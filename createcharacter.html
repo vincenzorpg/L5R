@@ -3,295 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Création de Personnage | L5R 4e Édition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+  <title>Création de Personnage Complète | Campagne L5R – MJ David</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --dark-lacquer: #0b0909;
+      --bg-dark: #0c0a09;
+      --card-bg: #171311;
       --gold: #d4af37;
+      --crimson: #7f1d1d;
     }
     body {
-      background-color: var(--dark-lacquer);
-      color: #e5dec9;
+      background-color: var(--bg-dark);
+      color: #e7e5e4;
       font-family: 'Noto Serif JP', serif;
     }
-    h1, h2, h3, .font-imperial { font-family: 'Cinzel', serif; }
-    .card-clean {
-      background: rgba(20, 16, 16, 0.9);
-      border: 1px solid rgba(212, 175, 55, 0.25);
+    h1, h2, h3, .font-imperial {
+      font-family: 'Cinzel', serif;
     }
-    .gold-text { color: var(--gold); }
+    .panel {
+      background-color: var(--card-bg);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 0.75rem;
+    }
+    .gold-text {
+      color: var(--gold);
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff; color: #000; }
+      .panel { border: 1px solid #444; background: #fff; color: #000; }
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col pb-16">
 
-  <!-- NAVIGATION RAPIDE -->
-  <header class="py-6 px-6 border-b border-amber-500/20 text-center">
-    <h1 class="text-2xl font-bold gold-text font-imperial">GÉNÉRATEUR DE PERSONNAGE (L5R 4E)</h1>
-    <p class="text-xs text-stone-400 mt-1">Conforme aux règles officielles et aux manuels des clans[span_1](start_span)[span_1](end_span)[span_2](start_span)[span_2](end_span)</p>
-    <div class="mt-4 flex justify-center gap-3 text-xs">
-      <a href="index.html" class="px-3 py-1.5 rounded bg-stone-900 text-amber-300 border border-stone-800 hover:border-amber-500">← Retour Accueil</a>
+  <!-- BARRE SUPÉRIEURE FIXE : COMPTEUR XP & STATS EN TEMPS RÉEL -->
+  <div class="sticky top-0 z-50 bg-stone-950/95 border-b border-amber-500/40 backdrop-blur px-4 py-2.5 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="no-print px-3 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold">
+          ← Accueil
+        </a>
+        <h1 class="text-sm md:text-lg font-bold gold-text tracking-wider">
+          CRÉATION DE PERSONNAGE L5R
+        </h1>
+      </div>
+
+      <!-- Résumé temps réel -->
+      <div class="flex flex-wrap items-center gap-2 md:gap-4 text-xs">
+        <div class="px-3 py-1 rounded bg-red-950/90 border border-amber-400/50">
+          <span class="text-stone-300">XP Restants :</span>
+          <span id="top-xp-left" class="text-base font-bold text-amber-300 ml-1">40</span>
+          <span class="text-stone-400">/ <span id="top-xp-total">40</span></span>
+        </div>
+        <div class="px-2.5 py-1 rounded bg-stone-900 border border-stone-700">
+          Réputation : <strong id="top-insight" class="text-amber-300">100</strong>
+          (<span class="text-amber-400">Rang <strong id="top-rank">1</strong></span>)
+        </div>
+        <div class="px-2.5 py-1 rounded bg-stone-900 border border-stone-700">
+          ND Armure : <strong id="top-armortn" class="text-emerald-400">15</strong>
+        </div>
+        <div class="px-2.5 py-1 rounded bg-stone-900 border border-stone-700">
+          Initiative : <strong id="top-init" class="text-sky-300">3g2</strong>
+        </div>
+        <div class="px-2.5 py-1 rounded bg-stone-900 border border-stone-700">
+          Honneur : <strong id="top-honor" class="text-amber-200">3.5</strong> |
+          Gloire : <strong id="top-glory" class="text-amber-200">1.0</strong> |
+          Statut : <strong id="top-status" class="text-amber-200">1.0</strong>
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
 
   <!-- CONTENU PRINCIPAL -->
-  <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 space-y-6">
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
 
-    <!-- ÉTAPE 1 : IDENTITÉ, CLAN & ÉCOLE -->
-    <div class="card-clean rounded-xl p-5 space-y-4">
-      <h2 class="text-lg font-bold gold-text">1. Clan, Famille & École</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div>
-          <label class="block text-stone-400 mb-1">Nom du Samouraï</label>
-          <input type="text" id="pc-name" value="Okado Hiruma" class="w-full p-2 rounded bg-black border border-stone-800 text-amber-200">
-        </div>
-        <div>
-          <label class="block text-stone-400 mb-1">Clan Majeur</label>
-          <select id="pc-clan" onchange="updateSchools()" class="w-full p-2 rounded bg-black border border-stone-800 text-amber-200">
-            <option value="Crabe">Clan du Crabe[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)</option>
-            <option value="Mante">Clan de la Mante[span_5](start_span)[span_5](end_span)[span_6](start_span)[span_6](end_span)</option>
-            <option value="Grue">Clan de la Grue[span_7](start_span)[span_7](end_span)[span_8](start_span)[span_8](end_span)</option>
-            <option value="Licorne">Clan de la Licorne[span_9](start_span)[span_9](end_span)[span_10](start_span)[span_10](end_span)</option>
-            <option value="Dragon">Clan du Dragon[span_11](start_span)[span_11](end_span)[span_12](start_span)[span_12](end_span)</option>
-            <option value="Lion">Clan du Lion[span_13](start_span)[span_13](end_span)[span_14](start_span)[span_14](end_span)</option>
-            <option value="Phenix">Clan du Phénix[span_15](start_span)[span_15](end_span)[span_16](start_span)[span_16](end_span)</option>
-            <option value="Scorpion">Clan du Scorpion[span_17](start_span)[span_17](end_span)[span_18](start_span)[span_18](end_span)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-stone-400 mb-1">École de Clan</label>
-          <select id="pc-school" onchange="loadSchoolDetails()" class="w-full p-2 rounded bg-black border border-stone-800 text-amber-200">
-            <!-- Dynamique selon le clan -->
-          </select>
-        </div>
-      </div>
-      <div id="school-info" class="p-3 rounded bg-black/60 border border-stone-800 text-xs text-stone-300">
-        <!-- Aperçu des avantages et compétences de l'école sélectionnée -->
-      </div>
-    </div>
-
-    <!-- ÉTAPE 2 : LES 5 ANNEAUX & TRAITS -->
-    <div class="card-clean rounded-xl p-5 space-y-4">
-      <div class="flex justify-between items-center">
-        <h2 class="text-lg font-bold gold-text">2. Les 5 Anneaux & Traits (Base : 2)[span_19](start_span)[span_19](end_span)</h2>
-        <span class="text-xs text-amber-400">XP restants : <b id="xp-left">40</b> / 40[span_20](start_span)[span_20](end_span)[span_21](start_span)[span_21](end_span)</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs text-center">
-        <div class="p-3 rounded bg-black/60 border border-amber-900/40 space-y-2">
-          <div class="font-bold text-amber-300">土 Terre</div>
-          <div>Stamina: <input type="number" id="t-stamina" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div>Will: <input type="number" id="t-will" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div class="text-[11px] text-stone-400 pt-1 border-t border-stone-800">Anneau : <span id="ring-terre" class="font-bold text-amber-300">2</span></div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-blue-900/40 space-y-2">
-          <div class="font-bold text-blue-300">水 Eau</div>
-          <div>Strength: <input type="number" id="w-strength" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div>Perception: <input type="number" id="w-perc" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div class="text-[11px] text-stone-400 pt-1 border-t border-stone-800">Anneau : <span id="ring-eau" class="font-bold text-blue-300">2</span></div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-teal-900/40 space-y-2">
-          <div class="font-bold text-teal-300">風 Air</div>
-          <div>Reflexes: <input type="number" id="a-reflex" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div>Awareness: <input type="number" id="a-aware" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div class="text-[11px] text-stone-400 pt-1 border-t border-stone-800">Anneau : <span id="ring-air" class="font-bold text-teal-300">2</span></div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-red-900/40 space-y-2">
-          <div class="font-bold text-red-300">火 Feu</div>
-          <div>Agility: <input type="number" id="f-agi" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div>Intelligence: <input type="number" id="f-intel" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded"></div>
-          <div class="text-[11px] text-stone-400 pt-1 border-t border-stone-800">Anneau : <span id="ring-feu" class="font-bold text-red-300">2</span></div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-purple-900/40 space-y-2 flex flex-col justify-between">
-          <div class="font-bold text-purple-300">空 Vide</div>
-          <div>Void Trait: <input type="number" id="v-trait" value="2" min="2" max="6" oninput="calculateSheet()" class="w-12 bg-stone-900 text-center font-bold text-amber-200 rounded mt-2"></div>
-          <div class="text-[11px] text-stone-400 pt-1 border-t border-stone-800">Anneau : <span id="ring-vide" class="font-bold text-purple-300">2</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 3 : COMPÉTENCES DE L'ÉCOLE -->
-    <div class="card-clean rounded-xl p-5 space-y-3">
-      <h2 class="text-lg font-bold gold-text">3. Compétences de l'École (Rang 1 par défaut)[span_22](start_span)[span_22](end_span)</h2>
-      <div id="school-skills-list" class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-        <!-- Rempli dynamiquement -->
-      </div>
-    </div>
-
-    <!-- ÉTAPE 4 : ARMES, ARMURES ET ÉQUIPEMENT -->
-    <div class="card-clean rounded-xl p-5 space-y-4">
-      <h2 class="text-lg font-bold gold-text">4. Armes, Armures & Équipement de départ</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div>
-          <label class="block text-stone-400 mb-1">Arme principale</label>
-          <select id="pc-weapon" class="w-full p-2 rounded bg-black border border-stone-800 text-amber-200">
-            <option value="Katana">Katana (VD 2g2, Corps à corps)[span_23](start_span)[span_23](end_span)</option>
-            <option value="Naginata">Naginata (VD 3g2, Arme d'Hast)[span_24](start_span)[span_24](end_span)</option>
-            <option value="Yumi">Arc Yumi + 20 Flèches (Distance)[span_25](start_span)[span_25](end_span)[span_26](start_span)[span_26](end_span)</option>
-            <option value="Tetsubo">Tetsubo (VD 3g2, Lourde)[span_27](start_span)[span_27](end_span)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-stone-400 mb-1">Armure</label>
-          <select id="pc-armor" onchange="calculateSheet()" class="w-full p-2 rounded bg-black border border-stone-800 text-amber-200">
-            <option value="5">Armure Légère (+5 ND d'Armure)[span_28](start_span)[span_28](end_span)[span_29](start_span)[span_29](end_span)</option>
-            <option value="10">Armure Lourde (+10 ND d'Armure)[span_30](start_span)[span_30](end_span)</option>
-            <option value="0">Vêtements normaux (Pas de bonus)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-stone-400 mb-1">Équipement de base</label>
-          <input type="text" value="Daisho, Wakizashi, Traveling Pack, 3 Koku" disabled class="w-full p-2 rounded bg-black/40 border border-stone-800 text-stone-400">
-        </div>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 5 : STATISTIQUES FINALES ET COMBAT -->
-    <div class="card-clean rounded-xl p-5 space-y-3">
-      <h2 class="text-lg font-bold gold-text">5. Statistiques & Combat (Calculé Automatiquement)</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-center">
-        <div class="p-3 rounded bg-black/50 border border-stone-800">
-          <div class="text-stone-400">Réputation (Insight)[span_31](start_span)[span_31](end_span)[span_32](start_span)[span_32](end_span)</div>
-          <div id="out-insight" class="text-lg font-bold gold-text mt-1">100</div>
-        </div>
-        <div class="p-3 rounded bg-black/50 border border-stone-800">
-          <div class="text-stone-400">ND d'Armure[span_33](start_span)[span_33](end_span)[span_34](start_span)[span_34](end_span)</div>
-          <div id="out-armor" class="text-lg font-bold text-emerald-400 mt-1">15</div>
-        </div>
-        <div class="p-3 rounded bg-black/50 border border-stone-800">
-          <div class="text-stone-400">Initiative[span_35](start_span)[span_35](end_span)[span_36](start_span)[span_36](end_span)</div>
-          <div id="out-init" class="text-lg font-bold text-amber-300 mt-1">2g2</div>
-        </div>
-        <div class="p-3 rounded bg-black/50 border border-stone-800">
-          <div class="text-stone-400">Blessures (Indemne)[span_37](start_span)[span_37](end_span)[span_38](start_span)[span_38](end_span)</div>
-          <div id="out-wounds" class="text-lg font-bold text-red-400 mt-1">10 PV</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOUTON SAUVEGARDE -->
-    <div class="text-center pt-2">
-      <button onclick="alert('Fiche samouraï validée avec succès selon les règles officielles de L5R 4e Édition[span_39](start_span)[span_39](end_span) !')" class="px-6 py-3 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs uppercase tracking-wider transition shadow-lg">
-        💾 Enregistrer la Fiche Samouraï
-      </button>
-    </div>
-
-  </main>
-
-  <footer class="py-4 text-center text-[10px] text-stone-600 border-t border-stone-900">
-    Campagne L5R – Générateur de Personnage • GitHub Pages[span_40](start_span)[span_40](end_span)[span_41](start_span)[span_41](end_span)
-  </footer>
-
-  <script>
-    // Base de données des Écoles par Clan
-    const clanSchools = {
-      Crabe: [
-        { name: "Bushi Hida", benefit: "+1 Stamina", skills: ["Defense", "Jiujutsu", "Kenjutsu", "Lore: Shadowlands", "Heavy Weapons", "Kyujutsu", "Any Bugei Skill"] },
-        { name: "Bushi Hiruma", benefit: "+1 Agility", skills: ["Athletics", "Defense", "Hunting", "Kenjutsu", "Kyujutsu", "Stealth", "Any Bugei Skill"] },
-        { name: "Shugenja Kuni", benefit: "+1 Willpower", skills: ["Calligraphy", "Investigation", "Lore: Theology", "Lore: Shadowlands", "Spellcraft", "Meditation", "Any High Skill"] }
-      ],
-      Mante: [
-        { name: "Bushi Yoritomo", benefit: "+1 Strength", skills: ["Athletics", "Defense", "Jiujutsu", "Kenjutsu", "Sailing", "Craft: Sailor", "Any Bugei/Merchant"] },
-        { name: "Archer Tsuruchi", benefit: "+1 Reflexes", skills: ["Kyujutsu", "Defense", "Hunting", "Investigation", "Stealth", "Lore: Heraldry", "Any Skill"] }
-      ],
-      Grue: [
-        { name: "Duelliste Kakita", benefit: "+1 Reflexes", skills: ["Iaijutsu", "Defense", "Kenjutsu", "Kyujutsu", "Courtier", "Etiquette", "Any High/Bugei"] },
-        { name: "Courtisan Doji", benefit: "+1 Awareness", skills: ["Courtier", "Etiquette", "Oratory", "Perform", "Sincerity", "Design", "Any High Skill"] }
-      ],
-      Licorne: [
-        { name: "Bushi Moto", benefit: "+1 Strength", skills: ["Battle", "Defense", "Horsemanship", "Hunting", "Kenjutsu", "Kyujutsu", "Spears"] },
-        { name: "Shugenja Iuchi", benefit: "+1 Awareness", skills: ["Calligraphy", "Divination", "Etiquette", "Lore: Theology", "Spellcraft", "Horsemanship", "Any High Skill"] }
-      ],
-      Dragon: [
-        { name: "Bushi Mirumoto", benefit: "+1 Agility", skills: ["Defense", "Iaijutsu", "Kenjutsu", "Lore: Theology", "Meditation", "Kyujutsu", "Any Skill"] },
-        { name: "Shugenja Tamori", benefit: "+1 Energy/Will", skills: ["Calligraphy", "Defense", "Investigation", "Lore: Theology", "Spellcraft", "Meditation", "Any High Skill"] }
-      ],
-      Lion: [
-        { name: "Bushi Akodo", benefit: "+1 Perception", skills: ["Battle", "Defense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Lore: History", "Any Bugei Skill"] },
-        { name: "Furies Matsu", benefit: "+1 Strength", skills: ["Athletics", "Battle", "Defense", "Intimidation", "Kenjutsu", "Jiujutsu", "Any Bugei Skill"] }
-      ],
-      Phenix: [
-        { name: "Bushi Shiba", benefit: "+1 Agility", skills: ["Athletics", "Defense", "Iaijutsu", "Kenjutsu", "Lore: Theology", "Meditation", "Any Skill"] },
-        { name: "Shugenja Isawa", benefit: "+1 Intelligence", skills: ["Calligraphy", "Investigation", "Lore: Theology", "Meditation", "Spellcraft", "Any Lore", "Any High Skill"] }
-      ],
-      Scorpion: [
-        { name: "Bushi Bayushi", benefit: "+1 Reflexes", skills: ["Acting", "Defense", "Etiquette", "Investigation", "Kenjutsu", "Sincerity", "Any Skill"] },
-        { name: "Courtisan Bayushi", benefit: "+1 Awareness", skills: ["Courtier", "Etiquette", "Investigation", "Seduction", "Sincerity", "Design", "Any High Skill"] }
-      ]
-    };
-
-    function updateSchools() {
-      const clan = document.getElementById('pc-clan').value;
-      const schoolSelect = document.getElementById('pc-school');
-      schoolSelect.innerHTML = '';
-      
-      if (clanSchools[clan]) {
-        clanSchools[clan].forEach((school, index) => {
-          const opt = document.createElement('option');
-          opt.value = index;
-          opt.textContent = school.name + " (" + school.benefit + ")";
-          schoolSelect.appendChild(opt);
-        });
-      }
-      loadSchoolDetails();
-    }
-
-    function loadSchoolDetails() {
-      const clan = document.getElementById('pc-clan').value;
-      const schoolIndex = document.getElementById('pc-school').value;
-      const school = clanSchools[clan] ? clanSchools[clan][schoolIndex] : null;
-
-      if (school) {
-        document.getElementById('school-info').innerHTML = `<b>Avantage d'école :</b> ${school.benefit}`;
-        const skillsContainer = document.getElementById('school-skills-list');
-        skillsContainer.innerHTML = school.skills.map(s => `
-          <div class="p-2 rounded bg-black/55 border border-stone-800 flex justify-between items-center">
-            <span>${s}</span>
-            <span class="text-amber-400 font-bold">Rang 1</span>
-          </div>
-        `).join('');
-      }
-    }
-
-    function calculateSheet() {
-      const st = parseInt(document.getElementById('t-stamina').value) || 2;
-      const wil = parseInt(document.getElementById('t-will').value) || 2;
-      const str = parseInt(document.getElementById('w-strength').value) || 2;
-      const per = parseInt(document.getElementById('w-perc').value) || 2;
-      const ref = parseInt(document.getElementById('a-reflex').value) || 2;
-      const awa = parseInt(document.getElementById('a-aware').value) || 2;
-      const agi = parseInt(document.getElementById('f-agi').value) || 2;
-      const int = parseInt(document.getElementById('f-intel').value) || 2;
-      const voidT = parseInt(document.getElementById('v-trait').value) || 2;
-
-      const rTerre = Math.min(st, wil);
-      const rEau = Math.min(str, per);
-      const rAir = Math.min(ref, awa);
-      const rFeu = Math.min(agi, int);
-      const rVide = voidT;
-
-      document.getElementById('ring-terre').innerText = rTerre;
-      document.getElementById('ring-eau').innerText = rEau;
-      document.getElementById('ring-air').innerText = rAir;
-      document.getElementById('ring-feu').innerText = rFeu;
-      document.getElementById('ring-vide').innerText = rVide;
-
-      const sumRings = rTerre + rEau + rAir + rFeu + rVide;
-      const insight = (sumRings * 10) + 20;
-      document.getElementById('out-insight').innerText = insight;
-
-      const armorBonus = parseInt(document.getElementById('pc-armor').value) || 5;
-      const armorTN = 5 + (5 * ref) + armorBonus;
-      document.getElementById('out-armor').innerText = armorTN;
-
-      document.getElementById('out-init').innerText = `${ref}g${ref}`;
-
-      const healthyWounds = rTerre * 5;
-      document.getElementById('out-wounds').innerText = `${healthyWounds} PV`;
-    }
-
-    // Initialisation au chargement
-    updateSchools();
-  </script>
-</body>
-</html>
+    <!-- BARRE DE SAUVEGARDE & LIENS WORDPRESS -->
+    <div class="no-print panel p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="saveCharacterLocal()" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">
+          💾 Sauvegarder sur le navigateur
+        </button>
+        <select id="saved-chars-select" onchange="loadCharacterLocal(this.value)" class="px-2.5 py-1.5 rounded bg-stone-900 border border-stone-700 text-amber-200">
+          <option value="">-- Charger un personnage sauvegardé --</option>
+        </select>
+        <button onclick="exportCharacterJSON()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-stone-600">
+          ⬇️ Exporter (.json)
+        </button>
+        <label class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-stone-600 cursor-pointer">
+          ⬆️ Importer (.json)
+          <input type="file" accept=".json" onchange="importCharacterJSON
