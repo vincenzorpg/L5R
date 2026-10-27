@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campagne L5R – MJ David | L'Ombre et le Sang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --crimson: #8b0000;
+      --gold: #d4af37;
+      --dark-lacquer: #0f0c0c;
+      --parchment: #f4ecd8;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 0%, #2a0808 0%, #0a0808 75%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, .font-imperial { font-family: 'Cinzel', serif; }
+    .font-title { font-family: 'Cinzel Decorative', serif; }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0px rgba(220, 38, 38, 0); }
+      15% { transform: scale(1.015); box-shadow: 0 0 45px rgba(220, 38, 38, 0.7); }
+      30% { transform: scale(0.995); }
+      45% { transform: scale(1.02); box-shadow: 0 0 70px rgba(220, 38, 38, 0.9); }
+    }
+    .iuchiban-pulse { animation: heartbeat 1.1s ease-in-out 2; }
+    .lacquer-card {
+      background: linear-gradient(145deg, rgba(28, 22, 22, 0.95), rgba(15, 11, 11, 0.98));
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      transition: all 0.25s ease;
+    }
+    .lacquer-card:hover { border-color: rgba(212, 175, 55, 0.65); transform: translateY(-2px); }
+    .gold-gradient-text {
+      background: linear-gradient(to right, #f3e5ab, #d4af37, #aa7c11);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .ring-terre { border-color: #b45309; background: rgba(180, 83, 9, 0.15); color: #fcd34d; }
+    .ring-eau   { border-color: #0284c7; background: rgba(2, 132, 199, 0.15); color: #7dd3fc; }
+    .ring-air   { border-color: #0d9488; background: rgba(13, 148, 136, 0.15); color: #99f6e4; }
+    .ring-feu   { border-color: #dc2626; background: rgba(220, 38, 38, 0.15); color: #fca5a5; }
+    .ring-vide  { border-color: #7c3aed; background: rgba(124, 58, 237, 0.15); color: #ddd6fe; }
+  </style>
+</head>
+<body id="app-body" class="min-h-screen flex flex-col">
+
+  <!-- BANDEAU DE CONTRÔLE MJ -->
+  <div class="bg-black/90 border-b border-amber-500/30 px-4 py-2 text-xs flex flex-wrap justify-between items-center gap-2 sticky top-0 z-50 backdrop-blur-md">
+    <div class="flex items-center gap-3">
+      <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-700/50 font-semibold">
+        Hébergé sur GitHub Pages • Règles L5R 4e Éd.[span_7](start_span)[span_7](end_span)
+      </span>
+      <span class="hidden md:inline text-amber-200/70 italic">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort »[span_8](start_span)[span_8](end_span).
+      </span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="triggerIuchibanPulse()" class="px-3 py-1 rounded bg-red-900/80 hover:bg-red-700 text-amber-100 border border-red-500/50 flex items-center gap-1.5 transition shadow-lg">
+        <span>🫀</span> Cœur de Iuchiban (BOUM !)[span_9](start_span)[span_9](end_span)[span_10](start_span)[span_10](end_span)
+      </button>
+      <a href="https://campagnel5rdavid2015.wordpress.com/ambiances/" target="_blank" class="px-3 py-1 rounded bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 border border-amber-600/40 transition">
+        🎵 Ambiances WP[span_11](start_span)[span_11](end_span)
+      </a>
+    </div>
+  </div>
+
+  <!-- EN-TÊTE -->
+  <header class="relative py-10 px-6 text-center border-b border-amber-500/30 overflow-hidden">
+    <div class="max-w-5xl mx-auto relative z-10">
+      <div class="text-3xl md:text-4xl tracking-[0.5em] text-amber-500/40 mb-2 font-serif select-none">
+        土 ・ 水 ・ 風 ・ 火 ・ 空[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span)
+      </div>
+      <h1 class="font-title text-3xl md:text-5xl font-bold gold-gradient-text tracking-wider mb-3">
+        CAMPAGNE L5R — MJ DAVID
+      </h1>
+      <p class="text-sm md:text-base text-amber-100/80 max-w-2xl mx-auto italic">
+        Chroniques de l'Empire d'Émeraude & de l'Outremonde • Avec Okado, Akira, Hiro-Hito et Ryujin[span_14](start_span)[span_14](end_span)[span_15](start_span)[span_15](end_span).
+      </p>
+
+      <nav class="mt-8 flex flex-wrap justify-center gap-2 md:gap-3">
+        <button onclick="switchTab('campagne')" id="tab-campagne" class="nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-red-900 text-amber-200 border border-amber-400 shadow-lg transition">
+          ⚔️ La Campagne (11 Épisodes)[span_16](start_span)[span_16](end_span)
+        </button>
+        <button onclick="switchTab('grimoire')" id="tab-grimoire" class="nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-stone-900/90 text-stone-300 border border-amber-500/20 hover:border-amber-400 transition">
+          📜 Grimoire & Règles Certifiées[span_17](start_span)[span_17](end_span)
+        </button>
+        <button onclick="switchTab('clans')" id="tab-clans" class="nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-stone-900/90 text-stone-300 border border-amber-500/20 hover:border-amber-400 transition">
+          🏯 Les 8 Clans & Voies[span_18](start_span)[span_18](end_span)[span_19](start_span)[span_19](end_span)
+        </button>
+        <button onclick="switchTab('pj')" id="tab-pj" class="nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-stone-900/90 text-stone-300 border border-amber-500/20 hover:border-amber-400 transition">
+          🎲 Espace PJ & Roll & Keep[span_20](start_span)[span_20](end_span)
+        </button>
+        <button onclick="switchTab('admin')" id="tab-admin" class="nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-amber-950/70 text-amber-300 border border-amber-500/40 hover:bg-amber-900 transition">
+          ⚙️ Admin & Vérif IA Règles[span_21](start_span)[span_21](end_span)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8">
+
+    <!-- ONGLET 1 : CAMPAGNE -->
+    <section id="view-campagne" class="space-y-8">
+      <div class="lacquer-card rounded-2xl p-6 md:p-8 border-2 border-amber-500/50 relative overflow-hidden">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="px-3 py-1 bg-red-800 text-amber-100 text-xs font-bold uppercase tracking-wider rounded-full">
+            🔥 Scénario 10 & 11 (Reprise 2026)[span_22](start_span)[span_22](end_span)
+          </span>
+          <span class="text-xs text-amber-300/80">Par Akira Tsuruchi & vincentdavidperso[span_23](start_span)[span_23](end_span)</span>
+        </div>
+        <h2 class="text-2xl md:text-4xl font-bold text-amber-300 mb-2">
+          Scénario 10 : La Tombe de Iuchiban[span_24](start_span)[span_24](end_span)
+        </h2>
+        <p class="text-stone-300 max-w-3xl mb-5 leading-relaxed">
+          10 ans après, nos héros reprennent leurs daishos pour affronter les mystères de la Tombe de Iuchiban, complété par le scénario tactique de l'Outremonde[span_25](start_span)[span_25](end_span)[span_26](start_span)[span_26](end_span).
+        </p>
+        <a href="https://campagnel5rdavid2015.wordpress.com/2026/10/14/scenario-10-la-tombe-de-iuchiban/" target="_blank" class="px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-bold text-sm transition">
+          📖 Lire sur WordPress[span_27](start_span)[span_27](end_span)
+        </a>
+      </div>
+      <div class="flex justify-between items-center gap-4">
+        <h3 class="text-xl font-bold text-amber-400">Chronologie des Épisodes</h3>
+        <input type="text" id="search-scenario" oninput="renderScenarios()" placeholder="Rechercher..." class="px-4 py-2 rounded-lg bg-stone-900 border border-amber-500/30 text-sm text-amber-100 w-full md:w-80">
+      </div>
+      <div id="scenarios-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ONGLET 2 : GRIMOIRE & RÈGLES VÉRIFIÉES -->
+    <section id="view-grimoire" class="hidden space-y-8">
+      <div class="lacquer-card rounded-xl p-6">
+        <h2 class="text-2xl font-bold text-amber-300 mb-2">Grimoire Dynamique & Règles Certifiées 4e Édition[span_28](start_span)[span_28](end_span)[span_29](start_span)[span_29](end_span)</h2>
+        <p class="text-sm text-stone-300 mb-6">
+          Chaque règle ou sort affiché ici est conforme aux sources officielles (Livre de Base, <em>Book of Earth/Fire/Water</em>)[span_30](start_span)[span_30](end_span)[span_31](start_span)[span_31](end_span).
+        </p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button onclick="setElementFilter('ALL')" class="el-btn px-4 py-2 rounded-lg text-sm font-bold bg-amber-600 text-black">Tous</button>
+          <button onclick="setElementFilter('Terre')" class="el-btn px-4 py-2 rounded-lg text-sm font-bold border ring-terre">土 Terre[span_32](start_span)[span_32](end_span)[span_33](start_span)[span_33](end_span)</button>
+          <button onclick="setElementFilter('Eau')" class="el-btn px-4 py-2 rounded-lg text-sm font-bold border ring-eau">水 Eau[span_34](start_span)[span_34](end_span)[span_35](start_span)[span_35](end_span)</button>
+          <button onclick="setElementFilter('Air')" class="el-btn px-4 py-2 rounded-lg text-sm font-bold border ring-air">風 Air[span_36](start_span)[span_36](end_span)[span_37](start_span)[span_37](end_span)</button>
+          <button onclick="setElementFilter('Feu')" class="el-btn px-4 py-2 rounded-lg text-sm font-bold border ring-feu">火 Feu[span_38](start_span)[span_38](end_span)[span_39](start_span)[span_39](end_span)</button>
+          <button onclick="setElementFilter('Vide')" class="el-btn px-4 py-2 rounded-lg text-sm font-bold border ring-vide">空 Vide[span_40](start_span)[span_40](end_span)[span_41](start_span)[span_41](end_span)</button>
+        </div>
+      </div>
+      <div id="grimoire-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ONGLET 3 : CLANS -->
+    <section id="view-clans" class="hidden space-y-6">
+      <h2 class="text-2xl font-bold text-amber-300">Les 8 Clans Majeurs[span_42](start_span)[span_42](end_span)[span_43](start_span)[span_43](end_span)</h2>
+      <div id="clans-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+    </section>
+
+    <!-- ONGLET 4 : ESPACE PJ & R&K -->
+    <section id="view-pj" class="hidden space-y-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="lacquer-card rounded-xl p-6 border border-amber-500/40">
+          <h3 class="text-xl font-bold text-amber-300 mb-3">🎲 Lanceur de Dés Roll & Keep (4e Éd.)[span_44](start_span)[span_44](end_span)</h3>
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <div><label class="text-xs text-amber-200">Lancés (X)</label><input type="number" id="dice-roll" value="6" class="w-full p-2 rounded bg-stone-900 text-center text-amber-300 font-bold"></div>
+            <div><label class="text-xs text-amber-200">Gardés (Y)</label><input type="number" id="dice-keep" value="3" class="w-full p-2 rounded bg-stone-900 text-center text-amber-300 font-bold"></div>
+            <div><label class="text-xs text-amber-200">ND</label><input type="number" id="dice-tn" value="15" class="w-full p-2 rounded bg-stone-900 text-center text-red-400 font-bold"></div>
+          </div>
+          <button onclick="rollRnK()" class="w-full py-3 rounded-lg bg-red-900 text-amber-100 font-bold border border-amber-400/50 shadow-lg">LANCER (XgY)</button>
+          <div id="dice-result" class="mt-4 p-4 rounded-lg bg-black/60 border border-stone-800 text-xs">Résultat du jet...</div>
+        </div>
+        <div class="lacquer-card rounded-xl p-6 space-y-4">
+          <h3 class="text-xl font-bold text-amber-300">🩸 Traqueur Outremonde (Scénario 2)[span_45](start_span)[span_45](end_span)</h3>
+          <p class="text-xs text-stone-300">Doigts de jade pur : +10 jets de Terre contre la Souillure (max 13 jours pour 2 doigts). Thé de pétales : +2g2[span_46](start_span)[span_46](end_span).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONGLET 5 : ADMIN & VÉRIF IA -->
+    <section id="view-admin" class="hidden space-y-8">
+      <div class="lacquer-card rounded-xl p-6 border-2 border-amber-500/40">
+        <h2 class="text-2xl font-bold text-amber-300 mb-2">⚙️ Admin & Vérification Automatique par Gemini</h2>
+        <p class="text-sm text-stone-300 mb-4">
+          Quand vous ajoutez un sort ou une règle, l'outil s'assure qu'il respecte les canons du livre de base (4e Édition)[span_47](start_span)[span_47](end_span).
+        </p>
+        <div class="p-5 rounded-xl bg-black/50 border border-stone-800 space-y-3">
+          <input id="new-item-title" type="text" placeholder="Nom du Sort / Kiho / Règle" class="w-full p-2.5 rounded bg-stone-900 border border-stone-700 text-sm text-amber-100">
+          <div class="grid grid-cols-2 gap-2">
+            <select id="new-item-el" class="p-2.5 rounded bg-stone-900 border border-stone-700 text-sm text-amber-200">
+              <option value="Terre">土 Terre</option><option value="Eau">水 Eau</option><option value="Air">風 Air</option><option value="Feu">火 Feu</option><option value="Vide">空 Vide</option>
+            </select>
+            <input id="new-item-rank" type="number" value="1" min="1" max="6" placeholder="Rang de Maîtrise" class="p-2.5 rounded bg-stone-900 border border-stone-700 text-sm text-amber-100">
+          </div>
+          <textarea id="new-item-desc" rows="3" placeholder="Effet mécanique (vérifié par les règles)..." class="w-full p-2.5 rounded bg-stone-900 border border-stone-700 text-sm text-amber-100"></textarea>
+          <button onclick="addNewGrimoireItem()" class="w-full py-2.5 rounded bg-amber-600 text-black font-bold text-sm">Publier et Valider avec les Livres</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-amber-500/20 bg-black/80 py-6 px-4 text-center text-xs text-stone-500 mt-12">
+    Campagne L5R – MJ David • Hébergé sur GitHub • Conforme L5R 4e Éd.[span_48](start_span)[span_48](end_span)[span_49](start_span)[span_49](end_span)
+  </footer>
+
+  <script>
+    const scenariosData = [
+      { num: "Épisode 1", title: "Scénario 1 : Championnat de Topaze", author: "MJ David", desc: "Le gempukku légendaire à Tsuma.", url: "https://campagnel5rdavid2015.wordpress.com/2015/08/15/scenario-1-championnat-de-topaze/", tag: "Gempukku[span_50](start_span)"[span_50](end_span) },
+      { num: "Épisode 2", title: "Scénario 2 : Meurtre au Château de Kyoteï", author: "Okado Hiruma", desc: "Intrigues de cour et lame ensanglantée.", url: "https://campagnel5rdavid2015.wordpress.com/2015/11/03/scenario-2-meurtre-au-chateau-de-kyotei-par-okado-hiruma/", tag: "Enquête[span_51](start_span)"[span_51](end_span) },
+      { num: "Hors-Série", title: "Les Battements de l'Outremonde", author: "Table de MJ David", desc: "La traque du Cœur de Iuchiban, l'énigme d'I'kak et le combat final.", url: "https://campagnel5rdavid2015.wordpress.com/la-campagne/", tag: "Outremonde[span_52](start_span)"[span_52](end_span) },
+      { num: "Épisode 10 (2026)", title: "Scénario 10 : La Tombe de Iuchiban", author: "Akira Tsuruchi", desc: "10 ans après, la reprise de la campagne.", url: "https://campagnel5rdavid2015.wordpress.com/2026/10/14/scenario-10-la-tombe-de-iuchiban/", tag: "Final[span_53](start_span)"[span_53](end_span) }
+    ];
+
+    const grimoireData = [
+      { title: "La Connaissance de l'Intérieur", category: "Kiho", element: "Vide", rank: 4, desc: "Type : Interne. Conditions : Méditation. Permet de sentir tous les esprits environnants.", url: "https://campagnel5rdavid2015.wordpress.com/2016/05/16/kiho-du-vide/[span_54](start_span)"[span_54](end_span) },
+      { title: "Poing de Terre", category: "Kiho", element: "Terre", rank: 3, desc: "Renforce le corps comme la pierre. Posture Défense ou Esquive requise.", url: "https://campagnel5rdavid2015.wordpress.com/2016/05/15/kihos-de-terre/[span_55](start_span)"[span_55](end_span) },
+      { title: "Bâton d'Eau (Bo of Water)", category: "Sort", element: "Eau", rank: 1, desc: "Invoque un bâton d'eau pure (VD 1g2) et octroie 1 Augmentation gratuite pour Renverser.", url: "https://campagnel5rdavid2015.wordpress.com/sorts-de-leau/[span_56](start_span)"[span_56](end_span) }
+    ];
+
+    const clansData = [
+      { name: "Clan du Crabe", kanji: "蟹", desc: "Défenseurs de la Muraille Kaiu face à l'Outremonde.", url: "https://campagnel5rdavid2015.wordpress.com/regles/les-clans/clan-du-crabe/[span_57](start_span)"[span_57](end_span), color: "border-blue-800" },
+      { name: "Clan de la Mante", kanji: "蟷", desc: "Maîtres des mers et archers redoutables.", url: "https://campagnel5rdavid2015.wordpress.com/regles/les-clans/clan-de-la-mante/[span_58](start_span)"[span_58](end_span), color: "border-emerald-700" },
+      { name: "Clan de la Grue", kanji: "鶴", desc: "Duellistes Kakita et courtisans de l'Impérial.", url: "https://campagnel5rdavid2015.wordpress.com/regles/les-clans/clan-de-la-grue/[span_59](start_span)"[span_59](end_span), color: "border-sky-400" },
+      { name: "Clan du Scorpion", kanji: "蠍", desc: "Le Masque de l'Empereur, maîtres des ombres.", url: "https://campagnel5rdavid2015.wordpress.com/regles/les-clans/clan-du-scorpion/[span_60](start_span)"[span_60](end_span), color: "border-red-700" }
+    ];
+
+    let currentElement = 'ALL';
+
+    function switchTab(id) {
+      ['campagne', 'grimoire', 'clans', 'pj', 'admin'].forEach(tab => {
+        document.getElementById('view-' + tab).classList.add('hidden');
+        document.getElementById('tab-' + tab).className = "nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-stone-900/90 text-stone-300 border border-amber-500/20";
+      });
+      document.getElementById('view-' + id).classList.remove('hidden');
+      document.getElementById('tab-' + id).className = "nav-btn px-5 py-2.5 rounded-lg font-imperial text-sm font-bold bg-red-900 text-amber-200 border border-amber-400 shadow-lg";
+    }
+
+    function renderScenarios() {
+      const q = (document.getElementById('search-scenario').value || '').toLowerCase();
+      document.getElementById('scenarios-grid').innerHTML = scenariosData
+        .filter(s => s.title.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q))
+        .map(s => `<article class="lacquer-card rounded-xl p-5 flex flex-col justify-between"><div><span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 text-xs font-bold">${s.num}</span><h4 class="text-lg font-bold text-amber-200 mt-2">${s.title}</h4><p class="text-xs text-amber-500 italic mb-2">${s.author}</p><p class="text-sm text-stone-300 mb-4">${s.desc}</p></div><a href="${s.url}" target="_blank" class="text-xs text-amber-400 underline">Voir sur WordPress ↗</a></article>`).join('');
+    }
+
+    function setElementFilter(el) { currentElement = el; renderGrimoire(); }
+    function renderGrimoire() {
+      document.getElementById('grimoire-grid').innerHTML = grimoireData
+        .filter(i => currentElement === 'ALL' || i.element === currentElement)
+        .map(i => `<div class="lacquer-card rounded-xl p-5"><div><span class="px-2 py-1 rounded text-xs font-bold ring-terre">${i.element} • Maîtrise ${i.rank}</span><h4 class="text-lg font-bold text-amber-200 mt-2">${i.title}</h4><p class="text-sm text-stone-300 mt-2">${i.desc}</p></div><a href="${i.url}" target="_blank" class="text-xs text-amber-400 underline mt-4 block">Source WP ↗</a></div>`).join('');
+    }
+
+    function renderClans() {
+      document.getElementById('clans-grid').innerHTML = clansData.map(c => `<a href="${c.ur
