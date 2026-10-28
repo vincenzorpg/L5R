@@ -2,6 +2,7 @@ backend:
   name: github
   repo: vincenzorpg/L5R
   branch: main
+  site_id : 80d68fef-1937-4856-8bd6-c3ccb287eda1
 
 # Dossier où seront enregistrées les images et les pistes audio
 media_folder: "assets/uploads"
