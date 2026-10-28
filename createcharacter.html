@@ -8,15 +8,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chargement des données externes si présentes -->
+
+  <!-- CHARGEMENT MODULAIRE DES BASES DE DONNÉES -->
   <script src="data/clans-data.js"></script>
+  <script src="data/competences-data.js"></script>
+  <script src="data/equipement-data.js"></script>
+  <script src="data/avantages-data.js"></script>
 
   <style>
     :root {
       --dark-lacquer: #0a0808;
       --gold: #d4af37;
       --gold-light: #f3e5ab;
-      --clan-primary: #1c2833;
     }
     body {
       background-color: var(--dark-lacquer);
@@ -24,17 +27,13 @@
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
-    h1, h2, h3, h4, .font-imperial {
-      font-family: 'Cinzel', serif;
-    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
     .card-clean {
       background: rgba(18, 14, 14, 0.92);
       border: 1px solid rgba(212, 175, 55, 0.25);
       transition: border-color 0.2s ease;
     }
-    .card-clean:hover {
-      border-color: rgba(212, 175, 55, 0.45);
-    }
+    .card-clean:hover { border-color: rgba(212, 175, 55, 0.45); }
     .gold-text { color: var(--gold); }
     input, select, textarea {
       background-color: #0d0b0b !important;
@@ -46,31 +45,18 @@
       border-color: var(--gold) !important;
       box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
     }
-    /* Styles pour l'impression / Export PDF */
     @media print {
-      body {
-        background: white !important;
-        color: black !important;
-      }
+      body { background: white !important; color: black !important; }
       .no-print { display: none !important; }
-      .card-clean {
-        background: white !important;
-        border: 1px solid #888 !important;
-        color: black !important;
-        break-inside: avoid;
-      }
-      input, select, textarea {
-        background: white !important;
-        color: black !important;
-        border: 1px solid #ccc !important;
-      }
+      .card-clean { background: white !important; border: 1px solid #888 !important; color: black !important; break-inside: avoid; }
+      input, select, textarea { background: white !important; color: black !important; border: 1px solid #ccc !important; }
       .gold-text { color: #8b0000 !important; }
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- EN-TÊTE ET NAVIGATION -->
+  <!-- EN-TÊTE -->
   <header class="py-6 px-4 md:px-8 border-b border-amber-500/20 bg-black/60 sticky top-0 z-50 backdrop-blur-sm no-print">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
       <div>
@@ -87,15 +73,15 @@
     </div>
   </header>
 
-  <!-- CONTENU PRINCIPAL -->
+  <!-- CONTENU -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <!-- BARRE D'ÉTAT FIXE DU BUDGET XP & RANG D'INSIGHT -->
+    <!-- BARRE FIXE XP & INSIGHT -->
     <div class="card-clean rounded-xl p-4 flex flex-wrap justify-between items-center gap-4 border-l-4 border-amber-500 bg-amber-950/20">
       <div class="flex items-center gap-4">
         <div>
           <span class="text-[10px] text-stone-400 uppercase tracking-wider block">Points d'Expérience restants</span>
-          <span class="text-2xl font-bold font-imperial" id="xp-display"><span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP</span>
+          <span class="text-2xl font-bold font-imperial"><span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP</span>
         </div>
         <div class="border-l border-amber-500/20 pl-4">
           <span class="text-[10px] text-stone-400 uppercase tracking-wider block">Réputation (Insight)</span>
@@ -112,30 +98,26 @@
       </div>
     </div>
 
-    <!-- 1. IDENTITÉ, CLAN, FAMILLE ET ÉCOLE -->
+    <!-- 1. ALLÉGEANCE & IDENTITÉ (Depuis clans-data.js) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">
         1. Allégeance, Identité & Lignée
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-        <!-- Clan -->
         <div>
           <label class="block text-stone-400 mb-1">Grand Clan de Rokugan</label>
           <select id="sel-clan" onchange="onClanChange()" class="w-full p-2.5 rounded font-medium"></select>
         </div>
-        <!-- Famille -->
         <div>
           <label class="block text-stone-400 mb-1">Famille du Clan</label>
           <select id="sel-family" onchange="onFamilyChange()" class="w-full p-2.5 rounded font-medium"></select>
           <div id="family-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
         </div>
-        <!-- École -->
         <div>
           <label class="block text-stone-400 mb-1">École de Clan (Rang 1)</label>
           <select id="sel-school" onchange="onSchoolChange()" class="w-full p-2.5 rounded font-medium"></select>
           <div id="school-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
         </div>
-        <!-- Nom du personnage + générateur -->
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="text-stone-400">Nom du Samouraï</label>
@@ -150,7 +132,6 @@
         </div>
       </div>
 
-      <!-- Détails de la Technique d'École -->
       <div id="technique-box" class="p-4 rounded bg-black/60 border border-stone-800 text-xs space-y-1">
         <div class="flex items-center gap-2">
           <span class="px-2 py-0.5 rounded bg-red-950 text-amber-300 font-bold uppercase text-[10px]" id="tech-rank">Technique Rang 1</span>
@@ -160,13 +141,11 @@
       </div>
     </section>
 
-    <!-- 2. LES 5 ANNEAUX ET TRAITS ASSOCIÉS -->
+    <!-- 2. LES 5 ANNEAUX & TRAITS -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">
-          2. Les 5 Anneaux & 8 Traits Élémentaires
-        </h2>
-        <span class="text-xs text-stone-400">Base 2 • Trait : <span class="text-amber-300">Nouveau Rang × 4 XP</span> • Anneau du Vide : <span class="text-amber-300">Nouveau Rang × 6 XP</span></span>
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux & 8 Traits Élémentaires</h2>
+        <span class="text-xs text-stone-400">Base 2 • Trait : <span class="text-amber-300">Rang suivant × 4 XP</span> • Anneau du Vide : <span class="text-amber-300">Rang suivant × 6 XP</span></span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
@@ -179,15 +158,11 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Constitution</span><span id="badge-sta" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-stamina" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-stamina" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Volonté</span><span id="badge-wil" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-willpower" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-willpower" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
           </div>
         </div>
@@ -201,15 +176,11 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Force</span><span id="badge-str" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-strength" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-strength" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Perception</span><span id="badge-per" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-perception" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-perception" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
           </div>
         </div>
@@ -223,15 +194,11 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Réflexes</span><span id="badge-ref" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-reflexes" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-reflexes" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Intuition</span><span id="badge-awa" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-awareness" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-awareness" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
           </div>
         </div>
@@ -245,15 +212,11 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Agilité</span><span id="badge-agi" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-agility" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-agility" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Intelligence</span><span id="badge-int" class="text-[10px] text-amber-500"></span></div>
-              <div class="flex items-center gap-2">
-                <input type="number" id="trait-intelligence" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              </div>
+              <input type="number" id="trait-intelligence" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
             </div>
           </div>
         </div>
@@ -265,43 +228,39 @@
             <span class="text-base font-bold text-purple-400" id="ring-void">2</span>
           </div>
           <div>
-            <div class="flex justify-between mb-0.5 text-stone-400"><span>Anneau du Vide</span><span id="badge-voi" class="text-[10px] text-amber-500"></span></div>
+            <div class="flex justify-between mb-0.5 text-stone-400"><span>Anneau du Vide</span></div>
             <input type="number" id="trait-void" min="2" max="6" value="2" onchange="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
           </div>
-          <div class="text-[10px] text-stone-500 italic text-center">Points de Vide dépensables</div>
+          <div class="text-[10px] text-stone-500 italic text-center">Points de Vide</div>
         </div>
       </div>
     </section>
 
-    <!-- 3. COMPÉTENCES D'ÉCOLE ET LIBRES -->
+    <!-- 3. COMPÉTENCES (Depuis competences-data.js) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">
-          3. Compétences & Spécialisations
-        </h2>
-        <div class="flex items-center gap-3 text-xs">
-          <span class="text-stone-400">Coût : <span class="text-amber-300">Rang suivant × 1 XP</span> • Spécialisation : <span class="text-amber-300">2 XP</span></span>
-          <button onclick="addCustomSkill()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">+ Ajouter Compétence</button>
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
+        <div class="flex items-center gap-2 text-xs">
+          <!-- Sélecteur dynamique tiré de competences-data.js -->
+          <select id="sel-add-skill" class="p-1.5 rounded text-xs"></select>
+          <button onclick="addSkillFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold">+ Ajouter</button>
         </div>
       </div>
 
-      <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-        <!-- Rempli dynamiquement -->
-      </div>
+      <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
     </section>
 
-    <!-- 4. AVANTAGES & DÉSAVANTAGES -->
+    <!-- 4. AVANTAGES & DÉSAVANTAGES (Depuis avantages-data.js) -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Avantages -->
       <div class="card-clean rounded-xl p-5 space-y-3">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
-          <h3 class="font-bold text-emerald-400 font-imperial text-sm">Avantages (Coût en XP)</h3>
+          <h3 class="font-bold text-emerald-400 font-imperial text-sm">Avantages (Coût XP)</h3>
           <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
         </div>
         <div class="flex gap-2 text-xs">
-          <input type="text" id="adv-name-in" placeholder="Nom de l'avantage..." class="flex-1 p-2 rounded">
-          <input type="number" id="adv-cost-in" placeholder="Coût" min="1" max="15" value="3" class="w-16 p-2 rounded text-center">
-          <button onclick="addAdvantage()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/30 font-bold">+</button>
+          <select id="sel-catalog-adv" class="flex-1 p-2 rounded"></select>
+          <button onclick="addAdvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/30 font-bold">+ Ajouter</button>
         </div>
         <div id="adv-container" class="space-y-1.5 text-xs max-h-48 overflow-y-auto"></div>
       </div>
@@ -309,25 +268,22 @@
       <!-- Désavantages -->
       <div class="card-clean rounded-xl p-5 space-y-3">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
-          <h3 class="font-bold text-red-400 font-imperial text-sm">Désavantages (Gain max : 15 XP)</h3>
+          <h3 class="font-bold text-red-400 font-imperial text-sm">Désavantages (Max 15 XP)</h3>
           <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
         </div>
         <div class="flex gap-2 text-xs">
-          <input type="text" id="disadv-name-in" placeholder="Nom du désavantage..." class="flex-1 p-2 rounded">
-          <input type="number" id="disadv-gain-in" placeholder="Gain" min="1" max="15" value="3" class="w-16 p-2 rounded text-center">
-          <button onclick="addDisadvantage()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/30 font-bold">+</button>
+          <select id="sel-catalog-disadv" class="flex-1 p-2 rounded"></select>
+          <button onclick="addDisadvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/30 font-bold">+ Ajouter</button>
         </div>
         <div id="disadv-container" class="space-y-1.5 text-xs max-h-48 overflow-y-auto"></div>
       </div>
     </section>
 
-    <!-- 5. STATISTIQUES DERIVEES, COMBAT ET BLESSURES -->
+    <!-- 5. COMBAT & BLESSURES -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">
-        4. Combat, Honneur & Seuils de Vitalité (4e Édition)
+        4. Combat & Seuils de Vitalité (4e Édition)
       </h2>
-
-      <!-- Tableau de bord de combat -->
       <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs text-center">
         <div class="p-3 rounded bg-black/60 border border-stone-800">
           <div class="text-stone-400">ND d'Armure</div>
@@ -347,7 +303,7 @@
         <div class="p-3 rounded bg-black/60 border border-stone-800">
           <div class="text-stone-400">Gloire / Statut</div>
           <div class="text-xl font-bold text-stone-300 font-imperial mt-1">1.0 / 1.0</div>
-          <div class="text-[10px] text-stone-500">Base officielle Rang 1</div>
+          <div class="text-[10px] text-stone-500">Base Rang 1</div>
         </div>
         <div class="p-3 rounded bg-black/60 border border-stone-800 col-span-2 md:col-span-1">
           <div class="text-stone-400">Récupération Nocturne</div>
@@ -356,7 +312,7 @@
         </div>
       </div>
 
-      <!-- Seuils de blessures (Standard 4e : Terre x 5 pour indemne, puis Terre x 2) -->
+      <!-- Seuils de blessures -->
       <div>
         <div class="text-xs font-bold text-stone-300 mb-2 font-imperial">Seuils de Vitalité (Multiplicateurs de Terre) :</div>
         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 text-center text-xs">
@@ -396,7 +352,7 @@
       </div>
     </section>
 
-    <!-- 6. ÉQUIPEMENT, ARMES & SAC DE VOYAGE -->
+    <!-- 6. ÉQUIPEMENT & ARMES (Depuis equipement-data.js) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">
         5. Équipement, Armes & Dotation
@@ -404,32 +360,15 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
         <div>
           <label class="block text-stone-400 mb-1">Armure portée</label>
-          <select id="pc-armor" onchange="updateAll()" class="w-full p-2.5 rounded font-medium">
-            <option value="5" data-reduc="3" selected>Armure Légère (+5 ND d'Armure, Réduction 3)</option>
-            <option value="10" data-reduc="5">Armure Lourde (+10 ND d'Armure, Réduction 5)</option>
-            <option value="0" data-reduc="0">Vêtements normaux / Kimono (Pas de bonus)</option>
-          </select>
+          <select id="pc-armor" onchange="updateAll()" class="w-full p-2.5 rounded font-medium"></select>
         </div>
         <div>
           <label class="block text-stone-400 mb-1">Arme Principale</label>
-          <select id="pc-weapon-1" class="w-full p-2.5 rounded font-medium">
-            <option value="Katana">Katana (VD 2g2, Médium, Corps à corps)</option>
-            <option value="Wakizashi">Wakizashi (VD 2g1, Petit, Corps à corps)</option>
-            <option value="Tetsubo">Tetsubo (VD 3g2, Lourd, Deux mains)</option>
-            <option value="Naginata">Naginata (VD 3g2, Hast, Deux mains)</option>
-            <option value="Yari">Yari (VD 2g2, Hast)</option>
-            <option value="Yumi">Arc Yumi (VD selon flèches, Distance)</option>
-            <option value="Kama">Kama (VD 1g2, Paysan)</option>
-          </select>
+          <select id="pc-weapon-1" class="w-full p-2.5 rounded font-medium"></select>
         </div>
         <div>
           <label class="block text-stone-400 mb-1">Arme Secondaire / Distance</label>
-          <select id="pc-weapon-2" class="w-full p-2.5 rounded font-medium">
-            <option value="Wakizashi">Wakizashi (Inclus dans le Daisho)</option>
-            <option value="Yumi">Arc Yumi + Carquois (20 Flèches)</option>
-            <option value="Tanto">Tanto (Couteau, VD 1g1)</option>
-            <option value="Aucune">Aucune arme secondaire</option>
-          </select>
+          <select id="pc-weapon-2" class="w-full p-2.5 rounded font-medium"></select>
         </div>
       </div>
       <div>
@@ -440,118 +379,19 @@
 
   </main>
 
-  <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print">
-    Campagne L5R – MJ David • Fiche Interactive conforme aux règles officielles de la 4ème Édition
+    Campagne L5R – MJ David • Fiche Interactive connectée aux bases modulaires
   </footer>
 
-  <!-- SCRIPT DU MOTEUR DE CRÉATION -->
+  <!-- LOGIQUE DE CONNEXION MODULAIRE -->
   <script>
-    // 1. BASE DE DONNÉES DE SECOURS (Si data/clans-data.js n'est pas encore présent)
-    const DEFAULT_CLANS_DATA = {
-      crabe: {
-        name: "Clan du Crabe",
-        families: [
-          { name: "Hida", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Hiruma", trait: "Volonté", bonus: "+1 Volonté" },
-          { name: "Kaiu", trait: "Intelligence", bonus: "+1 Intelligence" },
-          { name: "Kuni", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Yasuki", trait: "Perception", bonus: "+1 Perception" }
-        ],
-        schools: [
-          { id: "bushi-hida", name: "Bushi Hida", type: "Bushi", trait: "Force", bonus: "+1 Force", honor: 3.5, skills: ["Armes Lourdes (Tetsubo)", "Athlétisme", "Bataille", "Défense", "Kenjutsu", "Jiujutsu", "Une compétence Bugei"], outfit: "Armure lourde, Daisho, Tetsubo, Nécessaire de voyage, 3 koku", technique: { rank: 1, name: "La Voie du Crabe", effect: "Porte des armures lourdes sans malus supplémentaire. Ajoute sa Constitution à ses jets de dégâts." } },
-          { id: "eclaireur-hiruma", name: "Éclaireur Hiruma", type: "Bushi", trait: "Agilité", bonus: "+1 Agilité", honor: 4.5, skills: ["Athlétisme", "Chasse", "Discrétion", "Défense", "Kenjutsu", "Kyujutsu", "Connaissance : Outremonde"], outfit: "Armure légère, Daisho, Yumi avec 20 flèches, 2 koku", technique: { rank: 1, name: "Vigilance du Rôdeur", effect: "Ignore les pénalités de terrain difficile. Obtient +1g0 à l'Initiative et à la Discrétion." } }
-        ]
-      },
-      grue: {
-        name: "Clan de la Grue",
-        families: [
-          { name: "Kakita", trait: "Agilité", bonus: "+1 Agilité" },
-          { name: "Doji", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Daidoji", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Asahina", trait: "Intelligence", bonus: "+1 Intelligence" }
-        ],
-        schools: [
-          { id: "duelliste-kakita", name: "Duelliste Kakita", type: "Bushi", trait: "Réflexes", bonus: "+1 Réflexes", honor: 6.5, skills: ["Artisanat", "Courtisan", "Défense", "Étiquette", "Iaijutsu", "Kenjutsu", "Sincérité"], outfit: "Kimono raffiné, Daisho de maître, Nécessaire d'entretien, 5 koku", technique: { rank: 1, name: "La Voie de la Grue", effect: "Ajoute le rang d'Iaijutsu à l'Initiative. Gagne une Augmentation gratuite par tranche de 5 au duel." } },
-          { id: "courtisan-doji", name: "Courtisan Doji", type: "Courtisan", trait: "Intuition", bonus: "+1 Intuition", honor: 6.5, skills: ["Cérémonie du Thé", "Courtisan", "Étiquette", "Oratoire", "Représentation", "Sincérité", "Une compétence Noble"], outfit: "Kimono de cour somptueux, Wakizashi, Nécessaire d'écriture, 10 koku", technique: { rank: 1, name: "La Grâce Impériale", effect: "Reconnaît l'Honneur et le Statut exacts. Réduit le ND des faveurs sollicitées." } }
-        ]
-      },
-      dragon: {
-        name: "Clan du Dragon",
-        families: [
-          { name: "Mirumoto", trait: "Agilité", bonus: "+1 Agilité" },
-          { name: "Kitsuki", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Tamori", trait: "Volonté", bonus: "+1 Volonté" },
-          { name: "Togashi", trait: "Constitution", bonus: "+1 Constitution" }
-        ],
-        schools: [
-          { id: "bushi-mirumoto", name: "Bushi Mirumoto", type: "Bushi", trait: "Agilité", bonus: "+1 Agilité", honor: 4.5, skills: ["Défense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Méditation", "Connaissance : Théologie", "Une compétence Bugei"], outfit: "Armure légère ou lourde, Daisho Mirumoto, 3 koku", technique: { rank: 1, name: "Le Style Niten (Deux Sabres)", effect: "Maniement simultané Katana et Wakizashi sans malus. +5 permanent au ND d'Armure." } }
-        ]
-      },
-      lion: {
-        name: "Clan du Lion",
-        families: [
-          { name: "Akodo", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Matsu", trait: "Force", bonus: "+1 Force" },
-          { name: "Ikoma", trait: "Intelligence", bonus: "+1 Intelligence" },
-          { name: "Kitsu", trait: "Volonté", bonus: "+1 Volonté" }
-        ],
-        schools: [
-          { id: "bushi-akodo", name: "Bushi Akodo", type: "Bushi", trait: "Perception", bonus: "+1 Perception", honor: 6.5, skills: ["Art de la Guerre (Bataille)", "Défense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Connaissance : Histoire", "Sincérité"], outfit: "Armure lourde Lion, Daisho, 3 koku", technique: { rank: 1, name: "Précision du Maître", effect: "Peut relancer tout dé d'attaque inférieur ou égal à son Rang d'Honneur." } }
-        ]
-      },
-      mante: {
-        name: "Clan de la Mante",
-        families: [
-          { name: "Yoritomo", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Tsuruchi", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Moshi", trait: "Intelligence", bonus: "+1 Intelligence" }
-        ],
-        schools: [
-          { id: "archer-tsuruchi", name: "Archer Tsuruchi", type: "Bushi", trait: "Réflexes", bonus: "+1 Réflexes", honor: 4.5, skills: ["Athlétisme", "Chasse", "Discrétion", "Défense", "Enquête", "Kyujutsu", "Une compétence Bugei"], outfit: "Arc Yumi de maître, Carquois de 30 flèches, Daisho, 2 koku", technique: { rank: 1, name: "L'Œil du Faucon", effect: "Ignore les malus de portée d'arc. Encorder et tirer devient une Action Simple." } }
-        ]
-      },
-      phenix: {
-        name: "Clan du Phénix",
-        families: [
-          { name: "Isawa", trait: "Volonté", bonus: "+1 Volonté" },
-          { name: "Shiba", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Asako", trait: "Intuition", bonus: "+1 Intuition" }
-        ],
-        schools: [
-          { id: "bushi-shiba", name: "Bushi Shiba", type: "Bushi", trait: "Agilité", bonus: "+1 Agilité", honor: 5.5, skills: ["Armes d'Hast (Yari)", "Athlétisme", "Défense", "Iaijutsu", "Kenjutsu", "Méditation", "Connaissance : Théologie"], outfit: "Armure lourde, Daisho, Lance Yari, 3 koku", technique: { rank: 1, name: "Le Bouclier de Shiba", effect: "Dépenser un point de Vide pour ajouter son rang de Méditation au ND d'Armure d'un shugenja allié." } }
-        ]
-      },
-      scorpion: {
-        name: "Clan du Scorpion",
-        families: [
-          { name: "Bayushi", trait: "Agilité", bonus: "+1 Agilité" },
-          { name: "Shosuro", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Soshi", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Yogo", trait: "Volonté", bonus: "+1 Volonté" }
-        ],
-        schools: [
-          { id: "bushi-bayushi", name: "Bushi Bayushi", type: "Bushi", trait: "Réflexes", bonus: "+1 Réflexes", honor: 2.5, skills: ["Comédie", "Défense", "Discrétion", "Enquête", "Iaijutsu", "Kenjutsu", "Une compétence Bugei"], outfit: "Armure légère noire, Masque personnel, Daisho, 3 koku", technique: { rank: 1, name: "La Ruse du Scorpion", effect: "Ajoute son Iaijutsu à son Initiative. L'adversaire feinté perd temporairement son bonus d'armure." } }
-        ]
-      },
-      licorne: {
-        name: "Clan de la Licorne",
-        families: [
-          { name: "Moto", trait: "Force", bonus: "+1 Force" },
-          { name: "Shinjo", trait: "Réflexes", bonus: "+1 Réflexes" },
-          { name: "Utaku", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Iuchi", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Ide", trait: "Volonté", bonus: "+1 Volonté" }
-        ],
-        schools: [
-          { id: "bushi-moto", name: "Bushi Moto", type: "Bushi", trait: "Force", bonus: "+1 Force", honor: 3.5, skills: ["Art de la Guerre (Bataille)", "Armes d'Hast", "Défense", "Équitation", "Kenjutsu", "Kyujutsu", "Une compétence Bugei"], outfit: "Armure lourde en cuir d'écaille, Scimitar, Poney des steppes harnaché, 3 koku", technique: { rank: 1, name: "La Charge du Tonnerre", effect: "+2g0 aux dégâts en charge montée. Aucun malus de combat à cheval." } }
-        ]
-      }
-    };
+    // Récupération des bases modulaires (avec fallbacks minimaux de sécurité)
+    const CLANS = (typeof CLANS_DATA !== "undefined") ? CLANS_DATA : (typeof CLANS_CORE !== "undefined" ? CLANS_CORE : {});
+    const SKILLS_CATALOG = (typeof COMPETENCES_DATA !== "undefined") ? COMPETENCES_DATA : [];
+    const EQ_CATALOG = (typeof EQUIPEMENT_DATA !== "undefined") ? EQUIPEMENT_DATA : { armures: [], armes: [] };
+    const ADV_CATALOG = (typeof AVANTAGES_DATA !== "undefined") ? AVANTAGES_DATA : { avantages: [], desavantages: [] };
 
-    const CLANS = (typeof CLANS_DATA !== "undefined") ? CLANS_DATA : DEFAULT_CLANS_DATA;
-
-    // Prénoms rokuganis et significations poétiques
+    // Prénoms rokuganis
     const ROKUGANI_NAMES = {
       m: [
         { n: "Okado", m: "Porte de la sagesse" },
@@ -560,27 +400,31 @@
         { n: "Ryujin", m: "L'esprit du dragon des mers" },
         { n: "Kenji", m: "Second fils vigoureux" },
         { n: "Masashi", m: "Gouverneur honorable" },
-        { n: "Tadashi", m: "Droit et loyal au Bushido" },
-        { n: "Kazuki", m: "Espoir radieux" }
+        { n: "Tadashi", m: "Droit et loyal au Bushido" }
       ],
       f: [
         { n: "Yuriko", m: "Enfant du lys immaculé" },
         { n: "Ayame", m: "Iris fleurissant près des eaux" },
         { n: "Hotaru", m: "Luciole dans la brume du crépuscule" },
         { n: "Kaede", m: "Feuille d'érable d'automne" },
-        { n: "Tomoe", m: "Tourbillon protecteur" },
-        { n: "Chiyo", m: "Mille générations de bénédictions" },
-        { n: "Reiko", m: "Enfant reconnaissante et gracieuse" }
+        { n: "Tomoe", m: "Tourbillon protecteur" }
       ]
     };
 
-    let nameOrderWestern = true; // true = Prénom Famille (Okado Hiruma), false = Famille Prénom (Hiruma Okado)
+    let nameOrderWestern = true;
     let currentSkills = [];
     let advantagesList = [];
     let disadvantagesList = [];
 
-    // 2. INITIALISATION DES MENUS DÉROULANTS
-    function initSelectors() {
+    // Initialisation générale
+    function initAll() {
+      initClans();
+      initCatalogSelectors();
+      updateAll();
+    }
+
+    // Remplissage des sélecteurs de Clans
+    function initClans() {
       const clanSel = document.getElementById('sel-clan');
       clanSel.innerHTML = "";
       for (let k in CLANS) {
@@ -592,11 +436,71 @@
       onClanChange();
     }
 
+    // Remplissage des sélecteurs d'équipement et avantages depuis les fichiers .js
+    function initCatalogSelectors() {
+      // 1. Compétences
+      const skSel = document.getElementById('sel-add-skill');
+      skSel.innerHTML = "";
+      SKILLS_CATALOG.forEach(s => {
+        let opt = document.createElement('option');
+        opt.value = s.name;
+        opt.textContent = `${s.name} (${s.type} - ${s.trait})`;
+        skSel.appendChild(opt);
+      });
+
+      // 2. Armures
+      const armSel = document.getElementById('pc-armor');
+      armSel.innerHTML = "";
+      EQ_CATALOG.armures.forEach(a => {
+        let opt = document.createElement('option');
+        opt.value = a.tn;
+        opt.textContent = a.name;
+        armSel.appendChild(opt);
+      });
+
+      // 3. Armes
+      const w1Sel = document.getElementById('pc-weapon-1');
+      const w2Sel = document.getElementById('pc-weapon-2');
+      w1Sel.innerHTML = "";
+      w2Sel.innerHTML = "<option value='Aucune'>Aucune arme secondaire</option>";
+
+      EQ_CATALOG.armes.forEach(w => {
+        let opt1 = document.createElement('option');
+        opt1.value = w.name;
+        opt1.textContent = `${w.name} (VD ${w.vd}, ${w.type})`;
+        w1Sel.appendChild(opt1);
+
+        let opt2 = document.createElement('option');
+        opt2.value = w.name;
+        opt2.textContent = `${w.name} (VD ${w.vd})`;
+        w2Sel.appendChild(opt2);
+      });
+
+      // 4. Avantages & Désavantages
+      const advSel = document.getElementById('sel-catalog-adv');
+      advSel.innerHTML = "";
+      ADV_CATALOG.avantages.forEach((a, idx) => {
+        let opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${a.name} (${a.cost} XP) - ${a.type}`;
+        advSel.appendChild(opt);
+      });
+
+      const disadvSel = document.getElementById('sel-catalog-disadv');
+      disadvSel.innerHTML = "";
+      ADV_CATALOG.desavantages.forEach((d, idx) => {
+        let opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${d.name} (+${d.gain} XP) - ${d.type}`;
+        disadvSel.appendChild(opt);
+      });
+    }
+
     function onClanChange() {
       const clanKey = document.getElementById('sel-clan').value;
       const clan = CLANS[clanKey];
+      if (!clan) return;
 
-      // Familles
       const famSel = document.getElementById('sel-family');
       famSel.innerHTML = "";
       clan.families.forEach((f, idx) => {
@@ -606,7 +510,6 @@
         famSel.appendChild(opt);
       });
 
-      // Écoles
       const schSel = document.getElementById('sel-school');
       schSel.innerHTML = "";
       clan.schools.forEach((s, idx) => {
@@ -623,15 +526,18 @@
     function onFamilyChange() {
       const clanKey = document.getElementById('sel-clan').value;
       const famIdx = document.getElementById('sel-family').value;
-      const fam = CLANS[clanKey].families[famIdx];
-      document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
+      const fam = CLANS[clanKey]?.families[famIdx];
+      if (fam) {
+        document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
+      }
       updateAll();
     }
 
     function onSchoolChange() {
       const clanKey = document.getElementById('sel-clan').value;
       const schIdx = document.getElementById('sel-school').value;
-      const sch = CLANS[clanKey].schools[schIdx];
+      const sch = CLANS[clanKey]?.schools[schIdx];
+      if (!sch) return;
 
       document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
       document.getElementById('tech-name').textContent = sch.technique.name;
@@ -639,7 +545,7 @@
       document.getElementById('pc-outfit').value = sch.outfit;
       document.getElementById('stat-honor').textContent = sch.honor;
 
-      // Charger les compétences d'école au rang 1 par défaut
+      // Attribution automatique des compétences d'école au rang 1
       currentSkills = sch.skills.map(s => ({
         name: s,
         rank: 1,
@@ -651,33 +557,6 @@
       updateAll();
     }
 
-    // 3. GESTION DES NOMS
-    function generateRandomName(gender) {
-      const clanKey = document.getElementById('sel-clan').value;
-      const famIdx = document.getElementById('sel-family').value;
-      const familyName = CLANS[clanKey].families[famIdx].name;
-
-      const list = ROKUGANI_NAMES[gender] || ROKUGANI_NAMES['m'];
-      const pick = list[Math.floor(Math.random() * list.length)];
-
-      if (nameOrderWestern) {
-        document.getElementById('pc-name').value = `${pick.n} ${familyName}`;
-      } else {
-        document.getElementById('pc-name').value = `${familyName} ${pick.n}`;
-      }
-      document.getElementById('name-meaning').textContent = `Signification : ${pick.m}`;
-    }
-
-    function toggleNameOrder() {
-      nameOrderWestern = !nameOrderWestern;
-      const val = document.getElementById('pc-name').value.trim();
-      const parts = val.split(' ');
-      if (parts.length >= 2) {
-        document.getElementById('pc-name').value = `${parts.slice(1).join(' ')} ${parts[0]}`;
-      }
-    }
-
-    // 4. RENDU DES COMPÉTENCES
     function renderSkills() {
       const container = document.getElementById('skills-list');
       container.innerHTML = currentSkills.map((sk, idx) => `
@@ -691,9 +570,25 @@
               <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
             </label>
             <input type="number" min="0" max="10" value="${sk.rank}" onchange="changeSkillRank(${idx}, this.value)" class="w-12 p-1 rounded text-center font-bold text-amber-300">
+            <button onclick="removeSkill(${idx})" class="text-stone-500 hover:text-red-400 font-bold px-1">✕</button>
           </div>
         </div>
       `).join('');
+    }
+
+    function addSkillFromCatalog() {
+      const name = document.getElementById('sel-add-skill').value;
+      if (name && !currentSkills.some(s => s.name === name)) {
+        currentSkills.push({ name, rank: 1, spec: false, isSchool: false });
+        renderSkills();
+        updateAll();
+      }
+    }
+
+    function removeSkill(idx) {
+      currentSkills.splice(idx, 1);
+      renderSkills();
+      updateAll();
     }
 
     function changeSkillRank(idx, val) {
@@ -706,27 +601,22 @@
       updateAll();
     }
 
-    function addCustomSkill() {
-      const name = prompt("Nom de la nouvelle compétence (ex : Courtisan, Droit, Médecine...) :");
-      if (name && name.trim()) {
-        currentSkills.push({
-          name: name.trim(),
-          rank: 1,
-          spec: false,
-          isSchool: false
-        });
-        renderSkills();
+    // Gestion Avantages depuis le catalogue
+    function addAdvFromCatalog() {
+      const idx = document.getElementById('sel-catalog-adv').value;
+      const adv = ADV_CATALOG.avantages[idx];
+      if (adv && !advantagesList.some(a => a.name === adv.name)) {
+        advantagesList.push({ name: adv.name, cost: adv.cost });
+        renderAdvDisadv();
         updateAll();
       }
     }
 
-    // 5. AVANTAGES & DÉSAVANTAGES
-    function addAdvantage() {
-      const name = document.getElementById('adv-name-in').value.trim();
-      const cost = parseInt(document.getElementById('adv-cost-in').value) || 0;
-      if (name && cost > 0) {
-        advantagesList.push({ name, cost });
-        document.getElementById('adv-name-in').value = "";
+    function addDisadvFromCatalog() {
+      const idx = document.getElementById('sel-catalog-disadv').value;
+      const dis = ADV_CATALOG.desavantages[idx];
+      if (dis && !disadvantagesList.some(d => d.name === dis.name)) {
+        disadvantagesList.push({ name: dis.name, gain: dis.gain });
         renderAdvDisadv();
         updateAll();
       }
@@ -736,17 +626,6 @@
       advantagesList.splice(idx, 1);
       renderAdvDisadv();
       updateAll();
-    }
-
-    function addDisadvantage() {
-      const name = document.getElementById('disadv-name-in').value.trim();
-      const gain = parseInt(document.getElementById('disadv-gain-in').value) || 0;
-      if (name && gain > 0) {
-        disadvantagesList.push({ name, gain });
-        document.getElementById('disadv-name-in').value = "";
-        renderAdvDisadv();
-        updateAll();
-      }
     }
 
     function removeDisadv(idx) {
@@ -771,24 +650,49 @@
       `).join('');
     }
 
-    // 6. CALCUL GLOBAL DE LA FICHE & SUIVI XP
+    // Noms
+    function generateRandomName(gender) {
+      const clanKey = document.getElementById('sel-clan').value;
+      const famIdx = document.getElementById('sel-family').value;
+      const familyName = CLANS[clanKey]?.families[famIdx]?.name || "Samouraï";
+
+      const list = ROKUGANI_NAMES[gender] || ROKUGANI_NAMES['m'];
+      const pick = list[Math.floor(Math.random() * list.length)];
+
+      if (nameOrderWestern) {
+        document.getElementById('pc-name').value = `${pick.n} ${familyName}`;
+      } else {
+        document.getElementById('pc-name').value = `${familyName} ${pick.n}`;
+      }
+      document.getElementById('name-meaning').textContent = `Signification : ${pick.m}`;
+    }
+
+    function toggleNameOrder() {
+      nameOrderWestern = !nameOrderWestern;
+      const val = document.getElementById('pc-name').value.trim();
+      const parts = val.split(' ');
+      if (parts.length >= 2) {
+        document.getElementById('pc-name').value = `${parts.slice(1).join(' ')} ${parts[0]}`;
+      }
+    }
+
+    // CALCUL ET MISE À JOUR XP & COMBAT
     function updateAll() {
       const clanKey = document.getElementById('sel-clan').value;
       const famIdx = document.getElementById('sel-family').value;
       const schIdx = document.getElementById('sel-school').value;
 
-      const fam = CLANS[clanKey].families[famIdx];
-      const sch = CLANS[clanKey].schools[schIdx];
+      const fam = CLANS[clanKey]?.families[famIdx];
+      const sch = CLANS[clanKey]?.schools[schIdx];
 
       // Reset badges
-      ['sta','wil','str','per','ref','awa','agi','int','voi'].forEach(id => {
+      ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
         document.getElementById(`badge-${id}`).textContent = "";
       });
 
-      // Identifier les traits boostés par famille et école
       const traitMap = {
         "Constitution": "sta", "Volonté": "wil", "Force": "str", "Perception": "per",
-        "Réflexes": "ref", "Intuition": "awa", "Agilité": "agi", "Intelligence": "int", "Vide": "voi"
+        "Réflexes": "ref", "Intuition": "awa", "Agilité": "agi", "Intelligence": "int"
       };
 
       if (fam && traitMap[fam.trait]) document.getElementById(`badge-${traitMap[fam.trait]}`).textContent = "+1 Famille";
@@ -797,7 +701,7 @@
         document.getElementById(`badge-${traitMap[sch.trait]}`).textContent = cur ? "+2 F+É" : "+1 École";
       }
 
-      // Lecture des valeurs de traits
+      // Valeurs Traits
       const sta = parseInt(document.getElementById('trait-stamina').value) || 2;
       const wil = parseInt(document.getElementById('trait-willpower').value) || 2;
       const str = parseInt(document.getElementById('trait-strength').value) || 2;
@@ -808,7 +712,7 @@
       const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
       const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-      // Calcul des 5 Anneaux (minimum des traits)
+      // Anneaux (minimum)
       const rEarth = Math.min(sta, wil);
       const rWater = Math.min(str, per);
       const rAir = Math.min(ref, awa);
@@ -821,67 +725,54 @@
       document.getElementById('ring-fire').textContent = rFire;
       document.getElementById('ring-void').textContent = rVoid;
 
-      // CALCUL DU COÛT EN XP
+      // Calcul Dépense XP
       let xpSpent = 0;
-
-      // Coût des 8 Traits au-dessus de 2 (coût : rang suivant * 4)
       const traitsBase = [
-        { val: sta, bonus: (fam.trait === "Constitution" ? 1 : 0) + (sch.trait === "Constitution" ? 1 : 0) },
-        { val: wil, bonus: (fam.trait === "Volonté" ? 1 : 0) + (sch.trait === "Volonté" ? 1 : 0) },
-        { val: str, bonus: (fam.trait === "Force" ? 1 : 0) + (sch.trait === "Force" ? 1 : 0) },
-        { val: per, bonus: (fam.trait === "Perception" ? 1 : 0) + (sch.trait === "Perception" ? 1 : 0) },
-        { val: ref, bonus: (fam.trait === "Réflexes" ? 1 : 0) + (sch.trait === "Réflexes" ? 1 : 0) },
-        { val: awa, bonus: (fam.trait === "Intuition" ? 1 : 0) + (sch.trait === "Intuition" ? 1 : 0) },
-        { val: agi, bonus: (fam.trait === "Agilité" ? 1 : 0) + (sch.trait === "Agilité" ? 1 : 0) },
-        { val: int, bonus: (fam.trait === "Intelligence" ? 1 : 0) + (sch.trait === "Intelligence" ? 1 : 0) }
+        { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
+        { val: wil, bonus: (fam?.trait === "Volonté" ? 1 : 0) + (sch?.trait === "Volonté" ? 1 : 0) },
+        { val: str, bonus: (fam?.trait === "Force" ? 1 : 0) + (sch?.trait === "Force" ? 1 : 0) },
+        { val: per, bonus: (fam?.trait === "Perception" ? 1 : 0) + (sch?.trait === "Perception" ? 1 : 0) },
+        { val: ref, bonus: (fam?.trait === "Réflexes" ? 1 : 0) + (sch?.trait === "Réflexes" ? 1 : 0) },
+        { val: awa, bonus: (fam?.trait === "Intuition" ? 1 : 0) + (sch?.trait === "Intuition" ? 1 : 0) },
+        { val: agi, bonus: (fam?.trait === "Agilité" ? 1 : 0) + (sch?.trait === "Agilité" ? 1 : 0) },
+        { val: int, bonus: (fam?.trait === "Intelligence" ? 1 : 0) + (sch?.trait === "Intelligence" ? 1 : 0) }
       ];
 
       traitsBase.forEach(t => {
         let baseStart = 2 + t.bonus;
         if (t.val > baseStart) {
-          for (let r = baseStart + 1; r <= t.val; r++) {
-            xpSpent += r * 4;
-          }
+          for (let r = baseStart + 1; r <= t.val; r++) xpSpent += r * 4;
         }
       });
 
-      // Anneau du Vide (Vide x 6 XP)
-      let voidStart = 2 + (fam.trait === "Vide" ? 1 : 0) + (sch.trait === "Vide" ? 1 : 0);
-      if (voi > voidStart) {
-        for (let r = voidStart + 1; r <= voi; r++) {
-          xpSpent += r * 6;
-        }
+      if (voi > 2) {
+        for (let r = 3; r <= voi; r++) xpSpent += r * 6;
       }
 
-      // Compétences (Rang 1 gratuit si école, sinon rang suivant x 1 XP)
       currentSkills.forEach(sk => {
         let start = sk.isSchool ? 1 : 0;
         if (sk.rank > start) {
-          for (let r = start + 1; r <= sk.rank; r++) {
-            xpSpent += r * 1;
-          }
+          for (let r = start + 1; r <= sk.rank; r++) xpSpent += r * 1;
         }
         if (sk.spec) xpSpent += 2;
       });
 
-      // Avantages
       let advCost = advantagesList.reduce((acc, a) => acc + a.cost, 0);
       document.getElementById('adv-cost-total').textContent = advCost;
       xpSpent += advCost;
 
-      // Désavantages (Plafond officiel de 15 XP)
       let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
       let disadvGain = Math.min(rawDisadvGain, 15);
       document.getElementById('disadv-gain-total').textContent = disadvGain;
 
-      let totalXPBudget = 40 + disadvGain;
-      let remainingXP = totalXPBudget - xpSpent;
+      let totalXP = 40 + disadvGain;
+      let remainingXP = totalXP - xpSpent;
 
-      document.getElementById('xp-total').textContent = totalXPBudget;
+      document.getElementById('xp-total').textContent = totalXP;
       document.getElementById('xp-remaining').textContent = remainingXP;
       document.getElementById('xp-remaining').className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-      // CALCUL INSIGHT & RANG DE MAÎTRISE
+      // Insight
       let sumRings = rEarth + rWater + rAir + rFire + rVoid;
       let sumSkills = currentSkills.reduce((acc, sk) => acc + sk.rank, 0);
       let insight = (sumRings * 10) + sumSkills;
@@ -894,98 +785,72 @@
 
       document.getElementById('insight-display').innerHTML = `${insight} pts <span class="text-xs text-amber-400 font-bold">(Rang ${insightRank})</span>`;
 
-      // STATS DE COMBAT
+      // Combat
       const armorBonus = parseInt(document.getElementById('pc-armor').value) || 0;
-      const armorTN = 5 + (5 * ref) + armorBonus;
-      document.getElementById('stat-armor-tn').textContent = armorTN;
+      document.getElementById('stat-armor-tn').textContent = 5 + (5 * ref) + armorBonus;
       document.getElementById('stat-init').textContent = `${ref}g${ref}`;
       document.getElementById('stat-heal').textContent = `${(sta * 2) + insightRank} PV`;
 
-      // SEUILS DE BLESSURES
-      const healthyWounds = rEarth * 5;
-      const stepWounds = rEarth * 2;
-
-      document.getElementById('w-0').textContent = `${healthyWounds} PV`;
+      // Blessures
+      document.getElementById('w-0').textContent = `${rEarth * 5} PV`;
       for (let i = 1; i <= 7; i++) {
-        document.getElementById(`w-${i}`).textContent = `${stepWounds} PV`;
+        document.getElementById(`w-${i}`).textContent = `${rEarth * 2} PV`;
       }
     }
 
-    // 7. GÉNÉRATEUR ALÉATOIRE COMPLET (40 XP)
+    // Tirage auto équilibré
     function randomizeAll() {
-      // 1. Clan, Famille et École au hasard
       const clanKeys = Object.keys(CLANS);
       const randomClan = clanKeys[Math.floor(Math.random() * clanKeys.length)];
       document.getElementById('sel-clan').value = randomClan;
       onClanChange();
 
       const clan = CLANS[randomClan];
-      const randFamIdx = Math.floor(Math.random() * clan.families.length);
-      document.getElementById('sel-family').value = randFamIdx;
+      document.getElementById('sel-family').value = Math.floor(Math.random() * clan.families.length);
       onFamilyChange();
 
-      const randSchIdx = Math.floor(Math.random() * clan.schools.length);
-      document.getElementById('sel-school').value = randSchIdx;
+      document.getElementById('sel-school').value = Math.floor(Math.random() * clan.schools.length);
       onSchoolChange();
 
-      // 2. Nom aléatoire
       generateRandomName(Math.random() > 0.5 ? 'm' : 'f');
 
-      // 3. Reset Traits à 2 + bonus de départ
-      const fam = clan.families[randFamIdx];
-      const sch = clan.schools[randSchIdx];
+      // Réinitialiser les traits à la base + bonus
+      const fam = clan.families[document.getElementById('sel-family').value];
+      const sch = clan.schools[document.getElementById('sel-school').value];
 
       const traitInputs = {
         "Constitution": "trait-stamina", "Volonté": "trait-willpower",
         "Force": "trait-strength", "Perception": "trait-perception",
         "Réflexes": "trait-reflexes", "Intuition": "trait-awareness",
-        "Agilité": "trait-agility", "Intelligence": "trait-intelligence", "Vide": "trait-void"
+        "Agilité": "trait-agility", "Intelligence": "trait-intelligence"
       };
 
-      for (let k in traitInputs) {
-        document.getElementById(traitInputs[k]).value = 2;
-      }
-      if (fam && traitInputs[fam.trait]) {
-        let el = document.getElementById(traitInputs[fam.trait]);
-        el.value = parseInt(el.value) + 1;
-      }
+      for (let k in traitInputs) document.getElementById(traitInputs[k]).value = 2;
+      document.getElementById('trait-void').value = 2;
+
+      if (fam && traitInputs[fam.trait]) document.getElementById(traitInputs[fam.trait]).value = 3;
       if (sch && traitInputs[sch.trait]) {
         let el = document.getElementById(traitInputs[sch.trait]);
         el.value = parseInt(el.value) + 1;
       }
 
-      // 4. Attribution cohérente d'avantages/désavantages
-      advantagesList = [
-        { name: "Réflexes Éclairs", cost: 3 }
-      ];
-      disadvantagesList = [
-        { name: "Code du Bushido Strict", gain: 3 }
-      ];
+      // Ajout d'1 avantage et 1 désavantage depuis le catalogue
+      advantagesList = ADV_CATALOG.avantages.length ? [{ name: ADV_CATALOG.avantages[0].name, cost: ADV_CATALOG.avantages[0].cost }] : [];
+      disadvantagesList = ADV_CATALOG.desavantages.length ? [{ name: ADV_CATALOG.desavantages[0].name, gain: ADV_CATALOG.desavantages[0].gain }] : [];
       renderAdvDisadv();
 
-      // 5. Répartition intelligente des 40 XP
-      // Augmentation d'un trait principal de combat (ex : Réflexes ou Agilité) de 1 rang (3 -> 4 = 16 XP)
-      let primeTrait = sch.type === "Bushi" ? "trait-agility" : "trait-intelligence";
-      let curVal = parseInt(document.getElementById(primeTrait).value);
-      if (curVal < 4) {
-        document.getElementById(primeTrait).value = curVal + 1;
-      }
-
-      // Augmentation de l'Anneau du Vide (2 -> 3 = 18 XP)
+      // Dépense XP auto (ex : Vide à 3 = 18 XP)
       document.getElementById('trait-void').value = 3;
-
-      // Monter deux compétences d'école au Rang 2 (+2 XP + 2 XP = 4 XP)
       if (currentSkills.length >= 2) {
         currentSkills[0].rank = 2;
         currentSkills[1].rank = 2;
-        currentSkills[0].spec = true; // +2 XP
+        currentSkills[0].spec = true;
       }
       renderSkills();
-
       updateAll();
     }
 
-    // 8. IMPORT / EXPORT JSON
+    // Export / Import
     function exportJSON() {
       const data = {
         name: document.getElementById('pc-name').value,
@@ -1006,19 +871,17 @@
         skills: currentSkills,
         advantages: advantagesList,
         disadvantages: disadvantagesList,
-        outfit: document.getElementById('pc-outfit').value,
+        armor: document.getElementById('pc-armor').value,
         weapon1: document.getElementById('pc-weapon-1').value,
         weapon2: document.getElementById('pc-weapon-2').value,
-        armor: document.getElementById('pc-armor').value
+        outfit: document.getElementById('pc-outfit').value
       };
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = URL.createObjectURL(blob);
       a.download = `${data.name.replace(/\s+/g, '_')}_L5R4e.json`;
       a.click();
-      URL.revokeObjectURL(url);
     }
 
     function importJSON(event) {
@@ -1031,10 +894,8 @@
           const d = JSON.parse(e.target.result);
           document.getElementById('sel-clan').value = d.clan;
           onClanChange();
-
           document.getElementById('sel-family').value = d.family;
           onFamilyChange();
-
           document.getElementById('sel-school').value = d.school;
           onSchoolChange();
 
@@ -1053,32 +914,26 @@
           advantagesList = d.advantages || [];
           disadvantagesList = d.disadvantages || [];
 
-          if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
+          if (d.armor) document.getElementById('pc-armor').value = d.armor;
           if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
           if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
-          if (d.armor) document.getElementById('pc-armor').value = d.armor;
+          if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
 
           renderSkills();
           renderAdvDisadv();
           updateAll();
-          alert("Fiche chargée avec succès !");
-        } catch (err) {
-          alert("Erreur lors de la lecture du fichier JSON.");
+        } catch(err) {
+          alert("Erreur de format JSON.");
         }
       };
       reader.readAsText(file);
     }
 
     function resetCharacter() {
-      if (confirm("Réinitialiser l'ensemble de la fiche aux valeurs de base ?")) {
-        initSelectors();
-      }
+      if (confirm("Réinitialiser la fiche ?")) initClans();
     }
 
-    // Lancement au chargement
-    window.addEventListener('DOMContentLoaded', () => {
-      initSelectors();
-    });
+    window.addEventListener('DOMContentLoaded', initAll);
   </script>
 </body>
 </html>
