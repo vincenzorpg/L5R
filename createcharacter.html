@@ -9,11 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- CHARGEMENT DES BASES DE DONNÉES EXTERNES -->
-  <script src="data/clans-data.js"></script>
-  <script src="data/competences-data.js"></script>
-  <script src="data/equipement-data.js"></script>
-  <script src="data/avantages-data.js"></script>
+  <!-- CHARGEMENT DES BASES DE DONNÉES STRICTEMENT DÉPORTÉES -->
+  <script src="data/clans-data.js" defer></script>
+  <script src="data/competences-data.js" defer></script>
+  <script src="data/equipement-data.js" defer></script>
+  <script src="data/avantages-data.js" defer></script>
 
   <style>
     :root {
@@ -379,204 +379,11 @@
   </main>
 
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print">
-    Campagne L5R – MJ David • Fiche Interactive connectée aux bases modulaires
+    Campagne L5R – MJ David • Fiche Interactive dynamique alimentée par data/
   </footer>
 
-  <!-- SCRIPT DU MOTEUR COMPLET -->
+  <!-- MOTEUR STRICTEMENT CONNECTÉ AUX FICHIERS DATA -->
   <script>
-    // BASES DE DONNÉES DE SECOURS AUTONOMES
-    const FALLBACK_CLANS = {
-      crabe: {
-        name: "Clan du Crabe",
-        families: [
-          { name: "Hida", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Hiruma", trait: "Volonté", bonus: "+1 Volonté" },
-          { name: "Kaiu", trait: "Intelligence", bonus: "+1 Intelligence" },
-          { name: "Kuni", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Yasuki", trait: "Perception", bonus: "+1 Perception" }
-        ],
-        schools: [
-          { id: "bushi-hida", name: "Bushi Hida", type: "Bushi", trait: "Force", bonus: "+1 Force", honor: 3.5, skills: ["Armes Lourdes (Tetsubo)", "Athlétisme", "Bataille", "Défense", "Kenjutsu", "Jiujutsu", "Une compétence Bugei"], outfit: "Armure lourde, Daisho, Tetsubo, Nécessaire de voyage, 3 koku", technique: { rank: 1, name: "La Voie du Crabe", effect: "Porte des armures lourdes sans malus supplémentaire. Ajoute sa Constitution à ses jets de dégâts." } },
-          { id: "eclaireur-hiruma", name: "Éclaireur Hiruma", type: "Bushi", trait: "Agilité", bonus: "+1 Agilité", honor: 4.5, skills: ["Athlétisme", "Chasse", "Discrétion", "Défense", "Kenjutsu", "Kyujutsu", "Connaissance : Outremonde"], outfit: "Armure légère, Daisho, Yumi avec 20 flèches, 2 koku", technique: { rank: 1, name: "Vigilance du Rôdeur", effect: "Ignore les pénalités de terrain difficile. Obtient +1g0 à l'Initiative et à la Discrétion." } }
-        ]
-      },
-      grue: {
-        name: "Clan de la Grue",
-        families: [
-          { name: "Kakita", trait: "Agilité", bonus: "+1 Agilité" },
-          { name: "Doji", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Daidoji", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Asahina", trait: "Intelligence", bonus: "+1 Intelligence" }
-        ],
-        schools: [
-          { id: "duelliste-kakita", name: "Duelliste Kakita", type: "Bushi", trait: "Réflexes", bonus: "+1 Réflexes", honor: 6.5, skills: ["Artisanat", "Courtisan", "Défense", "Étiquette", "Iaijutsu", "Kenjutsu", "Sincérité"], outfit: "Kimono raffiné, Daisho de maître, Nécessaire d'entretien, 5 koku", technique: { rank: 1, name: "La Voie de la Grue", effect: "Ajoute le rang d'Iaijutsu à l'Initiative. Gagne une Augmentation gratuite par tranche de 5 au duel." } },
-          { id: "courtisan-doji", name: "Courtisan Doji", type: "Courtisan", trait: "Intuition", bonus: "+1 Intuition", honor: 6.5, skills: ["Cérémonie du Thé", "Courtisan", "Étiquette", "Oratoire", "Représentation", "Sincérité", "Une compétence Noble"], outfit: "Kimono de cour somptueux, Wakizashi, Nécessaire d'écriture, 10 koku", technique: { rank: 1, name: "La Grâce Impériale", effect: "Reconnaît l'Honneur et le Statut exacts. Réduit le ND des faveurs sollicitées." } }
-        ]
-      },
-      dragon: {
-        name: "Clan du Dragon",
-        families: [
-          { name: "Mirumoto", trait: "Agilité", bonus: "+1 Agilité" },
-          { name: "Kitsuki", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Tamori", trait: "Volonté", bonus: "+1 Volonté" },
-          { name: "Togashi", trait: "Constitution", bonus: "+1 Constitution" }
-        ],
-        schools: [
-          { id: "bushi-mirumoto", name: "Bushi Mirumoto", type: "Bushi", trait: "Agilité", bonus: "+1 Agilité", honor: 4.5, skills: ["Défense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Méditation", "Connaissance : Théologie", "Une compétence Bugei"], outfit: "Armure légère ou lourde, Daisho Mirumoto, 3 koku", technique: { rank: 1, name: "Le Style Niten", effect: "Maniement simultané Katana et Wakizashi sans malus. +5 permanent au ND d'Armure." } }
-        ]
-      },
-      lion: {
-        name: "Clan du Lion",
-        families: [
-          { name: "Akodo", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Matsu", trait: "Force", bonus: "+1 Force" },
-          { name: "Ikoma", trait: "Intelligence", bonus: "+1 Intelligence" },
-          { name: "Kitsu", trait: "Volonté", bonus: "+1 Volonté" }
-        ],
-        schools: [
-          { id: "bushi-akodo", name: "Bushi Akodo", type: "Bushi", trait: "Perception", bonus: "+1 Perception", honor: 6.5, skills: ["Art de la Guerre (Bataille)", "Défense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Connaissance : Histoire", "Sincérité"], outfit: "Armure lourde Lion, Daisho, 3 koku", technique: { rank: 1, name: "Précision du Maître", effect: "Peut relancer tout dé d'attaque inférieur ou égal à son Rang d'Honneur." } }
-        ]
-      },
-      mante: {
-        name: "Clan de la Mante",
-        families: [
-          { name: "Yoritomo", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Tsuruchi", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Moshi", trait: "Intelligence", bonus: "+1 Intelligence" }
-        ],
-        schools: [
-          { id: "archer-tsuruchi", name: "Archer Tsuruchi", type: "Bushi", trait: "Réflexes", bonus: "+1 Réflexes", honor: 4.5, skills: ["Athlétisme", "Chasse", "Discrétion", "Défense", "Enquête", "Kyujutsu", "Une compétence Bugei"], outfit: "Arc Yumi de maître, Carquois de 30 flèches, Daisho, 2 koku", technique: { rank: 1, name: "L'Œil du Faucon", effect: "Ignore les malus de portée d'arc. Encorder et tirer devient une Action Simple." } }
-        ]
-      },
-      phenix: {
-        name: "Clan du Phénix",
-        families: [
-          { name: "Isawa", trait: "Volonté", bonus: "+1 Volonté" },
-          { name: "Shiba", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Asako", trait: "Intuition", bonus: "+1 Intuition" }
-        ],
-        schools: [
-          { id: "bushi-shiba", name: "Bushi Shiba", type: "Bushi", trait: "Agilité", bonus: "+1 Agilité", honor: 5.5, skills: ["Armes d'Hast (Yari)", "Athlétisme", "Défense", "Iaijutsu", "Kenjutsu", "Méditation", "Connaissance : Théologie"], outfit: "Armure lourde, Daisho, Lance Yari, 3 koku", technique: { rank: 1, name: "Le Bouclier de Shiba", effect: "Dépenser un point de Vide pour ajouter son rang de Méditation au ND d'Armure d'un shugenja allié." } }
-        ]
-      },
-      scorpion: {
-        name: "Clan du Scorpion",
-        families: [
-          { name: "Bayushi", trait: "Agilité", bonus: "+1 Agilité" },
-          { name: "Shosuro", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Soshi", trait: "Perception", bonus: "+1 Perception" },
-          { name: "Yogo", trait: "Volonté", bonus: "+1 Volonté" }
-        ],
-        schools: [
-          { id: "bushi-bayushi", name: "Bushi Bayushi", type: "Bushi", trait: "Réflexes", bonus: "+1 Réflexes", honor: 2.5, skills: ["Comédie", "Défense", "Discrétion", "Enquête", "Iaijutsu", "Kenjutsu", "Une compétence Bugei"], outfit: "Armure légère noire, Masque personnel, Daisho, 3 koku", technique: { rank: 1, name: "La Ruse du Scorpion", effect: "Ajoute son Iaijutsu à son Initiative. L'adversaire feinté perd temporairement son bonus d'armure." } }
-        ]
-      },
-      licorne: {
-        name: "Clan de la Licorne",
-        families: [
-          { name: "Moto", trait: "Force", bonus: "+1 Force" },
-          { name: "Shinjo", trait: "Réflexes", bonus: "+1 Réflexes" },
-          { name: "Utaku", trait: "Constitution", bonus: "+1 Constitution" },
-          { name: "Iuchi", trait: "Intuition", bonus: "+1 Intuition" },
-          { name: "Ide", trait: "Volonté", bonus: "+1 Volonté" }
-        ],
-        schools: [
-          { id: "bushi-moto", name: "Bushi Moto", type: "Bushi", trait: "Force", bonus: "+1 Force", honor: 3.5, skills: ["Art de la Guerre (Bataille)", "Armes d'Hast", "Défense", "Équitation", "Kenjutsu", "Kyujutsu", "Une compétence Bugei"], outfit: "Armure lourde en cuir d'écaille, Scimitar, Poney des steppes harnaché, 3 koku", technique: { rank: 1, name: "La Charge du Tonnerre", effect: "+2g0 aux dégâts en charge montée. Aucun malus de combat à cheval." } }
-        ]
-      }
-    };
-
-    const FALLBACK_AVANTAGES = {
-      avantages: [
-        { name: "Réflexes Éclairs", cost: 3, type: "Physique", desc: "+1g1 aux jets d'Initiative." },
-        { name: "Âme de Guerrier", cost: 4, type: "Spirituel", desc: "Considéré comme ayant un rang de Maîtrise supérieur pour ses techniques de Bushi." },
-        { name: "Grande Taille", cost: 4, type: "Physique", desc: "+1g0 aux jets de Dégâts au corps à corps et +1 PV par niveau de blessure." },
-        { name: "Voix Envoûtante", cost: 3, type: "Social", desc: "+1g0 à tous les jets de compétences sociales face à autrui." },
-        { name: "Affinité Élémentaire", cost: 4, type: "Spirituel", desc: "+1g0 pour lancer les sorts de l'anneau choisi (Shugenja uniquement)." },
-        { name: "Chanceux", cost: 3, type: "Matériel", desc: "Peut relancer un jet de dés totalement raté par session de jeu." },
-        { name: "Honneur Pur", cost: 2, type: "Mental", desc: "Gagne 1 point d'Honneur supplémentaire lors de chaque gain d'Honneur." },
-        { name: "Sens de l'Orientation", cost: 1, type: "Mental", desc: "Ne se perd jamais en extérieur." },
-        { name: "Équilibre Parfait", cost: 2, type: "Physique", desc: "+1g0 aux jets d'Athlétisme liés à l'escalade ou l'équilibre." }
-      ],
-      desavantages: [
-        { name: "Code du Bushido Strict", gain: 3, type: "Mental", desc: "Perd le double d'Honneur en cas d'infraction au Bushido." },
-        { name: "Colérique", gain: 3, type: "Mental", desc: "Doit réussir un jet de Volonté ND 20 pour ne pas dégainer lorsqu'il est provoqué." },
-        { name: "Sombre Destin", gain: 3, type: "Spirituel", desc: "Le personnage est voué à mourir d'une mort tragique ou maudite." },
-        { name: "Boiteux", gain: 3, type: "Physique", desc: "Vitesse de déplacement réduite de 5 mètres." },
-        { name: "Malédiction de Benten", gain: 2, type: "Spirituel", desc: "Méfiance instinctive et inexplicable des tiers à son égard." },
-        { name: "Mauvaise Réputation", gain: 2, type: "Social", desc: "Pénalité sociale dans un ou plusieurs clans." },
-        { name: "Cupidité", gain: 2, type: "Mental", desc: "Attiré de manière déshonorante par la richesse matérielle." },
-        { name: "Doute de Soi", gain: 3, type: "Mental", desc: "Doit dépenser 2 points de Vide au lieu d'un seul pour obtenir un bonus de dé." }
-      ]
-    };
-
-    const FALLBACK_COMPETENCES = [
-      { name: "Armes d'Hast", trait: "Agilité", type: "Bugei" },
-      { name: "Armes de Paysan", trait: "Agilité", type: "Bugei" },
-      { name: "Armes Lourdes", trait: "Agilité", type: "Bugei" },
-      { name: "Athlétisme", trait: "Force", type: "Bugei" },
-      { name: "Art de la Guerre (Bataille)", trait: "Perception", type: "Bugei" },
-      { name: "Défense", trait: "Réflexes", type: "Bugei" },
-      { name: "Équitation", trait: "Agilité", type: "Bugei" },
-      { name: "Iaijutsu", trait: "Réflexes", type: "Bugei" },
-      { name: "Jiujutsu", trait: "Agilité", type: "Bugei" },
-      { name: "Kenjutsu", trait: "Agilité", type: "Bugei" },
-      { name: "Kyujutsu", trait: "Réflexes", type: "Bugei" },
-      { name: "Artisanat", trait: "Intuition", type: "Noble" },
-      { name: "Calligraphie", trait: "Intelligence", type: "Noble" },
-      { name: "Cérémonie du Thé", trait: "Vide", type: "Noble" },
-      { name: "Courtisan", trait: "Intuition", type: "Noble" },
-      { name: "Enquête", trait: "Perception", type: "Noble" },
-      { name: "Étiquette", trait: "Intuition", type: "Noble" },
-      { name: "Connaissance : Histoire", trait: "Intelligence", type: "Noble" },
-      { name: "Connaissance : Théologie", trait: "Intelligence", type: "Noble" },
-      { name: "Méditation", trait: "Vide", type: "Noble" },
-      { name: "Oratoire", trait: "Intuition", type: "Noble" },
-      { name: "Sincérité", trait: "Intuition", type: "Noble" },
-      { name: "Théurgie", trait: "Intelligence", type: "Noble" },
-      { name: "Commerce", trait: "Intelligence", type: "Marchande" },
-      { name: "Navigation", trait: "Intelligence", type: "Marchande" },
-      { name: "Comédie", trait: "Intuition", type: "Dégradante" },
-      { name: "Discrétion", trait: "Agilité", type: "Dégradante" },
-      { name: "Intimidation", trait: "Volonté", type: "Dégradante" },
-      { name: "Poisons", trait: "Intelligence", type: "Dégradante" },
-      { name: "Connaissance : Outremonde", trait: "Intelligence", type: "Dégradante" }
-    ];
-
-    const FALLBACK_EQUIPEMENT = {
-      armures: [
-        { name: "Vêtements normaux / Kimono", tn: 0 },
-        { name: "Armure Légère (+5 ND d'Armure, Réduction 3)", tn: 5 },
-        { name: "Armure Lourde (+10 ND d'Armure, Réduction 5)", tn: 10 }
-      ],
-      armes: [
-        { name: "Katana", vd: "2g2", type: "Médium" },
-        { name: "Wakizashi", vd: "2g1", type: "Petit" },
-        { name: "No-Dachi", vd: "3g3", type: "Deux mains" },
-        { name: "Tetsubo", vd: "3g2", type: "Lourd" },
-        { name: "Naginata", vd: "3g2", type: "Hast" },
-        { name: "Yari", vd: "2g2", type: "Hast" },
-        { name: "Arc Yumi", vd: "2g2", type: "Distance" },
-        { name: "Kama", vd: "1g2", type: "Paysan" },
-        { name: "Tanto", vd: "1g1", type: "Couteau" }
-      ]
-    };
-
-    // RÉSOLUTION DES SOURCES DE DONNÉES
-    function getClansData() {
-      return (window.CLANS_DATA && Object.keys(window.CLANS_DATA).length) ? window.CLANS_DATA :
-             (window.CLANS_CORE && Object.keys(window.CLANS_CORE).length ? window.CLANS_CORE : FALLBACK_CLANS);
-    }
-    function getCompetencesData() {
-      return (window.COMPETENCES_DATA && window.COMPETENCES_DATA.length) ? window.COMPETENCES_DATA : FALLBACK_COMPETENCES;
-    }
-    function getEquipementData() {
-      return (window.EQUIPEMENT_DATA && window.EQUIPEMENT_DATA.armures) ? window.EQUIPEMENT_DATA : FALLBACK_EQUIPEMENT;
-    }
-    function getAvantagesData() {
-      return (window.AVANTAGES_DATA && window.AVANTAGES_DATA.avantages) ? window.AVANTAGES_DATA : FALLBACK_AVANTAGES;
-    }
-
     // Prénoms rokuganis
     const ROKUGANI_NAMES = {
       m: [
@@ -602,15 +409,26 @@
     let advantagesList = [];
     let disadvantagesList = [];
 
-    // INITIALISATION GÉNÉRALE
-    function initAll() {
+    // ACCÈS DIRECT ET SÉCURISÉ AUX OBJETS DES FICHIERS EXTERNES
+    const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
+    const getSkills = () => window.COMPETENCES_DATA || [];
+    const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
+    const getAdvantages = () => window.AVANTAGES_DATA || { avantages: [], desavantages: [] };
+
+    // Initialisation avec attente dynamique des scripts
+    function bootstrap() {
+      // On s'assure que les données des fichiers data/ sont bien montées sur window
+      if (!window.CLANS_DATA && !window.CLANS_CORE) {
+        setTimeout(bootstrap, 50);
+        return;
+      }
       initClans();
       initCatalogSelectors();
       updateAll();
     }
 
     function initClans() {
-      const clans = getClansData();
+      const clans = getClans();
       const clanSel = document.getElementById('sel-clan');
       clanSel.innerHTML = "";
       for (let k in clans) {
@@ -623,21 +441,21 @@
     }
 
     function initCatalogSelectors() {
-      const skills = getCompetencesData();
-      const eq = getEquipementData();
-      const advData = getAvantagesData();
+      const skills = getSkills();
+      const eq = getEquipment();
+      const adv = getAdvantages();
 
-      // 1. Compétences
+      // Compétences
       const skSel = document.getElementById('sel-add-skill');
       skSel.innerHTML = "";
       skills.forEach(s => {
         let opt = document.createElement('option');
         opt.value = s.name;
-        opt.textContent = `${s.name} (${s.type || 'Bugei'} - ${s.trait || 'Agilité'})`;
+        opt.textContent = `${s.name} (${s.type} - ${s.trait})`;
         skSel.appendChild(opt);
       });
 
-      // 2. Armures
+      // Armures
       const armSel = document.getElementById('pc-armor');
       armSel.innerHTML = "";
       eq.armures.forEach(a => {
@@ -647,7 +465,7 @@
         armSel.appendChild(opt);
       });
 
-      // 3. Armes
+      // Armes
       const w1Sel = document.getElementById('pc-weapon-1');
       const w2Sel = document.getElementById('pc-weapon-2');
       w1Sel.innerHTML = "";
@@ -665,19 +483,20 @@
         w2Sel.appendChild(opt2);
       });
 
-      // 4. Avantages & Désavantages (Remplissage garanti)
+      // Avantages
       const advSel = document.getElementById('sel-catalog-adv');
       advSel.innerHTML = "";
-      advData.avantages.forEach((a, idx) => {
+      (adv.avantages || []).forEach((a, idx) => {
         let opt = document.createElement('option');
         opt.value = idx;
         opt.textContent = `${a.name} (${a.cost} XP) — [${a.type}]`;
         advSel.appendChild(opt);
       });
 
+      // Désavantages
       const disadvSel = document.getElementById('sel-catalog-disadv');
       disadvSel.innerHTML = "";
-      advData.desavantages.forEach((d, idx) => {
+      (adv.desavantages || []).forEach((d, idx) => {
         let opt = document.createElement('option');
         opt.value = idx;
         opt.textContent = `${d.name} (+${d.gain} XP) — [${d.type}]`;
@@ -686,7 +505,7 @@
     }
 
     function onClanChange() {
-      const clans = getClansData();
+      const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
       const clan = clans[clanKey];
       if (!clan) return;
@@ -714,7 +533,7 @@
     }
 
     function onFamilyChange() {
-      const clans = getClansData();
+      const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
       const famIdx = document.getElementById('sel-family').value;
       const fam = clans[clanKey]?.families[famIdx];
@@ -725,7 +544,7 @@
     }
 
     function onSchoolChange() {
-      const clans = getClansData();
+      const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
       const schIdx = document.getElementById('sel-school').value;
       const sch = clans[clanKey]?.schools[schIdx];
@@ -737,7 +556,6 @@
       document.getElementById('pc-outfit').value = sch.outfit;
       document.getElementById('stat-honor').textContent = sch.honor;
 
-      // Attribution automatique des compétences d'école au rang 1
       currentSkills = sch.skills.map(s => ({
         name: s,
         rank: 1,
@@ -795,26 +613,26 @@
 
     // Gestion Avantages & Désavantages
     function addAdvFromCatalog() {
-      const advData = getAvantagesData();
+      const adv = getAdvantages();
       const idx = document.getElementById('sel-catalog-adv').value;
-      if (idx === "" || !advData.avantages[idx]) return;
+      if (idx === "" || !adv.avantages[idx]) return;
 
-      const adv = advData.avantages[idx];
-      if (!advantagesList.some(a => a.name === adv.name)) {
-        advantagesList.push({ name: adv.name, cost: adv.cost });
+      const item = adv.avantages[idx];
+      if (!advantagesList.some(a => a.name === item.name)) {
+        advantagesList.push({ name: item.name, cost: item.cost });
         renderAdvDisadv();
         updateAll();
       }
     }
 
     function addDisadvFromCatalog() {
-      const advData = getAvantagesData();
+      const adv = getAdvantages();
       const idx = document.getElementById('sel-catalog-disadv').value;
-      if (idx === "" || !advData.desavantages[idx]) return;
+      if (idx === "" || !adv.desavantages[idx]) return;
 
-      const dis = advData.desavantages[idx];
-      if (!disadvantagesList.some(d => d.name === dis.name)) {
-        disadvantagesList.push({ name: dis.name, gain: dis.gain });
+      const item = adv.desavantages[idx];
+      if (!disadvantagesList.some(d => d.name === item.name)) {
+        disadvantagesList.push({ name: item.name, gain: item.gain });
         renderAdvDisadv();
         updateAll();
       }
@@ -848,9 +666,9 @@
       `).join('');
     }
 
-    // Gestion des Noms
+    // Noms
     function generateRandomName(gender) {
-      const clans = getClansData();
+      const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
       const famIdx = document.getElementById('sel-family').value;
       const familyName = clans[clanKey]?.families[famIdx]?.name || "Samouraï";
@@ -875,9 +693,9 @@
       }
     }
 
-    // CALCUL ET MISE À JOUR XP & STATISTIQUES
+    // CALCULS DYNAMIQUES XP & CARACTÉRISTIQUES
     function updateAll() {
-      const clans = getClansData();
+      const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
       const famIdx = document.getElementById('sel-family').value;
       const schIdx = document.getElementById('sel-school').value;
@@ -885,7 +703,6 @@
       const fam = clans[clanKey]?.families[famIdx];
       const sch = clans[clanKey]?.schools[schIdx];
 
-      // Badges
       ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
         document.getElementById(`badge-${id}`).textContent = "";
       });
@@ -901,7 +718,6 @@
         document.getElementById(`badge-${traitMap[sch.trait]}`).textContent = cur ? "+2 F+É" : "+1 École";
       }
 
-      // Valeurs Traits
       const sta = parseInt(document.getElementById('trait-stamina').value) || 2;
       const wil = parseInt(document.getElementById('trait-willpower').value) || 2;
       const str = parseInt(document.getElementById('trait-strength').value) || 2;
@@ -912,7 +728,7 @@
       const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
       const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-      // Anneaux (minimum des traits)
+      // 5 Anneaux
       const rEarth = Math.min(sta, wil);
       const rWater = Math.min(str, per);
       const rAir = Math.min(ref, awa);
@@ -925,7 +741,7 @@
       document.getElementById('ring-fire').textContent = rFire;
       document.getElementById('ring-void').textContent = rVoid;
 
-      // Dépense XP
+      // Calcul Dépense XP
       let xpSpent = 0;
       const traitsBase = [
         { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -991,18 +807,20 @@
       document.getElementById('stat-init').textContent = `${ref}g${ref}`;
       document.getElementById('stat-heal').textContent = `${(sta * 2) + insightRank} PV`;
 
-      // Blessures (Terre x 5 puis Terre x 2)
+      // Blessures
       document.getElementById('w-0').textContent = `${rEarth * 5} PV`;
       for (let i = 1; i <= 7; i++) {
         document.getElementById(`w-${i}`).textContent = `${rEarth * 2} PV`;
       }
     }
 
-    // Tirage aléatoire complet (40 XP)
+    // Tirage aléatoire complet
     function randomizeAll() {
-      const clans = getClansData();
-      const advData = getAvantagesData();
+      const clans = getClans();
+      const adv = getAdvantages();
       const clanKeys = Object.keys(clans);
+      if (!clanKeys.length) return;
+
       const randomClan = clanKeys[Math.floor(Math.random() * clanKeys.length)];
       document.getElementById('sel-clan').value = randomClan;
       onClanChange();
@@ -1035,12 +853,10 @@
         el.value = parseInt(el.value) + 1;
       }
 
-      // Ajout automatique d'1 avantage et 1 désavantage
-      advantagesList = advData.avantages.length ? [{ name: advData.avantages[0].name, cost: advData.avantages[0].cost }] : [];
-      disadvantagesList = advData.desavantages.length ? [{ name: advData.desavantages[0].name, gain: advData.desavantages[0].gain }] : [];
+      advantagesList = adv.avantages?.length ? [{ name: adv.avantages[0].name, cost: adv.avantages[0].cost }] : [];
+      disadvantagesList = adv.desavantages?.length ? [{ name: adv.desavantages[0].name, gain: adv.desavantages[0].gain }] : [];
       renderAdvDisadv();
 
-      // Dépense XP auto (Vide à 3 = 18 XP)
       document.getElementById('trait-void').value = 3;
       if (currentSkills.length >= 2) {
         currentSkills[0].rank = 2;
@@ -1051,7 +867,7 @@
       updateAll();
     }
 
-    // Export / Import JSON
+    // Import / Export JSON
     function exportJSON() {
       const data = {
         name: document.getElementById('pc-name').value,
@@ -1134,8 +950,8 @@
       if (confirm("Réinitialiser la fiche ?")) initClans();
     }
 
-    window.addEventListener('DOMContentLoaded', initAll);
+    // Lancement propre au chargement du DOM
+    window.addEventListener('DOMContentLoaded', bootstrap);
   </script>
 </body>
 </html>
-
