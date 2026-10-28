@@ -1,0 +1,55 @@
+backend:
+  name: github
+  repo: vincenzorpg/L5R
+  branch: main
+
+# Dossier où seront enregistrées les images et les pistes audio
+media_folder: "assets/uploads"
+public_folder: "assets/uploads"
+
+# Localisation en français
+locale: 'fr'
+
+collections:
+  # ==========================================
+  # 1. COLLECTION DES SCÉNARIOS & PODCASTS
+  # ==========================================
+  - name: "scenarios"
+    label: "Scénarios & Épisodes"
+    folder: "content/scenarios"
+    create: true
+    slug: "{{slug}}"
+    editor:
+      preview: true
+    fields:
+      - { label: "Numéro ou Type", name: "episode_num", widget: "string", hint: "Ex: Scénario 11, Aparté..." }
+      - { label: "Titre du Scénario", name: "title", widget: "string" }
+      - { label: "Date de la session", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Narrateur (PJ ou MJ)", name: "author", widget: "string", default: "MJ David" }
+      - { label: "Résumé court (Accroche)", name: "summary", widget: "text" }
+      - { label: "Illustration de l'épisode (Image IA)", name: "thumbnail", widget: "image", required: false }
+      - { label: "Fichier Audio / Podcast (MP3)", name: "podcast_audio", widget: "file", required: false, hint: "Résumé audio narré" }
+      - { label: "Lien WordPress d'origine", name: "wp_url", widget: "string", required: false }
+      - { label: "Récit complet de la session", name: "body", widget: "markdown" }
+
+  # ==========================================
+  # 2. COLLECTION DU GRIMOIRE & DES RÈGLES
+  # ==========================================
+  - name: "grimoire"
+    label: "Grimoire & Compendium"
+    folder: "content/grimoire"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nom de la règle / Sort / Kiho", name: "title", widget: "string" }
+      - label: "Catégorie"
+        name: "category"
+        widget: "select"
+        options: ["Sort", "Kiho", "Kata", "Avantage", "Désavantage", "Voie Alternative"]
+      - label: "Élément / Anneau associé"
+        name: "element"
+        widget: "select"
+        options: ["Terre", "Eau", "Air", "Feu", "Vide", "Général"]
+      - { label: "Rang de Maîtrise", name: "rank", widget: "number", value_type: "int", min: 1, max: 6, default: 1 }
+      - { label: "Portée / Durée / Zone", name: "range_duration", widget: "string", required: false }
+      - { label: "Description & Effet mécanique officiel", name: "body", widget: "markdown" }
