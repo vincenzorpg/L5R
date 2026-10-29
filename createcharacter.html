@@ -64,19 +64,19 @@
     <div class="max-w-7xl mx-auto flex flex-col gap-2">
       
       <!-- Ligne 1 : Nom, École, Budget XP, Réputation et Boutons -->
-      <div class="flex flex-wrap justify-between items-center gap-3">
-        <div class="flex items-center gap-2">
-          <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
-          <span id="sticky-pc-name" class="text-sm md:text-base font-bold text-amber-200 font-imperial">Okado Hiruma</span>
-          <span id="sticky-school-badge" class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-300">Bushi Hiruma</span>
-        </div>
-
+      <!-- XP personnalisable & Réputation -->
         <div class="flex items-center gap-4">
           <div>
-            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante</span>
-            <span class="text-sm font-bold font-imperial">
-              <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
-            </span>
+            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante / Total</span>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold font-imperial">
+                <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
+              </span>
+              <div class="flex items-center gap-1 bg-black/60 border border-stone-800 rounded px-1.5 py-0.5" title="Modifier l'XP de base (40 par défaut)">
+                <span class="text-[9px] text-stone-500 uppercase font-bold">Base:</span>
+                <input type="number" id="base-xp-input" value="40" min="0" max="999" oninput="updateAll()" class="w-12 bg-transparent text-amber-300 font-bold text-center text-xs focus:outline-none">
+              </div>
+            </div>
           </div>
           <div class="border-l border-amber-500/20 pl-3">
             <span class="text-[9px] text-stone-400 uppercase tracking-wider block">Réputation</span>
