@@ -48,12 +48,52 @@
       border-color: var(--gold) !important;
       box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
     }
+    @media screen {
+      #official-print-dossier { display: none !important; }
+    }
     @media print {
-      body { background: white !important; color: black !important; }
-      .no-print { display: none !important; }
-      .card-clean { background: white !important; border: 1px solid #888 !important; color: black !important; break-inside: avoid; }
-      input, select, textarea { background: white !important; color: black !important; border: 1px solid #ccc !important; }
-      .gold-text { color: #8b0000 !important; }
+      @page {
+        size: A4 portrait;
+        margin: 6mm 8mm;
+      }
+      body {
+        background: white !important;
+        color: #111 !important;
+        font-family: 'Noto Serif JP', serif;
+      }
+      .no-print, header, aside, main, footer {
+        display: none !important;
+      }
+      #official-print-dossier {
+        display: block !important;
+        width: 100% !important;
+        background: white !important;
+        color: black !important;
+      }
+      .print-page {
+        page-break-after: always;
+        break-after: page;
+        min-height: 280mm;
+        box-sizing: border-box;
+      }
+      .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .sheet-box {
+        border: 1.5px solid #222;
+        background: #fff;
+      }
+      .sheet-title {
+        font-family: 'Cinzel', serif;
+        font-weight: 700;
+        background: #f0ede6;
+        border-bottom: 1px solid #333;
+        padding: 2px 4px;
+        text-transform: uppercase;
+        font-size: 8px;
+        letter-spacing: 0.05em;
+      }
     }
   </style>
 </head>
@@ -103,7 +143,7 @@
             📂 Charger
             <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
           </label>
-          <button onclick="window.print()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ PDF</button>
+          <button onclick="exportOfficialPDF()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition">🖨️ PDF</button>
           <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
         </div>
 
@@ -416,6 +456,194 @@
       }
     }
   </script>
+  <!-- DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 & 2 DU LIVRET OFFICIEL) -->
+  <div id="official-print-dossier" class="text-black text-[9px] leading-tight">
+    
+    <!-- ==================== PAGE 1 : FEUILLE MARTIALE ==================== -->
+    <div class="print-page flex flex-col justify-between py-1">
+      
+      <!-- En-tête officiel -->
+      <div class="sheet-box mb-2 p-2">
+        <div class="flex justify-between items-center border-b border-black pb-1 mb-1">
+          <div class="font-imperial text-base font-black tracking-widest">LEGEND OF THE FIVE RINGS</div>
+          <div class="font-imperial text-xs font-bold text-stone-700">4TH EDITION CHARACTER SHEET</div>
+        </div>
+        <div class="grid grid-cols-6 gap-2 text-[10px]">
+          <div class="col-span-2 border-b border-dashed border-stone-400">
+            <span class="text-[8px] text-stone-500 uppercase font-bold block">Nom du Samouraï</span>
+            <span id="p-name" class="font-bold text-xs font-imperial"></span>
+          </div>
+          <div class="border-b border-dashed border-stone-400">
+            <span class="text-[8px] text-stone-500 uppercase font-bold block">Clan</span>
+            <span id="p-clan" class="font-bold"></span>
+          </div>
+          <div class="col-span-2 border-b border-dashed border-stone-400">
+            <span class="text-[8px] text-stone-500 uppercase font-bold block">École</span>
+            <span id="p-school" class="font-bold"></span>
+          </div>
+          <div class="border-b border-dashed border-stone-400 text-center">
+            <span class="text-[8px] text-stone-500 uppercase font-bold block">Rang d'École</span>
+            <span id="p-rank" class="font-bold font-imperial text-xs">1</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-2 text-[10px] mt-1 pt-1">
+          <div><span class="text-[8px] text-stone-500 uppercase font-bold">XP Restante / Total :</span> <b id="p-xp"></b></div>
+          <div><span class="text-[8px] text-stone-500 uppercase font-bold">Réputation (Insight) :</span> <b id="p-insight"></b></div>
+          <div><span class="text-[8px] text-stone-500 uppercase font-bold">Honneur :</span> <b id="p-honor"></b></div>
+          <div><span class="text-[8px] text-stone-500 uppercase font-bold">Gloire / Statut :</span> <b>1.0 / 1.0</b></div>
+        </div>
+      </div>
 
+      <!-- Les 5 Anneaux & 8 Traits (Mise en page officielle) -->
+      <div class="grid grid-cols-5 gap-1.5 mb-2 text-center">
+        <!-- TERRE -->
+        <div class="sheet-box">
+          <div class="sheet-title flex justify-between"><span>土 TERRE</span><span id="p-r-earth" class="font-bold">2</span></div>
+          <div class="p-1 space-y-1">
+            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Constitution</span><b id="p-t-sta" class="text-xs">2</b></div>
+            <div><span class="text-[8px] text-stone-500 block">Volonté</span><b id="p-t-wil" class="text-xs">2</b></div>
+          </div>
+        </div>
+        <!-- EAU -->
+        <div class="sheet-box">
+          <div class="sheet-title flex justify-between"><span>水 EAU</span><span id="p-r-water" class="font-bold">2</span></div>
+          <div class="p-1 space-y-1">
+            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Force</span><b id="p-t-str" class="text-xs">2</b></div>
+            <div><span class="text-[8px] text-stone-500 block">Perception</span><b id="p-t-per" class="text-xs">2</b></div>
+          </div>
+        </div>
+        <!-- AIR -->
+        <div class="sheet-box">
+          <div class="sheet-title flex justify-between"><span>風 AIR</span><span id="p-r-air" class="font-bold">2</span></div>
+          <div class="p-1 space-y-1">
+            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Réflexes</span><b id="p-t-ref" class="text-xs">2</b></div>
+            <div><span class="text-[8px] text-stone-500 block">Intuition</span><b id="p-t-awa" class="text-xs">2</b></div>
+          </div>
+        </div>
+        <!-- FEU -->
+        <div class="sheet-box">
+          <div class="sheet-title flex justify-between"><span>火 FEU</span><span id="p-r-fire" class="font-bold">2</span></div>
+          <div class="p-1 space-y-1">
+            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Agilité</span><b id="p-t-agi" class="text-xs">2</b></div>
+            <div><span class="text-[8px] text-stone-500 block">Intelligence</span><b id="p-t-int" class="text-xs">2</b></div>
+          </div>
+        </div>
+        <!-- VIDE -->
+        <div class="sheet-box flex flex-col justify-between">
+          <div class="sheet-title flex justify-between"><span>空 VIDE</span><span id="p-r-void" class="font-bold">2</span></div>
+          <div class="p-1">
+            <span class="text-[8px] text-stone-500 block">Points de Vide</span>
+            <b id="p-t-voi" class="text-xs">2</b>
+            <div class="text-[7px] text-stone-400 mt-1">○○○○○○○○</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ligne Combat : Initiative, ND Armure, Armure & Récupération -->
+      <div class="grid grid-cols-4 gap-1.5 mb-2 text-[9px]">
+        <div class="sheet-box p-1.5 text-center">
+          <div class="text-[8px] font-bold uppercase text-stone-500">Initiative (4e Éd.)</div>
+          <div id="p-init" class="text-sm font-bold font-imperial mt-0.5">3g2</div>
+          <div id="p-init-note" class="text-[7px] text-stone-600 truncate"></div>
+        </div>
+        <div class="sheet-box p-1.5 text-center">
+          <div class="text-[8px] font-bold uppercase text-stone-500">ND d'Armure</div>
+          <div id="p-armor-tn" class="text-sm font-bold font-imperial mt-0.5">20</div>
+          <div id="p-armor-note" class="text-[7px] text-stone-600 truncate"></div>
+        </div>
+        <div class="sheet-box p-1.5 text-center">
+          <div class="text-[8px] font-bold uppercase text-stone-500">Armure Portée</div>
+          <div id="p-armor-name" class="font-bold truncate mt-0.5">Armure</div>
+          <div id="p-armor-reduc" class="text-[7px] text-stone-600">Réduction : 0</div>
+        </div>
+        <div class="sheet-box p-1.5 text-center">
+          <div class="text-[8px] font-bold uppercase text-stone-500">Guérison Nocturne</div>
+          <div id="p-heal" class="text-sm font-bold font-imperial mt-0.5">5 PV</div>
+          <div class="text-[7px] text-stone-600">Const. × 2 + Rang</div>
+        </div>
+      </div>
+
+      <!-- Tableau des Compétences -->
+      <div class="sheet-box mb-2">
+        <div class="sheet-title">Compétences & Spécialisations</div>
+        <table class="w-full text-left border-collapse text-[8.5px]">
+          <thead>
+            <tr class="border-b border-stone-300 bg-stone-100 text-[7.5px] uppercase text-stone-600">
+              <th class="p-1">Nom de la compétence</th>
+              <th class="p-1 text-center w-12">École ?</th>
+              <th class="p-1 text-center w-12">Rang</th>
+              <th class="p-1 text-center w-20">Jet (XkY)</th>
+              <th class="p-1">Spécialisations & Notes</th>
+            </tr>
+          </thead>
+          <tbody id="p-skills-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Armes & Seuils de Vitalité -->
+      <div class="grid grid-cols-2 gap-2 mb-1">
+        <!-- Armes -->
+        <div class="sheet-box">
+          <div class="sheet-title">Armes & Attaques</div>
+          <div class="p-1.5 space-y-1 text-[8px]" id="p-weapons-box"></div>
+        </div>
+        <!-- Paliers de blessures -->
+        <div class="sheet-box">
+          <div class="sheet-title">Paliers de Vitalité (4e Édition)</div>
+          <table class="w-full text-center border-collapse text-[7.5px] mt-0.5">
+            <thead>
+              <tr class="bg-stone-100 border-b border-stone-300 font-bold">
+                <th>Palier</th><th>Malus</th><th>Total</th><th>Actuel</th>
+              </tr>
+            </thead>
+            <tbody id="p-wounds-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== PAGE 2 : IDENTITÉ & DONS ==================== -->
+    <div class="print-page flex flex-col justify-between py-1">
+      
+      <!-- En-tête Page 2 -->
+      <div class="sheet-box mb-2 p-1.5 flex justify-between items-center text-[9px]">
+        <div><b>Samouraï :</b> <span id="p-name-2" class="font-imperial font-bold text-xs"></span></div>
+        <div><b>Clan :</b> <span id="p-clan-2"></span></div>
+        <div><b>École :</b> <span id="p-school-2"></span></div>
+      </div>
+
+      <!-- Avantages & Désavantages -->
+      <div class="grid grid-cols-2 gap-2 mb-2">
+        <!-- Avantages -->
+        <div class="sheet-box">
+          <div class="sheet-title flex justify-between"><span>Avantages</span><span id="p-adv-total">0 XP</span></div>
+          <div class="p-1.5 space-y-1.5 text-[8px]" id="p-adv-list"></div>
+        </div>
+        <!-- Désavantages -->
+        <div class="sheet-box">
+          <div class="sheet-title flex justify-between"><span>Désavantages (Max 15 XP)</span><span id="p-disadv-total">0 XP</span></div>
+          <div class="p-1.5 space-y-1.5 text-[8px]" id="p-disadv-list"></div>
+        </div>
+      </div>
+
+      <!-- Techniques d'École -->
+      <div class="sheet-box mb-2">
+        <div class="sheet-title">Techniques d'École</div>
+        <div class="p-2 space-y-1 text-[8.5px]">
+          <div class="font-bold font-imperial text-xs" id="p-tech-name"></div>
+          <div class="text-stone-700 leading-relaxed text-[8px]" id="p-tech-desc"></div>
+        </div>
+      </div>
+
+      <!-- Équipement, Dotation & Richesse -->
+      <div class="sheet-box mb-1">
+        <div class="sheet-title">Équipement, Dotation (*Outfit*) & Richesse</div>
+        <div class="p-2 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
+      </div>
+
+    </div>
+
+  </div>
 </body>
 </html>
