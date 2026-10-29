@@ -141,7 +141,7 @@
       </div>
     </section>
 
-<!-- 2. LES 5 ANNEAUX ET TRAITS -->
+    <!-- 2. LES 5 ANNEAUX ET TRAITS -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux & 8 Traits Élémentaires</h2>
@@ -384,7 +384,6 @@
 
   <!-- MOTEUR STRICTEMENT CONNECTÉ AUX FICHIERS DATA -->
   <script>
-    // Prénoms rokuganis
     const ROKUGANI_NAMES = {
       m: [
         { n: "Okado", m: "Porte de la sagesse" },
@@ -404,20 +403,29 @@
       ]
     };
 
+    const TRAIT_INPUT_IDS = {
+      "Constitution": "trait-stamina",
+      "Volonté": "trait-willpower",
+      "Force": "trait-strength",
+      "Perception": "trait-perception",
+      "Réflexes": "trait-reflexes",
+      "Intuition": "trait-awareness",
+      "Agilité": "trait-agility",
+      "Intelligence": "trait-intelligence",
+      "Vide": "trait-void"
+    };
+
     let nameOrderWestern = true;
     let currentSkills = [];
     let advantagesList = [];
     let disadvantagesList = [];
 
-    // ACCÈS DIRECT ET SÉCURISÉ AUX OBJETS DES FICHIERS EXTERNES
     const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
     const getSkills = () => window.COMPETENCES_DATA || [];
     const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
     const getAdvantages = () => window.AVANTAGES_DATA || { avantages: [], desavantages: [] };
 
-    // Initialisation avec attente dynamique des scripts
     function bootstrap() {
-      // On s'assure que les données des fichiers data/ sont bien montées sur window
       if (!window.CLANS_DATA && !window.CLANS_CORE) {
         setTimeout(bootstrap, 50);
         return;
@@ -445,7 +453,6 @@
       const eq = getEquipment();
       const adv = getAdvantages();
 
-      // Compétences
       const skSel = document.getElementById('sel-add-skill');
       skSel.innerHTML = "";
       skills.forEach(s => {
@@ -455,7 +462,6 @@
         skSel.appendChild(opt);
       });
 
-      // Armures
       const armSel = document.getElementById('pc-armor');
       armSel.innerHTML = "";
       eq.armures.forEach(a => {
@@ -465,7 +471,6 @@
         armSel.appendChild(opt);
       });
 
-      // Armes
       const w1Sel = document.getElementById('pc-weapon-1');
       const w2Sel = document.getElementById('pc-weapon-2');
       w1Sel.innerHTML = "";
@@ -483,7 +488,6 @@
         w2Sel.appendChild(opt2);
       });
 
-      // Avantages
       const advSel = document.getElementById('sel-catalog-adv');
       advSel.innerHTML = "";
       (adv.avantages || []).forEach((a, idx) => {
@@ -493,7 +497,6 @@
         advSel.appendChild(opt);
       });
 
-      // Désavantages
       const disadvSel = document.getElementById('sel-catalog-disadv');
       disadvSel.innerHTML = "";
       (adv.desavantages || []).forEach((d, idx) => {
@@ -502,6 +505,46 @@
         opt.textContent = `${d.name} (+${d.gain} XP) — [${d.type}]`;
         disadvSel.appendChild(opt);
       });
+    }
+
+    function applyClanBonusesToTraits() {
+      const clans = getClans();
+      const clanKey = document.getElementById('sel-clan').value;
+      const famIdx = document.getElementById('sel-family').value;
+      const schIdx = document.getElementById('sel-school').value;
+
+      const fam = clans[clanKey]?.families[famIdx];
+      const sch = clans[clanKey]?.schools[schIdx];
+
+      ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
+        const el = document.getElementById(`badge-${id}`);
+        if (el) el.textContent = "";
+      });
+
+      const badgeMap = {
+        "Constitution": "sta", "Volonté": "wil", "Force": "str", "Perception": "per",
+        "Réflexes": "ref", "Intuition": "awa", "Agilité": "agi", "Intelligence": "int"
+      };
+
+      if (fam && badgeMap[fam.trait]) document.getElementById(`badge-${badgeMap[fam.trait]}`).textContent = "+1 Famille";
+      if (sch && badgeMap[sch.trait]) {
+        const badge = document.getElementById(`badge-${badgeMap[sch.trait]}`);
+        badge.textContent = badge.textContent ? "+2 F+É" : "+1 École";
+      }
+
+      for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
+        const input = document.getElementById(inputId);
+        if (!input) continue;
+
+        let baseVal = 2;
+        if (fam && fam.trait === traitName) baseVal += 1;
+        if (sch && sch.trait === traitName) baseVal += 1;
+
+        input.min = baseVal;
+        if (parseInt(input.value) < baseVal || isNaN(parseInt(input.value))) {
+          input.value = baseVal;
+        }
+      }
     }
 
     function onClanChange() {
@@ -540,6 +583,7 @@
       if (fam) {
         document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
       }
+      applyClanBonusesToTraits();
       updateAll();
     }
 
@@ -564,6 +608,7 @@
       }));
 
       renderSkills();
+      applyClanBonusesToTraits();
       updateAll();
     }
 
@@ -611,7 +656,6 @@
       updateAll();
     }
 
-    // Gestion Avantages & Désavantages
     function addAdvFromCatalog() {
       const adv = getAdvantages();
       const idx = document.getElementById('sel-catalog-adv').value;
@@ -666,7 +710,6 @@
       `).join('');
     }
 
-    // Noms
     function generateRandomName(gender) {
       const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
@@ -693,7 +736,6 @@
       }
     }
 
-    // CALCULS DYNAMIQUES XP & CARACTÉRISTIQUES
     function updateAll() {
       const clans = getClans();
       const clanKey = document.getElementById('sel-clan').value;
@@ -702,21 +744,6 @@
 
       const fam = clans[clanKey]?.families[famIdx];
       const sch = clans[clanKey]?.schools[schIdx];
-
-      ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
-        document.getElementById(`badge-${id}`).textContent = "";
-      });
-
-      const traitMap = {
-        "Constitution": "sta", "Volonté": "wil", "Force": "str", "Perception": "per",
-        "Réflexes": "ref", "Intuition": "awa", "Agilité": "agi", "Intelligence": "int"
-      };
-
-      if (fam && traitMap[fam.trait]) document.getElementById(`badge-${traitMap[fam.trait]}`).textContent = "+1 Famille";
-      if (sch && traitMap[sch.trait]) {
-        let cur = document.getElementById(`badge-${traitMap[sch.trait]}`).textContent;
-        document.getElementById(`badge-${traitMap[sch.trait]}`).textContent = cur ? "+2 F+É" : "+1 École";
-      }
 
       const sta = parseInt(document.getElementById('trait-stamina').value) || 2;
       const wil = parseInt(document.getElementById('trait-willpower').value) || 2;
@@ -728,7 +755,6 @@
       const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
       const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-      // 5 Anneaux
       const rEarth = Math.min(sta, wil);
       const rWater = Math.min(str, per);
       const rAir = Math.min(ref, awa);
@@ -741,7 +767,6 @@
       document.getElementById('ring-fire').textContent = rFire;
       document.getElementById('ring-void').textContent = rVoid;
 
-      // Calcul Dépense XP
       let xpSpent = 0;
       const traitsBase = [
         { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -788,7 +813,6 @@
       document.getElementById('xp-remaining').textContent = remainingXP;
       document.getElementById('xp-remaining').className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-      // Insight
       let sumRings = rEarth + rWater + rAir + rFire + rVoid;
       let sumSkills = currentSkills.reduce((acc, sk) => acc + sk.rank, 0);
       let insight = (sumRings * 10) + sumSkills;
@@ -801,20 +825,17 @@
 
       document.getElementById('insight-display').innerHTML = `${insight} pts <span class="text-xs text-amber-400 font-bold">(Rang ${insightRank})</span>`;
 
-      // Combat
       const armorBonus = parseInt(document.getElementById('pc-armor').value) || 0;
       document.getElementById('stat-armor-tn').textContent = 5 + (5 * ref) + armorBonus;
       document.getElementById('stat-init').textContent = `${ref}g${ref}`;
       document.getElementById('stat-heal').textContent = `${(sta * 2) + insightRank} PV`;
 
-      // Blessures
       document.getElementById('w-0').textContent = `${rEarth * 5} PV`;
       for (let i = 1; i <= 7; i++) {
         document.getElementById(`w-${i}`).textContent = `${rEarth * 2} PV`;
       }
     }
 
-    // Tirage aléatoire complet
     function randomizeAll() {
       const clans = getClans();
       const adv = getAdvantages();
@@ -867,7 +888,6 @@
       updateAll();
     }
 
-    // Import / Export JSON
     function exportJSON() {
       const data = {
         name: document.getElementById('pc-name').value,
@@ -950,7 +970,6 @@
       if (confirm("Réinitialiser la fiche ?")) initClans();
     }
 
-    // Lancement propre au chargement du DOM
     window.addEventListener('DOMContentLoaded', bootstrap);
   </script>
 </body>
