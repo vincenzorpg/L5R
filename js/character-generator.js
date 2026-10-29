@@ -1,6 +1,6 @@
 /**
  * character-generator.js — Moteur de création L5R 4e Édition
- * Déport de toute la logique dynamique pour createcharacter.html
+ * Réinitialisation complète et dynamique à chaque changement de Clan / Famille / École
  */
 
 const ROKUGANI_NAMES = {
@@ -39,7 +39,7 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
-// Accesseurs aux données globales
+// Accesseurs sécurisés aux données globales
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
@@ -52,7 +52,6 @@ function bootstrap() {
   }
   initClans();
   initCatalogSelectors();
-  updateAll();
 }
 
 function initClans() {
@@ -143,16 +142,39 @@ function initCatalogSelectors() {
   }
 }
 
-function applyClanBonusesToTraits() {
+// =========================================================================
+// FONCTION MAÎTRESSE : RÉINITIALISATION TOTALE À CHAQUE CHANGEMENT
+// =========================================================================
+function resetSheetToNewSelection() {
   const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const famIdx = document.getElementById('sel-family').value;
-  const schIdx = document.getElementById('sel-school').value;
+  const clanKey = document.getElementById('sel-clan')?.value;
+  if (!clanKey || !clans[clanKey]) return;
 
-  const fam = clans[clanKey]?.families[famIdx];
-  const sch = clans[clanKey]?.schools[schIdx];
+  const clan = clans[clanKey];
+  const famIdx = parseInt(document.getElementById('sel-family')?.value) || 0;
+  const schIdx = parseInt(document.getElementById('sel-school')?.value) || 0;
 
-  // 1. Réinitialisation des badges visuels
+  const fam = clan.families[famIdx];
+  const sch = clan.schools[schIdx];
+  if (!fam || !sch) return;
+
+  // 1. Mise à jour des descriptifs
+  document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
+  document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
+  document.getElementById('tech-name').textContent = sch.technique.name;
+  document.getElementById('tech-effect').textContent = sch.technique.effect;
+  document.getElementById('pc-outfit').value = sch.outfit;
+  document.getElementById('stat-honor').textContent = sch.honor;
+
+  // 2. Mise à jour du nom de famille
+  const nameInput = document.getElementById('pc-name');
+  if (nameInput) {
+    const currentParts = nameInput.value.trim().split(' ');
+    const firstName = currentParts.length > 1 ? currentParts[0] : (currentParts[0] || "Okado");
+    nameInput.value = nameOrderWestern ? `${firstName} ${fam.name}` : `${fam.name} ${firstName}`;
+  }
+
+  // 3. Réinitialisation des badges de bonus
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -163,13 +185,17 @@ function applyClanBonusesToTraits() {
     "Réflexes": "ref", "Intuition": "awa", "Agilité": "agi", "Intelligence": "int"
   };
 
-  if (fam && badgeMap[fam.trait]) document.getElementById(`badge-${badgeMap[fam.trait]}`).textContent = "+1 Famille";
+  if (fam && badgeMap[fam.trait]) {
+    const el = document.getElementById(`badge-${badgeMap[fam.trait]}`);
+    if (el) el.textContent = "+1 Famille";
+  }
   if (sch && badgeMap[sch.trait]) {
-    const badge = document.getElementById(`badge-${badgeMap[sch.trait]}`);
-    badge.textContent = badge.textContent ? "+2 F+É" : "+1 École";
+    const el = document.getElementById(`badge-${badgeMap[sch.trait]}`);
+    if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
-  // 2. Application de la valeur exacte (2 de base + bonus éventuels)
+  // 4. RÉINITIALISATION STRICTE DES 8 TRAITS ET DU VIDE
+  // Tout trait sans bonus repasse à 2. Trait avec bonus passe à 3 (ou 4).
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -179,8 +205,25 @@ function applyClanBonusesToTraits() {
     if (sch && sch.trait === traitName) baseVal += 1;
 
     input.min = baseVal;
-    input.value = baseVal; // Réinitialise directement à 2 (ou 3/4 si bonus actif)
+    input.value = baseVal; // Force la remise à la base
   }
+
+  // 5. Réinitialisation des compétences de départ (Rang 1, sans spé)
+  currentSkills = sch.skills.map(s => ({
+    name: s,
+    rank: 1,
+    spec: false,
+    isSchool: true
+  }));
+  renderSkills();
+
+  // 6. Réinitialisation des Avantages et Désavantages
+  advantagesList = [];
+  disadvantagesList = [];
+  renderAdvDisadv();
+
+  // 7. Recalcul immédiat de toute la fiche (XP à 40, Anneaux, Combat, Vitalité)
+  updateAll();
 }
 
 function onClanChange() {
@@ -207,49 +250,23 @@ function onClanChange() {
     schSel.appendChild(opt);
   });
 
-  onFamilyChange();
-  onSchoolChange();
+  resetSheetToNewSelection();
 }
 
 function onFamilyChange() {
-  const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const famIdx = document.getElementById('sel-family').value;
-  const fam = clans[clanKey]?.families[famIdx];
-  if (fam) {
-    document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
-  }
-  applyClanBonusesToTraits();
-  updateAll();
+  resetSheetToNewSelection();
 }
 
 function onSchoolChange() {
-  const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const schIdx = document.getElementById('sel-school').value;
-  const sch = clans[clanKey]?.schools[schIdx];
-  if (!sch) return;
-
-  document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
-  document.getElementById('tech-name').textContent = sch.technique.name;
-  document.getElementById('tech-effect').textContent = sch.technique.effect;
-  document.getElementById('pc-outfit').value = sch.outfit;
-  document.getElementById('stat-honor').textContent = sch.honor;
-
-  currentSkills = sch.skills.map(s => ({
-    name: s,
-    rank: 1,
-    spec: false,
-    isSchool: true
-  }));
-
-  renderSkills();
-  applyClanBonusesToTraits();
-  updateAll();
+  resetSheetToNewSelection();
 }
 
+// =========================================================================
+// RENDUS ET INTERACTIONS COMPÉTENCES / AVANTAGES
+// =========================================================================
 function renderSkills() {
   const container = document.getElementById('skills-list');
+  if (!container) return;
   container.innerHTML = currentSkills.map((sk, idx) => `
     <div class="p-2.5 rounded bg-black/60 border border-stone-800 flex items-center justify-between gap-2">
       <div class="flex-1 truncate">
@@ -260,7 +277,7 @@ function renderSkills() {
         <label class="text-[10px] text-stone-400 flex items-center gap-1">
           <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
         </label>
-        <input type="number" min="0" max="10" value="${sk.rank}" onchange="changeSkillRank(${idx}, this.value)" class="w-12 p-1 rounded text-center font-bold text-amber-300">
+        <input type="number" min="0" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-12 p-1 rounded text-center font-bold text-amber-300">
         <button onclick="removeSkill(${idx})" class="text-stone-500 hover:text-red-400 font-bold px-1">✕</button>
       </div>
     </div>
@@ -331,19 +348,25 @@ function removeDisadv(idx) {
 }
 
 function renderAdvDisadv() {
-  document.getElementById('adv-container').innerHTML = advantagesList.map((a, i) => `
-    <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
-      <span class="text-stone-300">${a.name} (${a.cost} XP)</span>
-      <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
-    </div>
-  `).join('');
+  const advContainer = document.getElementById('adv-container');
+  if (advContainer) {
+    advContainer.innerHTML = advantagesList.map((a, i) => `
+      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
+        <span class="text-stone-300">${a.name} (${a.cost} XP)</span>
+        <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
+      </div>
+    `).join('');
+  }
 
-  document.getElementById('disadv-container').innerHTML = disadvantagesList.map((d, i) => `
-    <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
-      <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
-      <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
-    </div>
-  `).join('');
+  const disadvContainer = document.getElementById('disadv-container');
+  if (disadvContainer) {
+    disadvContainer.innerHTML = disadvantagesList.map((d, i) => `
+      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
+        <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
+        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
+      </div>
+    `).join('');
+  }
 }
 
 function generateRandomName(gender) {
@@ -372,6 +395,9 @@ function toggleNameOrder() {
   }
 }
 
+// =========================================================================
+// CALCULS ET MISES À JOUR DES CARACTÉRISTIQUES
+// =========================================================================
 function updateAll() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan').value;
@@ -391,7 +417,7 @@ function updateAll() {
   const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
   const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-  // Calcul des Anneaux
+  // Calcul des 5 Anneaux (valeur minimale)
   const rEarth = Math.min(sta, wil);
   const rWater = Math.min(str, per);
   const rAir = Math.min(ref, awa);
@@ -404,7 +430,7 @@ function updateAll() {
   document.getElementById('ring-fire').textContent = rFire;
   document.getElementById('ring-void').textContent = rVoid;
 
-  // Calcul Budget XP
+  // Dépense d'XP
   let xpSpent = 0;
   const traitsBase = [
     { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -488,32 +514,12 @@ function randomizeAll() {
 
   const clan = clans[randomClan];
   document.getElementById('sel-family').value = Math.floor(Math.random() * clan.families.length);
-  onFamilyChange();
-
   document.getElementById('sel-school').value = Math.floor(Math.random() * clan.schools.length);
-  onSchoolChange();
 
+  resetSheetToNewSelection();
   generateRandomName(Math.random() > 0.5 ? 'm' : 'f');
 
-  const fam = clan.families[document.getElementById('sel-family').value];
-  const sch = clan.schools[document.getElementById('sel-school').value];
-
-  const traitInputs = {
-    "Constitution": "trait-stamina", "Volonté": "trait-willpower",
-    "Force": "trait-strength", "Perception": "trait-perception",
-    "Réflexes": "trait-reflexes", "Intuition": "trait-awareness",
-    "Agilité": "trait-agility", "Intelligence": "trait-intelligence"
-  };
-
-  for (let k in traitInputs) document.getElementById(traitInputs[k]).value = 2;
-  document.getElementById('trait-void').value = 2;
-
-  if (fam && traitInputs[fam.trait]) document.getElementById(traitInputs[fam.trait]).value = 3;
-  if (sch && traitInputs[sch.trait]) {
-    let el = document.getElementById(traitInputs[sch.trait]);
-    el.value = parseInt(el.value) + 1;
-  }
-
+  // Attribution équilibrée d'exemple pour le tirage aléatoire
   advantagesList = adv.avantages?.length ? [{ name: adv.avantages[0].name, cost: adv.avantages[0].cost }] : [];
   disadvantagesList = adv.desavantages?.length ? [{ name: adv.desavantages[0].name, gain: adv.desavantages[0].gain }] : [];
   renderAdvDisadv();
@@ -572,9 +578,8 @@ function importJSON(event) {
       document.getElementById('sel-clan').value = d.clan;
       onClanChange();
       document.getElementById('sel-family').value = d.family;
-      onFamilyChange();
       document.getElementById('sel-school').value = d.school;
-      onSchoolChange();
+      resetSheetToNewSelection();
 
       document.getElementById('pc-name').value = d.name;
       document.getElementById('trait-stamina').value = d.traits.sta;
@@ -607,7 +612,7 @@ function importJSON(event) {
 }
 
 function resetCharacter() {
-  if (confirm("Réinitialiser la fiche ?")) initClans();
+  if (confirm("Réinitialiser la fiche ?")) onClanChange();
 }
 
 window.addEventListener('DOMContentLoaded', bootstrap);
