@@ -1,10 +1,12 @@
 /**
  * character-generator.js — Moteur logique complet L5R 4e Édition
- * Règles officielles du Book of Earth (p. 80-82) :
+ * Règles officielles du Livre de Base (Book of Earth & Book of Fire) :
  * - Initiative : (Rang d'Insight + Réflexes) g Réflexes
  * - Toucher : (Compétence d'arme + Agilité ou Réflexes) g Trait
- * - Dégâts : VD Arme + Force (+ École / Avantages)
+ * - Dégâts : VD de l'Arme + Force (+ École / Avantages)
  * - ND d'Armure : 5 + (5 x Réflexes) + Armure (+ Modificateurs)
+ * - Arbre des 5 Techniques d'École avec mise en surbrillance selon l'Insight Rank
+ * - Plafond de 15 XP maximum pour les Désavantages
  */
 
 const MAX_DISADVANTAGE_XP = 15;
@@ -73,6 +75,7 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
+// Accesseurs aux tables de données modulaires
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
@@ -112,6 +115,7 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
+  // 1. Compétences
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
     skSel.innerHTML = "";
@@ -123,6 +127,7 @@ function initCatalogSelectors() {
     });
   }
 
+  // 2. Armures
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
     armSel.innerHTML = "";
@@ -134,6 +139,7 @@ function initCatalogSelectors() {
     });
   }
 
+  // 3. Armes
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
@@ -153,6 +159,7 @@ function initCatalogSelectors() {
     });
   }
 
+  // 4. Avantages
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     advSel.innerHTML = "";
@@ -164,6 +171,7 @@ function initCatalogSelectors() {
     });
   }
 
+  // 5. Désavantages
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     disadvSel.innerHTML = "";
@@ -178,6 +186,7 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
+// Réinitialisation intégrale lors d'un changement d'école, famille ou clan
 function resetSheetToNewSelection() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -193,8 +202,6 @@ function resetSheetToNewSelection() {
 
   document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
   document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
-  document.getElementById('tech-name').textContent = sch.technique.name;
-  document.getElementById('tech-effect').textContent = sch.technique.effect;
   document.getElementById('pc-outfit').value = sch.outfit;
   document.getElementById('stat-honor').textContent = sch.honor;
 
@@ -206,6 +213,7 @@ function resetSheetToNewSelection() {
     updateStickyName();
   }
 
+  // Badges visuels
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -225,6 +233,7 @@ function resetSheetToNewSelection() {
     if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
+  // Remise à zéro stricte des Traits (2 de base + bonus)
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -237,6 +246,7 @@ function resetSheetToNewSelection() {
     input.value = baseVal;
   }
 
+  // Compétences de départ (Rang 1, sans spécialisation)
   currentSkills = sch.skills.map(s => ({
     name: s,
     rank: 1,
@@ -245,7 +255,7 @@ function resetSheetToNewSelection() {
   }));
   renderSkills();
 
-  // Équipement par défaut adapté à l'école
+  // Équipement par défaut selon l'école
   const w1Sel = document.getElementById('pc-weapon-1');
   if (w1Sel) {
     if (sch.id?.includes("hida") || sch.name?.includes("Hida")) {
@@ -312,6 +322,72 @@ function onSchoolChange() {
   resetSheetToNewSelection();
 }
 
+// Rendu des 5 techniques d'école avec mise en valeur de la technique active
+function renderSchoolTechniques(currentRank) {
+  const container = document.getElementById('school-techniques-container');
+  if (!container) return;
+
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const schIdx = parseInt(document.getElementById('sel-school')?.value) || 0;
+  const school = clans[clanKey]?.schools?.[schIdx];
+
+  if (!school) {
+    container.innerHTML = "<div class='text-stone-500 italic text-xs'>Aucune école sélectionnée.</div>";
+    return;
+  }
+
+  let techList = school.techniques;
+  if (!techList || !techList.length) {
+    techList = [school.technique || { rank: 1, name: "Technique Rang 1", effect: "Description..." }];
+  }
+
+  container.innerHTML = techList.map(t => {
+    const isCurrent = (t.rank === currentRank);
+    const isMastered = (t.rank < currentRank);
+
+    if (isCurrent) {
+      return `
+        <div class="p-3 rounded-lg border-2 border-amber-400 bg-gradient-to-r from-amber-950/70 via-stone-900 to-amber-950/40 shadow-[0_0_15px_rgba(212,175,55,0.25)] transition duration-200">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded bg-amber-500 text-black font-extrabold uppercase text-[10px] tracking-wide shadow flex items-center gap-1">
+              ★ RANG ${t.rank} (ACTIF)
+            </span>
+            <span class="font-bold text-amber-200 text-sm font-imperial">${t.name}</span>
+          </div>
+          <p class="text-stone-100 text-xs leading-relaxed pl-1">${t.effect}</p>
+        </div>
+      `;
+    } else if (isMastered) {
+      return `
+        <div class="p-2.5 rounded-lg border border-emerald-900/50 bg-stone-950/70 opacity-90 transition duration-200">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/40 font-bold uppercase text-[9px]">
+              ✓ RANG ${t.rank} (MAÎTRISÉ)
+            </span>
+            <span class="font-bold text-amber-300/80 text-xs font-imperial">${t.name}</span>
+          </div>
+          <p class="text-stone-300 text-xs leading-relaxed pl-1">${t.effect}</p>
+        </div>
+      `;
+    } else {
+      const insightNeeded = 125 + (t.rank * 25);
+      return `
+        <div class="p-2.5 rounded-lg border border-stone-800/50 bg-black/40 opacity-40 hover:opacity-75 transition duration-200">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded bg-stone-900 text-stone-500 border border-stone-800 font-semibold uppercase text-[9px]">
+              🔒 RANG ${t.rank} (INSIGHT ${insightNeeded})
+            </span>
+            <span class="font-semibold text-stone-400 text-xs font-imperial">${t.name}</span>
+          </div>
+          <p class="text-stone-500 text-xs italic leading-relaxed pl-1">${t.effect}</p>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+// Verrouillage du bouton des désavantages (cap 15 XP)
 function updateDisadvButtonState() {
   const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
   const btnAddDisadv = document.querySelector("button[onclick='addDisadvFromCatalog()']");
@@ -321,7 +397,7 @@ function updateDisadvButtonState() {
     if (currentTotalGain >= MAX_DISADVANTAGE_XP) {
       btnAddDisadv.disabled = true;
       btnAddDisadv.classList.add('opacity-40', 'cursor-not-allowed');
-      btnAddDisadv.title = `Limite de ${MAX_DISADVANTAGE_XP} XP de désavantages atteinte.`;
+      btnAddDisadv.title = `Limite officielle de ${MAX_DISADVANTAGE_XP} XP de désavantages atteinte.`;
       if (selectDisadv) selectDisadv.disabled = true;
     } else {
       btnAddDisadv.disabled = false;
@@ -503,78 +579,6 @@ function toggleNameOrder() {
   }
   updateStickyName();
 }
-// =========================================================================
-// AFFICHAGE DES 5 TECHNIQUES D'ÉCOLE AVEC SURBRILLANCE DYNAMIQUE
-// =========================================================================
-function renderSchoolTechniques(currentRank) {
-  const container = document.getElementById('school-techniques-container');
-  if (!container) return;
-
-  const clans = getClans();
-  const clanKey = document.getElementById('sel-clan')?.value;
-  const schIdx = parseInt(document.getElementById('sel-school')?.value) || 0;
-  const school = clans[clanKey]?.schools?.[schIdx];
-
-  if (!school) {
-    container.innerHTML = "<div class='text-stone-500 italic text-xs'>Aucune école sélectionnée.</div>";
-    return;
-  }
-
-  // Récupération des techniques (tableau complet ou fallback si technique unique)
-  let techList = school.techniques;
-  if (!techList || !techList.length) {
-    techList = [school.technique || { rank: 1, name: "Technique Rang 1", effect: "Description..." }];
-  }
-
-  container.innerHTML = techList.map(t => {
-    const isCurrent = (t.rank === currentRank);
-    const isMastered = (t.rank < currentRank);
-    const isLocked = (t.rank > currentRank);
-
-    if (isCurrent) {
-      // SURBRILLANCE DORÉE ACTIVE
-      return `
-        <div class="p-3 rounded-lg border-2 border-amber-400 bg-gradient-to-r from-amber-950/70 via-stone-900 to-amber-950/40 shadow-[0_0_15px_rgba(212,175,55,0.25)] transition duration-200">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="px-2.5 py-0.5 rounded bg-amber-500 text-black font-extrabold uppercase text-[10px] tracking-wide shadow flex items-center gap-1">
-              ★ RANG ${t.rank} (ACTIF)
-            </span>
-            <span class="font-bold text-amber-200 text-sm font-imperial">${t.name}</span>
-          </div>
-          <p class="text-stone-100 text-xs leading-relaxed pl-1">${t.effect}</p>
-        </div>
-      `;
-    } else if (isMastered) {
-      // TECHNIQUE DÉJÀ MAÎTRISÉE
-      return `
-        <div class="p-2.5 rounded-lg border border-emerald-900/50 bg-stone-950/70 opacity-90 transition duration-200">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/40 font-bold uppercase text-[9px]">
-              ✓ RANG ${t.rank} (MAÎTRISÉ)
-            </span>
-            <span class="font-bold text-amber-300/80 text-xs font-imperial">${t.name}</span>
-          </div>
-          <p class="text-stone-300 text-xs leading-relaxed pl-1">${t.effect}</p>
-        </div>
-      `;
-    } else {
-      // TECHNIQUE FUTURE VERROUILLÉE
-      const insightNeeded = 125 + (t.rank * 25);
-      return `
-        <div class="p-2.5 rounded-lg border border-stone-800/50 bg-black/40 opacity-40 hover:opacity-75 transition duration-200">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="px-2 py-0.5 rounded bg-stone-900 text-stone-500 border border-stone-800 font-semibold uppercase text-[9px]">
-              🔒 RANG ${t.rank} (INSIGHT ${insightNeeded})
-            </span>
-            <span class="font-semibold text-stone-400 text-xs font-imperial">${t.name}</span>
-          </div>
-          <p class="text-stone-500 text-xs italic leading-relaxed pl-1">${t.effect}</p>
-        </div>
-      `;
-    }
-  }).join('');
-}
-
 
 // =========================================================================
 // CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
@@ -672,7 +676,7 @@ function updateAll() {
   remEl.textContent = remainingXP;
   remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-  // 3. Insight et Rang d'École (4e Édition : Tranches de 25)
+  // 3. Insight et Rang d'École (Tranches officielles de 25)
   let sumRings = rEarth + rWater + rAir + rFire + rVoid;
   let sumSkills = currentSkills.reduce((acc, sk) => acc + sk.rank, 0);
   let insight = (sumRings * 10) + sumSkills;
@@ -688,7 +692,10 @@ function updateAll() {
   const stickySchool = document.getElementById('sticky-school-badge');
   if (stickySchool && sch) stickySchool.textContent = sch.name;
 
-  // --- 4. CALCUL OFFICIEL DU JET POUR TOUCHER (Book of Earth, p. 80-82) ---
+  // Mise à jour visuelle des 5 techniques d'école
+  renderSchoolTechniques(insightRank);
+
+  // --- 4. CALCUL DU JET POUR TOUCHER (Book of Earth, p. 80-82) ---
   const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
   const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
     name: weapon1Name,
@@ -703,7 +710,6 @@ function updateAll() {
   const atkTraitVal = (atkTraitName === "Réflexes") ? ref : agi;
   const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
 
-  // Recherche de la compétence correspondante
   const skillObj = currentSkills.find(s => {
     const sName = s.name.toLowerCase();
     const wSkill = atkSkillName.toLowerCase();
@@ -722,7 +728,6 @@ function updateAll() {
     atkRoll = skillRank + atkTraitVal;
     atkDetails.push(`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`);
   } else {
-    // Règle 4e Édition : Jet Non Entraîné (Unskilled Roll) = Trait g Trait sans explosion
     atkRoll = atkTraitVal;
     atkDetails.push(`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`);
   }
@@ -746,7 +751,7 @@ function updateAll() {
     stickyAtkDetail.title = atkDetailStr;
   }
 
-  // --- 5. CALCUL OFFICIEL DU JET DE DÉGÂTS (Book of Earth, p. 82) ---
+  // --- 5. CALCUL DU JET DE DÉGÂTS (Book of Earth, p. 82) ---
   const vdParts = (weaponData.vd || "3g2").split('g');
   let dmgBaseRoll = parseInt(vdParts[0]) || 3;
   let dmgBaseKeep = parseInt(vdParts[1]) || 2;
@@ -760,7 +765,7 @@ function updateAll() {
     dmgRoll += str;
     dmgDetails.push(`Force (+${str}g0)`);
   } else {
-    dmgRoll += 3; // Force standard d'un grand arc Yumi rokugani
+    dmgRoll += 3;
     dmgDetails.push("Force d'Arc (+3g0)");
   }
 
@@ -789,8 +794,7 @@ function updateAll() {
     stickyDmgDetail.title = dmgDetailStr;
   }
 
-  // --- 6. CALCUL OFFICIEL DE L'INITIATIVE (Book of Earth, p. 81) ---
-  // Formule officielle 4e : (Rang d'Insight + Réflexes) g Réflexes
+  // --- 6. CALCUL DE L'INITIATIVE (Book of Earth, p. 81) ---
   let initRoll = insightRank + ref;
   let initKeep = ref;
   let initStatic = 0;
@@ -860,7 +864,7 @@ function updateAll() {
   }
   document.getElementById('stat-armor-tn').textContent = finalArmorTN;
 
-  // Vitalité et récupération nocturne
+  // Récupération nocturne & seuils de vitalité
   let effSta = sta;
   if (hasAdv("quick_heal")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
@@ -1004,11 +1008,12 @@ function resetCharacter() {
     onClanChange();
   }
 }
+
 // =========================================================================
-// GÉNÉRATION DE LA FICHE OFFICIELLE IMPRIMABLE (A4 VECTORIEL)
+// EXPORTATION VERS LA FICHE OFFICIELLE EN PDF VECTORIEL (A4)
 // =========================================================================
 function exportOfficialPDF() {
-  updateAll(); // S'assure que tout est synchronisé
+  updateAll();
 
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -1019,8 +1024,8 @@ function exportOfficialPDF() {
   const sch = clan?.schools?.[schIdx];
 
   const pcName = document.getElementById('pc-name')?.value || "Samouraï";
-  
-  // 1. Identité
+
+  // Identité
   document.getElementById('p-name').textContent = pcName;
   document.getElementById('p-name-2').textContent = pcName;
   document.getElementById('p-clan').textContent = clan ? clan.name : "Clan";
@@ -1031,7 +1036,7 @@ function exportOfficialPDF() {
   document.getElementById('p-insight').textContent = document.getElementById('insight-display')?.textContent || "120 pts (Rang 1)";
   document.getElementById('p-honor').textContent = document.getElementById('stat-honor')?.textContent || "4.5";
 
-  // 2. Anneaux et Traits
+  // Traits et Anneaux
   const sta = document.getElementById('trait-stamina').value;
   const wil = document.getElementById('trait-willpower').value;
   const str = document.getElementById('trait-strength').value;
@@ -1058,7 +1063,7 @@ function exportOfficialPDF() {
   document.getElementById('p-r-fire').textContent = document.getElementById('ring-fire').textContent;
   document.getElementById('p-r-void').textContent = document.getElementById('ring-void').textContent;
 
-  // 3. Combat
+  // Combat
   document.getElementById('p-init').textContent = document.getElementById('sticky-init')?.textContent || "3g2";
   document.getElementById('p-init-note').textContent = document.getElementById('sticky-init-detail')?.textContent || "";
   document.getElementById('p-armor-tn').textContent = document.getElementById('sticky-armor-tn')?.textContent || "20";
@@ -1069,10 +1074,9 @@ function exportOfficialPDF() {
   document.getElementById('p-armor-name').textContent = armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0] || "Aucune";
   document.getElementById('p-armor-reduc').textContent = armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0");
 
-  // 4. Compétences
+  // Compétences
   const skillsBody = document.getElementById('p-skills-body');
   skillsBody.innerHTML = currentSkills.map(sk => {
-    // Calcul de jet théorique
     const traitVal = parseInt(agi);
     const roll = `${sk.rank + traitVal}g${traitVal}`;
     return `
@@ -1086,7 +1090,7 @@ function exportOfficialPDF() {
     `;
   }).join('');
 
-  // 5. Armes
+  // Armes
   const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
   const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
   const wBox = document.getElementById('p-weapons-box');
@@ -1103,7 +1107,7 @@ function exportOfficialPDF() {
     ` : ''}
   `;
 
-  // 6. Vitalité
+  // Paliers de blessures
   const woundLevels = [
     { name: "Indemne (+0)", id: "w-0" },
     { name: "Égratigné (+3)", id: "w-1" },
@@ -1123,7 +1127,7 @@ function exportOfficialPDF() {
     </tr>
   `).join('');
 
-  // 7. Avantages & Désavantages
+  // Avantages et Désavantages
   document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
   document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
     const full = getAdvantages().avantages?.find(x => x.name === a.name);
@@ -1136,12 +1140,18 @@ function exportOfficialPDF() {
     return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
   }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
 
-  // 8. Technique & Dotation
-  document.getElementById('p-tech-name').textContent = document.getElementById('tech-name')?.textContent || "Technique Rang 1";
-  document.getElementById('p-tech-desc').textContent = document.getElementById('tech-effect')?.textContent || "";
+  // Techniques d'École Page 2 : affiche toutes les techniques avec indication de statut
+  const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
+  const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
+  document.getElementById('p-tech-name').textContent = sch ? `${sch.name} (Progression)` : "Techniques";
+  document.getElementById('p-tech-desc').innerHTML = techList.map(t => {
+    const tag = t.rank === currentRank ? "<b>[ACTIF]</b> " : (t.rank < currentRank ? "<i>[MAÎTRISÉ]</i> " : "[Verrouillé] ");
+    return `<div class="mb-1">${tag}<b>Rang ${t.rank} - ${t.name} :</b> ${t.effect}</div>`;
+  }).join('');
+
   document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
 
-  // 9. Lancement immédiat de l'impression
   window.print();
 }
+
 window.addEventListener('DOMContentLoaded', bootstrap);
