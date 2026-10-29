@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Clan du Scorpion — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --scorpion-crimson: #991b1b;
+      --scorpion-purple: #581c87;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #20081c 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 12, 18, 0.94);
+      border: 1px solid rgba(168, 85, 247, 0.28);
+    }
+    .gold-text { color: var(--gold); }
+    .scorpion-gradient {
+      background: linear-gradient(135deg, #fef08a 0%, #c084fc 45%, #991b1b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE -->
+  <header class="border-b border-purple-500/30 bg-[#120712]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-full border border-purple-400/50 bg-black flex items-center justify-center font-bold text-purple-300 font-imperial text-xs">忍</span>
+        <div>
+          <span class="font-imperial font-bold tracking-widest text-purple-200 block text-sm">ROKUGAN</span>
+          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-2 text-xs">
+        <a href="../index.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
+        <a href="../createcharacter.html" class="px-3 py-1.5 rounded bg-purple-700 hover:bg-purple-600 text-white font-bold transition flex items-center gap-1.5">
+          <span>⚔️</span> Forger un Scorpion
+        </a>
+        <a href="../grimoire.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">📜 Grimoire</a>
+        <a href="../campagne.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">🏮 Campagne</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO DU CLAN -->
+    <section class="card-clean rounded-2xl p-6 md:p-10 border-purple-500/40 relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 text-[140px] md:text-[200px] font-black text-purple-500/5 select-none pointer-events-none font-imperial">
+        忍
+      </div>
+      <div class="max-w-3xl space-y-3 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#290d2e] border border-purple-400/40 text-[10px] uppercase tracking-widest text-purple-200 font-bold">
+          <span>🎭</span> La Main Gauche de l'Empereur
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide scorpion-gradient">
+          LE CLAN DU SCORPION
+        </h1>
+        <p class="text-xs md:text-sm text-purple-200/90 italic font-imperial">
+          « Je serai ton méchant, mon frère, pour que ton Trône demeure immaculé. »
+        </p>
+        <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
+          Le Clan du Scorpion est le garant clandestin de l'Empire d'Émeraude[cite: 2, 7]. Tandis que les autres clans paradent sous le soleil en se drapant dans un honneur immaculé, le Scorpion arpente les ténèbres pour étouffer les conspirations dans l'œuf[cite: 2, 7]. Dissimulés derrière leurs masques cérémoniels, ses courtisans manient le chantage, le secret d'État et le poison pour préserver la dynastie impériale de ses propres faiblesses[cite: 2, 7].
+        </p>
+      </div>
+    </section>
+
+    <!-- 1. MYTHE FONDATEUR & MISSION SECRÈTE -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
+          1. Origine Sacrée & Le Fardeau de Bayushi
+        </h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Lors du tournoi originel qui vit Hantei triompher, le Kami <b>Bayushi</b> comprit une vérité amère que ses nobles frères refusaient de voir : aucune loi, aucun code de chevalerie ne peut survivre face aux intrigues viles de ceux qui refusent d'obéir aux règles[cite: 2]. Bayushi fit alors le serment le plus tragique de l'histoire rokuganie : <i>« Je protégerai ton empire contre ceux qui œuvrent dans l'ombre. Je mentirai, je tromperai et je serai détesté de tous pour que ton règne demeure pur. »</i>[cite: 2]
+        </p>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Pour mener à bien cette mission sans fin, Bayushi s'entoura de la mystérieuse <b>Shosuro</b> (maîtresse des illusions et des masques), du chaman de l'ombre <b>Soshi</b>, et du sorcier maudit <b>Yogo</b>[cite: 2, 7]. Depuis ce jour, aucun Scorpion ne montre son visage nu en public : le masque rappelle au monde qu'un serviteur de Bayushi n'a pas d'existence propre, seulement un devoir[cite: 2, 7].
+        </p>
+        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
+          <span class="text-purple-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
+          <span class="text-stone-300">Rouge sang et noir de jais, soulignés de pourpre nuit (kimonos ajustés, masques de laque ou voiles de soie, armes dissimulées)[cite: 2].</span>
+        </div>
+      </div>
+
+      <!-- CARTE D'IDENTITÉ DU CLAN -->
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <h3 class="text-sm font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
+          Profil de Clan
+        </h3>
+        <ul class="text-xs space-y-2 text-stone-300">
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Vertu Suprême :</span>
+            <b class="text-purple-300">Devoir (Chūgo) & Loyauté[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Kami Fondateur :</span>
+            <b>Bayushi le Masqué[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Capitale :</span>
+            <b>Kyuden Bayushi[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Symbole Sacré :</span>
+            <b>Le Masque & le Scorpion[cite: 2]</b>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-stone-500">Armes Emblématiques :</span>
+            <b>Katana, Jitte & Aiguchi[cite: 2, 7]</b>
+          </li>
+        </ul>
+        <div class="pt-2">
+          <a href="../createcharacter.html" class="w-full block py-2 rounded bg-purple-700 hover:bg-purple-600 text-white font-bold text-center text-xs uppercase tracking-wider transition">
+            Créer un samouraï Scorpion
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LES QUATRE FAMILLES DU SCORPION -->
+    <section class="space-y-4">
+      <div class="border-b border-purple-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">2. Les Familles du Clan & Leurs Rôles Spécifiques</h2>
+        <span class="text-xs text-stone-400">Le réseau le plus sophistiqué d'espions, de courtisans manipulateurs, d'acteurs de l'ombre et de gardiens de sceaux[cite: 2, 7].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+
+        <!-- BAYUSHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Bayushi</h3>
+            <span class="text-[10px] text-purple-400 font-bold">+1 Agilité[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La lignée souveraine du clan[cite: 2]. Leurs courtisans et diplomates sont craints dans tout Rokugan : ils découvrent les secrets intimes de leurs rivaux et s'en servent comme levier sans jamais violer ouvertement les règles de l'étiquette[cite: 2, 7]. Leurs bushi pratiquent une escrime imprévisible axée sur les feintes, les désarmements et les ripostes venimeuses[cite: 2, 7].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Seigneurs du clan, maîtres du chantage, duellistes feinteurs[cite: 2, 7].</div>
+        </div>
+
+        <!-- SHOSURO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Shosuro</h3>
+            <span class="text-[10px] text-purple-400 font-bold">+1 Intuition[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Les visages changeants du Scorpion[cite: 2, 7]. Acteurs adulés des plus grands théâtres de Rokugan, dramaturges et artistes séduisants, ils s'infiltrent partout[cite: 2, 7]. Dans l'ombre la plus secrète, l'Académie Shosuro forme les rares véritables assassins et agents d'infiltration (*shinobi*) du clan[cite: 2, 7].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Comédiens, espions infiltrés, maîtres du déguisement et du poison[cite: 2, 7].</div>
+        </div>
+
+        <!-- SOSHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Soshi</h3>
+            <span class="text-[10px] text-purple-400 font-bold">+1 Perception[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Les shugenja de l'Air et de l'Ombre[cite: 2, 7]. Descendants du premier mystique du clan, ils tissent des illusions auditives et visuelles troublantes pour dissimuler les mouvements de leurs frères ou égarer les intrus[cite: 2, 7]. Leurs rituels d'observation permettent d'écouter aux portes à des lieues de distance[cite: 2, 7].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Illusionnistes, maîtres espions spirituels, prêtres de l'Air[cite: 2, 7].</div>
+        </div>
+
+        <!-- YOGO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Yogo</h3>
+            <span class="text-[10px] text-purple-400 font-bold">+1 Volonté[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La lignée frappée par la malédiction la plus poignante : chaque héritier mâle Yogo est condamné à trahir un jour la personne qu'il aime le plus au monde[cite: 2]. Pour conjurer ce destin, ils s'isolent émotionnellement et sont devenus les plus grands experts des sceaux défensifs (*Wards*) de la Terre, capables de sceller n'importe quelle menace impie[cite: 2, 7].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Maîtres des protections et sceaux sacrés, exorcistes stoïques[cite: 2, 7].</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. LE SCORPION ET LE BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
+        3. Le Cœur du Roleplay : Le Scorpion face au Bushido
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
+            <span class="font-bold text-purple-200 text-sm">Le Devoir Absolu (Chūgo)[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Pour le Scorpion, l'honneur individuel (*Meiyo*) est un luxe égoïste[cite: 2, 7]. Un samouraï qui refuse d'empoisonner un traître pour préserver sa propre réputation commet une trahison envers son seigneur[cite: 2, 7]. La vraie noblesse consiste à **sacrifier son propre salut karmique** pour que le clan et l'Empire continuent de prospérer[cite: 2, 7].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
+            <span class="font-bold text-purple-200 text-sm">La Paranoïa & l'Isolement du Cœur[cite: 2, 7]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            À force de manipuler les mensonges, les poisons et les masques, le Scorpion doute de tout et de tout le monde[cite: 2, 7]. Vivre dans la dissimulation constante engendre une profonde solitude[cite: 2]. Le moindre geste d'affection sincère est scruté comme un piège potentiel, rendant les alliances durables presque impossibles[cite: 2, 7].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
+        4. Guide d'Interprétation : Jouer un Samouraï du Scorpion
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2">
+          <h3 class="font-bold text-purple-200 font-imperial text-sm">Le Masque & l'Attitude</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Votre masque fait partie intégrante de votre identité[cite: 2, 7]. Qu'il soit un loup de cuir ouvragé, un demi-masque de porcelaine ou un voile vaporeux, il dissimule vos micro-expressions[cite: 2, 7]. Vous ne mentez pas nécessairement : vous dites la vérité exacte qui pousse votre adversaire à l'erreur[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-purple-200 font-imperial text-sm">Relations avec les autres Clans</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Vous manipulez la fierté naïve du <b>Lion</b> d'un simple mot bien placé[cite: 2]. Vous livrez une guerre d'influence sans merci aux courtisans de la <b>Grue</b>[cite: 2]. Vous respectez la rudesse du <b>Crabe</b>, que vous savez incorruptible face au devoir[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-purple-200 font-imperial text-sm">Idées de Rôles Contrastés</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Un <b>bushi Bayushi</b> d'une loyauté chevaleresque déchiré entre ses sentiments personnels et un ordre odieux[cite: 2, 7] ; un <b>Yogo</b> cherchant désespérément à rompre la malédiction de sa lignée sans abandonner sa famille[cite: 2] ; ou un <b>comédien Shosuro</b> qui a oublié quel masque est son véritable visage[cite: 2, 7].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ÉCOLES FONDAMENTALES & ARSENAL -->
+    <section class="space-y-4">
+      <div class="border-b border-purple-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">5. Écoles Fondamentales de la 4e Édition</h2>
+        <span class="text-xs text-stone-400">Styles martiaux et disciplines représentés dans le générateur de fiches[cite: 2, 7].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        
+        <!-- BUSHI BAYUSHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-purple-200 text-sm font-imperial">École de Bushi Bayushi[cite: 2]</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold border border-purple-800/40">Feinte • Riposte[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Technique Rang 1 : La Ruse du Scorpion.</b> Ajoute son rang d'Iaijutsu à son Initiative[cite: 2]. Toute feinte réussie prive temporairement l'adversaire de la protection de son armure[cite: 2]. Aux rangs supérieurs, il attaque en Action Simple, riposte immédiatement si un ennemi le manque, et applique des poisons invalidants[cite: 2].
+          </p>
+        </div>
+
+        <!-- COURTISAN BAYUSHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-purple-200 text-sm font-imperial">École de Courtisan Bayushi[cite: 2]</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Chantage • Manipulation[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Technique Rang 1 : Les Faiblesses du Cœur.</b> Détecte intuitivement les Désavantages sociaux et moraux d'un interlocuteur[cite: 2]. Peut inciter subtilement une cible à enfreindre l'étiquette ou à commettre une faute d'honneur sans jamais paraître impliqué[cite: 2].
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NAVIGATION ENTRE LES CLANS -->
+    <nav aria-label="Navigation des clans" class="pt-6 border-t border-purple-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
+      <a href="phenix.html" class="text-red-400 hover:text-red-300 font-imperial">← Clan du Phénix</a>
+      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
+      <a href="licorne.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-purple-300 border border-stone-800 font-imperial">Clan de la Licorne →</a>
+    </nav>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan du Scorpion
+  </footer>
+
+</body>
+</html>
