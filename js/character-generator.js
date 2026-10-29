@@ -504,32 +504,40 @@ function toggleSkillSpec(idx) {
 
 function generateRandomName(gender) {
   const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const famIdx = document.getElementById('sel-family').value;
-  const familyName = clans[clanKey]?.families[famIdx]?.name || "Samouraï";
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const famIdx = parseInt(document.getElementById('sel-family')?.value) || 0;
+  const familyName = clans[clanKey]?.families?.[famIdx]?.name || "Samouraï";
 
   const list = ROKUGANI_NAMES[gender] || ROKUGANI_NAMES['m'];
+  if (!list || !list.length) return;
   const pick = list[Math.floor(Math.random() * list.length)];
 
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
     nameInput.value = nameOrderWestern ? `${pick.n} ${familyName}` : `${familyName} ${pick.n}`;
-    const stickyName = document.getElementById('sticky-pc-name');
-    if (stickyName) stickyName.textContent = nameInput.value;
   }
-  document.getElementById('name-meaning').textContent = `Signification : ${pick.m}`;
+
+  const meaningEl = document.getElementById('name-meaning');
+  if (meaningEl) {
+    meaningEl.textContent = `Signification : ${pick.m}`;
+  }
+
+  // Force la mise à jour immédiate du bandeau
+  updateStickyName();
 }
 
 function toggleNameOrder() {
   nameOrderWestern = !nameOrderWestern;
-  const val = document.getElementById('pc-name').value.trim();
-  const parts = val.split(' ');
-  if (parts.length >= 2) {
-    const formatted = `${parts.slice(1).join(' ')} ${parts[0]}`;
-    document.getElementById('pc-name').value = formatted;
-    const stickyName = document.getElementById('sticky-pc-name');
-    if (stickyName) stickyName.textContent = formatted;
+  const nameInput = document.getElementById('pc-name');
+  if (nameInput) {
+    const val = nameInput.value.trim();
+    const parts = val.split(' ');
+    if (parts.length >= 2) {
+      nameInput.value = `${parts.slice(1).join(' ')} ${parts[0]}`;
+    }
   }
+  // Force la mise à jour immédiate du bandeau
+  updateStickyName();
 }
 
 // =========================================================================
