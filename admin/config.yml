@@ -3,14 +3,13 @@ backend:
   repo: vincenzorpg/L5R
   branch: main
 
-# Dossier où atterriront vos illustrations, images IA et podcasts MP3
 media_folder: "assets/uploads"
 public_folder: "assets/uploads"
 
 collections:
 
   # =========================================================================
-  # 1. VOTRE COLLECTION EXISTANTE : SCÉNARIOS & ÉPISODES DE CAMPAGNE
+  # 1. SCÉNARIOS & ÉPISODES (MARKDOWN + FRONTMATTER)
   # =========================================================================
   - name: "scenarios"
     label: "Scénarios & Campagne"
@@ -28,13 +27,12 @@ collections:
       - { label: "Récit complet", name: "body", widget: "markdown" }
 
   # =========================================================================
-  # 2. LES HUIT GRANDS CLANS DE ROKUGAN
+  # 2. LES HUIT GRANDS CLANS (FICHIERS HTML BRUTS)
   # =========================================================================
   - name: "clans"
     label: "Fiches des Huit Clans"
+    format: "raw"
     delete: false
-    editor:
-      preview: true
     files:
       - name: "crabe"
         label: "Clan du Crabe"
@@ -85,10 +83,11 @@ collections:
           - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
 
   # =========================================================================
-  # 3. AIDES DE JEU ET PROTOCOLES
+  # 3. AIDES DE JEU (FICHIERS HTML BRUTS)
   # =========================================================================
   - name: "aides"
     label: "Aides de Jeu"
+    format: "raw"
     delete: false
     files:
       - name: "combat"
@@ -114,6 +113,7 @@ collections:
   # =========================================================================
   - name: "pages"
     label: "Portail & Accueil"
+    format: "raw"
     delete: false
     files:
       - name: "home"
