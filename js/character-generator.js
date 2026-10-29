@@ -1,95 +1,58 @@
 /**
  * character-generator.js — Moteur logique complet L5R 4e Édition
- * Gère le calcul dynamique, l'XP de base modulable, les seuils d'XP, 
- * les statistiques de combat, le bandeau sticky et les catalogues modulaires.
+ * Règles officielles du Book of Earth (p. 80-82) :
+ * - Initiative : (Rang d'Insight + Réflexes) g Réflexes
+ * - Toucher : (Compétence d'arme + Agilité ou Réflexes) g Trait
+ * - Dégâts : VD Arme + Force (+ École / Avantages)
+ * - ND d'Armure : 5 + (5 x Réflexes) + Armure (+ Modificateurs)
  */
 
 const MAX_DISADVANTAGE_XP = 15;
 
 const ROKUGANI_NAMES = {
   m: [
-    { n: "Okado", m: "Porte de la sagesse" },
-    { n: "Akira", m: "Lumière claire et tranchante" },
-    { n: "Hiro-Hito", m: "Homme généreux et bienveillant" },
-    { n: "Ryujin", m: "L'esprit du dragon des mers" },
-    { n: "Kenji", m: "Second fils vigoureux" },
-    { n: "Masashi", m: "Gouverneur honorable" },
-    { n: "Tadashi", m: "Droit et loyal au Bushido" },
-    { n: "Kazuki", m: "Espoir radieux" },
-    { n: "Daiki", m: "Grand arbre rayonnant" },
-    { n: "Shinji", m: "Fidèle serviteur de la vérité" },
-    { n: "Nobu", m: "Foi inébranlable" },
-    { n: "Takeshi", m: "Guerrier intrépide" },
-    { n: "Genji", m: "Origine noble" },
-    { n: "Isamu", m: "Bravoure indomptable" },
-    { n: "Jiro", m: "Second fils valeureux" },
-    { n: "Kenshin", m: "Cœur de sabre loyal" },
-    { n: "Makoto", m: "Sincérité absolue" },
-    { n: "Ren", m: "Lotus pur" },
-    { n: "Ryo", m: "Brise vivifiante" },
-    { n: "Shiro", m: "Quatrième fils de lumière" },
-    { n: "Taro", m: "Premier-né glorieux" },
-    { n: "Yasuo", m: "Homme de paix" },
-    { n: "Yoshito", m: "Personne juste et droite" },
-    { n: "Katsuro", m: "Fils victorieux" },
-    { n: "Kaito", m: "Vol au-dessus de l'océan" },
-    { n: "Haruto", m: "Soleil haut dans le ciel" },
-    { n: "Sosuke", m: "Aide courageuse et sage" },
-    { n: "Hayato", m: "Faucon agile" },
-    { n: "Minoru", m: "Moisson abondante" },
-    { n: "Naoki", m: "Arbre droit et probe" },
-    { n: "Osamu", m: "Discipline et loi" },
-    { n: "Saburo", m: "Troisième fils déterminé" },
-    { n: "Seiichi", m: "Premier fils d'intégrité" },
-    { n: "Takashi", m: "Noblesse d'esprit" },
-    { n: "Toru", m: "Persévérance à travers l'épreuve" },
-    { n: "Yuji", m: "Second fils brave" },
-    { n: "Goro", m: "Cinquième fils robuste" },
-    { n: "Junpei", m: "Paix pure et sincère" },
-    { n: "Ken'ichi", m: "Premier sabre de la famille" },
-    { n: "Masato", m: "Homme de justice" }
+    { n: "Okado", m: "Porte de la sagesse" }, { n: "Akira", m: "Lumière claire et tranchante" },
+    { n: "Hiro-Hito", m: "Homme généreux et bienveillant" }, { n: "Ryujin", m: "L'esprit du dragon des mers" },
+    { n: "Kenji", m: "Second fils vigoureux" }, { n: "Masashi", m: "Gouverneur honorable" },
+    { n: "Tadashi", m: "Droit et loyal au Bushido" }, { n: "Kazuki", m: "Espoir radieux" },
+    { n: "Daiki", m: "Grand arbre rayonnant" }, { n: "Shinji", m: "Fidèle serviteur de la vérité" },
+    { n: "Nobu", m: "Foi inébranlable" }, { n: "Takeshi", m: "Guerrier intrépide" },
+    { n: "Genji", m: "Origine noble" }, { n: "Isamu", m: "Bravoure indomptable" },
+    { n: "Jiro", m: "Second fils valeureux" }, { n: "Kenshin", m: "Cœur de sabre loyal" },
+    { n: "Makoto", m: "Sincérité absolue" }, { n: "Ren", m: "Lotus pur" },
+    { n: "Ryo", m: "Brise vivifiante" }, { n: "Shiro", m: "Quatrième fils de lumière" },
+    { n: "Taro", m: "Premier-né glorieux" }, { n: "Yasuo", m: "Homme de paix" },
+    { n: "Yoshito", m: "Personne juste et droite" }, { n: "Katsuro", m: "Fils victorieux" },
+    { n: "Kaito", m: "Vol au-dessus de l'océan" }, { n: "Haruto", m: "Soleil haut dans le ciel" },
+    { n: "Sosuke", m: "Aide courageuse et sage" }, { n: "Hayato", m: "Faucon agile" },
+    { n: "Minoru", m: "Moisson abondante" }, { n: "Naoki", m: "Arbre droit et probe" },
+    { n: "Osamu", m: "Discipline et loi" }, { n: "Saburo", m: "Troisième fils déterminé" },
+    { n: "Seiichi", m: "Premier fils d'intégrité" }, { n: "Takashi", m: "Noblesse d'esprit" },
+    { n: "Toru", m: "Persévérance à travers l'épreuve" }, { n: "Yuji", m: "Second fils brave" },
+    { n: "Goro", m: "Cinquième fils robuste" }, { n: "Junpei", m: "Paix pure et sincère" },
+    { n: "Ken'ichi", m: "Premier sabre de la famille" }, { n: "Masato", m: "Homme de justice" }
   ],
   f: [
-    { n: "Yuriko", m: "Enfant du lys immaculé" },
-    { n: "Ayame", m: "Iris fleurissant près des eaux" },
-    { n: "Hotaru", m: "Luciole dans la brume du crépuscule" },
-    { n: "Kaede", m: "Feuille d'érable d'automne" },
-    { n: "Tomoe", m: "Tourbillon protecteur" },
-    { n: "Chitose", m: "Mille années de prospérité" },
-    { n: "Reiko", m: "Enfant reconnaissante et gracieuse" },
-    { n: "Aoi", m: "Mauve sacrée" },
-    { n: "Emi", m: "Beau sourire béni" },
-    { n: "Hana", m: "Fleur éclatante" },
-    { n: "Haruka", m: "Parfum venu du lointain" },
-    { n: "Kazumi", m: "Beauté harmonieuse" },
-    { n: "Kiku", m: "Chrysanthème impérial" },
-    { n: "Kohaku", m: "Ambre précieux" },
-    { n: "Mai", m: "Danse gracieuse" },
-    { n: "Midori", m: "Verdure printanière" },
-    { n: "Nanami", m: "Sept mers calmes" },
-    { n: "Renka", m: "Fleur de lotus" },
-    { n: "Rin", m: "Dignité glacée et pure" },
-    { n: "Saki", m: "Fleurissant d'espoir" },
-    { n: "Sakura", m: "Fleur de cerisier éphémère" },
-    { n: "Shizuka", m: "Calme serein" },
-    { n: "Sora", m: "Ciel d'été infini" },
-    { n: "Sumiko", m: "Enfant de pure clarté" },
-    { n: "Suzume", m: "Moineau vif et mélodieux" },
-    { n: "Tamiko", m: "Enfant du peuple aimée" },
-    { n: "Tsuki", m: "Lumière de lune bienveillante" },
-    { n: "Ume", m: "Fleur de prunier résiliente" },
-    { n: "Yoko", m: "Enfant de l'aube" },
-    { n: "Yoshiko", m: "Enfant de noble vertu" },
-    { n: "Yuka", m: "Parfum délicat" },
-    { n: "Yumi", m: "Arc élégant" },
-    { n: "Asuka", m: "Parfum du matin naissant" },
-    { n: "Botan", m: "Pivoine royale" },
-    { n: "Fuji", m: "Glycine aux reflets d'argent" },
-    { n: "Hoshiko", m: "Enfant des étoiles" },
-    { n: "Kiyomi", m: "Pure beauté d'eau vive" },
-    { n: "Miyuki", m: "Neige silencieuse" },
-    { n: "Tsukiko", m: "Fille de la pleine lune" },
-    { n: "Moriko", m: "Enfant de la forêt sacrée" }
+    { n: "Yuriko", m: "Enfant du lys immaculé" }, { n: "Ayame", m: "Iris fleurissant près des eaux" },
+    { n: "Hotaru", m: "Luciole dans la brume du crépuscule" }, { n: "Kaede", m: "Feuille d'érable d'automne" },
+    { n: "Tomoe", m: "Tourbillon protecteur" }, { n: "Chitose", m: "Mille années de prospérité" },
+    { n: "Reiko", m: "Enfant reconnaissante et gracieuse" }, { n: "Aoi", m: "Mauve sacrée" },
+    { n: "Emi", m: "Beau sourire béni" }, { n: "Hana", m: "Fleur éclatante" },
+    { n: "Haruka", m: "Parfum venu du lointain" }, { n: "Kazumi", m: "Beauté harmonieuse" },
+    { n: "Kiku", m: "Chrysanthème impérial" }, { n: "Kohaku", m: "Ambre précieux" },
+    { n: "Mai", m: "Danse gracieuse" }, { n: "Midori", m: "Verdure printanière" },
+    { n: "Nanami", m: "Sept mers calmes" }, { n: "Renka", m: "Fleur de lotus" },
+    { n: "Rin", m: "Dignité glacée et pure" }, { n: "Saki", m: "Fleurissant d'espoir" },
+    { n: "Sakura", m: "Fleur de cerisier éphémère" }, { n: "Shizuka", m: "Calme serein" },
+    { n: "Sora", m: "Ciel d'été infini" }, { n: "Sumiko", m: "Enfant de pure clarté" },
+    { n: "Suzume", m: "Moineau vif et mélodieux" }, { n: "Tamiko", m: "Enfant du peuple aimée" },
+    { n: "Tsuki", m: "Lumière de lune bienveillante" }, { n: "Ume", m: "Fleur de prunier résiliente" },
+    { n: "Yoko", m: "Enfant de l'aube" }, { n: "Yoshiko", m: "Enfant de noble vertu" },
+    { n: "Yuka", m: "Parfum délicat" }, { n: "Yumi", m: "Arc élégant" },
+    { n: "Asuka", m: "Parfum du matin naissant" }, { n: "Botan", m: "Pivoine royale" },
+    { n: "Fuji", m: "Glycine aux reflets d'argent" }, { n: "Hoshiko", m: "Enfant des étoiles" },
+    { n: "Kiyomi", m: "Pure beauté d'eau vive" }, { n: "Miyuki", m: "Neige silencieuse" },
+    { n: "Tsukiko", m: "Fille de la pleine lune" }, { n: "Moriko", m: "Enfant de la forêt sacrée" }
   ]
 };
 
@@ -110,7 +73,6 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
-// Accesseurs sécurisés aux données
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
@@ -150,7 +112,6 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // 1. Compétences
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
     skSel.innerHTML = "";
@@ -162,7 +123,6 @@ function initCatalogSelectors() {
     });
   }
 
-  // 2. Armures
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
     armSel.innerHTML = "";
@@ -174,7 +134,6 @@ function initCatalogSelectors() {
     });
   }
 
-  // 3. Armes
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
@@ -194,7 +153,6 @@ function initCatalogSelectors() {
     });
   }
 
-  // 4. Avantages
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     advSel.innerHTML = "";
@@ -206,7 +164,6 @@ function initCatalogSelectors() {
     });
   }
 
-  // 5. Désavantages
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     disadvSel.innerHTML = "";
@@ -287,6 +244,31 @@ function resetSheetToNewSelection() {
     isSchool: true
   }));
   renderSkills();
+
+  // Équipement par défaut adapté à l'école
+  const w1Sel = document.getElementById('pc-weapon-1');
+  if (w1Sel) {
+    if (sch.id?.includes("hida") || sch.name?.includes("Hida")) {
+      w1Sel.value = "Tetsubo";
+    } else if (sch.id?.includes("tsuruchi") || sch.name?.includes("Tsuruchi")) {
+      w1Sel.value = "Arc Yumi";
+    } else if (sch.id?.includes("shiba") || sch.name?.includes("Shiba")) {
+      w1Sel.value = "Yari";
+    } else {
+      w1Sel.value = "Katana";
+    }
+  }
+
+  const armSel = document.getElementById('pc-armor');
+  if (armSel) {
+    if (sch.outfit?.toLowerCase().includes("lourde")) {
+      armSel.value = "10";
+    } else if (sch.outfit?.toLowerCase().includes("légère")) {
+      armSel.value = "5";
+    } else {
+      armSel.value = "0";
+    }
+  }
 
   advantagesList = [];
   disadvantagesList = [];
@@ -523,7 +505,7 @@ function toggleNameOrder() {
 }
 
 // =========================================================================
-// CALCULS DYNAMIQUES AVEC XP DE BASE PERSONNALISABLE
+// CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
 // =========================================================================
 function updateAll() {
   const clans = getClans();
@@ -544,7 +526,7 @@ function updateAll() {
   const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
   const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-  // Calcul des Anneaux
+  // 1. Calcul des 5 Anneaux
   const rEarth = Math.min(sta, wil);
   const rWater = Math.min(str, per);
   const rAir = Math.min(ref, awa);
@@ -557,7 +539,6 @@ function updateAll() {
   document.getElementById('ring-fire').textContent = rFire;
   document.getElementById('ring-void').textContent = rVoid;
 
-  // Détection des impacts d'Avantages et Désavantages
   const hasAdv = (impactName) => advantagesList.some(a => {
     const found = getAdvantages().avantages?.find(x => x.name === a.name);
     return found && found.impact === impactName;
@@ -568,7 +549,7 @@ function updateAll() {
     return found && found.impact === impactName;
   });
 
-  // Calcul Dépense d'XP
+  // 2. Calcul du Budget XP
   let xpSpent = 0;
   const traitsBase = [
     { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -608,7 +589,6 @@ function updateAll() {
   let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
   document.getElementById('disadv-gain-total').textContent = disadvGain;
 
-  // LECTURE DYNAMIQUE DE L'XP DE BASE (40 par défaut ou valeur saisie par le joueur)
   const baseXPInput = document.getElementById('base-xp-input');
   const baseXP = baseXPInput ? (parseInt(baseXPInput.value) || 0) : 40;
 
@@ -620,7 +600,7 @@ function updateAll() {
   remEl.textContent = remainingXP;
   remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-  // Insight et Rang d'École
+  // 3. Insight et Rang d'École (4e Édition : Tranches de 25)
   let sumRings = rEarth + rWater + rAir + rFire + rVoid;
   let sumSkills = currentSkills.reduce((acc, sk) => acc + sk.rank, 0);
   let insight = (sumRings * 10) + sumSkills;
@@ -636,34 +616,52 @@ function updateAll() {
   const stickySchool = document.getElementById('sticky-school-badge');
   if (stickySchool && sch) stickySchool.textContent = sch.name;
 
-  // --- 1. JET POUR TOUCHER ---
+  // --- 4. CALCUL OFFICIEL DU JET POUR TOUCHER (Book of Earth, p. 80-82) ---
   const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
-  const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
   const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
     name: weapon1Name,
-    vd: "2g2",
+    vd: "3g2",
     trait: "Agilité",
     skill: "Kenjutsu",
     type: "Médium"
   };
 
-  const atkTraitName = weaponData.trait || "Agilité";
-  const atkSkillName = weaponData.skill || "Kenjutsu";
+  const isRanged = (weaponData.type === "Distance" || weaponData.skill === "Kyujutsu");
+  const atkTraitName = isRanged ? "Réflexes" : (weaponData.trait || "Agilité");
   const atkTraitVal = (atkTraitName === "Réflexes") ? ref : agi;
+  const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
 
-  const skillObj = currentSkills.find(s => 
-    s.name.toLowerCase().includes(atkSkillName.toLowerCase()) || 
-    atkSkillName.toLowerCase().includes(s.name.toLowerCase())
-  );
+  // Recherche de la compétence correspondante
+  const skillObj = currentSkills.find(s => {
+    const sName = s.name.toLowerCase();
+    const wSkill = atkSkillName.toLowerCase();
+    const wName = weaponData.name.toLowerCase();
+    return sName.includes(wSkill) || wSkill.includes(sName) || sName.includes(wName);
+  });
+
   const skillRank = skillObj ? skillObj.rank : 0;
+  const hasSpec = skillObj ? skillObj.spec : false;
 
-  let atkRoll = skillRank + atkTraitVal;
+  let atkRoll = 0;
   let atkKeep = atkTraitVal;
-  let atkDetails = [`${atkSkillName} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`];
+  let atkDetails = [];
+
+  if (skillRank > 0) {
+    atkRoll = skillRank + atkTraitVal;
+    atkDetails.push(`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`);
+  } else {
+    // Règle 4e Édition : Jet Non Entraîné (Unskilled Roll) = Trait g Trait sans explosion
+    atkRoll = atkTraitVal;
+    atkDetails.push(`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`);
+  }
 
   if (hasAdv("school_skills_bonus") && skillObj?.isSchool) {
     atkRoll += 1;
     atkDetails.push("Prodige (+1g0)");
+  }
+
+  if (hasSpec) {
+    atkDetails.push("Spé : relance les 1");
   }
 
   const atkStr = `${atkRoll}g${atkKeep}`;
@@ -676,15 +674,23 @@ function updateAll() {
     stickyAtkDetail.title = atkDetailStr;
   }
 
-  // --- 2. JET DE DÉGÂTS ---
-  const vdParts = (weaponData.vd || "2g2").split('g');
-  let dmgBaseRoll = parseInt(vdParts[0]) || 2;
+  // --- 5. CALCUL OFFICIEL DU JET DE DÉGÂTS (Book of Earth, p. 82) ---
+  const vdParts = (weaponData.vd || "3g2").split('g');
+  let dmgBaseRoll = parseInt(vdParts[0]) || 3;
   let dmgBaseKeep = parseInt(vdParts[1]) || 2;
 
-  let dmgRoll = dmgBaseRoll + str;
+  let dmgRoll = dmgBaseRoll;
   let dmgKeep = dmgBaseKeep;
   let dmgBonusStatic = 0;
-  let dmgDetails = [`Arme (${weaponData.vd})`, `Force (+${str}g0)`];
+  let dmgDetails = [`Arme (${weaponData.vd})`];
+
+  if (!isRanged) {
+    dmgRoll += str;
+    dmgDetails.push(`Force (+${str}g0)`);
+  } else {
+    dmgRoll += 3; // Force standard d'un grand arc Yumi rokugani
+    dmgDetails.push("Force d'Arc (+3g0)");
+  }
 
   if (sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) {
     dmgBonusStatic += sta;
@@ -696,7 +702,7 @@ function updateAll() {
     dmgDetails.push("Grande Taille (+1g0)");
   }
 
-  if (disadvantagesList.some(d => d.name.includes("Petite Taille"))) {
+  if (disadvantagesList.some(d => d.name.includes("Petite Taille")) && !isRanged) {
     dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
     dmgDetails.push("Petite Taille (-1g0)");
   }
@@ -711,11 +717,12 @@ function updateAll() {
     stickyDmgDetail.title = dmgDetailStr;
   }
 
-  // --- 3. INITIATIVE ---
-  let initRoll = ref;
+  // --- 6. CALCUL OFFICIEL DE L'INITIATIVE (Book of Earth, p. 81) ---
+  // Formule officielle 4e : (Rang d'Insight + Réflexes) g Réflexes
+  let initRoll = insightRank + ref;
   let initKeep = ref;
   let initStatic = 0;
-  let initDetails = [`Réflexes (${ref}g${ref})`];
+  let initDetails = [`Insight ${insightRank} + Réfl. ${ref} (${insightRank + ref}g${ref})`];
 
   if (hasAdv("initiative_bonus")) {
     initRoll += 1;
@@ -751,7 +758,7 @@ function updateAll() {
   }
   document.getElementById('stat-init').textContent = initStr;
 
-  // --- 4. ND D'ARMURE ---
+  // --- 7. CALCUL DU ND D'ARMURE ---
   const armorSelect = document.getElementById('pc-armor');
   const armorBonus = parseInt(armorSelect?.value) || 0;
   const armorName = armorSelect?.options[armorSelect.selectedIndex]?.text?.split('(')[0]?.trim() || "Armure";
@@ -763,6 +770,7 @@ function updateAll() {
     armorDetails.push(`${armorName} (+${armorBonus})`);
   }
 
+  const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
   let nitenBonus = 0;
   if ((sch?.id === "bushi-mirumoto" || sch?.name?.includes("Mirumoto")) && (weapon1Name.includes("Katana") || weapon2Name.includes("Wakizashi"))) {
     nitenBonus = 5;
@@ -780,7 +788,7 @@ function updateAll() {
   }
   document.getElementById('stat-armor-tn').textContent = finalArmorTN;
 
-  // Récupération nocturne & seuils de vitalité
+  // Vitalité et récupération nocturne
   let effSta = sta;
   if (hasAdv("quick_heal")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
