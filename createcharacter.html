@@ -59,45 +59,84 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- BANDEAU STICKY PERMANENT (NOM, XP, INSIGHT ET COMMANDES) -->
-  <aside aria-label="État du personnage" class="sticky top-0 z-50 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-3 px-4 md:px-8 no-print">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+<!-- BANDEAU STICKY PERMANENT AVEC TABLEAU DE BORD DE COMBAT EN DIRECT -->
+  <aside aria-label="État du personnage" class="sticky top-0 z-50 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col gap-2">
       
-      <!-- Nom dynamique du samouraï -->
-      <div class="flex items-center gap-3">
-        <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
-        <span id="sticky-pc-name" class="text-base md:text-lg font-bold text-amber-200 font-imperial">Okado Hiruma</span>
+      <!-- Ligne 1 : Nom, École, Budget XP, Réputation et Boutons -->
+      <div class="flex flex-wrap justify-between items-center gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
+          <span id="sticky-pc-name" class="text-sm md:text-base font-bold text-amber-200 font-imperial">Okado Hiruma</span>
+          <span id="sticky-school-badge" class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-300">Bushi Hiruma</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div>
+            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante</span>
+            <span class="text-sm font-bold font-imperial">
+              <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
+            </span>
+          </div>
+          <div class="border-l border-amber-500/20 pl-3">
+            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">Réputation</span>
+            <span class="text-sm font-bold text-amber-300 font-imperial" id="insight-display">
+              120 pts <span class="text-[10px] text-stone-400 font-normal">(Rang 1)</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button onclick="randomizeAll()" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">⚡ Auto</button>
+          <button onclick="exportJSON()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">💾 JSON</button>
+          <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
+            📂 Charger
+            <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
+          </label>
+          <button onclick="window.print()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ PDF</button>
+          <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
+        </div>
       </div>
 
-      <!-- XP restante et Réputation / Insight -->
-      <div class="flex items-center gap-6">
-        <div>
-          <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante</span>
-          <span class="text-base md:text-lg font-bold font-imperial">
-            <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
-          </span>
+      <!-- Ligne 2 : Les 4 Métriques Clés avec Détails Explicatifs -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
+        
+        <!-- 1. Jet pour Toucher -->
+        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
+          <div class="flex justify-between items-baseline">
+            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Toucher</span>
+            <span id="sticky-atk" class="text-sm font-bold text-amber-300 font-imperial">3g2</span>
+          </div>
+          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Kenjutsu (1) + Agilité (2)</div>
         </div>
-        <div class="border-l border-amber-500/20 pl-4">
-          <span class="text-[9px] text-stone-400 uppercase tracking-wider block">Réputation</span>
-          <span class="text-base md:text-lg font-bold text-amber-300 font-imperial" id="insight-display">
-            120 pts <span class="text-xs text-stone-400 font-normal">(Rang 1)</span>
-          </span>
-        </div>
-      </div>
 
-      <!-- Liens rapides et actions -->
-      <div class="flex items-center gap-2 text-xs">
-        <a href="index.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
-        <a href="campagne.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Campagne</a>
-        <a href="grimoire.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Grimoire</a>
-        <button onclick="randomizeAll()" class="px-3 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">⚡ Auto</button>
-        <button onclick="exportJSON()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">💾 JSON</button>
-        <label class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
-          📂 Charger
-          <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
-        </label>
-        <button onclick="window.print()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ PDF</button>
-        <button onclick="resetCharacter()" class="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
+        <!-- 2. Jet de Dégâts -->
+        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
+          <div class="flex justify-between items-baseline">
+            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Dégâts</span>
+            <span id="sticky-dmg" class="text-sm font-bold text-red-400 font-imperial">4g2</span>
+          </div>
+          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Katana (2g2) + Force (2)</div>
+        </div>
+
+        <!-- 3. Jet d'Initiative -->
+        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
+          <div class="flex justify-between items-baseline">
+            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Initiative</span>
+            <span id="sticky-init" class="text-sm font-bold text-amber-200 font-imperial">2g2</span>
+          </div>
+          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Réflexes (2g2)</div>
+        </div>
+
+        <!-- 4. ND d'Armure -->
+        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
+          <div class="flex justify-between items-baseline">
+            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">ND Armure</span>
+            <span id="sticky-armor-tn" class="text-sm font-bold text-emerald-400 font-imperial">20</span>
+          </div>
+          <div id="sticky-armor-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Base 5 + Réfl. (10) + Armure (+5)</div>
+        </div>
+
       </div>
 
     </div>
