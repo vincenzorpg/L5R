@@ -115,6 +115,14 @@ const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
 const getAdvantages = () => window.AVANTAGES_DATA || { avantages: [], desavantages: [] };
 
+function updateStickyName() {
+  const nameInput = document.getElementById('pc-name');
+  const stickyName = document.getElementById('sticky-pc-name');
+  if (nameInput && stickyName) {
+    stickyName.textContent = nameInput.value.trim() || "Samouraï";
+  }
+}
+
 function bootstrap() {
   if (!window.CLANS_DATA && !window.CLANS_CORE) {
     setTimeout(bootstrap, 50);
@@ -122,6 +130,13 @@ function bootstrap() {
   }
   initClans();
   initCatalogSelectors();
+
+  // Écoute automatique de la saisie sur le champ du nom
+  const nameInput = document.getElementById('pc-name');
+  if (nameInput) {
+    nameInput.addEventListener('input', updateStickyName);
+  }
+  updateStickyName();
 }
 
 function initClans() {
