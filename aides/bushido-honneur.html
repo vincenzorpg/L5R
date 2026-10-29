@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Code du Bushido & l'Honneur — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #201208 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media print {
+      body { background: white !important; color: black !important; }
+      .no-print { display: none !important; }
+      .card-clean { background: white !important; border: 1px solid #777 !important; color: black !important; break-inside: avoid; }
+      .gold-text { color: #8b0000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE -->
+  <header class="border-b border-amber-500/30 bg-[#0d0b0b]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl no-print">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-full border border-amber-500/50 bg-black flex items-center justify-center font-bold text-amber-300 font-imperial text-xs">義</span>
+        <div>
+          <span class="font-imperial font-bold tracking-widest text-amber-200 block text-sm">ROKUGAN</span>
+          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-2 text-xs">
+        <a href="../index.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
+        <a href="../createcharacter.html" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">Forge de Samouraï</a>
+        <a href="combat-memento.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-200 border border-stone-800 font-imperial">Mémento Combat</a>
+        <button onclick="window.print()" class="px-2.5 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ Imprimer</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO SECTION -->
+    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="space-y-2 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/60 border border-amber-500/30 text-[10px] uppercase tracking-widest text-amber-300 font-bold">
+          <span>📜</span> Guide Moral & Règles de Réputation 4e Édition
+        </div>
+        <h1 class="text-2xl md:text-4xl font-black font-imperial tracking-wide gold-gradient">
+          LE CODE DU BUSHIDO & L'HONNEUR
+        </h1>
+        <p class="text-xs md:text-sm text-stone-300 italic">
+          « L'honneur n'est pas ce que les autres voient de toi, c'est ce que tu vois de toi-même lorsque tu es seul face à ton sabre. »
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 shrink-0 text-center">
+        <span class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Échelle Officielle</span>
+        <div class="p-2.5 px-4 rounded-xl bg-black/60 border border-amber-500/40 text-sm font-bold font-imperial text-amber-300">
+          Rangs 0.0 à 10.0 (10 pts / Rang)
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1 : LES 7 VERTUS DU BUSHIDO -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">1. Les Sept Vertus Cardinales du Bushido</h2>
+        <span class="text-xs text-stone-400">Le code moral absolu enseigné par les Kami Akodo, Doji et Mirumoto à l'aube de l'Empire.</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+
+        <!-- GI -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">義 Gi</span>
+            <span class="text-[10px] text-stone-400">Droiture & Justice</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Agir avec intégrité morale sans compromis. Il n'y a pas de zone grise : pour un samouraï, une action est soit juste, soit injuste.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Lion, Grue, Dragon.</div>
+        </div>
+
+        <!-- YU -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">勇 Yū</span>
+            <span class="text-[10px] text-stone-400">Bravoure Héroïque</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Se dresser face au péril sans reculer. Le courage du Bushido n'est pas l'absence de peur, mais la détermination de triompher malgré elle.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Crabe, Lion, Mante.</div>
+        </div>
+
+        <!-- JIN -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">仁 Jin</span>
+            <span class="text-[10px] text-stone-400">Compassion & Bienveillance</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La force impose la responsabilité de protéger les faibles et les humbles (heimin, hinin). User de son pouvoir pour écraser sans raison détruit l'âme.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Phénix, Licorne.</div>
+        </div>
+
+        <!-- REI -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">礼 Rei</span>
+            <span class="text-[10px] text-stone-400">Courtoisie & Politesse</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Le respect absolu de l'étiquette et du rang social. La courtoisie est l'armure qui prévient les effusions de sang inutiles dans les cours.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Grue, Phénix.</div>
+        </div>
+
+        <!-- MAKOTO -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">誠 Makoto</span>
+            <span class="text-[10px] text-stone-400">Sincérité Totale</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Parler et agir doivent être une seule et même chose. La parole d'un samouraï a valeur de décret sacré ; la renier, c'est se déchoir.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Dragon, Lion.</div>
+        </div>
+
+        <!-- MEIYO -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">名誉 Meiyo</span>
+            <span class="text-[10px] text-stone-400">Honneur & Gloire Intérieure</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Le regard des ancêtres sur votre conduite. Nul ne peut juger votre honneur sinon votre propre conscience et le ciel céleste.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Tous les clans (sauf Scorpion dans l'ombre).</div>
+        </div>
+
+        <!-- CHUGO -->
+        <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40 lg:col-span-2">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial text-sm">忠義 Chūgo</span>
+            <span class="text-[10px] text-stone-400">Devoir & Loyauté Inébranlable</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Obéissance inconditionnelle envers son seigneur féodal (Daimyo) et l'Empereur. Pour le Clan du Scorpion, cette vertu prime sur toutes les autres au point de sacrifier son honneur personnel.
+          </p>
+          <div class="text-[10px] text-amber-400/80 italic">Prisé par : Scorpion, Lion, Crabe.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2 : DIFFÉRENCE ENTRE HONNEUR, GLOIRE & STATUT -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial gold-text border-b border-amber-500/20 pb-2">
+        2. La Trinité Sociale : Honneur, Gloire et Statut (Livre de Base, p. 90-93)
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Honneur (Meiyo)</h3>
+            <span class="text-[10px] text-amber-400 font-bold">Interne</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Ce que <b>vous savez de vous-même</b>. Votre valeur morale intrinsèque face au code du Bushido. L'honneur change selon vos actes personnels, que des témoins soient présents ou non.
+          </p>
+          <div class="p-2 rounded bg-amber-950/40 border border-amber-800/40 text-[10px] text-amber-300">
+            Défini au départ par votre École (ex : 6.5 pour Akodo/Kakita, 3.5 pour Hida, 2.5 pour Bayushi).
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Gloire (Kōmei)</h3>
+            <span class="text-[10px] text-amber-400 font-bold">Public</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Ce que <b>le monde sait de vous</b>. Votre réputation, la renommée de vos victoires au combat, vos duels célèbres ou vos poèmes admirés en cour.
+          </p>
+          <div class="p-2 rounded bg-stone-900 border border-stone-800 text-[10px] text-stone-300">
+            Démarre à <b>1.0</b> pour un samouraï nouvellement gempukku. Doit être officiellement reconnue par un supérieur pour augmenter en rang.
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Statut (Chii)</h3>
+            <span class="text-[10px] text-amber-400 font-bold">Hiérarchie</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Votre <b>place officielle dans l'Ordre Céleste</b> et la chaîne de commandement impériale (guerrier ordinaire, officier Gunso, gouverneur, magistrat, Daimyo, Champion de Clan).
+          </p>
+          <div class="p-2 rounded bg-stone-900 border border-stone-800 text-[10px] text-stone-300">
+            Démarre à <b>1.0</b> (samouraï ordinaire de clan). Protège légalement son détenteur contre les accusations de rang inférieur.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3 : TABLEAU OFFICIEL DES GAINS ET PERTES D'HONNEUR -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">3. Table Officielle des Gains et Pertes d'Honneur (Table 2.3)</h2>
+        <span class="text-xs text-stone-400">Le barème est pondéré : plus votre Honneur est élevé, plus les fautes coûtent cher et moins les actes héroïques ordinaires rapportent de points.</span>
+      </div>
+
+      <div class="card-clean rounded-xl overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-amber-500/30 bg-black/80 text-[10px] uppercase font-imperial text-amber-300">
+              <th class="p-3">Acte commis</th>
+              <th class="p-3 text-center">Rang 0</th>
+              <th class="p-3 text-center">Rang 1-2</th>
+              <th class="p-3 text-center">Rang 3-4</th>
+              <th class="p-3 text-center">Rang 5-6</th>
+              <th class="p-3 text-center">Rang 7-8</th>
+              <th class="p-3 text-center">Rang 9-10</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-800 text-stone-300 text-[11px]">
+            <tr class="hover:bg-amber-950/20">
+              <td class="p-2.5 font-bold text-amber-200">Accomplir une promesse malgré un coût personnel immense</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+10</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+4</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+2</td>
+              <td class="p-2.5 text-center text-stone-500">0</td>
+            </tr>
+            <tr class="hover:bg-amber-950/20">
+              <td class="p-2.5 font-bold text-amber-200">Protéger les intérêts de son seigneur au péril de sa vie</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+4</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+2</td>
+            </tr>
+            <tr class="hover:bg-amber-950/20">
+              <td class="p-2.5 font-bold text-amber-200">Faire preuve d'une courtoisie sincère envers ses rivaux</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+9</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+7</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+5</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+2</td>
+              <td class="p-2.5 text-center text-stone-500">0</td>
+              <td class="p-2.5 text-center text-stone-500">0</td>
+            </tr>
+            <tr class="hover:bg-amber-950/20">
+              <td class="p-2.5 font-bold text-amber-200">Secourir un ennemi blessé sur le champ de bataille</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+9</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+5</td>
+              <td class="p-2.5 text-center text-emerald-400 font-bold">+3</td>
+            </tr>
+            <tr class="hover:bg-red-950/20 bg-red-950/10">
+              <td class="p-2.5 font-bold text-red-300">Manquement mineur à l'étiquette ou impolitesse publique</td>
+              <td class="p-2.5 text-center text-stone-500">0</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-1</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-2</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-3</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-4</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-5</td>
+            </tr>
+            <tr class="hover:bg-red-950/20 bg-red-950/10">
+              <td class="p-2.5 font-bold text-red-300">Mentir pour protéger ses propres intérêts égoïstes</td>
+              <td class="p-2.5 text-center text-stone-500">0</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-3</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-5</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-7</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-9</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-10</td>
+            </tr>
+            <tr class="hover:bg-red-950/20 bg-red-950/10">
+              <td class="p-2.5 font-bold text-red-300">Fuir lâchement le champ de bataille devant l'ennemi</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-5</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-8</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-12</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-15</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-18</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-20</td>
+            </tr>
+            <tr class="hover:bg-red-950/20 bg-red-950/10">
+              <td class="p-2.5 font-bold text-red-300">Trahir son seigneur féodal ou commettre un acte félon</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-10</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-15</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-20</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-25</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">-30</td>
+              <td class="p-2.5 text-center text-red-400 font-bold">Perte totale (0.0)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 4 : LE JET D'HONNEUR & LA SOUILLURE -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+      
+      <!-- JET D'HONNEUR -->
+      <div class="card-clean rounded-xl p-5 space-y-3">
+        <h3 class="font-bold text-amber-200 text-sm font-imperial border-b border-amber-500/20 pb-2">
+          Le Jet d'Honneur (Règle Optionnelle de Foi)
+        </h3>
+        <p class="text-stone-300 leading-relaxed">
+          Une fois par session de jeu, lorsqu'un personnage échoue à un jet d'action critique pour l'honneur de sa famille, de son clan ou de son seigneur, le joueur peut invoquer la force de ses convictions :
+        </p>
+        <ul class="list-disc pl-4 space-y-1.5 text-stone-300">
+          <li>Le joueur relance intégralement son jet en utilisant un nombre de dés égal à son <b>Rang d'Honneur en dés lancés et gardés (ex : 6g6 pour un Honneur de 6.5)</b>.</li>
+          <li><b>Le prix de l'échec :</b> Si le nouveau jet échoue malgré tout, le doute submerge l'âme du samouraï qui perd immédiatement <b>1 Rang complet d'Honneur</b> (10 points).</li>
+        </ul>
+      </div>
+
+      <!-- LA SOUILLURE DE L'OUTREMONDE -->
+      <div class="card-clean rounded-xl p-5 space-y-3">
+        <h3 class="font-bold text-red-400 text-sm font-imperial border-b border-red-500/20 pb-2">
+          La Souillure de l'Outremonde (Shadowlands Taint)
+        </h3>
+        <p class="text-stone-300 leading-relaxed">
+          Le poison spirituel de Jigoku corrompt les âmes et le sang de ceux qui s'aventurent au-delà du Mur Kaiu sans protection de jade :
+        </p>
+        <ul class="list-disc pl-4 space-y-1.5 text-stone-400">
+          <li><b>Les Doigts de Jade :</b> 1 doigt protège 7 jours, 2 doigts 13 jours, 3 doigts 16 jours avec +10 aux jets de Terre avant de fondre en boue noire fétide.</li>
+          <li><b>Paliers de Souillure :</b>
+            <span class="text-stone-300 block mt-0.5">• Rang 0.1 à 1.9 : Taches cutanées, cauchemars, irritabilité.</span>
+            <span class="text-amber-300 block">• Rang 2.0 à 4.9 : Peau grise, dents acérées, soif de sang.</span>
+            <span class="text-red-400 block">• Rang 5.0+ : Perte de l'humanité, le personnage devient un serviteur de Fu Leng (PNJ sous contrôle du MJ).</span>
+          </li>
+        </ul>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10 no-print">
+    Chronique L5R 4e Édition — MJ David • Guide officiel du Bushido, de l'Honneur et de la Gloire
+  </footer>
+
+</body>
+</html>
