@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Clan du Lion — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --lion-gold: #eab308;
+      --lion-ochre: #854d0e;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #2a1605 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(22, 17, 12, 0.94);
+      border: 1px solid rgba(234, 179, 8, 0.28);
+    }
+    .gold-text { color: var(--gold); }
+    .lion-gradient {
+      background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #9a3412 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE -->
+  <header class="border-b border-amber-500/30 bg-[#120d07]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-full border border-amber-400/50 bg-black flex items-center justify-center font-bold text-amber-300 font-imperial text-xs">武</span>
+        <div>
+          <span class="font-imperial font-bold tracking-widest text-amber-200 block text-sm">ROKUGAN</span>
+          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-2 text-xs">
+        <a href="../index.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
+        <a href="../createcharacter.html" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition flex items-center gap-1.5">
+          <span>⚔️</span> Forger un Lion
+        </a>
+        <a href="../grimoire.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">📜 Grimoire</a>
+        <a href="../campagne.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">🏮 Campagne</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO DU CLAN -->
+    <section class="card-clean rounded-2xl p-6 md:p-10 border-amber-500/40 relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 text-[140px] md:text-[200px] font-black text-amber-400/5 select-none pointer-events-none font-imperial">
+        武
+      </div>
+      <div class="max-w-3xl space-y-3 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#331c07] border border-amber-400/40 text-[10px] uppercase tracking-widest text-amber-200 font-bold">
+          <span>⚔️</span> Le Sabre Droit de l'Empereur
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide lion-gradient">
+          LE CLAN DU LION
+        </h1>
+        <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial">
+          « Mon honneur est ma vie, mon devoir est ma tombe. »
+        </p>
+        <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
+          Le Clan du Lion est la force militaire suprême de Rokugan[cite: 2, 10]. Gardien sans compromis du code du Bushido et des traditions ancestrales, le Lion veille sur la souveraineté du Trône d'Émeraude grâce à la discipline inflexible de ses légions[cite: 2, 10]. Là où d'autres clans manient la flatterie des cours ou le mysticisme contemplatif, le Lion répond par la clarté stratégique, le culte des héros défunts et le fracas des charges d'infanterie[cite: 2, 10].
+        </p>
+      </div>
+    </section>
+
+    <!-- 1. MYTHE FONDATEUR & RÔLE DANS L'EMPIRE -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
+          1. Origine Sacrée & Vocation Martiale
+        </h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Lorsque les Kami chutèrent du Paradis Céleste, <b>Akodo</b> était le tacticien par excellence, le maître de la guerre éclairée et de la discipline stoïque[cite: 2]. C'est lui qui rédigea le légendaire traité <i>Commandement</i> (*Leadership*), référence absolue en matière de stratégie militaire étudiée dans tous les dojos de l'Empire[cite: 2].
+        </p>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Pour forger son armée, Akodo scella l'alliance avec la redoutable matriarche guerrière <b>Matsu</b> et l'historien <b>Ikoma</b>[cite: 2, 10]. Plus tard, après la disparition tragique de la race primitive des Kitsu lors des guerres de l'Aube, les survivants s'unirent aux humains pour donner naissance à la lignée chamanique des <i>Sodan-Senzo</i>, capables d'invoquer directement les esprits des héros défunts sur le champ de bataille[cite: 2, 10].
+        </p>
+        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
+          <span class="text-amber-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
+          <span class="text-stone-300">Ocre doré, jaune fauve et écarlate (armures laquées d'or patiné, crinières de casque en poil teinté et bannières chargées du Mon du Lion)[cite: 2, 10].</span>
+        </div>
+      </div>
+
+      <!-- CARTE D'IDENTITÉ TACTIQUE -->
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <h3 class="text-sm font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
+          Profil de Clan
+        </h3>
+        <ul class="text-xs space-y-2 text-stone-300">
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Vertu Maîtresse :</span>
+            <b class="text-amber-300">Honneur (Meiyo)[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Kami Fondateur :</span>
+            <b>Akodo le Borgne[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Capitale :</span>
+            <b>Shiro Akodo[cite: 2, 10]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Doctrine de Guerre :</span>
+            <b>Les Légions Royales[cite: 2, 10]</b>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-stone-500">Arme Emblématique :</span>
+            <b>Katana & Yari de ligne[cite: 2, 10]</b>
+          </li>
+        </ul>
+        <div class="pt-2">
+          <a href="../createcharacter.html" class="w-full block py-2 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-center text-xs uppercase tracking-wider transition">
+            Créer un samouraï Lion
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LES QUATRE FAMILLES DU LION -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">2. Les Familles du Clan & Leurs Devoirs</h2>
+        <span class="text-xs text-stone-400">Le mariage indestructible du génie tactique, de la fureur martiale, de la mémoire épique et du dialogue avec les morts[cite: 2, 10].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+
+        <!-- AKODO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Akodo</h3>
+            <span class="text-[10px] text-amber-400 font-bold">+1 Perception[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La lignée des seigneurs et des stratèges[cite: 2]. Les guerriers Akodo approchent le combat avec un sang-froid absolu[cite: 2]. Éduqués dans l'art du placement, de la manœuvre de masse et de la lecture des lignes adverses, ils ne tirent jamais leur sabre sans savoir précisément où et quand la victoire sera scellée[cite: 2, 10].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Généraux d'armées, stratèges de siège et maîtres d'escrime[cite: 2, 10].</div>
+        </div>
+
+        <!-- MATSU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Matsu</h3>
+            <span class="text-[10px] text-amber-400 font-bold">+1 Force[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La plus populeuse et agressive des familles de Rokugan[cite: 2, 10]. Fièrement matriarcale, la maison Matsu prône l'offensive sauvage et sans compromis[cite: 2]. Leurs légions de furies guerrières (*Fierté du Lion*) chargent en hurlant, terrifiant leurs adversaires avant même le contact des lames[cite: 2, 7].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Infanterie d'assaut, berserkers de choc et choc frontal[cite: 2, 10].</div>
+        </div>
+
+        <!-- IKOMA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Ikoma</h3>
+            <span class="text-[10px] text-amber-400 font-bold">+1 Intelligence[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La voix et la mémoire du clan[cite: 2, 10]. Tandis que le reste du Lion cultive le silence stoïque, les bardes Ikoma racontent les exploits héroïques des ancêtres avec une ferveur passionnée[cite: 2, 10]. Dans les cours, ils jouent le rôle d'ambassadeurs capables d'extérioriser les émotions que leurs frères doivent taire[cite: 2, 10].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Bardes épiques, historiens, diplomates et hérauts[cite: 2, 10].</div>
+        </div>
+
+        <!-- KITSU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kitsu</h3>
+            <span class="text-[10px] text-amber-400 font-bold">+1 Volonté[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Les prêtres gardiens des tombes ancestrales[cite: 2, 10]. Descendants partiels des Kitsu primitifs, ils possèdent des yeux dorés et une sensibilité unique au monde spirituel de Meido et Yomi[cite: 2, 10]. Leurs shugenja ne se contentent pas de prier les éléments : ils communient intimement avec les ancêtres défunts[cite: 2, 10].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Prêtres de lignée (Sodan-Senzo), médiums et archivistes spirituels[cite: 2, 10].</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. LE LION ET LE BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
+        3. Le Cœur du Roleplay : Le Lion face au Bushido
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
+            <span class="font-bold text-amber-200 text-sm">L'Honneur (Meiyo) & Le Devoir (Chugo)[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Pour un Lion, la vie d'un samouraï n'a de sens que si elle sert la gloire de son seigneur et l'éclat de son clan[cite: 2]. Tout ordre émanant d'un supérieur est exécuté immédiatement, sans débat ni réserve[cite: 2]. Reculer ou transiger avec sa conscience morale équivaut à la mort de l'âme[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
+            <span class="font-bold text-amber-200 text-sm">L'Orgueil Militaire & la Rigidité Dogmatique[cite: 2, 10]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            L'obsession de la rectitude rend le Lion aisément manipulable par des intrigants subtils[cite: 2]. Piqué dans son orgueil ou accusé de lâcheté, un officier Matsu déclenchera un affrontement sanglant au mépris du bon sens politique[cite: 2]. Leur mépris de la ruse et des compromis leur coûte souvent cher face au Scorpion ou à la Grue[cite: 2].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
+        4. Guide d'Interprétation : Jouer un Samouraï du Lion
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Allure & Comportement</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Votre posture est droite, martiale et sans relâchement[cite: 2]. Vous portez votre daisho avec fierté et saluez vos pairs avec une déférence rigoureuse[cite: 2]. Vous considérez le confort excessif comme un signe d'amollissement et préférez la camaraderie rude des casernes aux intrigues parfumées[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Rapports avec les autres Clans</h3>
+          <p class="text-stone-400 leading-relaxed">
+            La <b>Grue</b> est votre rivale séculaire : vous jugez ses victoires de cour artificielles et douteuses
