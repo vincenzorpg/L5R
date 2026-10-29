@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Étiquette & Coutumes — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- MENU GLOBAL CENTRALISÉ (Dossier parent) -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #161c16 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(14, 18, 15, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .tea-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #a7f3d0 45%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media print {
+      body { background: white !important; color: black !important; }
+      .no-print { display: none !important; }
+      .card-clean { background: white !important; border: 1px solid #777 !important; color: black !important; break-inside: avoid; }
+      .gold-text { color: #8b0000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE INJECTÉE PAR NAVBAR.JS -->
+  <header id="site-header"></header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO SECTION -->
+    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="space-y-2 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[10px] uppercase tracking-widest text-emerald-300 font-bold">
+          <span>🍵</span> Protocole Céleste & Rituels Quotidiens
+        </div>
+        <h1 class="text-2xl md:text-4xl font-black font-imperial tracking-wide tea-gradient">
+          ÉTIQUETTE, COUTUMES & VIE SOCIALE
+        </h1>
+        <p class="text-xs md:text-sm text-stone-300 italic">
+          « L'étiquette n'est pas faite pour restreindre les hommes, mais pour empêcher que le monde ne s'embrase au moindre mot de travers. »
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 shrink-0 text-center">
+        <span class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Règle d'Or</span>
+        <div class="p-2.5 px-4 rounded-xl bg-black/60 border border-amber-500/40 text-xs font-bold font-imperial text-amber-300">
+          Sauver la Face (On) & Politesse (Rei)
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. L'ORDRE CÉLESTE & LA STRUCTURE SOCIALE -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">1. L'Ordre Céleste (La Pyramide Sociale)</h2>
+        <span class="text-xs text-stone-400">À Rokugan, chaque être naît à la place exacte que son karma lui a assignée. Enfreindre cette hiérarchie est un sacrilège contre les Kami.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+        
+        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-amber-400">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[9px]">Sommet Divin</span>
+            <span class="font-imperial font-bold text-amber-200">Kuge</span>
+          </div>
+          <h3 class="font-bold text-amber-300 text-sm font-imperial">La Noblesse Supérieure</h3>
+          <p class="text-stone-300 leading-relaxed">
+            L'Empereur, la famille impériale (Hantei / Otomo / Seppun / Miya) et les Champions des Grands Clans. Leur parole a force de loi divine et nul samouraï ordinaire ne peut les regarder directement dans les yeux sans invitation.
+          </p>
+        </div>
+
+        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-emerald-400">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold uppercase text-[9px]">Gardiens de l'Ordre</span>
+            <span class="font-imperial font-bold text-emerald-200">Buke</span>
+          </div>
+          <h3 class="font-bold text-emerald-300 text-sm font-imperial">La Caste Guerrière</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Tous les samouraïs de clan (bushi, shugenja, courtisans, artisans). Seuls autorisés à porter le <b>Daisho</b> (la paire de sabres), ils disposent du droit de justice immédiate (*Kiri-sute gomen*) sur les roturiers insolents.
+          </p>
+        </div>
+
+        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-blue-400">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold uppercase text-[9px]">Les Producteurs</span>
+            <span class="font-imperial font-bold text-blue-200">Heimin</span>
+          </div>
+          <h3 class="font-bold text-blue-300 text-sm font-imperial">Les Gens du Peuple</h3>
+          <p class="text-stone-300 leading-relaxed">
+            <b>1. Paysans :</b> les plus respectés, car ils nourrissent l'Empire par le riz sacré.<br>
+            <b>2. Artisans :</b> créateurs d'outils et d'œuvres utiles.<br>
+            <b>3. Marchands :</b> les plus méprisés des heimin, car ils tirent profit du travail d'autrui sans rien créer.
+          </p>
+        </div>
+
+        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-red-500">
+          <div class="flex justify-between items-center">
+            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[9px]">Hors Castes</span>
+            <span class="font-imperial font-bold text-red-200">Hinin</span>
+          </div>
+          <h3 class="font-bold text-red-300 text-sm font-imperial">Les Intouchables</h3>
+          <p class="text-stone-300 leading-relaxed">
+            « Non-humains ». Tanneurs, bouchers, fossoyeurs, tortionnaires et geôliers. Ils s'occupent de la mort, du sang et des souillures physiques. Les rônins déchus et les comédiens ambulants partagent souvent cette condition précaire.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. LE PORT DU SABRE & LA SÉCURITÉ DES DEMEURES -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial gold-text border-b border-amber-500/20 pb-2">
+        2. Le Sabre, l'Armure & la Paix des Châteaux
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm flex items-center gap-1.5">
+            <span>🗡️</span> Le Daisho : Passeport de l'Âme
+          </h3>
+          <p class="text-stone-300 leading-relaxed">
+            Le katana est l'âme du samouraï, mais le <b>Wakizashi</b> est son passeport social et légal. Un samouraï ne se sépare <b>jamais</b> de son wakizashi, même pour dormir ou prendre son bain. Être désarmé de son wakizashi équivaut à être privé de son statut de noble.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm flex items-center gap-1.5">
+            <span>🏯</span> Entrer dans la Demeure d'un Hôte
+          </h3>
+          <p class="text-stone-300 leading-relaxed">
+            Dans un château ou manoir noble, le katana doit obligatoirement être confié aux gardes à l'entrée ou déposé sur le râtelier d'honneur (*katanakake*). Si l'on est autorisé à le garder à la ceinture, il doit être noué par son cordon de soie (*sageo*) pour prouver l'absence d'intention d'Iaijutsu.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm flex items-center gap-1.5">
+            <span>⚠️</span> Signes Hostiles Immédiats
+          </h3>
+          <p class="text-stone-300 leading-relaxed">
+            Porter son katana à la hanche droite (prêt à dégainer de la main gauche par surprise), pousser la garde du pouce (*koiguchi no kitte*) ou laisser tinter le fourreau contre celui d'un autre samouraï est une insulte capitale méritant un duel immédiat.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. RITUELS SOCIAUX MAJEURS -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">3. Rituels & Savoir-Vivre Obligatoires</h2>
+        <span class="text-xs text-stone-400">Les usages à maîtriser pour ne pas perdre d'Honneur ou de Réputation en société.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+
+        <!-- L'ART DES CADEAUX -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">L'Art du Cadeau (Onsen & Faveurs)</h3>
+            <span class="text-[10px] text-amber-400 font-bold">Règle des 3 Fois</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Offrir ou recevoir un présent est un acte politique codifié. L'étiquette exige que le destinataire <b>refuse modestement le cadeau à deux reprises</b>, affirmant qu'il ne mérite pas une telle marque d'honneur. L'hôte insiste alors, et le présent n'est accepté qu'à la <b>troisième proposition</b>.
+          </p>
+          <div class="p-2 rounded bg-amber-950/30 border border-amber-800/40 text-[10px] text-amber-300">
+            Tabou absolu : Ne donnez jamais d'argent (koku) directement de la main à la main à un samouraï ; cela le ravale au rang d'un vulgaire marchand vénai.
+          </div>
+        </div>
+
+        <!-- LA CÉRÉMONIE DU THÉ -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">La Cérémonie du Thé (Cha-no-yu)</h3>
+            <span class="text-[10px] text-emerald-400 font-bold">Sanctuaire Neutre</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Le pavillon de thé est le seul lieu de Rokugan où toutes les rancœurs de clan s'effacent. L'entrée (*nijiriguchi*) est si basse que même un général doit ramper pour pénétrer dans la pièce, déposant toutes ses armes dehors.
+          </p>
+          <div class="p-2 rounded bg-emerald-950/30 border border-emerald-800/40 text-[10px] text-emerald-300">
+            En termes de règles : Partager une cérémonie du thé réussie apaise les tensions et permet de récupérer 1 point de Vide pour la journée.
+          </div>
+        </div>
+
+        <!-- LE SALUT ET LE REGARD -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Le Salut (Rei) & le Regard</h3>
+            <span class="text-[10px] text-sky-400 font-bold">Angle du Maintien</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            L'inclinaison du buste reflète le différentiel de Statut. Face à un égal, on s'incline à 15°. Face à un seigneur ou un Daimyo, l'inclinaison atteint 45° sans jamais le quitter des yeux pour les bushi (prêt à la défense). Devant l'Empereur ou un Kuge, on s'agenouille jusqu'au sol (*Dogeza*).
+          </p>
+          <div class="text-[10px] text-stone-500 italic">
+            Fixer avec insistance un supérieur est considéré comme une provocation martiale directe.
+          </div>
+        </div>
+
+        <!-- TABOUS ET SOUILLURES PHYSIQUES -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Les Souillures Rituelles (Tsumi)</h3>
+            <span class="text-[10px] text-red-400 font-bold">Impureté Religieuse</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Le Shintoïsme réprouve le contact avec le sang frais, les cadavres et la viande d'animaux à quatre pattes. Toucher du cuir non traité ou panser une plaie béante sans se purifier ensuite vous rend rituellement impur.
+          </p>
+          <div class="p-2 rounded bg-red-950/30 border border-red-800/40 text-[10px] text-red-300">
+            Purification : Un samouraï souillé doit procéder aux ablutions d'eau salée (*Harai*) avant d'entrer dans un sanctuaire ou un tribunal impérial.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. L'ART DE SAUVER LA FACE (ON) -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial gold-text border-b border-amber-500/20 pb-2">
+        4. Sauver la Face (On) & La Diplomatie Indirecte
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Le Recours aux Intermédiaires</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Un samouraï de haut rang ne négocie jamais les détails pénibles en direct. Il charge un courtisan, un barde ou un vassal de sonder les intentions de son rival. Cela permet de rejeter une proposition sans que l'honneur du seigneur ne soit publiquement entaché.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Le Refus Poli & les Métaphores</h3>
+          <p class="text-stone-400 leading-relaxed">
+            On ne dit jamais « non » de façon frontale en cour. On dit : <i>« Cette affaire sera d'une grande difficulté »</i>, ou <i>« Je méditerai sur la beauté de votre suggestion »</i>. Forcer quelqu'un à dire un « non » direct en public est une impolitesse grossière.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Le Suicide Rituel (Seppuku)</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Lorsqu'une faute morale ou militaire est irrémédiable, le Seppuku (éventration rituelle assistée d'un second qui tranche la tête) n'est pas une punition : c'est le privilège suprême du buke permettant de laver la faute et de préserver l'honneur de sa lignée.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION ENTRE LES GUIDES -->
+    <nav aria-label="Navigation des aides de jeu" class="pt-6 border-t border-amber-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
+      <a href="bushido-honneur.html" class="text-amber-400 hover:text-amber-300 font-imperial">← Le Code du Bushido & Honneur</a>
+      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
+      <a href="combat-memento.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 font-imperial">Mémento Combat & Duels →</a>
+    </nav>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10 no-print">
+    Chronique L5R 4e Édition — MJ David • Guide officiel de l'Étiquette et des Coutumes Impériales
+  </footer>
+
+</body>
+</html>
