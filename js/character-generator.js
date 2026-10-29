@@ -1,7 +1,7 @@
 /**
  * character-generator.js — Moteur logique complet L5R 4e Édition
- * Gère le calcul dynamique, les seuils d'XP, les statistiques de combat,
- * le bandeau supérieur persistant et les bases de données modulaires.
+ * Gère le calcul dynamique, l'XP de base modulable, les seuils d'XP, 
+ * les statistiques de combat, le bandeau sticky et les catalogues modulaires.
  */
 
 const MAX_DISADVANTAGE_XP = 15;
@@ -110,13 +110,12 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
-// Accesseurs aux tables de données modulaires
+// Accesseurs sécurisés aux données
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
 const getAdvantages = () => window.AVANTAGES_DATA || { avantages: [], desavantages: [] };
 
-// Initialisation globale
 function bootstrap() {
   if (!window.CLANS_DATA && !window.CLANS_CORE) {
     setTimeout(bootstrap, 50);
@@ -222,7 +221,6 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
-// Réinitialisation intégrale de la fiche lors d'un changement d'allégeance
 function resetSheetToNewSelection() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -236,7 +234,6 @@ function resetSheetToNewSelection() {
   const sch = clan.schools[schIdx];
   if (!fam || !sch) return;
 
-  // Mise à jour des descriptifs d'école et de famille
   document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
   document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
   document.getElementById('tech-name').textContent = sch.technique.name;
@@ -244,7 +241,6 @@ function resetSheetToNewSelection() {
   document.getElementById('pc-outfit').value = sch.outfit;
   document.getElementById('stat-honor').textContent = sch.honor;
 
-  // Mise à jour du nom de famille
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
     const currentParts = nameInput.value.trim().split(' ');
@@ -253,7 +249,6 @@ function resetSheetToNewSelection() {
     updateStickyName();
   }
 
-  // Réinitialisation des badges des traits
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -273,7 +268,6 @@ function resetSheetToNewSelection() {
     if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
-  // Remise à zéro stricte des 8 traits et du Vide
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -286,7 +280,6 @@ function resetSheetToNewSelection() {
     input.value = baseVal;
   }
 
-  // Réinitialisation des compétences de départ (Rang 1, sans spé)
   currentSkills = sch.skills.map(s => ({
     name: s,
     rank: 1,
@@ -295,7 +288,6 @@ function resetSheetToNewSelection() {
   }));
   renderSkills();
 
-  // Réinitialisation des listes d'avantages et désavantages
   advantagesList = [];
   disadvantagesList = [];
   renderAdvDisadv();
@@ -338,7 +330,6 @@ function onSchoolChange() {
   resetSheetToNewSelection();
 }
 
-// Gestion des seuils et de l'état du bouton d'ajout de désavantages
 function updateDisadvButtonState() {
   const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
   const btnAddDisadv = document.querySelector("button[onclick='addDisadvFromCatalog()']");
@@ -348,7 +339,7 @@ function updateDisadvButtonState() {
     if (currentTotalGain >= MAX_DISADVANTAGE_XP) {
       btnAddDisadv.disabled = true;
       btnAddDisadv.classList.add('opacity-40', 'cursor-not-allowed');
-      btnAddDisadv.title = `Limite officielle de ${MAX_DISADVANTAGE_XP} XP de désavantages atteinte.`;
+      btnAddDisadv.title = `Limite de ${MAX_DISADVANTAGE_XP} XP de désavantages atteinte.`;
       if (selectDisadv) selectDisadv.disabled = true;
     } else {
       btnAddDisadv.disabled = false;
@@ -441,7 +432,6 @@ function renderAdvDisadv() {
   updateDisadvButtonState();
 }
 
-// Gestion des compétences
 function renderSkills() {
   const container = document.getElementById('skills-list');
   if (!container) return;
@@ -487,7 +477,6 @@ function toggleSkillSpec(idx) {
   updateAll();
 }
 
-// Synchronisation de l'identité et du bandeau supérieur
 function updateStickyName() {
   const nameInput = document.getElementById('pc-name');
   const stickyName = document.getElementById('sticky-pc-name');
@@ -534,7 +523,7 @@ function toggleNameOrder() {
 }
 
 // =========================================================================
-// CALCULS EN TEMPS RÉEL (XP, RANGS, COMBAT ET BANDEAU STICKY)
+// CALCULS DYNAMIQUES AVEC XP DE BASE PERSONNALISABLE
 // =========================================================================
 function updateAll() {
   const clans = getClans();
@@ -579,7 +568,7 @@ function updateAll() {
     return found && found.impact === impactName;
   });
 
-  // Calcul du budget d'XP
+  // Calcul Dépense d'XP
   let xpSpent = 0;
   const traitsBase = [
     { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -619,7 +608,11 @@ function updateAll() {
   let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
   document.getElementById('disadv-gain-total').textContent = disadvGain;
 
-  let totalXP = 40 + disadvGain;
+  // LECTURE DYNAMIQUE DE L'XP DE BASE (40 par défaut ou valeur saisie par le joueur)
+  const baseXPInput = document.getElementById('base-xp-input');
+  const baseXP = baseXPInput ? (parseInt(baseXPInput.value) || 0) : 40;
+
+  let totalXP = baseXP + disadvGain;
   let remainingXP = totalXP - xpSpent;
 
   document.getElementById('xp-total').textContent = totalXP;
@@ -640,11 +633,10 @@ function updateAll() {
 
   document.getElementById('insight-display').innerHTML = `${insight} pts <span class="text-xs text-amber-400 font-bold">(Rang ${insightRank})</span>`;
 
-  // Badge d'école dans le bandeau
   const stickySchool = document.getElementById('sticky-school-badge');
   if (stickySchool && sch) stickySchool.textContent = sch.name;
 
-  // --- STATISTIQUE 1 : JET POUR TOUCHER ---
+  // --- 1. JET POUR TOUCHER ---
   const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
   const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
   const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
@@ -684,7 +676,7 @@ function updateAll() {
     stickyAtkDetail.title = atkDetailStr;
   }
 
-  // --- STATISTIQUE 2 : JET DE DÉGÂTS ---
+  // --- 2. JET DE DÉGÂTS ---
   const vdParts = (weaponData.vd || "2g2").split('g');
   let dmgBaseRoll = parseInt(vdParts[0]) || 2;
   let dmgBaseKeep = parseInt(vdParts[1]) || 2;
@@ -719,7 +711,7 @@ function updateAll() {
     stickyDmgDetail.title = dmgDetailStr;
   }
 
-  // --- STATISTIQUE 3 : INITIATIVE ---
+  // --- 3. INITIATIVE ---
   let initRoll = ref;
   let initKeep = ref;
   let initStatic = 0;
@@ -759,7 +751,7 @@ function updateAll() {
   }
   document.getElementById('stat-init').textContent = initStr;
 
-  // --- STATISTIQUE 4 : ND D'ARMURE ---
+  // --- 4. ND D'ARMURE ---
   const armorSelect = document.getElementById('pc-armor');
   const armorBonus = parseInt(armorSelect?.value) || 0;
   const armorName = armorSelect?.options[armorSelect.selectedIndex]?.text?.split('(')[0]?.trim() || "Armure";
@@ -808,7 +800,6 @@ function updateAll() {
   updateDisadvButtonState();
 }
 
-// Tirage automatique
 function randomizeAll() {
   const clans = getClans();
   const adv = getAdvantages();
@@ -840,10 +831,10 @@ function randomizeAll() {
   updateAll();
 }
 
-// Export et import JSON
 function exportJSON() {
   const data = {
     name: document.getElementById('pc-name').value,
+    baseXP: document.getElementById('base-xp-input')?.value || "40",
     clan: document.getElementById('sel-clan').value,
     family: document.getElementById('sel-family').value,
     school: document.getElementById('sel-school').value,
@@ -882,6 +873,12 @@ function importJSON(event) {
   reader.onload = function(e) {
     try {
       const d = JSON.parse(e.target.result);
+
+      if (d.baseXP !== undefined) {
+        const baseInput = document.getElementById('base-xp-input');
+        if (baseInput) baseInput.value = d.baseXP;
+      }
+
       document.getElementById('sel-clan').value = d.clan;
       onClanChange();
       document.getElementById('sel-family').value = d.family;
@@ -921,7 +918,11 @@ function importJSON(event) {
 }
 
 function resetCharacter() {
-  if (confirm("Réinitialiser entièrement la fiche ?")) onClanChange();
+  if (confirm("Réinitialiser entièrement la fiche ?")) {
+    const baseInput = document.getElementById('base-xp-input');
+    if (baseInput) baseInput.value = 40;
+    onClanChange();
+  }
 }
 
 window.addEventListener('DOMContentLoaded', bootstrap);
