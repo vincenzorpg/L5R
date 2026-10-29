@@ -647,6 +647,44 @@ function updateAll() {
     document.getElementById(`w-${i}`).textContent = `${rEarth * 2} PV`;
   }
 
+// --- PRISE EN COMPTE DYNAMIQUE DES IMPACTS D'AVANTAGES & DÉSAVANTAGES ---
+  const hasAdv = (impactName) => advantagesList.some(a => {
+    const found = getAdvantages().avantages?.find(x => x.name === a.name);
+    return found && found.impact === impactName;
+  });
+
+  const hasDisadv = (impactName) => disadvantagesList.some(d => {
+    const found = getAdvantages().desavantages?.find(x => x.name === d.name);
+    return found && found.impact === impactName;
+  });
+
+  // 1. Initiative (Réflexes Éclairs confère +1g1)
+  let initRoll = ref;
+  let initKeep = ref;
+  if (hasAdv("initiative_bonus")) {
+    initRoll += 1;
+    initKeep += 1;
+  }
+  document.getElementById('stat-init').textContent = `${initRoll}g${initKeep}`;
+
+  // 2. Récupération Nocturne (Guérison Rapide considère Stamina + 2)
+  let effSta = sta;
+  if (hasAdv("quick_heal")) effSta += 2;
+  document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
+
+  // 3. Paliers de Vitalité & Blessures (Grande Taille donne +1 PV par palier, Mauvaise Santé retire 1 PV)
+  let woundMod = 0;
+  if (hasAdv("large_wounds")) woundMod += 1;
+  if (hasDisadv("reduce_wounds")) woundMod -= 1;
+
+  const healthyWounds = Math.max(1, (rEarth * 5) + woundMod);
+  const stepWounds = Math.max(1, (rEarth * 2) + woundMod);
+
+  document.getElementById('w-0').textContent = `${healthyWounds} PV`;
+  for (let i = 1; i <= 7; i++) {
+    document.getElementById(`w-${i}`).textContent = `${stepWounds} PV`;
+  }
+  
   updateDisadvButtonState();
 }
 
