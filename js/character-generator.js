@@ -1,7 +1,9 @@
 /**
  * character-generator.js — Moteur de création L5R 4e Édition
- * Réinitialisation complète et dynamique à chaque changement de Clan / Famille / École
+ * Gestion dynamique, calculs en temps réel et verrouillage des seuils d'Avantages / Désavantages
  */
+
+const MAX_DISADVANTAGE_XP = 15;
 
 const ROKUGANI_NAMES = {
   m: [
@@ -39,7 +41,7 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
-// Accesseurs sécurisés aux données globales
+// Accesseurs aux bases de données
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
@@ -140,10 +142,12 @@ function initCatalogSelectors() {
       disadvSel.appendChild(opt);
     });
   }
+
+  updateDisadvButtonState();
 }
 
 // =========================================================================
-// FONCTION MAÎTRESSE : RÉINITIALISATION TOTALE À CHAQUE CHANGEMENT
+// RÉINITIALISATION COMPLÈTE LORS DU CHANGEMENT DE SÉLECTION
 // =========================================================================
 function resetSheetToNewSelection() {
   const clans = getClans();
@@ -158,7 +162,7 @@ function resetSheetToNewSelection() {
   const sch = clan.schools[schIdx];
   if (!fam || !sch) return;
 
-  // 1. Mise à jour des descriptifs
+  // Descriptifs
   document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
   document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
   document.getElementById('tech-name').textContent = sch.technique.name;
@@ -166,15 +170,17 @@ function resetSheetToNewSelection() {
   document.getElementById('pc-outfit').value = sch.outfit;
   document.getElementById('stat-honor').textContent = sch.honor;
 
-  // 2. Mise à jour du nom de famille
+  // Nom du personnage et bandeau sticky
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
     const currentParts = nameInput.value.trim().split(' ');
     const firstName = currentParts.length > 1 ? currentParts[0] : (currentParts[0] || "Okado");
     nameInput.value = nameOrderWestern ? `${firstName} ${fam.name}` : `${fam.name} ${firstName}`;
+    const stickyName = document.getElementById('sticky-pc-name');
+    if (stickyName) stickyName.textContent = nameInput.value;
   }
 
-  // 3. Réinitialisation des badges de bonus
+  // Badges des traits
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -194,8 +200,7 @@ function resetSheetToNewSelection() {
     if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
-  // 4. RÉINITIALISATION STRICTE DES 8 TRAITS ET DU VIDE
-  // Tout trait sans bonus repasse à 2. Trait avec bonus passe à 3 (ou 4).
+  // Remise des traits à la base exacte (2 ou 3/4 avec bonus)
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -205,10 +210,10 @@ function resetSheetToNewSelection() {
     if (sch && sch.trait === traitName) baseVal += 1;
 
     input.min = baseVal;
-    input.value = baseVal; // Force la remise à la base
+    input.value = baseVal;
   }
 
-  // 5. Réinitialisation des compétences de départ (Rang 1, sans spé)
+  // Compétences de départ (Rang 1, pas de spécialisation)
   currentSkills = sch.skills.map(s => ({
     name: s,
     rank: 1,
@@ -217,12 +222,11 @@ function resetSheetToNewSelection() {
   }));
   renderSkills();
 
-  // 6. Réinitialisation des Avantages et Désavantages
+  // Remise à zéro des Avantages et Désavantages
   advantagesList = [];
   disadvantagesList = [];
   renderAdvDisadv();
 
-  // 7. Recalcul immédiat de toute la fiche (XP à 40, Anneaux, Combat, Vitalité)
   updateAll();
 }
 
@@ -262,7 +266,113 @@ function onSchoolChange() {
 }
 
 // =========================================================================
-// RENDUS ET INTERACTIONS COMPÉTENCES / AVANTAGES
+// GESTION DU CATALOGUE ET DES SEUILS D'AVANTAGES / DÉSAVANTAGES
+// =========================================================================
+function updateDisadvButtonState() {
+  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
+  const btnAddDisadv = document.querySelector("button[onclick='addDisadvFromCatalog()']");
+  const selectDisadv = document.getElementById('sel-catalog-disadv');
+
+  if (btnAddDisadv) {
+    if (currentTotalGain >= MAX_DISADVANTAGE_XP) {
+      btnAddDisadv.disabled = true;
+      btnAddDisadv.classList.add('opacity-40', 'cursor-not-allowed');
+      btnAddDisadv.title = `Limite officielle de ${MAX_DISADVANTAGE_XP} XP de désavantages atteinte.`;
+      if (selectDisadv) selectDisadv.disabled = true;
+    } else {
+      btnAddDisadv.disabled = false;
+      btnAddDisadv.classList.remove('opacity-40', 'cursor-not-allowed');
+      btnAddDisadv.title = "";
+      if (selectDisadv) selectDisadv.disabled = false;
+    }
+  }
+}
+
+function addAdvFromCatalog() {
+  const adv = getAdvantages();
+  const idx = document.getElementById('sel-catalog-adv').value;
+  if (idx === "" || !adv.avantages[idx]) return;
+
+  const item = adv.avantages[idx];
+
+  if (advantagesList.some(a => a.name === item.name)) {
+    alert(`L'avantage « ${item.name} » est déjà sélectionné.`);
+    return;
+  }
+
+  // Calcul du disponible actuel
+  const currentRemainingXP = parseInt(document.getElementById('xp-remaining')?.textContent) || 0;
+  if (currentRemainingXP - item.cost < 0) {
+    alert(`Impossible d'ajouter « ${item.name} » (${item.cost} XP) : solde insuffisant (${currentRemainingXP} XP disponible).`);
+    return;
+  }
+
+  advantagesList.push({ name: item.name, cost: item.cost });
+  renderAdvDisadv();
+  updateAll();
+}
+
+function addDisadvFromCatalog() {
+  const adv = getAdvantages();
+  const idx = document.getElementById('sel-catalog-disadv').value;
+  if (idx === "" || !adv.desavantages[idx]) return;
+
+  const item = adv.desavantages[idx];
+
+  if (disadvantagesList.some(d => d.name === item.name)) {
+    alert(`Le désavantage « ${item.name} » est déjà sélectionné.`);
+    return;
+  }
+
+  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
+  if (currentTotalGain + item.gain > MAX_DISADVANTAGE_XP) {
+    alert(`Seuil dépassé ! Vous avez déjà ${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP de désavantages. L'ajout de « ${item.name} » (+${item.gain} XP) atteindrait ${currentTotalGain + item.gain} XP.`);
+    return;
+  }
+
+  disadvantagesList.push({ name: item.name, gain: item.gain });
+  renderAdvDisadv();
+  updateAll();
+}
+
+function removeAdv(idx) {
+  advantagesList.splice(idx, 1);
+  renderAdvDisadv();
+  updateAll();
+}
+
+function removeDisadv(idx) {
+  disadvantagesList.splice(idx, 1);
+  renderAdvDisadv();
+  updateAll();
+}
+
+function renderAdvDisadv() {
+  const advContainer = document.getElementById('adv-container');
+  if (advContainer) {
+    advContainer.innerHTML = advantagesList.map((a, i) => `
+      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
+        <span class="text-stone-300">${a.name} (${a.cost} XP)</span>
+        <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
+      </div>
+    `).join('');
+  }
+
+  const disadvContainer = document.getElementById('disadv-container');
+  if (disadvContainer) {
+    disadvContainer.innerHTML = disadvantagesList.map((d, i) => `
+      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
+        <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
+        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
+      </div>
+    `).join('');
+  }
+
+  updateDisadvButtonState();
+}
+
+// =========================================================================
+// GESTION DES COMPÉTENCES & IDENTITÉ
 // =========================================================================
 function renderSkills() {
   const container = document.getElementById('skills-list');
@@ -309,66 +419,6 @@ function toggleSkillSpec(idx) {
   updateAll();
 }
 
-function addAdvFromCatalog() {
-  const adv = getAdvantages();
-  const idx = document.getElementById('sel-catalog-adv').value;
-  if (idx === "" || !adv.avantages[idx]) return;
-
-  const item = adv.avantages[idx];
-  if (!advantagesList.some(a => a.name === item.name)) {
-    advantagesList.push({ name: item.name, cost: item.cost });
-    renderAdvDisadv();
-    updateAll();
-  }
-}
-
-function addDisadvFromCatalog() {
-  const adv = getAdvantages();
-  const idx = document.getElementById('sel-catalog-disadv').value;
-  if (idx === "" || !adv.desavantages[idx]) return;
-
-  const item = adv.desavantages[idx];
-  if (!disadvantagesList.some(d => d.name === item.name)) {
-    disadvantagesList.push({ name: item.name, gain: item.gain });
-    renderAdvDisadv();
-    updateAll();
-  }
-}
-
-function removeAdv(idx) {
-  advantagesList.splice(idx, 1);
-  renderAdvDisadv();
-  updateAll();
-}
-
-function removeDisadv(idx) {
-  disadvantagesList.splice(idx, 1);
-  renderAdvDisadv();
-  updateAll();
-}
-
-function renderAdvDisadv() {
-  const advContainer = document.getElementById('adv-container');
-  if (advContainer) {
-    advContainer.innerHTML = advantagesList.map((a, i) => `
-      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
-        <span class="text-stone-300">${a.name} (${a.cost} XP)</span>
-        <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
-      </div>
-    `).join('');
-  }
-
-  const disadvContainer = document.getElementById('disadv-container');
-  if (disadvContainer) {
-    disadvContainer.innerHTML = disadvantagesList.map((d, i) => `
-      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
-        <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
-        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
-      </div>
-    `).join('');
-  }
-}
-
 function generateRandomName(gender) {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan').value;
@@ -378,10 +428,11 @@ function generateRandomName(gender) {
   const list = ROKUGANI_NAMES[gender] || ROKUGANI_NAMES['m'];
   const pick = list[Math.floor(Math.random() * list.length)];
 
-  if (nameOrderWestern) {
-    document.getElementById('pc-name').value = `${pick.n} ${familyName}`;
-  } else {
-    document.getElementById('pc-name').value = `${familyName} ${pick.n}`;
+  const nameInput = document.getElementById('pc-name');
+  if (nameInput) {
+    nameInput.value = nameOrderWestern ? `${pick.n} ${familyName}` : `${familyName} ${pick.n}`;
+    const stickyName = document.getElementById('sticky-pc-name');
+    if (stickyName) stickyName.textContent = nameInput.value;
   }
   document.getElementById('name-meaning').textContent = `Signification : ${pick.m}`;
 }
@@ -391,18 +442,21 @@ function toggleNameOrder() {
   const val = document.getElementById('pc-name').value.trim();
   const parts = val.split(' ');
   if (parts.length >= 2) {
-    document.getElementById('pc-name').value = `${parts.slice(1).join(' ')} ${parts[0]}`;
+    const formatted = `${parts.slice(1).join(' ')} ${parts[0]}`;
+    document.getElementById('pc-name').value = formatted;
+    const stickyName = document.getElementById('sticky-pc-name');
+    if (stickyName) stickyName.textContent = formatted;
   }
 }
 
 // =========================================================================
-// CALCULS ET MISES À JOUR DES CARACTÉRISTIQUES
+// MOTEUR DE CALCULS DYNAMIQUES
 // =========================================================================
 function updateAll() {
   const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const famIdx = document.getElementById('sel-family').value;
-  const schIdx = document.getElementById('sel-school').value;
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const famIdx = document.getElementById('sel-family')?.value;
+  const schIdx = document.getElementById('sel-school')?.value;
 
   const fam = clans[clanKey]?.families[famIdx];
   const sch = clans[clanKey]?.schools[schIdx];
@@ -417,7 +471,7 @@ function updateAll() {
   const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
   const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-  // Calcul des 5 Anneaux (valeur minimale)
+  // Calcul des 5 Anneaux
   const rEarth = Math.min(sta, wil);
   const rWater = Math.min(str, per);
   const rAir = Math.min(ref, awa);
@@ -467,17 +521,18 @@ function updateAll() {
   xpSpent += advCost;
 
   let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
-  let disadvGain = Math.min(rawDisadvGain, 15);
+  let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
   document.getElementById('disadv-gain-total').textContent = disadvGain;
 
   let totalXP = 40 + disadvGain;
   let remainingXP = totalXP - xpSpent;
 
   document.getElementById('xp-total').textContent = totalXP;
-  document.getElementById('xp-remaining').textContent = remainingXP;
-  document.getElementById('xp-remaining').className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
+  const remEl = document.getElementById('xp-remaining');
+  remEl.textContent = remainingXP;
+  remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-  // Insight
+  // Réputation & Rang
   let sumRings = rEarth + rWater + rAir + rFire + rVoid;
   let sumSkills = currentSkills.reduce((acc, sk) => acc + sk.rank, 0);
   let insight = (sumRings * 10) + sumSkills;
@@ -500,6 +555,8 @@ function updateAll() {
   for (let i = 1; i <= 7; i++) {
     document.getElementById(`w-${i}`).textContent = `${rEarth * 2} PV`;
   }
+
+  updateDisadvButtonState();
 }
 
 function randomizeAll() {
@@ -519,7 +576,6 @@ function randomizeAll() {
   resetSheetToNewSelection();
   generateRandomName(Math.random() > 0.5 ? 'm' : 'f');
 
-  // Attribution équilibrée d'exemple pour le tirage aléatoire
   advantagesList = adv.avantages?.length ? [{ name: adv.avantages[0].name, cost: adv.avantages[0].cost }] : [];
   disadvantagesList = adv.desavantages?.length ? [{ name: adv.desavantages[0].name, gain: adv.desavantages[0].gain }] : [];
   renderAdvDisadv();
@@ -582,6 +638,9 @@ function importJSON(event) {
       resetSheetToNewSelection();
 
       document.getElementById('pc-name').value = d.name;
+      const stickyName = document.getElementById('sticky-pc-name');
+      if (stickyName) stickyName.textContent = d.name;
+
       document.getElementById('trait-stamina').value = d.traits.sta;
       document.getElementById('trait-willpower').value = d.traits.wil;
       document.getElementById('trait-strength').value = d.traits.str;
@@ -612,7 +671,7 @@ function importJSON(event) {
 }
 
 function resetCharacter() {
-  if (confirm("Réinitialiser la fiche ?")) onClanChange();
+  if (confirm("Réinitialiser entièrement la fiche ?")) onClanChange();
 }
 
 window.addEventListener('DOMContentLoaded', bootstrap);
