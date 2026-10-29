@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Clan de la Grue — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --crane-cyan: #38bdf8;
+      --crane-silver: #e2e8f0;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #081a24 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(14, 18, 22, 0.94);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .crane-gradient {
+      background: linear-gradient(135deg, #ffffff 0%, #bae6fd 45%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE -->
+  <header class="border-b border-sky-500/30 bg-[#070e14]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-full border border-sky-400/50 bg-black flex items-center justify-center font-bold text-sky-300 font-imperial text-xs">風</span>
+        <div>
+          <span class="font-imperial font-bold tracking-widest text-sky-200 block text-sm">ROKUGAN</span>
+          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-2 text-xs">
+        <a href="../index.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
+        <a href="../createcharacter.html" class="px-3 py-1.5 rounded bg-sky-600 hover:bg-sky-500 text-black font-bold transition flex items-center gap-1.5">
+          <span>⚔️</span> Forger une Grue
+        </a>
+        <a href="../grimoire.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">📜 Grimoire</a>
+        <a href="../campagne.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">🏮 Campagne</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO DU CLAN -->
+    <section class="card-clean rounded-2xl p-6 md:p-10 border-sky-500/40 relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 text-[140px] md:text-[200px] font-black text-sky-400/5 select-none pointer-events-none font-imperial">
+        風
+      </div>
+      <div class="max-w-3xl space-y-3 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0c2438] border border-sky-400/40 text-[10px] uppercase tracking-widest text-sky-200 font-bold">
+          <span>🪶</span> L'Âme et les Yeux de l'Empire
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide crane-gradient">
+          LE CLAN DE LA GRUE
+        </h1>
+        <p class="text-xs md:text-sm text-sky-200/90 italic font-imperial">
+          « La perfection n'est pas un idéal lointain, c'est le seul standard acceptable. »
+        </p>
+        <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
+          Gardiens incontestés de la haute culture, des beaux-arts et de l'étiquette impériale, les samouraïs de la Grue façonnent les lois de la cour et règnent sur l'art du duel formel au sabre[cite: 2, 14]. Fondé par dame Doji et son époux Kakita, le clan utilise la beauté, le prestige et la rapidité foudroyante de l'Iaijutsu pour dominer la scène politique de Rokugan sans jamais salir son kimono de poussière inutile[cite: 2, 14].
+        </p>
+      </div>
+    </section>
+
+    <!-- 1. MYTHE FONDATEUR & DOMAINE IMPÉRIAL -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+          1. Origine Sacrée & Rôle Politique
+        </h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Lorsque les Kami chutèrent des Cieux Célestes, dame <b>Doji</b> était l'incarnation même de l'élégance, de l'harmonie et de la grâce divine[cite: 2]. C'est elle qui enseigna aux premiers mortels les codes de l'étiquette, la justice raffinée, la cérémonie du thé et l'organisation pacifique de la société[cite: 2, 14]. Son époux, le légendaire duelliste <b>Kakita</b>, remporta le premier duel de l'histoire de l'Empire contre Matsu, établissant l'Iaijutsu comme la méthode d'arbitrage suprême du Trône d'Émeraude[cite: 2, 14].
+        </p>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Le Clan de la Grue contrôle les terres les plus fertiles et les routes côtières les plus prospères de Rokugan[cite: 2]. Depuis plus de mille ans, la coutume veut que l'Impératrice de Rokugan soit issue de la lignée de Doji, consolidant une alliance indestructible avec la dynastie régnante[cite: 2].
+        </p>
+        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
+          <span class="text-sky-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
+          <span class="text-stone-300">Blanc immaculé, bleu azur et reflets argentés (kimonos de soie fine, éventails ciselés et parures d'ivoire)[cite: 2, 14].</span>
+        </div>
+      </div>
+
+      <!-- CARTE D'IDENTITÉ -->
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <h3 class="text-sm font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+          Profil de Clan
+        </h3>
+        <ul class="text-xs space-y-2 text-stone-300">
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Anneau Majeur :</span>
+            <b class="text-sky-300">Air (Fū)[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Kami Fondatrice :</span>
+            <b>Dame Doji[cite: 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Capitale :</span>
+            <b>Kyuden Doji[cite: 2, 14]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Sanctuaire Sacré :</span>
+            <b>Les Tombeaux Kakita[cite: 2]</b>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-stone-500">Arme Emblématique :</span>
+            <b>Katana de duel (Kakita)[cite: 2, 5, 14]</b>
+          </li>
+        </ul>
+        <div class="pt-2">
+          <a href="../createcharacter.html" class="w-full block py-2 rounded bg-sky-600 hover:bg-sky-500 text-black font-bold text-center text-xs uppercase tracking-wider transition">
+            Créer un samouraï Grue
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LES QUATRE FAMILLES DE LA GRUE -->
+    <section class="space-y-4">
+      <div class="border-b border-sky-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">2. Les Familles du Clan & Leurs Devoirs</h2>
+        <span class="text-xs text-stone-400">L'équilibre parfait entre la diplomatie de salon, la maîtrise du sabre et l'action militaire feutrée[cite: 2, 6, 14].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+
+        <!-- DOJI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Doji</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Intuition[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La lignée princière du clan, maîtres absolus des cours d'hiver et de la haute diplomatie[cite: 2, 14]. Leurs courtisans manient les faveurs, les généalogies et les silences avec une précision mortelle[cite: 2, 14]. Un sourire de Doji peut briser un général Lion plus sûrement qu'un bataillon entier[cite: 2].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Courtisans, diplomates impériaux, mécènes et juges[cite: 2, 14].</div>
+        </div>
+
+        <!-- KAKITA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Kakita</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Agilité[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            L'Académie Kakita forme les duellistes d'Iaijutsu les plus réputés de l'histoire[cite: 2, 14]. Pour un Kakita, le duel au sabre n'est pas une simple épreuve martiale mais un art sublime où la perfection du geste ne tolère aucune hésitation[cite: 2, 14]. Ils abritent également les plus grands peintres, poètes et forgerons de lames fines de l'Empire[cite: 2, 14].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Duellistes judiciaires, champions d'Iaijutsu et maîtres artisans[cite: 2, 14].</div>
+        </div>
+
+        <!-- DAIDOJI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Daidoji</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Constitution[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Les « Grues de Fer » (*The Iron Cranes*)[cite: 6, 14]. Gardes du corps dévoués et fantassins de ligne, les Daidoji accomplissent les tâches rudes et pragmatiques dont leurs cousins répugnent à parler[cite: 2, 6, 14]. Leurs éclaireurs et sapeurs n'hésitent pas à tendre des embuscades et poser des pièges pour préserver les frontières du clan[cite: 6].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Armée régulière, gardes du corps yojimbo, éclaireurs et logistique[cite: 2, 6, 14].</div>
+        </div>
+
+        <!-- ASAHINA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Asahina</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Intelligence[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Ordre monastique et pacifique de shugenja de l'Air[cite: 2, 14]. Rejetant toute magie de destruction, ils vouent leur communion avec les Kami à la guérison, à la création de fétiches mystiques harmonieux (*nemuranai*) et à la préservation de la quiétude spirituelle de Rokugan[cite: 2, 14].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Prêtres pacificateurs, guérisseurs et enchanteurs de reliques[cite: 2, 14].</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. LA GRUE ET LE BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+        3. Le Cœur du Roleplay : La Grue face au Bushido
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
+            <span class="font-bold text-sky-200 text-sm">La Courtoisie (Rei)[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Pour la Grue, la politesse n'est pas un vernis : c'est l'armure qui distingue l'homme noble du barbare sanguinaire[cite: 2, 14]. Observer scrupuleusement l'étiquette, respecter le rang d'autrui et masquer ses tourments sous un maintien gracieux constitue l'obligation morale suprême[cite: 2]. Tout manquement de forme est une blessure faite à l'ordre céleste[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
+            <span class="font-bold text-sky-200 text-sm">L'Orgueil & la Fragilité Esthétique[cite: 2, 5, 14]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            À force de traquer la perfection absolue, la Grue devient aisément condescendante, vaniteuse et fragile face aux réalités brutales[cite: 2, 5]. Incapables d'admettre la médiocrité ou l'échec, nombre de leurs duellistes ou courtisans préfèrent le suicide rituel (Seppuku) plutôt que de supporter le regard d'un rival après avoir perdu la face en public[cite: 2, 6].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+        4. Guide d'Interprétation : Jouer un Samouraï de la Grue
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Allure & Maintien</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Votre tenue est impeccable en toute circonstance[cite: 2, 6]. Vous soignez votre coiffure, blanchissez traditionnellement vos cheveux à la poudre de riz ou d'argent, et vos mouvements sont fluides et mesurés[cite: 2, 14]. Vous ne criez jamais : une voix calme et posée porte davantage que les éclats de voix[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Diplomatie & Rivaux</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Le <b>Lion</b> est votre rival historique : vous méprisez son agitation martiale bruyante, mais redoutez sa force brute sur le champ de bataille[cite: 2]. Vous surveillez le <b>Scorpion</b> comme un poison tapi dans la soie[cite: 2]. Vous traitez le <b>Crabe</b> avec une politesse distante, trouvant ses manières frustes et déplacées en cour[cite: 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Idées de Concepts Originaux</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Un <b>Daidoji</b> brisé par une mission de sabotage secrète qui refuse désormais de toucher une arme dissimulée[cite: 6] ; un <b>duelliste Kakita</b> hanté par le doute après avoir tué un ami d'enfance lors d'un duel d'honneur inutile[cite: 2, 14] ; ou un <b>courtisan Doji</b> idéaliste tentant sincèrement d'éviter une guerre frontalière par la seule négociation[cite: 2].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ÉCOLES FONDAMENTALES & ARSENAL -->
+    <section class="space-y-4">
+      <div class="border-b border-sky-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">5. Écoles Fondamentales de la 4e Édition</h2>
+        <span class="text-xs text-stone-400">Styles martiaux et disciplines représentés dans le générateur de fiches[cite: 2].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        
+        <!-- DUELLISTE KAKITA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Duelliste Kakita[cite: 2]</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-sky-950 text-sky-400 font-bold border border-sky-800/40">Iaijutsu • Finesse[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Technique Rang 1 : La Voie de la Grue.</b> Ajoute deux fois son rang d'Iaijutsu à tous ses jets d'Initiative[cite: 2]. En posture du Centre, gagne +1g1 + Rang d'École sur ses jets d'attaque et de Concentration lors des duels d'honneur[cite: 2]. Aux rangs supérieurs, il frappe plus tôt en duel et peut porter des attaques simples rapides[cite: 2].
+          </p>
+        </div>
+
+        <!-- COURTISAN DOJI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Courtisan Doji[cite: 2]</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold border border-blue-800/40">Intrigue • Préséance[cite: 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Technique Rang 1 : La Grâce Impériale.</b> Reconnaît immédiatement le rang d'Honneur et de Statut exacts de n'importe quel interlocuteur[cite: 2]. Le Niveau de Difficulté (ND) de toutes les faveurs politiques et alliances sollicitées en cour est réduit de 5 points[cite: 2].
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NAVIGATION ENTRE LES CLANS -->
+    <nav aria-label="Navigation des clans" class="pt-6 border-t border-sky-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
+      <a href="crabe.html" class="text-amber-400 hover:text-amber-300 font-imperial">← Clan du Crabe</a>
+      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
+      <a href="dragon.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-emerald-300 border border-stone-800 font-imperial">Clan du Dragon →</a>
+    </nav>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan de la Grue
+  </footer>
+
+</body>
+</html>
