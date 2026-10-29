@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grimoire des Sorts & Kihō — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- NAVIGATION COMMUNE -->
+  <script src="js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 5%, #181014 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 16, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    input, select {
+      background-color: #0d0b0b !important;
+      border: 1px solid #3a3028 !important;
+      color: #f3e5ab !important;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+    }
+    .badge-air { background: #082f49; color: #7dd3fc; border: 1px solid #0284c7; }
+    .badge-earth { background: #271a0c; color: #fde047; border: 1px solid #a16207; }
+    .badge-fire { background: #450a0a; color: #fca5a5; border: 1px solid #dc2626; }
+    .badge-water { background: #082f49; color: #93c5fd; border: 1px solid #2563eb; }
+    .badge-void { background: #2e1065; color: #d8b4fe; border: 1px solid #7c3aed; }
+    .badge-maho { background: #4c0519; color: #fda4af; border: 1px solid #e11d48; }
+    .badge-kiho { background: #064e3b; color: #6ee7b7; border: 1px solid #059669; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE INJECTÉE PAR NAVBAR.JS -->
+  <header id="site-header"></header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
+
+    <!-- HERO SECTION -->
+    <section class="card-clean rounded-2xl p-6 md:p-10 border-amber-500/40 relative overflow-hidden">
+      <div class="max-w-3xl space-y-3 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/40 text-[10px] uppercase tracking-widest text-purple-200 font-bold">
+          <span>📜</span> Bibliothèque Théologique & Spirituelle
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide gold-gradient">
+          LE GRIMOIRE DE ROKUGAN
+        </h1>
+        <p class="text-xs md:text-sm text-stone-300 italic">
+          « Les Kami ne sont pas des serviteurs que l’on commande, mais les esprits primordiaux du monde avec lesquels le sage entre en harmonie. »
+        </p>
+        <p class="text-xs md:text-sm text-stone-400 leading-relaxed pt-1">
+          Recueil officiel des prières sacrées aux Éléments (Air, Terre, Feu, Eau, Vide), des mystères interdits de la Magie du Sang (Mahō) et des techniques d'éveil intérieur (Kihō) de la 4e Édition.
+        </p>
+      </div>
+    </section>
+
+    <!-- BARRE DE RECHERCHE ET FILTRES DYNAMIQUES -->
+    <section class="card-clean rounded-xl p-5 space-y-4 border-amber-500/30">
+      
+      <!-- Ligne 1 : Recherche texte & Filtre Maîtrise -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="md:col-span-2">
+          <label class="block text-stone-400 mb-1 font-bold">Recherche par nom, mot-clé ou effet :</label>
+          <input type="text" id="search-input" placeholder="Ex: Soin, Armure de Terre, Invocation, Vol, Peur..." oninput="filterSpells()" class="w-full p-2.5 rounded text-sm font-medium">
+        </div>
+        <div>
+          <label class="block text-stone-400 mb-1 font-bold">Rang de Maîtrise (Niveau) :</label>
+          <select id="mastery-select" onchange="filterSpells()" class="w-full p-2.5 rounded text-sm font-medium">
+            <option value="all">Tous les Rangs (1 à 6)</option>
+            <option value="Universel">Sorts Fondamentaux (Universels)</option>
+            <option value="1">Rang 1 (Initié)</option>
+            <option value="2">Rang 2 (Adepte)</option>
+            <option value="3">Rang 3 (Maître)</option>
+            <option value="4">Rang 4 (Éminent)</option>
+            <option value="5">Rang 5 (Légendaire)</option>
+            <option value="6">Rang 6 (Céleste)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Ligne 2 : Onglets Élémentaires -->
+      <div class="pt-2 border-t border-stone-800 flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-stone-400 font-bold uppercase text-[10px] mr-1">Élément / Voie :</span>
+        <button onclick="setElementFilter('all')" class="elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition" data-elem="all">Tous</button>
+        <button onclick="setElementFilter('Air')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-sky-300 border border-stone-800 font-imperial transition" data-elem="Air">風 Air</button>
+        <button onclick="setElementFilter('Terre')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 font-imperial transition" data-elem="Terre">土 Terre</button>
+        <button onclick="setElementFilter('Feu')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-red-400 border border-stone-800 font-imperial transition" data-elem="Feu">火 Feu</button>
+        <button onclick="setElementFilter('Eau')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-blue-400 border border-stone-800 font-imperial transition" data-elem="Eau">水 Eau</button>
+        <button onclick="setElementFilter('Vide')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-purple-300 border border-stone-800 font-imperial transition" data-elem="Vide">空 Vide (Ishiken)</button>
+        <button onclick="setElementFilter('Kiho')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-emerald-300 border border-stone-800 font-imperial transition" data-elem="Kiho">気 Kihō (Moines)</button>
+        <button onclick="setElementFilter('Maho')" class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-rose-400 border border-stone-800 font-imperial transition" data-elem="Maho">血 Mahō (Interdit)</button>
+      </div>
+
+      <!-- Résumé du filtrage -->
+      <div class="text-[11px] text-stone-400 flex justify-between items-center pt-1">
+        <span>Résultats affichés : <b id="results-count" class="text-amber-300">0</b></span>
+        <span class="italic text-stone-500">Formule ND Sort : 5 + (Maîtrise × 5) • Incantation : Anneau + Théologie</span>
+      </div>
+
+    </section>
+
+    <!-- LISTE DES SORTS ET POUVOIRS (GRILLE DE CARTES) -->
+    <section id="spells-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Grimoire complet des Sorts & Pouvoirs
+  </footer>
+
+  <!-- SCRIPT DU MOTEUR DU GRIMOIRE -->
+  <script>
+    const SPELLS_DATABASE = [
+      // SORTS UNIVERSELS DE BASE
+      {
+        name: "Sentir les Kami (Sense)",
+        element: "Universel",
+        mastery: "Universel",
+        keywords: ["Perception", "Divination"],
+        range: "Personnelle",
+        area: "Rayon de 15 m",
+        duration: "Instantanée",
+        raises: "Portée (+15 m par Raise), Détection précise",
+        desc: "Permet au shugenja de percevoir la présence, l'équilibre et la puissance des esprits élémentaires dans son environnement immédiat. Révèle si un lieu est corrompu ou purifié."
+      },
+      {
+        name: "Communier avec les Kami (Commune)",
+        element: "Universel",
+        mastery: "Universel",
+        keywords: ["Divination", "Communication"],
+        range: "Personnelle",
+        area: "Esprit ciblé",
+        duration: "Concentration",
+        raises: "Une question additionnelle par Raise",
+        desc: "Le prêtre pose un nombre de questions égal à son rang d'Anneau à un esprit de l'élément invoqué. L'esprit répond selon sa nature (les esprits de la Terre sont lents et fiables, l'Air est capricieux et poétique)."
+      },
+      {
+        name: "Invoquer les Kami (Summon)",
+        element: "Universel",
+        mastery: "Universel",
+        keywords: ["Matérialisation"],
+        range: "9 mètres",
+        area: "Matière invoquée",
+        duration: "Permanente",
+        raises: "Quantité x2 par Raise",
+        desc: "Fait apparaître une petite quantité d'élément pur et naturel (de l'eau potable, une braise vive pour allumer un feu, une brise fraîche ou une motte de terre fertile)."
+      },
+
+      // AIR
+      {
+        name: "Le Vent Bienveillant (Blessed Wind)",
+        element: "Air",
+        mastery: 1,
+        keywords: ["Défense", "Protection"],
+        range: "Personnelle",
+        area: "Le lanceur",
+        duration: "10 Rounds",
+        raises: "Durée (+5 rounds), Cible protégée supplémentaire",
+        desc: "Une douce brise tourbillonne autour du shugenja, déviant les traits légers. Confère un bonus de +5 au ND d'Armure contre toutes les attaques à distance (flèches, shurikens)."
+      },
+      {
+        name: "La Brume Illusoire (Mists of Illusion)",
+        element: "Air",
+        mastery: 2,
+        keywords: ["Illusion"],
+        range: "15 mètres",
+        area: "Sphère de 6 m de rayon",
+        duration: "5 Rounds",
+        raises: "Taille de l'illusion, Durée (+2 rounds)",
+        desc: "Crée une illusion visuelle et auditive saisissante. Les observateurs doivent réussir un jet de Volonté opposé au jet d'incantation pour déceler la supercherie."
+      },
+      {
+        name: "L'Ennemi de ton Cœur (Your Heart's Enemy)",
+        element: "Air",
+        mastery: 3,
+        keywords: ["Illusion", "Peur"],
+        range: "8 mètres",
+        area: "Une créature",
+        duration: "5 Rounds",
+        raises: "Durée (+1 round), Portée (+5 m)",
+        desc: "Sonde le cœur de la cible et manifeste sous ses yeux l'illusion de ce qu'elle craint le plus au monde. Génère un effet de Peur 4 que la cible doit impérativement surmonter."
+      },
+      {
+        name: "Symbole d'Air (Symbol of Air)",
+        element: "Air",
+        mastery: 4,
+        keywords: ["Sceau", "Ward"],
+        range: "Contact",
+        area: "Un passage ou une porte",
+        duration: "Permanente",
+        raises: "ND de résistance accru",
+        desc: "Grave une rune d'Air sur un seuil. Quiconque franchit le passage sans autorisation doit réussir un jet opposé de Terre contre l'Air du prêtre ou sombrer dans un sommeil léthargique d'une heure."
+      },
+
+      // TERRE
+      {
+        name: "L'Armure de Terre (Armor of Earth)",
+        element: "Terre",
+        mastery: 1,
+        keywords: ["Protection"],
+        range: "Contact",
+        area: "Une cible",
+        duration: "5 Rounds",
+        raises: "Durée (+2 rounds par Raise), Réduction +1",
+        desc: "La peau de la cible prend la dureté du granit. Confère une Réduction de dégâts de 3 contre toutes les blessures physiques, cumulable avec les armures portées."
+      },
+      {
+        name: "La Force du Corbeau (Strength of the Crow)",
+        element: "Terre",
+        mastery: 2,
+        keywords: ["Purification", "Outremonde"],
+        range: "Contact",
+        area: "Une cible",
+        duration: "1 Heure",
+        raises: "Durée (+1 heure), Cible supplémentaire",
+        desc: "Bénit la cible contre la corruption de Jigoku. Accorde un bonus de +2g1 à tous ses jets de Terre pour résister à la Souillure de l'Outremonde."
+      },
+      {
+        name: "Le Tombeau de Jade (Tomb of Jade)",
+        element: "Terre",
+        mastery: 3,
+        keywords: ["Attaque", "Jade"],
+        range: "15 mètres",
+        area: "Une cible souillée",
+        duration: "Concentration",
+        raises: "Dégâts accrus (+1g0 par Raise)",
+        desc: "Fait jaillir des piliers de jade du sol pour emprisonner une créature de l'Outremonde. La cible subit 4g2 dégâts de jade par round et se trouve totalement paralysée tant que le prêtre maintient son souffle."
+      },
+      {
+        name: "Symbole de Terre (Symbol of Earth)",
+        element: "Terre",
+        mastery: 4,
+        keywords: ["Sceau", "Ward"],
+        range: "Contact",
+        area: "Un portail ou coffre",
+        duration: "Permanente",
+        raises: "Dégâts de choc (+1k0)",
+        desc: "Une onde de choc tellurique frappe les intrus (Air contre Terre). L'échec jette au sol, assomme la cible et inflige 2g2 dégâts si la créature possède la Souillure."
+      },
+
+      // FEU
+      {
+        name: "La Morsure d'Acier (Biting Steel)",
+        element: "Feu",
+        mastery: 1,
+        keywords: ["Enchantement", "Combat"],
+        range: "Contact",
+        area: "Une arme tranchante",
+        duration: "5 Rounds",
+        raises: "Dégâts (+1g0 par Raise)",
+        desc: "Lame embrasée d'une lueur écarlate. L'arme bénie ignore 3 points de Réduction adverse et inflige +1g0 dégâts de feu supplémentaires à chaque frappe."
+      },
+      {
+        name: "La Fureur d'Osano-Wo (Fury of Osano-Wo)",
+        element: "Feu",
+        mastery: 2,
+        keywords: ["Attaque", "Foudre"],
+        range: "30 mètres",
+        area: "Une cible",
+        duration: "Instantanée",
+        raises: "Dégâts (+1g0 par Raise), Portée (+10 m)",
+        desc: "Invoque un éclair assourdissant depuis les cieux qui frappe la cible en lui infligeant 3g3 dégâts. Les créatures proches doivent tester leur Volonté contre la surdité temporaire."
+      },
+      {
+        name: "Le Feu Intérieur (The Fires From Within)",
+        element: "Feu",
+        mastery: 3,
+        keywords: ["Attaque", "Zone"],
+        range: "15 mètres",
+        area: "Cône de 9 mètres",
+        duration: "Instantanée",
+        raises: "Dégâts (+1g1 par 2 Raises)",
+        desc: "Le lanceur projette une gerbe de flammes vives consumant tout sur son passage. Inflige 4g2 dégâts de brûlure à tous les ennemis présents dans le cône d'effet."
+      },
+      {
+        name: "Les Ailes du Phénix (Wings of the Phoenix)",
+        element: "Feu",
+        mastery: 5,
+        keywords: ["Déplacement", "Vol"],
+        range: "Personnelle",
+        area: "Le lanceur",
+        duration: "10 Rounds",
+        raises: "Vitesse accrue",
+        desc: "Deux gigantesques ailes de flammes pures jaillissent du dos du shugenja, lui octroyant une vitesse de vol prodigieuse égale à Eau x 20 en Action Simple."
+      },
+
+      // EAU
+      {
+        name: "La Voie de la Paix Intérieure (Path to Inner Peace)",
+        element: "Eau",
+        mastery: 1,
+        keywords: ["Guérison"],
+        range: "Contact",
+        area: "Une cible vivante",
+        duration: "Instantanée",
+        raises: "Soins accrus (+1g1 par 2 Raises)",
+        desc: "L'eau bienfaisante des esprits referme les chairs meurtries. Rétablit un nombre de points de vie égal à (Rang d'Eau du shugenja + Rang de Théologie) g (Rang d'Eau)."
+      },
+      {
+        name: "Les Vapeurs Régénératrices (Rejuvenating Vapors)",
+        element: "Eau",
+        mastery: 2,
+        keywords: ["Guérison", "Vitalité"],
+        range: "Contact",
+        area: "Une cible",
+        duration: "Instantanée",
+        raises: "Cible supplémentaire par 2 Raises",
+        desc: "Disperse l'épuisement physique et mental. La cible est rafraîchie comme après une nuit de sommeil complet et dissipe tous les états de fatigue ou d'étourdissement."
+      },
+      {
+        name: "Marcher sur les Eaux (Walking Upon the Waves)",
+        element: "Eau",
+        mastery: 3,
+        keywords: ["Déplacement"],
+        range: "Contact",
+        area: "Le lanceur ou 1 allié",
+        duration: "10 Minutes",
+        raises: "Cibles supplémentaires (+1 par Raise)",
+        desc: "Permet de courir et manœuvrer sur n'importe quelle surface liquide (fleuve déchaîné, mer, marécage) avec la même aisance que sur une plaine solide."
+      },
+
+      // VIDE (ISHIKEN-DO)
+      {
+        name: "Puiser dans le Vide (Drawing the Void)",
+        element: "Vide",
+        mastery: 1,
+        keywords: ["Énergie", "Ishiken"],
+        range: "Personnelle",
+        area: "Le lanceur",
+        duration: "Instantanée",
+        raises: "+1 point de Vide supplémentaire par 3 Raises",
+        desc: "L'Ishiken puise directement dans le tissu cosmique de l'univers et regagne immédiatement un nombre de points de Vide temporaires égal à son Rang d'École + 1."
+      },
+      {
+        name: "Transmutation du Vide (Flow through the Void)",
+        element: "Vide",
+        mastery: 1,
+        keywords: ["Altération"],
+        range: "Contact",
+        area: "0,03 m³ de matière élémentaire pure",
+        duration: "Permanente",
+        raises: "Volume doublé par Raise",
+        desc: "Toutes choses étant une dans le Vide, le shugenja transmute une matière élémentaire pure (eau, terre, feu ou air) en n'importe quel autre élément."
+      },
+      {
+        name: "Toucher par le Vide (Reach Through the Void)",
+        element: "Vide",
+        mastery: 2,
+        keywords: ["Télékinésie"],
+        range: "15 mètres",
+        area: "Objet jusqu'à 2,5 kg",
+        duration: "Instantanée",
+        raises: "Poids accru (+1 kg par 2 Raises), Portée",
+        desc: "Permet de manipuler, déplacer ou désarmer un objet à distance sans aucun contact physique, en utilisant le flux d'énergie pure qui relie toute matière."
+      },
+
+      // KIHO (MOINES & ASCÈTES)
+      {
+        name: "Cœur de Pierre (Heart of Stone)",
+        element: "Kiho",
+        mastery: 3,
+        keywords: ["Karmique", "Terre"],
+        range: "Personnelle",
+        area: "Le moine",
+        duration: "Anneau de Terre en rounds",
+        raises: "Non applicable (activation par Vide)",
+        desc: "En concentrant son chi tellurique, le moine acquiert la résistance d'un roc millénaire : il gagne une Réduction égale à son Anneau de Terre x 2."
+      },
+      {
+        name: "La Gifle de la Vague (Slap the Wave)",
+        element: "Kiho",
+        mastery: 7,
+        keywords: ["Mystique", "Eau"],
+        range: "Cône frontal (Eau x 1,5 m)",
+        area: "Tous les ennemis",
+        duration: "Instantanée",
+        raises: "Non applicable",
+        desc: "Frappant ses paumes nues dans un kiai retentissant, le moine libère une onde de choc équivalente à un raz-de-marée qui étourdit (Dazed) tous les assaillants."
+      },
+      {
+        name: "Danse des Flammes (Dance of the Flames)",
+        element: "Kiho",
+        mastery: 6,
+        keywords: ["Martial", "Feu"],
+        range: "Personnelle",
+        area: "Attaques nues",
+        duration: "Anneau de Feu en rounds",
+        raises: "Non applicable",
+        desc: "Les poings et pieds du moine s'animent d'une vélocité destructrice : ses attaques à mains nues deviennent des Actions Simples au lieu d'Actions Complexes."
+      },
+      {
+        name: "Porter le Dragon du Vide (Touch the Void Dragon)",
+        element: "Kiho",
+        mastery: 4,
+        keywords: ["Interne", "Vide"],
+        range: "Personnelle",
+        area: "Le corps",
+        duration: "1 Heure",
+        raises: "Non applicable",
+        desc: "Le moine fusionne son énergie vitale avec l'environnement immédiat : l'un de ses Anneaux élémentaires dominant les lieux gagne +1 rang effectif temporaire."
+      },
+
+      // MAHO (MAGIE DU SANG INTERDITE)
+      {
+        name: "L'Héritage du Prince Sombre (Legacy of the Dark One)",
+        element: "Maho",
+        mastery: 1,
+        keywords: ["Corruption", "Air"],
+        range: "30 mètres",
+        area: "Une cible",
+        duration: "5 Rounds",
+        raises: "Durée (+1 round), Cibles (+1 par Raise)",
+        desc: "Invoque des esprits malveillants (*kansen*) qui corrompent l'esprit de la victime. La cible perd immédiatement 1 point de Vide qu'elle ne peut récupérer durant toute la durée du sort."
+      },
+      {
+        name: "Créer un Vortex Élémentaire (Create Elemental Vortex)",
+        element: "Maho",
+        mastery: 5,
+        keywords: ["Invocation", "Jigoku"],
+        range: "30 mètres",
+        area: "Sphère de 30 mètres",
+        duration: "Instantanée",
+        raises: "Stabilité du portail",
+        desc: "Ouvre une déchirure béante entre le monde mortel et les fosses de Jigoku, permettant aux oni et bêtes souillées de franchir le gouffre en plein cœur de Rokugan."
+      }
+    ];
+
+    let currentElement = 'all';
+
+    function setElementFilter(elem) {
+      currentElement = elem;
+      document.querySelectorAll('.elem-btn').forEach(btn => {
+        if (btn.getAttribute('data-elem') === elem) {
+          btn.className = "elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow";
+        } else {
+          btn.className = "elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition";
+        }
+      });
+      filterSpells();
+    }
+
+    function filterSpells() {
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      const m = document.getElementById('mastery-select').value;
+      const grid = document.getElementById('spells-grid');
+
+      const filtered = SPELLS_DATABASE.filter(spell => {
+        // Filtre Élément
+        if (currentElement !== 'all' && spell.element !== currentElement) {
+          return false;
+        }
+
+        // Filtre Maîtrise
+        if (m !== 'all') {
+          if (m === 'Universel' && spell.mastery !== 'Universel') return false;
+          if (m !== 'Universel' && String(spell.mastery) !== m) return false;
+        }
+
+        // Filtre Texte
+        if (q) {
+          const matchName = spell.name.toLowerCase().includes(q);
+          const matchDesc = spell.desc.toLowerCase().includes(q);
+          const matchKeyw = spell.keywords.some(k => k.toLowerCase().includes(q));
+          if (!matchName && !matchDesc && !matchKeyw) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('results-count').textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 card-clean rounded-xl">
+            <span class="text-3xl block mb-2">📜</span>
+            <span class="font-imperial font-bold text-amber-300 text-base">Aucun sort ou pouvoir ne correspond à vos critères</span>
+            <p class="text-xs text-stone-500 mt-1">Essayez d'ajuster les filtres de maîtrise ou le terme de recherche.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(s => {
+        let badgeClass = "badge-earth";
+        if (s.element === "Air") badgeClass = "badge-air";
+        else if (s.element === "Feu") badgeClass = "badge-fire";
+        else if (s.element === "Eau") badgeClass = "badge-water";
+        else if (s.element === "Vide") badgeClass = "badge-void";
+        else if (s.element === "Maho") badgeClass = "badge-maho";
+        else if (s.element === "Kiho") badgeClass = "badge-kiho";
+
+        const ndCalculated = s.mastery === "Universel" ? "ND 10" : `ND ${5 + (parseInt(s.mastery) * 5)}`;
+
+        return `
+          <div class="card-clean rounded-xl p-5 space-y-3 flex flex-col justify-between hover:border-amber-400/60 transition shadow-lg">
+            <div class="space-y-2">
+              <div class="flex justify-between items-start gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial ${badgeClass}">
+                  ${s.element} ${s.mastery === 'Universel' ? '• Universel' : '• Rang ' + s.mastery}
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-bold text-amber-300 font-imperial">
+                  ${ndCalculated}
+                </span>
+              </div>
+              <h3 class="text-sm font-bold font-imperial text-amber-200">${s.name}</h3>
+              <div class="flex flex-wrap gap-1 text-[9px] text-stone-400">
+                ${s.keywords.map(k => `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-800">${k}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-stone-800/80 text-xs">
+              <p class="text-stone-300 leading-relaxed text-[11px]">${s.desc}</p>
+              
+              <div class="p-2 rounded bg-black/50 border border-stone-800 text-[10px] space-y-1 text-stone-400">
+                <div><b class="text-stone-300">Portée :</b> ${s.range} | <b class="text-stone-300">Zone :</b> ${s.area}</div>
+                <div><b class="text-stone-300">Durée :</b> ${s.duration}</div>
+                ${s.raises ? `<div class="pt-1 border-t border-stone-800/60 text-amber-400/90"><b class="text-amber-300">Augmentations :</b> ${s.raises}</div>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Chargement initial
+    document.addEventListener("DOMContentLoaded", filterSpells);
+  </script>
+
+</body>
+</html>
