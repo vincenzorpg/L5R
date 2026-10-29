@@ -9,24 +9,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- BASES DE DONNÉES -->
+  <!-- BASES DE DONNÉES DÉPORTÉES -->
   <script src="data/clans-data.js" defer></script>
   <script src="data/competences-data.js" defer></script>
   <script src="data/equipement-data.js" defer></script>
   <script src="data/avantages-data.js" defer></script>
 
-  <!-- MOTEUR DE L'APPLICATION -->
-  <script src="js/character-generator.js" defer></script>
+  <!-- MOTEUR LOGIQUE -->
+  <script src="js/character-generator.js?v=4" defer></script>
 
   <style>
-    :root { --dark-lacquer: #0a0808; --gold: #d4af37; --gold-light: #f3e5ab; }
-    body { background-color: var(--dark-lacquer); background-image: radial-gradient(circle at 50% 5%, #230808 0%, #0a0808 85%); color: #e5dec9; font-family: 'Noto Serif JP', serif; }
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 5%, #230808 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
     h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
-    .card-clean { background: rgba(18, 14, 14, 0.92); border: 1px solid rgba(212, 175, 55, 0.25); transition: border-color 0.2s ease; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      transition: border-color 0.2s ease;
+    }
     .card-clean:hover { border-color: rgba(212, 175, 55, 0.45); }
     .gold-text { color: var(--gold); }
-    input, select, textarea { background-color: #0d0b0b !important; border: 1px solid #3a3028 !important; color: #f3e5ab !important; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold) !important; box-shadow: 0 0 6px rgba(212, 175, 55, 0.3); }
+    input, select, textarea {
+      background-color: #0d0b0b !important;
+      border: 1px solid #3a3028 !important;
+      color: #f3e5ab !important;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+    }
     @media print {
       body { background: white !important; color: black !important; }
       .no-print { display: none !important; }
@@ -38,47 +59,52 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- EN-TÊTE FIXE -->
-  <header class="py-6 px-4 md:px-8 border-b border-amber-500/20 bg-black/60 sticky top-0 z-50 backdrop-blur-sm no-print">
+  <!-- BANDEAU STICKY PERMANENT (NOM, XP, INSIGHT ET COMMANDES) -->
+  <aside aria-label="État du personnage" class="sticky top-0 z-50 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-3 px-4 md:px-8 no-print">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-      <div>
-        <div class="text-[10px] tracking-[0.3em] text-amber-500/60 uppercase">土 ・ 水 ・ 風 ・ 火 ・ 空</div>
-        <h1 class="text-xl md:text-2xl font-bold gold-text font-imperial">FORGE DE SAMOURAÏ (L5R 4E)</h1>
+      
+      <!-- Nom dynamique du samouraï -->
+      <div class="flex items-center gap-3">
+        <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
+        <span id="sticky-pc-name" class="text-base md:text-lg font-bold text-amber-200 font-imperial">Okado Hiruma</span>
       </div>
-      <div class="flex flex-wrap items-center gap-2 text-xs">
-        <a href="index.html" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
-        <a href="campagne.html" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Campagne</a>
-        <a href="grimoire.html" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Grimoire</a>
-        <button onclick="randomizeAll()" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">⚡ Tirage Auto (40 XP)</button>
-        <button onclick="window.print()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ PDF / Imprimer</button>
+
+      <!-- XP restante et Réputation / Insight -->
+      <div class="flex items-center gap-6">
+        <div>
+          <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante</span>
+          <span class="text-base md:text-lg font-bold font-imperial">
+            <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
+          </span>
+        </div>
+        <div class="border-l border-amber-500/20 pl-4">
+          <span class="text-[9px] text-stone-400 uppercase tracking-wider block">Réputation</span>
+          <span class="text-base md:text-lg font-bold text-amber-300 font-imperial" id="insight-display">
+            120 pts <span class="text-xs text-stone-400 font-normal">(Rang 1)</span>
+          </span>
+        </div>
       </div>
+
+      <!-- Liens rapides et actions -->
+      <div class="flex items-center gap-2 text-xs">
+        <a href="index.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
+        <a href="campagne.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Campagne</a>
+        <a href="grimoire.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Grimoire</a>
+        <button onclick="randomizeAll()" class="px-3 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">⚡ Auto</button>
+        <button onclick="exportJSON()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">💾 JSON</button>
+        <label class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
+          📂 Charger
+          <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
+        </label>
+        <button onclick="window.print()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ PDF</button>
+        <button onclick="resetCharacter()" class="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
+      </div>
+
     </div>
-  </header>
+  </aside>
 
   <!-- CONTENU PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
-
-    <!-- BARRE FIXE BUDGET XP & INSIGHT -->
-    <div class="card-clean rounded-xl p-4 flex flex-wrap justify-between items-center gap-4 border-l-4 border-amber-500 bg-amber-950/20">
-      <div class="flex items-center gap-4">
-        <div>
-          <span class="text-[10px] text-stone-400 uppercase tracking-wider block">Points d'Expérience restants</span>
-          <span class="text-2xl font-bold font-imperial"><span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP</span>
-        </div>
-        <div class="border-l border-amber-500/20 pl-4">
-          <span class="text-[10px] text-stone-400 uppercase tracking-wider block">Réputation (Insight)</span>
-          <span class="text-xl font-bold text-amber-300 font-imperial" id="insight-display">120 pts <span class="text-xs text-stone-400 font-normal">(Rang 1)</span></span>
-        </div>
-      </div>
-      <div class="flex items-center gap-3 text-xs">
-        <button onclick="exportJSON()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">💾 Exporter JSON</button>
-        <label class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
-          📂 Charger JSON
-          <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
-        </label>
-        <button onclick="resetCharacter()" class="px-3 py-1.5 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Réinitialiser</button>
-      </div>
-    </div>
 
     <!-- 1. IDENTITÉ, CLAN, FAMILLE ET ÉCOLE -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
@@ -107,7 +133,7 @@
               <button onclick="toggleNameOrder()" title="Inverser Prénom/Famille" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-900 text-stone-400 hover:text-amber-300">⇄</button>
             </div>
           </div>
-          <input type="text" id="pc-name" value="Okado Hiruma" class="w-full p-2.5 rounded font-bold">
+          <input type="text" id="pc-name" value="Okado Hiruma" oninput="updateStickyName()" class="w-full p-2.5 rounded font-bold">
           <div id="name-meaning" class="text-[11px] text-stone-400 italic mt-1">Signification : Épée vigoureuse et loyale</div>
         </div>
       </div>
@@ -329,6 +355,17 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print">
     Campagne L5R – MJ David • Fiche Interactive dynamique alimentée par data/ et js/
   </footer>
+
+  <!-- SYNCHRONISATION DU BANDEAU STICKY -->
+  <script>
+    function updateStickyName() {
+      const input = document.getElementById('pc-name');
+      const sticky = document.getElementById('sticky-pc-name');
+      if (input && sticky) {
+        sticky.textContent = input.value.trim() || "Samouraï";
+      }
+    }
+  </script>
 
 </body>
 </html>
