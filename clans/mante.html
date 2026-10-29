@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Clan de la Mante — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --mantis-blue: #0284c7;
+      --mantis-teal: #0d9488;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #061e29 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(12, 21, 26, 0.94);
+      border: 1px solid rgba(14, 165, 233, 0.28);
+    }
+    .gold-text { color: var(--gold); }
+    .mantis-gradient {
+      background: linear-gradient(135deg, #fef08a 0%, #38bdf8 50%, #0d9488 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- NAVIGATION SUPÉRIEURE -->
+  <header class="border-b border-sky-500/30 bg-[#07131a]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <a href="../index.html" class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-full border border-sky-400/50 bg-black flex items-center justify-center font-bold text-sky-300 font-imperial text-xs">雷</span>
+        <div>
+          <span class="font-imperial font-bold tracking-widest text-sky-200 block text-sm">ROKUGAN</span>
+          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-2 text-xs">
+        <a href="../index.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
+        <a href="../createcharacter.html" class="px-3 py-1.5 rounded bg-sky-600 hover:bg-sky-500 text-black font-bold transition flex items-center gap-1.5">
+          <span>⚔️</span> Forger une Mante
+        </a>
+        <a href="../grimoire.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">📜 Grimoire</a>
+        <a href="../campagne.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">🏮 Campagne</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO DU CLAN -->
+    <section class="card-clean rounded-2xl p-6 md:p-10 border-sky-500/40 relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 text-[140px] md:text-[200px] font-black text-sky-400/5 select-none pointer-events-none font-imperial">
+        雷
+      </div>
+      <div class="max-w-3xl space-y-3 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0a2738] border border-sky-400/40 text-[10px] uppercase tracking-widest text-sky-200 font-bold">
+          <span>⛈️</span> Les Fils de la Tempête & des Îles
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide mantis-gradient">
+          LE CLAN DE LA MANTE
+        </h1>
+        <p class="text-xs md:text-sm text-sky-200/90 italic font-imperial">
+          « L'Océan ne s'incline devant aucun empereur, et la foudre frappe où bon lui semble. »
+        </p>
+        <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
+          Forgé dans les embruns des Îles de la Soie et de l'Épice, le Clan de la Mante est le seul Grand Clan à ne pas descendre directement d'un Kami fondateur ayant remporté le tournoi initial[cite: 1, 2]. Née comme un Clan Mineur fondé par Kaimetsu-Uo (fils d'Osano-Wo), la Mante s'est hissée au rang des Grands Clans par la volonté de fer de son Champion charismatique, <b>Yoritomo</b>[cite: 1, 2]. Maîtres absolus des routes maritimes, corsaires intrépides et archers sans pitié, les samouraïs de la Mante prennent ce que le destin refuse de leur accorder[cite: 1, 2].
+        </p>
+      </div>
+    </section>
+
+    <!-- 1. HISTOIRE & ASCENSION UNIQUE -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+          1. Ascension & Domination Maritime
+        </h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Pendant des siècles, la Mante fut cantonnée au statut de modeste Clan Mineur insulaire[cite: 1, 2]. Mais lors de la Guerre des Clans au XIIe siècle, face à la corruption grandissante et à la paralysie de la cour impériale, <b>Yoritomo le Fils de l'Orage</b> réunit sous sa bannière plusieurs Clans Mineurs isolés : les maîtres archers du <b>Clan de la Guêpe (Tsuruchi)</b> et les dévotes du Soleil du <b>Clan du Mille-Pattes (Moshi)</b>[cite: 1, 2].
+        </p>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          En menaçant de couper le ravitaillement maritime de l'Empire et en offrant ses flottes invincibles pour sauver Rokugan de la ruine, Yoritomo força le Trône à lui reconnaître le statut officiel de <b>Grand Clan</b>[cite: 1, 2]. La Mante apporte à l'Empire une flotte de guerre sans égale, le commerce des épices lointaines et un pragmatisme implacable[cite: 1, 2].
+        </p>
+        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
+          <span class="text-sky-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
+          <span class="text-stone-300">Bleu tempête, vert océan et reflets d'or foudroyant (tissus légers résistant à l'eau de mer, armures de plaques vernies et armes d'abordage)[cite: 1, 2].</span>
+        </div>
+      </div>
+
+      <!-- CARTE D'IDENTITÉ TACTIQUE -->
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <h3 class="text-sm font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+          Profil de Clan
+        </h3>
+        <ul class="text-xs space-y-2 text-stone-300">
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Élément de Prédilection :</span>
+            <b class="text-sky-300">Eau & Foudre (Osano-Wo)[cite: 1, 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Champion Mythique :</span>
+            <b>Yoritomo[cite: 1, 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Forteresse Mère :</span>
+            <b>Kyuden Gotei[cite: 1, 2]</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Doctrine Navale :</span>
+            <b>Flottes d'Abordage[cite: 1, 2]</b>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-stone-500">Armes Emblématiques :</span>
+            <b>Kama & Arc Yumi[cite: 1, 2]</b>
+          </li>
+        </ul>
+        <div class="pt-2">
+          <a href="../createcharacter.html" class="w-full block py-2 rounded bg-sky-600 hover:bg-sky-500 text-black font-bold text-center text-xs uppercase tracking-wider transition">
+            Créer un samouraï Mante
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LES TROIS GRANDES FAMILLES DE LA MANTE -->
+    <section class="space-y-4">
+      <div class="border-b border-sky-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">2. Les Familles du Clan & Leurs Traditions</h2>
+        <span class="text-xs text-stone-400">L'union des marins de choc, des archers incorruptibles et des prêtresses solaires[cite: 1, 2].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+
+        <!-- YORITOMO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Yoritomo</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Constitution[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            La lignée souveraine du clan[cite: 1, 2]. Marins robustes, bretteurs au pied marin et corsaires aguerris, les Yoritomo manient les hachettes, les serpes (*kama*) et les armes paysannes avec une férocité pragmatique[cite: 1, 2]. Leurs capitaines n'ont peur ni des tempêtes d'Osano-Wo, ni de la morgue des cours impériales[cite: 1, 2].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Navigateurs, bushi d'abordage, capitaines et intendants maritimes[cite: 1, 2].</div>
+        </div>
+
+        <!-- TSURUCHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Tsuruchi</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Perception[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Anciennement le légendaire <b>Clan de la Guêpe</b>[cite: 1, 2]. Les Tsuruchi sont les tireurs d'élite suprêmes de Rokugan[cite: 1, 2]. Rejetant le fétichisme du katana, ils considèrent que la justice frappe à distance sans état d'âme[cite: 1, 2]. Leurs archers servent de magistrats incorruptibles, de pisteurs et de chasseurs de primes à travers tout l'Empire[cite: 1, 2].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Maîtres archers d'élite (Kyujutsu), traqueurs et magistrats mercenaires[cite: 1, 2].</div>
+        </div>
+
+        <!-- MOSHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Moshi</h3>
+            <span class="text-[10px] text-sky-400 font-bold">+1 Intelligence[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Anciennement le pieux <b>Clan du Mille-Pattes</b>, matriarcat voué à la Dame Soleil (Amaterasu)[cite: 1, 2]. Leurs shugenja invoquent la puissance purificatrice du Feu et de l'Air pour commander aux tempêtes océaniques, chasser les brouillards maléfiques et guider les flottes marchandes vers les ports sûrs[cite: 1, 2].
+          </p>
+          <div class="text-[10px] text-stone-500 italic">Rôle : Prêtresses de Dame Soleil, devins célestes et maîtresses des vents[cite: 1, 2].</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. LA MANTE ET LE BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+        3. Le Cœur du Roleplay : La Mante face au Bushido
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
+            <span class="font-bold text-sky-200 text-sm">Le Courage (Yū) & l'Ambition Légitime[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Pour la Mante, le courage n'est pas d'attendre docilement la mort pour un précepte poétique[cite: 1, 2]. C'est d'oser défier les traditions millénaires et les tempêtes rugissantes pour s'élever par ses propres mérites[cite: 1, 2]. Un bushi de la Mante croit fermement que sa destinée dépend de sa ténacité et de son habileté martiale[cite: 1, 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
+            <span class="font-bold text-sky-200 text-sm">Le Lucre & le Mépris des Convenances[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Considérés par les clans continentaux comme des « parvenus » ou des marchands déguisés en samouraïs, les membres de la Mante ont parfois du mal à cacher leur goût pour les richesses matérielles, le profit commercial et les armes non orthodoxes[cite: 1, 2]. Leur insolence face aux courtisans leur attire de constantes rancœurs en cour[cite: 1, 2].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
+        4. Guide d'Interprétation : Jouer un Samouraï de la Mante
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Allure & Tempérament</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Vous avez le teint hâlé par les embruns et le soleil des îles[cite: 1, 2]. Vos gestes sont directs, vifs et équilibrés[cite: 1, 2]. Vous refusez de vous encombrer de cérémoniaux pesants quand une poignée de main virile ou une preuve tangible suffit pour conclure une affaire[cite: 1, 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Relations avec les autres Clans</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Vous respectez l'efficacité brutale du <b>Crabe</b> (avec qui vous partagez la dévotion à Osano-Wo et aux armes lourdes)[cite: 1, 2]. Vous vous méfiez de la condescendance de la <b>Grue</b> et du formalisme du <b>Lion</b>[cite: 1, 2]. Vous traitez avec la <b>Licorne</b> pour ses marchandises exotiques[cite: 1, 2].
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Idées de Concepts Originaux</h3>
+          <p class="text-stone-400 leading-relaxed">
+            Un <b>archer Tsuruchi</b> inflexible qui traque un seigneur de clan majeur coupable de meurtre[cite: 1, 2] ; un <b>courtisan Yoritomo</b> brutal qui intimide ses rivaux par la menace d'un blocus naval économique[cite: 1, 2] ; ou une <b>prêtresse Moshi</b> fascinée par les technologies de navigation étrangères[cite: 1, 2].
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ÉCOLES FONDAMENTALES & ARSENAL -->
+    <section class="space-y-4">
+      <div class="border-b border-sky-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">5. Écoles Fondamentales de la 4e Édition</h2>
+        <span class="text-xs text-stone-400">Styles martiaux et disciplines représentés dans le générateur de fiches[cite: 1, 2].</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        
+        <!-- ARCHER TSURUCHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sky-200 text-sm font-imperial">École d'Archer Tsuruchi[cite: 1, 2]</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-sky-950 text-sky-300 font-bold border border-sky-800/40">Tir à l'Arc • Distance[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Technique Rang 1 : L'Œil du Faucon.</b> Ignore les malus de portée d'arc et permet d'encocher et tirer en Action Simple au lieu d'Action Complexe[cite: 1, 2]. Aux rangs supérieurs, il ajoute son rang de Kyujutsu aux dégâts de ses flèches et peut transpercer l'armure et la réduction adverse[cite: 1, 2].
+          </p>
+        </div>
+
+        <!-- BUSHI YORITOMO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Bushi Yoritomo[cite: 1, 2]</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-800/40">Abordage • Kama[cite: 1, 2]</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Technique Rang 1 : La Fureur de l'Océan.</b> Manie deux armes sans malus (notamment les kama et hachettes) et gagne des bonus d'esquive en mouvement[cite: 1, 2]. Aux rangs supérieurs, il déclenche des charges dévastatrices et abat ses ennemis au sol avec une violence foudroyante[cite: 1, 2].
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NAVIGATION ENTRE LES CLANS -->
+    <nav aria-label="Navigation des clans" class="pt-6 border-t border-sky-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
+      <a href="lion.html" class="text-amber-400 hover:text-amber-300 font-imperial">← Clan du Lion</a>
+      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
+      <a href="phenix.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-red-400 border border-stone-800 font-imperial">Clan du Phénix →</a>
+    </nav>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan de la Mante
+  </footer>
+
+</body>
+</html>
