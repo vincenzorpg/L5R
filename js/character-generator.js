@@ -1,6 +1,7 @@
 /**
  * character-generator.js — Moteur logique complet L5R 4e Édition
  * Règles officielles du Livre de Base (Book of Earth & Book of Fire) :
+ * - Filtrage dynamique des écoles selon la famille choisie
  * - Initiative : (Rang d'Insight + Réflexes) g Réflexes
  * - Toucher : (Compétence d'arme + Agilité ou Réflexes) g Trait
  * - Dégâts : VD de l'Arme + Force (+ École / Avantages)
@@ -8,6 +9,7 @@
  * - Gestion interactive des choix de compétences d'école (Bugei, Noble, Libre)
  * - Arbre des 5 Techniques d'École avec mise en surbrillance selon l'Insight Rank
  * - Plafond de 15 XP maximum pour les Désavantages
+ * - Exportation vers fiche officielle A4 vectorielle
  */
 
 const MAX_DISADVANTAGE_XP = 15;
@@ -76,7 +78,7 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
-// Accesseurs aux tables de données modulaires
+// Accesseurs aux tables modulaires
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
@@ -116,7 +118,7 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // 1. Compétences
+  // Compétences
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
     skSel.innerHTML = "";
@@ -128,7 +130,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // 2. Armures
+  // Armures
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
     armSel.innerHTML = "";
@@ -140,7 +142,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // 3. Armes
+  // Armes
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
@@ -160,7 +162,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // 4. Avantages
+  // Avantages
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     advSel.innerHTML = "";
@@ -172,7 +174,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // 5. Désavantages
+  // Désavantages
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     disadvSel.innerHTML = "";
@@ -187,7 +189,66 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
-// Réinitialisation intégrale lors d'un changement d'école, famille ou clan
+// Filtrage strict des écoles selon la famille sélectionnée
+function updateSchoolOptions() {
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const famIdx = parseInt(document.getElementById('sel-family')?.value) || 0;
+  const clan = clans[clanKey];
+  if (!clan) return;
+
+  const selectedFamily = clan.families[famIdx]?.name;
+  const schSel = document.getElementById('sel-school');
+  if (!schSel) return;
+
+  schSel.innerHTML = "";
+
+  // Filtre les écoles associées à cette famille précise
+  let matchingSchools = clan.schools.filter(s => s.family === selectedFamily);
+
+  // Fallback si aucune école n'est spécifiquement étiquetée
+  if (matchingSchools.length === 0) {
+    matchingSchools = clan.schools;
+  }
+
+  matchingSchools.forEach(s => {
+    const realIdx = clan.schools.findIndex(x => x.id === s.id);
+    let opt = document.createElement('option');
+    opt.value = realIdx;
+    opt.textContent = `${s.name} (${s.bonus})`;
+    schSel.appendChild(opt);
+  });
+}
+
+function onClanChange() {
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan').value;
+  const clan = clans[clanKey];
+  if (!clan) return;
+
+  const famSel = document.getElementById('sel-family');
+  famSel.innerHTML = "";
+  clan.families.forEach((f, idx) => {
+    let opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = `${f.name} (${f.bonus})`;
+    famSel.appendChild(opt);
+  });
+
+  updateSchoolOptions();
+  resetSheetToNewSelection();
+}
+
+function onFamilyChange() {
+  updateSchoolOptions();
+  resetSheetToNewSelection();
+}
+
+function onSchoolChange() {
+  resetSheetToNewSelection();
+}
+
+// Réinitialisation lors d'un changement de sélection
 function resetSheetToNewSelection() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -214,6 +275,7 @@ function resetSheetToNewSelection() {
     updateStickyName();
   }
 
+  // Badges visuels de bonus
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -233,6 +295,7 @@ function resetSheetToNewSelection() {
     if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
+  // Remise à zéro stricte des Traits
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -245,7 +308,7 @@ function resetSheetToNewSelection() {
     input.value = baseVal;
   }
 
-  // Initialisation des compétences d'école avec détection des choix libres
+  // Compétences d'école avec détection des choix libres
   currentSkills = sch.skills.map(s => {
     const sLower = s.toLowerCase();
     const isChoice = sLower.includes("compétence") || sLower.includes("choix") || sLower.includes("any");
@@ -267,7 +330,7 @@ function resetSheetToNewSelection() {
   });
   renderSkills();
 
-  // Équipement par défaut selon l'école
+  // Équipement par défaut
   const w1Sel = document.getElementById('pc-weapon-1');
   if (w1Sel) {
     if (sch.id?.includes("hida") || sch.name?.includes("Hida")) {
@@ -299,42 +362,7 @@ function resetSheetToNewSelection() {
   updateAll();
 }
 
-function onClanChange() {
-  const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const clan = clans[clanKey];
-  if (!clan) return;
-
-  const famSel = document.getElementById('sel-family');
-  famSel.innerHTML = "";
-  clan.families.forEach((f, idx) => {
-    let opt = document.createElement('option');
-    opt.value = idx;
-    opt.textContent = `${f.name} (${f.bonus})`;
-    famSel.appendChild(opt);
-  });
-
-  const schSel = document.getElementById('sel-school');
-  schSel.innerHTML = "";
-  clan.schools.forEach((s, idx) => {
-    let opt = document.createElement('option');
-    opt.value = idx;
-    opt.textContent = `${s.name} (${s.bonus})`;
-    schSel.appendChild(opt);
-  });
-
-  resetSheetToNewSelection();
-}
-
-function onFamilyChange() {
-  resetSheetToNewSelection();
-}
-
-function onSchoolChange() {
-  resetSheetToNewSelection();
-}
-
-// Rendu des 5 techniques d'école avec surbrillance dynamique du Rang actuel
+// Rendu des 5 techniques avec mise en valeur selon l'Insight Rank
 function renderSchoolTechniques(currentRank) {
   const container = document.getElementById('school-techniques-container');
   if (!container) return;
@@ -502,9 +530,7 @@ function renderAdvDisadv() {
   updateDisadvButtonState();
 }
 
-// =========================================================================
-// RENDU DES COMPÉTENCES & GESTION DES CHOIX LIBRES D'ÉCOLE
-// =========================================================================
+// Rendu des compétences avec sélecteur pour les choix libres
 function renderSkills() {
   const container = document.getElementById('skills-list');
   if (!container) return;
@@ -512,13 +538,11 @@ function renderSkills() {
   const catalogSkills = getSkills();
 
   container.innerHTML = currentSkills.map((sk, idx) => {
-    // 1. Emplacement de choix libre non encore assigné : affiche un sélecteur
     if (sk.isChoice && !sk.chosen) {
       let filtered = catalogSkills;
       if (sk.choiceFilter) {
         filtered = catalogSkills.filter(s => s.type?.toLowerCase() === sk.choiceFilter.toLowerCase());
       }
-      // Filtre les compétences déjà connues
       filtered = filtered.filter(s => !currentSkills.some(cs => (cs.chosen || !cs.isChoice) && cs.name === s.name));
 
       const optionsHtml = filtered.map(s => 
@@ -541,28 +565,26 @@ function renderSkills() {
       `;
     }
 
-    // 2. Compétence définie (normale ou choix validé)
     const isChoiceActive = sk.isChoice && sk.chosen;
     return `
       <div class="p-2.5 rounded bg-black/60 border ${isChoiceActive ? 'border-amber-500/50' : 'border-stone-800'} flex items-center justify-between gap-2">
         <div class="flex-1 truncate">
           <span class="font-bold text-amber-200">${sk.name}</span>
           ${sk.isSchool ? `<span class="text-[9px] px-1 rounded bg-amber-950 text-amber-400 ml-1 border border-amber-900">${isChoiceActive ? 'École (Choix)' : 'École'}</span>` : ''}
-          ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement d'école" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5">⇄ Changer</button>` : ''}
+          ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5">⇄ Changer</button>` : ''}
         </div>
         <div class="flex items-center gap-1.5">
           <label class="text-[10px] text-stone-400 flex items-center gap-1">
             <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
           </label>
           <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-12 p-1 rounded text-center font-bold text-amber-300">
-          <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix d\'école' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1">✕</button>
+          <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1">✕</button>
         </div>
       </div>
     `;
   }).join('');
 }
 
-// Validation d'une compétence d'école libre
 function chooseSchoolSkill(idx, skillName) {
   if (!skillName) return;
   const sk = currentSkills[idx];
@@ -575,7 +597,6 @@ function chooseSchoolSkill(idx, skillName) {
   updateAll();
 }
 
-// Réouverture du choix sans perdre l'emplacement gratuit
 function reopenSkillChoice(idx) {
   const sk = currentSkills[idx];
   if (!sk) return;
@@ -591,13 +612,11 @@ function addSkillFromCatalog() {
   const name = document.getElementById('sel-add-skill').value;
   if (!name) return;
 
-  // Si la compétence est déjà présente, on ne fait rien
   if (currentSkills.some(s => (s.chosen || !s.isChoice) && s.name === name)) {
     alert(`La compétence « ${name} » est déjà présente sur la fiche.`);
     return;
   }
 
-  // Vérifie si un emplacement d'école libre en attente correspond à cette compétence
   const catalogSkill = getSkills().find(s => s.name === name);
   const openChoiceIdx = currentSkills.findIndex(s => {
     if (!s.isChoice || s.chosen) return false;
@@ -606,12 +625,10 @@ function addSkillFromCatalog() {
   });
 
   if (openChoiceIdx !== -1) {
-    // On l'attribue directement à l'emplacement gratuit de l'école !
     chooseSchoolSkill(openChoiceIdx, name);
     return;
   }
 
-  // Sinon ajout hors-école classique (coûtera 1 XP pour le Rang 1)
   currentSkills.push({
     name,
     rank: 1,
@@ -629,13 +646,11 @@ function removeSkill(idx) {
   const sk = currentSkills[idx];
   if (!sk) return;
 
-  // Si c'est un choix d'école, on ne supprime pas l'emplacement : on le réinitialise en sélecteur
   if (sk.isChoice) {
     reopenSkillChoice(idx);
     return;
   }
 
-  // Si c'est une compétence d'école fixe, confirmation
   if (sk.isSchool) {
     if (!confirm(`« ${sk.name} » est une compétence fondamentale de votre école. Voulez-vous vraiment la retirer ?`)) {
       return;
@@ -729,7 +744,7 @@ function updateAll() {
   const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
   const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-  // 1. Calcul des 5 Anneaux
+  // 1. Anneaux
   const rEarth = Math.min(sta, wil);
   const rWater = Math.min(str, per);
   const rAir = Math.min(ref, awa);
@@ -752,7 +767,7 @@ function updateAll() {
     return found && found.impact === impactName;
   });
 
-  // 2. Calcul du Budget XP
+  // 2. Budget XP
   let xpSpent = 0;
   const traitsBase = [
     { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -777,7 +792,6 @@ function updateAll() {
   }
 
   currentSkills.forEach(sk => {
-    // Si c'est un choix d'école non encore validé, il ne coûte aucun XP
     if (sk.isChoice && !sk.chosen) return;
 
     let start = sk.isSchool ? 1 : 0;
@@ -806,7 +820,7 @@ function updateAll() {
   remEl.textContent = remainingXP;
   remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-  // 3. Insight et Rang d'École (Tranches officielles de 25)
+  // 3. Insight & Rang d'École
   let sumRings = rEarth + rWater + rAir + rFire + rVoid;
   let sumSkills = currentSkills.reduce((acc, sk) => {
     if (sk.isChoice && !sk.chosen) return acc;
@@ -825,10 +839,9 @@ function updateAll() {
   const stickySchool = document.getElementById('sticky-school-badge');
   if (stickySchool && sch) stickySchool.textContent = sch.name;
 
-  // Mise à jour visuelle des 5 techniques d'école avec surbrillance
   renderSchoolTechniques(insightRank);
 
-  // --- 4. CALCUL DU JET POUR TOUCHER (Book of Earth, p. 80-82) ---
+  // 4. Jet pour Toucher
   const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
   const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
     name: weapon1Name,
@@ -885,7 +898,7 @@ function updateAll() {
     stickyAtkDetail.title = atkDetailStr;
   }
 
-  // --- 5. CALCUL DU JET DE DÉGÂTS (Book of Earth, p. 82) ---
+  // 5. Jet de Dégâts
   const vdParts = (weaponData.vd || "3g2").split('g');
   let dmgBaseRoll = parseInt(vdParts[0]) || 3;
   let dmgBaseKeep = parseInt(vdParts[1]) || 2;
@@ -928,7 +941,7 @@ function updateAll() {
     stickyDmgDetail.title = dmgDetailStr;
   }
 
-  // --- 6. CALCUL DE L'INITIATIVE (Book of Earth, p. 81) ---
+  // 6. Initiative (Formule officielle 4e : Insight + Réflexes g Réflexes)
   let initRoll = insightRank + ref;
   let initKeep = ref;
   let initStatic = 0;
@@ -968,7 +981,7 @@ function updateAll() {
   }
   document.getElementById('stat-init').textContent = initStr;
 
-  // --- 7. CALCUL DU ND D'ARMURE ---
+  // 7. ND d'Armure
   const armorSelect = document.getElementById('pc-armor');
   const armorBonus = parseInt(armorSelect?.value) || 0;
   const armorName = armorSelect?.options[armorSelect.selectedIndex]?.text?.split('(')[0]?.trim() || "Armure";
@@ -998,7 +1011,7 @@ function updateAll() {
   }
   document.getElementById('stat-armor-tn').textContent = finalArmorTN;
 
-  // Récupération nocturne & seuils de vitalité
+  // Récupération nocturne & vitalité
   let effSta = sta;
   if (hasAdv("quick_heal")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
@@ -1029,8 +1042,14 @@ function randomizeAll() {
   onClanChange();
 
   const clan = clans[randomClan];
-  document.getElementById('sel-family').value = Math.floor(Math.random() * clan.families.length);
-  document.getElementById('sel-school').value = Math.floor(Math.random() * clan.schools.length);
+  const randFam = Math.floor(Math.random() * clan.families.length);
+  document.getElementById('sel-family').value = randFam;
+  updateSchoolOptions();
+
+  const schSel = document.getElementById('sel-school');
+  if (schSel && schSel.options.length > 0) {
+    schSel.selectedIndex = Math.floor(Math.random() * schSel.options.length);
+  }
 
   resetSheetToNewSelection();
   generateRandomName(Math.random() > 0.5 ? 'm' : 'f');
@@ -1100,6 +1119,7 @@ function importJSON(event) {
       document.getElementById('sel-clan').value = d.clan;
       onClanChange();
       document.getElementById('sel-family').value = d.family;
+      updateSchoolOptions();
       document.getElementById('sel-school').value = d.school;
       resetSheetToNewSelection();
 
@@ -1143,9 +1163,7 @@ function resetCharacter() {
   }
 }
 
-// =========================================================================
-// EXPORTATION VERS LA FICHE OFFICIELLE EN PDF VECTORIEL (A4)
-// =========================================================================
+// Exportation vers la fiche officielle A4 vectorielle
 function exportOfficialPDF() {
   updateAll();
 
@@ -1159,7 +1177,7 @@ function exportOfficialPDF() {
 
   const pcName = document.getElementById('pc-name')?.value || "Samouraï";
 
-  // 1. Identité
+  // Identité
   document.getElementById('p-name').textContent = pcName;
   document.getElementById('p-name-2').textContent = pcName;
   document.getElementById('p-clan').textContent = clan ? clan.name : "Clan";
@@ -1170,7 +1188,7 @@ function exportOfficialPDF() {
   document.getElementById('p-insight').textContent = document.getElementById('insight-display')?.textContent || "120 pts (Rang 1)";
   document.getElementById('p-honor').textContent = document.getElementById('stat-honor')?.textContent || "4.5";
 
-  // 2. Traits et Anneaux
+  // Traits et Anneaux
   const sta = document.getElementById('trait-stamina').value;
   const wil = document.getElementById('trait-willpower').value;
   const str = document.getElementById('trait-strength').value;
@@ -1197,7 +1215,7 @@ function exportOfficialPDF() {
   document.getElementById('p-r-fire').textContent = document.getElementById('ring-fire').textContent;
   document.getElementById('p-r-void').textContent = document.getElementById('ring-void').textContent;
 
-  // 3. Combat
+  // Combat
   document.getElementById('p-init').textContent = document.getElementById('sticky-init')?.textContent || "3g2";
   document.getElementById('p-init-note').textContent = document.getElementById('sticky-init-detail')?.textContent || "";
   document.getElementById('p-armor-tn').textContent = document.getElementById('sticky-armor-tn')?.textContent || "20";
@@ -1208,7 +1226,7 @@ function exportOfficialPDF() {
   document.getElementById('p-armor-name').textContent = armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0] || "Aucune";
   document.getElementById('p-armor-reduc').textContent = armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0");
 
-  // 4. Compétences
+  // Compétences
   const skillsBody = document.getElementById('p-skills-body');
   skillsBody.innerHTML = currentSkills.map(sk => {
     const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
@@ -1225,7 +1243,7 @@ function exportOfficialPDF() {
     `;
   }).join('');
 
-  // 5. Armes
+  // Armes
   const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
   const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
   const wBox = document.getElementById('p-weapons-box');
@@ -1242,7 +1260,7 @@ function exportOfficialPDF() {
     ` : ''}
   `;
 
-  // 6. Paliers de blessures
+  // Paliers de blessures
   const woundLevels = [
     { name: "Indemne (+0)", id: "w-0" },
     { name: "Égratigné (+3)", id: "w-1" },
@@ -1262,7 +1280,7 @@ function exportOfficialPDF() {
     </tr>
   `).join('');
 
-  // 7. Avantages et Désavantages
+  // Avantages & Désavantages
   document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
   document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
     const full = getAdvantages().avantages?.find(x => x.name === a.name);
@@ -1275,7 +1293,7 @@ function exportOfficialPDF() {
     return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
   }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
 
-  // 8. Techniques d'École Page 2
+  // Techniques d'École
   const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
   const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
   document.getElementById('p-tech-name').textContent = sch ? `${sch.name} (Progression)` : "Techniques";
