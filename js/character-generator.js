@@ -503,6 +503,78 @@ function toggleNameOrder() {
   }
   updateStickyName();
 }
+// =========================================================================
+// AFFICHAGE DES 5 TECHNIQUES D'ÉCOLE AVEC SURBRILLANCE DYNAMIQUE
+// =========================================================================
+function renderSchoolTechniques(currentRank) {
+  const container = document.getElementById('school-techniques-container');
+  if (!container) return;
+
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const schIdx = parseInt(document.getElementById('sel-school')?.value) || 0;
+  const school = clans[clanKey]?.schools?.[schIdx];
+
+  if (!school) {
+    container.innerHTML = "<div class='text-stone-500 italic text-xs'>Aucune école sélectionnée.</div>";
+    return;
+  }
+
+  // Récupération des techniques (tableau complet ou fallback si technique unique)
+  let techList = school.techniques;
+  if (!techList || !techList.length) {
+    techList = [school.technique || { rank: 1, name: "Technique Rang 1", effect: "Description..." }];
+  }
+
+  container.innerHTML = techList.map(t => {
+    const isCurrent = (t.rank === currentRank);
+    const isMastered = (t.rank < currentRank);
+    const isLocked = (t.rank > currentRank);
+
+    if (isCurrent) {
+      // SURBRILLANCE DORÉE ACTIVE
+      return `
+        <div class="p-3 rounded-lg border-2 border-amber-400 bg-gradient-to-r from-amber-950/70 via-stone-900 to-amber-950/40 shadow-[0_0_15px_rgba(212,175,55,0.25)] transition duration-200">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded bg-amber-500 text-black font-extrabold uppercase text-[10px] tracking-wide shadow flex items-center gap-1">
+              ★ RANG ${t.rank} (ACTIF)
+            </span>
+            <span class="font-bold text-amber-200 text-sm font-imperial">${t.name}</span>
+          </div>
+          <p class="text-stone-100 text-xs leading-relaxed pl-1">${t.effect}</p>
+        </div>
+      `;
+    } else if (isMastered) {
+      // TECHNIQUE DÉJÀ MAÎTRISÉE
+      return `
+        <div class="p-2.5 rounded-lg border border-emerald-900/50 bg-stone-950/70 opacity-90 transition duration-200">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/40 font-bold uppercase text-[9px]">
+              ✓ RANG ${t.rank} (MAÎTRISÉ)
+            </span>
+            <span class="font-bold text-amber-300/80 text-xs font-imperial">${t.name}</span>
+          </div>
+          <p class="text-stone-300 text-xs leading-relaxed pl-1">${t.effect}</p>
+        </div>
+      `;
+    } else {
+      // TECHNIQUE FUTURE VERROUILLÉE
+      const insightNeeded = 125 + (t.rank * 25);
+      return `
+        <div class="p-2.5 rounded-lg border border-stone-800/50 bg-black/40 opacity-40 hover:opacity-75 transition duration-200">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded bg-stone-900 text-stone-500 border border-stone-800 font-semibold uppercase text-[9px]">
+              🔒 RANG ${t.rank} (INSIGHT ${insightNeeded})
+            </span>
+            <span class="font-semibold text-stone-400 text-xs font-imperial">${t.name}</span>
+          </div>
+          <p class="text-stone-500 text-xs italic leading-relaxed pl-1">${t.effect}</p>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
 
 // =========================================================================
 // CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
@@ -947,7 +1019,7 @@ function exportOfficialPDF() {
   const sch = clan?.schools?.[schIdx];
 
   const pcName = document.getElementById('pc-name')?.value || "Samouraï";
-
+  
   // 1. Identité
   document.getElementById('p-name').textContent = pcName;
   document.getElementById('p-name-2').textContent = pcName;
