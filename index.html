@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenue dans l'Empire d'Émeraude — Campagne L5R depuis 2015 | MJ David</title>
+  <title>Chronique de Rokugan — L5R 4e Édition | Campagne MJ David</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- FAVICON OFFICIEL DES 5 ANNEAUX -->
+  <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- NAVIGATION COMMUNE -->
+  <script src="js/navbar.js" defer></script>
 
   <style>
     :root {
@@ -21,20 +24,14 @@
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #200808 0%, #0a0808 80%);
+      background-image: radial-gradient(circle at 50% 10%, #200808 0%, #0a0808 85%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
     h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
     .card-clean {
-      background: rgba(18, 14, 14, 0.92);
+      background: rgba(18, 14, 14, 0.94);
       border: 1px solid rgba(212, 175, 55, 0.25);
-      transition: all 0.25s ease;
-    }
-    .card-clean:hover {
-      border-color: rgba(212, 175, 55, 0.6);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
     }
     .gold-text { color: var(--gold); }
     .gold-gradient {
@@ -46,249 +43,180 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- NAVIGATION SUPÉRIEURE -->
-  <header class="border-b border-amber-500/30 bg-[#0d0b0b]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-      <a href="index.html" class="flex items-center gap-3">
-        <span class="w-8 h-8 rounded-full border border-amber-500/50 bg-black flex items-center justify-center font-bold text-amber-300 font-imperial text-xs">空</span>
-        <div>
-          <span class="font-imperial font-bold tracking-widest text-amber-200 block text-sm">ROKUGAN</span>
-          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
+  <!-- MENU SUPÉRIEUR AUTOMATIQUE -->
+  <header id="site-header"></header>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+
+    <!-- HERO PORTAIL -->
+    <section class="card-clean rounded-2xl p-6 md:p-12 border-amber-500/40 text-center relative overflow-hidden">
+      <div class="max-w-3xl mx-auto space-y-4 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/70 border border-amber-500/40 text-[11px] uppercase tracking-widest text-amber-300 font-bold">
+          <span>🌸</span> Chronique Officielle 4e Édition
         </div>
-      </a>
-      <nav class="flex items-center gap-2 text-xs">
-        <a href="createcharacter.html" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition flex items-center gap-1.5">
-          <span>⚔️</span> Forge de Samouraï
-        </a>
-        <a href="grimoire.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">📜 Grimoire</a>
-        <a href="campagne.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">🏮 Campagne</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- CONTENU DU PORTAIL -->
-  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-12">
-
-    <!-- HERO BANNER -->
-    <section class="text-center py-8 md:py-12 space-y-4">
-      <div class="inline-block px-3 py-1 rounded-full bg-amber-950/60 border border-amber-500/30 text-[10px] uppercase tracking-widest text-amber-300 font-bold mb-2">
-        Système Officiel 4e Édition
-      </div>
-      <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide gold-gradient">
-        BIENVENUE DANS L'EMPIRE D'ÉMERAUDE
-      </h1>
-      <p class="max-w-2xl mx-auto text-xs md:text-sm text-stone-400 leading-relaxed">
-        « Dans un monde régi par le code du Bushido, l'acier du katana ne prévaut jamais sur la rectitude de l'âme. Que vos pas soient guidés par la volonté des Fortunes et l'honneur de vos ancêtres. »
-      </p>
-
-      <!-- RACCOURCIS RAPIDES VERS LES OUTILS -->
-      <div class="pt-4 flex flex-wrap justify-center gap-3">
-        <a href="createcharacter.html" class="px-5 py-2.5 rounded bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-black font-bold text-xs uppercase tracking-wider font-imperial shadow-lg shadow-amber-950/50 transition">
-          Créer un Samouraï
-        </a>
-        <a href="aides/combat-memento.html" class="px-5 py-2.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-200 border border-amber-500/30 text-xs font-imperial transition">
-          Mémento du Combat
-        </a>
-        <a href="aides/bushido-honneur.html" class="px-5 py-2.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-imperial transition">
-          Code du Bushido
-        </a>
+        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide gold-gradient">
+          L'EMPIRE D'ÉMERAUDE
+        </h1>
+        <p class="text-xs md:text-sm text-stone-300 leading-relaxed italic">
+          « L'honneur est plus lourd qu'une montagne, et la mort est plus légère qu'une plume. »
+        </p>
+        <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto pt-2">
+          Bienvenue sur le portail de campagne de la table du MJ David. Consultez les préceptes des huit Grands Clans, révisez les règles d'escarmouche et d'Iaijutsu, ou forgez votre samouraï prêt pour l'aventure.
+        </p>
+        <div class="pt-4 flex flex-wrap justify-center gap-3">
+          <a href="createcharacter.html" class="px-5 py-2.5 rounded bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-black font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition">
+            <span>⚔️</span> Forger un Personnage
+          </a>
+          <a href="aides/combat-memento.html" class="px-5 py-2.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-imperial transition flex items-center gap-2">
+            <span>📜</span> Mémento de Combat
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- LES HUIT GRANDS CLANS DE ROKUGAN -->
-    <section class="space-y-6">
-      <div class="flex justify-between items-baseline border-b border-amber-500/20 pb-3">
-        <div>
-          <h2 class="text-xl font-bold font-imperial gold-text">Les Huit Grands Clans</h2>
-          <span class="text-xs text-stone-400">Histoire, familles fondatrices, écoles et guide d'interprétation pour les joueurs.</span>
-        </div>
-        <span class="text-xs text-amber-500/60 font-imperial hidden sm:inline">Tradition millénaire</span>
+    <!-- 1. LES HUIT GRANDS CLANS DE ROKUGAN (RECTANGLES ENTIÈREMENT CLIQUABLES) -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">Les Huit Grands Clans</h2>
+        <span class="text-xs text-stone-400">Histoire, familles fondamentales et serments sacrés</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
 
         <!-- CRABE -->
-        <a href="clans/crabe.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-amber-500 group-hover:scale-110 transition duration-200">土</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Chi • Terre</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan du Crabe</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              Le rempart d'acier dressé le long du Mur Kaiu. Des guerriers endurcis protégeant l'Empire des horreurs de l'Outremonde.
-            </p>
+        <a href="clans/crabe.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#1e140d] border border-amber-700/50 flex items-center justify-center font-bold text-amber-400 font-imperial text-xs group-hover:scale-110 transition">土</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-amber-400/80 flex justify-between items-center">
-            <span>Familles : Hida, Hiruma...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-amber-200 text-sm font-imperial group-hover:text-amber-300">Clan du Crabe</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Les défenseurs stoïques du Mur Kaiu contre les horreurs de l'Outremonde.</p>
         </a>
 
         <!-- GRUE -->
-        <a href="clans/grue.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-cyan-400 group-hover:scale-110 transition duration-200">風</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Fū • Air</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan de la Grue</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              Les arbitres de la cour et du duel formel. Gardiens de la beauté, de l'art étincelant et de l'étiquette impériale irréprochable.
-            </p>
+        <a href="clans/grue.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-sky-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#081a24] border border-sky-500/50 flex items-center justify-center font-bold text-sky-300 font-imperial text-xs group-hover:scale-110 transition">風</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-sky-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-cyan-400/80 flex justify-between items-center">
-            <span>Familles : Doji, Kakita...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-sky-200 text-sm font-imperial group-hover:text-sky-300">Clan de la Grue</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Maîtres de la cour, arbitres de l'étiquette et champions légendaires du duel Iaijutsu.</p>
         </a>
 
         <!-- DRAGON -->
-        <a href="clans/dragon.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-emerald-400 group-hover:scale-110 transition duration-200">山</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Éveil mystique</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan du Dragon</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              Ermites des hautes cimes, moines tatoués Togashi et duellistes Niten à deux sabres observant le monde avec recul.
-            </p>
+        <a href="clans/dragon.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-emerald-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#062016] border border-emerald-500/50 flex items-center justify-center font-bold text-emerald-300 font-imperial text-xs group-hover:scale-110 transition">龍</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-emerald-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-emerald-400/80 flex justify-between items-center">
-            <span>Familles : Mirumoto, Kitsuki...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-emerald-200 text-sm font-imperial group-hover:text-emerald-300">Clan du Dragon</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Escrimeurs du style Niten à deux sabres, magistrats logiques et moines tatoués.</p>
         </a>
 
         <!-- LION -->
-        <a href="clans/lion.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-amber-400 group-hover:scale-110 transition duration-200">武</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Le Sabre de l'Empereur</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan du Lion</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              La plus puissante armée de l'Empire. Dévouement inconditionnel au Bushido, culte des ancêtres et discipline martiale d'airain.
-            </p>
+        <a href="clans/lion.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#2a1605] border border-amber-500/50 flex items-center justify-center font-bold text-amber-300 font-imperial text-xs group-hover:scale-110 transition">武</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-amber-400/80 flex justify-between items-center">
-            <span>Familles : Akodo, Matsu...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-amber-200 text-sm font-imperial group-hover:text-amber-300">Clan du Lion</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Le Sabre Droit de l'Empereur, stratèges infaillibles et légions guerrières vouées au Bushido.</p>
         </a>
 
         <!-- MANTE -->
-        <a href="clans/mante.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-blue-400 group-hover:scale-110 transition duration-200">雷</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Tempête & Mer</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan de la Mante</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              Seigneurs des îles et maîtres de la mer. Navigateurs intrépides et archers redoutables menés par la lignée de Yoritomo.
-            </p>
+        <a href="clans/mante.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-sky-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#061e29] border border-sky-400/50 flex items-center justify-center font-bold text-sky-300 font-imperial text-xs group-hover:scale-110 transition">雷</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-sky-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-blue-400/80 flex justify-between items-center">
-            <span>Familles : Yoritomo, Tsuruchi...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-sky-200 text-sm font-imperial group-hover:text-sky-300">Clan de la Mante</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Les fils des tempêtes océaniques, corsaires redoutables et maîtres archers de l'Empire.</p>
         </a>
 
         <!-- PHÉNIX -->
-        <a href="clans/phenix.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-red-400 group-hover:scale-110 transition duration-200">火</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Ka • Éléments</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan du Phénix</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              Les gardiens de la spiritualité et des rouleaux mystiques. Les shugenja les plus éclairés, voués à la paix et à l'harmonie des Kami.
-            </p>
+        <a href="clans/phenix.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-red-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#290a0a] border border-red-500/50 flex items-center justify-center font-bold text-red-400 font-imperial text-xs group-hover:scale-110 transition">鳳</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-red-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-red-400/80 flex justify-between items-center">
-            <span>Familles : Isawa, Shiba...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-red-200 text-sm font-imperial group-hover:text-red-300">Clan du Phénix</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">La voix des Kami, les plus éminents maîtres des éléments et les gardes du corps Shiba.</p>
         </a>
 
         <!-- SCORPION -->
-        <a href="clans/scorpion.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-purple-400 group-hover:scale-110 transition duration-200">忍</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Le Devoir Masqué</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan du Scorpion</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              « Je serai ton méchant, mon frère. » Ceux qui sacrifient leur propre honneur dans les ombres pour préserver la stabilité du Trône.
-            </p>
+        <a href="clans/scorpion.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-purple-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#20081c] border border-purple-500/50 flex items-center justify-center font-bold text-purple-300 font-imperial text-xs group-hover:scale-110 transition">忍</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-purple-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-purple-400/80 flex justify-between items-center">
-            <span>Familles : Bayushi, Shosuro...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-purple-200 text-sm font-imperial group-hover:text-purple-300">Clan du Scorpion</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">La Main Gauche de l'Empereur, manipulant le secret, le chantage et le devoir absolu.</p>
         </a>
 
         <!-- LICORNE -->
-        <a href="clans/licorne.html" class="card-clean rounded-xl p-5 flex flex-col justify-between group">
-          <div class="space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-2xl font-bold text-purple-300 group-hover:scale-110 transition duration-200">馬</span>
-              <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800">Cavaliers Nomades</span>
-            </div>
-            <h3 class="font-imperial font-bold text-base text-amber-200 group-hover:text-amber-300 transition">Clan de la Licorne</h3>
-            <p class="text-xs text-stone-400 leading-relaxed">
-              Revenus des Terres Brûlées après huit siècles d'errance. Maîtres des puissants destriers, de la magie Meishodo et des tactiques mobiles.
-            </p>
+        <a href="clans/licorne.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-purple-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-8 h-8 rounded-full bg-[#1e0d29] border border-purple-400/50 flex items-center justify-center font-bold text-purple-300 font-imperial text-xs group-hover:scale-110 transition">馬</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-purple-300">Voir Clan →</span>
           </div>
-          <div class="pt-4 border-t border-stone-800/60 mt-4 text-[10px] text-purple-300/80 flex justify-between items-center">
-            <span>Familles : Moto, Shinjo...</span>
-            <span>Consulter →</span>
-          </div>
+          <h3 class="font-bold text-purple-200 text-sm font-imperial group-hover:text-purple-300">Clan de la Licorne</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Revenus des terres lointaines avec leurs destriers fougueux et leur magie des amulettes.</p>
         </a>
 
       </div>
     </section>
 
-    <!-- AIDES DE JEU ET CODEX DU JOUEUR -->
-    <section class="space-y-6">
-      <div class="border-b border-amber-500/20 pb-3">
-        <h2 class="text-xl font-bold font-imperial gold-text">Aides de Jeu & Protocoles</h2>
-        <span class="text-xs text-stone-400">Règles résumées et guides pratiques pour fluidifier vos séances.</span>
+    <!-- 2. AIDES DE JEU & RÈGLES OFFICIELLES (RECTANGLES ENTIÈREMENT CLIQUABLES) -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">Aides de Jeu & Règles Officielles</h2>
+        <span class="text-xs text-stone-400">Guides de référence immédiate pour les joueurs et le MJ autour de la table.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
 
-        <div class="card-clean rounded-xl p-5 space-y-3">
-          <div class="text-amber-400 text-lg">⚔️</div>
-          <h3 class="font-imperial font-bold text-sm text-amber-200">Mémento de Combat & Duels</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">
-            Déroulement d'un round en 3 phases, les 5 postures de combat (Attaque, Attaque Totale, Défense, Défense Totale, Centre) et la procédure en 3 temps d'un duel d'Iaijutsu.
-          </p>
-          <a href="aides/combat-memento.html" class="text-xs text-amber-400 hover:text-amber-300 font-bold block pt-2">Ouvrir le guide →</a>
-        </div>
+        <!-- CARTE CLIQUABLE : MÉMENTO COMBAT -->
+        <a href="aides/combat-memento.html" class="card-clean rounded-xl p-5 space-y-3 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-9 h-9 rounded-full bg-red-950/60 border border-red-500/40 flex items-center justify-center text-red-300 font-bold group-hover:scale-110 transition">⚔️</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400 tracking-wider">Guide Tactique →</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 transition">Combat & Duels Iaijutsu</h3>
+            <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
+              Déroulement d'un round d'escarmouche, les 5 postures de combat, les 3 rounds du duel formel au sabre et les manœuvres d'augmentation.
+            </p>
+          </div>
+        </a>
 
-        <div class="card-clean rounded-xl p-5 space-y-3">
-          <div class="text-emerald-400 text-lg">📜</div>
-          <h3 class="font-imperial font-bold text-sm text-amber-200">Le Code du Bushido & Honneur</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">
-            Les 7 vertus cardinales de Rokugan (Gi, Yu, Jin, Rei, Makoto, Meiyo, Chugo), les tables de gains et pertes d'Honneur et les paliers de Gloire et Statut.
-          </p>
-          <a href="aides/bushido-honneur.html" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold block pt-2">Ouvrir le guide →</a>
-        </div>
+        <!-- CARTE CLIQUABLE : BUSHIDO & HONNEUR -->
+        <a href="aides/bushido-honneur.html" class="card-clean rounded-xl p-5 space-y-3 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-9 h-9 rounded-full bg-amber-950/60 border border-amber-500/40 flex items-center justify-center text-amber-300 font-bold font-imperial group-hover:scale-110 transition">義</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400 tracking-wider">Code Moral →</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 transition">Code du Bushido & Honneur</h3>
+            <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
+              Les 7 vertus cardinales, distinction entre Honneur, Gloire et Statut, et le barème officiel des gains et pertes d'honneur (Table 2.3).
+            </p>
+          </div>
+        </a>
 
-        <div class="card-clean rounded-xl p-5 space-y-3">
-          <div class="text-blue-400 text-lg">🏮</div>
-          <h3 class="font-imperial font-bold text-sm text-amber-200">Étiquette & Vie Quotidienne</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">
-            Le protocole de cour, la coutume de refus des présents, la souillure rituelle du sang et de la mort, et la pratique solennelle du Seppuku.
-          </p>
-          <a href="aides/etiquette-coutumes.html" class="text-xs text-blue-400 hover:text-blue-300 font-bold block pt-2">Ouvrir le guide →</a>
-        </div>
+        <!-- CARTE CLIQUABLE : ÉTIQUETTE & COUTUMES -->
+        <a href="aides/etiquette-coutumes.html" class="card-clean rounded-xl p-5 space-y-3 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+          <div class="flex justify-between items-center">
+            <span class="w-9 h-9 rounded-full bg-emerald-950/60 border border-emerald-500/40 flex items-center justify-center text-emerald-300 font-bold group-hover:scale-110 transition">🍵</span>
+            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400 tracking-wider">Us & Coutumes →</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 transition">Étiquette & Coutumes</h3>
+            <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
+              L'Ordre Céleste et les castes, le protocole des sabres, la règle des cadeaux en trois temps, la cérémonie du thé et l'art de sauver la face.
+            </p>
+          </div>
+        </a>
 
       </div>
     </section>
@@ -296,8 +224,8 @@
   </main>
 
   <!-- PIED DE PAGE -->
-  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-12">
-    Chronique L5R 4e Édition — Maître de Jeu David • Les Cinq Anneaux et le Trône d'Émeraude
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Portail de Campagne
   </footer>
 
 </body>
