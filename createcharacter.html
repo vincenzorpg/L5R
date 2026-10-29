@@ -16,7 +16,7 @@
   <script src="data/avantages-data.js" defer></script>
 
   <!-- MOTEUR LOGIQUE -->
-  <script src="js/character-generator.js?v=5" defer></script>
+  <script src="js/character-generator.js?v=6" defer></script>
 
   <style>
     :root {
@@ -59,12 +59,21 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-<!-- BANDEAU STICKY PERMANENT AVEC TABLEAU DE BORD DE COMBAT EN DIRECT -->
+  <!-- BANDEAU STICKY PERMANENT RÉALIGNÉ -->
   <aside aria-label="État du personnage" class="sticky top-0 z-50 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
-    <div class="max-w-7xl mx-auto flex flex-col gap-2">
+    <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
       
-      <!-- Ligne 1 : Nom, École, Budget XP, Réputation et Boutons -->
-      <!-- XP personnalisable & Réputation -->
+      <!-- Ligne 1 : Nom + École (Gauche) | XP + Réputation (Centre) | Boutons (Droite) -->
+      <div class="flex flex-wrap justify-between items-center gap-3">
+        
+        <!-- Bloc Identité -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
+          <span id="sticky-pc-name" class="text-sm md:text-base font-bold text-amber-200 font-imperial">Okado Hiruma</span>
+          <span id="sticky-school-badge" class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-300">Bushi Hiruma</span>
+        </div>
+
+        <!-- Bloc XP personnalisable & Réputation -->
         <div class="flex items-center gap-4">
           <div>
             <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante / Total</span>
@@ -86,6 +95,7 @@
           </div>
         </div>
 
+        <!-- Bloc Actions & Raccourcis -->
         <div class="flex items-center gap-1.5">
           <button onclick="randomizeAll()" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">⚡ Auto</button>
           <button onclick="exportJSON()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">💾 JSON</button>
@@ -96,9 +106,10 @@
           <button onclick="window.print()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ PDF</button>
           <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
         </div>
+
       </div>
 
-      <!-- Ligne 2 : Les 4 Métriques Clés avec Détails Explicatifs -->
+      <!-- Ligne 2 : Les 4 Métriques de Combat -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
         
         <!-- 1. Jet pour Toucher -->
@@ -107,7 +118,7 @@
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Toucher</span>
             <span id="sticky-atk" class="text-sm font-bold text-amber-300 font-imperial">3g2</span>
           </div>
-          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Kenjutsu (1) + Agilité (2)</div>
+          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Katana : Kenjutsu (1) + Agilité (2)</div>
         </div>
 
         <!-- 2. Jet de Dégâts -->
