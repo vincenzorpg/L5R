@@ -1,6 +1,7 @@
 /**
- * character-generator.js — Moteur de création L5R 4e Édition
- * Gestion dynamique, calculs en temps réel et verrouillage des seuils d'Avantages / Désavantages
+ * character-generator.js — Moteur logique complet L5R 4e Édition
+ * Gère le calcul dynamique, les seuils d'XP, les statistiques de combat,
+ * le bandeau supérieur persistant et les bases de données modulaires.
  */
 
 const MAX_DISADVANTAGE_XP = 15;
@@ -109,20 +110,13 @@ let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
 
-// Accesseurs aux bases de données
+// Accesseurs aux tables de données modulaires
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
 const getAdvantages = () => window.AVANTAGES_DATA || { avantages: [], desavantages: [] };
 
-function updateStickyName() {
-  const nameInput = document.getElementById('pc-name');
-  const stickyName = document.getElementById('sticky-pc-name');
-  if (nameInput && stickyName) {
-    stickyName.textContent = nameInput.value.trim() || "Samouraï";
-  }
-}
-
+// Initialisation globale
 function bootstrap() {
   if (!window.CLANS_DATA && !window.CLANS_CORE) {
     setTimeout(bootstrap, 50);
@@ -131,7 +125,6 @@ function bootstrap() {
   initClans();
   initCatalogSelectors();
 
-  // Écoute automatique de la saisie sur le champ du nom
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
     nameInput.addEventListener('input', updateStickyName);
@@ -158,7 +151,7 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // Compétences
+  // 1. Compétences
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
     skSel.innerHTML = "";
@@ -170,7 +163,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // Armures
+  // 2. Armures
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
     armSel.innerHTML = "";
@@ -182,7 +175,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // Armes
+  // 3. Armes
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
@@ -202,7 +195,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // Avantages
+  // 4. Avantages
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     advSel.innerHTML = "";
@@ -214,7 +207,7 @@ function initCatalogSelectors() {
     });
   }
 
-  // Désavantages
+  // 5. Désavantages
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     disadvSel.innerHTML = "";
@@ -229,9 +222,7 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
-// =========================================================================
-// RÉINITIALISATION COMPLÈTE LORS DU CHANGEMENT DE SÉLECTION
-// =========================================================================
+// Réinitialisation intégrale de la fiche lors d'un changement d'allégeance
 function resetSheetToNewSelection() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -245,7 +236,7 @@ function resetSheetToNewSelection() {
   const sch = clan.schools[schIdx];
   if (!fam || !sch) return;
 
-  // Descriptifs
+  // Mise à jour des descriptifs d'école et de famille
   document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
   document.getElementById('school-bonus').textContent = `Bonus École : ${sch.bonus}`;
   document.getElementById('tech-name').textContent = sch.technique.name;
@@ -253,17 +244,16 @@ function resetSheetToNewSelection() {
   document.getElementById('pc-outfit').value = sch.outfit;
   document.getElementById('stat-honor').textContent = sch.honor;
 
-  // Nom du personnage et bandeau sticky
+  // Mise à jour du nom de famille
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
     const currentParts = nameInput.value.trim().split(' ');
     const firstName = currentParts.length > 1 ? currentParts[0] : (currentParts[0] || "Okado");
     nameInput.value = nameOrderWestern ? `${firstName} ${fam.name}` : `${fam.name} ${firstName}`;
-    const stickyName = document.getElementById('sticky-pc-name');
-    if (stickyName) stickyName.textContent = nameInput.value;
+    updateStickyName();
   }
 
-  // Badges des traits
+  // Réinitialisation des badges des traits
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -283,7 +273,7 @@ function resetSheetToNewSelection() {
     if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
-  // Remise des traits à la base exacte (2 ou 3/4 avec bonus)
+  // Remise à zéro stricte des 8 traits et du Vide
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -296,7 +286,7 @@ function resetSheetToNewSelection() {
     input.value = baseVal;
   }
 
-  // Compétences de départ (Rang 1, pas de spécialisation)
+  // Réinitialisation des compétences de départ (Rang 1, sans spé)
   currentSkills = sch.skills.map(s => ({
     name: s,
     rank: 1,
@@ -305,7 +295,7 @@ function resetSheetToNewSelection() {
   }));
   renderSkills();
 
-  // Remise à zéro des Avantages et Désavantages
+  // Réinitialisation des listes d'avantages et désavantages
   advantagesList = [];
   disadvantagesList = [];
   renderAdvDisadv();
@@ -348,9 +338,7 @@ function onSchoolChange() {
   resetSheetToNewSelection();
 }
 
-// =========================================================================
-// GESTION DU CATALOGUE ET DES SEUILS D'AVANTAGES / DÉSAVANTAGES
-// =========================================================================
+// Gestion des seuils et de l'état du bouton d'ajout de désavantages
 function updateDisadvButtonState() {
   const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
   const btnAddDisadv = document.querySelector("button[onclick='addDisadvFromCatalog()']");
@@ -383,7 +371,6 @@ function addAdvFromCatalog() {
     return;
   }
 
-  // Calcul du disponible actuel
   const currentRemainingXP = parseInt(document.getElementById('xp-remaining')?.textContent) || 0;
   if (currentRemainingXP - item.cost < 0) {
     alert(`Impossible d'ajouter « ${item.name} » (${item.cost} XP) : solde insuffisant (${currentRemainingXP} XP disponible).`);
@@ -454,9 +441,7 @@ function renderAdvDisadv() {
   updateDisadvButtonState();
 }
 
-// =========================================================================
-// GESTION DES COMPÉTENCES & IDENTITÉ
-// =========================================================================
+// Gestion des compétences
 function renderSkills() {
   const container = document.getElementById('skills-list');
   if (!container) return;
@@ -502,6 +487,15 @@ function toggleSkillSpec(idx) {
   updateAll();
 }
 
+// Synchronisation de l'identité et du bandeau supérieur
+function updateStickyName() {
+  const nameInput = document.getElementById('pc-name');
+  const stickyName = document.getElementById('sticky-pc-name');
+  if (nameInput && stickyName) {
+    stickyName.textContent = nameInput.value.trim() || "Samouraï";
+  }
+}
+
 function generateRandomName(gender) {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -522,7 +516,6 @@ function generateRandomName(gender) {
     meaningEl.textContent = `Signification : ${pick.m}`;
   }
 
-  // Force la mise à jour immédiate du bandeau
   updateStickyName();
 }
 
@@ -533,15 +526,15 @@ function toggleNameOrder() {
     const val = nameInput.value.trim();
     const parts = val.split(' ');
     if (parts.length >= 2) {
-      nameInput.value = `${parts.slice(1).join(' ')} ${parts[0]}`;
+      const formatted = `${parts.slice(1).join(' ')} ${parts[0]}`;
+      nameInput.value = formatted;
     }
   }
-  // Force la mise à jour immédiate du bandeau
   updateStickyName();
 }
 
 // =========================================================================
-// MOTEUR DE CALCULS DYNAMIQUES
+// CALCULS EN TEMPS RÉEL (XP, RANGS, COMBAT ET BANDEAU STICKY)
 // =========================================================================
 function updateAll() {
   const clans = getClans();
@@ -562,7 +555,7 @@ function updateAll() {
   const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
   const voi = parseInt(document.getElementById('trait-void').value) || 2;
 
-  // Calcul des 5 Anneaux
+  // Calcul des Anneaux
   const rEarth = Math.min(sta, wil);
   const rWater = Math.min(str, per);
   const rAir = Math.min(ref, awa);
@@ -575,7 +568,18 @@ function updateAll() {
   document.getElementById('ring-fire').textContent = rFire;
   document.getElementById('ring-void').textContent = rVoid;
 
-  // Dépense d'XP
+  // Détection des impacts d'Avantages et Désavantages
+  const hasAdv = (impactName) => advantagesList.some(a => {
+    const found = getAdvantages().avantages?.find(x => x.name === a.name);
+    return found && found.impact === impactName;
+  });
+
+  const hasDisadv = (impactName) => disadvantagesList.some(d => {
+    const found = getAdvantages().desavantages?.find(x => x.name === d.name);
+    return found && found.impact === impactName;
+  });
+
+  // Calcul du budget d'XP
   let xpSpent = 0;
   const traitsBase = [
     { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -623,7 +627,7 @@ function updateAll() {
   remEl.textContent = remainingXP;
   remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
-  // Réputation & Rang
+  // Insight et Rang d'École
   let sumRings = rEarth + rWater + rAir + rFire + rVoid;
   let sumSkills = currentSkills.reduce((acc, sk) => acc + sk.rank, 0);
   let insight = (sumRings * 10) + sumSkills;
@@ -636,43 +640,159 @@ function updateAll() {
 
   document.getElementById('insight-display').innerHTML = `${insight} pts <span class="text-xs text-amber-400 font-bold">(Rang ${insightRank})</span>`;
 
-  // Combat & Vitalité
-  const armorBonus = parseInt(document.getElementById('pc-armor').value) || 0;
-  document.getElementById('stat-armor-tn').textContent = 5 + (5 * ref) + armorBonus;
-  document.getElementById('stat-init').textContent = `${ref}g${ref}`;
-  document.getElementById('stat-heal').textContent = `${(sta * 2) + insightRank} PV`;
+  // Badge d'école dans le bandeau
+  const stickySchool = document.getElementById('sticky-school-badge');
+  if (stickySchool && sch) stickySchool.textContent = sch.name;
 
-  document.getElementById('w-0').textContent = `${rEarth * 5} PV`;
-  for (let i = 1; i <= 7; i++) {
-    document.getElementById(`w-${i}`).textContent = `${rEarth * 2} PV`;
+  // --- STATISTIQUE 1 : JET POUR TOUCHER ---
+  const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
+  const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
+    name: weapon1Name,
+    vd: "2g2",
+    trait: "Agilité",
+    skill: "Kenjutsu",
+    type: "Médium"
+  };
+
+  const atkTraitName = weaponData.trait || "Agilité";
+  const atkSkillName = weaponData.skill || "Kenjutsu";
+  const atkTraitVal = (atkTraitName === "Réflexes") ? ref : agi;
+
+  const skillObj = currentSkills.find(s => 
+    s.name.toLowerCase().includes(atkSkillName.toLowerCase()) || 
+    atkSkillName.toLowerCase().includes(s.name.toLowerCase())
+  );
+  const skillRank = skillObj ? skillObj.rank : 0;
+
+  let atkRoll = skillRank + atkTraitVal;
+  let atkKeep = atkTraitVal;
+  let atkDetails = [`${atkSkillName} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`];
+
+  if (hasAdv("school_skills_bonus") && skillObj?.isSchool) {
+    atkRoll += 1;
+    atkDetails.push("Prodige (+1g0)");
   }
 
-// --- PRISE EN COMPTE DYNAMIQUE DES IMPACTS D'AVANTAGES & DÉSAVANTAGES ---
-  const hasAdv = (impactName) => advantagesList.some(a => {
-    const found = getAdvantages().avantages?.find(x => x.name === a.name);
-    return found && found.impact === impactName;
-  });
+  const atkStr = `${atkRoll}g${atkKeep}`;
+  const atkDetailStr = `${weaponData.name} : ${atkDetails.join(' + ')}`;
+  const stickyAtk = document.getElementById('sticky-atk');
+  const stickyAtkDetail = document.getElementById('sticky-atk-detail');
+  if (stickyAtk) stickyAtk.textContent = atkStr;
+  if (stickyAtkDetail) {
+    stickyAtkDetail.textContent = atkDetailStr;
+    stickyAtkDetail.title = atkDetailStr;
+  }
 
-  const hasDisadv = (impactName) => disadvantagesList.some(d => {
-    const found = getAdvantages().desavantages?.find(x => x.name === d.name);
-    return found && found.impact === impactName;
-  });
+  // --- STATISTIQUE 2 : JET DE DÉGÂTS ---
+  const vdParts = (weaponData.vd || "2g2").split('g');
+  let dmgBaseRoll = parseInt(vdParts[0]) || 2;
+  let dmgBaseKeep = parseInt(vdParts[1]) || 2;
 
-  // 1. Initiative (Réflexes Éclairs confère +1g1)
+  let dmgRoll = dmgBaseRoll + str;
+  let dmgKeep = dmgBaseKeep;
+  let dmgBonusStatic = 0;
+  let dmgDetails = [`Arme (${weaponData.vd})`, `Force (+${str}g0)`];
+
+  if (sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) {
+    dmgBonusStatic += sta;
+    dmgDetails.push(`Voie du Crabe (+${sta})`);
+  }
+
+  if (hasAdv("large_wounds") && (weaponData.type === "Médium" || weaponData.type === "Lourd" || weaponData.type === "Deux mains" || weaponData.type === "Hast")) {
+    dmgRoll += 1;
+    dmgDetails.push("Grande Taille (+1g0)");
+  }
+
+  if (disadvantagesList.some(d => d.name.includes("Petite Taille"))) {
+    dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
+    dmgDetails.push("Petite Taille (-1g0)");
+  }
+
+  const dmgStr = dmgBonusStatic > 0 ? `${dmgRoll}g${dmgKeep} + ${dmgBonusStatic}` : `${dmgRoll}g${dmgKeep}`;
+  const dmgDetailStr = dmgDetails.join(' + ');
+  const stickyDmg = document.getElementById('sticky-dmg');
+  const stickyDmgDetail = document.getElementById('sticky-dmg-detail');
+  if (stickyDmg) stickyDmg.textContent = dmgStr;
+  if (stickyDmgDetail) {
+    stickyDmgDetail.textContent = dmgDetailStr;
+    stickyDmgDetail.title = dmgDetailStr;
+  }
+
+  // --- STATISTIQUE 3 : INITIATIVE ---
   let initRoll = ref;
   let initKeep = ref;
+  let initStatic = 0;
+  let initDetails = [`Réflexes (${ref}g${ref})`];
+
   if (hasAdv("initiative_bonus")) {
     initRoll += 1;
     initKeep += 1;
+    initDetails.push("Réflexes Éclairs (+1g1)");
   }
-  document.getElementById('stat-init').textContent = `${initRoll}g${initKeep}`;
 
-  // 2. Récupération Nocturne (Guérison Rapide considère Stamina + 2)
+  if (sch?.id === "eclaireur-hiruma" || sch?.name?.includes("Hiruma")) {
+    initRoll += 1;
+    initDetails.push("Hiruma (+1g0)");
+  }
+
+  const iaiSkill = currentSkills.find(s => s.name.toLowerCase().includes("iaijutsu"));
+  const iaiRank = iaiSkill ? iaiSkill.rank : 0;
+  if ((sch?.id === "duelliste-kakita" || sch?.name?.includes("Kakita")) && iaiRank > 0) {
+    initStatic += (iaiRank * 2);
+    initDetails.push(`Voie de la Grue (+${iaiRank * 2})`);
+  }
+
+  if ((sch?.id === "bushi-bayushi" || sch?.name?.includes("Bayushi")) && iaiRank > 0) {
+    initStatic += iaiRank;
+    initDetails.push(`Ruse du Scorpion (+${iaiRank})`);
+  }
+
+  const initStr = initStatic > 0 ? `${initRoll}g${initKeep} + ${initStatic}` : `${initRoll}g${initKeep}`;
+  const initDetailStr = initDetails.join(' + ');
+  const stickyInit = document.getElementById('sticky-init');
+  const stickyInitDetail = document.getElementById('sticky-init-detail');
+  if (stickyInit) stickyInit.textContent = initStr;
+  if (stickyInitDetail) {
+    stickyInitDetail.textContent = initDetailStr;
+    stickyInitDetail.title = initDetailStr;
+  }
+  document.getElementById('stat-init').textContent = initStr;
+
+  // --- STATISTIQUE 4 : ND D'ARMURE ---
+  const armorSelect = document.getElementById('pc-armor');
+  const armorBonus = parseInt(armorSelect?.value) || 0;
+  const armorName = armorSelect?.options[armorSelect.selectedIndex]?.text?.split('(')[0]?.trim() || "Armure";
+
+  let baseArmor = 5 + (5 * ref);
+  let armorDetails = [`Base (5)`, `Réfl. (+${5 * ref})`];
+
+  if (armorBonus > 0) {
+    armorDetails.push(`${armorName} (+${armorBonus})`);
+  }
+
+  let nitenBonus = 0;
+  if ((sch?.id === "bushi-mirumoto" || sch?.name?.includes("Mirumoto")) && (weapon1Name.includes("Katana") || weapon2Name.includes("Wakizashi"))) {
+    nitenBonus = 5;
+    armorDetails.push("Niten (+5)");
+  }
+
+  const finalArmorTN = baseArmor + armorBonus + nitenBonus;
+  const armorDetailStr = armorDetails.join(' + ');
+  const stickyArmor = document.getElementById('sticky-armor-tn');
+  const stickyArmorDetail = document.getElementById('sticky-armor-detail');
+  if (stickyArmor) stickyArmor.textContent = finalArmorTN;
+  if (stickyArmorDetail) {
+    stickyArmorDetail.textContent = armorDetailStr;
+    stickyArmorDetail.title = armorDetailStr;
+  }
+  document.getElementById('stat-armor-tn').textContent = finalArmorTN;
+
+  // Récupération nocturne & seuils de vitalité
   let effSta = sta;
   if (hasAdv("quick_heal")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
 
-  // 3. Paliers de Vitalité & Blessures (Grande Taille donne +1 PV par palier, Mauvaise Santé retire 1 PV)
   let woundMod = 0;
   if (hasAdv("large_wounds")) woundMod += 1;
   if (hasDisadv("reduce_wounds")) woundMod -= 1;
@@ -684,10 +804,11 @@ function updateAll() {
   for (let i = 1; i <= 7; i++) {
     document.getElementById(`w-${i}`).textContent = `${stepWounds} PV`;
   }
-  
+
   updateDisadvButtonState();
 }
 
+// Tirage automatique
 function randomizeAll() {
   const clans = getClans();
   const adv = getAdvantages();
@@ -719,6 +840,7 @@ function randomizeAll() {
   updateAll();
 }
 
+// Export et import JSON
 function exportJSON() {
   const data = {
     name: document.getElementById('pc-name').value,
@@ -767,8 +889,7 @@ function importJSON(event) {
       resetSheetToNewSelection();
 
       document.getElementById('pc-name').value = d.name;
-      const stickyName = document.getElementById('sticky-pc-name');
-      if (stickyName) stickyName.textContent = d.name;
+      updateStickyName();
 
       document.getElementById('trait-stamina').value = d.traits.sta;
       document.getElementById('trait-willpower').value = d.traits.wil;
