@@ -3,10 +3,15 @@ backend:
   repo: vincenzorpg/L5R
   branch: main
 
+# Dossier où atterriront vos illustrations, images IA et podcasts MP3
 media_folder: "assets/uploads"
 public_folder: "assets/uploads"
 
 collections:
+
+  # =========================================================================
+  # 1. VOTRE COLLECTION EXISTANTE : SCÉNARIOS & ÉPISODES DE CAMPAGNE
+  # =========================================================================
   - name: "scenarios"
     label: "Scénarios & Campagne"
     folder: "content/scenarios"
@@ -21,3 +26,98 @@ collections:
       - { label: "Illustration (Image IA)", name: "thumbnail", widget: "image", required: false }
       - { label: "Podcast Audio (MP3)", name: "podcast_audio", widget: "file", required: false }
       - { label: "Récit complet", name: "body", widget: "markdown" }
+
+  # =========================================================================
+  # 2. LES HUIT GRANDS CLANS DE ROKUGAN
+  # =========================================================================
+  - name: "clans"
+    label: "Fiches des Huit Clans"
+    delete: false
+    editor:
+      preview: true
+    files:
+      - name: "crabe"
+        label: "Clan du Crabe"
+        file: "clans/crabe.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "grue"
+        label: "Clan de la Grue"
+        file: "clans/grue.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "dragon"
+        label: "Clan du Dragon"
+        file: "clans/dragon.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "lion"
+        label: "Clan du Lion"
+        file: "clans/lion.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "mante"
+        label: "Clan de la Mante"
+        file: "clans/mante.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "phenix"
+        label: "Clan du Phénix"
+        file: "clans/phenix.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "scorpion"
+        label: "Clan du Scorpion"
+        file: "clans/scorpion.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "licorne"
+        label: "Clan de la Licorne"
+        file: "clans/licorne.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+  # =========================================================================
+  # 3. AIDES DE JEU ET PROTOCOLES
+  # =========================================================================
+  - name: "aides"
+    label: "Aides de Jeu"
+    delete: false
+    files:
+      - name: "combat"
+        label: "Mémento du Combat & Duels"
+        file: "aides/combat-memento.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "bushido"
+        label: "Code du Bushido & Honneur"
+        file: "aides/bushido-honneur.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+      - name: "etiquette"
+        label: "Étiquette & Coutumes"
+        file: "aides/etiquette-coutumes.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+
+  # =========================================================================
+  # 4. PAGES PRINCIPALES
+  # =========================================================================
+  - name: "pages"
+    label: "Portail & Accueil"
+    delete: false
+    files:
+      - name: "home"
+        label: "Portail d'Accueil (index.html)"
+        file: "index.html"
+        fields:
+          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
