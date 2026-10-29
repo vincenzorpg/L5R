@@ -152,6 +152,7 @@ function applyClanBonusesToTraits() {
   const fam = clans[clanKey]?.families[famIdx];
   const sch = clans[clanKey]?.schools[schIdx];
 
+  // 1. Réinitialisation des badges visuels
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -168,6 +169,7 @@ function applyClanBonusesToTraits() {
     badge.textContent = badge.textContent ? "+2 F+É" : "+1 École";
   }
 
+  // 2. Application de la valeur exacte (2 de base + bonus éventuels)
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -177,9 +179,7 @@ function applyClanBonusesToTraits() {
     if (sch && sch.trait === traitName) baseVal += 1;
 
     input.min = baseVal;
-    if (parseInt(input.value) < baseVal || isNaN(parseInt(input.value))) {
-      input.value = baseVal;
-    }
+    input.value = baseVal; // Réinitialise directement à 2 (ou 3/4 si bonus actif)
   }
 }
 
