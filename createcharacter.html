@@ -16,7 +16,7 @@
   <script src="data/avantages-data.js" defer></script>
 
   <!-- MOTEUR LOGIQUE -->
-  <script src="js/character-generator.js?v=6" defer></script>
+  <script src="js/character-generator.js?v=7" defer></script>
 
   <style>
     :root {
@@ -48,6 +48,8 @@
       border-color: var(--gold) !important;
       box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
     }
+
+    /* RÈGLES D'IMPRESSION ET D'EXPORTATION PDF */
     @media screen {
       #official-print-dossier { display: none !important; }
     }
@@ -99,11 +101,11 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- BANDEAU STICKY PERMANENT RÉALIGNÉ -->
+  <!-- BANDEAU STICKY PERMANENT AVEC TABLEAU DE BORD DE COMBAT EN DIRECT -->
   <aside aria-label="État du personnage" class="sticky top-0 z-50 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
     <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
       
-      <!-- Ligne 1 : Nom + École (Gauche) | XP + Réputation (Centre) | Boutons (Droite) -->
+      <!-- Ligne 1 : Nom + École (Gauche) | XP + Réputation (Centre) | Boutons d'Action (Droite) -->
       <div class="flex flex-wrap justify-between items-center gap-3">
         
         <!-- Bloc Identité -->
@@ -143,13 +145,13 @@
             📂 Charger
             <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
           </label>
-          <button onclick="exportOfficialPDF()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition">🖨️ PDF</button>
+          <button onclick="exportOfficialPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition">🖨️ PDF</button>
           <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
         </div>
 
       </div>
 
-      <!-- Ligne 2 : Les 4 Métriques de Combat -->
+      <!-- Ligne 2 : Les 4 Métriques Clés avec Détails Explicatifs -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
         
         <!-- 1. Jet pour Toucher -->
@@ -167,16 +169,16 @@
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Dégâts</span>
             <span id="sticky-dmg" class="text-sm font-bold text-red-400 font-imperial">4g2</span>
           </div>
-          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Katana (2g2) + Force (2)</div>
+          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Katana (3g2) + Force (2)</div>
         </div>
 
         <!-- 3. Jet d'Initiative -->
         <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
           <div class="flex justify-between items-baseline">
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Initiative</span>
-            <span id="sticky-init" class="text-sm font-bold text-amber-200 font-imperial">2g2</span>
+            <span id="sticky-init" class="text-sm font-bold text-amber-200 font-imperial">3g2</span>
           </div>
-          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Réflexes (2g2)</div>
+          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Insight 1 + Réfl. 2 (3g2)</div>
         </div>
 
         <!-- 4. ND d'Armure -->
@@ -228,7 +230,7 @@
         </div>
       </div>
 
-<!-- ARBRE DES TECHNIQUES D'ÉCOLE (RANGS 1 À 5) -->
+      <!-- ARBRE DES TECHNIQUES D'ÉCOLE (RANGS 1 À 5) -->
       <div class="mt-4 pt-3 border-t border-amber-500/20">
         <div class="flex justify-between items-center mb-2">
           <span class="text-xs font-bold text-amber-300 font-imperial tracking-wide uppercase">Progression des Techniques d'École (Rangs 1 à 5)</span>
@@ -383,8 +385,8 @@
         </div>
         <div class="p-3 rounded bg-black/60 border border-stone-800">
           <div class="text-stone-400">Initiative</div>
-          <div id="stat-init" class="text-xl font-bold text-amber-300 font-imperial mt-1">2g2</div>
-          <div class="text-[10px] text-stone-500">Réflexes g Réflexes</div>
+          <div id="stat-init" class="text-xl font-bold text-amber-300 font-imperial mt-1">3g2</div>
+          <div class="text-[10px] text-stone-500">(Insight + Réfl.) g Réfl.</div>
         </div>
         <div class="p-3 rounded bg-black/60 border border-stone-800">
           <div class="text-stone-400">Honneur</div>
@@ -447,23 +449,11 @@
     Campagne L5R – MJ David • Fiche Interactive dynamique alimentée par data/ et js/
   </footer>
 
-  <!-- SYNCHRONISATION DU BANDEAU STICKY -->
-  <script>
-    function updateStickyName() {
-      const input = document.getElementById('pc-name');
-      const sticky = document.getElementById('sticky-pc-name');
-      if (input && sticky) {
-        sticky.textContent = input.value.trim() || "Samouraï";
-      }
-    }
-  </script>
-  <!-- DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 & 2 DU LIVRET OFFICIEL) -->
+  <!-- DOSSIER OFFICIEL IMPRIMABLE (A4 VECTORIEL POUR EXPORTATION PDF) -->
   <div id="official-print-dossier" class="text-black text-[9px] leading-tight">
     
-    <!-- ==================== PAGE 1 : FEUILLE MARTIALE ==================== -->
+    <!-- PAGE 1 : FEUILLE MARTIALE -->
     <div class="print-page flex flex-col justify-between py-1">
-      
-      <!-- En-tête officiel -->
       <div class="sheet-box mb-2 p-2">
         <div class="flex justify-between items-center border-b border-black pb-1 mb-1">
           <div class="font-imperial text-base font-black tracking-widest">LEGEND OF THE FIVE RINGS</div>
@@ -495,9 +485,8 @@
         </div>
       </div>
 
-      <!-- Les 5 Anneaux & 8 Traits (Mise en page officielle) -->
+      <!-- Anneaux et Traits -->
       <div class="grid grid-cols-5 gap-1.5 mb-2 text-center">
-        <!-- TERRE -->
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>土 TERRE</span><span id="p-r-earth" class="font-bold">2</span></div>
           <div class="p-1 space-y-1">
@@ -505,7 +494,6 @@
             <div><span class="text-[8px] text-stone-500 block">Volonté</span><b id="p-t-wil" class="text-xs">2</b></div>
           </div>
         </div>
-        <!-- EAU -->
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>水 EAU</span><span id="p-r-water" class="font-bold">2</span></div>
           <div class="p-1 space-y-1">
@@ -513,7 +501,6 @@
             <div><span class="text-[8px] text-stone-500 block">Perception</span><b id="p-t-per" class="text-xs">2</b></div>
           </div>
         </div>
-        <!-- AIR -->
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>風 AIR</span><span id="p-r-air" class="font-bold">2</span></div>
           <div class="p-1 space-y-1">
@@ -521,7 +508,6 @@
             <div><span class="text-[8px] text-stone-500 block">Intuition</span><b id="p-t-awa" class="text-xs">2</b></div>
           </div>
         </div>
-        <!-- FEU -->
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>火 FEU</span><span id="p-r-fire" class="font-bold">2</span></div>
           <div class="p-1 space-y-1">
@@ -529,7 +515,6 @@
             <div><span class="text-[8px] text-stone-500 block">Intelligence</span><b id="p-t-int" class="text-xs">2</b></div>
           </div>
         </div>
-        <!-- VIDE -->
         <div class="sheet-box flex flex-col justify-between">
           <div class="sheet-title flex justify-between"><span>空 VIDE</span><span id="p-r-void" class="font-bold">2</span></div>
           <div class="p-1">
@@ -540,7 +525,7 @@
         </div>
       </div>
 
-      <!-- Ligne Combat : Initiative, ND Armure, Armure & Récupération -->
+      <!-- Ligne Combat -->
       <div class="grid grid-cols-4 gap-1.5 mb-2 text-[9px]">
         <div class="sheet-box p-1.5 text-center">
           <div class="text-[8px] font-bold uppercase text-stone-500">Initiative (4e Éd.)</div>
@@ -564,7 +549,7 @@
         </div>
       </div>
 
-      <!-- Tableau des Compétences -->
+      <!-- Compétences -->
       <div class="sheet-box mb-2">
         <div class="sheet-title">Compétences & Spécialisations</div>
         <table class="w-full text-left border-collapse text-[8.5px]">
@@ -581,14 +566,12 @@
         </table>
       </div>
 
-      <!-- Armes & Seuils de Vitalité -->
+      <!-- Armes & Vitalité -->
       <div class="grid grid-cols-2 gap-2 mb-1">
-        <!-- Armes -->
         <div class="sheet-box">
           <div class="sheet-title">Armes & Attaques</div>
           <div class="p-1.5 space-y-1 text-[8px]" id="p-weapons-box"></div>
         </div>
-        <!-- Paliers de blessures -->
         <div class="sheet-box">
           <div class="sheet-title">Paliers de Vitalité (4e Édition)</div>
           <table class="w-full text-center border-collapse text-[7.5px] mt-0.5">
@@ -601,34 +584,27 @@
           </table>
         </div>
       </div>
-
     </div>
 
-    <!-- ==================== PAGE 2 : IDENTITÉ & DONS ==================== -->
+    <!-- PAGE 2 : IDENTITÉ, AVANTAGES & TECHNIQUES -->
     <div class="print-page flex flex-col justify-between py-1">
-      
-      <!-- En-tête Page 2 -->
       <div class="sheet-box mb-2 p-1.5 flex justify-between items-center text-[9px]">
         <div><b>Samouraï :</b> <span id="p-name-2" class="font-imperial font-bold text-xs"></span></div>
         <div><b>Clan :</b> <span id="p-clan-2"></span></div>
         <div><b>École :</b> <span id="p-school-2"></span></div>
       </div>
 
-      <!-- Avantages & Désavantages -->
       <div class="grid grid-cols-2 gap-2 mb-2">
-        <!-- Avantages -->
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>Avantages</span><span id="p-adv-total">0 XP</span></div>
           <div class="p-1.5 space-y-1.5 text-[8px]" id="p-adv-list"></div>
         </div>
-        <!-- Désavantages -->
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>Désavantages (Max 15 XP)</span><span id="p-disadv-total">0 XP</span></div>
           <div class="p-1.5 space-y-1.5 text-[8px]" id="p-disadv-list"></div>
         </div>
       </div>
 
-      <!-- Techniques d'École -->
       <div class="sheet-box mb-2">
         <div class="sheet-title">Techniques d'École</div>
         <div class="p-2 space-y-1 text-[8.5px]">
@@ -637,14 +613,13 @@
         </div>
       </div>
 
-      <!-- Équipement, Dotation & Richesse -->
       <div class="sheet-box mb-1">
         <div class="sheet-title">Équipement, Dotation (*Outfit*) & Richesse</div>
         <div class="p-2 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
       </div>
-
     </div>
 
   </div>
+
 </body>
 </html>
