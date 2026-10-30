@@ -1,4 +1,4 @@
-export const SORTS_AIR = [
+const SORTS_AIR = [
   {
     id: "air-1-blessed-wind",
     name: "Le Vent Bienveillant (Blessed Wind)",
