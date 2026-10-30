@@ -1,12 +1,5 @@
 /**
  * js/grimoire.js — Moteur interactif du Grimoire L5R 4e Édition
- * 
- * Fonctionnalités :
- * - Lecture et écriture d'URL : ?q=, ?el=, ?rang= et #sort-<id>
- * - Recherche tolérante (insensible aux accents, casse et ponctuation)
- * - Navigation fluide et mise en surbrillance automatique du sort ciblé
- * - Cloisonnement strict du Mahō sans mot de passe
- * - Synchronisation transparente avec history.replaceState
  */
 
 (function () {
@@ -22,44 +15,43 @@
       .trim();
   }
 
-  // Slug stable pour les ancres : "Frappe de jade" -> "frappe-de-jade"
+  // Slug stable pour les ancres (#sort-<id>)
   function slugify(text) {
     return normalizeText(text)
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
   }
 
-  // Récupération sécurisée et aplatissement universel des données de sorts
+  // Récupération sécurisée et aplatissement des sorts
   function getSpellsData() {
     const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
+    if (Array.isArray(raw)) return raw;
+    return Object.values(raw).filter(v => v && typeof v === "object");
+  }
 
-    // Cas 1 : Déjà un tableau plat
-    if (Array.isArray(raw)) {
-      return raw;
+  // Badge CSS selon l'élément
+  function getElementBadgeClass(element) {
+    const el = normalizeText(element);
+    switch (el) {
+      case "terre":
+      case "earth": return "badge-terre";
+      case "eau":
+      case "water": return "badge-eau";
+      case "feu":
+      case "fire": return "badge-feu";
+      case "air": return "badge-air";
+      case "vide":
+      case "void": return "badge-vide";
+      case "universel":
+      case "universal": return "badge-universel";
+      case "kiho": return "badge-kiho";
+      case "maho": return "badge-maho";
+      default: return "badge-universel";
     }
-
-    // Cas 2 : Objet contenant des tableaux par élément { terre: [...], eau: [...] }
-    const values = Object.values(raw);
-    if (values.some(v => Array.isArray(v))) {
-      let flat = [];
-      Object.entries(raw).forEach(([elementKey, spellList]) => {
-        if (Array.isArray(spellList)) {
-          spellList.forEach(s => {
-            // Assure la présence de l'élément si non défini dans l'objet sort
-            if (!s.element && !s.el) s.element = elementKey;
-            flat.push(s);
-          });
-        }
-      });
-      return flat;
-    }
-
-    // Cas 3 : Dictionnaire d'objets indexé par ID { "sentir": { nom: "Sentir", ... } }
-    return values.filter(v => v && typeof v === "object");
   }
 
   // =========================================================================
-  // GESTION DU FILTRAGE ET DU RENDU
+  // FILTRAGE ET RENDU
   // =========================================================================
   function applyFilters() {
     const searchInput = document.getElementById("search-input");
@@ -72,50 +64,58 @@
     if (!searchInput || !elementSelect || !rankSelect || !container) return;
 
     const query = normalizeText(searchInput.value);
-    const selectedElement = elementSelect.value.toLowerCase();
+    const selectedElement = normalizeText(elementSelect.value);
     const selectedRank = rankSelect.value;
 
     const allSpells = getSpellsData();
 
-    // 1. Filtrage strict du Mahō : masqué tant que le sceau n'est pas levé
+    // 1. Protection Mahō
     let filtered = allSpells.filter(spell => {
-      const isMahoSpell = (spell.element?.toLowerCase() === "maho") || spell.isMaho === true;
-      if (isMahoSpell && !isMahoUnlocked) {
-        return false;
-      }
+      const el = normalizeText(spell.element || spell.ring || spell.elem || "");
+      const isMahoSpell = el === "maho" || spell.isMaho === true;
+      if (isMahoSpell && !isMahoUnlocked) return false;
       return true;
     });
 
-    // 2. Filtre par Élément
+    // 2. Filtre par Élément (support FR & EN)
     if (selectedElement !== "tous") {
-      filtered = filtered.filter(spell => (spell.element || "").toLowerCase() === selectedElement);
+      filtered = filtered.filter(spell => {
+        const el = normalizeText(spell.element || spell.ring || spell.elem || "");
+        if (selectedElement === "terre") return el === "terre" || el === "earth";
+        if (selectedElement === "eau") return el === "eau" || el === "water";
+        if (selectedElement === "feu") return el === "feu" || el === "fire";
+        if (selectedElement === "air") return el === "air";
+        if (selectedElement === "vide") return el === "vide" || el === "void";
+        if (selectedElement === "universel") return el === "universel" || el === "universal";
+        return el === selectedElement;
+      });
     }
 
     // 3. Filtre par Rang de Maîtrise
     if (selectedRank !== "tous") {
       const rNum = parseInt(selectedRank, 10);
-      filtered = filtered.filter(spell => parseInt(spell.rang, 10) === rNum);
-    }
-
-    // 4. Recherche plein texte tolérante (nom, mots-clés, portée, effet)
-    if (query !== "") {
       filtered = filtered.filter(spell => {
-        const nomNorm = normalizeText(spell.nom);
-        const descNorm = normalizeText(spell.description || spell.effet);
-        const motsClesNorm = normalizeText(Array.isArray(spell.motsCles) ? spell.motsCles.join(" ") : spell.motsCles);
-        const porteeNorm = normalizeText(spell.portee);
-
-        return nomNorm.includes(query) ||
-               descNorm.includes(query) ||
-               motsClesNorm.includes(query) ||
-               porteeNorm.includes(query);
+        const r = parseInt(spell.rang !== undefined ? spell.rang : spell.rank, 10);
+        return r === rNum;
       });
     }
 
-    // 5. Mise à jour du compteur
+    // 4. Recherche texte tolérante (Nom, Descriptif, Mots-clés)
+    if (query !== "") {
+      filtered = filtered.filter(spell => {
+        const nom = normalizeText(spell.nom || spell.name);
+        const desc = normalizeText(spell.description || spell.effet || spell.effect || spell.desc);
+        const mots = normalizeText(Array.isArray(spell.motsCles || spell.keywords) ? (spell.motsCles || spell.keywords).join(" ") : (spell.motsCles || spell.keywords));
+        const portee = normalizeText(spell.portee || spell.range);
+
+        return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query);
+      });
+    }
+
+    // 5. Compteur
     if (counter) counter.textContent = filtered.length;
 
-    // 6. Affichage des cartes de sorts
+    // 6. Rendu HTML
     container.innerHTML = "";
     if (filtered.length === 0) {
       if (noResults) noResults.classList.remove("hidden");
@@ -123,9 +123,16 @@
       if (noResults) noResults.classList.add("hidden");
 
       filtered.forEach(spell => {
-        const cardId = `sort-${slugify(spell.nom)}`;
-        const badgeClass = getElementBadgeClass(spell.element);
-        const keywordsStr = Array.isArray(spell.motsCles) ? spell.motsCles.join(", ") : (spell.motsCles || "");
+        const spellName = spell.nom || spell.name || "Sort sans nom";
+        const spellId = spell.id || slugify(spellName);
+        const cardId = `sort-${spellId}`;
+
+        const spellElem = spell.element || spell.ring || "Universel";
+        const spellRank = spell.rang !== undefined ? spell.rang : (spell.rank !== undefined ? spell.rank : 0);
+        const badgeClass = getElementBadgeClass(spellElem);
+
+        const keywordsRaw = spell.motsCles || spell.keywords;
+        const keywordsStr = Array.isArray(keywordsRaw) ? keywordsRaw.join(", ") : (keywordsRaw || "");
 
         const card = document.createElement("article");
         card.id = cardId;
@@ -133,17 +140,16 @@
 
         card.innerHTML = `
           <div>
-            <!-- En-tête du Sort -->
             <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
               <div>
                 <h2 class="font-bold font-imperial text-amber-200 text-sm md:text-base leading-tight">
                   <a href="#${cardId}" class="hover:underline hover:text-amber-300" title="Lien direct vers ce sort">
-                    ${spell.nom}
+                    ${spellName}
                   </a>
                 </h2>
                 <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                   <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${badgeClass}">
-                    ${spell.element.toUpperCase()} ${parseInt(spell.rang) === 0 ? "(Universel)" : `— Rang ${spell.rang}`}
+                    ${spellElem.toUpperCase()} ${parseInt(spellRank) === 0 ? "(Universel)" : `— Rang ${spellRank}`}
                   </span>
                   ${keywordsStr ? `<span class="text-[9px] text-stone-500 italic">[${keywordsStr}]</span>` : ""}
                 </div>
@@ -158,21 +164,18 @@
               </button>
             </div>
 
-            <!-- Caractéristiques techniques -->
             <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] text-stone-400 mt-2 bg-black/40 p-2 rounded border border-stone-900">
-              <div><b class="text-stone-300">Portée :</b> ${spell.portee || "Personnelle"}</div>
-              <div><b class="text-stone-300">Zone :</b> ${spell.zone || "1 cible"}</div>
-              <div><b class="text-stone-300">Durée :</b> ${spell.duree || "Instantanée"}</div>
-              <div><b class="text-stone-300">Augmentations :</b> ${spell.augmentations || "Aucune"}</div>
+              <div><b class="text-stone-300">Portée :</b> ${spell.portee || spell.range || "Personnelle"}</div>
+              <div><b class="text-stone-300">Zone :</b> ${spell.zone || spell.area || "1 cible"}</div>
+              <div><b class="text-stone-300">Durée :</b> ${spell.duree || spell.duration || "Instantanée"}</div>
+              <div><b class="text-stone-300">Augmentations :</b> ${spell.augmentations || spell.raises || "Aucune"}</div>
             </div>
 
-            <!-- Description / Effet officiel -->
             <div class="mt-2.5 text-stone-300 text-xs leading-relaxed space-y-1.5">
-              <p>${spell.description || spell.effet || ""}</p>
+              <p>${spell.description || spell.effet || spell.effect || spell.desc || ""}</p>
             </div>
           </div>
 
-          <!-- Note de bas de carte -->
           ${spell.source ? `
             <div class="pt-2 border-t border-stone-900 text-[9px] text-stone-600 flex justify-between items-center">
               <span>Source : ${spell.source}</span>
@@ -188,7 +191,6 @@
     renderActiveFilterBadges();
   }
 
-  // Badges visuels récapitulatifs sous les filtres
   function renderActiveFilterBadges() {
     const container = document.getElementById("active-filters-badges");
     if (!container) return;
@@ -225,7 +227,7 @@
   }
 
   // =========================================================================
-  // GESTION DES URLS : SEARCH PARAMS & ANCRES (#sort-<id>)
+  // URL SEARCH PARAMS & ANCRES (#sort-<id>)
   // =========================================================================
   function syncFiltersToURL() {
     const searchInput = document.getElementById("search-input");
@@ -262,37 +264,29 @@
     const elementSelect = document.getElementById("element-select");
     const rankSelect = document.getElementById("rank-select");
 
-    // 1. Préremplissage du paramètre q
     const qParam = p.get("q");
     if (qParam !== null && searchInput) {
       searchInput.value = qParam;
     }
 
-    // 2. Présélection de l'élément (el)
     const elParam = p.get("el");
     if (elParam && elementSelect) {
       const elLower = elParam.toLowerCase();
       if (elLower === "maho") {
-        if (isMahoUnlocked) {
-          elementSelect.value = "maho";
-        }
+        if (isMahoUnlocked) elementSelect.value = "maho";
       } else {
         const option = elementSelect.querySelector(`option[value="${CSS.escape(elLower)}"]`);
         if (option) elementSelect.value = elLower;
       }
     }
 
-    // 3. Présélection du rang (rang)
     const rangParam = p.get("rang");
     if (rangParam !== null && rankSelect) {
       const option = rankSelect.querySelector(`option[value="${CSS.escape(rangParam)}"]`);
       if (option) rankSelect.value = rangParam;
     }
 
-    // Exécution du filtrage
     applyFilters();
-
-    // 4. Défilement automatique si une ancre #sort-<id> est présente
     handleHashNavigation();
   }
 
@@ -307,14 +301,14 @@
       setTimeout(() => {
         targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
         targetElement.classList.remove("sort-highlight");
-        void targetElement.offsetWidth; // Force reflow
+        void targetElement.offsetWidth;
         targetElement.classList.add("sort-highlight");
       }, 100);
     }
   }
 
   // =========================================================================
-  // GESTION DU MAHŌ ET DU MOT DE PASSE
+  // MAHŌ ET SÉCURITÉ
   // =========================================================================
   window.toggleMahoSecurityModal = function (forceState) {
     const modal = document.getElementById("maho-modal");
@@ -340,11 +334,9 @@
     const input = document.getElementById("maho-password-input");
     const errorEl = document.getElementById("maho-error");
     const btnMaho = document.getElementById("btn-toggle-maho");
-    const optMaho = document.getElementById("opt-maho");
 
     const pwd = (input?.value || "").trim().toLowerCase();
 
-    // Mots de passe reconnus pour le Maître de Jeu / Mahō-tsukai
     if (pwd === "iuchiban" || pwd === "maho" || pwd === "jigoku" || pwd === "outremonde") {
       isMahoUnlocked = true;
       try {
@@ -365,7 +357,6 @@
     }
   };
 
-  // Réinitialisation complète
   window.resetAllFilters = function () {
     const searchInput = document.getElementById("search-input");
     const elementSelect = document.getElementById("element-select");
@@ -379,7 +370,6 @@
     window.history.replaceState(null, "", window.location.pathname);
   };
 
-  // Copie dans le presse-papier du lien direct d'un sort
   window.copySpellDirectLink = function (cardId) {
     const url = `${window.location.origin}${window.location.pathname}#${cardId}`;
     navigator.clipboard.writeText(url).then(() => {
@@ -391,7 +381,7 @@
   };
 
   // =========================================================================
-  // INITIALISATION AU CHARGEMENT DE LA PAGE
+  // INITIALISATION
   // =========================================================================
   function initApp() {
     try {
@@ -438,7 +428,6 @@
 
     window.addEventListener("hashchange", handleHashNavigation);
 
-    // Initialisation depuis l'adresse
     initFromURL();
   }
 
