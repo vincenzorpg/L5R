@@ -1,4 +1,4 @@
-export const SORTS_VIDE = [
+const SORTS_VIDE = [
   {
     id: "void-1-drawing-void",
     name: "Puiser dans le Vide (Drawing the Void)",
