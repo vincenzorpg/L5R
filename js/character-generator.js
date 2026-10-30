@@ -1458,3 +1458,137 @@ function exportOfficialPDF() {
   document.getElementById('p-xp').textContent = `${document.getElementById('xp-remaining')?.textContent} / ${document.getElementById('xp-total')?.textContent} XP`;
   document.getElementById('p-insight').textContent = document.getElementById('insight-display')?.textContent || "120 pts (Rang 1)";
   document.getElementById('p-honor').textContent = document.getElementById('stat-honor')?.textContent || "4.5";
+
+  // Traits et Anneaux
+  const sta = document.getElementById('trait-stamina').value;
+  const wil = document.getElementById('trait-willpower').value;
+  const str = document.getElementById('trait-strength').value;
+  const per = document.getElementById('trait-perception').value;
+  const ref = document.getElementById('trait-reflexes').value;
+  const awa = document.getElementById('trait-awareness').value;
+  const agi = document.getElementById('trait-agility').value;
+  const int = document.getElementById('trait-intelligence').value;
+  const voi = document.getElementById('trait-void').value;
+
+  document.getElementById('p-t-sta').textContent = sta;
+  document.getElementById('p-t-wil').textContent = wil;
+  document.getElementById('p-t-str').textContent = str;
+  document.getElementById('p-t-per').textContent = per;
+  document.getElementById('p-t-ref').textContent = ref;
+  document.getElementById('p-t-awa').textContent = awa;
+  document.getElementById('p-t-agi').textContent = agi;
+  document.getElementById('p-t-int').textContent = int;
+  document.getElementById('p-t-voi').textContent = voi;
+
+  document.getElementById('p-r-earth').textContent = document.getElementById('ring-earth').textContent;
+  document.getElementById('p-r-water').textContent = document.getElementById('ring-water').textContent;
+  document.getElementById('p-r-air').textContent = document.getElementById('ring-air').textContent;
+  document.getElementById('p-r-fire').textContent = document.getElementById('ring-fire').textContent;
+  document.getElementById('p-r-void').textContent = document.getElementById('ring-void').textContent;
+
+  // Combat
+  document.getElementById('p-init').textContent = document.getElementById('sticky-init')?.textContent || "3g2";
+  document.getElementById('p-init-note').textContent = document.getElementById('sticky-init-detail')?.textContent || "";
+  document.getElementById('p-armor-tn').textContent = document.getElementById('sticky-armor-tn')?.textContent || "20";
+  document.getElementById('p-armor-note').textContent = document.getElementById('sticky-armor-detail')?.textContent || "";
+  document.getElementById('p-heal').textContent = document.getElementById('stat-heal')?.textContent || "5 PV";
+
+  const armorSel = document.getElementById('pc-armor');
+  document.getElementById('p-armor-name').textContent = armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0] || "Aucune";
+  document.getElementById('p-armor-reduc').textContent = armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0");
+
+  // Compétences (avec Paliers de Maîtrise dans la colonne notes)
+  const skillsBody = document.getElementById('p-skills-body');
+  skillsBody.innerHTML = currentSkills.map(sk => {
+    const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
+    const traitVal = parseInt(agi);
+    const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + traitVal}g${traitVal}`;
+    const masteriesSummary = getMasteriesSummary(sk.name, sk.rank);
+    const notesParts = [];
+    if (sk.spec) notesParts.push("Spé (relance les 1)");
+    if (masteriesSummary) notesParts.push(masteriesSummary);
+
+    return `
+      <tr class="border-b border-stone-200">
+        <td class="p-1 font-bold">${displayName}</td>
+        <td class="p-1 text-center">${sk.isSchool ? '✓' : ''}</td>
+        <td class="p-1 text-center font-bold font-imperial">${sk.rank}</td>
+        <td class="p-1 text-center font-bold">${roll}</td>
+        <td class="p-1 text-stone-600 text-[8px]">${notesParts.join(' • ')}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Armes
+  const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
+  const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  const wBox = document.getElementById('p-weapons-box');
+  wBox.innerHTML = `
+    <div class="border-b border-stone-200 pb-1">
+      <div class="font-bold font-imperial">${w1} (Principale)</div>
+      <div><b>Toucher :</b> ${document.getElementById('sticky-atk')?.textContent || '3g2'} | <b>Dégâts :</b> ${document.getElementById('sticky-dmg')?.textContent || '4g2'}</div>
+      <div class="text-stone-500 text-[7px]">${document.getElementById('sticky-atk-detail')?.textContent || ''}</div>
+    </div>
+    ${w2 !== 'Aucune' ? `
+      <div class="pt-1">
+        <div class="font-bold font-imperial">${w2} (Secondaire)</div>
+      </div>
+    ` : ''}
+  `;
+
+  // Paliers de blessures
+  const woundLevels = [
+    { name: "Indemne (+0)", id: "w-0" },
+    { name: "Égratigné (+3)", id: "w-1" },
+    { name: "Blessé Léger (+5)", id: "w-2" },
+    { name: "Blessé (+10)", id: "w-3" },
+    { name: "Gravement (+15)", id: "w-4" },
+    { name: "Estropié (+20)", id: "w-5" },
+    { name: "Inconscient (+40)", id: "w-6" },
+    { name: "Mortel", id: "w-7" }
+  ];
+  document.getElementById('p-wounds-body').innerHTML = woundLevels.map(wl => `
+    <tr class="border-b border-stone-200">
+      <td class="text-left pl-1 font-bold">${wl.name}</td>
+      <td>${wl.name.includes('+') ? wl.name.split('(')[1].replace(')', '') : '—'}</td>
+      <td class="font-bold">${document.getElementById(wl.id)?.textContent || '4 PV'}</td>
+      <td class="border-l border-stone-300"></td>
+    </tr>
+  `).join('');
+
+  // Avantages & Désavantages
+  document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
+  document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
+    const full = getAdvantages().avantages?.find(x => x.name === a.name);
+    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
+  }).join('') : '<div class="text-stone-400 italic">Aucun avantage sélectionné.</div>';
+
+  document.getElementById('p-disadv-total').textContent = `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`;
+  document.getElementById('p-disadv-list').innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
+    const full = getAdvantages().desavantages?.find(x => x.name === d.name);
+    return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
+  }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
+
+  // Techniques d'École
+  const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
+  const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
+  document.getElementById('p-tech-name').textContent = sch ? `${sch.name} (Progression)` : "Techniques";
+  document.getElementById('p-tech-desc').innerHTML = techList.map(t => {
+    const tag = t.rank === currentRank ? "<b>[ACTIF]</b> " : (t.rank < currentRank ? "<i>[MAÎTRISÉ]</i> " : "[Verrouillé] ");
+    return `<div class="mb-1">${tag}<b>Rang ${t.rank} - ${t.name} :</b> ${t.effect}</div>`;
+  }).join('');
+
+  document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
+
+  window.print();
+}
+
+// Exposition globale pour createcharacter.html et export-carnet.js
+if (typeof window !== "undefined") {
+  window.addSkillFromCatalog = addSkillFromCatalog;
+  window.adjustSkillRank = adjustSkillRank;
+  window.adjustTrait = adjustTrait;
+  window.updateAll = updateAll;
+}
+
+window.addEventListener('DOMContentLoaded', bootstrap);
