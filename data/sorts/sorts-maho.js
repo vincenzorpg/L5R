@@ -1,4 +1,4 @@
-export const SORTS_MAHO = [
+const SORTS_MAHO = [
   {
     id: "maho-1-legacy-dark-one",
     name: "L'Héritage du Prince Sombre (Legacy of the Dark One)",
