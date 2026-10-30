@@ -682,8 +682,12 @@ function addSkillFromCatalog() {
   const name = document.getElementById('sel-add-skill').value;
   if (!name) return;
 
-  if (currentSkills.some(s => (s.chosen || !s.isChoice) && s.name === name)) {
-    alert(`La compétence « ${name} » est déjà présente sur la fiche.`);
+  const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
+  const targetRoot = normalizeSkill(name);
+
+  // Vérification de sécurité doublon (racine commune)
+  if (currentSkills.some(s => (s.chosen || !s.isChoice) && normalizeSkill(s.name) === targetRoot)) {
+    alert(`La compétence « ${name} » est déjà maîtrisée par votre personnage.`);
     return;
   }
 
@@ -708,6 +712,7 @@ function addSkillFromCatalog() {
     chosen: true,
     originalPlaceholder: null
   });
+
   renderSkills();
   initCatalogSelectors();
   updateAll();
