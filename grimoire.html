@@ -13,6 +13,9 @@
   <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
+  <!-- BASE DE DONNÉES EN SECOURS (compatibilité file:// et navigateurs sans ESM direct) -->
+  <script src="data/sorts-data.js" defer></script>
+
   <!-- NAVIGATION COMMUNE -->
   <script src="js/navbar.js" defer></script>
 
@@ -61,13 +64,14 @@
     .badge-void { background: #2e1065; color: #d8b4fe; border: 1px solid #7c3aed; }
     .badge-maho { background: #4c0519; color: #fda4af; border: 1px solid #e11d48; }
     .badge-kiho { background: #064e3b; color: #6ee7b7; border: 1px solid #059669; }
-    /* Style du filtre Mahō verrouillé */
+
+    /* Filtre Mahō verrouillé */
     .elem-btn[data-elem="Maho"].locked {
       border-color: #881337 !important;
       color: #fda4af !important;
       opacity: 0.85;
     }
-    
+
     /* Voile d'occultation des cartes Mahō */
     .maho-card {
       position: relative;
@@ -127,7 +131,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- CONTENU PRINCIPAL -->
   <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
 
@@ -176,17 +180,23 @@
         </div>
       </div>
 
-      <!-- Ligne 2 : Boutons d'Éléments -->
-      <div class="pt-2 border-t border-stone-800 flex flex-wrap items-center gap-2 text-xs">
-        <span class="text-stone-400 font-bold uppercase text-[10px] mr-1">Élément / Voie :</span>
-        <button class="elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow" data-elem="all">Tous</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Air">風 Air</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Terre">土 Terre</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Feu">火 Feu</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Eau">水 Eau</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Vide">空 Vide (Ishiken)</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Kiho">気 Kihō (Moines)</button>
-        <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Maho">血 Mahō (Interdit)</button>
+      <!-- Ligne 2 : Boutons d'Éléments & Verrou MJ -->
+      <div class="pt-2 border-t border-stone-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-stone-400 font-bold uppercase text-[10px] mr-1">Élément / Voie :</span>
+          <button class="elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow" data-elem="all">Tous</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Air">風 Air</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Terre">土 Terre</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Feu">火 Feu</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Eau">水 Eau</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Vide">空 Vide (Ishiken)</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Kiho">気 Kihō (Moines)</button>
+          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Maho">血 Mahō (Interdit)</button>
+        </div>
+
+        <button id="maho-relock-btn" class="hidden text-[10px] text-stone-500 hover:text-rose-400 font-imperial transition flex items-center gap-1 px-2 py-1 rounded bg-stone-950 border border-stone-800">
+          <span>🔒</span> Reverrouiller Mahō
+        </button>
       </div>
 
       <!-- Résumé du filtrage -->
@@ -211,7 +221,7 @@
     Chronique L5R 4e Édition — MJ David • Grimoire complet des Sorts & Invocations
   </footer>
 
-  <!-- SCRIPT MODULAIRE AVEC FALLBACK -->
+  <!-- SCRIPT DU GRIMOIRE -->
   <script type="module">
     let allSpells = [];
 
@@ -219,11 +229,13 @@
       const module = await import('./data/sorts-data.js');
       allSpells = module.SORTS_DATA || window.SORTS_DATA || [];
     } catch (e) {
-      console.warn("Import ESM direct impossible, tentative via window.SORTS_DATA...", e);
+      console.warn("Import ESM direct indisponible, bascule sur window.SORTS_DATA...", e);
       allSpells = window.SORTS_DATA || [];
     }
 
     let currentElement = 'all';
+    const MAHO_SECRET_PASS = "JIGOKU";
+    let isMahoUnlocked = sessionStorage.getItem("l5r_maho_unlocked") === "true";
 
     const searchInput = document.getElementById('search-input');
     const masterySelect = document.getElementById('mastery-select');
@@ -231,8 +243,31 @@
     const resultsCount = document.getElementById('results-count');
     const spellsGrid = document.getElementById('spells-grid');
     const elemButtons = document.querySelectorAll('.elem-btn');
+    const mahoModal = document.getElementById('maho-modal');
+    const mahoInput = document.getElementById('maho-password-input');
+    const mahoError = document.getElementById('maho-error');
+    const mahoBtn = document.querySelector('.elem-btn[data-elem="Maho"]');
+    const mahoRelockBtn = document.getElementById('maho-relock-btn');
+
+    function updateMahoState() {
+      if (mahoBtn) {
+        mahoBtn.innerHTML = isMahoUnlocked ? '🩸 Mahō (Déverrouillé)' : '🔒 Mahō (Scellé)';
+        mahoBtn.classList.toggle('locked', !isMahoUnlocked);
+      }
+      if (mahoRelockBtn) {
+        mahoRelockBtn.classList.toggle('hidden', !isMahoUnlocked);
+      }
+    }
 
     function setElementFilter(elem) {
+      if (elem === 'Maho' && !isMahoUnlocked) {
+        mahoError?.classList.add('hidden');
+        if (mahoInput) mahoInput.value = '';
+        mahoModal?.classList.remove('hidden');
+        mahoInput?.focus();
+        return;
+      }
+
       currentElement = elem;
       elemButtons.forEach(btn => {
         const isTarget = btn.getAttribute('data-elem') === elem;
@@ -242,184 +277,127 @@
           btn.className = "elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition";
         }
       });
+
+      updateMahoState();
       render();
     }
 
-// Mot de passe MJ par défaut (configurable)
-const MAHO_SECRET_PASS = "JIGOKU"; 
-let isMahoUnlocked = sessionStorage.getItem("l5r_maho_unlocked") === "true";
+    // Défloutage individuel au clic (exposé au scope global pour onclick HTML)
+    window.revealMahoSpell = function(btn) {
+      const card = btn.closest('.maho-card');
+      if (!card) return;
+      card.classList.remove('sealed');
+      const overlay = card.querySelector('.maho-overlay');
+      if (overlay) overlay.remove();
+    };
 
-// Gestion du bouton et de la modale Mahō
-const mahoModal = document.getElementById('maho-modal');
-const mahoInput = document.getElementById('maho-password-input');
-const mahoError = document.getElementById('maho-error');
-const mahoBtn = document.querySelector('.elem-btn[data-elem="Maho"]');
+    function render() {
+      if (!spellsGrid) return;
+      const q = searchInput?.value.toLowerCase().trim() || "";
+      const m = masterySelect?.value || "all";
 
-function updateMahoButtonLabel() {
-  if (mahoBtn) {
-    mahoBtn.innerHTML = isMahoUnlocked ? '🩸 Mahō (Déverrouillé)' : '🔒 Mahō (Scellé)';
-    mahoBtn.classList.toggle('locked', !isMahoUnlocked);
-  }
-}
-updateMahoButtonLabel();
+      if (clearSearchBtn) {
+        clearSearchBtn.classList.toggle('hidden', q.length === 0);
+      }
 
-function setElementFilter(elem) {
-  if (elem === 'Maho' && !isMahoUnlocked) {
-    mahoError.classList.add('hidden');
-    mahoInput.value = '';
-    mahoModal.classList.remove('hidden');
-    mahoInput.focus();
-    return;
-  }
+      const filtered = allSpells.filter(spell => {
+        // Règle 1 : Mahō totalement invisible si non déverrouillé
+        if (spell.element === 'Maho' && !isMahoUnlocked) {
+          return false;
+        }
 
-  currentElement = elem;
-  elemButtons.forEach(btn => {
-    const isTarget = btn.getAttribute('data-elem') === elem;
-    if (isTarget) {
-      btn.className = "elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow";
-    } else {
-      btn.className = "elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition";
-    }
-  });
-  updateMahoButtonLabel();
-  render();
-}
+        // Règle 2 : en mode "Tous", masquer Mahō pour garder un grimoire noble
+        if (currentElement === 'all' && spell.element === 'Maho') {
+          return false;
+        }
 
-document.getElementById('maho-cancel-btn')?.addEventListener('click', () => {
-  mahoModal.classList.add('hidden');
-});
+        if (currentElement !== 'all' && spell.element !== currentElement) {
+          return false;
+        }
 
-document.getElementById('maho-unlock-btn')?.addEventListener('click', () => {
-  if (mahoInput.value.trim().toUpperCase() === MAHO_SECRET_PASS) {
-    isMahoUnlocked = true;
-    sessionStorage.setItem("l5r_maho_unlocked", "true");
-    mahoModal.classList.add('hidden');
-    setElementFilter('Maho');
-  } else {
-    mahoError.classList.remove('hidden');
-  }
-});
+        if (m !== 'all') {
+          if (m === 'Universel' && spell.mastery !== 'Universel') return false;
+          if (m !== 'Universel' && String(spell.mastery) !== m) return false;
+        }
 
-mahoInput?.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') document.getElementById('maho-unlock-btn')?.click();
-});
+        if (q) {
+          const matchName = (spell.name || "").toLowerCase().includes(q);
+          const matchDesc = (spell.desc || "").toLowerCase().includes(q);
+          const matchKeyw = (spell.keywords || []).some(k => k.toLowerCase().includes(q));
+          if (!matchName && !matchDesc && !matchKeyw) return false;
+        }
 
-// Défloutage individuel au clic
-window.revealMahoSpell = function(btn) {
-  const card = btn.closest('.maho-card');
-  if (!card) return;
-  card.classList.remove('sealed');
-  const overlay = card.querySelector('.maho-overlay');
-  if (overlay) overlay.remove();
-};
+        return true;
+      });
 
-function render() {
-  if (!spellsGrid) return;
-  const q = searchInput?.value.toLowerCase().trim() || "";
-  const m = masterySelect?.value || "all";
+      if (resultsCount) resultsCount.textContent = filtered.length;
 
-  if (clearSearchBtn) {
-    clearSearchBtn.classList.toggle('hidden', q.length === 0);
-  }
-
-  const filtered = allSpells.filter(spell => {
-    // Règle 1 : les sorts Mahō sont totalement masqués si non déverrouillés
-    if (spell.element === 'Maho' && !isMahoUnlocked) {
-      return false;
-    }
-
-    // Règle 2 : en mode "Tous", masquer Mahō pour éviter la pollution visuelle
-    if (currentElement === 'all' && spell.element === 'Maho') {
-      return false;
-    }
-
-    if (currentElement !== 'all' && spell.element !== currentElement) {
-      return false;
-    }
-
-    if (m !== 'all') {
-      if (m === 'Universel' && spell.mastery !== 'Universel') return false;
-      if (m !== 'Universel' && String(spell.mastery) !== m) return false;
-    }
-
-    if (q) {
-      const matchName = (spell.name || "").toLowerCase().includes(q);
-      const matchDesc = (spell.desc || "").toLowerCase().includes(q);
-      const matchKeyw = (spell.keywords || []).some(k => k.toLowerCase().includes(q));
-      if (!matchName && !matchDesc && !matchKeyw) return false;
-    }
-
-    return true;
-  });
-
-  if (resultsCount) resultsCount.textContent = filtered.length;
-
-  if (filtered.length === 0) {
-    spellsGrid.innerHTML = `
-      <div class="col-span-full text-center py-12 card-clean rounded-xl">
-        <span class="text-3xl block mb-2">📜</span>
-        <span class="font-imperial font-bold text-amber-300 text-base">Aucun sort ou pouvoir ne correspond à vos critères</span>
-        <p class="text-xs text-stone-500 mt-1">Modifiez vos mots-clés ou sélectionnez une autre catégorie d'éléments.</p>
-      </div>
-    `;
-    return;
-  }
-
-  spellsGrid.innerHTML = filtered.map(s => {
-    const isMaho = s.element === "Maho";
-    let badgeClass = "badge-earth";
-    if (s.element === "Universel") badgeClass = "badge-univ";
-    else if (s.element === "Air") badgeClass = "badge-air";
-    else if (s.element === "Feu") badgeClass = "badge-fire";
-    else if (s.element === "Eau") badgeClass = "badge-water";
-    else if (s.element === "Vide") badgeClass = "badge-void";
-    else if (isMaho) badgeClass = "badge-maho";
-    else if (s.element === "Kiho") badgeClass = "badge-kiho";
-
-    const ndCalculated = s.mastery === "Universel" 
-      ? "ND 10" 
-      : (s.element === "Kiho" ? "Kihō" : `ND ${5 + (parseInt(s.mastery, 10) * 5)}`);
-
-    return `
-      <div class="card-clean rounded-xl p-5 space-y-3 flex flex-col justify-between shadow-lg ${isMaho ? 'maho-card sealed border-rose-900/60' : ''}">
-        ${isMaho ? `
-          <div class="maho-overlay" onclick="revealMahoSpell(this)">
-            <span class="text-2xl mb-1">🩸</span>
-            <span class="text-rose-300 font-imperial font-bold text-xs uppercase tracking-wide">Pacte Maudit Scellé</span>
-            <p class="text-[10px] text-stone-400 mt-1">Cliquer pour rompre le sceau et lire ce rituel</p>
+      if (filtered.length === 0) {
+        spellsGrid.innerHTML = `
+          <div class="col-span-full text-center py-12 card-clean rounded-xl">
+            <span class="text-3xl block mb-2">📜</span>
+            <span class="font-imperial font-bold text-amber-300 text-base">Aucun sort ou pouvoir ne correspond à vos critères</span>
+            <p class="text-xs text-stone-500 mt-1">Modifiez vos mots-clés ou sélectionnez une autre catégorie d'éléments.</p>
           </div>
-        ` : ''}
+        `;
+        return;
+      }
 
-        <div class="space-y-2 maho-content">
-          <div class="flex justify-between items-start gap-2">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial ${badgeClass}">
-              ${s.element} ${s.mastery === 'Universel' ? '• Universel' : (s.element === 'Kiho' ? '• Éveil ' + s.mastery : '• Rang ' + s.mastery)}
-            </span>
-            <span class="text-[10px] px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-bold text-amber-300 font-imperial">
-              ${ndCalculated}
-            </span>
-          </div>
-          <h3 class="text-sm font-bold font-imperial ${isMaho ? 'text-rose-300' : 'text-amber-200'}">${s.name}</h3>
-          <div class="flex flex-wrap gap-1 text-[9px] text-stone-400">
-            ${(s.keywords || []).map(k => `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-800">${k}</span>`).join('')}
-          </div>
-        </div>
+      spellsGrid.innerHTML = filtered.map(s => {
+        const isMaho = s.element === "Maho";
+        let badgeClass = "badge-earth";
+        if (s.element === "Universel") badgeClass = "badge-univ";
+        else if (s.element === "Air") badgeClass = "badge-air";
+        else if (s.element === "Feu") badgeClass = "badge-fire";
+        else if (s.element === "Eau") badgeClass = "badge-water";
+        else if (s.element === "Vide") badgeClass = "badge-void";
+        else if (isMaho) badgeClass = "badge-maho";
+        else if (s.element === "Kiho") badgeClass = "badge-kiho";
 
-        <div class="space-y-2 pt-2 border-t border-stone-800/80 text-xs maho-content">
-          <p class="text-stone-300 leading-relaxed text-[11px]">${s.desc}</p>
-          
-          <div class="p-2 rounded bg-black/50 border border-stone-800 text-[10px] space-y-1 text-stone-400">
-            <div><b class="text-stone-300">Portée :</b> ${s.range} | <b class="text-stone-300">Zone :</b> ${s.area}</div>
-            <div><b class="text-stone-300">Durée :</b> ${s.duration}</div>
-            ${s.raises ? `<div class="pt-1 border-t border-stone-800/60 text-amber-400/90"><b class="text-amber-300">Augmentations :</b> ${s.raises}</div>` : ''}
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
+        const ndCalculated = s.mastery === "Universel" 
+          ? "ND 10" 
+          : (s.element === "Kiho" ? "Kihō" : `ND ${5 + (parseInt(s.mastery, 10) * 5)}`);
 
-    // Écouteurs d'événements
+        return `
+          <div class="card-clean rounded-xl p-5 space-y-3 flex flex-col justify-between shadow-lg ${isMaho ? 'maho-card sealed border-rose-900/60' : ''}">
+            ${isMaho ? `
+              <div class="maho-overlay" onclick="revealMahoSpell(this)">
+                <span class="text-2xl mb-1">🩸</span>
+                <span class="text-rose-300 font-imperial font-bold text-xs uppercase tracking-wide">Pacte Maudit Scellé</span>
+                <p class="text-[10px] text-stone-400 mt-1">Cliquer pour rompre le sceau et lire ce rituel</p>
+              </div>
+            ` : ''}
+
+            <div class="space-y-2 maho-content">
+              <div class="flex justify-between items-start gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial ${badgeClass}">
+                  ${s.element} ${s.mastery === 'Universel' ? '• Universel' : (s.element === 'Kiho' ? '• Éveil ' + s.mastery : '• Rang ' + s.mastery)}
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-bold text-amber-300 font-imperial">
+                  ${ndCalculated}
+                </span>
+              </div>
+              <h3 class="text-sm font-bold font-imperial ${isMaho ? 'text-rose-300' : 'text-amber-200'}">${s.name}</h3>
+              <div class="flex flex-wrap gap-1 text-[9px] text-stone-400">
+                ${(s.keywords || []).map(k => `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-800">${k}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-stone-800/80 text-xs maho-content">
+              <p class="text-stone-300 leading-relaxed text-[11px]">${s.desc}</p>
+              
+              <div class="p-2 rounded bg-black/50 border border-stone-800 text-[10px] space-y-1 text-stone-400">
+                <div><b class="text-stone-300">Portée :</b> ${s.range} | <b class="text-stone-300">Zone :</b> ${s.area}</div>
+                <div><b class="text-stone-300">Durée :</b> ${s.duration}</div>
+                ${s.raises ? `<div class="pt-1 border-t border-stone-800/60 text-amber-400/90"><b class="text-amber-300">Augmentations :</b> ${s.raises}</div>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Écouteurs de filtrage
     searchInput?.addEventListener('input', render);
     masterySelect?.addEventListener('change', render);
 
@@ -434,7 +412,35 @@ function render() {
       });
     });
 
-    // Premier rendu
+    // Écouteurs modale Mahō
+    document.getElementById('maho-cancel-btn')?.addEventListener('click', () => {
+      mahoModal?.classList.add('hidden');
+    });
+
+    document.getElementById('maho-unlock-btn')?.addEventListener('click', () => {
+      if (mahoInput?.value.trim().toUpperCase() === MAHO_SECRET_PASS) {
+        isMahoUnlocked = true;
+        sessionStorage.setItem("l5r_maho_unlocked", "true");
+        mahoModal?.classList.add('hidden');
+        setElementFilter('Maho');
+      } else {
+        mahoError?.classList.remove('hidden');
+      }
+    });
+
+    mahoInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('maho-unlock-btn')?.click();
+    });
+
+    // Reverrouillage de session
+    mahoRelockBtn?.addEventListener('click', () => {
+      isMahoUnlocked = false;
+      sessionStorage.removeItem("l5r_maho_unlocked");
+      setElementFilter('all');
+    });
+
+    // Initialisation
+    updateMahoState();
     render();
   </script>
 
