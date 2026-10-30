@@ -1,10 +1,9 @@
 /**
- * AVANTAGES & DÉSAVANTAGES OFFICIELS — L5R 4e Édition (Livre de Base p. 146-163)
- * Compatible character-generator.js et createcharacter.html
+ * data/avantages-data.js — L5R 4e Édition
+ * Définition universelle (Array + Dictionnaire Objet) pour character-generator.js
  */
 
 (function () {
-  // 1. DÉFINITION DES AVANTAGES
   const AVANTAGES_LIST = [
     {
       id: "adv-ambidextre",
@@ -13,7 +12,7 @@
       cost: 3,
       prerequisite: "Agilité 3",
       desc: "Vous maniez vos armes et vos outils avec une égale dextérité de la main gauche comme de la main droite.",
-      rule: "Vous ignorez la pénalité habituelle de +5 au ND (ou le malus de -1g0 aux dés) lorsque vous effectuez une attaque ou une action avec votre main non dominante. Requis pour le style à deux armes sans malus."
+      rule: "Vous ignorez la pénalité habituelle de +5 au ND (ou de -1g0) avec votre main non dominante. Requis pour le combat à deux armes sans malus."
     },
     {
       id: "adv-grand",
@@ -21,8 +20,8 @@
       type: "Physique",
       cost: 2,
       prerequisite: "Incompatible avec Petit",
-      desc: "Votre stature imposante domine le champ de bataille et impressionne vos pairs samouraïs.",
-      rule: "Vous gagnez +1 point de vie supplémentaire à chaque palier de blessure. De plus, vous ajoutez +1g0 à tous vos jets de dégâts au corps à corps lorsque vous maniez une arme à deux mains ou une arme lourde."
+      desc: "Votre stature imposante domine le champ de bataille et impressionne le peuple de l'Empire.",
+      rule: "Vous gagnez +1 point de vie supplémentaire à chaque palier de blessure. De plus, vous ajoutez +1g0 aux dégâts avec une arme à deux mains ou une arme lourde."
     },
     {
       id: "adv-dur-a-cuire",
@@ -40,7 +39,7 @@
       cost: 4,
       prerequisite: "Réflexes 3",
       desc: "Vos réflexes fulgurants vous permettent d'anticiper la trajectoire des lames ennemies.",
-      rule: "Vous ajoutez votre Anneau d'Air en bonus direct au résultat de tous vos jets d'Initiative au début de chaque tour de combat."
+      rule: "Vous ajoutez votre Anneau d'Air en bonus direct à tous vos jets d'Initiative au début de chaque tour de combat."
     },
     {
       id: "adv-combattant-rapide",
@@ -49,7 +48,7 @@
       cost: 3,
       prerequisite: "Aucun",
       desc: "Votre corps bondit instinctivement dès qu'un péril mortel survient.",
-      rule: "Lors de chaque jet d'Initiative, vous lancez 1 dé supplémentaire (+1g0). En cas d'égalité d'Initiative, vous agissez systématiquement avant votre adversaire."
+      rule: "Lors de chaque jet d'Initiative, vous lancez 1 dé supplémentaire (+1g0). En cas d'égalité, vous agissez en premier."
     },
     {
       id: "adv-sens-aigus",
@@ -58,7 +57,7 @@
       cost: 3,
       prerequisite: "Aucun",
       desc: "Votre vue perçante, votre ouïe fine ou votre flair d'animal traqueur déjouent les pièges de l'ombre.",
-      rule: "Vous recevez un bonus de +1g0 sur tous vos jets de Compétences basés sur le Trait Perception (Investigation, Chasse, Vigilance auditive et visuelle)."
+      rule: "Vous recevez un bonus de +1g0 sur tous vos jets de Compétences basés sur le Trait Perception (Investigation, Chasse, Vigilance)."
     },
     {
       id: "adv-sang-osano-wo",
@@ -67,7 +66,7 @@
       cost: 4,
       prerequisite: "Prisé par le Clan du Crabe",
       desc: "La foudre et les tempêtes du Seigneur du Tonnerre coulent dans vos veines.",
-      rule: "Vous bénéficiez d'un bonus de +1g1 sur tous vos jets de Constitution pour résister aux intempéries, au froid extrême, à la privation ou aux poisons. Toute Réduction de dégâts naturelle contre les attaques électriques ou élémentaires augmente de 5."
+      rule: "Bonus de +1g1 sur tous vos jets de Constitution contre les intempéries, la privation ou les poisons. Réduction augmentée de 5 contre l'électricité."
     },
     {
       id: "adv-duelliste-ne",
@@ -76,7 +75,7 @@
       cost: 4,
       prerequisite: "Iaijutsu 3",
       desc: "Vous percevez le rythme exact de la respiration adverse précédant le dégainé du katana.",
-      rule: "Dans tout duel formel d'Iaijutsu (au premier sang ou à mort), vous gagnez +1g0 lors de la phase de Concentration pour tenter d'accumuler des Augmentations Gratuites."
+      rule: "En duel formel d'Iaijutsu, vous gagnez +1g0 lors de la phase de Concentration pour obtenir des Augmentations Gratuites."
     },
     {
       id: "adv-pensee-claire",
@@ -85,7 +84,7 @@
       cost: 3,
       prerequisite: "Incompatible avec Naïf",
       desc: "Votre logique d'acier et votre lucidité vous préservent des mensonges et des sortilèges illusoires.",
-      rule: "Vous gagnez +2g0 sur tous vos jets opposés pour résister aux illusions de l'Air, aux tromperies, aux manœuvres de Tentation ou à toute manipulation mentale magique."
+      rule: "Vous gagnez +2g0 sur tous vos jets opposés pour résister aux illusions, tromperies, Tentations ou manipulations mentales magiques."
     },
     {
       id: "adv-memoire-precise",
@@ -94,7 +93,7 @@
       cost: 2,
       prerequisite: "Aucun",
       desc: "Vous retenez les détails d'un parchemin, les plans d'un château ou une généalogie avec une fidélité absolue.",
-      rule: "Vous gagnez +1g0 sur tous vos jets d'Intelligence pour vous remémorer un fait précis, réciter un code de lois ou reproduire fidèlement un document sans support écrit."
+      rule: "Bonus de +1g0 sur les jets d'Intelligence pour vous remémorer un fait précis, réciter une loi ou reproduire un document."
     },
     {
       id: "adv-sens-danger",
@@ -103,7 +102,7 @@
       cost: 3,
       prerequisite: "Intuition 3",
       desc: "Un frisson tellurique vous avertit des trahisons et des embuscades avant qu'elles ne se referment.",
-      rule: "Le Maître du Jeu doit vous avertir dès qu'une embuscade préméditée vous cible. Vous ne pouvez jamais subir l'état Surpris lors du premier round d'un affrontement."
+      rule: "Le MJ doit vous avertir dès qu'une embuscade vous cible. Vous ne pouvez jamais être Surpris au premier round d'un affrontement."
     },
     {
       id: "adv-prodigieux",
@@ -111,8 +110,8 @@
       type: "Mental",
       cost: 12,
       prerequisite: "À la création uniquement",
-      desc: "Vous faites partie de ces génies rares qui assimilent n'importe quel art martial ou érudit deux fois plus vite.",
-      rule: "Le coût en Points d'Expérience pour augmenter n'importe quelle Compétence (Bugei, Noble, Marchande ou Dégradante) est réduit de 1 point (coût minimum : 1 XP par rang)."
+      desc: "Vous assimilez n'importe quel art martial ou érudit deux fois plus vite.",
+      rule: "Le coût en XP pour augmenter n'importe quelle Compétence est réduit de 1 point (minimum 1 XP par rang)."
     },
     {
       id: "adv-grand-potentiel",
@@ -121,7 +120,7 @@
       cost: 5,
       prerequisite: "Spécifier une Compétence",
       desc: "Votre famille a décelé en vous une disposition hors norme pour une discipline précise.",
-      rule: "Choisissez une compétence précise. Vous pouvez monter cette compétence jusqu'au rang 6 (outrepassant la limite de 5) sans condition de Rang d'École, et le coût d'Augmentation libre sur cette compétence est réduit de 1 point."
+      rule: "Choisissez une compétence : vous pouvez la monter jusqu'au rang 6 sans condition, et ses Augmentations libres coûtent 1 point de moins."
     },
     {
       id: "adv-voix",
@@ -129,8 +128,8 @@
       type: "Social",
       cost: 3,
       prerequisite: "Incompatible avec Bégaiement",
-      desc: "Votre voix possède un timbre noble, profond et hypnotique qui captive l'assemblée des cours.",
-      rule: "Vous gagnez +1g0 sur tous vos jets d'Éloquence, Chant, Déclamation, Commandement et Art de la Guerre (Tactique) impliquant des ordres vocaux."
+      desc: "Votre voix possède un timbre noble et profond qui captive l'assemblée des cours.",
+      rule: "Bonus de +1g0 sur tous les jets d'Éloquence, Chant, Déclamation, Commandement et Art de la Guerre (Tactique)."
     },
     {
       id: "adv-modele-bushido",
@@ -139,7 +138,7 @@
       cost: 3,
       prerequisite: "Honneur 4.0 minimum",
       desc: "Vous personnifiez l'une des sept vertus cardinales de l'Empire de façon remarquable.",
-      rule: "Choisissez une vertu du Bushidō (Gi, Yu, Jin, Rei, Makoto, Meiyo, Chugo). Chaque gain d'Honneur directement rattaché à l'accomplissement héroïque de cette vertu est doublé."
+      rule: "Choisissez une vertu : chaque gain d'Honneur directement rattaché à l'accomplissement héroïque de cette vertu est doublé."
     },
     {
       id: "adv-allie-influent",
@@ -147,8 +146,8 @@
       type: "Social",
       cost: 4,
       prerequisite: "Définir l'identité du PNJ",
-      desc: "Un Magistrat d'Émeraude, un Daimyō de province ou un Karō influent vous est lié par une dette d'honneur.",
-      rule: "Vous possédez un allié dont le Statut est égal à (votre Statut + 2). Il peut fournir escortes, immunités juridictionnelles mineures ou prêts d'honneur selon les besoins de votre mission."
+      desc: "Un haut dignitaire ou daimyō provincial vous est lié par une dette d'honneur sacrée.",
+      rule: "Vous disposez d'un allié fixe de Statut égal à (votre Statut + 2) capable de vous fournir escortes, immunités ou appui politique."
     },
     {
       id: "adv-chanceux",
@@ -157,7 +156,7 @@
       cost: 3,
       prerequisite: "Cumulable jusqu'à 3 fois (3 pts/niveau)",
       desc: "Les Fortunes veillent sur votre pas et détournent la lame fatale au dernier instant.",
-      rule: "Par niveau acheté, vous pouvez relancer une fois par session de jeu l'intégralité d'un jet de dés non satisfaisant. Le second résultat est conservé."
+      rule: "Par niveau acheté, vous pouvez relancer une fois par session un jet de dés raté en gardant le second résultat."
     },
     {
       id: "adv-benediction-benten",
@@ -165,8 +164,8 @@
       type: "Spirituel",
       cost: 3,
       prerequisite: "Incompatible avec Odieux",
-      desc: "La Fortune de l'Amour et des Arts a posé sa grâce sur vos traits et votre allure.",
-      rule: "Vous recevez un bonus de +1g0 à tous vos jets de Séduction, Courtisan, Étiquette et Persuasion face à quiconque ne vous voue pas une inimitié mortelle déclarée."
+      desc: "La Fortune de l'Amour et des Arts a posé sa grâce sur vos traits et votre démarche.",
+      rule: "Bonus de +1g0 sur tous les jets de Séduction, Courtisan, Étiquette et Persuasion."
     },
     {
       id: "adv-benediction-bishamon",
@@ -175,7 +174,7 @@
       cost: 3,
       prerequisite: "Aucun",
       desc: "La Fortune de la Guerre approuve la vigueur de vos assauts.",
-      rule: "Lorsque vous adoptez la Posture d'Attaque Totale ou que vous déclarez une manœuvre pour Dégâts Accrus, ajoutez +1g0 supplémentaire à votre jet de dégâts."
+      rule: "En Posture d'Attaque Totale ou lors d'une manœuvre pour Dégâts Accrus, ajoutez +1g0 supplémentaire à vos dégâts."
     },
     {
       id: "adv-affinite-elementaire",
@@ -184,11 +183,10 @@
       cost: 3,
       prerequisite: "Shugenja ou Moine",
       desc: "Les Kami d'un élément précis communient avec votre âme avec une intensité rare.",
-      rule: "Choisissez un Élément (Air, Terre, Feu ou Eau). Le ND d'incantation de tous les sorts de cet élément est réduit de 5 points, ou vous obtenez 1 Augmentation Gratuite sur chaque invocation réussie."
+      rule: "Choisissez un Élément : le ND d'incantation de tous ses sorts est réduit de 5, ou vous gagnez 1 Augmentation Gratuite."
     }
   ];
 
-  // 2. DÉFINITION DES DÉSAVANTAGES
   const DESAVANTAGES_LIST = [
     {
       id: "dis-borgne",
@@ -198,7 +196,7 @@
       gain: 2,
       prerequisite: "Aucun",
       desc: "Une cicatrice de duel ou une flèche perdue vous a privé d'un œil, réduisant votre vision périphérique.",
-      rule: "Vous subissez une pénalité de -1g0 à tous vos jets de Tir à l'arc (Kyujutsu), d'Armes de Jet, ainsi qu'à tous vos jets de Perception basés sur la vue ou l'estimation des distances."
+      rule: "Pénalité de -1g0 à tous les jets de Tir à l'arc (Kyujutsu), d'Armes de Jet et de Perception visuelle."
     },
     {
       id: "dis-boiteux",
@@ -208,7 +206,7 @@
       gain: 3,
       prerequisite: "Aucun",
       desc: "Un coup d'épieu mal soigné ou une malformation vous fait traîner la jambe.",
-      rule: "Votre distance de déplacement par Action de Mouvement Simple ou Gratuite est réduite de 1,5 mètre. Vous subissez également une pénalité de -1g1 sur tous vos jets d'Athlétisme."
+      rule: "Votre distance de déplacement par Action de Mouvement est réduite de 1,5 mètre. Pénalité de -1g1 en Athlétisme."
     },
     {
       id: "dis-petit",
@@ -217,8 +215,8 @@
       cost: 3,
       gain: 3,
       prerequisite: "Incompatible avec Grand",
-      desc: "Votre gabarit est nettement plus frêle et modeste que celui de vos pairs guerriers.",
-      rule: "Chacun de vos Paliers de Blessures contient 1 point de vie en moins par rapport à votre calcul normal. Vous subissez de plus un malus de -1g0 sur vos jets de dégâts avec des armes lourdes."
+      desc: "Votre gabarit est nettement plus modeste que celui de vos pairs guerriers.",
+      rule: "Chaque palier de blessure contient 1 PV en moins. Malus de -1g0 sur les jets de dégâts avec les armes lourdes."
     },
     {
       id: "dis-faible",
@@ -228,7 +226,7 @@
       gain: 4,
       prerequisite: "Aucun",
       desc: "Votre métabolisme endure difficilement la morsure du poison et des fièvres.",
-      rule: "Chaque fois que vous devez effectuer un jet de Constitution pour résister aux maladies, toxines ou blessures critiques, votre Trait de Constitution est considéré comme réduit de 1 cran."
+      rule: "Votre Constitution est considérée comme réduite de 1 cran pour résister aux toxines, maladies et blessures critiques."
     },
     {
       id: "dis-colerique",
@@ -237,8 +235,8 @@
       cost: 3,
       gain: 3,
       prerequisite: "Incompatible avec Calme",
-      desc: "Votre sang bout au moindre affront perçu, qu'il soit réel ou purement imaginaire.",
-      rule: "Lorsqu'on vous insulte, vous provoque ou vous contredit en public, vous devez réussir un jet de Volonté ND 20 pour ne pas dégainer votre sabre, crier ou défier l'offenseur en duel sur-le-champ."
+      desc: "Votre sang bout au moindre affront perçu, qu'il soit réel ou imaginaire.",
+      rule: "En cas de provocation publique, vous devez réussir un jet de Volonté ND 20 pour ne pas dégainer ou défier en duel immédiatement."
     },
     {
       id: "dis-obsession",
@@ -246,9 +244,9 @@
       type: "Mental",
       cost: 2,
       gain: 2,
-      prerequisite: "Spécifier la nature de l'obsession",
-      desc: "Un vice secret (jeu d'argent, saké fort, collection d'armes interdites, artisanat compulsif) dévore vos pensées.",
-      rule: "Pour résister à l'envie d'assouvir votre compulsion lorsqu'une opportunité se présente, vous devez réussir un jet de Volonté ND 15. En cas d'échec, vous y consacrez tout votre temps libre et vos koku."
+      prerequisite: "Spécifier l'obsession",
+      desc: "Un vice secret (jeu, saké fort, armes interdites) dévore vos pensées.",
+      rule: "Jet de Volonté ND 15 requis pour résister à l'envie d'assouvir votre obsession dès qu'une opportunité se présente."
     },
     {
       id: "dis-cupide",
@@ -257,8 +255,8 @@
       cost: 3,
       gain: 3,
       prerequisite: "Aucun",
-      desc: "Vous accordez une importance honteuse à l'or, aux soies et aux richesses matérielles, au mépris de la droiture du Bushidō.",
-      rule: "Toutes les vertus du Bushidō vous coûtent le double d'Honneur en cas d'infraction vénale. Vous subissez une pénalité de -1g1 sur tous vos jets de Volonté pour refuser un pot-de-vin substantiel."
+      desc: "Vous accordez une importance honteuse à l'or et aux richesses matérielles.",
+      rule: "Perte d'Honneur doublée en cas d'infraction vénale. Malus de -1g1 en Volonté pour refuser un pot-de-vin substantiel."
     },
     {
       id: "dis-phobie",
@@ -266,9 +264,9 @@
       type: "Mental",
       cost: 3,
       gain: 3,
-      prerequisite: "Définir la source (Serpents, Sang, Eau, Morts)",
+      prerequisite: "Définir la source",
       desc: "Une peur viscérale et irrationnelle paralyse vos sens en présence de l'objet redouté.",
-      rule: "Lorsque vous êtes confronté directement à l'objet de votre phobie, vous subissez immédiatement un effet équivalent à un état de Peur 3 (malus de -3g0 à tous vos jets tant que la source reste visible)."
+      rule: "Face à votre phobie, vous subissez un état de Peur 3 (-3g0 à tous vos jets tant que la source reste visible)."
     },
     {
       id: "dis-dette-honneur",
@@ -277,8 +275,8 @@
       cost: 3,
       gain: 3,
       prerequisite: "Définir le créancier",
-      desc: "Un autre samouraï (ou un seigneur rival) a sauvé votre vie ou préservé l'honneur de votre maison dans le passé.",
-      rule: "Votre créancier détient une emprise morale absolue sur vous. S'il requiert votre aide ou votre silence au cours du scénario, vous devez vous exécuter ou subir une perte immédiate de 2 Rangs complets d'Honneur."
+      desc: "Un samouraï ou seigneur rival a sauvé votre vie ou préservé votre nom par le passé.",
+      rule: "Votre créancier a une emprise morale absolue sur vous. Refuser son appel entraîne une perte immédiate de 2 Rangs d'Honneur."
     },
     {
       id: "dis-odieux",
@@ -287,8 +285,8 @@
       cost: 3,
       gain: 3,
       prerequisite: "Incompatible avec Benten",
-      desc: "Votre franchise brutale, votre cynisme ou vos maladresses enfreignent constamment l'Étiquette impériale.",
-      rule: "Vous subissez une pénalité de -1g1 à tous vos jets de Compétences Sociales (Étiquette, Courtisan, Séduction). En cas d'échec total sur un jet d'Étiquette, vous commettez un outrage public."
+      desc: "Votre franchise brutale ou vos maladresses enfreignent constamment la bienséance.",
+      rule: "Malus de -1g1 sur tous les jets de Compétences Sociales (Étiquette, Courtisan, Séduction)."
     },
     {
       id: "dis-ennemi-jure",
@@ -296,9 +294,9 @@
       type: "Social",
       cost: 3,
       gain: 3,
-      prerequisite: "Définir l'ennemi avec le MJ",
-      desc: "Un duelliste, un magistrat ou un membre d'un clan rival a juré votre ruine personnelle ou celle de votre lignée.",
-      rule: "Le MJ introduit périodiquement cet adversaire dont le rang d'école et l'influence politique égalent ou surpassent les vôtres, prêt à ruiner vos alliances politiques et saboter vos missions officielles."
+      prerequisite: "Définir l'ennemi",
+      desc: "Un rival influent a juré votre ruine personnelle ou celle de votre lignée.",
+      rule: "Le MJ introduit cet adversaire redoutable prêt à ruiner vos alliances politiques et saboter vos missions officielles."
     },
     {
       id: "dis-sacre-sombre",
@@ -306,9 +304,9 @@
       type: "Social",
       cost: 4,
       gain: 4,
-      prerequisite: "Accorder la nature du secret avec le MJ",
-      desc: "Une infamie cachée (parent souillé, meurtre déshonorant, descendance illégitime, usage secret d'un poison) pèse sur votre nom.",
-      rule: "Si ce secret venait à être révélé aux cours de l'Empire, vous seriez immédiatement condamné au Seppuku rituel, à l'exil parmi les Ronins sans maître ou à la disgrâce absolue de votre famille."
+      prerequisite: "Définir avec le MJ",
+      desc: "Une infamie cachée pèse sur votre nom et votre famille.",
+      rule: "Si ce secret éclate au grand jour, vous seriez immédiatement condamné au Seppuku ou à l'exil parmi les Ronins."
     },
     {
       id: "dis-malediction-fortune",
@@ -316,9 +314,9 @@
       type: "Spirituel",
       cost: 4,
       gain: 4,
-      prerequisite: "Spécifier la Fortune offensée",
-      desc: "Un acte sacrilège commis par l'un de vos ancêtres a attiré le courroux d'une Fortune céleste sur votre âme.",
-      rule: "Une fois par session, à un moment crucial décidé par le Maître du Jeu, les esprits vous tournent le dos : l'un de vos jets réussis est annulé et doit être relancé avec deux dés en moins (-2g0)."
+      prerequisite: "Spécifier la Fortune",
+      desc: "Un sacrilège commis par vos aïeux a attiré le courroux d'une Fortune céleste sur vous.",
+      rule: "Une fois par session, à l'appréciation du MJ, l'un de vos jets réussis est annulé et relancé avec deux dés en moins (-2g0)."
     },
     {
       id: "dis-hante",
@@ -327,8 +325,8 @@
       cost: 3,
       gain: 3,
       prerequisite: "Aucun",
-      desc: "Le fantôme tourmenté (Shiryo) d'un aïeul vous suit comme une ombre, murmurant reproches et avertissements discordants.",
-      rule: "Dans les situations de stress intense ou de méditation, l'apparition de l'ancêtre perturbe votre concentration. Vous subissez une pénalité de -1g0 à tous vos jets d'Initiative et jets de Vigilance."
+      desc: "Le fantôme tourmenté d'un aïeul vous suit comme une ombre, murmurant des reproches.",
+      rule: "Pénalité de -1g0 à tous vos jets d'Initiative et jets de Vigilance lors de situations de stress ou de combat."
     },
     {
       id: "dis-sensible-souillure",
@@ -336,45 +334,53 @@
       type: "Spirituel",
       cost: 4,
       gain: 4,
-      prerequisite: "Incompatible avec Pureté de l'Âme",
+      prerequisite: "Incompatible avec Pureté",
       desc: "Votre résistance spirituelle est poreuse face aux miasmes putrides de Jigoku.",
-      rule: "Tous les jets de Terre ou de Constitution que vous effectuez pour résister à l'acquisition de points de Souillure de l'Outremonde voient leur ND augmenter de +10. Vous ne pouvez jamais dépenser de Vide pour relancer ces jets."
+      rule: "+10 au ND de tous les jets pour résister à la Souillure. Interdiction totale de dépenser du Vide sur ces jets."
     }
   ];
 
-  // 3. CONSTRUCTION DES DICTIONNAIRES ATTENDUS PAR CHARACTER-GENERATOR.JS
-  const advMap = {};
+  // Création des dictionnaires sous forme d'objets (avec recherche par ID ET par Nom)
+  const advObj = {};
   AVANTAGES_LIST.forEach(item => {
-    advMap[item.id] = item;
-    // Permet la recherche par ID ET par Nom sans créer de doublon dans les boucles
-    Object.defineProperty(advMap, item.name, { value: item, enumerable: false, writable: true });
+    advObj[item.id] = item;
+    advObj[item.name] = item;
   });
 
-  const disadvMap = {};
+  const disadvObj = {};
   DESAVANTAGES_LIST.forEach(item => {
-    disadvMap[item.id] = item;
-    Object.defineProperty(disadvMap, item.name, { value: item, enumerable: false, writable: true });
+    disadvObj[item.id] = item;
+    disadvObj[item.name] = item;
   });
 
-  // 4. INJECTION DANS L'ÉCOSYSTÈME GLOBAL
+  // Injection multi-compatible (pour character-generator.js ET createcharacter.html)
   if (typeof window !== "undefined") {
+    // 1. Dictionnaires d'objets indexés par ID (ce que cherche character-generator.js ligne 454)
     window.L5R_DATA = window.L5R_DATA || {};
+    window.L5R_DATA.advantages = advObj;
+    window.L5R_DATA.disadvantages = disadvObj;
+    window.L5R_DATA.avantages = advObj;
+    window.L5R_DATA.desavantages = disadvObj;
 
-    // Attendu par character-generator.js ligne 477
-    window.L5R_DATA.advantages = advMap;
-    window.L5R_DATA.disadvantages = disadvMap;
-    window.L5R_DATA.avantages = advMap;
-    window.L5R_DATA.desavantages = disadvMap;
+    // 2. Variables directes souvent appelées dans les générateurs L5R
+    window.ADVANTAGES = advObj;
+    window.DISADVANTAGES = disadvObj;
+    window.AVANTAGES = advObj;
+    window.DESAVANTAGES = disadvObj;
 
-    // Utilisé par les sélecteurs et aperçus de createcharacter.html
+    // 3. Tableaux pour les boucles d'affichage dans createcharacter.html
     window.AVANTAGES_DATA = AVANTAGES_LIST;
     window.DESAVANTAGES_DATA = DESAVANTAGES_LIST;
     window.TRAITS_DATA = [...AVANTAGES_LIST, ...DESAVANTAGES_LIST];
 
-    // Alias de secours universels
-    window.ADVANTAGES = advMap;
-    window.DISADVANTAGES = disadvMap;
-    window.AVANTAGES = advMap;
-    window.DESAVANTAGES = disadvMap;
+    // Permet d'accéder à AVANTAGES_DATA['adv-grand'] même si c'est un Array !
+    AVANTAGES_LIST.forEach(a => {
+      AVANTAGES_LIST[a.id] = a;
+      AVANTAGES_LIST[a.name] = a;
+    });
+    DESAVANTAGES_LIST.forEach(d => {
+      DESAVANTAGES_LIST[d.id] = d;
+      DESAVANTAGES_LIST[d.name] = d;
+    });
   }
 })();
