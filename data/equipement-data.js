@@ -1,455 +1,577 @@
 /**
- * EQUIPEMENT_DATA — Armes, Armures et Équipement officiel
- * L5R 4e Édition (Livre de Base, Livre du Feu p. 198-204)
- * 
- * Règle de dégâts de mêlée : (Force + premier chiffre du DR) g (deuxième chiffre)
+ * data/equipement-data.js — L5R 4e Édition (Livre de Base p. 198-204)
+ * Initialise L5R_DATA.weapons et L5R_DATA.armors pour character-generator.js
  */
 
-const WEAPONS_DATA = [
+(function () {
   // =========================================================================
-  // SABRES & LAMES (SWORDS — KENJUTSU / IAIJUTSU)
+  // 1. ARMURES OFFICIELLES (LIVRE DE BASE P. 198)
   // =========================================================================
-  {
-    id: "wep-katana",
-    name: "Katana",
-    category: "Sabres",
-    skill: "Kenjutsu",
-    dr: "3k2",
-    diceRolled: 3,
-    diceKept: 2,
-    size: "Moyen",
-    keywords: ["Moyen", "Samouraï"],
-    price: "Inestimable (25 koku)",
-    rules: "Dépense de Vide : Vous pouvez dépenser 1 point de Vide pour augmenter les dégâts d'une frappe réussie de +1g1 (non cumulable)."
-  },
-  {
-    id: "wep-wakizashi",
-    name: "Wakizashi",
-    category: "Sabres",
-    skill: "Kenjutsu",
-    dr: "2k2",
-    diceRolled: 2,
-    diceKept: 2,
-    size: "Petit",
-    keywords: ["Petit", "Samouraï"],
-    price: "Inestimable (15 koku)",
-    rules: "Symbole de statut du samouraï avec le katana (daishō). Utilisé pour le seppuku et le combat à deux armes (Niten)."
-  },
-  {
-    id: "wep-nodachi",
-    name: "No-Dachi",
-    category: "Sabres",
-    skill: "Kenjutsu",
-    dr: "3k3",
-    diceRolled: 3,
-    diceKept: 3,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "30 koku",
-    rules: "Épée à deux mains (1,5 à 2 mètres). Conçue à l'origine contre la cavalerie. Nécessite deux mains."
-  },
-  {
-    id: "wep-ninja-to",
-    name: "Ninja-tō",
-    category: "Sabres",
-    skill: "Ninjutsu",
-    dr: "2k2",
-    diceRolled: 2,
-    diceKept: 2,
-    size: "Moyen",
-    keywords: ["Moyen", "Ninja"],
-    price: "5 koku",
-    rules: "Lame droite rustique. Considéré comme de Petite taille pour être dissimulé. Si une attaque inflige plus de 40 blessures, la lame se brise."
-  },
-  {
-    id: "wep-parangu",
-    name: "Parangu",
-    category: "Sabres",
-    skill: "Kenjutsu",
-    dr: "2k2",
-    diceRolled: 2,
-    diceKept: 2,
-    size: "Moyen",
-    keywords: ["Moyen", "Paysan"],
-    price: "1 koku",
-    rules: "Machette de marin ou de débroussaillage en acier non replié. Risque de bris face à un katana forgé."
-  },
+  const ARMORS_DICT = {
+    "none": {
+      id: "none",
+      name: "Aucune armure (Kimono)",
+      bonus: 0,
+      bonusTN: 0,
+      armorBonus: 0,
+      reduction: 0,
+      reduc: 0,
+      price: "0 koku",
+      rules: "ND d'Armure de base : (Réflexes × 5) + 5. Aucune Réduction ni malus."
+    },
+    "ashigaru": {
+      id: "ashigaru",
+      name: "Armure d'Ashigaru",
+      bonus: 3,
+      bonusTN: 3,
+      armorBonus: 3,
+      reduction: 1,
+      reduc: 1,
+      price: "5 koku",
+      rules: "+3 au ND d'Armure, Réduction 1."
+    },
+    "light": {
+      id: "light",
+      name: "Armure légère",
+      bonus: 5,
+      bonusTN: 5,
+      armorBonus: 5,
+      reduction: 3,
+      reduc: 3,
+      price: "15 koku",
+      rules: "+5 au ND d'Armure, Réduction 3."
+    },
+    "heavy": {
+      id: "heavy",
+      name: "Armure lourde",
+      bonus: 10,
+      bonusTN: 10,
+      armorBonus: 10,
+      reduction: 5,
+      reduc: 5,
+      price: "40 koku",
+      rules: "+10 au ND d'Armure, Réduction 5. Pénalité de +5 au ND des jets d'Athlétisme et de Furtivité."
+    },
+    "riding": {
+      id: "riding",
+      name: "Armure de cavalerie",
+      bonus: 7,
+      bonusTN: 7,
+      armorBonus: 7,
+      reduction: 4,
+      reduc: 4,
+      price: "35 koku",
+      rules: "+7 au ND d'Armure, Réduction 4. Conçue pour le combat monté."
+    }
+  };
 
   // =========================================================================
-  // ARMES LOURDES (HEAVY WEAPONS — TSUTO / ARMES LOURDES)
+  // 2. ARMES OFFICIELLES (LIVRE DE BASE P. 199-204)
+  // Règle de dégâts de mêlée : (Force + premier chiffre) g (deuxième chiffre)
   // =========================================================================
-  {
-    id: "wep-tetsubo",
-    name: "Tetsubō",
-    category: "Armes Lourdes",
-    skill: "Armes Lourdes",
-    dr: "3k3",
-    diceRolled: 3,
-    diceKept: 3,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "10 koku",
-    rules: "Masse de guerre ferrée ou garnie de pointes d'acier. Arme fétiche des bushi du Crabe pour briser les carapaces et armures. À deux mains."
-  },
-  {
-    id: "wep-dai-tsuchi",
-    name: "Dai Tsuchi",
-    category: "Armes Lourdes",
-    skill: "Armes Lourdes",
-    dr: "5k2",
-    diceRolled: 5,
-    diceKept: 2,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "15 koku",
-    rules: "Marteau de guerre massif à deux mains. Concentre sa force sur une surface réduite pour concasser la pierre et les plaques d'armure lourde."
-  },
-  {
-    id: "wep-ono",
-    name: "Ono",
-    category: "Armes Lourdes",
-    skill: "Armes Lourdes",
-    dr: "0k4",
-    diceRolled: 0,
-    diceKept: 4,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "20 koku",
-    rules: "Grande hache de guerre à deux mains. Les dés lancés dépendent uniquement de la Force de l'attaquant (Force g 4). Tranchant dévastateur."
-  },
-  {
-    id: "wep-masakari",
-    name: "Masakari",
-    category: "Armes Lourdes",
-    skill: "Armes Lourdes",
-    dr: "2k3",
-    diceRolled: 2,
-    diceKept: 3,
-    size: "Moyen",
-    keywords: ["Moyen"],
-    price: "8 koku",
-    rules: "Hache de bûcheron équilibrée pour le combat. Seule arme lourde pouvant être maniée à une main."
-  },
+  const WEAPONS_DICT = {
+    // --- SABRES & LAMES (KENJUTSU / IAIJUTSU) ---
+    "katana": {
+      id: "katana",
+      name: "Katana",
+      category: "Sabres",
+      skill: "Kenjutsu",
+      dr: "3k2",
+      damage: "3k2",
+      drDisplay: "3g2",
+      rolled: 3,
+      kept: 2,
+      diceRolled: 3,
+      diceKept: 2,
+      size: "Moyen",
+      price: "Inestimable (25 koku)",
+      rules: "Vous pouvez dépenser 1 point de Vide pour ajouter +1g1 aux dégâts d'une frappe réussie."
+    },
+    "wakizashi": {
+      id: "wakizashi",
+      name: "Wakizashi",
+      category: "Sabres",
+      skill: "Kenjutsu",
+      dr: "2k2",
+      damage: "2k2",
+      drDisplay: "2g2",
+      rolled: 2,
+      kept: 2,
+      diceRolled: 2,
+      diceKept: 2,
+      size: "Petit",
+      price: "Inestimable (15 koku)",
+      rules: "Lame d'honneur du daishō, seppuku, et maniement à deux armes."
+    },
+    "nodachi": {
+      id: "nodachi",
+      name: "No-Dachi",
+      category: "Sabres",
+      skill: "Kenjutsu",
+      dr: "3k3",
+      damage: "3k3",
+      drDisplay: "3g3",
+      rolled: 3,
+      kept: 3,
+      diceRolled: 3,
+      diceKept: 3,
+      size: "Grand",
+      price: "30 koku",
+      rules: "Grand sabre à deux mains de cavalerie et de siège."
+    },
+    "ninja-to": {
+      id: "ninja-to",
+      name: "Ninja-tō",
+      category: "Sabres",
+      skill: "Kenjutsu",
+      dr: "2k2",
+      damage: "2k2",
+      drDisplay: "2g2",
+      rolled: 2,
+      kept: 2,
+      diceRolled: 2,
+      diceKept: 2,
+      size: "Moyen",
+      price: "5 koku",
+      rules: "Lame droite courte. Se brise si l'attaque inflige plus de 40 blessures."
+    },
 
-  // =========================================================================
-  // ARMES D'HAST (POLEARMS)
-  // =========================================================================
-  {
-    id: "wep-naginata",
-    name: "Naginata",
-    category: "Armes d'Hast",
-    skill: "Armes d'Hast",
-    dr: "3k2",
-    diceRolled: 3,
-    diceKept: 2,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "10 koku",
-    rules: "Lame courbée montée sur une hampe de chêne. Arme noble des femmes samouraïs (onna-bugeisha) et des gardes d'honneur."
-  },
-  {
-    id: "wep-bisento",
-    name: "Bisento",
-    category: "Armes d'Hast",
-    skill: "Armes d'Hast",
-    dr: "3k3",
-    diceRolled: 3,
-    diceKept: 3,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "12 koku",
-    rules: "Variante lourde de la naginata dotée d'une lame très épaisse. Portée d'estoc et de taille."
-  },
-  {
-    id: "wep-nagamaki",
-    name: "Nagamaki",
-    category: "Armes d'Hast",
-    skill: "Armes d'Hast",
-    dr: "2k3",
-    diceRolled: 2,
-    diceKept: 3,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "10 koku",
-    rules: "Lame de katana montée sur un manche de même longueur que la lame, offrant un effet de levier puissant."
-  },
-  {
-    id: "wep-sasumata",
-    name: "Sasumata",
-    category: "Armes d'Hast",
-    skill: "Armes d'Hast",
-    dr: "0k2",
-    diceRolled: 0,
-    diceKept: 2,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "5 bu",
-    rules: "Fourche en U utilisée par les magistrats et gardes pour immobiliser un samouraï sans porter atteinte à sa vie."
-  },
+    // --- ARMES LOURDES (ARMES LOURDES / HEAVY WEAPONS) ---
+    "tetsubo": {
+      id: "tetsubo",
+      name: "Tetsubō",
+      category: "Armes Lourdes",
+      skill: "Armes Lourdes",
+      dr: "3k3", // Valeur officielle stricte L5R 4e
+      damage: "3k3",
+      drDisplay: "3g3",
+      rolled: 3,
+      kept: 3,
+      diceRolled: 3,
+      diceKept: 3,
+      size: "Grand",
+      price: "10 koku",
+      rules: "Gourdin ferré ou garni de pointes. Dégâts dévastateurs au corps-à-corps : (Force + 3)g3."
+    },
+    "dai-tsuchi": {
+      id: "dai-tsuchi",
+      name: "Dai Tsuchi",
+      category: "Armes Lourdes",
+      skill: "Armes Lourdes",
+      dr: "5k2",
+      damage: "5k2",
+      drDisplay: "5g2",
+      rolled: 5,
+      kept: 2,
+      diceRolled: 5,
+      diceKept: 2,
+      size: "Grand",
+      price: "15 koku",
+      rules: "Marteau de guerre massif à deux mains conçu pour briser les carapaces d'Outremonde."
+    },
+    "ono": {
+      id: "ono",
+      name: "Ono",
+      category: "Armes Lourdes",
+      skill: "Armes Lourdes",
+      dr: "0k4",
+      damage: "0k4",
+      drDisplay: "0g4",
+      rolled: 0,
+      kept: 4,
+      diceRolled: 0,
+      diceKept: 4,
+      size: "Grand",
+      price: "20 koku",
+      rules: "Grande hache à deux mains. Dés lancés basés exclusivement sur la Force : (Force)g4."
+    },
+    "masakari": {
+      id: "masakari",
+      name: "Masakari",
+      category: "Armes Lourdes",
+      skill: "Armes Lourdes",
+      dr: "2k3",
+      damage: "2k3",
+      drDisplay: "2g3",
+      rolled: 2,
+      kept: 3,
+      diceRolled: 2,
+      diceKept: 3,
+      size: "Moyen",
+      price: "8 koku",
+      rules: "Hache de guerre à une main."
+    },
 
-  // =========================================================================
-  // LANCES (SPEARS)
-  // =========================================================================
-  {
-    id: "wep-yari",
-    name: "Yari",
-    category: "Lances",
-    skill: "Lances",
-    dr: "2k2",
-    diceRolled: 2,
-    diceKept: 2,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "3 bu",
-    rules: "Pique d'infanterie standard de 2 à 3 mètres de long avec une pointe droite à double tranchant."
-  },
-  {
-    id: "wep-nage-yari",
-    name: "Nage-Yari",
-    category: "Lances",
-    skill: "Lances",
-    dr: "1k2",
-    diceRolled: 1,
-    diceKept: 2,
-    size: "Moyen",
-    keywords: ["Moyen"],
-    price: "2 bu",
-    rules: "Javelot court conçu pour être lancé (portée 15 m) ou employé au corps-à-corps."
-  },
+    // --- ARMES D'HAST (POLEARMS) ---
+    "naginata": {
+      id: "naginata",
+      name: "Naginata",
+      category: "Armes d'Hast",
+      skill: "Armes d'Hast",
+      dr: "3k2",
+      damage: "3k2",
+      drDisplay: "3g2",
+      rolled: 3,
+      kept: 2,
+      diceRolled: 3,
+      diceKept: 2,
+      size: "Grand",
+      price: "10 koku",
+      rules: "Lame courbe sur hampe en bois dur."
+    },
+    "bisento": {
+      id: "bisento",
+      name: "Bisento",
+      category: "Armes d'Hast",
+      skill: "Armes d'Hast",
+      dr: "3k3",
+      damage: "3k3",
+      drDisplay: "3g3",
+      rolled: 3,
+      kept: 3,
+      diceRolled: 3,
+      diceKept: 3,
+      size: "Grand",
+      price: "12 koku",
+      rules: "Variante lourde de la naginata avec lame renforcée."
+    },
+    "nagamaki": {
+      id: "nagamaki",
+      name: "Nagamaki",
+      category: "Armes d'Hast",
+      skill: "Armes d'Hast",
+      dr: "2k3",
+      damage: "2k3",
+      drDisplay: "2g3",
+      rolled: 2,
+      kept: 3,
+      diceRolled: 2,
+      diceKept: 3,
+      size: "Grand",
+      price: "10 koku",
+      rules: "Lame d'épée sur manche d'égale longueur offrant un fort bras de levier."
+    },
+    "sasumata": {
+      id: "sasumata",
+      name: "Sasumata",
+      category: "Armes d'Hast",
+      skill: "Armes d'Hast",
+      dr: "0k2",
+      damage: "0k2",
+      drDisplay: "0g2",
+      rolled: 0,
+      kept: 2,
+      diceRolled: 0,
+      diceKept: 2,
+      size: "Grand",
+      price: "5 bu",
+      rules: "Fourche de capture utilisée par les magistrats pour immobiliser."
+    },
 
-  // =========================================================================
-  // COUTEAUX (KNIVES)
-  // =========================================================================
-  {
-    id: "wep-tanto",
-    name: "Tantō",
-    category: "Couteaux",
-    skill: "Couteaux",
-    dr: "1k2",
-    diceRolled: 1,
-    diceKept: 2,
-    size: "Petit",
-    keywords: ["Petit", "Samouraï"],
-    price: "2 koku",
-    rules: "Poignard samouraï traditionnel à garde (tsuba), souvent porté en complément du daishō."
-  },
-  {
-    id: "wep-aiguchi",
-    name: "Aiguchi",
-    category: "Couteaux",
-    skill: "Couteaux",
-    dr: "1k2",
-    diceRolled: 1,
-    diceKept: 2,
-    size: "Petit",
-    keywords: ["Petit"],
-    price: "1 koku",
-    rules: "Dague dépourvue de garde facilitant la dissimulation sous un kimono ou dans une manche."
-  },
+    // --- LANCES (SPEARS) ---
+    "yari": {
+      id: "yari",
+      name: "Yari",
+      category: "Lances",
+      skill: "Lances",
+      dr: "2k2",
+      damage: "2k2",
+      drDisplay: "2g2",
+      rolled: 2,
+      kept: 2,
+      diceRolled: 2,
+      diceKept: 2,
+      size: "Grand",
+      price: "3 bu",
+      rules: "Pique d'infanterie standard de 2 à 3 mètres à double tranchant."
+    },
+    "nage-yari": {
+      id: "nage-yari",
+      name: "Nage-Yari",
+      category: "Lances",
+      skill: "Lances",
+      dr: "1k2",
+      damage: "1k2",
+      drDisplay: "1g2",
+      rolled: 1,
+      kept: 2,
+      diceRolled: 1,
+      diceKept: 2,
+      size: "Moyen",
+      price: "2 bu",
+      rules: "Javelot d'hast court pouvant être lancé à 15 m ou utilisé au contact."
+    },
 
-  // =========================================================================
-  // BÂTONS (STAVES)
-  // =========================================================================
-  {
-    id: "wep-bo",
-    name: "Bō",
-    category: "Bâtons",
-    skill: "Bâtons",
-    dr: "1k2",
-    diceRolled: 1,
-    diceKept: 2,
-    size: "Grand",
-    keywords: ["Grand", "Bâton"],
-    price: "1 bu",
-    rules: "Bâton long de 1,80 m. Les armures adverses doublent leur bonus au ND d'Armure face à cette arme contondante."
-  },
-  {
-    id: "wep-jo",
-    name: "Jō",
-    category: "Bâtons",
-    skill: "Bâtons",
-    dr: "1k1",
-    diceRolled: 1,
-    diceKept: 1,
-    size: "Moyen",
-    keywords: ["Moyen", "Bâton"],
-    price: "5 zeni",
-    rules: "Bâton court de marche (1,20 m). Double également le bonus conféré par les armures adverses."
-  },
+    // --- COUTEAUX (KNIVES) ---
+    "tanto": {
+      id: "tanto",
+      name: "Tantō",
+      category: "Couteaux",
+      skill: "Couteaux",
+      dr: "1k2",
+      damage: "1k2",
+      drDisplay: "1g2",
+      rolled: 1,
+      kept: 2,
+      diceRolled: 1,
+      diceKept: 2,
+      size: "Petit",
+      price: "2 koku",
+      rules: "Dague traditionnelle samouraï à garde (tsuba)."
+    },
+    "aiguchi": {
+      id: "aiguchi",
+      name: "Aiguchi",
+      category: "Couteaux",
+      skill: "Couteaux",
+      dr: "1k2",
+      damage: "1k2",
+      drDisplay: "1g2",
+      rolled: 1,
+      kept: 2,
+      diceRolled: 1,
+      diceKept: 2,
+      size: "Petit",
+      price: "1 koku",
+      rules: "Dague sans garde facilement dissimulable dans un vêtement."
+    },
 
-  // =========================================================================
-  // ARMES PAYSANNES & MARTIALES (PEASANT & IMPROVISED)
-  // =========================================================================
-  {
-    id: "wep-jitte",
-    name: "Jitte",
-    category: "Armes de Jitte",
-    skill: "Jitte",
-    dr: "1k1",
-    diceRolled: 1,
-    diceKept: 1,
-    size: "Petit",
-    keywords: ["Petit"],
-    price: "5 bu",
-    rules: "Tringle de fer à crochet utilisée par la police citadine pour bloquer et briser les lames ennemies sans blessure mortelle."
-  },
-  {
-    id: "wep-kama",
-    name: "Kama",
-    category: "Armes Paysannes",
-    skill: "Armes Paysannes",
-    dr: "1k2",
-    diceRolled: 1,
-    diceKept: 2,
-    size: "Petit",
-    keywords: ["Petit", "Paysan"],
-    price: "1 bu",
-    rules: "Faucille à riz agricole. Arme de prédilection des bushi du Clan de la Mante."
-  },
-  {
-    id: "wep-nunchaku",
-    name: "Nunchaku",
-    category: "Armes Paysannes",
-    skill: "Armes Paysannes",
-    dr: "1k2",
-    diceRolled: 1,
-    diceKept: 2,
-    size: "Petit",
-    keywords: ["Petit", "Paysan"],
-    price: "1 bu",
-    rules: "Fléau agricole articulé en bois dur réputé pour désorienter l'adversaire."
-  },
-  {
-    id: "wep-tonfa",
-    name: "Tonfa",
-    category: "Armes Paysannes",
-    skill: "Armes Paysannes",
-    dr: "0k3",
-    diceRolled: 0,
-    diceKept: 3,
-    size: "Moyen",
-    keywords: ["Moyen", "Paysan"],
-    price: "5 bu",
-    rules: "Manivelle de meule en bois. Permet de parer le long de l'avant-bras. Dégâts basés purement sur la Force (Force g 3)."
-  },
+    // --- BÂTONS (STAVES) ---
+    "bo": {
+      id: "bo",
+      name: "Bō",
+      category: "Bâtons",
+      skill: "Bâtons",
+      dr: "1k2",
+      damage: "1k2",
+      drDisplay: "1g2",
+      rolled: 1,
+      kept: 2,
+      diceRolled: 1,
+      diceKept: 2,
+      size: "Grand",
+      price: "1 bu",
+      rules: "Bâton en bois dur de 1,80 m. Les armures doublent leur bonus de ND face au Bō."
+    },
+    "jo": {
+      id: "jo",
+      name: "Jō",
+      category: "Bâtons",
+      skill: "Bâtons",
+      dr: "1k1",
+      damage: "1k1",
+      drDisplay: "1g1",
+      rolled: 1,
+      kept: 1,
+      diceRolled: 1,
+      diceKept: 1,
+      size: "Moyen",
+      price: "5 zeni",
+      rules: "Bâton court de marche (1,20 m)."
+    },
 
-  // =========================================================================
-  // ARCS & FLÈCHES (BOWS & ARROWS — KYUJUTSU)
-  // =========================================================================
-  {
-    id: "wep-yumi",
-    name: "Yumi (Arc Court / Moyen)",
-    category: "Arcs",
-    skill: "Tir à l'Arc",
-    dr: "Spécial (Force de l'arc + Flèche)",
-    diceRolled: 0,
-    diceKept: 0,
-    size: "Moyen",
-    keywords: ["Moyen"],
-    price: "8 koku",
-    rules: "Force d'arc standard : 3. Les dégâts totaux sont égaux à (Force de l'arc + dégâts de la flèche)."
-  },
-  {
-    id: "wep-daikyu",
-    name: "Dai-Kyū (Grand Arc Asymétrique)",
-    category: "Arcs",
-    skill: "Tir à l'Arc",
-    dr: "Spécial (Force de l'arc + Flèche)",
-    diceRolled: 0,
-    diceKept: 0,
-    size: "Grand",
-    keywords: ["Grand"],
-    price: "25 koku",
-    rules: "Arc de guerre monté asymétrique (plus de 2 mètres). Conçu pour le tir à cheval (Horsemanship) sans pénalité."
-  },
-  {
-    id: "wep-arrow-willow",
-    name: "Flèche Feuille de Saule (Yanagi-ba)",
-    category: "Flèches",
-    skill: "Tir à l'Arc",
-    dr: "2k2",
-    diceRolled: 2,
-    diceKept: 2,
-    size: "Petit",
-    keywords: ["Flèche"],
-    price: "1 bu (les 20)",
-    rules: "Pointe standard équilibrée de l'archer samouraï."
-  },
-  {
-    id: "wep-arrow-piercing",
-    name: "Flèche Perce-Armure (Watakusi)",
-    category: "Flèches",
-    skill: "Tir à l'Arc",
-    dr: "1k1",
-    diceRolled: 1,
-    diceKept: 1,
-    size: "Petit",
-    keywords: ["Flèche"],
-    price: "2 bu (les 20)",
-    rules: "Ignore totalement le bonus au ND d'Armure conféré par l'armure de la cible."
-  },
-  {
-    id: "wep-arrow-flesh",
-    name: "Flèche Barbue Coupe-Chair",
-    category: "Flèches",
-    skill: "Tir à l'Arc",
-    dr: "2k3",
-    diceRolled: 2,
-    diceKept: 3,
-    size: "Petit",
-    keywords: ["Flèche"],
-    price: "5 bu (les 20)",
-    rules: "Dégâts accrus sur chair nue, mais l'armure ennemie double son bonus de protection. Portée réduite de moitié."
+    // --- ARCS & FLÈCHES (KYUJUTSU) ---
+    "yumi": {
+      id: "yumi",
+      name: "Arc Yumi",
+      category: "Arcs",
+      skill: "Tir à l'Arc",
+      dr: "2k2",
+      damage: "2k2",
+      drDisplay: "2g2 (Flèche)",
+      rolled: 2,
+      kept: 2,
+      diceRolled: 2,
+      diceKept: 2,
+      size: "Moyen",
+      price: "8 koku",
+      rules: "Portée 100'. Dégâts = Force de l'arc (3 de base) + Type de flèche."
+    },
+    "daikyu": {
+      id: "daikyu",
+      name: "Dai-Kyū",
+      category: "Arcs",
+      skill: "Tir à l'Arc",
+      dr: "3k2",
+      damage: "3k2",
+      drDisplay: "3g2 (Flèche)",
+      rolled: 3,
+      kept: 2,
+      diceRolled: 3,
+      diceKept: 2,
+      size: "Grand",
+      price: "25 koku",
+      rules: "Grand arc asymétrique monté. Portée 500'. Force 4."
+    },
+
+    // --- ARMES PAYSANNES & MARTIALES ---
+    "jitte": {
+      id: "jitte",
+      name: "Jitte",
+      category: "Armes Paysannes",
+      skill: "Armes Paysannes",
+      dr: "1k1",
+      damage: "1k1",
+      drDisplay: "1g1",
+      rolled: 1,
+      kept: 1,
+      diceRolled: 1,
+      diceKept: 1,
+      size: "Petit",
+      price: "5 bu",
+      rules: "Tringle de fer à crochet conférant 1 Augmentation gratuite pour désarmer."
+    },
+    "kama": {
+      id: "kama",
+      name: "Kama",
+      category: "Armes Paysannes",
+      skill: "Armes Paysannes",
+      dr: "1k2",
+      damage: "1k2",
+      drDisplay: "1g2",
+      rolled: 1,
+      kept: 2,
+      diceRolled: 1,
+      diceKept: 2,
+      size: "Petit",
+      price: "1 bu",
+      rules: "Faucille à riz traditionnelle (arme de prédilection de la Mante)."
+    },
+    "nunchaku": {
+      id: "nunchaku",
+      name: "Nunchaku",
+      category: "Armes Paysannes",
+      skill: "Armes Paysannes",
+      dr: "1k2",
+      damage: "1k2",
+      drDisplay: "1g2",
+      rolled: 1,
+      kept: 2,
+      diceRolled: 1,
+      diceKept: 2,
+      size: "Petit",
+      price: "1 bu",
+      rules: "Fléau court articulé."
+    },
+    "tonfa": {
+      id: "tonfa",
+      name: "Tonfa",
+      category: "Armes Paysannes",
+      skill: "Armes Paysannes",
+      dr: "0k3",
+      damage: "0k3",
+      drDisplay: "0g3",
+      rolled: 0,
+      kept: 3,
+      diceRolled: 0,
+      diceKept: 3,
+      size: "Moyen",
+      price: "5 bu",
+      rules: "Manivelle de meule en bois. Dégâts basés sur la Force : (Force)g3."
+    },
+    "unarmed": {
+      id: "unarmed",
+      name: "Mains nues / Jiujutsu",
+      category: "Corps à corps",
+      skill: "Jiujutsu",
+      dr: "0k1",
+      damage: "0k1",
+      drDisplay: "0g1",
+      rolled: 0,
+      kept: 1,
+      diceRolled: 0,
+      diceKept: 1,
+      size: "Petit",
+      price: "0 koku",
+      rules: "Frappe à mains nues ou coups de pied : (Force)g1 blessures."
+    }
+  };
+
+  // 3. ENRICHISSEMENT AVEC ALIAS SANS DOUBLONS DANS LES MENUS DÉROULANTS
+  Object.keys(ARMORS_DICT).forEach(key => {
+    const item = ARMORS_DICT[key];
+    Object.defineProperty(ARMORS_DICT, item.name, { value: item, enumerable: false, writable: true });
+    Object.defineProperty(ARMORS_DICT, `arm-${key}`, { value: item, enumerable: false, writable: true });
+  });
+
+  Object.keys(WEAPONS_DICT).forEach(key => {
+    const item = WEAPONS_DICT[key];
+    Object.defineProperty(WEAPONS_DICT, item.name, { value: item, enumerable: false, writable: true });
+    Object.defineProperty(WEAPONS_DICT, `wep-${key}`, { value: item, enumerable: false, writable: true });
+  });
+
+  // 4. EXPOSITION GLOBALE MULTI-COMPATIBILITÉ
+  if (typeof window !== "undefined") {
+    window.L5R_DATA = window.L5R_DATA || {};
+    window.L5R_DATA.armors = ARMORS_DICT;
+    window.L5R_DATA.weapons = WEAPONS_DICT;
+    window.L5R_DATA.equipment = { armors: ARMORS_DICT, weapons: WEAPONS_DICT };
+    window.L5R_DATA.equipement = { armors: ARMORS_DICT, weapons: WEAPONS_DICT };
+
+    window.ARMORS_DATA = Object.values(ARMORS_DICT);
+    window.WEAPONS_DATA = Object.values(WEAPONS_DICT);
+    window.EQUIPEMENT_DATA = { armors: ARMORS_DICT, weapons: WEAPONS_DICT };
   }
-];
 
-// =========================================================================
-// ARMURES OFFICIELLES (LIVRE DE BASE P. 198)
-// =========================================================================
-const ARMORS_DATA = [
-  {
-    id: "arm-none",
-    name: "Aucune Armure (Kimono de soie)",
-    bonusTN: 0,
-    reduction: 0,
-    price: "0 koku",
-    rules: "ND d'Armure de base : (Réflexes × 5) + 5. Aucune gêne de déplacement."
-  },
-  {
-    id: "arm-ashigaru",
-    name: "Armure d'Ashigaru",
-    bonusTN: 3,
-    reduction: 1,
-    price: "5 koku",
-    rules: "Plastron de cuir bouilli et bandes de fer pour fantassins. +3 au ND d'Armure, Réduction 1."
-  },
-  {
-    id: "arm-light",
-    name: "Armure Légère (Samouraï)",
-    bonusTN: 5,
-    reduction: 3,
-    price: "15 koku",
-    rules: "Plaques de cuir et d'acier laqué reliées par des cordons de soie. +5 au ND d'Armure, Réduction 3."
-  },
-  {
-    id: "arm-heavy",
-    name: "Armure Lourde (O-Yoroi)",
-    bonusTN: 10,
-    reduction: 5,
-    price: "40 koku",
-    rules: "Grand harnois cuirassé avec casque (kabuto), spallières et jambières. +10 au ND d'Armure, Réduction 5. Malus de +5 au ND de tous les jets d'Athlétisme et de Furtivité."
-  },
-  {
-    id: "arm-riding",
-    name: "Armure de Cavalerie (Licorne)",
-    bonusTN: 7,
-    reduction: 4,
-    price: "35 koku",
-    rules: "Conception souple de cuir renforcé pour le combat équestre. +7 au ND d'Armure, Réduction 4."
+  // 5. GARANTIE D'INITIALISATION VISUELLE (SI LE SCRIPT DU FORMULAIRE EST DÉJÀ PASSÉ)
+  function ensureDropdownsPopulated() {
+    const armorSel = document.getElementById("pc-armor");
+    const w1Sel = document.getElementById("pc-weapon-1");
+    const w2Sel = document.getElementById("pc-weapon-2");
+
+    if (armorSel && armorSel.options.length <= 1) {
+      armorSel.innerHTML = "";
+      Object.keys(ARMORS_DICT).forEach(k => {
+        const a = ARMORS_DICT[k];
+        const opt = document.createElement("option");
+        opt.value = k;
+        opt.textContent = `${a.name} (+${a.bonus} ND, Réd. ${a.reduction})`;
+        armorSel.appendChild(opt);
+      });
+      // Sélectionne Armure lourde par défaut pour un bushi Hida/Hiruma
+      if (armorSel.querySelector('option[value="heavy"]')) {
+        armorSel.value = "heavy";
+      }
+    }
+
+    if (w1Sel && w1Sel.options.length === 0) {
+      w1Sel.innerHTML = "";
+      Object.keys(WEAPONS_DICT).forEach(k => {
+        const w = WEAPONS_DICT[k];
+        const opt = document.createElement("option");
+        opt.value = k;
+        opt.textContent = `${w.name} (${w.drDisplay || w.dr})`;
+        w1Sel.appendChild(opt);
+      });
+      // Sélectionne Katana ou Tetsubo par défaut
+      if (w1Sel.querySelector('option[value="katana"]')) {
+        w1Sel.value = "katana";
+      }
+    }
+
+    if (w2Sel && w2Sel.options.length <= 1) {
+      w2Sel.innerHTML = '<option value="">Aucune arme secondaire</option>';
+      Object.keys(WEAPONS_DICT).forEach(k => {
+        const w = WEAPONS_DICT[k];
+        const opt = document.createElement("option");
+        opt.value = k;
+        opt.textContent = `${w.name} (${w.drDisplay || w.dr})`;
+        w2Sel.appendChild(opt);
+      });
+      if (w2Sel.querySelector('option[value="tetsubo"]')) {
+        w2Sel.value = "tetsubo";
+      }
+    }
+
+    // Force la recalculation du bandeau d'en-tête si disponible
+    if (typeof window.updateAll === "function") {
+      window.updateAll();
+    }
   }
-];
 
-if (typeof window !== "undefined") {
-  window.WEAPONS_DATA = WEAPONS_DATA;
-  window.ARMORS_DATA = ARMORS_DATA;
-}
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => setTimeout(ensureDropdownsPopulated, 50));
+  } else {
+    setTimeout(ensureDropdownsPopulated, 50);
+  }
+})();
