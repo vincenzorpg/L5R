@@ -1,10 +1,10 @@
 /**
  * js/export-carnet.js — Export officiel pour Le Carnet de Rokugan (schemaVersion: 2)
- * Compatible Carnet v2.18.0+ (https://nelsio.github.io/carnet-l5r/)
+ * Calibré sur le DOM de createcharacter.html & character-generator.js
  */
 
 // =============================================================================
-// 1. TABLE DE CORRESPONDANCE DES IDENTIFIANTS D'ÉCOLES (schoolId)
+// 1. TABLE OFFICIELLE DES IDENTIFIANTS D'ÉCOLES (schoolId) DU CARNET
 // =============================================================================
 const CARNET_SCHOOL_IDS = {
   // CLAN DU CRABE
@@ -95,7 +95,25 @@ const CARNET_SCHOOL_IDS = {
 };
 
 // =============================================================================
-// 2. FONCTIONS UTILITAIRES DE NORMALISATION
+// 2. DICTIONNAIRE CANONIQUE DES ARMES (VD & MOTS-CLÉS FERMÉS DU CARNET)
+// =============================================================================
+const CARNET_WEAPONS_CATALOG = {
+  "katana": { skill: "Kenjutsu", dr: "3g2", keywords: ["samourai", "moyenne"] },
+  "wakizashi": { skill: "Kenjutsu", dr: "2g2", keywords: ["samourai", "moyenne"] },
+  "tetsubo": { skill: "Armes lourdes", dr: "3g3", keywords: ["lourde", "grande", "deux-mains"] },
+  "dai tsuchi": { skill: "Armes lourdes", dr: "4g3", keywords: ["lourde", "grande", "deux-mains"] },
+  "ono": { skill: "Armes lourdes", dr: "4g2", keywords: ["lourde", "grande", "deux-mains"] },
+  "no-dachi": { skill: "Kenjutsu", dr: "3g3", keywords: ["samourai", "grande", "deux-mains"] },
+  "yari": { skill: "Lances", dr: "2g2", keywords: ["hast", "deux-mains"] },
+  "naginata": { skill: "Armes d'hast", dr: "3g2", keywords: ["hast", "deux-mains", "samourai"] },
+  "yumi": { skill: "Kyujutsu", dr: "1g2", keywords: ["arc", "deux-mains"], bowStrength: 2 },
+  "tanto": { skill: "Couteaux", dr: "1g2", keywords: ["moyenne"] },
+  "kama": { skill: "Armes paysannes", dr: "1g2", keywords: ["peasant", "moyenne"] },
+  "bo": { skill: "Bâtons", dr: "1g2", keywords: ["deux-mains"] }
+};
+
+// =============================================================================
+// 3. UTILITAIRES DE CONVERSION ET NETTOYAGE
 // =============================================================================
 function normalizeString(str) {
   return (str || "")
@@ -106,258 +124,331 @@ function normalizeString(str) {
     .trim();
 }
 
+function cleanClanName(rawClan) {
+  const norm = normalizeString(rawClan);
+  if (norm.includes("crabe")) return "Crabe";
+  if (norm.includes("grue")) return "Grue";
+  if (norm.includes("dragon")) return "Dragon";
+  if (norm.includes("lion")) return "Lion";
+  if (norm.includes("mante")) return "Mante";
+  if (norm.includes("phenix")) return "Phénix";
+  if (norm.includes("scorpion")) return "Scorpion";
+  if (norm.includes("licorne")) return "Licorne";
+  return rawClan ? rawClan.trim() : "Crabe";
+}
+
 function resolveSchoolId(schoolName) {
   const norm = normalizeString(schoolName)
-    .replace(/^(ecole\s+de\s+|ecole\s+d'|ecole\s+des\s+)/, "");
+    .replace(/^(ecole\s+de\s+|ecole\s+d'|ecole\s+des\s+|ecole\s+)/, "");
   
   return CARNET_SCHOOL_IDS[norm] || 
          CARNET_SCHOOL_IDS[normalizeString(schoolName)] || 
-         norm.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+         norm.replace(/[^a-z0-9\-]/g, "-").replace(/^-+|-+$/g, "");
 }
 
-function normalizeKeyword(kw) {
-  return normalizeString(kw)
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9\-]/g, "");
+function getSkillTrait(skillName) {
+  const s = normalizeString(skillName);
+  if (s.includes("kenjutsu") || s.includes("jiujutsu") || s.includes("lourde") || s.includes("lance") || s.includes("hast") || s.includes("athletisme") || s.includes("equitation") || s.includes("discretion")) return "agility";
+  if (s.includes("iaijutsu") || s.includes("kyujutsu") || s.includes("defense")) return "reflexes";
+  if (s.includes("courtisan") || s.includes("etiquette") || s.includes("sincerite") || s.includes("intimidation") || s.includes("art")) return "awareness";
+  if (s.includes("enquete") || s.includes("chasse") || s.includes("bataille") || s.includes("guerre")) return "perception";
+  if (s.includes("meditation")) return "willpower";
+  if (s.includes("medecine") || s.includes("theologie") || s.includes("lore") || s.includes("connaissance") || s.includes("histoire") || s.includes("ingenierie")) return "intelligence";
+  return "agility";
 }
 
-// Calcule le rang d'Insight officiel L5R 4e
-function calculateInsightRank(traits, voidRing, skills) {
-  // Anneaux : plus faible des 2 traits
+// =============================================================================
+// 4. RÉCUPÉRATION ROBUSTE DES DONNÉES DU FORMULAIRE (DOM OU MÉMOIRE)
+// =============================================================================
+function extractCharacterState() {
+  // 1. Vérification dans les variables globales de character-generator.js
+  const globals = [
+    window.character,
+    window.currentChar,
+    window.pc,
+    window.charData,
+    window.characterState,
+    window.CURRENT_CHARACTER,
+    window.currentCharacter
+  ];
+  for (const obj of globals) {
+    if (obj && typeof obj === "object" && (obj.traits || obj.skills || obj.name || obj.clan)) {
+      return obj;
+    }
+  }
+
+  // 2. Extraction directe et infaillible depuis le DOM de createcharacter.html
+  const nameEl = document.getElementById("pc-name");
+  if (!nameEl) return null;
+
+  const clanEl = document.getElementById("sel-clan");
+  const famEl = document.getElementById("sel-family");
+  const schoolEl = document.getElementById("sel-school");
+
+  const clanText = clanEl?.options[clanEl.selectedIndex]?.text || clanEl?.value || "Crabe";
+  const famText = famEl?.options[famEl.selectedIndex]?.text || famEl?.value || "";
+  const schoolText = schoolEl?.options[schoolEl.selectedIndex]?.text || schoolEl?.value || "École de bushi Hida";
+
+  const getNumVal = (id, def = 2) => {
+    const el = document.getElementById(id);
+    const n = parseInt(el?.value || el?.textContent || def, 10);
+    return isNaN(n) ? def : n;
+  };
+
+  const traits = {
+    stamina: getNumVal("trait-stamina", 2),
+    willpower: getNumVal("trait-willpower", 2),
+    strength: getNumVal("trait-strength", 2),
+    perception: getNumVal("trait-perception", 2),
+    agility: getNumVal("trait-agility", 2),
+    intelligence: getNumVal("trait-intelligence", 2),
+    reflexes: getNumVal("trait-reflexes", 2),
+    awareness: getNumVal("trait-awareness", 2)
+  };
+
+  const voidRing = getNumVal("trait-void", 2);
+
+  // Extraction des compétences (depuis la table d'impression ou la liste active)
+  const skills = [];
+  const printSkillRows = document.querySelectorAll("#p-skills-body tr");
+
+  if (printSkillRows.length > 0) {
+    printSkillRows.forEach(row => {
+      const cols = row.querySelectorAll("td");
+      if (cols.length >= 3) {
+        const sName = cols[0]?.textContent?.trim() || "";
+        const sRank = parseInt(cols[2]?.textContent?.trim() || "1", 10) || 1;
+        const sEmph = cols[4]?.textContent?.trim() || "";
+        if (sName) {
+          skills.push({
+            name: sName,
+            rank: sRank,
+            trait: getSkillTrait(sName),
+            emphases: sEmph ? sEmph.split(",").map(e => e.trim()).filter(Boolean) : []
+          });
+        }
+      }
+    });
+  } else {
+    // Lecture dans les cartes de #skills-list
+    document.querySelectorAll("#skills-list > div").forEach(card => {
+      const sName = card.querySelector("span, b, h4")?.textContent?.trim();
+      const sRankInput = card.querySelector("input[type='number']");
+      const sRank = parseInt(sRankInput?.value || "1", 10) || 1;
+      if (sName) {
+        skills.push({
+          name: sName,
+          rank: sRank,
+          trait: getSkillTrait(sName),
+          emphases: []
+        });
+      }
+    });
+  }
+
+  // Si aucune compétence encore ajoutée, on injecte au moins Kenjutsu 1
+  if (skills.length === 0) {
+    skills.push({ name: "Kenjutsu", rank: 1, trait: "agility", emphases: [] });
+  }
+
+  // Armure
+  const armorSelect = document.getElementById("pc-armor");
+  const armorText = armorSelect?.options[armorSelect.selectedIndex]?.text || armorSelect?.value || "";
+  let armorBonus = 0;
+  let armorReduction = 0;
+  let armorCatalogId = "none";
+
+  if (normalizeString(armorText).includes("lourde") || normalizeString(armorText).includes("heavy")) {
+    armorBonus = 10;
+    armorReduction = 5;
+    armorCatalogId = "heavy";
+  } else if (normalizeString(armorText).includes("legere") || normalizeString(armorText).includes("light")) {
+    armorBonus = 5;
+    armorReduction = 3;
+    armorCatalogId = "light";
+  }
+
+  // Armes
+  const weaponSelect1 = document.getElementById("pc-weapon-1");
+  const weaponSelect2 = document.getElementById("pc-weapon-2");
+  const rawWeapons = [
+    weaponSelect1?.options[weaponSelect1.selectedIndex]?.text || weaponSelect1?.value,
+    weaponSelect2?.options[weaponSelect2.selectedIndex]?.text || weaponSelect2?.value
+  ].filter(Boolean);
+
+  const weapons = [];
+  rawWeapons.forEach(wRaw => {
+    const normW = normalizeString(wRaw);
+    let matchedKey = Object.keys(CARNET_WEAPONS_CATALOG).find(k => normW.includes(k));
+    if (matchedKey) {
+      const cat = CARNET_WEAPONS_CATALOG[matchedKey];
+      const wObj = {
+        name: wRaw.split("(")[0].trim(),
+        skill: cat.skill,
+        dr: cat.dr,
+        keywords: cat.keywords
+      };
+      if (cat.bowStrength) wObj.bowStrength = cat.bowStrength;
+      weapons.push(wObj);
+    } else {
+      weapons.push({
+        name: wRaw.split("(")[0].trim() || "Katana",
+        skill: "Kenjutsu",
+        dr: "3g2",
+        keywords: ["samourai", "moyenne"]
+      });
+    }
+  });
+
+  if (weapons.length === 0) {
+    weapons.push({
+      name: "Katana",
+      skill: "Kenjutsu",
+      dr: "3g2",
+      keywords: ["samourai", "moyenne"]
+    });
+  }
+
+  // Avantages / Désavantages
+  const advEls = document.querySelectorAll("#adv-container > div, #p-adv-list > div");
+  const advList = [];
+  advEls.forEach(el => advList.push(el.textContent.trim()));
+
+  const disadvEls = document.querySelectorAll("#disadv-container > div, #p-disadv-list > div");
+  const disadvList = [];
+  disadvEls.forEach(el => disadvList.push(el.textContent.trim()));
+
+  // Honneur et XP
+  const honorVal = parseFloat(document.getElementById("stat-honor")?.textContent || "4.5") || 4.5;
+  const xpTotal = parseInt(document.getElementById("xp-total")?.textContent || document.getElementById("base-xp-input")?.value || "40", 10) || 40;
+  const xpRemaining = parseInt(document.getElementById("xp-remaining")?.textContent || "0", 10) || 0;
+
+  return {
+    name: nameEl.value.trim() || "Nouveau Samouraï",
+    clan: cleanClanName(clanText),
+    family: famText.trim(),
+    school: schoolText.trim(),
+    traits: traits,
+    voidRing: voidRing,
+    voidPoints: voidRing,
+    honor: honorVal,
+    glory: 1.0,
+    status: 1.0,
+    xpTotal: xpTotal,
+    xpSpent: Math.max(0, xpTotal - xpRemaining),
+    skills: skills,
+    armor: {
+      name: armorText.split("(")[0].trim() || "Aucune",
+      bonus: armorBonus,
+      reduction: armorReduction,
+      catalogId: armorCatalogId
+    },
+    weapons: weapons,
+    advantages: advList.join(", "),
+    disadvantages: disadvList.join(", "),
+    notes: document.getElementById("pc-outfit")?.value || ""
+  };
+}
+
+// =============================================================================
+// 5. CALCUL OFFICIEL DU RANG D'INSIGHT
+// =============================================================================
+function computeInsight(traits, voidRing, skills) {
   const earth = Math.min(traits.stamina, traits.willpower);
   const water = Math.min(traits.strength, traits.perception);
   const fire  = Math.min(traits.agility, traits.intelligence);
   const air   = Math.min(traits.reflexes, traits.awareness);
-  const voidVal = Number(voidRing) || 2;
+  const ringsSum = earth + water + fire + air + (Number(voidRing) || 2);
 
-  const ringsTotal = earth + water + fire + air + voidVal;
-
-  let skillsTotal = 0;
+  let skillsSum = 0;
   if (Array.isArray(skills)) {
-    skills.forEach(s => {
-      skillsTotal += Number(s.rank) || 0;
-    });
+    skills.forEach(s => skillsSum += (Number(s.rank) || 0));
   }
 
-  const insightPoints = (ringsTotal * 10) + skillsTotal;
+  const points = (ringsSum * 10) + skillsSum;
 
-  if (insightPoints < 150) return 1;
-  if (insightPoints < 175) return 2;
-  if (insightPoints < 200) return 3;
-  if (insightPoints < 225) return 4;
-  if (insightPoints < 250) return 5;
-  if (insightPoints < 275) return 6;
-  if (insightPoints < 300) return 7;
+  if (points < 150) return 1;
+  if (points < 175) return 2;
+  if (points < 200) return 3;
+  if (points < 225) return 4;
+  if (points < 250) return 5;
+  if (points < 275) return 6;
+  if (points < 300) return 7;
   return 8;
 }
 
 // =============================================================================
-// 3. CONSTRUCTEUR DU PAYLOAD CARNET DE ROKUGAN (schemaVersion: 2)
+// 6. GÉNÉRATION DU FICHIER JSON & TÉLÉCHARGEMENT CLIENT
 // =============================================================================
-function buildCarnetPayload(charData) {
-  // 1. Traits (8 obligatoires, entiers entre 1 et 10)
-  const traits = {
-    stamina: parseInt(charData.traits?.stamina ?? charData.constitution ?? 2, 10),
-    willpower: parseInt(charData.traits?.willpower ?? charData.volonte ?? 2, 10),
-    strength: parseInt(charData.traits?.strength ?? charData.force ?? 2, 10),
-    perception: parseInt(charData.traits?.perception ?? 2, 10),
-    agility: parseInt(charData.traits?.agility ?? charData.agilite ?? 2, 10),
-    intelligence: parseInt(charData.traits?.intelligence ?? 2, 10),
-    reflexes: parseInt(charData.traits?.reflexes ?? 2, 10),
-    awareness: parseInt(charData.traits?.awareness ?? charData.intuition ?? 2, 10)
-  };
-
-  const voidRing = parseInt(charData.voidRing ?? charData.vide ?? 2, 10);
-  const voidPoints = parseInt(charData.voidPoints ?? voidRing, 10);
-
-  // 2. Compétences
-  const skills = (charData.skills || []).map(s => {
-    let traitKey = (s.trait || "agility").toLowerCase();
-    const traitMap = {
-      "agilité": "agility", "force": "strength", "réflexes": "reflexes",
-      "constitution": "stamina", "volonté": "willpower", "perception": "perception",
-      "intelligence": "intelligence", "intuition": "awareness", "vide": "void"
-    };
-    if (traitMap[traitKey]) traitKey = traitMap[traitKey];
-
-    return {
-      name: s.name || s.nom || "Compétence",
-      rank: parseInt(s.rank ?? s.rang ?? 1, 10),
-      trait: traitKey,
-      emphases: Array.isArray(s.emphases) ? s.emphases : (s.specialisation ? [s.specialisation] : [])
-    };
-  });
-
-  // 3. Armes
-  const weapons = (charData.weapons || []).map(w => {
-    const rawKeywords = w.keywords || w.motsCles || [];
-    const keywordsArray = Array.isArray(rawKeywords) 
-      ? rawKeywords 
-      : rawKeywords.toString().split(",").map(k => k.trim());
-
-    const item = {
-      name: w.name || w.nom || "Katana",
-      skill: w.skill || w.competence || "Kenjutsu",
-      dr: (w.dr || w.vd || "3g2").toString().toLowerCase().replace("k", "g"),
-      keywords: keywordsArray.map(normalizeKeyword).filter(Boolean)
-    };
-
-    if (w.bowStrength || w.forceArc) {
-      item.bowStrength = parseInt(w.bowStrength || w.forceArc, 10);
-    }
-    return item;
-  });
-
-  // 4. Armure
-  const armor = charData.armor || {};
-  const armorPayload = {
-    name: armor.name || armor.nom || "Aucune",
-    bonus: parseInt(armor.bonus ?? armor.ndBonus ?? 0, 10),
-    reduction: parseInt(armor.reduction ?? armor.rd ?? 0, 10)
-  };
-  if (armor.catalogId || armor.id) {
-    armorPayload.catalogId = (armor.catalogId || armor.id).toString();
-  }
-
-  // 5. Sorts (pour Shugenjas)
-  const spells = (charData.spells || charData.sorts || []).map(sp => ({
-    name: sp.name || sp.nom || "Sort",
-    ring: (sp.ring || sp.element || sp.anneau || "Air").toString(),
-    mastery: parseInt(sp.mastery ?? sp.maitrise ?? sp.rang ?? 1, 10)
-  }));
-
-  // 6. École & Rangs
-  const schoolDisplayName = charData.school || charData.ecole || "École de bushi Hida";
-  const schoolIdentifier = charData.schoolId || resolveSchoolId(schoolDisplayName);
-  const calculatedInsight = calculateInsightRank(traits, voidRing, skills);
-
-  // 7. Assemblage final strict
-  const payload = {
-    schemaVersion: 2,
-    name: (charData.name || charData.nom || "Nouveau Samouraï").trim(),
-    clan: (charData.clan || "Crabe").trim(),
-    family: (charData.family || charData.famille || "").trim(),
-    school: schoolDisplayName,
-    schoolId: schoolIdentifier,
-    schoolRank: null, // Laisse le Carnet déduire les techniques automatiquement
-    insightRank: calculatedInsight,
-    honor: parseFloat(Number(charData.honor ?? charData.honneur ?? 4.5).toFixed(1)),
-    glory: parseFloat(Number(charData.glory ?? charData.gloire ?? 1.0).toFixed(1)),
-    status: parseFloat(Number(charData.status ?? charData.statut ?? 1.0).toFixed(1)),
-    xp: {
-      total: parseInt(charData.xp?.total ?? charData.xpTotal ?? 40, 10),
-      spent: parseInt(charData.xp?.spent ?? charData.xpDepense ?? 40, 10)
-    },
-    traits: traits,
-    voidRing: voidRing,
-    voidPoints: Math.min(voidPoints, voidRing),
-    wounds: parseInt(charData.wounds ?? 0, 10),
-    armor: armorPayload,
-    skills: skills,
-    weapons: weapons,
-    spells: spells,
-    techniques: [], // Ne pas surcharger, le catalogue Carnet s'en charge via schoolId
-    maneuvers: [],
-    advantages: typeof charData.advantages === "string" ? charData.advantages : (charData.avantages || []).join(", "),
-    disadvantages: typeof charData.disadvantages === "string" ? charData.disadvantages : (charData.desavantages || []).join(", "),
-    notes: charData.notes || ""
-  };
-
-  return payload;
-}
-
-// =============================================================================
-// 4. POINT D'ENTRÉE DU TÉLÉCHARGEMENT CLIENT
-// =============================================================================
-function getCharacterData() {
-  // 1. Recherche dans les variables globales possibles
-  const candidates = [
-    window.character,
-    window.currentChar,
-    window.currentPersonnage,
-    window.perso,
-    window.characterData,
-    window.characterState,
-    window.CURRENT_CHARACTER,
-    window.currentCharacter,
-    window.charData
-  ];
-
-  for (const c of candidates) {
-    if (c && typeof c === "object" && (c.name || c.nom || c.clan || c.school || c.ecole)) {
-      return c;
-    }
-  }
-
-  // 2. Recherche dans le localStorage
-  const storageKeys = ["l5r_character", "l5r_perso", "current_character", "character"];
-  for (const k of storageKeys) {
-    try {
-      const saved = localStorage.getItem(k);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && typeof parsed === "object") return parsed;
-      }
-    } catch (e) {}
-  }
-
-  // 3. Extraction directe depuis le DOM / formulaire HTML si présent
-  const getVal = (ids) => {
-    for (const id of ids) {
-      const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
-      if (el) return el.value || el.textContent;
-    }
-    return null;
-  };
-
-  const getNum = (ids, def = 2) => {
-    const v = getVal(ids);
-    const n = parseInt(v, 10);
-    return isNaN(n) ? def : n;
-  };
-
-  const nameVal = getVal(["char-name", "character-name", "nom", "name", "input-nom"]);
-  if (nameVal) {
-    return {
-      name: nameVal,
-      clan: getVal(["clan-select", "clan", "select-clan"]) || "Crabe",
-      family: getVal(["family-select", "family", "famille", "select-family"]) || "",
-      school: getVal(["school-select", "school", "ecole", "select-school"]) || "École de bushi Hida",
-      traits: {
-        stamina: getNum(["stamina", "constitution", "trait-constitution"]),
-        willpower: getNum(["willpower", "volonte", "trait-volonte"]),
-        strength: getNum(["strength", "force", "trait-force"]),
-        perception: getNum(["perception", "trait-perception"]),
-        agility: getNum(["agility", "agilite", "trait-agilite"]),
-        intelligence: getNum(["intelligence", "trait-intelligence"]),
-        reflexes: getNum(["reflexes", "trait-reflexes"]),
-        awareness: getNum(["awareness", "intuition", "trait-intuition"])
-      },
-      voidRing: getNum(["void", "vide", "voidRing", "trait-vide"]),
-      honor: parseFloat(getVal(["honor", "honneur"]) || "4.5"),
-      glory: parseFloat(getVal(["glory", "gloire"]) || "1.0"),
-      status: parseFloat(getVal(["status", "statut"]) || "1.0"),
-      xp: {
-        total: getNum(["xp-total", "xpTotal"], 40),
-        spent: getNum(["xp-spent", "xpDepense"], 40)
-      }
-    };
-  }
-
-  return null;
-}
-
 function exportToCarnetRokugan() {
-  const currentCharacter = getCharacterData();
+  const char = extractCharacterState();
 
-  if (!currentCharacter) {
-    alert("Impossible de localiser les données du personnage en cours. Vérifiez qu'un nom est saisi ou assignez votre objet personnage à window.character.");
+  if (!char || !char.name) {
+    alert("Veuillez saisir au moins le nom de votre personnage avant de l'exporter.");
     return;
   }
 
-  const payload = buildCarnetPayload(currentCharacter);
+  const insightRank = computeInsight(char.traits, char.voidRing, char.skills);
+
+  const payload = {
+    schemaVersion: 2,
+    name: char.name,
+    clan: char.clan,
+    family: char.family || "",
+    school: char.school,
+    schoolId: resolveSchoolId(char.school),
+    schoolRank: null, // Laisse le Carnet charger automatiquement les techniques d'école
+    insightRank: insightRank,
+    honor: parseFloat(Number(char.honor || 4.5).toFixed(1)),
+    glory: parseFloat(Number(char.glory || 1.0).toFixed(1)),
+    status: parseFloat(Number(char.status || 1.0).toFixed(1)),
+    xp: {
+      total: parseInt(char.xpTotal || 40, 10),
+      spent: parseInt(char.xpSpent || 40, 10)
+    },
+    traits: {
+      stamina: parseInt(char.traits.stamina, 10),
+      willpower: parseInt(char.traits.willpower, 10),
+      strength: parseInt(char.traits.strength, 10),
+      perception: parseInt(char.traits.perception, 10),
+      agility: parseInt(char.traits.agility, 10),
+      intelligence: parseInt(char.traits.intelligence, 10),
+      reflexes: parseInt(char.traits.reflexes, 10),
+      awareness: parseInt(char.traits.awareness, 10)
+    },
+    voidRing: parseInt(char.voidRing, 10),
+    voidPoints: Math.min(parseInt(char.voidPoints || char.voidRing, 10), parseInt(char.voidRing, 10)),
+    wounds: 0,
+    armor: {
+      name: char.armor.name || "Aucune",
+      bonus: parseInt(char.armor.bonus || 0, 10),
+      reduction: parseInt(char.armor.reduction || 0, 10),
+      catalogId: char.armor.catalogId || "none"
+    },
+    skills: char.skills.map(s => ({
+      name: s.name,
+      rank: parseInt(s.rank, 10),
+      trait: s.trait,
+      emphases: Array.isArray(s.emphases) ? s.emphases : []
+    })),
+    weapons: char.weapons.map(w => ({
+      name: w.name,
+      skill: w.skill,
+      dr: w.dr,
+      keywords: w.keywords,
+      ...(w.bowStrength ? { bowStrength: parseInt(w.bowStrength, 10) } : {})
+    })),
+    techniques: [],
+    maneuvers: [],
+    spells: [],
+    advantages: char.advantages || "",
+    disadvantages: char.disadvantages || "",
+    notes: char.notes || ""
+  };
+
   const jsonStr = JSON.stringify(payload, null, 2);
 
+  // Nom de fichier standardisé : <nom-du-personnage>-l5r.json
   const safeFilename = normalizeString(payload.name)
     .replace(/[^a-z0-9\-]/g, "-")
     .replace(/-+/g, "-")
@@ -376,4 +467,3 @@ function exportToCarnetRokugan() {
 
 // Exposition globale
 window.exportToCarnetRokugan = exportToCarnetRokugan;
-window.buildCarnetPayload = buildCarnetPayload;
