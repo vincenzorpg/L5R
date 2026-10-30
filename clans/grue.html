@@ -45,7 +45,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- CONTENEUR DU MENU GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <!-- CONTENEUR DU MENU GLOBAL -->
   <header id="site-header"></header>
 
   <!-- CONTENU PRINCIPAL -->
@@ -63,63 +63,77 @@
         <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide crane-gradient">
           LE CLAN DE LA GRUE
         </h1>
-        <p class="text-xs md:text-sm text-sky-200/90 italic font-imperial">
-          « La perfection n'est pas un idéal lointain, c'est le seul standard acceptable. »
-        </p>
         <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
-          Gardiens incontestés de la haute culture, des beaux-arts et de l'étiquette impériale, les samouraïs de la Grue façonnent les lois de la cour et règnent sur l'art du duel formel au sabre[cite: 2, 14]. Fondé par dame Doji et son époux Kakita, le clan utilise la beauté, le prestige et la rapidité foudroyante de l'Iaijutsu pour dominer la scène politique de Rokugan sans jamais salir son kimono de poussière inutile[cite: 2, 14].
+          Arbitres de la cour impériale, bâtisseurs de la culture rokuganie et maîtres incontestés du duel judiciaire à l'épée, les membres du Clan de la Grue exercent une influence politique et artistique déterminante sur l'Empire d'Émeraude. Fondé par dame Doji et son époux le duelliste Kakita, le clan s'appuie sur la codification des lois, l'excellence des beaux-arts, l'art du duel Iaijutsu et la défense pragmatique de ses terres fertiles.
         </p>
+        <div class="pt-2 text-[11px] text-sky-300/80 font-mono">
+          Références : Livre de Règles 4e Édition, p. 50-51, 109-112 ; The Great Clans, p. 47-73.
+        </div>
       </div>
     </section>
 
-    <!-- 1. MYTHE FONDATEUR & DOMAINE IMPÉRIAL -->
+    <!-- 1. ORIGINE SACRÉE & CADRE TECHNIQUE -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-4">
         <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
-          1. Origine Sacrée & Rôle Politique
+          1. Origine Sacrée & Mandat Impérial
         </h2>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Lorsque les Kami chutèrent des Cieux Célestes, dame <b>Doji</b> était l'incarnation même de l'élégance, de l'harmonie et de la grâce divine[cite: 2]. C'est elle qui enseigna aux premiers mortels les codes de l'étiquette, la justice raffinée, la cérémonie du thé et l'organisation pacifique de la société[cite: 2, 14]. Son époux, le légendaire duelliste <b>Kakita</b>, remporta le premier duel de l'histoire de l'Empire contre Matsu, établissant l'Iaijutsu comme la méthode d'arbitrage suprême du Trône d'Émeraude[cite: 2, 14].
+          Lors de la chute des Kami, dame <b>Doji</b> posa les fondations institutionnelles de Rokugan en établissant l'étiquette, la justice codifiée, la cérémonie du thé et l'organisation pacifique de la haute société. Son époux, <b>Kakita</b>, remporta le premier duel formel de l'histoire contre Matsu lors du Premier Tournoi, instituant l'art de l'Iaijutsu comme juridiction suprême pour trancher les litiges d'honneur.
         </p>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Le Clan de la Grue contrôle les terres les plus fertiles et les routes côtières les plus prospères de Rokugan[cite: 2]. Depuis plus de mille ans, la coutume veut que l'Impératrice de Rokugan soit issue de la lignée de Doji, consolidant une alliance indestructible avec la dynastie régnante[cite: 2].
+          Le clan assure sa prospérité en administrant les plaines les plus fertiles et les routes maritimes majeures de l'Empire. La coutume impériale veut que la lignée de Doji fournisse régulièrement l'Épouse Impériale, consolidant une alliance dynastique séculaire avec la famille Hantei.
         </p>
-        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
-          <span class="text-sky-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
-          <span class="text-stone-300">Blanc immaculé, bleu azur et reflets argentés (kimonos de soie fine, éventails ciselés et parures d'ivoire)[cite: 2, 14].</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-sky-400 font-bold uppercase text-[10px] tracking-wider block">Héraldique & Maintien</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Blanc pur, bleu azur, cyan et reflets argentés. Kimonos de soie brodée, coiffures travaillées blanchies à la poudre de riz ou d'argent, éventails ouvragés et daisho d'apparat finement équilibré.
+            </p>
+          </div>
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-sky-400 font-bold uppercase text-[10px] tracking-wider block">Ouvrages de Référence</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Histoire clanique : <i>The Great Clans</i>, p. 47-56. Droit, arts et cours d'hiver : <i>Emerald Empire</i>, p. 34-45. Maîtrise de l'Air : <i>The Book of Air</i>, p. 28-54.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- CARTE D'IDENTITÉ -->
+      <!-- CARTE D'IDENTITÉ DU JOUEUR -->
       <div class="card-clean rounded-xl p-6 space-y-3">
         <h3 class="text-sm font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
-          Profil de Clan
+          Profil de Création PJ
         </h3>
         <ul class="text-xs space-y-2 text-stone-300">
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Anneau Majeur :</span>
-            <b class="text-sky-300">Air (Fū)[cite: 2]</b>
+            <b class="text-sky-300">Air (Fū)</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Honneur de Base :</span>
+            <b class="text-sky-400">6,5 (Très élevé)</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Kami Fondatrice :</span>
-            <b>Dame Doji[cite: 2]</b>
+            <b>Dame Doji</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Capitale :</span>
-            <b>Kyuden Doji[cite: 2, 14]</b>
+            <span class="text-stone-500">Palais Principal :</span>
+            <b>Kyuden Doji</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Sanctuaire Sacré :</span>
-            <b>Les Tombeaux Kakita[cite: 2]</b>
+            <span class="text-stone-500">Discipline Reine :</span>
+            <b>Iaijutsu (Duel au Sabre)</b>
           </li>
           <li class="flex justify-between">
-            <span class="text-stone-500">Arme Emblématique :</span>
-            <b>Katana de duel (Kakita)[cite: 2, 5, 14]</b>
+            <span class="text-stone-500">Livre de Base 4e :</span>
+            <b class="text-sky-400">Pages 109-112</b>
           </li>
         </ul>
         <div class="pt-2">
           <a href="../createcharacter.html" class="w-full block py-2 rounded bg-sky-600 hover:bg-sky-500 text-black font-bold text-center text-xs uppercase tracking-wider transition">
-            Créer un samouraï Grue
+            Forger un samouraï Grue
           </a>
         </div>
       </div>
@@ -127,9 +141,9 @@
 
     <!-- 2. LES QUATRE FAMILLES DE LA GRUE -->
     <section class="space-y-4">
-      <div class="border-b border-sky-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">2. Les Familles du Clan & Leurs Devoirs</h2>
-        <span class="text-xs text-stone-400">L'équilibre parfait entre la diplomatie de salon, la maîtrise du sabre et l'action militaire feutrée[cite: 2, 6, 14].</span>
+      <div class="border-b border-sky-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">2. Les Familles du Clan</h2>
+        <span class="text-xs text-stone-400">Livre de Règles 4e Édition, p. 109 ; The Great Clans, p. 57-61.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -138,115 +152,99 @@
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Doji</h3>
-            <span class="text-[10px] text-sky-400 font-bold">+1 Intuition[cite: 2]</span>
+            <span class="text-[10px] text-sky-400 font-bold px-2 py-0.5 rounded bg-sky-950/80 border border-sky-800/40">+1 Intuition</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            La lignée princière du clan, maîtres absolus des cours d'hiver et de la haute diplomatie[cite: 2, 14]. Leurs courtisans manient les faveurs, les généalogies et les silences avec une précision mortelle[cite: 2, 14]. Un sourire de Doji peut briser un général Lion plus sûrement qu'un bataillon entier[cite: 2].
+            Lignée princière et maîtresse de la diplomatie impériale. Les courtisans Doji dominent les cours d'hiver, maniant la rhétorique, les alliances de faveur et les règles de préséance pour dicter la politique de l'Empire et neutraliser les menaces sans recours aux armes.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Courtisans, diplomates impériaux, mécènes et juges[cite: 2, 14].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Courtisans de haut rang, ambassadeurs, ministres impériaux et juges d'étiquette.
+          </div>
         </div>
 
         <!-- KAKITA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Kakita</h3>
-            <span class="text-[10px] text-sky-400 font-bold">+1 Agilité[cite: 2]</span>
+            <span class="text-[10px] text-sky-400 font-bold px-2 py-0.5 rounded bg-sky-950/80 border border-sky-800/40">+1 Agilité</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            L'Académie Kakita forme les duellistes d'Iaijutsu les plus réputés de l'histoire[cite: 2, 14]. Pour un Kakita, le duel au sabre n'est pas une simple épreuve martiale mais un art sublime où la perfection du geste ne tolère aucune hésitation[cite: 2, 14]. Ils abritent également les plus grands peintres, poètes et forgerons de lames fines de l'Empire[cite: 2, 14].
+            Héritiers du premier champion de l'Empire. L'Académie Kakita forme les duellistes d'Iaijutsu les plus prestigieux de Rokugan. La famille abrite également les maîtres artisans, forgerons de sabres de cérémonie, peintres et poètes les plus célébrés du royaume.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Duellistes judiciaires, champions d'Iaijutsu et maîtres artisans[cite: 2, 14].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Duellistes judiciaires, champions d'Iaijutsu, maîtres forgerons et artistes impériaux.
+          </div>
         </div>
 
         <!-- DAIDOJI -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Daidoji</h3>
-            <span class="text-[10px] text-sky-400 font-bold">+1 Constitution[cite: 2]</span>
+            <span class="text-[10px] text-sky-400 font-bold px-2 py-0.5 rounded bg-sky-950/80 border border-sky-800/40">+1 Constitution</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Les « Grues de Fer » (*The Iron Cranes*)[cite: 6, 14]. Gardes du corps dévoués et fantassins de ligne, les Daidoji accomplissent les tâches rudes et pragmatiques dont leurs cousins répugnent à parler[cite: 2, 6, 14]. Leurs éclaireurs et sapeurs n'hésitent pas à tendre des embuscades et poser des pièges pour préserver les frontières du clan[cite: 6].
+            Connus sous le nom de Grues de Fer (<i>Iron Cranes</i>), les Daidoji assurent l'intégralité de l'effort militaire régulier, la protection rapprochée des courtisans et la sécurité territoriale. Pragmatiques, ils intègrent l'infanterie lourde, le génie de siège et les opérations d'embuscade.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Armée régulière, gardes du corps yojimbo, éclaireurs et logistique[cite: 2, 6, 14].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Gardes du corps (yojimbo), fantassins de ligne, officiers de garnison et tirailleurs.
+          </div>
         </div>
 
         <!-- ASAHINA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-sky-200 text-sm font-imperial">Famille Asahina</h3>
-            <span class="text-[10px] text-sky-400 font-bold">+1 Intelligence[cite: 2]</span>
+            <span class="text-[10px] text-sky-400 font-bold px-2 py-0.5 rounded bg-sky-950/80 border border-sky-800/40">+1 Intelligence</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Ordre monastique et pacifique de shugenja de l'Air[cite: 2, 14]. Rejetant toute magie de destruction, ils vouent leur communion avec les Kami à la guérison, à la création de fétiches mystiques harmonieux (*nemuranai*) et à la préservation de la quiétude spirituelle de Rokugan[cite: 2, 14].
+            Ordre mystique pacifique voué aux esprits de l'Air. Rejetant les sortilèges offensifs et la destruction, les Asahina emploient leur magie pour soigner, méditer, apaiser les conflits et fabriquer des fétiches sacrés (<i>nemuranai</i>) protégeant les membres du clan.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Prêtres pacificateurs, guérisseurs et enchanteurs de reliques[cite: 2, 14].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Shugenja pacificateurs, guérisseurs, créateurs d'amulettes sacrées et moines érudits.
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- 3. LA GRUE ET LE BUSHIDO -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
-        3. Le Cœur du Roleplay : La Grue face au Bushido
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
-            <span class="font-bold text-sky-200 text-sm">La Courtoisie (Rei)[cite: 2]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Pour la Grue, la politesse n'est pas un vernis : c'est l'armure qui distingue l'homme noble du barbare sanguinaire[cite: 2, 14]. Observer scrupuleusement l'étiquette, respecter le rang d'autrui et masquer ses tourments sous un maintien gracieux constitue l'obligation morale suprême[cite: 2]. Tout manquement de forme est une blessure faite à l'ordre céleste[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
-            <span class="font-bold text-sky-200 text-sm">L'Orgueil & la Fragilité Esthétique[cite: 2, 5, 14]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            À force de traquer la perfection absolue, la Grue devient aisément condescendante, vaniteuse et fragile face aux réalités brutales[cite: 2, 5]. Incapables d'admettre la médiocrité ou l'échec, nombre de leurs duellistes ou courtisans préfèrent le suicide rituel (Seppuku) plutôt que de supporter le regard d'un rival après avoir perdu la face en public[cite: 2, 6].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300 border-b border-sky-500/20 pb-2">
-        4. Guide d'Interprétation : Jouer un Samouraï de la Grue
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        <div class="space-y-2">
-          <h3 class="font-bold text-sky-200 font-imperial text-sm">Allure & Maintien</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Votre tenue est impeccable en toute circonstance[cite: 2, 6]. Vous soignez votre coiffure, blanchissez traditionnellement vos cheveux à la poudre de riz ou d'argent, et vos mouvements sont fluides et mesurés[cite: 2, 14]. Vous ne criez jamais : une voix calme et posée porte davantage que les éclats de voix[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-sky-200 font-imperial text-sm">Diplomatie & Rivaux</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Le <b>Lion</b> est votre rival historique : vous méprisez son agitation martiale bruyante, mais redoutez sa force brute sur le champ de bataille[cite: 2]. Vous surveillez le <b>Scorpion</b> comme un poison tapi dans la soie[cite: 2]. Vous traitez le <b>Crabe</b> avec une politesse distante, trouvant ses manières frustes et déplacées en cour[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-sky-200 font-imperial text-sm">Idées de Concepts Originaux</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Un <b>Daidoji</b> brisé par une mission de sabotage secrète qui refuse désormais de toucher une arme dissimulée[cite: 6] ; un <b>duelliste Kakita</b> hanté par le doute après avoir tué un ami d'enfance lors d'un duel d'honneur inutile[cite: 2, 14] ; ou un <b>courtisan Doji</b> idéaliste tentant sincèrement d'éviter une guerre frontalière par la seule négociation[cite: 2].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. ÉCOLES FONDAMENTALES & ARSENAL -->
-    <section class="space-y-4">
+    <!-- 3. DOCTRINE & PERCEPTION DU BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-5">
       <div class="border-b border-sky-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">5. Écoles Fondamentales de la 4e Édition</h2>
-        <span class="text-xs text-stone-400">Styles martiaux et disciplines représentés dans le générateur de fiches[cite: 2].</span>
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">
+          3. Doctrine Martiale & Pratique du Bushido
+        </h2>
+        <span class="text-xs text-stone-400">Références : Livre de Règles 4e Édition, p. 50-51, 91-94 ; Emerald Empire, p. 34-37.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">La Courtoisie (Rei)</h3>
+          <p class="text-stone-300 leading-relaxed">
+            La Grue considère la politesse et le protocole comme les remparts fondamentaux séparant la civilisation impériale de la barbarie. Le respect méticuleux de la préséance, la maîtrise des émotions et l'élégance du verbe constituent un devoir moral impérieux.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">L'Excellence & le Duel</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Le standard de perfection imposé par Kakita exclut toute complaisance envers l'échec ou la médiocrité. En situation de litige insoluble à la cour, la Grue tranche le différend par le duel Iaijutsu au premier sang ou à mort, sanctifié par les lois d'Émeraude.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-sky-200 font-imperial text-sm">Diplomatie Clanique</h3>
+          <p class="text-stone-300 leading-relaxed">
+            La rivalité avec le <b>Lion</b> est permanente sur les frontières terrestres et dans les arbitrages impériaux. Les manœuvres du <b>Scorpion</b> sont surveillées avec une méfiance soutenue. Les relations avec le <b>Phénix</b> sont cordiales et pacifiques, tandis que le <b>Crabe</b> est tenu à distance polie en raison de ses manières rugueuses.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LES QUATRE ÉCOLES FONDAMENTALES (LIVRE DE RÈGLES 4E ÉDITION) -->
+    <section class="space-y-4">
+      <div class="border-b border-sky-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-sky-300">4. Écoles Fondamentales de Base</h2>
+        <span class="text-xs text-stone-400">Règles officielles : Livre de Règles 4e Édition, pages 109 à 112.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -254,40 +252,110 @@
         <!-- DUELLISTE KAKITA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-sky-200 text-sm font-imperial">École de Duelliste Kakita[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-sky-950 text-sky-400 font-bold border border-sky-800/40">Iaijutsu • Finesse[cite: 2]</span>
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Duelliste Kakita</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-sky-950 text-sky-300 font-bold border border-sky-800/40">Bushi • Livre de Base p. 110</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Voie de la Grue.</b> Ajoute deux fois son rang d'Iaijutsu à tous ses jets d'Initiative[cite: 2]. En posture du Centre, gagne +1g1 + Rang d'École sur ses jets d'attaque et de Concentration lors des duels d'honneur[cite: 2]. Aux rangs supérieurs, il frappe plus tôt en duel et peut porter des attaques simples rapides[cite: 2].
+            <b>Bonus de Trait :</b> +1 Agilité.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Art ou Représentation au choix, Cérémonie du Thé, Étiquette, Iaijutsu (Concentration), Kenjutsu (Katana), Kyujutsu, Sincérité.<br>
+            <b>Technique de Rang 1 (La Voie de la Grue) :</b> Ajoute deux fois son rang de compétence Iaijutsu au total de ses jets d'Initiative. En posture du Centre, bénéficie d'un bonus supplémentaire de +1g1 + Rang d'École à ses jets d'Attaque et à ses jets d'Iaijutsu (Concentration).
           </p>
         </div>
 
         <!-- COURTISAN DOJI -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-sky-200 text-sm font-imperial">École de Courtisan Doji[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold border border-blue-800/40">Intrigue • Préséance[cite: 2]</span>
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Courtisan Doji</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-sky-300 font-bold border border-sky-500/30">Courtisan • Livre de Base p. 110-111</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Grâce Impériale.</b> Reconnaît immédiatement le rang d'Honneur et de Statut exacts de n'importe quel interlocuteur[cite: 2]. Le Niveau de Difficulté (ND) de toutes les faveurs politiques et alliances sollicitées en cour est réduit de 5 points[cite: 2].
+            <b>Bonus de Trait :</b> +1 Intuition.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Calligraphie (Poésie), Cérémonie du Thé, Courtisan (Manipulation), Étiquette (Conversation), Représentation : Conteur, Sincérité (Honnêteté), une compétence Noble au choix.<br>
+            <b>Technique de Rang 1 (La Grâce de Doji) :</b> Évalue instantanément le rang d'Honneur et de Gloire d'un interlocuteur. Réduit le ND de toutes les faveurs politiques de 5 points et ajoute son Rang de Courtisan aux jets d'Étiquette opposés.
+          </p>
+        </div>
+
+        <!-- GUERRIER DE FER DAIDOJI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Guerrier de Fer Daidoji</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-slate-900 text-slate-300 font-bold border border-slate-700">Bushi • Livre de Base p. 111-112</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Force.<br>
+            <b>Honneur de départ :</b> 5,5.<br>
+            <b>Compétences de Départ :</b> Armes d'Hast, Armes Lourdes, Art de la Guerre, Défense, Kenjutsu, Kyujutsu, une compétence de Bugei au choix.<br>
+            <b>Technique de Rang 1 (La Force du Devoir) :</b> En posture de Défense ou Défense Totale, ajoute sa compétence Défense à son ND d'Armure. Peut intercepter sans pénalité une attaque visant un allié adjacent en s'interposant.
+          </p>
+        </div>
+
+        <!-- SHUGENJA ASAHINA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sky-200 text-sm font-imperial">École de Shugenja Asahina</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-teal-300 font-bold border border-teal-500/30">Shugenja • Livre de Base p. 111</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Intelligence.<br>
+            <b>Affinité / Déficience :</b> Affinité Air, Déficience Feu.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Art ou Artisanat au choix, Calligraphie (Chiffres), Cérémonie du Thé, Connaissance : Théologie, Érudition, Étiquette, Méditation.<br>
+            <b>Technique (L'Esprit de Paix) :</b> Dépense un emplacement de sort d'Air pour annuler ou réduire les dégâts d'une attaque subie par un allié à portée de voix. Ne peut lancer aucun sort causant intentionnellement des dégâts létaux directs.
           </p>
         </div>
 
       </div>
     </section>
 
-    <!-- NAVIGATION ENTRE LES CLANS -->
-    <nav aria-label="Navigation des clans" class="pt-6 border-t border-sky-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
-      <a href="crabe.html" class="text-amber-400 hover:text-amber-300 font-imperial">← Clan du Crabe</a>
-      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
-      <a href="dragon.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-emerald-300 border border-stone-800 font-imperial">Clan du Dragon →</a>
-    </nav>
+    <!-- 5. VOIES ALTERNATIVES & PROFILS AVANCÉS -->
+    <section class="card-clean rounded-xl p-6 space-y-3">
+      <div class="border-b border-sky-500/20 pb-2">
+        <h3 class="text-sm font-bold font-imperial text-sky-300">
+          5. Voies Alternatives & Écoles Avancées (Pour optimiser son PJ)
+        </h3>
+        <span class="text-[11px] text-stone-400">Options officielles complémentaires pour développer son personnage.</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs pt-1">
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-sky-300 block">Kakita Master Swordsman</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Livre de Règles 4e Édition, p. 248 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Maître absolu de la lame accélérée frappant avant que l'adversaire n'ait achevé son mouvement.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-sky-300 block">Doji Magistrate</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 223 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Magistrat de cour combinant autorité juridique, rigueur du protocole et désarmement non létal.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-sky-300 block">Daidoji Yojimbo</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 64 (Voie Alternative Rang 3)</span>
+          <p class="text-stone-300 text-[11px]">Garde du corps d'élite formant un rempart inamovible autour du courtisan sous sa garde.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-sky-300 block">Asahina Fetishist</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 63 (Voie Alternative Rang 2)</span>
+          <p class="text-stone-300 text-[11px]">Spécialiste de la manufacture d'objets mineurs imprégnés d'esprits kami (tsangusuri).</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-sky-300 block">Kakita Artisan</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 223 (Artisan de Base)</span>
+          <p class="text-stone-300 text-[11px]">Créateur de chefs-d'œuvre artistiques capables d'influencer durablement l'opinion impériale.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-sky-300 block">Daidoji Harrier</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 64-65 (Voie Alternative Rang 4)</span>
+          <p class="text-stone-300 text-[11px]">Unité clandestine spécialisée dans le sabotage nocturne, les pièges et la guerre non conventionnelle.</p>
+        </div>
+      </div>
+    </section>
 
   </main>
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan de la Grue
+    Chronique L5R 4e Édition — MJ David • Fiche technique du Clan de la Grue
   </footer>
 
 </body>
