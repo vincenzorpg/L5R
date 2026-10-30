@@ -80,8 +80,15 @@ const NAV_CONFIG = {
     const header = document.getElementById("site-header");
     if (!header) return;
 
-    // Rendre l'en-tête collant automatiquement sur toutes les pages
-    header.classList.add("sticky", "top-0", "z-50");
+    // Fixer l'en-tête de manière absolue au défilement (insensible au flexbox du body)
+    header.style.position = "fixed";
+    header.style.top = "0";
+    header.style.left = "0";
+    header.style.right = "0";
+    header.style.zIndex = "1000";
+
+    // Ajouter automatiquement un dégagement sur le body pour que le haut de page ne soit pas tronqué
+    document.body.style.paddingTop = "54px";
 
     let navHtml = `
       <nav class="bg-[#0a0808]/95 backdrop-blur-md border-b border-amber-500/40 text-stone-300 text-xs shadow-2xl relative z-50">
@@ -120,7 +127,7 @@ const NAV_CONFIG = {
               <div class="rounded-xl bg-[#120d0d] border border-amber-500/40 shadow-2xl py-1.5 overflow-hidden">
                 ${item.children.map(sub => {
                   const kanjiBadge = sub.kanji ? `
-                    <span class="w-6 h-6 rounded flex items-center justify-center font-serif font-bold text-sm mr-2.5 bg-black/70 border border-stone-800" style="color: ${sub.color}; text-shadow: 0 0 6px${sub.color}40;">
+                    <span class="w-6 h-6 rounded flex items-center justify-center font-serif font-bold text-sm mr-2.5 bg-black/70 border border-stone-800" style="color: ${sub.color}; text-shadow: 0 0 6px ${sub.color}40;">
                       ${sub.kanji}
                     </span>` : "";
                   return `
