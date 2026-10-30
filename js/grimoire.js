@@ -1,10 +1,14 @@
 /**
  * js/grimoire.js — Moteur interactif du Grimoire L5R 4e Édition
+ * 
+ * Compatible avec la structure exacte des données :
+ * id, name, element, mastery, keywords, range, area, duration, raises, desc
  */
 
 (function () {
   let isMahoUnlocked = false;
 
+  // Normalisation Unicode : minuscules, suppression des accents et espaces superflus
   function normalizeText(str) {
     return (str || "")
       .toString()
@@ -14,22 +18,24 @@
       .trim();
   }
 
+  // Slug stable pour les ancres
   function slugify(text) {
     return normalizeText(text)
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
   }
 
+  // Récupération sécurisée du catalogue fusionné dans sorts-data.js
   function getSpellsData() {
     const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
     if (Array.isArray(raw)) return raw;
     return Object.values(raw).filter(v => v && typeof v === "object");
   }
 
-  // Extraction fiable de l'élément
+  // Extraction uniforme de l'élément en minuscules
   function getSpellElement(spell) {
     if (spell.isMaho) return "maho";
-    const raw = spell.element || spell.anneau || spell.ring || spell.elem || spell.type || "";
+    const raw = spell.element || spell.anneau || spell.ring || spell.elem || "";
     const norm = normalizeText(raw);
 
     if (norm.includes("terre") || norm.includes("earth")) return "terre";
@@ -44,44 +50,21 @@
     return norm || "universel";
   }
 
-  // Extraction du rang (supporte nombres, chaînes "Rang X" et chiffres romains I-VI)
+  // Extraction du rang (lit prioritairement spell.mastery)
   function getSpellRank(spell) {
-    if (typeof spell.rang === "number") return spell.rang;
-    if (typeof spell.maitrise === "number") return spell.maitrise;
+    const val = spell.mastery !== undefined ? spell.mastery :
+               (spell.maitrise !== undefined ? spell.maitrise :
+               (spell.rang !== undefined ? spell.rang :
+               (spell.rank !== undefined ? spell.rank : null)));
 
-    function parseVal(val) {
-      if (typeof val === "number") return val;
-      if (!val) return null;
-      const str = val.toString().trim();
-      const m = str.match(/\b([0-6])\b/) || str.match(/\d+/);
-      if (m) return parseInt(m[0] || m[1], 10);
-
-      const u = str.toUpperCase();
-      if (/\bVI\b/.test(u)) return 6;
-      if (/\bV\b/.test(u)) return 5;
-      if (/\bIV\b/.test(u)) return 4;
-      if (/\bIII\b/.test(u)) return 3;
-      if (/\bII\b/.test(u)) return 2;
-      if (/\bI\b/.test(u)) return 1;
-      return null;
+    if (val !== null && val !== undefined) {
+      const m = val.toString().match(/\d+/);
+      if (m) return parseInt(m[0], 10);
     }
-
-    for (const [key, val] of Object.entries(spell)) {
-      if (val === undefined || val === null || typeof val === "function") continue;
-      const nk = normalizeText(key);
-      if (nk.includes("rang") || nk.includes("maitr") || nk.includes("rank") || nk.includes("level") || nk.includes("niveau")) {
-        const parsed = parseVal(val);
-        if (parsed !== null) return parsed;
-      }
-    }
-
-    const ringStr = (spell.anneau || spell.element || spell.nom || spell.name || "").toString();
-    const ringParsed = parseVal(ringStr);
-    if (ringParsed !== null) return ringParsed;
-
     return 0;
   }
 
+  // Badge CSS selon l'élément
   function getElementBadgeClass(element) {
     switch (element) {
       case "terre": return "badge-terre";
@@ -115,7 +98,7 @@
 
     const allSpells = getSpellsData();
 
-    // 1. Filtrage Mahō (masqué sans mot de passe)
+    // 1. Filtrage Mahō (masqué sans déverrouillage préalable)
     let filtered = allSpells.filter(spell => {
       const el = getSpellElement(spell);
       if (el === "maho" && !isMahoUnlocked) return false;
@@ -127,28 +110,30 @@
       filtered = filtered.filter(spell => getSpellElement(spell) === selectedElement);
     }
 
-    // 3. Filtre par Rang de Maîtrise
+    // 3. Filtre par Rang de Maîtrise (mastery)
     if (selectedRank !== "tous") {
       const targetRank = parseInt(selectedRank, 10);
       filtered = filtered.filter(spell => getSpellRank(spell) === targetRank);
     }
 
-    // 4. Recherche texte tolérante
+    // 4. Recherche plein texte (nom, desc, mots-clés, portée)
     if (query !== "") {
       filtered = filtered.filter(spell => {
-        const nom = normalizeText(spell.nom || spell.name);
-        const desc = normalizeText(spell.description || spell.effet || spell.effect || spell.desc);
-        const mots = normalizeText(Array.isArray(spell.motsCles || spell.keywords || spell.mots_cles) 
-          ? (spell.motsCles || spell.keywords || spell.mots_cles).join(" ") 
-          : (spell.motsCles || spell.keywords || spell.mots_cles));
-        const portee = normalizeText(spell.portee || spell.range || spell.portée);
+        const nom = normalizeText(spell.name || spell.nom);
+        const desc = normalizeText(spell.desc || spell.description || spell.effet);
+        const mots = normalizeText(Array.isArray(spell.keywords || spell.motsCles) 
+          ? (spell.keywords || spell.motsCles).join(" ") 
+          : (spell.keywords || spell.motsCles));
+        const portee = normalizeText(spell.range || spell.portee);
 
         return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query);
       });
     }
 
+    // 5. Mise à jour du compteur
     if (counter) counter.textContent = filtered.length;
 
+    // 6. Rendu HTML
     container.innerHTML = "";
     if (filtered.length === 0) {
       if (noResults) noResults.classList.remove("hidden");
@@ -156,23 +141,26 @@
       if (noResults) noResults.classList.add("hidden");
 
       filtered.forEach(spell => {
-        const spellName = spell.nom || spell.name || "Sort sans nom";
-        const spellId = spell.id || slugify(spellName);
-        const cardId = `sort-${spellId}`;
+        const spellName = spell.name || spell.nom || "Sort sans nom";
+        const primaryId = spell.id || slugify(spellName);
+        const cardId = `sort-${primaryId}`;
+        const nameSlug = slugify(spellName);
 
         const spellElem = getSpellElement(spell);
         const spellRank = getSpellRank(spell);
         const badgeClass = getElementBadgeClass(spellElem);
 
-        const keywordsRaw = spell.motsCles || spell.keywords || spell.mots_cles;
+        const keywordsRaw = spell.keywords || spell.motsCles;
         const keywordsStr = Array.isArray(keywordsRaw) ? keywordsRaw.join(", ") : (keywordsRaw || "");
 
         const card = document.createElement("article");
         card.id = cardId;
+        card.setAttribute("data-alias", `sort-${nameSlug}`);
         card.className = "card-spell rounded-xl p-4 flex flex-col justify-between space-y-3 relative";
 
         card.innerHTML = `
           <div>
+            <!-- En-tête -->
             <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
               <div>
                 <h2 class="font-bold font-imperial text-amber-200 text-sm md:text-base leading-tight">
@@ -197,24 +185,25 @@
               </button>
             </div>
 
+            <!-- Paramètres techniques -->
             <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] text-stone-400 mt-2 bg-black/40 p-2 rounded border border-stone-900">
-              <div><b class="text-stone-300">Portée :</b> ${spell.portee || spell.portée || spell.range || "Personnelle"}</div>
-              <div><b class="text-stone-300">Zone :</b> ${spell.zone || spell.area || "1 cible"}</div>
-              <div><b class="text-stone-300">Durée :</b> ${spell.duree || spell.durée || spell.duration || "Instantanée"}</div>
-              <div><b class="text-stone-300">Augmentations :</b> ${spell.augmentations || spell.raises || "Aucune"}</div>
+              <div><b class="text-stone-300">Portée :</b> ${spell.range || spell.portee || "Personnelle"}</div>
+              <div><b class="text-stone-300">Zone :</b> ${spell.area || spell.zone || "1 cible"}</div>
+              <div><b class="text-stone-300">Durée :</b> ${spell.duration || spell.duree || "Instantanée"}</div>
+              <div><b class="text-stone-300">Augmentations :</b> ${spell.raises || spell.augmentations || "Aucune"}</div>
             </div>
 
+            <!-- Description / Effet -->
             <div class="mt-2.5 text-stone-300 text-xs leading-relaxed space-y-1.5">
-              <p>${spell.description || spell.effet || spell.effect || spell.desc || ""}</p>
+              <p>${spell.desc || spell.description || spell.effet || ""}</p>
             </div>
           </div>
 
-          ${spell.source ? `
-            <div class="pt-2 border-t border-stone-900 text-[9px] text-stone-600 flex justify-between items-center">
-              <span>Source : ${spell.source}</span>
-              <span class="text-[8px] font-mono text-stone-700">#${cardId}</span>
-            </div>
-          ` : ""}
+          <!-- Pied de carte -->
+          <div class="pt-2 border-t border-stone-900 text-[9px] text-stone-600 flex justify-between items-center">
+            <span>${spell.source || "Livre de Base 4e Édition"}</span>
+            <span class="text-[8px] font-mono text-stone-700">#${cardId}</span>
+          </div>
         `;
 
         container.appendChild(card);
@@ -259,6 +248,9 @@
     }
   }
 
+  // =========================================================================
+  // URL SEARCH PARAMS & ANCRES (#sort-<id>)
+  // =========================================================================
   function syncFiltersToURL() {
     const searchInput = document.getElementById("search-input");
     const elementSelect = document.getElementById("element-select");
@@ -325,7 +317,11 @@
     if (!hash || !hash.startsWith("#sort-")) return;
 
     const targetId = hash.slice(1);
-    const targetElement = document.getElementById(targetId);
+    // Recherche par ID direct (ex: sort-air-1-blessed-wind) ou par alias (ex: sort-le-vent-bienveillant)
+    let targetElement = document.getElementById(targetId);
+    if (!targetElement) {
+      targetElement = document.querySelector(`[data-alias="${CSS.escape(targetId)}"]`);
+    }
 
     if (targetElement) {
       setTimeout(() => {
@@ -337,6 +333,9 @@
     }
   }
 
+  // =========================================================================
+  // GESTION DU MAHŌ ET DU MOT DE PASSE
+  // =========================================================================
   window.toggleMahoSecurityModal = function (forceState) {
     const modal = document.getElementById("maho-modal");
     const errorEl = document.getElementById("maho-error");
@@ -407,6 +406,9 @@
     });
   };
 
+  // =========================================================================
+  // INITIALISATION
+  // =========================================================================
   function initApp() {
     try {
       if (sessionStorage.getItem("l5r_maho_unlocked") === "true") {
