@@ -29,25 +29,33 @@
       .replace(/^-+|-+$/g, "");
   }
 
-  // Récupération sécurisée du catalogue de sorts
+  // Récupération sécurisée et aplatissement universel des données de sorts
   function getSpellsData() {
-    return window.SORTS_DATA || window.GRIMOIRE_DATA || [];
-  }
+    const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
 
-  // Détermination de la classe CSS du badge selon l'élément
-  function getElementBadgeClass(element) {
-    const el = (element || "").toLowerCase();
-    switch (el) {
-      case "terre": return "badge-terre";
-      case "eau": return "badge-eau";
-      case "feu": return "badge-feu";
-      case "air": return "badge-air";
-      case "vide": return "badge-vide";
-      case "universel": return "badge-universel";
-      case "kiho": return "badge-kiho";
-      case "maho": return "badge-maho";
-      default: return "badge-universel";
+    // Cas 1 : Déjà un tableau plat
+    if (Array.isArray(raw)) {
+      return raw;
     }
+
+    // Cas 2 : Objet contenant des tableaux par élément { terre: [...], eau: [...] }
+    const values = Object.values(raw);
+    if (values.some(v => Array.isArray(v))) {
+      let flat = [];
+      Object.entries(raw).forEach(([elementKey, spellList]) => {
+        if (Array.isArray(spellList)) {
+          spellList.forEach(s => {
+            // Assure la présence de l'élément si non défini dans l'objet sort
+            if (!s.element && !s.el) s.element = elementKey;
+            flat.push(s);
+          });
+        }
+      });
+      return flat;
+    }
+
+    // Cas 3 : Dictionnaire d'objets indexé par ID { "sentir": { nom: "Sentir", ... } }
+    return values.filter(v => v && typeof v === "object");
   }
 
   // =========================================================================
