@@ -9,8 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- NAVIGATION SUPÉRIEURE -->
   <script src="../js/navbar.js" defer></script>
+
   <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
@@ -42,8 +44,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-
-  <!-- CONTENEUR DU MENU GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <!-- CONTENEUR DU MENU GLOBAL -->
   <header id="site-header"></header>
   
   <!-- CONTENU PRINCIPAL -->
@@ -61,73 +62,87 @@
         <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide unicorn-gradient">
           LE CLAN DE LA LICORNE
         </h1>
-        <p class="text-xs md:text-sm text-purple-200/90 italic font-imperial">
-          « Nous avons franchi les déserts et les montagnes pour apprendre ce que le monde recèle au-delà du ciel de Rokugan. »
-        </p>
         <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
-          Autrefois nommé le <b>Clan du Ki-Rin</b>, ce peuple quitta l'Empire au premier siècle sur ordre de l'Empereur pour explorer le vaste monde extérieur et identifier les menaces tapies au-delà des frontières de Rokugan[cite: 2, 13]. Revenus au IXe siècle sous le nom de Clan de la Licorne après huit cents ans d'exil nomade, ils apportèrent avec eux de puissants destriers de guerre, la magie singulière des talismans <i>Meishōdō</i>, des sabres courbes (cimeterres) et des coutumes étrangères qui continuent de déconcerter les cours traditionnelles[cite: 2, 13].
+          Originellement connu sous le nom de Clan du Ki-Rin, ce peuple quitta l'Empire au Ier siècle sur ordre de l'Empereur Hantei afin d'explorer le monde extérieur et d'identifier les périls susceptibles de menacer Rokugan. De retour au IXe siècle sous l'appellation de Clan de la Licorne après huit siècles de pérégrinations nomades, ils ont réintroduit les grands destriers de guerre, la magie talismanique Meishōdō, le tir à l'arc monté et des tactiques de cavalerie lourde qui bouleversèrent l'art militaire de l'Empire.
         </p>
+        <div class="pt-2 text-[11px] text-purple-300/80 font-mono">
+          Références : Livre de Règles 4e Édition, p. 68-69, 124-128 ; The Great Clans, p. 171-205.
+        </div>
       </div>
     </section>
 
-    <!-- 1. HISTOIRE & RETOUR DES STEPS -->
+    <!-- 1. ORIGINE SACRÉE & CADRE TECHNIQUE -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-4">
         <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
-          1. L'Épopée du Grand Exil & Le Retour Glorieux
+          1. L'Épopée du Grand Exil & Le Retour Impérial
         </h2>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Guidé par la fougueuse Kami <b>Shinjo</b>, le clan traversa les Terres Brûlées, affronta les empires étrangers d'Ujik, de Senpet et de Medinaat al-Salaam, et adopta l'équitation lourde pour survivre dans des contrées hostiles[cite: 2, 13]. Durant leur périple, la tribu de Moto et la cavalerie d'élite d'Otaku (devenue Utaku) forgèrent une tradition martiale où le cavalier et sa monture ne font qu'un[cite: 2, 13].
+          Sous la conduite de la Kami <b>Shinjo</b>, le clan franchit les frontières de l'Empire pour parcourir les Terres Brûlées et les royaumes d'outre-monde. Confrontés à des civilisations étrangères telles que les Ujik, Senpet et Medinaat al-Salaam, les survivants s'adaptèrent à la vie pastorale nomade et perfectionnèrent l'art de l'équitation de guerre en symbiose totale avec leurs montures.
         </p>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Lorsqu'ils revinrent en 800 aux frontières de Rokugan, les clans sédentaires les prirent pour une invasion de barbares <i>gaijin</i>[cite: 13]. Le Lion et le Crabe tentèrent de leur barrer la route, mais la mobilité foudroyante et la puissance de choc des cavaliers de Shinjo brisèrent les lignes de fantassins[cite: 13]. Reconnus par l'Empereur Hantei comme les descendants légitimes du Ki-Rin, ils reprirent leur place au sein des Grands Clans[cite: 2, 13].
+          À leur retour en l'an 800, les clans sédentaires prirent initialement leurs armées montées pour une invasion étrangère. Après des affrontements frontaliers contre le Crabe et le Lion où la vélocité de la cavalerie brisa les rangs d'infanterie classique, l'Empereur reconnut la filiation sacrée de Shinjo et restitua au clan ses terres ancestrales du nord-ouest.
         </p>
-        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
-          <span class="text-purple-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
-          <span class="text-stone-300">Pourpre améthyste, or sable et cuir tanné (bottes montantes, capes de laine chaude, selles ornées et arcs composites)[cite: 2, 13].</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-purple-400 font-bold uppercase text-[10px] tracking-wider block">Héraldique & Uniforme</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Pourpre impérial, or sable, blanc et cuir tanné. Bottes d'équitation montantes, selles richement ornées, manteaux de voyage doublés et daisho adapté à la monte.
+            </p>
+          </div>
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-purple-400 font-bold uppercase text-[10px] tracking-wider block">Ouvrages de Référence</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Histoire clanique : <i>The Great Clans</i>, p. 171-180. Traditions équestres : <i>Emerald Empire</i>, p. 64-67. Traité de l'Eau : <i>The Book of Water</i>, p. 48-62.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- CARTE D'IDENTITÉ -->
+      <!-- CARTE D'IDENTITÉ DU JOUEUR -->
       <div class="card-clean rounded-xl p-6 space-y-3">
         <h3 class="text-sm font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
-          Profil de Clan
+          Profil de Création PJ
         </h3>
         <ul class="text-xs space-y-2 text-stone-300">
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Spécialité :</span>
-            <b class="text-purple-300">Cavalerie & Vitesse[cite: 2, 13]</b>
+            <span class="text-stone-500">Anneau Majeur :</span>
+            <b class="text-purple-300">Eau & Mobilité</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Kami Fondatrice :</span>
-            <b>Shinjo[cite: 2, 13]</b>
+            <b>Shinjo</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Capitale :</span>
-            <b>Shiro Shinjo[cite: 2]</b>
+            <span class="text-stone-500">Palais Principal :</span>
+            <b>Shiro Shinjo</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Magie Spécifique :</span>
-            <b>Meishōdō (Amulettes)[cite: 2]</b>
+            <span class="text-stone-500">Discipline Reine :</span>
+            <b>Cavalerie & Tir Monté</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Armes Clés :</span>
+            <b>Katana, Cimeterre, Arc composite</b>
           </li>
           <li class="flex justify-between">
-            <span class="text-stone-500">Armes Emblématiques :</span>
-            <b>Cimeterre & Arc équestre[cite: 2, 13]</b>
+            <span class="text-stone-500">Livre de Base 4e :</span>
+            <b class="text-purple-400">Pages 124-128</b>
           </li>
         </ul>
         <div class="pt-2">
           <a href="../createcharacter.html" class="w-full block py-2 rounded bg-purple-600 hover:bg-purple-500 text-white font-bold text-center text-xs uppercase tracking-wider transition">
-            Créer un samouraï Licorne
+            Forger un samouraï Licorne
           </a>
         </div>
       </div>
     </section>
 
-    <!-- 2. LES FAMILLES DE LA LICORNE -->
+    <!-- 2. LES CINQ FAMILLES DE LA LICORNE -->
     <section class="space-y-4">
-      <div class="border-b border-purple-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">2. Les Familles du Clan & Leurs Traditions</h2>
-        <span class="text-xs text-stone-400">L'alliance des stratèges nomades, des charges de cavalerie de fer, des diplomates interculturels et des prêtresses d'amulettes[cite: 2, 13].</span>
+      <div class="border-b border-purple-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">2. Les Familles du Clan</h2>
+        <span class="text-xs text-stone-400">Livre de Règles 4e Édition, p. 124-125 ; The Great Clans, p. 180-186.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
@@ -136,127 +151,113 @@
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Shinjo</h3>
-            <span class="text-[10px] text-purple-400 font-bold">+1 Réflexes[cite: 2]</span>
+            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Réflexes</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            La lignée dirigeante de la Kami[cite: 2]. Tireurs d'élite montés et meneurs bienveillants, les Shinjo possèdent une curiosité insatiable pour le monde[cite: 2, 13]. Leurs éclaireurs couvrent d'immenses distances et savent négocier avec pragmatisme avant que le fer ne parle[cite: 2, 13].
+            Lignée dirigeante descendant directement de la Kami. Reconnus pour leur curiosité d'esprit et leur adaptabilité, les Shinjo excellent dans la reconnaissance à longue distance, le tir à l'arc monté et la direction générale des armées et domaines claniques.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Éclaireurs à cheval, seigneurs de clan et archers montés[cite: 2, 13].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Éclaireurs à cheval, archers montés, commandants et seigneurs de province.
+          </div>
         </div>
 
         <!-- MOTO -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Moto</h3>
-            <span class="text-[10px] text-purple-400 font-bold">+1 Force[cite: 2]</span>
+            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Force</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            D'origine barbare des steppes, les guerriers Moto sont la cavalerie lourde d'assaut du clan[cite: 2, 13]. Robustes, vêtus de manteaux de fourrure et armés de cimeterres courbes, ils chargent au cœur des mêlées les plus sanglantes avec un mépris total du danger[cite: 2, 13].
+            Issus des tribus guerrières des steppes ralliées durant l'exil, les Moto forment le bras armé lourd du clan. Robustes, austères et pugnaces, ils mènent des charges brutales avec leurs cimeterres et marteaux de guerre, acceptant les missions de première ligne les plus périlleuses.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Cavaliers de choc, bretteurs au cimeterre et troupes d'assaut[cite: 2, 13].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Cavaliers lourds d'assaut, bretteurs au cimeterre, officiers de choc.
+          </div>
         </div>
 
-        <!-- UTAKU (OTAKU) -->
+        <!-- UTAKU -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Utaku</h3>
-            <span class="text-[10px] text-purple-400 font-bold">+1 Constitution[cite: 2]</span>
+            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Constitution</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Un ordre matriarcal strict de vierges guerrières montées (*Battle Maidens*)[cite: 2, 13]. Seules les femmes Utaku ont le privilège de chevaucher les purs destriers de guerre de la famille[cite: 2, 13]. Leurs charges dévastatrices au galop sont précédées d'une réputation de pureté morale et d'honneur inflexible[cite: 2, 13].
+            Ordre matriarcal d'élite réputé pour sa rigueur morale et ses destriers d'exception. Seules les femmes de la lignée montent en première ligne au sein des célèbres Vierges Guerrières (<i>Battle Maidens</i>), tandis que les hommes assurent la gestion des haras sacrés et l'infanterie de protection.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Vierges guerrières d'élite et gardiens des haras sacrés[cite: 2, 13].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Vierges guerrières d'élite, gardiennes des lignées, écuyers et fantassins dévoués.
+          </div>
         </div>
 
         <!-- IUCHI -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Iuchi</h3>
-            <span class="text-[10px] text-purple-400 font-bold">+1 Intuition[cite: 2]</span>
+            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Intuition</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Les maîtres de la magie du clan[cite: 2, 13]. Prêtres nomades, ils ont appris à lier les esprits élémentaires dans des amulettes de métal précieux et de cuir (*Meishōdō*), leur permettant de déclencher des effets magiques instantanés sans les longs rituels des parchemins[cite: 2].
+            Prêtres et mystiques du clan. Les Iuchi communient avec les esprits de la nature et ont développé l'art du <i>Meishōdō</i>, liant les forces élémentaires dans des talismans de métal ou de cuir pour déclencher des effets spirituels instantanés lors des déplacements ou des batailles.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Shugenja voyageurs, créateurs d'amulettes et devins des éléments[cite: 2, 13].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Shugenja nomades, créateurs de talismans Meishōdō, guides spirituels et devins.
+          </div>
         </div>
 
         <!-- IDE -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Ide</h3>
-            <span class="text-[10px] text-purple-400 font-bold">+1 Volonté[cite: 2]</span>
+            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Perception</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Les émissaires doux et concilliants de la Licorne[cite: 2, 13]. C'est à eux qu'incombe la tâche délicate d'apaiser les tensions avec les clans traditionalistes[cite: 2, 13]. Leurs diplomates écoutent plus qu'ils ne parlent et désamorcent les conflits par une empathie et une bienveillance remarquables[cite: 2, 13].
+            Diplomates et pacificateurs de la Licorne. Chargés d'amortir les heurts culturels avec les autres clans, les Ide emploient une écoute attentive, une diplomatie empathique et une sincérité désarmante pour préserver les alliances et désamorcer les conflits armés.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Diplomates, négociateurs de paix et hérauts impériaux[cite: 2, 13].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Ambassadeurs de cour, négociateurs de traités, marchands d'État et médiateurs.
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- 3. LA LICORNE ET LE BUSHIDO -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
-        3. Le Cœur du Roleplay : La Licorne face au Bushido
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
-            <span class="font-bold text-purple-200 text-sm">La Compassion (Jin) & L'Ouverture d'Esprit[cite: 2]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Ayant côtoyé des dizaines de cultures différentes durant leur exil, les membres de la Licorne ne jugent pas un homme à ses origines ou à son strict respect d'un rituel, mais à la noblesse de son cœur et à sa loyauté[cite: 2, 13]. Ils sont compatissants envers les humbles et prompts à secourir ceux que le dogme impérial abandonne[cite: 2, 13].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
-            <span class="font-bold text-purple-200 text-sm">Le Décalage Culturel & la Barbarie Présumée[cite: 2, 13]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Les coutumes de la Licorne choquent régulièrement les traditionalistes : manger de la viande rouge, porter des bottes de cuir animal ou serrer la main d'un étranger sans intermédiaire les fait passer pour des barbares impurs aux yeux de la Grue ou du Phénix[cite: 2, 13]. Leur spontanéité est souvent interprétée à tort comme un manque d'éducation[cite: 2, 13].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300 border-b border-purple-500/20 pb-2">
-        4. Guide d'Interprétation : Jouer un Samouraï de la Licorne
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        <div class="space-y-2">
-          <h3 class="font-bold text-purple-200 font-imperial text-sm">Allure & Maintien</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Vous marchez avec le déhanché caractéristique des cavaliers qui passent leur vie en selle[cite: 2, 13]. Vos vêtements en pourpre et cuir sont fonctionnels et adaptés au voyage[cite: 2, 13]. Vous êtes chaleureux, curieux des coutumes locales et considérez votre monture comme un frère d'armes à part entière[cite: 2, 13].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-purple-200 font-imperial text-sm">Rapports avec les autres Clans</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Vous admirez la détermination du <b>Crabe</b>[cite: 2]. Vous comprenez l'amour du commerce et de la liberté de la <b>Mante</b>[cite: 2]. Les règles byzantines de la <b>Grue</b> vous étouffent, et vous restez sur vos gardes face à la condescendance martiale du <b>Lion</b>[cite: 2, 13].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-purple-200 font-imperial text-sm">Idées de Rôles Contrastés</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Un <b>cavalier Moto</b> hanté par la chute d'une partie de sa lignée dans l'Outremonde qui cherche la rédemption[cite: 13] ; une <b>guerrière Utaku</b> découvrant avec effarement l'hypocrisie des salons d'Otosan Uchi[cite: 2, 13] ; ou un <b>shugenja Iuchi</b> protégeant le secret de fabrication des talismans Meishōdō[cite: 2].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. ÉCOLES FONDAMENTALES & CAPACITÉS -->
-    <section class="space-y-4">
+    <!-- 3. DOCTRINE & PERCEPTION DU BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-5">
       <div class="border-b border-purple-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">5. Écoles Fondamentales de la 4e Édition</h2>
-        <span class="text-xs text-stone-400">Disciplines martiales représentées dans le générateur de fiches[cite: 2, 13].</span>
+        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">
+          3. Doctrine Martiale & Pratique du Bushido
+        </h2>
+        <span class="text-xs text-stone-400">Références : Livre de Règles 4e Édition, p. 68-69, 91-94 ; Emerald Empire, p. 64-67.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-purple-200 font-imperial text-sm">La Compassion (Jin)</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Pour la Licorne, la vertu cardinale est la bienveillance concrète envers autrui. Ayant côtoyé des peuples aux croyances variées durant l'exil, le clan refuse de mépriser un individu sur de simples critères de caste ou d'origine, préférant évaluer sa loyauté et sa droiture personnelle.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-purple-200 font-imperial text-sm">Pragmatisme Culturel</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Les habitudes héritées du nomadisme (consommation modérée de viande, port de bottes de cuir, poignées de main franches) tranchent avec le formalisme impérial. La Licorne privilégie la fonctionnalité de terrain et la sincérité du cœur sur la rigidité du protocole de cour.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-purple-200 font-imperial text-sm">Diplomatie Clanique</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Le clan entretient des relations solides avec le <b>Crabe</b>, qui admire sa vigueur martiale. Les rapports avec la <b>Mante</b> sont fluides sur le plan commercial. En revanche, les relations restent complexes avec le <b>Lion</b> en raison des contentieux frontaliers passés, et méfiantes avec la <b>Grue</b> en raison de son étiquette stricte.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LES QUATRE ÉCOLES FONDAMENTALES (LIVRE DE RÈGLES 4E ÉDITION) -->
+    <section class="space-y-4">
+      <div class="border-b border-purple-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">4. Écoles Fondamentales de Base</h2>
+        <span class="text-xs text-stone-400">Règles officielles : Livre de Règles 4e Édition, pages 124 à 128.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -264,40 +265,110 @@
         <!-- BUSHI MOTO -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-purple-200 text-sm font-imperial">École de Bushi Moto[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold border border-purple-800/40">Cavalerie • Fureur[cite: 2, 13]</span>
+            <span class="font-bold text-purple-200 text-sm font-imperial">École de Bushi Moto</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold border border-purple-800/40">Bushi • Livre de Base p. 126</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Charge du Tonnerre.</b> Confère un bonus de +2g0 à tous les jets de dégâts en charge montée et annule toutes les pénalités liées au combat équestre[cite: 2, 13]. Aux rangs supérieurs, il s'immunise contre la Peur et peut attaquer en Action Simple[cite: 2].
+            <b>Bonus de Trait :</b> +1 Agilité.<br>
+            <b>Honneur de départ :</b> 3,5.<br>
+            <b>Compétences de Départ :</b> Armes Lourdes ou Kenjutsu (Cimeterre), Athlétisme, Chasse, Défense, Équitation, Kyujutsu, une compétence de Bugei ou Marchande au choix.<br>
+            <b>Technique de Rang 1 (La Justice du Khan) :</b> En posture d'Attaque ou d'Attaque Totale, bénéficie d'un bonus de +1g0 à tous ses jets d'Attaque. Lorsqu'il combat monté, ajoute +1g0 à tous ses jets de dégâts avec un cimeterre ou une arme lourde.
           </p>
         </div>
 
         <!-- VIERGE GUERRIÈRE UTAKU -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-purple-200 text-sm font-imperial">École de Vierge Guerrière Utaku[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Honneur • Pureté[cite: 2, 13]</span>
+            <span class="font-bold text-purple-200 text-sm font-imperial">École de Vierge Guerrière Utaku</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Bushi (Femmes) • p. 127</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : Chevaucher en Harmonie.</b> Ajoute son Rang d'Honneur au résultat de ses jets de dégâts et à son ND d'Armure lorsqu'elle est en selle sur un destrier Utaku[cite: 2, 13]. Ses charges foudroyantes transpercent les armures les plus solides[cite: 2, 13].
+            <b>Bonus de Trait :</b> +1 Agilité.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Art de la Guerre, Chasse, Défense, Équitation, Iaijutsu ou Kenjutsu, Kyujutsu, Sincérité.<br>
+            <b>Technique de Rang 1 (Chevaucher en Harmonie) :</b> Lorsqu'elle monte un destrier Utaku, ajoute son Rang d'Honneur au total de ses jets de dégâts et à son ND d'Armure. En charge montée, ignore les malus de terrain accidenté pour sa monture.
+          </p>
+        </div>
+
+        <!-- ÉMISSAIRE IDE -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-purple-200 text-sm font-imperial">École d'Émissaire Ide</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-cyan-300 font-bold border border-cyan-500/30">Courtisan • Livre de Base p. 127</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Intuition.<br>
+            <b>Honneur de départ :</b> 5,5.<br>
+            <b>Compétences de Départ :</b> Cérémonie du Thé, Commerce, Courtisan, Équitation, Étiquette (Conversation), Sincérité (Honnêteté), une compétence Noble ou de Bugei au choix.<br>
+            <b>Technique de Rang 1 (Le Cœur Pacifique) :</b> Réduit les tensions et désamorce les provocations d'un jet d'Étiquette ou de Courtisan opposé. Peut dépenser un point de Vide pour discerner les objectifs secrets ou les besoins immédiats d'un interlocuteur.
+          </p>
+        </div>
+
+        <!-- SHUGENJA IUCHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-purple-200 text-sm font-imperial">École de Shugenja Iuchi</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-teal-300 font-bold border border-teal-500/30">Shugenja • Livre de Base p. 128</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Perception.<br>
+            <b>Affinité / Déficience :</b> Affinité Eau, Déficience Feu.<br>
+            <b>Honneur de départ :</b> 4,5.<br>
+            <b>Compétences de Départ :</b> Calligraphie (Chiffres), Chasse, Connaissance : Théologie, Défense, Équitation, Méditation, une compétence Noble ou de Bugei au choix.<br>
+            <b>Technique (La Voie du Nomade) :</b> Détecte intuitivement les sources d'eau potable et l'orientation cardinale. Les sorts d'Eau liés au mouvement, à la vitesse ou au voyage bénéficient d'une portée et d'une durée accrues d'un rang gratuit.
           </p>
         </div>
 
       </div>
     </section>
 
-    <!-- NAVIGATION ENTRE LES CLANS -->
-    <nav aria-label="Navigation des clans" class="pt-6 border-t border-purple-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
-      <a href="scorpion.html" class="text-purple-400 hover:text-purple-300 font-imperial">← Clan du Scorpion</a>
-      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
-      <a href="crabe.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-400 border border-stone-800 font-imperial">Clan du Crabe →</a>
-    </nav>
+    <!-- 5. VOIES ALTERNATIVES & PROFILS AVANCÉS -->
+    <section class="card-clean rounded-xl p-6 space-y-3">
+      <div class="border-b border-purple-500/20 pb-2">
+        <h3 class="text-sm font-bold font-imperial text-purple-300">
+          5. Voies Alternatives & Écoles Avancées (Pour optimiser son PJ)
+        </h3>
+        <span class="text-[11px] text-stone-400">Options officielles supplémentaires pour la progression du personnage.</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs pt-1">
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-purple-300 block">Shinjo Bushi</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 182-183 (École de Base complémentaire)</span>
+          <p class="text-stone-300 text-[11px]">Bushi polyvalent alliant combat au sabre, équitation de combat et tir à l'arc monté.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-purple-300 block">Moto Vindicator</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Livre de Règles 4e Édition, p. 249 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Guerrier voué à l'extermination des Moto corrompus et créatures souillées de l'Outremonde.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-purple-300 block">Shinjo Horseback Archer</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 184 (Voie Alternative Rang 2)</span>
+          <p class="text-stone-300 text-[11px]">Tireur monté d'élite décochant ses flèches en pleine course au grand galop.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-purple-300 block">Utaku Stablemaster</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 184-185 (Voie Alternative Rang 3)</span>
+          <p class="text-stone-300 text-[11px]">Réservé aux hommes Utaku : dresseur des destriers de guerre et combattant de soutien.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-purple-300 block">Ide Peacemaker</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 231 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Médiateur diplomatique capable d'annuler les hostilités et de punir les agresseurs téméraires.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-purple-300 block">Iuchi Meishōdō Master</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 232 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Artisan mystique fabriquant des talismans capables de libérer instantanément des sortilèges majeurs.</p>
+        </div>
+      </div>
+    </section>
 
   </main>
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan de la Licorne
+    Chronique L5R 4e Édition — MJ David • Fiche technique du Clan de la Licorne
   </footer>
 
 </body>
