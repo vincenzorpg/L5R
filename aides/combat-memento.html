@@ -46,33 +46,18 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- NAVIGATION SUPÉRIEURE -->
-  <header class="border-b border-amber-500/30 bg-[#0d0b0b]/90 backdrop-blur-md sticky top-0 z-50 py-3 px-4 md:px-8 shadow-xl no-print">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-      <a href="../index.html" class="flex items-center gap-3">
-        <span class="w-8 h-8 rounded-full border border-amber-500/50 bg-black flex items-center justify-center font-bold text-amber-300 font-imperial text-xs">⚔️</span>
-        <div>
-          <span class="font-imperial font-bold tracking-widest text-amber-200 block text-sm">ROKUGAN</span>
-          <span class="text-[9px] text-stone-400 tracking-wider uppercase block">Chronique du MJ David</span>
-        </div>
-      </a>
-      <nav class="flex items-center gap-2 text-xs">
-        <a href="../index.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800">Accueil</a>
-        <a href="../createcharacter.html" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">Forge de Samouraï</a>
-        <a href="../grimoire.html" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">📜 Grimoire</a>
-        <button onclick="window.print()" class="px-2.5 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30">🖨️ Imprimer</button>
-      </nav>
-    </div>
-  </header>
+  <!-- NAVIGATION SUPÉRIEURE (MENU GLOBAL) -->
+  <header id="site-header" class="no-print"></header>
+  <script src="../js/navbar.js" defer></script>
 
   <!-- CONTENU DU MÉMENTO -->
   <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
 
     <!-- HERO SECTION -->
-    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6 shadow-2xl">
       <div class="space-y-2 max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/60 border border-amber-500/30 text-[10px] uppercase tracking-widest text-amber-300 font-bold">
-          <span>📜</span> Guide Tactique Officiel 4e Édition
+          <span>📜</span> Guide Tactique & Arbitrage 4e Édition
         </div>
         <h1 class="text-2xl md:text-4xl font-black font-imperial tracking-wide gold-gradient">
           MÉMENTO DU COMBAT & DES DUELS
@@ -82,66 +67,86 @@
         </p>
       </div>
       <div class="flex flex-col gap-2 shrink-0 text-center">
-        <span class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Formule Initiale (4e Éd.)</span>
-        <div class="p-2.5 px-4 rounded-xl bg-black/60 border border-amber-500/40 text-sm font-bold font-imperial text-amber-300">
-          (Insight + Réflexes) g Réflexes
+        <span class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Initiative d'Escarmouche</span>
+        <div class="p-2.5 px-4 rounded-xl bg-black/60 border border-amber-500/40 text-sm font-bold font-imperial text-amber-300 shadow">
+          (Rang d'Insight + Réflexes) g Réflexes
         </div>
+        <span class="text-[9px] text-stone-500 italic">Conservée pour toute l'escarmouche</span>
       </div>
     </section>
 
-    <!-- SECTION 1 : DÉROULEMENT DU ROUND D'ESCARMOUCHE -->
+    <!-- SECTION 1 : CHRONOLOGIE COMPLÈTE DU ROUND D'ESCARMOUCHE -->
     <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">1. Déroulement d'un Round d'Escarmouche</h2>
-        <span class="text-xs text-stone-400">Une escarmouche se joue en rounds successifs décomposés en trois étapes strictes (Livre de Base, p. 81-82).</span>
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">1. Déroulement d'un Round d'Escarmouche</h2>
+          <span class="text-xs text-stone-400">Une escarmouche se résout en rounds successifs articulés en 3 étapes impératives (Livre de Base, p. 81-83).</span>
+        </div>
+        <span class="text-xs font-imperial text-amber-400 hidden sm:inline">Structure du Tour</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
         
         <!-- ÉTAPE 1 -->
-        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-amber-500">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[10px]">Étape 1</span>
-            <span class="text-stone-400 font-imperial font-bold">Début du Round</span>
+        <div class="card-clean rounded-xl p-4 space-y-2.5 border-t-2 border-amber-500 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[10px]">Étape 1</span>
+              <span class="text-stone-400 font-imperial font-bold">Début du Round</span>
+            </div>
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Initiative & Préparation</h3>
+            <p class="text-stone-300 leading-relaxed">
+              <b>Au Round 1 :</b> Chaque belligérant effectue son jet d'Initiative : <b>(Insight + Réflexes) g Réflexes</b>. Ce score détermine l'ordre d'action pour toute la rencontre.
+            </p>
+            <p class="text-stone-400 leading-relaxed">
+              Les combattants surpris ne lancent pas l'Initiative et agissent en dernier au Round 1 avec un malus de <b>-5 au ND d'Armure</b>.
+            </p>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial">Initiative & Posture</h3>
-          <p class="text-stone-300 leading-relaxed">
-            Au <b>Round 1</b>, chaque combattant choisit sa Posture puis effectue son jet d'Initiative : <b>(Rang d'Insight + Réflexes) g Réflexes</b>. Le score obtenu reste valable pour toute l'escarmouche sauf modificateur ou technique.
-          </p>
           <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-amber-300">
-            Dépense de Vide : +10 à l'Initiative pour le round en cours.
+            ⚡ <b>Dépense de Vide :</b> +10 au score d'Initiative pour le round en cours.
           </div>
         </div>
 
         <!-- ÉTAPE 2 -->
-        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-red-500">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">Étape 2[cite: 3]</span>
-            <span class="text-stone-400 font-imperial font-bold">Résolution</span>
+        <div class="card-clean rounded-xl p-4 space-y-2.5 border-t-2 border-red-500 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">Étape 2</span>
+              <span class="text-stone-400 font-imperial font-bold">Résolution des Tours</span>
+            </div>
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Posture & Actions du Tour</h3>
+            <p class="text-stone-300 leading-relaxed">
+              Les combattants agissent à tour de rôle, par ordre décroissant d'Initiative. <b>Au début précis de son tour</b>, le personnage :
+            </p>
+            <ol class="list-decimal pl-4 space-y-1 text-stone-300">
+              <li><b>Déclare sa Posture :</b> Elle prend effet aussitôt et persiste jusqu'au début de son propre tour au round suivant.</li>
+              <li><b>Exécute ses Actions :</b> Soit <b>1 Action Complexe</b>, soit <b>2 Actions Simples</b>, ainsi que des Actions Gratuites.</li>
+            </ol>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial">Tours d'Action</h3>
-          <p class="text-stone-300 leading-relaxed">
-            Les combattants agissent du score d'Initiative le plus élevé au plus bas. À son tour, un personnage peut changer de Posture, puis réaliser au choix :
-          </p>
-          <ul class="list-disc pl-4 space-y-1 text-stone-300">
-            <li><b>1 Action Complexe</b> (ex : Attaquer[cite: 2, 3], Sort majeur, Défense Totale).</li>
-            <li><b>2 Actions Simples</b> (ex : Attaque d'école avancée[cite: 3], Mouvement, Sort rapide).</li>
-            <li>Des <b>Actions Gratuites</b> (max 1 par type : lâcher une arme, parler, bouger de base).</li>
-          </ul>
+          <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-stone-300">
+            🏃 <b>Déplacement :</b> Eau × 1,5 m (Gratuit) | Eau × 3 m (Simple) | Eau × 6 m (Course Complexe).
+          </div>
         </div>
 
         <!-- ÉTAPE 3 -->
-        <div class="card-clean rounded-xl p-4 space-y-2 border-t-2 border-blue-500">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold uppercase text-[10px]">Étape 3</span>
-            <span class="text-stone-400 font-imperial font-bold">Fin du Round</span>
+        <div class="card-clean rounded-xl p-4 space-y-2.5 border-t-2 border-blue-500 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold uppercase text-[10px]">Étape 3</span>
+              <span class="text-stone-400 font-imperial font-bold">Fin du Round</span>
+            </div>
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Phase de Réaction</h3>
+            <p class="text-stone-300 leading-relaxed">
+              Une fois que tous les protagonistes ont agi :
+            </p>
+            <ul class="list-disc pl-4 space-y-1 text-stone-300">
+              <li><b>Expiration des effets :</b> Les sorts et bonus temporaires valables « 1 round » prennent fin.</li>
+              <li><b>Récupération d'états :</b> Jets de Terre contre les états préjudiciables (Étourdi / Dazed, poison, feu).</li>
+              <li><b>Techniques de Réaction :</b> Résolution des capacités d'école spécifiques déclenchées en fin de tour.</li>
+            </ul>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial">Phase de Réaction</h3>
-          <p class="text-stone-300 leading-relaxed">
-            Résolution des effets expirants (durée des sorts, bonus temporaires) et déclenchement des techniques étiquetées <i>Réaction</i>. Les personnages subissant des états préjudiciables (Étourdi, Dazed) testent leur récupération[cite: 3].
-          </p>
           <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-stone-400">
-            On passe au round suivant en conservant l'ordre d'Initiative.
+            🔄 On enchaîne directement sur l'Étape 2 du round suivant.
           </div>
         </div>
 
@@ -152,78 +157,88 @@
     <section class="space-y-4">
       <div class="border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Les 5 Postures de Combat (Stances)</h2>
-        <span class="text-xs text-stone-400">Chaque posture est liée à un Anneau élémentaire et modifie les capacités offensives et défensives (Livre de Base, p. 84)[cite: 3].</span>
+        <span class="text-xs text-stone-400">La posture est choisie au début du tour du personnage et reste en vigueur jusqu'à son tour au round suivant (Livre de Base, p. 84-85).</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
 
         <!-- ATTAQUE (EAU) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-blue-500/40">
-          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-            <span class="font-bold text-blue-300 font-imperial text-sm">水 Attaque</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-950 text-blue-300">Eau</span>
+        <div class="card-clean rounded-xl p-3.5 space-y-2 border-blue-500/40 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+              <span class="font-bold text-blue-300 font-imperial text-sm">水 Attaque</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-950 text-blue-300">Eau</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed">
+              Posture martiale équilibrée adoptée par défaut. Aucune restriction sur les actions : permet le corps-à-corps, le tir à l'arc, les sorts et les déplacements normaux.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Posture standard adoptée par défaut. Fluide et équilibrée, elle n'impose <b>aucune restriction</b> sur les types d'actions réalisables (corps à corps, distance, sorts ou déplacements).
-          </p>
-          <div class="text-[10px] text-stone-400 pt-1 border-t border-stone-800/60">
-            ND d'Armure normal.
+          <div class="text-[10px] text-stone-400 pt-1 border-t border-stone-800/60 font-bold">
+            ND d'Armure standard (sans bonus ni malus).
           </div>
         </div>
 
         <!-- ATTAQUE TOTALE (FEU) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-red-500/40">
-          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-            <span class="font-bold text-red-300 font-imperial text-sm">火 Attaque Totale</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-950 text-red-300">Feu</span>
+        <div class="card-clean rounded-xl p-3.5 space-y-2 border-red-500/40 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+              <span class="font-bold text-red-300 font-imperial text-sm">火 Attaque Totale</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-950 text-red-300">Feu</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed">
+              Assaut sauvage et désespéré. Confère <b>+2g1 à tous les jets d'attaque au corps-à-corps</b> et permet de se déplacer de +1,5 m supplémentaire vers l'ennemi.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Assaut furieux sans souci de sa survie. Confère un bonus de <b>+2g1 aux jets d'attaque</b> et +1,5 m de mouvement vers l'ennemi.
-          </p>
           <div class="text-[10px] text-red-400 font-bold pt-1 border-t border-stone-800/60">
-            Malus : -10 au ND d'Armure. Pas d'armes à distance.
+            Malus : -10 au ND d'Armure. Tir à l'arc interdit. Doit attaquer ou avancer.
           </div>
         </div>
 
         <!-- DÉFENSE (AIR) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-teal-500/40">
-          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-            <span class="font-bold text-teal-300 font-imperial text-sm">風 Défense</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 text-teal-300">Air</span>
+        <div class="card-clean rounded-xl p-3.5 space-y-2 border-teal-500/40 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+              <span class="font-bold text-teal-300 font-imperial text-sm">風 Défense</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 text-teal-300">Air</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed">
+              Garde fluide et prudente. Le combattant pare et esquive. Il ajoute son <b>rang de Défense + son Anneau d'Air</b> à son ND d'Armure.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Attentif et mobile, le samouraï esquive sans se jeter dans la mêlée. Ajoute son <b>rang de Défense + Anneau d'Air</b> à son ND d'Armure.
-          </p>
-          <div class="text-[10px] text-stone-400 pt-1 border-t border-stone-800/60">
-            Ne permet aucune attaque physique.
+          <div class="text-[10px] text-teal-400 font-bold pt-1 border-t border-stone-800/60">
+            Attaques physiques impossibles. Sorts et mouvements permis.
           </div>
         </div>
 
         <!-- DÉFENSE TOTALE (TERRE) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-amber-500/40">
-          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-            <span class="font-bold text-amber-300 font-imperial text-sm">土 Défense Totale</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300">Terre</span>
+        <div class="card-clean rounded-xl p-3.5 space-y-2 border-amber-500/40 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+              <span class="font-bold text-amber-300 font-imperial text-sm">土 Défense Totale</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300">Terre</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed">
+              Consomme <b>1 Action Complexe</b>. Le samouraï effectue un jet de <b>Défense / Réflexes</b>. Il ajoute <b>la moitié du résultat (arrondie au supérieur)</b> à son ND d'Armure.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Action Complexe : effectuez un jet de <b>Défense / Réflexes</b>[cite: 3]. Ajoutez <b>la moitié du résultat</b> (arrondie au supérieur) au ND d'Armure jusqu'au tour suivant[cite: 3].
-          </p>
           <div class="text-[10px] text-amber-400 font-bold pt-1 border-t border-stone-800/60">
-            Seules les Actions Gratuites sont permises.
+            Seules les Actions Gratuites sont permises ce tour.
           </div>
         </div>
 
         <!-- CENTRE (VIDE) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-purple-500/40">
-          <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-            <span class="font-bold text-purple-300 font-imperial text-sm">空 Centre</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-950 text-purple-300">Vide</span>
+        <div class="card-clean rounded-xl p-3.5 space-y-2 border-purple-500/40 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
+              <span class="font-bold text-purple-300 font-imperial text-sm">空 Centre</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-950 text-purple-300">Vide</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed">
+              Méditation martiale. Aucune action ce tour. Au tour suivant : <b>+1g1 + Rang de Vide</b> sur n'importe quel jet, et <b>+10 à l'Initiative</b> pour le round suivant.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Aucune action ce tour. Au tour suivant : gagnez <b>+1g1 + Rang de Vide</b> sur n'importe quel jet, ainsi que <b>+10 à l'Initiative</b> pour ce round.
-          </p>
           <div class="text-[10px] text-purple-300 font-bold pt-1 border-t border-stone-800/60">
-            Posture obligatoire des duels.
+            Posture obligatoire lors des duels d'Iaijutsu.
           </div>
         </div>
 
@@ -231,11 +246,11 @@
     </section>
 
     <!-- SECTION 3 : PROCÉDURE OFFICIELLE DU DUEL D'IAIJUTSU -->
-    <section class="card-clean rounded-xl p-6 space-y-5 border-amber-500/40">
+    <section class="card-clean rounded-xl p-6 space-y-5 border-amber-500/40 shadow-xl">
       <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
         <div>
-          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">3. Le Duel d'Iaijutsu (3 Rounds Formels)</h2>
-          <span class="text-xs text-stone-400">Procédure rituelle au premier sang ou à mort (Livre de Base, p. 87-88). Les deux duellistes sont en posture du Centre.</span>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">3. Le Duel d'Iaijutsu (3 Rounds Rituels)</h2>
+          <span class="text-xs text-stone-400">Procédure formelle au premier sang ou à mort (Livre de Base, p. 87-88). Les deux duellistes sont en posture du Centre.</span>
         </div>
         <span class="text-xs text-amber-400 font-imperial">Art suprême du sabre</span>
       </div>
@@ -243,109 +258,117 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
         
         <!-- ROUND 1 : ÉVALUATION -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[10px]">Round 1</span>
-            <span class="font-bold text-stone-300">Observation</span>
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[10px]">Round 1</span>
+              <span class="font-bold text-stone-300">Observation</span>
+            </div>
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Évaluation (Assessment)</h3>
+            <p class="text-stone-300 leading-relaxed">
+              Chaque duelliste effectue un jet d'<b>Iaijutsu (Évaluation) / Intuition</b> contre un <b>ND = 10 + (5 × Réputation adverse)</b>.
+            </p>
+            <p class="text-stone-400 leading-relaxed">
+              La réussite révèle 1 caractéristique cachée (Rang de Vide, Réflexes, rang d'Iaijutsu ou niveau de blessures actuel) + 1 information par Augmentation réussie.
+            </p>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial">Évaluation (Assessment)</h3>
-          <p class="text-stone-300 leading-relaxed">
-            Chaque duelliste effectue un jet d'<b>Iaijutsu (Évaluation) / Intuition</b> contre un <b>ND = 10 + (5 × Réputation adverse)</b>.
-          </p>
-          <p class="text-stone-400 leading-relaxed">
-            La réussite révèle 1 information cachée (Vide, Réflexes, Iaijutsu, points de blessures) + 1 information par Augmentation.
-          </p>
           <div class="p-2 rounded bg-amber-950/40 border border-amber-800/40 text-[10px] text-amber-300">
-            Si le jet bat celui de l'adversaire de 10+, vous gagnez <b>+1g1</b> au jet de Concentration du Round 2.
+            Si votre total dépasse celui de l'adversaire de 10+, vous gagnez <b>+1g1</b> au jet de Concentration du Round 2.
           </div>
         </div>
 
         <!-- ROUND 2 : CONCENTRATION -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold uppercase text-[10px]">Round 2</span>
-            <span class="font-bold text-stone-300">Tension pure</span>
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold uppercase text-[10px]">Round 2</span>
+              <span class="font-bold text-stone-300">Tension Pure</span>
+            </div>
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Concentration (Focus)</h3>
+            <p class="text-stone-300 leading-relaxed">
+              Jet en opposition d'<b>Iaijutsu (Concentration) / Vide</b>. Celui qui dépasse son rival d'au moins <b>5 points frappe en premier</b> au Round 3.
+            </p>
+            <p class="text-stone-400 leading-relaxed">
+              Pour chaque tranche complète de 5 points d'écart au-delà des 5 premiers, le vainqueur remporte <b>1 Augmentation Gratuite</b> applicable sur sa frappe.
+            </p>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial">Concentration (Focus)</h3>
-          <p class="text-stone-300 leading-relaxed">
-            Jet opposé d'<b>Iaijutsu (Concentration) / Vide</b>. Celui qui dépasse son rival d'au moins <b>5 points frappe en premier</b>.
-          </p>
-          <p class="text-stone-400 leading-relaxed">
-            Pour chaque tranche pleine de 5 points supplémentaires au-delà des 5 premiers, le duelliste gagne <b>1 Augmentation Gratuite</b> pour sa frappe.
-          </p>
           <div class="p-2 rounded bg-purple-950/40 border border-purple-800/40 text-[10px] text-purple-300">
-            Frappe Karmique : si la différence est inférieure à 5, les deux sabres frappent simultanément !
+            ⚔️ <b>Frappe Karmique :</b> Si l'écart est inférieur à 5, les deux sabres frappent au même instant !
           </div>
         </div>
 
         <!-- ROUND 3 : LA FRAPPE -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">Round 3</span>
-            <span class="font-bold text-stone-300">Résolution</span>
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">Round 3</span>
+              <span class="font-bold text-stone-300">Résolution</span>
+            </div>
+            <h3 class="font-bold text-amber-200 text-sm font-imperial">Frappe (Strike)</h3>
+            <p class="text-stone-300 leading-relaxed">
+              Le vainqueur du Round 2 frappe : jet d'<b>Iaijutsu / Réflexes</b> contre le <b>ND d'Armure normal</b> de sa cible (armure incluse).
+            </p>
+            <p class="text-stone-400 leading-relaxed">
+              Application immédiate des Augmentations gratuites gagnées. Les dégâts du sabre sont aussitôt résolus.
+            </p>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial">Frappe (Strike)[cite: 2, 3]</h3>
-          <p class="text-stone-300 leading-relaxed">
-            Le vainqueur du Round 2 frappe en premier : jet d'<b>Iaijutsu / Réflexes</b> contre le ND d'Armure normal de son adversaire.
-          </p>
-          <p class="text-stone-400 leading-relaxed">
-            Application des Augmentations gratuites gagnées au Round 2[cite: 2, 3]. Les dégâts sont immédiatement résolus.
-          </p>
           <div class="p-2 rounded bg-red-950/40 border border-red-800/40 text-[10px] text-red-300">
-            Au premier sang : le premier qui blesse gagne le duel[cite: 2, 3]. À mort : si le second survit, il porte sa réplique.
+            🩸 <b>Premier Sang :</b> Le premier qui inflige des blessures l'emporte. <b>À Mort :</b> Si le second survit, il porte sa réplique.
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- SECTION 4 : LES RÈGLES DE BASE DES JETS D10 -->
+    <!-- SECTION 4 : FORMULES CLÉS DU SYSTÈME D10 & MANŒUVRES -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
       
-      <!-- CALCULS OFFICIELS -->
+      <!-- FORMULES DE BASE -->
       <div class="card-clean rounded-xl p-5 space-y-3">
         <h3 class="font-bold text-amber-200 text-sm font-imperial border-b border-amber-500/20 pb-2">
-          Formules Clés du Système D10
+          Formules Clés du Système Roll & Keep (XkY)
         </h3>
         <ul class="space-y-2.5 text-stone-300">
           <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>Jet pour Toucher (Mêlée) :</span>
+            <span>Attaque au Corps-à-corps :</span>
             <b class="text-amber-300 font-imperial">(Compétence + Agilité) g Agilité</b>
           </li>
           <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>Jet pour Toucher (Tir / Arc) :</span>
+            <span>Attaque à l'Arc (Tir) :</span>
             <b class="text-amber-300 font-imperial">(Kyujutsu + Réflexes) g Réflexes</b>
           </li>
           <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>Dégâts de Mêlée :</span>
-            <b class="text-red-300 font-imperial">(VD de l'Arme + Force) g VD_gardée</b>
+            <span>Dégâts d'une Arme :</span>
+            <b class="text-red-300 font-imperial">(VD_lancée + Force) g VD_gardée</b>
           </li>
           <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
             <span>ND d'Armure pour être touché :</span>
             <b class="text-emerald-300 font-imperial">5 + (5 × Réflexes) + Armure</b>
           </li>
           <li class="flex justify-between items-baseline">
-            <span>Récupération Nocturne :</span>
-            <b class="text-blue-300 font-imperial">Constitution × 2 + Rang de Réputation</b>
+            <span>Guérison Nocturne :</span>
+            <b class="text-blue-300 font-imperial">(Constitution × 2) + Rang de Réputation</b>
           </li>
         </ul>
       </div>
 
-      <!-- LES AUGMENTATIONS ET LE VIDE -->
+      <!-- AUGMENTATIONS & MANŒUVRES TACTIQUES -->
       <div class="card-clean rounded-xl p-5 space-y-3">
         <h3 class="font-bold text-amber-200 text-sm font-imperial border-b border-amber-500/20 pb-2">
-          Augmentations (Raises) & Points de Vide
+          Augmentations (Raises) & Manœuvres
         </h3>
         <p class="text-stone-300 leading-relaxed">
-          <b>Augmentations (Raises) :</b> Déclarer une augmentation augmente le Niveau de Difficulté (ND) de <b>+5 par augmentation</b>. En cas d'échec face au nouveau ND, l'action échoue complètement.
+          Chaque Augmentation déclarée avant le jet augmente le Niveau de Difficulté de <b>+5</b>. En cas d'échec face au nouveau ND, l'action est totalement manquée.
         </p>
-        <ul class="list-disc pl-4 space-y-1 text-stone-400">
-          <li>Augmenter les dégâts : +1g0 par augmentation déclarée.</li>
-          <li>Manœuvres martiales : Feinte (2 Raises), Désarmement (3 Raises), Renversement (2 Raises).</li>
-          <li><b>Limite de Raises :</b> Égale au Rang de Vide du samouraï.</li>
+        <ul class="space-y-1.5 text-stone-300">
+          <li><b>Dégâts accrus :</b> +1g0 aux dégâts par augmentation déclarée.</li>
+          <li><b>Feinte (2 Raises) :</b> Si l'attaque touche, la moitié des dégâts infligés est convertie en réduction du ND d'Armure de la cible pour votre prochaine attaque.</li>
+          <li><b>Désarmement (3 Raises) :</b> Si l'attaque réussit, l'adversaire lâche son arme principale.</li>
+          <li><b>Renversement (2 Raises) :</b> Jet de Force en opposition : la cible est mise à terre (Prone : -10 au ND d'Armure).</li>
+          <li><b>Garder un allié :</b> Action Gratuite ou Simple : ajoutez +10 au ND d'Armure de votre allié adjacent, votre ND d'Armure est réduit de 5.</li>
         </ul>
         <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-amber-300 mt-2">
-          <b>Points de Vide au combat :</b> +1g1 sur un jet (sauf dégâts), réduire de 10 les blessures subies sur un coup, ou +10 au ND d'Armure pour 1 round.
+          ⚡ <b>Limite d'Augmentations :</b> Un samouraï ne peut jamais déclarer plus d'Augmentations sur un jet que son <b>Rang de Vide</b>.
         </div>
       </div>
 
@@ -355,7 +378,7 @@
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10 no-print">
-    Chronique L5R 4e Édition — MJ David • Mémento officiel de combat et duels
+    Chronique L5R 4e Édition — MJ David • Mémento officiel d'arbitrage de combat
   </footer>
 
 </body>
