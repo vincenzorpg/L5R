@@ -90,13 +90,25 @@ function bootstrap() {
     return;
   }
   initClans();
+  
+  // S'assure que les listes d'équipement sont bien remplies AVANT le premier calcul
   initCatalogSelectors();
+
+  // Force la sélection de l'armure lourde par défaut pour Hida si le champ est vide
+  const armSel = document.getElementById('pc-armor');
+  if (armSel && (!armSel.value || armSel.value === "0")) {
+    // Cherche l'option armure lourde (valeur "10")
+    if (armSel.querySelector('option[value="10"]')) {
+      armSel.value = "10";
+    }
+  }
 
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
     nameInput.addEventListener('input', updateStickyName);
   }
   updateStickyName();
+  updateAll();
 }
 
 function initClans() {
