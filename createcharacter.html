@@ -17,11 +17,11 @@
   <script src="data/clans-data.js" defer></script>
   <script src="data/competences-data.js" defer></script>
   <script src="data/equipement-data.js" defer></script>
-  <script src="data/avantages-desavantages-data.js" defer></script>
+  <script src="data/avantages-desavantages.js" defer></script>
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/navbar.js" defer></script>
-  <script src="js/character-generator.js?v=8" defer></script>
+  <script src="js/character-generator.js?v=9" defer></script>
 
   <style>
     :root {
@@ -258,7 +258,7 @@
       </div>
     </section>
 
-    <!-- 2. LES 5 ANNEAUX ET TRAITS -->
+    <!-- 2. LES 5 ANNEAUX ET TRAITS (AVEC BOUTONS - ET +) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux & 8 Traits Élémentaires</h2>
@@ -275,11 +275,19 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Constitution</span><span id="badge-sta" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-stamina" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-stamina', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-stamina" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-stamina', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Volonté</span><span id="badge-wil" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-willpower" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-willpower', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-willpower" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-willpower', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
           </div>
         </div>
@@ -293,11 +301,19 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Force</span><span id="badge-str" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-strength" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-strength', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-strength" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-strength', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Perception</span><span id="badge-per" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-perception" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-perception', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-perception" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-perception', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
           </div>
         </div>
@@ -311,11 +327,19 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Réflexes</span><span id="badge-ref" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-reflexes" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-reflexes', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-reflexes" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-reflexes', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Intuition</span><span id="badge-awa" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-awareness" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-awareness', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-awareness" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-awareness', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
           </div>
         </div>
@@ -329,11 +353,19 @@
           <div class="space-y-2">
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Agilité</span><span id="badge-agi" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-agility" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-agility', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-agility" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-agility', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Intelligence</span><span id="badge-int" class="text-[10px] text-amber-500"></span></div>
-              <input type="number" id="trait-intelligence" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-intelligence', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <input type="number" id="trait-intelligence" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-intelligence', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              </div>
             </div>
           </div>
         </div>
@@ -346,7 +378,11 @@
           </div>
           <div>
             <div class="flex justify-between mb-0.5 text-stone-400"><span>Anneau du Vide</span></div>
-            <input type="number" id="trait-void" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="adjustTrait('trait-void', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+              <input type="number" id="trait-void" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <button type="button" onclick="adjustTrait('trait-void', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+            </div>
           </div>
           <div class="text-[10px] text-stone-500 italic text-center">Points de Vide</div>
         </div>
@@ -696,112 +732,62 @@
   <!-- SYNCHRONISATION DES FICHES DÉTAILLÉES AVANTAGES / DÉSAVANTAGES -->
   <script>
     function updateAdvPreview() {
-    const sel = document.getElementById('sel-catalog-adv');
-    const card = document.getElementById('adv-preview-card');
-    if (!sel || !card) return;
-  
-    const val = sel.value;
-    if (val === "") {
-      card.classList.add('hidden');
-      return;
-    }
-  
-    const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
-    const list = advContainer?.avantages || [];
-    // Recherche soit par index numérique soit par id/nom
-    const adv = list[val] || list.find(a => a.id === val || a.name === val);
-  
-    if (!adv) {
-      card.classList.add('hidden');
-      return;
-    }
-  
-    document.getElementById('adv-preview-name').textContent = adv.name;
-    document.getElementById('adv-preview-type').textContent = `Catégorie : ${adv.type}`;
-    document.getElementById('adv-preview-cost').textContent = `Coût : ${adv.cost} XP`;
-    document.getElementById('adv-preview-prereq').textContent = adv.prerequisite ? `Prérequis : ${adv.prerequisite}` : '';
-    document.getElementById('adv-preview-desc').textContent = adv.desc ? `« ${adv.desc} »` : '';
-    document.getElementById('adv-preview-rule').textContent = adv.rule || '';
-    card.classList.remove('hidden');
-  }
-  
-  function updateDisadvPreview() {
-    const sel = document.getElementById('sel-catalog-disadv');
-    const card = document.getElementById('disadv-preview-card');
-    if (!sel || !card) return;
-  
-    const val = sel.value;
-    if (val === "") {
-      card.classList.add('hidden');
-      return;
-    }
-  
-    const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
-    const list = advContainer?.desavantages || [];
-    // Recherche soit par index numérique soit par id/nom
-    const dis = list[val] || list.find(d => d.id === val || d.name === val);
-  
-    if (!dis) {
-      card.classList.add('hidden');
-      return;
-    }
-  
-    document.getElementById('disadv-preview-name').textContent = dis.name;
-    document.getElementById('disadv-preview-type').textContent = `Catégorie : ${dis.type}`;
-    document.getElementById('disadv-preview-cost').textContent = `Gain : +${dis.gain || dis.cost} XP`;
-    document.getElementById('disadv-preview-prereq').textContent = dis.prerequisite ? `Condition : ${dis.prerequisite}` : '';
-    document.getElementById('disadv-preview-desc').textContent = dis.desc ? `« ${dis.desc} »` : '';
-    document.getElementById('disadv-preview-rule').textContent = dis.rule || '';
-    card.classList.remove('hidden');
-  }
+      const sel = document.getElementById('sel-catalog-adv');
+      const card = document.getElementById('adv-preview-card');
+      if (!sel || !card) return;
 
-    // Peuple les sélecteurs groupés par type si non géré par character-generator
-    function initCatalogsFallback() {
-      const selAdv = document.getElementById('sel-catalog-adv');
-      const selDis = document.getElementById('sel-catalog-disadv');
-
-      if (selAdv && selAdv.options.length <= 1 && window.AVANTAGES_DATA) {
-        selAdv.innerHTML = '<option value="">-- Sélectionner un Avantage --</option>';
-        const types = [...new Set(window.AVANTAGES_DATA.map(a => a.type))];
-        types.forEach(t => {
-          const group = document.createElement('optgroup');
-          group.label = `— Avantages ${t}s —`;
-          window.AVANTAGES_DATA.filter(a => a.type === t).forEach(a => {
-            const opt = document.createElement('option');
-            opt.value = a.id || a.name;
-            opt.textContent = `${a.name} (${a.cost} XP)`;
-            group.appendChild(opt);
-          });
-          selAdv.appendChild(group);
-        });
+      const val = sel.value;
+      if (val === "") {
+        card.classList.add('hidden');
+        return;
       }
 
-      if (selDis && selDis.options.length <= 1 && window.DESAVANTAGES_DATA) {
-        selDis.innerHTML = '<option value="">-- Sélectionner un Désavantage --</option>';
-        const types = [...new Set(window.DESAVANTAGES_DATA.map(d => d.type))];
-        types.forEach(t => {
-          const group = document.createElement('optgroup');
-          group.label = `— Désavantages ${t}s —`;
-          window.DESAVANTAGES_DATA.filter(d => d.type === t).forEach(d => {
-            const opt = document.createElement('option');
-            opt.value = d.id || d.name;
-            opt.textContent = `${d.name} (+${d.cost} XP)`;
-            group.appendChild(opt);
-          });
-          selDis.appendChild(group);
-        });
+      const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
+      const list = advContainer?.avantages || [];
+      const adv = list[val] || list.find(a => a.id === val || a.name === val);
+
+      if (!adv) {
+        card.classList.add('hidden');
+        return;
       }
 
-      selAdv?.addEventListener('change', updateAdvPreview);
-      selDis?.addEventListener('change', updateDisadvPreview);
-
-      updateAdvPreview();
-      updateDisadvPreview();
+      document.getElementById('adv-preview-name').textContent = adv.name;
+      document.getElementById('adv-preview-type').textContent = `Catégorie : ${adv.type}`;
+      document.getElementById('adv-preview-cost').textContent = `Coût : ${adv.cost} XP`;
+      document.getElementById('adv-preview-prereq').textContent = adv.prerequisite ? `Prérequis : ${adv.prerequisite}` : '';
+      document.getElementById('adv-preview-desc').textContent = adv.desc ? `« ${adv.desc} »` : '';
+      document.getElementById('adv-preview-rule').textContent = adv.rule || '';
+      card.classList.remove('hidden');
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(initCatalogsFallback, 80);
-    });
+    function updateDisadvPreview() {
+      const sel = document.getElementById('sel-catalog-disadv');
+      const card = document.getElementById('disadv-preview-card');
+      if (!sel || !card) return;
+
+      const val = sel.value;
+      if (val === "") {
+        card.classList.add('hidden');
+        return;
+      }
+
+      const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
+      const list = advContainer?.desavantages || [];
+      const dis = list[val] || list.find(d => d.id === val || d.name === val);
+
+      if (!dis) {
+        card.classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('disadv-preview-name').textContent = dis.name;
+      document.getElementById('disadv-preview-type').textContent = `Catégorie : ${dis.type}`;
+      document.getElementById('disadv-preview-cost').textContent = `Gain : +${dis.gain || dis.cost} XP`;
+      document.getElementById('disadv-preview-prereq').textContent = dis.prerequisite ? `Condition : ${dis.prerequisite}` : '';
+      document.getElementById('disadv-preview-desc').textContent = dis.desc ? `« ${dis.desc} »` : '';
+      document.getElementById('disadv-preview-rule').textContent = dis.rule || '';
+      card.classList.remove('hidden');
+    }
   </script>
 
 </body>
