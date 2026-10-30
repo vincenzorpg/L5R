@@ -269,33 +269,105 @@ function buildCarnetPayload(charData) {
 // =============================================================================
 // 4. POINT D'ENTRÉE DU TÉLÉCHARGEMENT CLIENT
 // =============================================================================
+function getCharacterData() {
+  // 1. Recherche dans les variables globales possibles
+  const candidates = [
+    window.character,
+    window.currentChar,
+    window.currentPersonnage,
+    window.perso,
+    window.characterData,
+    window.characterState,
+    window.CURRENT_CHARACTER,
+    window.currentCharacter,
+    window.charData
+  ];
+
+  for (const c of candidates) {
+    if (c && typeof c === "object" && (c.name || c.nom || c.clan || c.school || c.ecole)) {
+      return c;
+    }
+  }
+
+  // 2. Recherche dans le localStorage
+  const storageKeys = ["l5r_character", "l5r_perso", "current_character", "character"];
+  for (const k of storageKeys) {
+    try {
+      const saved = localStorage.getItem(k);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === "object") return parsed;
+      }
+    } catch (e) {}
+  }
+
+  // 3. Extraction directe depuis le DOM / formulaire HTML si présent
+  const getVal = (ids) => {
+    for (const id of ids) {
+      const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
+      if (el) return el.value || el.textContent;
+    }
+    return null;
+  };
+
+  const getNum = (ids, def = 2) => {
+    const v = getVal(ids);
+    const n = parseInt(v, 10);
+    return isNaN(n) ? def : n;
+  };
+
+  const nameVal = getVal(["char-name", "character-name", "nom", "name", "input-nom"]);
+  if (nameVal) {
+    return {
+      name: nameVal,
+      clan: getVal(["clan-select", "clan", "select-clan"]) || "Crabe",
+      family: getVal(["family-select", "family", "famille", "select-family"]) || "",
+      school: getVal(["school-select", "school", "ecole", "select-school"]) || "École de bushi Hida",
+      traits: {
+        stamina: getNum(["stamina", "constitution", "trait-constitution"]),
+        willpower: getNum(["willpower", "volonte", "trait-volonte"]),
+        strength: getNum(["strength", "force", "trait-force"]),
+        perception: getNum(["perception", "trait-perception"]),
+        agility: getNum(["agility", "agilite", "trait-agilite"]),
+        intelligence: getNum(["intelligence", "trait-intelligence"]),
+        reflexes: getNum(["reflexes", "trait-reflexes"]),
+        awareness: getNum(["awareness", "intuition", "trait-intuition"])
+      },
+      voidRing: getNum(["void", "vide", "voidRing", "trait-vide"]),
+      honor: parseFloat(getVal(["honor", "honneur"]) || "4.5"),
+      glory: parseFloat(getVal(["glory", "gloire"]) || "1.0"),
+      status: parseFloat(getVal(["status", "statut"]) || "1.0"),
+      xp: {
+        total: getNum(["xp-total", "xpTotal"], 40),
+        spent: getNum(["xp-spent", "xpDepense"], 40)
+      }
+    };
+  }
+
+  return null;
+}
+
 function exportToCarnetRokugan() {
-  // Récupère l'état global du personnage en mémoire
-  // Adaptez à votre variable globale existante (ex: window.CURRENT_CHARACTER ou characterState)
-  const currentCharacter = window.CURRENT_CHARACTER || window.currentCharacter || window.charData;
+  const currentCharacter = getCharacterData();
 
   if (!currentCharacter) {
-    alert("Veuillez d'abord créer ou charger un personnage avant de l'exporter.");
+    alert("Impossible de localiser les données du personnage en cours. Vérifiez qu'un nom est saisi ou assignez votre objet personnage à window.character.");
     return;
   }
 
   const payload = buildCarnetPayload(currentCharacter);
   const jsonStr = JSON.stringify(payload, null, 2);
 
-  // Nom de fichier assaini : <nom-du-personnage>-l5r.json
   const safeFilename = normalizeString(payload.name)
     .replace(/[^a-z0-9\-]/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "") || "personnage";
 
-  const fileName = `${safeFilename}-l5r.json`;
-
-  // Création du Blob UTF-8 et téléchargement automatique
   const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = fileName;
+  link.download = `${safeFilename}-l5r.json`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
