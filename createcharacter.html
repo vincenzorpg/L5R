@@ -696,50 +696,64 @@
   <!-- SYNCHRONISATION DES FICHES DÉTAILLÉES AVANTAGES / DÉSAVANTAGES -->
   <script>
     function updateAdvPreview() {
-      const sel = document.getElementById('sel-catalog-adv');
-      const card = document.getElementById('adv-preview-card');
-      if (!sel || !card) return;
-      
-      const val = sel.value;
-      const list = window.AVANTAGES_DATA || [];
-      const adv = list.find(a => a.id === val || a.name === val || (val && a.name.toLowerCase().includes(val.toLowerCase())));
-      
-      if (!adv) {
-        card.classList.add('hidden');
-        return;
-      }
-
-      document.getElementById('adv-preview-name').textContent = adv.name;
-      document.getElementById('adv-preview-type').textContent = `Catégorie : ${adv.type}`;
-      document.getElementById('adv-preview-cost').textContent = `Coût : ${adv.cost} XP`;
-      document.getElementById('adv-preview-prereq').textContent = adv.prerequisite ? `Prérequis : ${adv.prerequisite}` : '';
-      document.getElementById('adv-preview-desc').textContent = adv.desc ? `« ${adv.desc} »` : '';
-      document.getElementById('adv-preview-rule').textContent = adv.rule || '';
-      card.classList.remove('hidden');
+    const sel = document.getElementById('sel-catalog-adv');
+    const card = document.getElementById('adv-preview-card');
+    if (!sel || !card) return;
+  
+    const val = sel.value;
+    if (val === "") {
+      card.classList.add('hidden');
+      return;
     }
-
-    function updateDisadvPreview() {
-      const sel = document.getElementById('sel-catalog-disadv');
-      const card = document.getElementById('disadv-preview-card');
-      if (!sel || !card) return;
-      
-      const val = sel.value;
-      const list = window.DESAVANTAGES_DATA || [];
-      const dis = list.find(d => d.id === val || d.name === val || (val && d.name.toLowerCase().includes(val.toLowerCase())));
-      
-      if (!dis) {
-        card.classList.add('hidden');
-        return;
-      }
-
-      document.getElementById('disadv-preview-name').textContent = dis.name;
-      document.getElementById('disadv-preview-type').textContent = `Catégorie : ${dis.type}`;
-      document.getElementById('disadv-preview-cost').textContent = `Gain : +${dis.cost} XP`;
-      document.getElementById('disadv-preview-prereq').textContent = dis.prerequisite ? `Condition : ${dis.prerequisite}` : '';
-      document.getElementById('disadv-preview-desc').textContent = dis.desc ? `« ${dis.desc} »` : '';
-      document.getElementById('disadv-preview-rule').textContent = dis.rule || '';
-      card.classList.remove('hidden');
+  
+    const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
+    const list = advContainer?.avantages || [];
+    // Recherche soit par index numérique soit par id/nom
+    const adv = list[val] || list.find(a => a.id === val || a.name === val);
+  
+    if (!adv) {
+      card.classList.add('hidden');
+      return;
     }
+  
+    document.getElementById('adv-preview-name').textContent = adv.name;
+    document.getElementById('adv-preview-type').textContent = `Catégorie : ${adv.type}`;
+    document.getElementById('adv-preview-cost').textContent = `Coût : ${adv.cost} XP`;
+    document.getElementById('adv-preview-prereq').textContent = adv.prerequisite ? `Prérequis : ${adv.prerequisite}` : '';
+    document.getElementById('adv-preview-desc').textContent = adv.desc ? `« ${adv.desc} »` : '';
+    document.getElementById('adv-preview-rule').textContent = adv.rule || '';
+    card.classList.remove('hidden');
+  }
+  
+  function updateDisadvPreview() {
+    const sel = document.getElementById('sel-catalog-disadv');
+    const card = document.getElementById('disadv-preview-card');
+    if (!sel || !card) return;
+  
+    const val = sel.value;
+    if (val === "") {
+      card.classList.add('hidden');
+      return;
+    }
+  
+    const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
+    const list = advContainer?.desavantages || [];
+    // Recherche soit par index numérique soit par id/nom
+    const dis = list[val] || list.find(d => d.id === val || d.name === val);
+  
+    if (!dis) {
+      card.classList.add('hidden');
+      return;
+    }
+  
+    document.getElementById('disadv-preview-name').textContent = dis.name;
+    document.getElementById('disadv-preview-type').textContent = `Catégorie : ${dis.type}`;
+    document.getElementById('disadv-preview-cost').textContent = `Gain : +${dis.gain || dis.cost} XP`;
+    document.getElementById('disadv-preview-prereq').textContent = dis.prerequisite ? `Condition : ${dis.prerequisite}` : '';
+    document.getElementById('disadv-preview-desc').textContent = dis.desc ? `« ${dis.desc} »` : '';
+    document.getElementById('disadv-preview-rule').textContent = dis.rule || '';
+    card.classList.remove('hidden');
+  }
 
     // Peuple les sélecteurs groupés par type si non géré par character-generator
     function initCatalogsFallback() {
