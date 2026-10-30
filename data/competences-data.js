@@ -1,54 +1,4 @@
 /**
- * Paliers de Maîtrise officiels (L5R 4e Édition - Rangs 3, 5 et 7)
- */
-const SKILL_MASTERIES = {
-  "kenjutsu": [
-    { rank: 3, label: "Dégainé Éclair", desc: "Dégainer un sabre devient une Action Gratuite." },
-    { rank: 5, label: "Tranchant Affûté", desc: "Les dés de dégâts avec un sabre explosent sur 9 et 10." },
-    { rank: 7, label: "Frappe Fluide", desc: "Porter une attaque de mêlée devient une Action Simple." }
-  ],
-  "iaijutsu": [
-    { rank: 3, label: "Dégainé Réflexe", desc: "Dégainer un sabre devient une Action Gratuite." },
-    { rank: 5, label: "Focalisation", desc: "+1g0 sur les jets de Concentration en duel." },
-    { rank: 7, label: "Frappe Ultime", desc: "Les dés de frappe d'Iaijutsu explosent sur 9 et 10." }
-  ],
-  "kyujutsu": [
-    { rank: 3, label: "Encoche Rapide", desc: "Encocher et viser devient une Action Gratuite." },
-    { rank: 5, label: "Tir à Bout Portant", desc: "Aucun malus pour tirer sur une cible engagée au corps-à-corps." },
-    { rank: 7, label: "Flèche Éclair", desc: "Les attaques à l'arc deviennent des Actions Simples." }
-  ],
-  "armes lourdes": [
-    { rank: 3, label: "Impact Brutal", desc: "Augmentation Gratuite pour la manœuvre Renversement (Knockdown)." },
-    { rank: 5, label: "Brise-Garde", desc: "Ignore 3 points de Réduction d'armure adverse." },
-    { rank: 7, label: "Broyeur", desc: "Les attaques avec armes lourdes deviennent des Actions Simples." }
-  ],
-  "jiujutsu": [
-    { rank: 3, label: "Prise Solide", desc: "+1g0 sur les jets de contrôle en Lutte (Grapple)." },
-    { rank: 5, label: "Poings d'Acier", desc: "Dégâts à mains nues augmentés à 0g2 (au lieu de 0g1) + Force." },
-    { rank: 7, label: "Enchaînement", desc: "Les attaques à mains nues deviennent des Actions Simples." }
-  ],
-  "defense": [
-    { rank: 3, label: "Garde Souple", desc: "Ajoute +3 supplémentaire au ND d'Armure en posture Défense." },
-    { rank: 5, label: "Esquive Totale", desc: "Conserve la totalité (au lieu de la moitié) du jet de Défense en Défense Totale." },
-    { rank: 7, label: "Mur Infranchissable", desc: "+5 permanent au ND d'Armure quelle que soit la posture." }
-  ],
-  "courtisan": [
-    { rank: 3, label: "Étiquette Aiguisée", desc: "Gain de +1g0 sur les jets de commérage et d'observation en cour." },
-    { rank: 5, label: "Réseau d'Indiscrétions", desc: "Dépenser 1 point de Vide confère +2g1 au lieu de +1g1 sur les jets de Cour." },
-    { rank: 7, label: "Maître des Salons", desc: "Immunité contre les pénalités sociales infligées par autrui." }
-  ],
-  "enquete": [
-    { rank: 3, label: "Coup d'Œil", desc: "Augmentation Gratuite sur la recherche d'indices matériels." },
-    { rank: 5, label: "Déduction Pure", desc: "Permet de poser une question véridique au MJ par session." },
-    { rank: 7, label: "Infaillible", desc: "Les mensonges de niveau commun sont détectés sans jet de dé." }
-  ],
-  "athletisme": [
-    { rank: 3, label: "Bond Aérien", desc: "Distance de saut augmentée de 50 %." },
-    { rank: 5, label: "Course Endurante", desc: "Mouvement gratuit par tour augmenté de +1,5 mètre." },
-    { rank: 7, label: "Agilité Suprême", desc: "Se relever de terre (Prone) est une Action Gratuite." }
-  ]
-};
-/**
  * COMPETENCES_DATA - Catalogue officiel L5R 4e Édition
  * Compétences Bugei, Nobles (High), Marchandes (Merchant) et Dégradantes (Low)
  */
@@ -94,4 +44,6 @@ const COMPETENCES_DATA = [
   { id: "outremonde", name: "Connaissance : Outremonde", trait: "Intelligence", type: "Dégradante", desc: "Connaissance des gobelins, onis et de la Souillure." }
 ];
 
-if (typeof window !== "undefined") window.COMPETENCES_DATA = COMPETENCES_DATA;
+if (typeof window !== "undefined") {
+  window.COMPETENCES_DATA = COMPETENCES_DATA;
+}
