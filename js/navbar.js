@@ -109,8 +109,12 @@
             <span>${item.label}</span>
             <span class="text-[9px] text-stone-500 group-hover:rotate-180 transition-transform">▼</span>
           </button>
-          <div class="absolute left-0 mt-1 hidden group-hover:block w-56 rounded-lg bg-[#0e0b0b] border border-amber-500/40 shadow-2xl py-1 z-50 divide-y divide-stone-900">
-            ${dropdownHtml}
+          
+          <!-- PONT CLIQUE/SURVOL SANS TROU D'AIR -->
+          <div class="absolute left-0 top-full pt-1.5 hidden group-hover:block z-50">
+            <div class="w-56 rounded-lg bg-[#0e0b0b] border border-amber-500/40 shadow-2xl py-1 divide-y divide-stone-900">
+              ${dropdownHtml}
+            </div>
           </div>
         </div>
       `;
