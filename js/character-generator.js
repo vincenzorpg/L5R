@@ -118,23 +118,40 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // Compétences
+  // 1. Compétences (Filtrage des compétences déjà possédées)
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
+    const ownedSkillNames = new Set((currentSkills || []).map(s => s.name.toLowerCase().trim()));
+    const previousVal = skSel.value;
     skSel.innerHTML = "";
-    skills.forEach(s => {
+
+    const availableSkills = (skills || []).filter(s => !ownedSkillNames.has(s.name.toLowerCase().trim()));
+
+    if (availableSkills.length === 0) {
       let opt = document.createElement('option');
-      opt.value = s.name;
-      opt.textContent = `${s.name} (${s.type} - ${s.trait})`;
+      opt.value = "";
+      opt.textContent = "— Toutes les compétences acquises —";
       skSel.appendChild(opt);
-    });
+      skSel.disabled = true;
+    } else {
+      skSel.disabled = false;
+      availableSkills.forEach(s => {
+        let opt = document.createElement('option');
+        opt.value = s.name;
+        opt.textContent = `${s.name} (${s.type} - ${s.trait})`;
+        skSel.appendChild(opt);
+      });
+      if (previousVal && availableSkills.some(s => s.name === previousVal)) {
+        skSel.value = previousVal;
+      }
+    }
   }
 
-  // Armures
+  // 2. Armures
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
     armSel.innerHTML = "";
-    eq.armures.forEach(a => {
+    (eq.armures || []).forEach(a => {
       let opt = document.createElement('option');
       opt.value = a.tn;
       opt.textContent = a.name;
@@ -142,14 +159,14 @@ function initCatalogSelectors() {
     });
   }
 
-  // Armes
+  // 3. Armes
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
     w1Sel.innerHTML = "";
     w2Sel.innerHTML = "<option value='Aucune'>Aucune arme secondaire</option>";
 
-    eq.armes.forEach(w => {
+    (eq.armes || []).forEach(w => {
       let opt1 = document.createElement('option');
       opt1.value = w.name;
       opt1.textContent = `${w.name} (VD ${w.vd}, ${w.type})`;
@@ -162,28 +179,62 @@ function initCatalogSelectors() {
     });
   }
 
-  // Avantages
+  // 4. Avantages (Filtrage des avantages déjà choisis)
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
+    const ownedAdvNames = new Set((advantagesList || []).map(a => a.name.toLowerCase().trim()));
     advSel.innerHTML = "";
-    (adv.avantages || []).forEach((a, idx) => {
+
+    const availableAdv = (adv.avantages || [])
+      .map((item, originalIdx) => ({ item, originalIdx }))
+      .filter(({ item }) => !ownedAdvNames.has(item.name.toLowerCase().trim()));
+
+    if (availableAdv.length === 0) {
       let opt = document.createElement('option');
-      opt.value = idx;
-      opt.textContent = `${a.name} (${a.cost} XP) — [${a.type}]`;
+      opt.value = "";
+      opt.textContent = "— Aucun autre avantage disponible —";
       advSel.appendChild(opt);
-    });
+      advSel.disabled = true;
+    } else {
+      advSel.disabled = false;
+      availableAdv.forEach(({ item, originalIdx }) => {
+        let opt = document.createElement('option');
+        opt.value = originalIdx;
+        opt.textContent = `${item.name} (${item.cost} XP) — [${item.type}]`;
+        advSel.appendChild(opt);
+      });
+    }
+
+    if (typeof updateAdvPreview === 'function') updateAdvPreview();
   }
 
-  // Désavantages
+  // 5. Désavantages (Filtrage des désavantages déjà choisis)
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
+    const ownedDisNames = new Set((disadvantagesList || []).map(d => d.name.toLowerCase().trim()));
     disadvSel.innerHTML = "";
-    (adv.desavantages || []).forEach((d, idx) => {
+
+    const availableDis = (adv.desavantages || [])
+      .map((item, originalIdx) => ({ item, originalIdx }))
+      .filter(({ item }) => !ownedDisNames.has(item.name.toLowerCase().trim()));
+
+    if (availableDis.length === 0) {
       let opt = document.createElement('option');
-      opt.value = idx;
-      opt.textContent = `${d.name} (+${d.gain} XP) — [${d.type}]`;
+      opt.value = "";
+      opt.textContent = "— Aucun autre désavantage disponible —";
       disadvSel.appendChild(opt);
-    });
+      disadvSel.disabled = true;
+    } else {
+      disadvSel.disabled = false;
+      availableDis.forEach(({ item, originalIdx }) => {
+        let opt = document.createElement('option');
+        opt.value = originalIdx;
+        opt.textContent = `${item.name} (+${item.gain || item.cost} XP) — [${item.type}]`;
+        disadvSel.appendChild(opt);
+      });
+    }
+
+    if (typeof updateDisadvPreview === 'function') updateDisadvPreview();
   }
 
   updateDisadvButtonState();
@@ -359,6 +410,7 @@ function resetSheetToNewSelection() {
   disadvantagesList = [];
   renderAdvDisadv();
 
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -468,6 +520,7 @@ function addAdvFromCatalog() {
 
   advantagesList.push({ name: item.name, cost: item.cost });
   renderAdvDisadv();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -491,18 +544,21 @@ function addDisadvFromCatalog() {
 
   disadvantagesList.push({ name: item.name, gain: item.gain });
   renderAdvDisadv();
+  initCatalogSelectors();
   updateAll();
 }
 
 function removeAdv(idx) {
   advantagesList.splice(idx, 1);
   renderAdvDisadv();
+  initCatalogSelectors();
   updateAll();
 }
 
 function removeDisadv(idx) {
   disadvantagesList.splice(idx, 1);
   renderAdvDisadv();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -594,6 +650,7 @@ function chooseSchoolSkill(idx, skillName) {
   sk.rank = 1;
   sk.spec = false;
   renderSkills();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -605,6 +662,7 @@ function reopenSkillChoice(idx) {
   sk.rank = 1;
   sk.spec = false;
   renderSkills();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -639,6 +697,7 @@ function addSkillFromCatalog() {
     originalPlaceholder: null
   });
   renderSkills();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -659,6 +718,7 @@ function removeSkill(idx) {
 
   currentSkills.splice(idx, 1);
   renderSkills();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -1065,6 +1125,7 @@ function randomizeAll() {
     currentSkills[0].spec = true;
   }
   renderSkills();
+  initCatalogSelectors();
   updateAll();
 }
 
@@ -1147,6 +1208,7 @@ function importJSON(event) {
 
       renderSkills();
       renderAdvDisadv();
+      initCatalogSelectors();
       updateAll();
     } catch(err) {
       alert("Erreur de format JSON.");
