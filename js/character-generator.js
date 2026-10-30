@@ -90,14 +90,11 @@ function bootstrap() {
     return;
   }
   initClans();
-  
-  // S'assure que les listes d'équipement sont bien remplies AVANT le premier calcul
   initCatalogSelectors();
 
-  // Force la sélection de l'armure lourde par défaut pour Hida si le champ est vide
+  // Sécurise la sélection de l'armure par défaut si Hida au chargement
   const armSel = document.getElementById('pc-armor');
   if (armSel && (!armSel.value || armSel.value === "0")) {
-    // Cherche l'option armure lourde (valeur "10")
     if (armSel.querySelector('option[value="10"]')) {
       armSel.value = "10";
     }
@@ -130,13 +127,11 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-// 1. Compétences (Filtrage intelligent incluant les variantes d'école avec parenthèses)
+  // 1. Compétences (Filtrage intelligent incluant les variantes d'école avec parenthèses)
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
-    // Fonction utilitaire pour extraire le nom racine : "Kenjutsu (Katana)" -> "kenjutsu"
     const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
 
-    // On stocke tous les noms racines déjà possédés par le samouraï
     const ownedSkillRoots = new Set(
       (currentSkills || [])
         .filter(s => !s.isChoice || s.chosen)
@@ -174,6 +169,7 @@ function initCatalogSelectors() {
   // 2. Armures
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
+    const prevArmVal = armSel.value;
     armSel.innerHTML = "";
     (eq.armures || []).forEach(a => {
       let opt = document.createElement('option');
@@ -181,12 +177,18 @@ function initCatalogSelectors() {
       opt.textContent = a.name;
       armSel.appendChild(opt);
     });
+    if (prevArmVal && armSel.querySelector(`option[value="${prevArmVal}"]`)) {
+      armSel.value = prevArmVal;
+    }
   }
 
   // 3. Armes
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
+    const prevW1 = w1Sel.value;
+    const prevW2 = w2Sel.value;
+
     w1Sel.innerHTML = "";
     w2Sel.innerHTML = "<option value='Aucune'>Aucune arme secondaire</option>";
 
@@ -201,9 +203,16 @@ function initCatalogSelectors() {
       opt2.textContent = `${w.name} (VD ${w.vd})`;
       w2Sel.appendChild(opt2);
     });
+
+    if (prevW1 && w1Sel.querySelector(`option[value="${prevW1}"]`)) {
+      w1Sel.value = prevW1;
+    }
+    if (prevW2 && w2Sel.querySelector(`option[value="${prevW2}"]`)) {
+      w2Sel.value = prevW2;
+    }
   }
 
-  // 4. Avantages (Filtrage des avantages déjà choisis)
+  // 4. Avantages (Filtrage de ceux déjà sélectionnés)
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     const ownedAdvNames = new Set((advantagesList || []).map(a => a.name.toLowerCase().trim()));
@@ -232,7 +241,7 @@ function initCatalogSelectors() {
     if (typeof updateAdvPreview === 'function') updateAdvPreview();
   }
 
-  // 5. Désavantages (Filtrage des désavantages déjà choisis)
+  // 5. Désavantages (Filtrage de ceux déjà sélectionnés)
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     const ownedDisNames = new Set((disadvantagesList || []).map(d => d.name.toLowerCase().trim()));
@@ -610,7 +619,7 @@ function renderAdvDisadv() {
   updateDisadvButtonState();
 }
 
-// Rendu des compétences avec sélecteur pour les choix libres
+// Rendu des compétences avec sélecteur pour les choix libres & boutons - / +
 function renderSkills() {
   const container = document.getElementById('skills-list');
   if (!container) return;
@@ -657,12 +666,43 @@ function renderSkills() {
           <label class="text-[10px] text-stone-400 flex items-center gap-1">
             <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
           </label>
-          <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-12 p-1 rounded text-center font-bold text-amber-300">
-          <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1">✕</button>
+          
+          <!-- Boutons ergonomiques - et + -->
+          <div class="flex items-center gap-1 ml-1">
+            <button type="button" onclick="adjustSkillRank(${idx}, -1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs">-</button>
+            <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
+            <button type="button" onclick="adjustSkillRank(${idx}, 1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs">+</button>
+          </div>
+
+          <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1 ml-0.5">✕</button>
         </div>
       </div>
     `;
   }).join('');
+}
+
+function adjustSkillRank(idx, delta) {
+  const sk = currentSkills[idx];
+  if (!sk) return;
+  const minRank = sk.isSchool ? 1 : 0;
+  let newRank = (parseInt(sk.rank) || 0) + delta;
+  if (newRank < minRank) newRank = minRank;
+  if (newRank > 10) newRank = 10;
+  sk.rank = newRank;
+  renderSkills();
+  updateAll();
+}
+
+function adjustTrait(traitId, delta) {
+  const input = document.getElementById(traitId);
+  if (!input) return;
+  const min = parseInt(input.min) || 2;
+  const max = parseInt(input.max) || 6;
+  let val = (parseInt(input.value) || 2) + delta;
+  if (val < min) val = min;
+  if (val > max) val = max;
+  input.value = val;
+  updateAll();
 }
 
 function chooseSchoolSkill(idx, skillName) {
@@ -697,7 +737,7 @@ function addSkillFromCatalog() {
   const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
   const targetRoot = normalizeSkill(name);
 
-  // Vérification de sécurité doublon (racine commune)
+  // Empêche l'ajout d'une compétence déjà possédée sous forme de spécialité d'école
   if (currentSkills.some(s => (s.chosen || !s.isChoice) && normalizeSkill(s.name) === targetRoot)) {
     alert(`La compétence « ${name} » est déjà maîtrisée par votre personnage.`);
     return;
@@ -724,7 +764,6 @@ function addSkillFromCatalog() {
     chosen: true,
     originalPlaceholder: null
   });
-
   renderSkills();
   initCatalogSelectors();
   updateAll();
@@ -1396,6 +1435,31 @@ function exportOfficialPDF() {
   document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
 
   window.print();
+}
+
+// Fonctions d'ajustement ergonomique (+ et -)
+function adjustSkillRank(idx, delta) {
+  const sk = currentSkills[idx];
+  if (!sk) return;
+  const minRank = sk.isSchool ? 1 : 0;
+  let newRank = (parseInt(sk.rank) || 0) + delta;
+  if (newRank < minRank) newRank = minRank;
+  if (newRank > 10) newRank = 10;
+  sk.rank = newRank;
+  renderSkills();
+  updateAll();
+}
+
+function adjustTrait(traitId, delta) {
+  const input = document.getElementById(traitId);
+  if (!input) return;
+  const min = parseInt(input.min) || 2;
+  const max = parseInt(input.max) || 6;
+  let val = (parseInt(input.value) || 2) + delta;
+  if (val < min) val = min;
+  if (val > max) val = max;
+  input.value = val;
+  updateAll();
 }
 
 window.addEventListener('DOMContentLoaded', bootstrap);
