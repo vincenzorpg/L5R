@@ -414,6 +414,36 @@
       desc: "Vous captivez instantanément une foule dès que vous montez sur scène ou déclamez un vers.",
       rule: "Vous êtes considéré comme possédant le Rang 1 dans n'importe quelle Compétence de Spectacle (Perform) non maîtrisée."
     },
+    {
+      id: "adv-ecoles-multiples",
+      name: "Écoles Multiples (Multiple Schools)",
+      type: "Social",
+      cost: 10,
+      impact: "multiple_schools",
+      prerequisite: "En cours de partie uniquement. Accord du MJ. Rang 1 dans toutes les Compétences d'École de la nouvelle école. Incompatible Bushi/Shugenja.",
+      desc: "Vous avez reçu l'insigne honneur d'être libéré de vos serments envers votre premier sensei pour être admis dans le dojo d'une autre École majeure de l'Empire.",
+      rule: "Ne peut s'acheter qu'en cours de jeu. Dès l'acquisition, votre progression dans votre École d'origine s'arrête définitivement. Lorsque vous atteignez votre prochain Rang de Maîtrise (Insight Rank), vous débutez la nouvelle École au Rang 1 et apprenez sa première Technique. Vous devez posséder au moins le Rang 1 dans toutes les Compétences d'École de la nouvelle formation avant d'en acquérir les Techniques. Il est formellement interdit de cumuler une École de Bushi et une École de Shugenja."
+    },
+    {
+      id: "adv-ami-confrerie",
+      name: "Ami de la Confrérie (Friend of the Brotherhood)",
+      type: "Spirituel",
+      cost: 5,
+      impact: "friend_of_the_brotherhood",
+      prerequisite: "Shugenja ou Moine (4 pts pour le Clan du Dragon)",
+      desc: "Vos séjours prolongés au sein des monastères de Shinsei vous ont ouvert les portes des mystères du corps et de l'âme.",
+      rule: "Vous pouvez acheter et apprendre des Kiho comme si vous étiez un Moine de la Confrérie de Shinsei, sans payer de surcoût d'XP, en respectant les prérequis d'Anneaux normaux."
+    },
+    {
+      id: "adv-sacro-saint",
+      name: "Sacro-Saint (Sacrosanct)",
+      type: "Social",
+      cost: 4,
+      impact: "sacrosanct",
+      prerequisite: "Familles Impériales ou Shugenja / Moines déclarés pacifiques",
+      desc: "Votre fonction sacrée ou votre rang au sein de l'Ordre Céleste rend toute violence physique directe à votre égard impensable pour un esprit traditionnel.",
+      rule: "Quiconque tente de vous porter une attaque directe doit réussir un jet de Volonté ND (votre Honneur × 5). En cas d'échec, son action est perdue et il perd immédiatement de l'Honneur."
+    },
 
     // --- AVANTAGES SPIRITUELS ---
     {
