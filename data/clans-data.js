@@ -1,53 +1,50 @@
 /**
  * CLANS_DATA — Les Huit Grands Clans de Rokugan
- * Règles officielles L5R 4e Édition (Livre de Base, The Great Clans, Emerald Empire)
+ * Conforme aux règles canoniques du Livre de Base L5R 4e Édition
  */
 const CLANS_DATA = {
 
   // =========================================================================
-  // 1. CLAN DU CRABE
+  // 1. CLAN DU CRABE (Book of Fire p. 106-108)
   // =========================================================================
   crabe: {
     name: "Clan du Crabe",
     families: [
-      { name: "Hida", trait: "Constitution", bonus: "+1 Constitution" },
-      { name: "Hiruma", trait: "Volonté", bonus: "+1 Volonté" },
+      { name: "Hida", trait: "Force", bonus: "+1 Force" },
+      { name: "Hiruma", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Kaiu", trait: "Intelligence", bonus: "+1 Intelligence" },
-      { name: "Kuni", trait: "Intuition", bonus: "+1 Intuition" },
+      { name: "Kuni", trait: "Intelligence", bonus: "+1 Intelligence" },
       { name: "Yasuki", trait: "Perception", bonus: "+1 Perception" }
     ],
     schools: [
-      // ÉCOLE BUSHI HIDA (Core p. 106)
       {
         id: "bushi-hida",
         family: "Hida",
         name: "Bushi Hida",
         type: "Bushi",
-        trait: "Force",
-        bonus: "+1 Force",
+        trait: "Constitution",
+        bonus: "+1 Constitution",
         honor: 3.5,
         skills: ["Armes Lourdes (Tetsubo)", "Athlétisme", "Bataille", "Défense", "Jiujutsu", "Kenjutsu", "Une compétence Bugei au choix"],
-        outfit: "Armure lourde, Daisho, Tetsubo ou Dai Tsuchi, Nécessaire de voyage, 3 koku",
+        outfit: "Armure lourde, Daisho, Tetsubo, Nécessaire de voyage, 3 koku",
         techniques: [
           { rank: 1, name: "La Voie du Crabe", effect: "Le port d'une Armure Lourde n'augmente pas le ND de vos jets d'Athlétisme ou basés sur l'Agilité (la Discrétion reste pénalisée). Lorsque vous maniez une Arme Lourde, vous ajoutez +1g0 à tous vos jets de dégâts." },
           { rank: 2, name: "La Montagne ne Bouge Pas", effect: "Vous gagnez une valeur de Réduction de dégâts permanente égale à votre Anneau de Terre. Cette Réduction se cumule avec celle de votre armure." },
-          { rank: 3, name: "Deux Pinces, Un Seul Esprit", effect: "Porter une attaque devient une Action Simple (au lieu de Complexe) lorsque vous maniez une Arme Lourde ou une arme portant le mot-clé Samouraï." },
+          { rank: 3, name: "Deux Pinces, Un Seul Esprit", effect: "Porter une attaque devient une Action Simple lorsque vous maniez une Arme Lourde ou une arme portant le mot-clé Samouraï." },
           { rank: 4, name: "La Poigne de la Terre", effect: "Lorsque vous touchez avec une Arme Lourde, vous ignorez une quantité de Réduction adverse égale à votre Anneau de Terre. Vous effectuez la manœuvre Renversement pour 1 Augmentation de moins (minimum 1)." },
           { rank: 5, name: "La Montagne ne Tombe Jamais", effect: "Au début de votre tour ou en phase de Réactions, dépensez 1 point de Vide : durant 1 round complet, vous ignorez tous vos malus de blessures (vous agissez au palier Indemne +0) et vous ne pouvez pas être rendu Inconscient ou Mis Hors de Combat par les dégâts." }
         ]
       },
-
-      // ÉCOLE BUSHI HIRUMA (Core p. 108)
       {
         id: "bushi-hiruma",
         family: "Hiruma",
         name: "Bushi Hiruma (Éclaireur)",
         type: "Bushi",
-        trait: "Agilité",
-        bonus: "+1 Agilité",
+        trait: "Volonté",
+        bonus: "+1 Volonté",
         honor: 4.5,
         skills: ["Athlétisme", "Chasse (Pistage)", "Connaissance : Outremonde", "Défense", "Discrétion", "Kenjutsu", "Kyujutsu"],
-        outfit: "Armure légère, Daisho, Arc Yumi avec 20 flèches, Nécessaire de voyage et de pistage, 3 koku",
+        outfit: "Armure légère, Daisho, Arc Yumi avec 20 flèches, Nécessaire de survie, 3 koku",
         techniques: [
           { rank: 1, name: "La Flamme de la Torche Vacille", effect: "En posture d'Attaque, vous gagnez +1g0 à tous vos jets d'attaque. Votre entraînement de traqueur divise par deux vos besoins quotidiens en nourriture, eau et sommeil." },
           { rank: 2, name: "La Leçon du Loup", effect: "En posture de Défense Totale, vous ajoutez votre rang de compétence Athlétisme à votre ND d'Armure. Vous pouvez substituer l'Agilité à la Force pour tous vos jets d'Athlétisme." },
@@ -56,18 +53,16 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Jour sans Regrets", effect: "Une fois par combat en Action Gratuite, ajoutez votre Volonté × 5 à votre ND d'Armure pour 1 round. Vos attaques infligent +2g2 de dégâts supplémentaires en frappant un point vital." }
         ]
       },
-
-      // ÉCOLE INGÉNIEUR KAIU (The Great Clans p. 39)
       {
         id: "ingenieur-kaiu",
         family: "Kaiu",
         name: "Ingénieur Kaiu",
         type: "Bushi",
-        trait: "Intelligence",
-        bonus: "+1 Intelligence",
+        trait: "Constitution",
+        bonus: "+1 Constitution",
         honor: 4.5,
         skills: ["Artisanat (Forge de Siège)", "Bataille", "Connaissance : Architecture", "Connaissance : Ingénierie (Siège)", "Défense", "Kenjutsu", "Éventail de Guerre"],
-        outfit: "Armure lourde, Daisho, Marteau de guerre lourd ou Éventail d'acier, Outils d'architecte et de forge, 3 koku",
+        outfit: "Armure lourde, Daisho, Marteau de guerre lourd, Outils d'architecte et de forge, 3 koku",
         techniques: [
           { rank: 1, name: "La Méthode Kaiu", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets d'Ingénierie, Artisanat et Architecture. Dépenser 1 point de Vide sur ces compétences ajoute +2g2 au lieu de +1g1." },
           { rank: 2, name: "La Voie de Pierre", effect: "Vous pouvez réparer ou fortifier n'importe quel édifice. Les armes de siège sous vos ordres relancent tous les dés de dégâts inférieurs à votre Rang d'École." },
@@ -76,8 +71,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Voie de l'Acier", effect: "Lorsque vous forgez une arme, vous lui conférez de manière permanente soit +1g0 à l'attaque, soit +0g1 aux dégâts. En dépensant vos points de Vide, vous pouvez rendre une lame Incassable." }
         ]
       },
-
-      // ÉCOLE SHUGENJA KUNI (Core p. 107)
       {
         id: "shugenja-kuni",
         family: "Kuni",
@@ -96,8 +89,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Colère de la Terre", effect: "Dépensez 1 point de Vide : double la zone d'effet ou la durée d'un sort de Terre lancé ce round." }
         ]
       },
-
-      // ÉCOLE COURTISAN YASUKI (Core p. 107)
       {
         id: "courtisan-yasuki",
         family: "Yasuki",
@@ -120,18 +111,17 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 2. CLAN DE LA GRUE
+  // 2. CLAN DE LA GRUE (Book of Fire p. 109-111)
   // =========================================================================
   grue: {
     name: "Clan de la Grue",
     families: [
-      { name: "Kakita", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Doji", trait: "Intuition", bonus: "+1 Intuition" },
+      { name: "Kakita", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Daidoji", trait: "Constitution", bonus: "+1 Constitution" },
       { name: "Asahina", trait: "Intelligence", bonus: "+1 Intelligence" }
     ],
     schools: [
-      // ÉCOLE BUSHI KAKITA (DUELLISTE) (Core p. 109)
       {
         id: "duelliste-kakita",
         family: "Kakita",
@@ -150,8 +140,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Frappe Ultime", effect: "Vous pouvez adopter la posture du Centre et effectuer malgré tout une Action Simple d'attaque lors du même tour. En duel, si vous subissez un coup mortel, vous portez votre frappe au même instant avant de tomber." }
         ]
       },
-
-      // ÉCOLE COURTISAN DOJI (Core p. 110-111)
       {
         id: "courtisan-doji",
         family: "Doji",
@@ -170,15 +158,13 @@ const CLANS_DATA = {
           { rank: 5, name: "La Voix de l'Empereur", effect: "Dépensez 1 point de Vide : quiconque souhaite vous attaquer ou agir contre vous en cour doit réussir un jet de Volonté opposé à votre Statut sous peine de renoncer." }
         ]
       },
-
-      // ÉCOLE GUERRIER DAIDOJI (Core p. 111)
       {
         id: "guerrier-daidoji",
         family: "Daidoji",
         name: "Guerrier Daidoji (Grue de Fer)",
         type: "Bushi",
-        trait: "Constitution",
-        bonus: "+1 Constitution",
+        trait: "Force",
+        bonus: "+1 Force",
         honor: 5.5,
         skills: ["Armes d'Hast (Naginata)", "Athlétisme", "Bataille", "Défense", "Iaijutsu", "Kenjutsu (Katana)", "Une compétence Bugei au choix"],
         outfit: "Armure lourde Daidoji laquée de gris, Daisho, Naginata ou Lance Yari, Nécessaire de voyage, 3 koku",
@@ -190,15 +176,13 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Rempart Vivant", effect: "Lorsqu'un allié à portée de mouvement est ciblé par une attaque, vous dépensez 1 point de Vide pour intercepter le coup. L'attaque vous frappe à sa place, mais tous les dégâts sont réduits de moitié après application de votre Réduction." }
         ]
       },
-
-      // ÉCOLE SHUGENJA ASAHINA (Core p. 110)
       {
         id: "shugenja-asahina",
         family: "Asahina",
         name: "Shugenja Asahina",
         type: "Shugenja",
-        trait: "Intelligence",
-        bonus: "+1 Intelligence",
+        trait: "Volonté",
+        bonus: "+1 Volonté",
         honor: 6.5,
         skills: ["Artisanat (Origami)", "Calligraphie", "Cérémonie du Thé", "Connaissance : Théologie", "Méditation", "Sincérité", "Une compétence Noble au choix"],
         outfit: "Robes blanches monastiques, Wakizashi, Nécessaire de calligraphie et d'origami sacré, 4 koku",
@@ -214,25 +198,24 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 3. CLAN DU DRAGON
+  // 3. CLAN DU DRAGON (Book of Fire p. 112-115)
   // =========================================================================
   dragon: {
     name: "Clan du Dragon",
     families: [
       { name: "Mirumoto", trait: "Agilité", bonus: "+1 Agilité" },
-      { name: "Kitsuki", trait: "Intuition", bonus: "+1 Intuition" },
+      { name: "Kitsuki", trait: "Perception", bonus: "+1 Perception" },
       { name: "Tamori", trait: "Volonté", bonus: "+1 Volonté" },
       { name: "Togashi", trait: "Réflexes", bonus: "+1 Réflexes" }
     ],
     schools: [
-      // ÉCOLE BUSHI MIRUMOTO (Core p. 112-113)
       {
         id: "bushi-mirumoto",
         family: "Mirumoto",
         name: "Bushi Mirumoto",
         type: "Bushi",
-        trait: "Agilité",
-        bonus: "+1 Agilité",
+        trait: "Constitution",
+        bonus: "+1 Constitution",
         honor: 4.5,
         skills: ["Défense", "Iaijutsu", "Kenjutsu (Katana)", "Kenjutsu (Wakizashi)", "Connaissance : Théologie", "Méditation", "Une compétence Bugei au choix"],
         outfit: "Armure légère ou lourde, Daisho Mirumoto, Nécessaire de voyage, 3 koku",
@@ -244,8 +227,6 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Cœur du Dragon", effect: "Si vous attaquez deux fois lors de votre tour en maniant le katana et le wakizashi, vous pouvez effectuer une troisième attaque immédiate avec votre main secondaire en tant qu'Action Gratuite." }
         ]
       },
-
-      // ÉCOLE ENQUÊTEUR KITSUKI (Core p. 114)
       {
         id: "magistrat-kitsuki",
         family: "Kitsuki",
@@ -264,15 +245,13 @@ const CLANS_DATA = {
           { rank: 5, name: "La Vérité Nue", effect: "Dépensez 1 point de Vide : forcez un suspect à confesser ses actes s'il échoue à un jet de Volonté opposé à votre Perception." }
         ]
       },
-
-      // ORDRE TATOUÉ TOGASHI (Core p. 114-115)
       {
         id: "moine-togashi",
         family: "Togashi",
         name: "Ordre Tatoué Togashi (Ise Zumi)",
         type: "Moine",
-        trait: "Constitution",
-        bonus: "+1 Constitution",
+        trait: "Vide",
+        bonus: "+1 Vide",
         honor: 4.5,
         skills: ["Athlétisme", "Connaissance : Théologie", "Défense", "Jiujutsu", "Méditation", "Art de la Scène (Récit)", "Une compétence Noble ou Bugei"],
         outfit: "Robes monastiques simples, Bâton Bo ou combat à mains nues, Bol à aumônes, 1 koku",
@@ -284,8 +263,6 @@ const CLANS_DATA = {
           { rank: 5, name: "L'Éveil du Dragon", effect: "Dépensez 1 point de Vide pour activer simultanément 3 tatouages durant 3 rounds. Obtention du 6e Tatouage." }
         ]
       },
-
-      // ÉCOLE SHUGENJA TAMORI (Core p. 113)
       {
         id: "shugenja-tamori",
         family: "Tamori",
@@ -308,18 +285,17 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 4. CLAN DU LION
+  // 4. CLAN DU LION (Book of Fire p. 116-119)
   // =========================================================================
   lion: {
     name: "Clan du Lion",
     families: [
       { name: "Akodo", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Matsu", trait: "Force", bonus: "+1 Force" },
-      { name: "Ikoma", trait: "Intelligence", bonus: "+1 Intelligence" },
-      { name: "Kitsu", trait: "Volonté", bonus: "+1 Volonté" }
+      { name: "Ikoma", trait: "Intuition", bonus: "+1 Intuition" },
+      { name: "Kitsu", trait: "Intelligence", bonus: "+1 Intelligence" }
     ],
     schools: [
-      // ÉCOLE BUSHI AKODO (Core p. 117)
       {
         id: "bushi-akodo",
         family: "Akodo",
@@ -338,8 +314,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Victoire Finale", effect: "Une fois par round, vous pouvez dépenser 1 point de Vide pour ajouter deux fois votre Rang d'Honneur (+Honneur × 2) au total d'un jet de compétence de Bugei ou d'un jet de dégâts." }
         ]
       },
-
-      // ÉCOLE BERSERKER MATSU (Core p. 119)
       {
         id: "bushi-matsu",
         family: "Matsu",
@@ -358,8 +332,6 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Courage de Matsu", effect: "Tant que vous combattez en posture d'Attaque Totale, vous ignorez totalement tous les malus de blessures." }
         ]
       },
-
-      // ÉCOLE BARDE IKOMA (Core p. 118-119)
       {
         id: "barde-ikoma",
         family: "Ikoma",
@@ -371,15 +343,13 @@ const CLANS_DATA = {
         skills: ["Art de la Scène (Conteur)", "Bataille", "Cérémonie du Thé", "Connaissance : Histoire", "Courtisan", "Étiquette", "Sincérité"],
         outfit: "Vêtements nobles aux armoiries du Lion, Wakizashi, Tambour ou Biwa traditionnel, Nécessaire d'écriture, 5 koku",
         techniques: [
-          { rank: 1, name: "La Voix de la Gloire", effect: "Vous captivez votre auditoire par les chroniques des ancêtres. Vous gagnez un bonus de +1g1 sur vos jets d'Art de la Scène et d'Oratoire. D'une harangue martiale, vous accordez +1g0 à la résistance à la Peur de vos alliés." },
+          { rank: 1, name: "La Voie de la Gloire", effect: "Vous captivez votre auditoire par les chroniques des ancêtres. Vous gagnez un bonus de +1g1 sur vos jets d'Art de la Scène et d'Oratoire. D'une harangue martiale, vous accordez +1g0 à la résistance à la Peur de vos alliés." },
           { rank: 2, name: "La Voix des Héros", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets de Courtisan face à des samouraïs ayant un Rang d'Honneur d'au moins 4.0." },
           { rank: 3, name: "La Flamme Inaltérable", effect: "Vos compagnons de bataille sont totalement immunisés contre la panique en combat de masse." },
           { rank: 4, name: "La Gloire Partagée", effect: "Vous pouvez transférer temporairement des points de Gloire à un allié méritant pour rehausser son statut en cour." },
           { rank: 5, name: "Le Dit des Mille Générations", effect: "Dépensez 1 point de Vide : invoquez l'esprit d'un aïeul légendaire pour réussir automatiquement un test d'histoire ou de tactique." }
         ]
       },
-
-      // ÉCOLE SHUGENJA KITSU (Core p. 117)
       {
         id: "shugenja-kitsu",
         family: "Kitsu",
@@ -402,7 +372,7 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 5. CLAN DE LA MANTE
+  // 5. CLAN DE LA MANTE (Book of Fire p. 120-122)
   // =========================================================================
   mante: {
     name: "Clan de la Mante",
@@ -410,10 +380,9 @@ const CLANS_DATA = {
       { name: "Yoritomo", trait: "Constitution", bonus: "+1 Constitution" },
       { name: "Tsuruchi", trait: "Perception", bonus: "+1 Perception" },
       { name: "Moshi", trait: "Intelligence", bonus: "+1 Intelligence" },
-      { name: "Kitsune", trait: "Volonté", bonus: "+1 Volonté" }
+      { name: "Kitsune", trait: "Intuition", bonus: "+1 Intuition" }
     ],
     schools: [
-      // ÉCOLE BUSHI YORITOMO (Core p. 120-121)
       {
         id: "bushi-yoritomo",
         family: "Yoritomo",
@@ -432,15 +401,13 @@ const CLANS_DATA = {
           { rank: 5, name: "La Main d'Osano-Wo", effect: "Dépensez 1 point de Vide en Action Gratuite : vous gardez un nombre de dés de dégâts supplémentaire égal à votre Force (+Force dés gardés). Si la cible est à terre, vous infligez +0g2 supplémentaire." }
         ]
       },
-
-      // ÉCOLE ARCHER TSURUCHI (Core p. 122)
       {
         id: "archer-tsuruchi",
         family: "Tsuruchi",
         name: "Archer Tsuruchi",
         type: "Bushi",
-        trait: "Perception",
-        bonus: "+1 Perception",
+        trait: "Réflexes",
+        bonus: "+1 Réflexes",
         honor: 4.5,
         skills: ["Athlétisme", "Chasse (Pistage)", "Défense", "Discrétion", "Enquête", "Kyujutsu", "Une compétence Bugei au choix"],
         outfit: "Arc Yumi de maître, Carquois de 30 flèches variées, Daisho, Nécessaire d'archer, 3 koku",
@@ -452,8 +419,6 @@ const CLANS_DATA = {
           { rank: 5, name: "L'Œil de Tsuruchi", effect: "Vous pouvez effectuer une attaque à distance en Action Complexe : vous gagnez un bonus massif de +4k1 au jet d'attaque et au jet de dégâts de cette flèche." }
         ]
       },
-
-      // ÉCOLE COURTISAN YORITOMO (Core p. 121)
       {
         id: "courtisan-yoritomo",
         family: "Yoritomo",
@@ -472,20 +437,18 @@ const CLANS_DATA = {
           { rank: 5, name: "L'Alliance Incontournable", effect: "Dépensez 1 point de Vide : forcez un noble à signer un pacte économique sous peine de sanctions commerciales dévastatrices." }
         ]
       },
-
-      // ÉCOLE SHUGENJA MOSHI (Core p. 120)
       {
         id: "shugenja-moshi",
         family: "Moshi",
         name: "Shugenja Moshi (Filles du Soleil)",
         type: "Shugenja",
-        trait: "Intelligence",
-        bonus: "+1 Intelligence",
+        trait: "Volonté",
+        bonus: "+1 Volonté",
         honor: 5.5,
         skills: ["Astrologie", "Calligraphie", "Cérémonie du Thé", "Connaissance : Théologie", "Méditation", "Navigation", "Une compétence Noble"],
         outfit: "Robes blanches et safran de prêtresse solaire, Bâton Bo ou Tanto, Miroir solaire de bronze, 4 koku",
         techniques: [
-          { rank: 1, name: "La Ferveur Solaire", effect: "Affinité : Feu (ou Air). Déficience : Eau. Vous gagnez une Augmentation Gratuite sur tous les sorts invoquant la lumière, la chaleur ou la purification céleste." },
+          { rank: 1, name: "La Ferveur Solaire", effect: "Affinité : Feu. Déficience : Eau. Vous gagnez une Augmentation Gratuite sur tous les sorts invoquant la lumière, la chaleur ou la purification céleste." },
           { rank: 2, name: "La Danse de l'Aurore", effect: "Vous pouvez aveugler temporairement vos assaillants d'un jet d'Intelligence / Méditation." },
           { rank: 3, name: "L'Éclair Céleste", effect: "Lancer un sort de Feu de Maîtrise 1 ou 2 devient une Action Simple." },
           { rank: 4, name: "Les Rayons Purificateurs", effect: "Vos sorts de Feu ignorent la résistance magique et la Réduction des créatures souillées." },
@@ -496,7 +459,7 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 6. CLAN DU PHÉNIX
+  // 6. CLAN DU PHÉNIX (Book of Fire p. 123-125)
   // =========================================================================
   phenix: {
     name: "Clan du Phénix",
@@ -507,7 +470,6 @@ const CLANS_DATA = {
       { name: "Agasha", trait: "Perception", bonus: "+1 Perception" }
     ],
     schools: [
-      // ÉCOLE BUSHI SHIBA (Core p. 123)
       {
         id: "bushi-shiba",
         family: "Shiba",
@@ -526,8 +488,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Touche du Vide", effect: "Une fois par combat, vous pouvez dépenser 1 point de Vide pour porter une attaque de mêlée qui ignore totalement l'armure et la Réduction de la cible." }
         ]
       },
-
-      // ÉCOLE SHUGENJA ISAWA (Core p. 124)
       {
         id: "shugenja-isawa",
         family: "Isawa",
@@ -546,8 +506,6 @@ const CLANS_DATA = {
           { rank: 5, name: "L'Apothéose Élémentaire", effect: "Dépensez 1 point de Vide pour convertir un emplacement de sort dans n'importe quel autre élément sans subir de malus." }
         ]
       },
-
-      // ÉCOLE ÉRUDIT ASAKO (Core p. 124-125)
       {
         id: "erudit-asako",
         family: "Asako",
@@ -566,8 +524,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Sagesse des Âges", effect: "Vous gagnez un bonus permanent de +5k0 au total de tous vos jets de compétences de Connaissance (Lore)." }
         ]
       },
-
-      // ÉCOLE SHUGENJA AGASHA (Core p. 125)
       {
         id: "shugenja-agasha",
         family: "Agasha",
@@ -590,18 +546,17 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 7. CLAN DU SCORPION
+  // 7. CLAN DU SCORPION (Book of Fire p. 126-128)
   // =========================================================================
   scorpion: {
     name: "Clan du Scorpion",
     families: [
       { name: "Bayushi", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Shosuro", trait: "Intuition", bonus: "+1 Intuition" },
-      { name: "Soshi", trait: "Intelligence", bonus: "+1 Intelligence" },
+      { name: "Soshi", trait: "Perception", bonus: "+1 Perception" },
       { name: "Yogo", trait: "Volonté", bonus: "+1 Volonté" }
     ],
     schools: [
-      // ÉCOLE BUSHI BAYUSHI (Core p. 126-127)
       {
         id: "bushi-bayushi",
         family: "Bayushi",
@@ -620,8 +575,6 @@ const CLANS_DATA = {
           { rank: 5, name: "Les Pinces Retiennent, la Queue Frappe", effect: "Une fois par combat en Action Complexe, portez une attaque de mêlée : si elle réussit, la cible est Étourdie (Stunned) jusqu'à ce qu'elle réussisse un jet de Terre contre le montant des blessures infligées." }
         ]
       },
-
-      // ÉCOLE COURTISAN BAYUSHI (Core p. 127)
       {
         id: "courtisan-bayushi",
         family: "Bayushi",
@@ -640,8 +593,6 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Maître des Pantins", effect: "Dépensez 1 point de Vide : forcez un interlocuteur compromis à obéir à une directive sous peine d'un scandale public déshonorant." }
         ]
       },
-
-      // ÉCOLE INFILTRATEUR SHOSURO (Core p. 128)
       {
         id: "infiltrateur-shosuro",
         family: "Shosuro",
@@ -660,15 +611,13 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Sommeil Sans Réveil", effect: "Après avoir réussi une frappe par surprise, vous pouvez dépenser 1 point de Vide pour forcer deux de vos dés de dégâts à afficher la valeur 10 sans exploser." }
         ]
       },
-
-      // ÉCOLE SHUGENJA SOSHI (Core p. 127)
       {
         id: "shugenja-soshi",
         family: "Soshi",
         name: "Shugenja Soshi",
         type: "Shugenja",
-        trait: "Perception",
-        bonus: "+1 Perception",
+        trait: "Intelligence",
+        bonus: "+1 Intelligence",
         honor: 2.5,
         skills: ["Calligraphie", "Connaissance : Théologie", "Courtisan", "Défense", "Discrétion", "Enquête", "Méditation"],
         outfit: "Robes sombres amples, Masque de gaze, Tanto, Boîte de parchemins secrets, 3 koku",
@@ -680,8 +629,6 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Puits des Ténèbres", effect: "Dépensez 1 point de Vide pour plonger une zone de 15 mètres de rayon dans une obscurité magique totale impénétrable." }
         ]
       },
-
-      // ÉCOLE MAÎTRE DES SCEAUX YOGO (The Great Clans p. 229)
       {
         id: "maitre-sceaux-yogo",
         family: "Yogo",
@@ -704,19 +651,19 @@ const CLANS_DATA = {
   },
 
   // =========================================================================
-  // 8. CLAN DE LA LICORNE
+  // 8. CLAN DE LA LICORNE (Book of Fire p. 129-132)
   // =========================================================================
   licorne: {
     name: "Clan de la Licorne",
     families: [
-      { name: "Moto", trait: "Force", bonus: "+1 Force" },
+      { name: "Moto", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Shinjo", trait: "Réflexes", bonus: "+1 Réflexes" },
       { name: "Utaku", trait: "Constitution", bonus: "+1 Constitution" },
-      { name: "Iuchi", trait: "Perception", bonus: "+1 Perception" },
-      { name: "Ide", trait: "Intuition", bonus: "+1 Intuition" }
+      { name: "Ide", trait: "Perception", bonus: "+1 Perception" },
+      { name: "Iuchi", trait: "Intelligence", bonus: "+1 Intelligence" },
+      { name: "Horiuchi", trait: "Volonté", bonus: "+1 Volonté" }
     ],
     schools: [
-      // ÉCOLE BUSHI MOTO (Core p. 130)
       {
         id: "bushi-moto",
         family: "Moto",
@@ -735,8 +682,6 @@ const CLANS_DATA = {
           { rank: 5, name: "Le Moto ne Fléchit Pas", effect: "Lorsque vous combattez en selle ou que vous adoptez la posture d'Attaque Totale, vous gardez un nombre de dés de dégâts supplémentaire égal à la moitié de votre Force arrondie à l'inférieur (+Force/2 dés gardés) avec une arme à deux mains ou une arme de Samouraï." }
         ]
       },
-
-      // ÉCOLE CAVALIER SHINJO (Emerald Empire p. 31 / Core p. 255)
       {
         id: "bushi-shinjo",
         family: "Shinjo",
@@ -755,15 +700,13 @@ const CLANS_DATA = {
           { rank: 5, name: "La Danse de Shinjo", effect: "Vous pouvez vous désengager du combat monté sans subir d'attaque d'opportunité et votre monture double sa vitesse de déplacement." }
         ]
       },
-
-      // ÉCOLE VIERGE GUERRIÈRE UTAKU (Core p. 132)
       {
         id: "vierge-utaku",
         family: "Utaku",
         name: "Vierge Guerrière Utaku (Battle Maiden)",
         type: "Bushi",
-        trait: "Constitution",
-        bonus: "+1 Constitution",
+        trait: "Agilité",
+        bonus: "+1 Agilité",
         honor: 6.5,
         skills: ["Bataille", "Défense", "Équitation (Destrier Utaku)", "Iaijutsu", "Kenjutsu", "Sincérité", "Une compétence Bugei au choix"],
         outfit: "Armure de plates fines laquée, Destrier de guerre Utaku, Katana de maître, 5 koku",
@@ -775,8 +718,6 @@ const CLANS_DATA = {
           { rank: 5, name: "La Bénédiction d'Otaku", effect: "Au début de votre tour, vous pouvez dépenser 1 point de Vide en Action Gratuite : vous ajoutez votre Rang d'Honneur à tous vos jets de dégâts et à tous vos jets de compétences de Bugei pour l'ensemble du tour." }
         ]
       },
-
-      // ÉCOLE ÉMISSAIRE IDE (Core p. 131)
       {
         id: "courtisan-ide",
         family: "Ide",
@@ -795,8 +736,6 @@ const CLANS_DATA = {
           { rank: 5, name: "L'Harmonie du Voyageur", effect: "Dépensez 1 point de Vide : imposez une trêve inviolable de 24 heures entre délégations armées." }
         ]
       },
-
-      // ÉCOLE SHUGENJA IUCHI (Core p. 130-131)
       {
         id: "shugenja-iuchi",
         family: "Iuchi",
