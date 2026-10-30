@@ -103,6 +103,31 @@
   <!-- NAVIGATION SUPÉRIEURE INJECTÉE PAR NAVBAR.JS -->
   <header id="site-header"></header>
 
+  <!-- MODALE VERROU MAHŌ -->
+  <div id="maho-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="card-clean rounded-2xl max-w-md w-full p-6 border-rose-900 shadow-2xl space-y-4">
+      <div class="flex items-center gap-2 text-rose-500 font-imperial font-bold text-sm tracking-wider uppercase">
+        <span>🩸</span> Sceau des Tsukai-Sagasu
+      </div>
+      <h3 class="text-xl font-bold font-imperial text-rose-200">Accès Restreint : Magie du Sang</h3>
+      <p class="text-xs text-stone-400 leading-relaxed">
+        Ce savoir corrompt quiconque y pose les yeux sans y avoir été préparé par les inquisiteurs Kuni. Entrez le mot de passe MJ pour lever le sceau.
+      </p>
+      <div class="space-y-2">
+        <input type="password" id="maho-password-input" placeholder="Mot de passe MJ..." class="w-full p-2.5 rounded text-sm font-medium">
+        <p id="maho-error" class="hidden text-[11px] text-rose-400 font-bold">Mot de passe incorrect.</p>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button id="maho-cancel-btn" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-imperial">
+          Annuler
+        </button>
+        <button id="maho-unlock-btn" class="px-4 py-1.5 rounded bg-rose-900 hover:bg-rose-800 text-rose-100 font-bold text-xs font-imperial transition">
+          Rompre le Sceau
+        </button>
+      </div>
+    </div>
+  </div>
+  
   <!-- CONTENU PRINCIPAL -->
   <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
 
@@ -220,92 +245,179 @@
       render();
     }
 
-    function render() {
-      if (!spellsGrid) return;
-      const q = searchInput?.value.toLowerCase().trim() || "";
-      const m = masterySelect?.value || "all";
+// Mot de passe MJ par défaut (configurable)
+const MAHO_SECRET_PASS = "JIGOKU"; 
+let isMahoUnlocked = sessionStorage.getItem("l5r_maho_unlocked") === "true";
 
-      if (clearSearchBtn) {
-        clearSearchBtn.classList.toggle('hidden', q.length === 0);
-      }
+// Gestion du bouton et de la modale Mahō
+const mahoModal = document.getElementById('maho-modal');
+const mahoInput = document.getElementById('maho-password-input');
+const mahoError = document.getElementById('maho-error');
+const mahoBtn = document.querySelector('.elem-btn[data-elem="Maho"]');
 
-      const filtered = allSpells.filter(spell => {
-        if (currentElement !== 'all' && spell.element !== currentElement) {
-          return false;
-        }
+function updateMahoButtonLabel() {
+  if (mahoBtn) {
+    mahoBtn.innerHTML = isMahoUnlocked ? '🩸 Mahō (Déverrouillé)' : '🔒 Mahō (Scellé)';
+    mahoBtn.classList.toggle('locked', !isMahoUnlocked);
+  }
+}
+updateMahoButtonLabel();
 
-        if (m !== 'all') {
-          if (m === 'Universel' && spell.mastery !== 'Universel') return false;
-          if (m !== 'Universel' && String(spell.mastery) !== m) return false;
-        }
+function setElementFilter(elem) {
+  if (elem === 'Maho' && !isMahoUnlocked) {
+    mahoError.classList.add('hidden');
+    mahoInput.value = '';
+    mahoModal.classList.remove('hidden');
+    mahoInput.focus();
+    return;
+  }
 
-        if (q) {
-          const matchName = (spell.name || "").toLowerCase().includes(q);
-          const matchDesc = (spell.desc || "").toLowerCase().includes(q);
-          const matchKeyw = (spell.keywords || []).some(k => k.toLowerCase().includes(q));
-          if (!matchName && !matchDesc && !matchKeyw) return false;
-        }
-
-        return true;
-      });
-
-      if (resultsCount) resultsCount.textContent = filtered.length;
-
-      if (filtered.length === 0) {
-        spellsGrid.innerHTML = `
-          <div class="col-span-full text-center py-12 card-clean rounded-xl">
-            <span class="text-3xl block mb-2">📜</span>
-            <span class="font-imperial font-bold text-amber-300 text-base">Aucun sort ou pouvoir ne correspond à vos critères</span>
-            <p class="text-xs text-stone-500 mt-1">Modifiez vos mots-clés ou sélectionnez une autre catégorie d'éléments.</p>
-          </div>
-        `;
-        return;
-      }
-
-      spellsGrid.innerHTML = filtered.map(s => {
-        let badgeClass = "badge-earth";
-        if (s.element === "Universel") badgeClass = "badge-univ";
-        else if (s.element === "Air") badgeClass = "badge-air";
-        else if (s.element === "Feu") badgeClass = "badge-fire";
-        else if (s.element === "Eau") badgeClass = "badge-water";
-        else if (s.element === "Vide") badgeClass = "badge-void";
-        else if (s.element === "Maho") badgeClass = "badge-maho";
-        else if (s.element === "Kiho") badgeClass = "badge-kiho";
-
-        const ndCalculated = s.mastery === "Universel" 
-          ? "ND 10" 
-          : (s.element === "Kiho" ? "Kihō" : `ND ${5 + (parseInt(s.mastery, 10) * 5)}`);
-
-        return `
-          <div class="card-clean rounded-xl p-5 space-y-3 flex flex-col justify-between shadow-lg">
-            <div class="space-y-2">
-              <div class="flex justify-between items-start gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial ${badgeClass}">
-                  ${s.element} ${s.mastery === 'Universel' ? '• Universel' : (s.element === 'Kiho' ? '• Éveil ' + s.mastery : '• Rang ' + s.mastery)}
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-bold text-amber-300 font-imperial">
-                  ${ndCalculated}
-                </span>
-              </div>
-              <h3 class="text-sm font-bold font-imperial text-amber-200">${s.name}</h3>
-              <div class="flex flex-wrap gap-1 text-[9px] text-stone-400">
-                ${(s.keywords || []).map(k => `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-800">${k}</span>`).join('')}
-              </div>
-            </div>
-
-            <div class="space-y-2 pt-2 border-t border-stone-800/80 text-xs">
-              <p class="text-stone-300 leading-relaxed text-[11px]">${s.desc}</p>
-              
-              <div class="p-2 rounded bg-black/50 border border-stone-800 text-[10px] space-y-1 text-stone-400">
-                <div><b class="text-stone-300">Portée :</b> ${s.range} | <b class="text-stone-300">Zone :</b> ${s.area}</div>
-                <div><b class="text-stone-300">Durée :</b> ${s.duration}</div>
-                ${s.raises ? `<div class="pt-1 border-t border-stone-800/60 text-amber-400/90"><b class="text-amber-300">Augmentations :</b> ${s.raises}</div>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+  currentElement = elem;
+  elemButtons.forEach(btn => {
+    const isTarget = btn.getAttribute('data-elem') === elem;
+    if (isTarget) {
+      btn.className = "elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow";
+    } else {
+      btn.className = "elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition";
     }
+  });
+  updateMahoButtonLabel();
+  render();
+}
+
+document.getElementById('maho-cancel-btn')?.addEventListener('click', () => {
+  mahoModal.classList.add('hidden');
+});
+
+document.getElementById('maho-unlock-btn')?.addEventListener('click', () => {
+  if (mahoInput.value.trim().toUpperCase() === MAHO_SECRET_PASS) {
+    isMahoUnlocked = true;
+    sessionStorage.setItem("l5r_maho_unlocked", "true");
+    mahoModal.classList.add('hidden');
+    setElementFilter('Maho');
+  } else {
+    mahoError.classList.remove('hidden');
+  }
+});
+
+mahoInput?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('maho-unlock-btn')?.click();
+});
+
+// Défloutage individuel au clic
+window.revealMahoSpell = function(btn) {
+  const card = btn.closest('.maho-card');
+  if (!card) return;
+  card.classList.remove('sealed');
+  const overlay = card.querySelector('.maho-overlay');
+  if (overlay) overlay.remove();
+};
+
+function render() {
+  if (!spellsGrid) return;
+  const q = searchInput?.value.toLowerCase().trim() || "";
+  const m = masterySelect?.value || "all";
+
+  if (clearSearchBtn) {
+    clearSearchBtn.classList.toggle('hidden', q.length === 0);
+  }
+
+  const filtered = allSpells.filter(spell => {
+    // Règle 1 : les sorts Mahō sont totalement masqués si non déverrouillés
+    if (spell.element === 'Maho' && !isMahoUnlocked) {
+      return false;
+    }
+
+    // Règle 2 : en mode "Tous", masquer Mahō pour éviter la pollution visuelle
+    if (currentElement === 'all' && spell.element === 'Maho') {
+      return false;
+    }
+
+    if (currentElement !== 'all' && spell.element !== currentElement) {
+      return false;
+    }
+
+    if (m !== 'all') {
+      if (m === 'Universel' && spell.mastery !== 'Universel') return false;
+      if (m !== 'Universel' && String(spell.mastery) !== m) return false;
+    }
+
+    if (q) {
+      const matchName = (spell.name || "").toLowerCase().includes(q);
+      const matchDesc = (spell.desc || "").toLowerCase().includes(q);
+      const matchKeyw = (spell.keywords || []).some(k => k.toLowerCase().includes(q));
+      if (!matchName && !matchDesc && !matchKeyw) return false;
+    }
+
+    return true;
+  });
+
+  if (resultsCount) resultsCount.textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    spellsGrid.innerHTML = `
+      <div class="col-span-full text-center py-12 card-clean rounded-xl">
+        <span class="text-3xl block mb-2">📜</span>
+        <span class="font-imperial font-bold text-amber-300 text-base">Aucun sort ou pouvoir ne correspond à vos critères</span>
+        <p class="text-xs text-stone-500 mt-1">Modifiez vos mots-clés ou sélectionnez une autre catégorie d'éléments.</p>
+      </div>
+    `;
+    return;
+  }
+
+  spellsGrid.innerHTML = filtered.map(s => {
+    const isMaho = s.element === "Maho";
+    let badgeClass = "badge-earth";
+    if (s.element === "Universel") badgeClass = "badge-univ";
+    else if (s.element === "Air") badgeClass = "badge-air";
+    else if (s.element === "Feu") badgeClass = "badge-fire";
+    else if (s.element === "Eau") badgeClass = "badge-water";
+    else if (s.element === "Vide") badgeClass = "badge-void";
+    else if (isMaho) badgeClass = "badge-maho";
+    else if (s.element === "Kiho") badgeClass = "badge-kiho";
+
+    const ndCalculated = s.mastery === "Universel" 
+      ? "ND 10" 
+      : (s.element === "Kiho" ? "Kihō" : `ND ${5 + (parseInt(s.mastery, 10) * 5)}`);
+
+    return `
+      <div class="card-clean rounded-xl p-5 space-y-3 flex flex-col justify-between shadow-lg ${isMaho ? 'maho-card sealed border-rose-900/60' : ''}">
+        ${isMaho ? `
+          <div class="maho-overlay" onclick="revealMahoSpell(this)">
+            <span class="text-2xl mb-1">🩸</span>
+            <span class="text-rose-300 font-imperial font-bold text-xs uppercase tracking-wide">Pacte Maudit Scellé</span>
+            <p class="text-[10px] text-stone-400 mt-1">Cliquer pour rompre le sceau et lire ce rituel</p>
+          </div>
+        ` : ''}
+
+        <div class="space-y-2 maho-content">
+          <div class="flex justify-between items-start gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial ${badgeClass}">
+              ${s.element} ${s.mastery === 'Universel' ? '• Universel' : (s.element === 'Kiho' ? '• Éveil ' + s.mastery : '• Rang ' + s.mastery)}
+            </span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-bold text-amber-300 font-imperial">
+              ${ndCalculated}
+            </span>
+          </div>
+          <h3 class="text-sm font-bold font-imperial ${isMaho ? 'text-rose-300' : 'text-amber-200'}">${s.name}</h3>
+          <div class="flex flex-wrap gap-1 text-[9px] text-stone-400">
+            ${(s.keywords || []).map(k => `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-800">${k}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2 border-t border-stone-800/80 text-xs maho-content">
+          <p class="text-stone-300 leading-relaxed text-[11px]">${s.desc}</p>
+          
+          <div class="p-2 rounded bg-black/50 border border-stone-800 text-[10px] space-y-1 text-stone-400">
+            <div><b class="text-stone-300">Portée :</b> ${s.range} | <b class="text-stone-300">Zone :</b> ${s.area}</div>
+            <div><b class="text-stone-300">Durée :</b> ${s.duration}</div>
+            ${s.raises ? `<div class="pt-1 border-t border-stone-800/60 text-amber-400/90"><b class="text-amber-300">Augmentations :</b> ${s.raises}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
     // Écouteurs d'événements
     searchInput?.addEventListener('input', render);
