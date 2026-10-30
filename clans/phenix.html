@@ -44,7 +44,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- CONTENEUR DU MENU GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <!-- CONTENEUR DU MENU GLOBAL -->
   <header id="site-header"></header>
 
   <!-- CONTENU PRINCIPAL -->
@@ -62,219 +62,285 @@
         <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide phenix-gradient">
           LE CLAN DU PHÉNIX
         </h1>
-        <p class="text-xs md:text-sm text-red-200/90 italic font-imperial">
-          « L'homme s'élève quand son esprit cesse de vouloir contraindre le monde pour commencer à l'écouter. »
-        </p>
         <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
-          Le Clan du Phénix est le cœur spirituel, érudit et magique de l'Empire d'Émeraude[cite: 2, 7]. Dépositaire de la plus vaste bibliothèque de parchemins sacrés et de sorts de Rokugan, il abrite les plus éminents maîtres des cinq Éléments[cite: 2, 7]. C'est un clan singulier où le sabre s'incline devant la sagesse du prêtre : les fiers bushi Shiba ont fait le serment sacré de donner leur vie pour protéger les shugenja Isawa, tandis que les érudits Asako veillent sur l'histoire et les voies de l'illumination[cite: 2, 7].
+          Cœur spirituel, érudit et théologique de Rokugan, le Clan du Phénix conserve la plus grande bibliothèque de parchemins sacrés et de traités ésotériques de l'Empire. Gouverné par une théocratie de maîtres des cinq Éléments (le Conseil des Cinq Maîtres Isawa), le clan fait primer la communion pacifique avec les esprits et la préservation de la vie sur les ambitions belliqueuses. Ses bushi Shiba ont prêté le serment solennel de servir de rempart physique aux shugenja, tandis que les érudits Asako veillent sur l'histoire et les voies de l'illumination.
         </p>
+        <div class="pt-2 text-[11px] text-red-300/80 font-mono">
+          Références : Livre de Règles 4e Édition, p. 66-67, 121-124 ; The Great Clans, p. 145-177.
+        </div>
       </div>
     </section>
 
-    <!-- 1. MYTHE FONDATEUR & PACTE SACRÉ -->
+    <!-- 1. ORIGINE SACRÉE & CADRE TECHNIQUE -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-4">
         <h2 class="text-base md:text-lg font-bold font-imperial text-red-300 border-b border-red-500/20 pb-2">
           1. Origine Sacrée & Le Serment de Shiba
         </h2>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Lors de la chute des Kami, la tribu humaine menée par le puissant sorcier <b>Isawa</b> refusa de se soumettre à l'autorité des dieux tombés du ciel, se sachant déjà maîtresse de la magie élémentaire[cite: 2]. Comprenant que l'humanité avait besoin de cette connaissance pour survivre aux ténèbres de Fu Leng, le Kami <b>Shiba</b> accomplit un geste impensable : il posa son sabre au sol et s'agenouilla humblement devant Isawa[cite: 2].
+          Lors de la chute des Kami, la tribu humaine menée par le sorcier <b>Isawa</b> refusa initialement de se soumettre aux nouveaux dieux, disposant déjà d'une maîtrise avancée de la magie élémentaire. Conscient que cette science était indispensable à la préservation de l'Empire contre les forces corrompues de Fu Leng, le Kami <b>Shiba</b> déposa son sabre devant Isawa et s'agenouilla humblement.
         </p>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Touché par cette humilité divine, Isawa accepta d'unir son peuple à Shiba à une condition absolue : les descendants de Shiba serviraient de boucliers vivants (*Yojimbo*) aux maîtres shugenja et le clan serait gouverné par les prêtres[cite: 2]. Ainsi naquit le <b>Conseil des Cinq Maîtres Élémentaires</b>, guidant le clan non par la conquête militaire mais par la quête d'harmonie entre le monde des mortels et celui des esprits[cite: 2, 7].
+          Cette alliance consacra un serment perpétuel : les descendants de Shiba s'engagèrent à protéger physiquement les lanceurs de sorts au péril de leur propre existence, confiant la direction politique et spirituelle du clan au <b>Conseil des Cinq Maîtres Élémentaires</b> (Air, Terre, Feu, Eau et Vide).
         </p>
-        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
-          <span class="text-red-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
-          <span class="text-stone-300">Rouge écarlate, orange incandescent et touches d'or céleste (soies vaporeuses, capes cérémonielles brodées du plumage du Phénix et parchemins de prières bénis)[cite: 2].</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-red-400 font-bold uppercase text-[10px] tracking-wider block">Héraldique & Maintien</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Rouge écarlate, orange safran, pourpre et touches d'or céleste. Soies légères ornées de motifs de flammes ou d'ailes de Phénix, parchemins de prières bénis et port sobre du daisho.
+            </p>
+          </div>
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-red-400 font-bold uppercase text-[10px] tracking-wider block">Ouvrages de Référence</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Histoire clanique : <i>The Great Clans</i>, p. 145-155. Magie et Ishiken-do : <i>Emerald Empire</i>, p. 74-78. Les secrets du Vide : <i>The Book of Void</i>.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- CARTE D'IDENTITÉ DU CLAN -->
+      <!-- CARTE D'IDENTITÉ DU JOUEUR -->
       <div class="card-clean rounded-xl p-6 space-y-3">
         <h3 class="text-sm font-bold font-imperial text-red-300 border-b border-red-500/20 pb-2">
-          Profil de Clan
+          Profil de Création PJ
         </h3>
         <ul class="text-xs space-y-2 text-stone-300">
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Affinité Majeure :</span>
-            <b class="text-red-400">Magie Élémentaire & Vide[cite: 2, 7]</b>
+            <span class="text-stone-500">Anneau Majeur :</span>
+            <b class="text-red-400">Vide & Éléments</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Kami Protecteur :</span>
-            <b>Shiba[cite: 2]</b>
+            <span class="text-stone-500">Kami Fondateur :</span>
+            <b>Shiba</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Gouvernance :</span>
-            <b>Le Conseil des 5 Maîtres[cite: 2, 7]</b>
+            <b>Conseil des 5 Maîtres</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Forteresse Mère :</span>
-            <b>Kyuden Isawa / Shiro Shiba[cite: 2, 7]</b>
+            <span class="text-stone-500">Palais Principaux :</span>
+            <b>Kyuden Isawa & Shiro Shiba</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Spécialité :</span>
+            <b>Haute Théologie & Yojimbo</b>
           </li>
           <li class="flex justify-between">
-            <span class="text-stone-500">Armes Emblématiques :</span>
-            <b>Yari d'hast & Rouleau de sorts[cite: 2]</b>
+            <span class="text-stone-500">Livre de Base 4e :</span>
+            <b class="text-red-400">Pages 121-124</b>
           </li>
         </ul>
         <div class="pt-2">
           <a href="../createcharacter.html" class="w-full block py-2 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-center text-xs uppercase tracking-wider transition">
-            Créer un samouraï Phénix
+            Forger un samouraï Phénix
           </a>
         </div>
       </div>
     </section>
 
-    <!-- 2. LES TROIS FAMILLES MAJEURES DU PHÉNIX -->
+    <!-- 2. LES QUATRE FAMILLES DU PHÉNIX -->
     <section class="space-y-4">
-      <div class="border-b border-red-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">2. Les Familles du Clan & Leurs Devoirs Sacrés</h2>
-        <span class="text-xs text-stone-400">Le mariage mystique entre le commandement théocratique, la protection martiale désintéressée et l'érudition philosophique[cite: 2, 7].</span>
+      <div class="border-b border-red-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">2. Les Familles du Clan</h2>
+        <span class="text-xs text-stone-400">Livre de Règles 4e Édition, p. 121-122 ; The Great Clans, p. 156-161.</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
 
         <!-- ISAWA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Isawa</h3>
-            <span class="text-[10px] text-red-400 font-bold">+1 Volonté[cite: 2]</span>
+            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Volonté</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Les souverains spirituels du Phénix et les plus grands lanceurs de sorts du monde connu[cite: 2, 7]. Leurs shugenja ne souffrent d'aucune déficience élémentaire et sont les seuls mortels capables de manier naturellement la magie insaisissable du Vide (*Ishiken-do*)[cite: 2, 7]. Leur soif de connaissance mystique les pousse parfois aux limites de la prudence[cite: 2, 7].
+            Lignée dirigeante et autorité mystique absolue du clan. Les shugenja Isawa possèdent une polyvalence élémentaire totale sans aucune déficience native et sont les seuls capables d'étudier légitimement la manipulation directe de l'Anneau de Vide (Ishiken-do).
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Maîtres des éléments, Ishiken du Vide, législateurs religieux[cite: 2, 7].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Maîtres des éléments, prêtres du Vide (Ishiken), érudits et conseillers théologiques.
+          </div>
         </div>
 
         <!-- SHIBA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Shiba</h3>
-            <span class="text-[10px] text-red-400 font-bold">+1 Perception[cite: 2]</span>
+            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Perception</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Descendants directs du Kami fondateur, les Shiba sont pourtant les serviteurs dévoués de leurs frères[cite: 2, 7]. Bushi-philosophes et gardes du corps (*yojimbo*), ils manient la lance et le sabre avec une retenue exemplaire, n'attaquant que pour protéger une vie innocente ou canaliser les bénédictions des shugenja qu'ils escortent[cite: 2, 7].
+            Descendants directs du Kami fondateur. Dépositaires d'une tradition martiale fondée sur l'abnégation, la protection d'autrui et la philosophie, les guerriers Shiba servent principalement d'escortes rapprochées (yojimbo) pour préserver les prêtres lors de leurs rituels.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Gardes du corps dévoués, guerriers pacifistes, lettrés[cite: 2, 7].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Gardes du corps dévoués (yojimbo), lanciers philosophes, officiers défensifs et duellistes.
+          </div>
         </div>
 
         <!-- ASAKO -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Asako</h3>
-            <span class="text-[10px] text-red-400 font-bold">+1 Intuition[cite: 2]</span>
+            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Intuition</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Fondée par dame Asako, l'épouse de Yogo[cite: 2, 7]. Érudits paisibles, médecins et historiens méticuleux, ils conservent la mémoire des dynasties éteintes[cite: 2]. En secret, certains disciples étudient la voie des *Henshin*, des moines capables de transcender la condition mortelle pour transformer leur chair en pur élément[cite: 2].
+            Lignée d'historiens, de médecins et de diplomates pacifiques. La famille abrite également l'ordre monastique secret des Henshin, des ascètes cherchant à transcender les faiblesses du corps mortel par la compréhension profonde des énigmes de l'univers.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Érudits de cour, archivistes impériaux, médecins et moines Henshin[cite: 2].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Moines Henshin, archivistes impériaux, médecins légistes, diplomates de conciliation.
+          </div>
+        </div>
+
+        <!-- AGASHA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-baseline">
+            <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Agasha</h3>
+            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Intelligence</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            Ancienne famille du Dragon ayant rejoint le Phénix au XIIe siècle. Chercheurs, métallurgistes et alchimistes, les Agasha fusionnent la théologie avec l'expérimentation matérielle et la concoction de poudres pour approfondir la connaissance des esprits du Feu et de la Terre.
+          </p>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Shugenja alchimistes, herboristes de précision, forgerons élémentaires et théoriciens.
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- 3. LE PHÉNIX ET LE BUSHIDO -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-red-300 border-b border-red-500/20 pb-2">
-        3. Le Cœur du Roleplay : Le Phénix face au Bushido
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
-            <span class="font-bold text-red-200 text-sm">La Compassion (Jin) & La Sagesse[cite: 2]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Le Phénix considère que chaque vie fauchée dans un duel futile ou sur une plaine de bataille est un échec pour l'intelligence humaine[cite: 2, 7]. La véritable maîtrise consiste à apaiser les passions destructrices avant qu'elles n'embrasent les provinces[cite: 2, 7]. Même un bushi Shiba préférera désarmer ou contenir son ennemi plutôt que de lui ôter la vie[cite: 2, 7].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
-            <span class="font-bold text-red-200 text-sm">L'Arrogance Mystique & Le Pacifisme Aveugle[cite: 2, 7]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Parce qu'ils dialoguent avec les esprits de l'univers, certains maîtres Isawa regardent les affaires mortelles avec une condescendance coupable[cite: 2, 7]. Leur refus obstiné de mobiliser leurs armées les rend vulnérables aux offensives préventives du Lion ou du Crabe, et leur curiosité pour les magies obscures a parfois frôlé de tragiques désastres[cite: 2, 7].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-red-300 border-b border-red-500/20 pb-2">
-        4. Guide d'Interprétation : Jouer un Samouraï du Phénix
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        <div class="space-y-2">
-          <h3 class="font-bold text-red-200 font-imperial text-sm">Allure & Sérénité</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Vos vêtements sont impeccables, souples et confectionnés dans des soies rouges et dorées évoquant le feu rituel[cite: 2]. Vous parlez d'une voix posée et prévenante, attentif aux murmures des esprits environnants (l'odeur de la cendre, la brise sur l'étang)[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-red-200 font-imperial text-sm">Rapports avec les autres Clans</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Vous partagez la quête d'harmonie esthétique de la <b>Grue</b>, mais trouvez ses querelles de salon futiles[cite: 2]. Vous admirez le mysticisme du <b>Dragon</b>[cite: 2]. La violence impulsive du <b>Lion</b> vous effraie, tout comme vous redoutez la noirceur pragmatique du <b>Scorpion</b>[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-red-200 font-imperial text-sm">Idées de Rôles Contrastés</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Un <b>bushi Shiba</b> tourmenté qui a dû tuer pour sauver son maître et tente d'expier sa faute par la méditation[cite: 2, 7] ; un <b>Isawa Ishiken</b> submergé par des visions terrifiantes du Vide[cite: 2, 7] ; ou un <b>érudit Asako</b> découvrant une vérité historique compromettante sur l'Empire qu'il hésite à divulguer[cite: 2].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. ÉCOLES FONDAMENTALES & CAPACITÉS -->
-    <section class="space-y-4">
+    <!-- 3. DOCTRINE & PERCEPTION DU BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-5">
       <div class="border-b border-red-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">5. Écoles Fondamentales de la 4e Édition</h2>
-        <span class="text-xs text-stone-400">Disciplines majeures représentées dans le générateur de fiches[cite: 2].</span>
+        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">
+          3. Doctrine Théologique & Pratique du Bushido
+        </h2>
+        <span class="text-xs text-stone-400">Références : Livre de Règles 4e Édition, p. 66-67, 91-94 ; Emerald Empire, p. 74-77.</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-red-200 font-imperial text-sm">La Compassion (Jin)</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Le Phénix considère que chaque vie fauchée sur un champ de bataille représente un échec spirituel. La doctrine du clan prescrit d'apaiser les conflits par l'arbitrage moral et la médiation avant le recours aux armes. Même au combat, les guerriers Shiba cherchent à neutraliser la menace sans cruauté inutile.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-red-200 font-imperial text-sm">Responsabilité Magique</h3>
+          <p class="text-stone-300 leading-relaxed">
+            La manipulation des forces élémentaires est envisagée comme un sacerdoce sacré plutôt qu'un outil de domination politique. Les Isawa veillent rigoureusement à empêcher la propagation de la Souillure et des magies de sang (Maho), appliquant une surveillance étroite sur toute recherche hétérodoxe.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-red-200 font-imperial text-sm">Diplomatie Clanique</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Le clan entretient des relations pacifiques et respectueuses avec le <b>Clan de la Grue</b>. Le mysticisme du <b>Dragon</b> est compris, bien que la sécession des Agasha ait suscité des tensions historiques. L'impulsivité du <b>Lion</b> est perçue comme un danger constant, tandis que les méthodes du <b>Scorpion</b> sont surveillées avec sévérité.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LES TROIS ÉCOLES FONDAMENTALES (LIVRE DE RÈGLES 4E ÉDITION) -->
+    <section class="space-y-4">
+      <div class="border-b border-red-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">4. Écoles Fondamentales de Base</h2>
+        <span class="text-xs text-stone-400">Règles officielles : Livre de Règles 4e Édition, pages 121 à 124.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
         
         <!-- BUSHI SHIBA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-red-200 text-sm font-imperial">École de Bushi Shiba[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Yojimbo • Vide[cite: 2, 7]</span>
+            <span class="font-bold text-red-200 text-sm font-imperial">École de Bushi Shiba</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Bushi • Livre de Base p. 122</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Voie du Phénix.</b> Peut dépenser 2 points de Vide pour obtenir +2g2 au lieu du bonus standard de +1g1[cite: 2]. L'action Défendre un allié (*Guard*) devient une Action Gratuite (+5 ND Armure de la cible)[cite: 2]. Aux rangs supérieurs, il modifie les ND des sorts alliés et attaque en Action Simple[cite: 2, 7].
+            <b>Bonus de Trait :</b> +1 Agilité.<br>
+            <b>Honneur de départ :</b> 5,5.<br>
+            <b>Compétences de Départ :</b> Armes d'Hast (Lance/Yari), Connaissance : Théologie, Défense, Iaijutsu, Kenjutsu, Kyujutsu, une compétence Noble ou de Bugei au choix.<br>
+            <b>Technique de Rang 1 (La Voie du Phénix) :</b> La manœuvre Défendre (Guard) s'effectue comme une Action Gratuite (au lieu d'une Action Simple). Lorsqu'il dépense un point de Vide pour améliorer un jet, il bénéficie d'un bonus de +2g2 (au lieu de +1g1).
           </p>
         </div>
 
         <!-- SHUGENJA ISAWA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-red-200 text-sm font-imperial">École de Shugenja Isawa[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Éléments • Ishiken[cite: 2]</span>
+            <span class="font-bold text-red-200 text-sm font-imperial">École de Shugenja Isawa</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Shugenja • Livre de Base p. 123</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Affinité & Polyvalence Élémentaire.</b> Les Isawa choisissent une Affinité avec un Élément mais ne souffrent d'aucune Déficience[cite: 2]. Ils disposent du plus vaste choix de parchemins et peuvent acheter l'avantage *Ishiken-do* à coût réduit pour canaliser la magie du Vide[cite: 2].
+            <b>Bonus de Trait :</b> +1 Volonté.<br>
+            <b>Affinité / Déficience :</b> Affinité au choix (Air, Terre, Feu ou Eau), <i>Aucune Déficience</i>.<br>
+            <b>Honneur de départ :</b> 4,5.<br>
+            <b>Compétences de Départ :</b> Calligraphie (Chiffres), Connaissance : Théologie, Érudition, Méditation, trois compétences Nobles ou de Connaissance au choix.<br>
+            <b>Technique (La Grâce des Éléments) :</b> Débute avec un sort supplémentaire de niveau 1 de son Affinité. Ne subit aucun malus de Déficience élémentaire et peut acquérir l'Avantage Ishiken-do pour manipuler les sorts de Vide.
+          </p>
+        </div>
+
+        <!-- MOINE HENSHIN ASAKO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-red-200 text-sm font-imperial">Moine Henshin Asako</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-orange-300 font-bold border border-orange-500/30">Moine • Livre de Base p. 124</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Volonté.<br>
+            <b>Honneur de départ :</b> 5,5.<br>
+            <b>Compétences de Départ :</b> Cérémonie du Thé, Connaissance : Histoire, Connaissance : Théologie, Érudition, Méditation, une compétence d'Artisanat au choix, une compétence Noble ou de Bugei au choix.<br>
+            <b>Technique de Rang 1 (Les Énigmes Élémentaires) :</b> Le moine peut canaliser les énigmes de la Terre, de l'Air, du Feu ou de l'Eau pour altérer temporairement ses traits physiques et mentaux ou ceux de ses alliés proches.
           </p>
         </div>
 
       </div>
     </section>
 
-    <!-- NAVIGATION ENTRE LES CLANS -->
-    <nav aria-label="Navigation des clans" class="pt-6 border-t border-red-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
-      <a href="mante.html" class="text-sky-300 hover:text-sky-200 font-imperial">← Clan de la Mante</a>
-      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
-      <a href="scorpion.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-purple-400 border border-stone-800 font-imperial">Clan du Scorpion →</a>
-    </nav>
+    <!-- 5. VOIES ALTERNATIVES & PROFILS AVANCÉS -->
+    <section class="card-clean rounded-xl p-6 space-y-3">
+      <div class="border-b border-red-500/20 pb-2">
+        <h3 class="text-sm font-bold font-imperial text-red-300">
+          5. Voies Alternatives & Écoles Avancées (Pour optimiser son PJ)
+        </h3>
+        <span class="text-[11px] text-stone-400">Options officielles complémentaires pour développer son personnage.</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs pt-1">
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-red-300 block">Isawa Tensai</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Livre de Règles 4e Édition, p. 248 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Shugenja ultra-spécialisé dans un élément unique, réduisant les temps d'incantation et surpassant les protections mystiques.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-red-300 block">Asako Inquisitor</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 227 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Inquisiteur spirituel chargé de déceler les corruptions doctrinales, les faux serments et la sorcellerie Maho.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-red-300 block">Shiba Yojimbo</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 162 (Voie Alternative Rang 3)</span>
+          <p class="text-stone-300 text-[11px]">Garde du corps d'élite sacrifiant ses propres réserves de Vide pour absorber les blessures destinées à son protégé.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-red-300 block">Elemental Guard</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 161-162 (Voie Alternative Rang 2)</span>
+          <p class="text-stone-300 text-[11px]">Bushi d'élite entraîné aux côtés des shugenja pour imprégner ses frappes d'énergie élémentaire.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-red-300 block">Asako Diplomat (Courtisan)</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 228 (Courtisan de Base)</span>
+          <p class="text-stone-300 text-[11px]">Négociateur de cour érudit utilisant les précédents historiques et l'éthique pour désamorcer les conflits armés.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-red-300 block">Agasha Shugenja (Phénix)</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 160-161 (Shugenja de Base)</span>
+          <p class="text-stone-300 text-[11px]">Prêtre alchimiste combinant les éléments du Feu et de la Terre dans des mixtures volatiles et préparations de forge.</p>
+        </div>
+      </div>
+    </section>
 
   </main>
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan du Phénix
+    Chronique L5R 4e Édition — MJ David • Fiche technique du Clan du Phénix
   </footer>
 
 </body>
