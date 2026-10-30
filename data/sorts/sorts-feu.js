@@ -1,4 +1,4 @@
-export const SORTS_FEU = [
+const SORTS_FEU = [
   {
     id: "fire-1-biting-steel",
     name: "La Morsure de l'Acier (Biting Steel)",
