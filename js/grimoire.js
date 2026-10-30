@@ -1,16 +1,10 @@
 /**
  * js/grimoire.js — Moteur interactif du Grimoire L5R 4e Édition
- * 
- * Correctifs appliqués :
- * 1. Protection XSS stricte : construction des badges de filtres en DOM natif avec textContent.
- * 2. Unification du Rang de Maîtrise : lecture prioritaire de spell.mastery / rang / rank ("Universel" -> 0).
- * 3. Scope et événements : attachement dynamique des écouteurs addEventListener sur les boutons ✕ et exposition globale sur window.
  */
 
 (function () {
   let isMahoUnlocked = false;
 
-  // Normalisation Unicode : minuscules, suppression des accents et espaces superflus
   function normalizeText(str) {
     return (str || "")
       .toString()
@@ -20,7 +14,6 @@
       .trim();
   }
 
-  // Échappement HTML préventif pour injection sécurisée
   function escapeHtml(str) {
     return (str || "").toString().replace(/[&<>"']/g, function (c) {
       return {
@@ -33,27 +26,24 @@
     });
   }
 
-  // Slug stable pour les ancres (#sort-<id>)
   function slugify(text) {
     return normalizeText(text)
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
   }
 
-  // Résolution canonique du rang de maîtrise (supporte mastery, rang, rank, et la valeur "universel")
+  // Lecture prioritaire et stricte du rang de maîtrise (mastery -> maitrise -> rang)
   function getRank(spell) {
-    const r = spell.rang ?? spell.rank ?? spell.mastery ?? 0;
+    const r = spell.mastery ?? spell.maitrise ?? spell.rang ?? spell.rank ?? spell.niveau ?? 0;
     return normalizeText(r) === "universel" ? 0 : (parseInt(r, 10) || 0);
   }
 
-  // Récupération universelle des sorts
   function getSpellsData() {
     const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
     if (Array.isArray(raw)) return raw;
     return Object.values(raw).filter(v => v && typeof v === "object");
   }
 
-  // Extraction uniforme de l'élément en minuscules
   function getSpellElement(spell) {
     if (spell.isMaho) return "maho";
     const raw = spell.element || spell.anneau || spell.ring || spell.elem || "";
@@ -71,7 +61,6 @@
     return norm || "universel";
   }
 
-  // Classe CSS selon l'élément
   function getElementBadgeClass(element) {
     switch (element) {
       case "terre": return "badge-terre";
@@ -105,7 +94,7 @@
 
     const allSpells = getSpellsData();
 
-    // 1. Filtrage Mahō (masqué sans mot de passe)
+    // 1. Filtrage Mahō
     let filtered = allSpells.filter(spell => {
       const el = getSpellElement(spell);
       if (el === "maho" && !isMahoUnlocked) return false;
@@ -123,7 +112,7 @@
       filtered = filtered.filter(spell => getRank(spell) === targetRank);
     }
 
-    // 4. Recherche texte tolérante (nom, desc, mots-clés, portée)
+    // 4. Recherche texte
     if (query !== "") {
       filtered = filtered.filter(spell => {
         const nom = normalizeText(spell.name || spell.nom);
@@ -137,10 +126,8 @@
       });
     }
 
-    // 5. Compteur de résultats
     if (counter) counter.textContent = filtered.length;
 
-    // 6. Rendu des cartes de sorts
     container.innerHTML = "";
     if (filtered.length === 0) {
       if (noResults) noResults.classList.remove("hidden");
@@ -168,7 +155,6 @@
 
         card.innerHTML = `
           <div>
-            <!-- En-tête -->
             <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
               <div>
                 <h2 class="font-bold font-imperial text-amber-200 text-sm md:text-base leading-tight">
@@ -193,7 +179,6 @@
               </button>
             </div>
 
-            <!-- Caractéristiques techniques -->
             <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] text-stone-400 mt-2 bg-black/40 p-2 rounded border border-stone-900">
               <div><b class="text-stone-300">Portée :</b> ${escapeHtml(spell.range || spell.portee || "Personnelle")}</div>
               <div><b class="text-stone-300">Zone :</b> ${escapeHtml(spell.area || spell.zone || "1 cible")}</div>
@@ -201,13 +186,11 @@
               <div><b class="text-stone-300">Augmentations :</b> ${escapeHtml(spell.raises || spell.augmentations || "Aucune")}</div>
             </div>
 
-            <!-- Description / Effet -->
             <div class="mt-2.5 text-stone-300 text-xs leading-relaxed space-y-1.5">
               <p>${escapeHtml(spell.desc || spell.description || spell.effet || "")}</p>
             </div>
           </div>
 
-          <!-- Pied de carte -->
           <div class="pt-2 border-t border-stone-900 text-[9px] text-stone-600 flex justify-between items-center">
             <span>${escapeHtml(spell.source || "Livre de Base 4e Édition")}</span>
             <span class="text-[8px] font-mono text-stone-700">#${escapeHtml(cardId)}</span>
@@ -222,7 +205,7 @@
   }
 
   // =========================================================================
-  // GESTION SÉCURISÉE DES BADGES (ANTI-XSS & ÉCOUTEURS LOCAUX)
+  // GESTION DES BADGES SÉCURISÉE CONTRE XSS
   // =========================================================================
   function renderActiveFilterBadges() {
     const container = document.getElementById("active-filters-badges");
@@ -233,14 +216,11 @@
     const elementSelect = document.getElementById("element-select");
     const rankSelect = document.getElementById("rank-select");
 
-    // Badge 1 : Texte de recherche (?q=) — Protection XSS via textContent
     const queryVal = searchInput ? searchInput.value.trim() : "";
     if (queryVal) {
       const badge = document.createElement("span");
       badge.className = "px-2 py-0.5 rounded bg-amber-950/60 border border-amber-600/40 text-amber-300 text-[10px] flex items-center gap-1";
-
-      const textNode = document.createTextNode(`« ${queryVal} »`);
-      badge.appendChild(textNode);
+      badge.appendChild(document.createTextNode(`« ${queryVal} »`));
 
       const btn = document.createElement("button");
       btn.type = "button";
@@ -257,11 +237,9 @@
       container.appendChild(badge);
     }
 
-    // Badge 2 : Élément (?el=)
     if (elementSelect && elementSelect.value !== "tous") {
       const badge = document.createElement("span");
       badge.className = "px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-300 text-[10px] flex items-center gap-1";
-
       const label = elementSelect.options[elementSelect.selectedIndex]?.text || elementSelect.value.toUpperCase();
       badge.appendChild(document.createTextNode(label));
 
@@ -280,11 +258,9 @@
       container.appendChild(badge);
     }
 
-    // Badge 3 : Rang de Maîtrise (?rang=)
     if (rankSelect && rankSelect.value !== "tous") {
       const badge = document.createElement("span");
       badge.className = "px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-300 text-[10px] flex items-center gap-1";
-
       const label = parseInt(rankSelect.value, 10) === 0 ? "Universel" : `Rang ${rankSelect.value}`;
       badge.appendChild(document.createTextNode(label));
 
@@ -305,7 +281,7 @@
   }
 
   // =========================================================================
-  // SYNCHRONISATION URL (SEARCH PARAMS & ANCRES)
+  // SYNCHRONISATION URL & NAVIGATION
   // =========================================================================
   function syncFiltersToURL() {
     const searchInput = document.getElementById("search-input");
@@ -388,9 +364,6 @@
     }
   }
 
-  // =========================================================================
-  // GESTION DU MAHŌ ET DU MOT DE PASSE
-  // =========================================================================
   window.toggleMahoSecurityModal = function (forceState) {
     const modal = document.getElementById("maho-modal");
     const errorEl = document.getElementById("maho-error");
@@ -461,13 +434,9 @@
     });
   };
 
-  // Exposition globale pour prévenir toute ReferenceError externe
   window.applyFilters = applyFilters;
   window.syncFiltersToURL = syncFiltersToURL;
 
-  // =========================================================================
-  // INITIALISATION AU CHARGEMENT DU DOM
-  // =========================================================================
   function initApp() {
     try {
       if (sessionStorage.getItem("l5r_maho_unlocked") === "true") {
