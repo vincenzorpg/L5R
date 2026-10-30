@@ -1,4 +1,4 @@
-export const SORTS_UNIVERSELS = [
+const SORTS_UNIVERSELS = [
   {
     id: "univ-sense",
     name: "Sentir les Kami (Sense)",
