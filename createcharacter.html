@@ -164,6 +164,10 @@
             <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
           </label>
           <button onclick="exportOfficialPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition">🖨️ PDF</button>
+          <button type="button"   id="btn-export-carnet"   onclick="exportToCarnetRokugan()"   class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 hover:border-amber-400 font-bold text-xs tracking-wider transition flex items-center gap-2 shadow-md">
+          <span>📖</span>
+          <span>Exporter pour le Carnet de Rokugan</span>
+          </button>
           <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
         </div>
 
