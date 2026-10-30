@@ -1,8 +1,10 @@
 /**
  * js/grimoire.js — Moteur interactif du Grimoire L5R 4e Édition
  * 
- * Compatible avec la structure exacte des données :
- * id, name, element, mastery, keywords, range, area, duration, raises, desc
+ * Correctifs appliqués :
+ * 1. Protection XSS stricte : construction des badges de filtres en DOM natif avec textContent.
+ * 2. Unification du Rang de Maîtrise : lecture prioritaire de spell.mastery / rang / rank ("Universel" -> 0).
+ * 3. Scope et événements : attachement dynamique des écouteurs addEventListener sur les boutons ✕ et exposition globale sur window.
  */
 
 (function () {
@@ -18,14 +20,33 @@
       .trim();
   }
 
-  // Slug stable pour les ancres
+  // Échappement HTML préventif pour injection sécurisée
+  function escapeHtml(str) {
+    return (str || "").toString().replace(/[&<>"']/g, function (c) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[c];
+    });
+  }
+
+  // Slug stable pour les ancres (#sort-<id>)
   function slugify(text) {
     return normalizeText(text)
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
   }
 
-  // Récupération sécurisée du catalogue fusionné dans sorts-data.js
+  // Résolution canonique du rang de maîtrise (supporte mastery, rang, rank, et la valeur "universel")
+  function getRank(spell) {
+    const r = spell.rang ?? spell.rank ?? spell.mastery ?? 0;
+    return normalizeText(r) === "universel" ? 0 : (parseInt(r, 10) || 0);
+  }
+
+  // Récupération universelle des sorts
   function getSpellsData() {
     const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
     if (Array.isArray(raw)) return raw;
@@ -50,21 +71,7 @@
     return norm || "universel";
   }
 
-  // Extraction du rang (lit prioritairement spell.mastery)
-  function getSpellRank(spell) {
-    const val = spell.mastery !== undefined ? spell.mastery :
-               (spell.maitrise !== undefined ? spell.maitrise :
-               (spell.rang !== undefined ? spell.rang :
-               (spell.rank !== undefined ? spell.rank : null)));
-
-    if (val !== null && val !== undefined) {
-      const m = val.toString().match(/\d+/);
-      if (m) return parseInt(m[0], 10);
-    }
-    return 0;
-  }
-
-  // Badge CSS selon l'élément
+  // Classe CSS selon l'élément
   function getElementBadgeClass(element) {
     switch (element) {
       case "terre": return "badge-terre";
@@ -98,7 +105,7 @@
 
     const allSpells = getSpellsData();
 
-    // 1. Filtrage Mahō (masqué sans déverrouillage préalable)
+    // 1. Filtrage Mahō (masqué sans mot de passe)
     let filtered = allSpells.filter(spell => {
       const el = getSpellElement(spell);
       if (el === "maho" && !isMahoUnlocked) return false;
@@ -110,13 +117,13 @@
       filtered = filtered.filter(spell => getSpellElement(spell) === selectedElement);
     }
 
-    // 3. Filtre par Rang de Maîtrise (mastery)
+    // 3. Filtre par Rang de Maîtrise
     if (selectedRank !== "tous") {
       const targetRank = parseInt(selectedRank, 10);
-      filtered = filtered.filter(spell => getSpellRank(spell) === targetRank);
+      filtered = filtered.filter(spell => getRank(spell) === targetRank);
     }
 
-    // 4. Recherche plein texte (nom, desc, mots-clés, portée)
+    // 4. Recherche texte tolérante (nom, desc, mots-clés, portée)
     if (query !== "") {
       filtered = filtered.filter(spell => {
         const nom = normalizeText(spell.name || spell.nom);
@@ -130,10 +137,10 @@
       });
     }
 
-    // 5. Mise à jour du compteur
+    // 5. Compteur de résultats
     if (counter) counter.textContent = filtered.length;
 
-    // 6. Rendu HTML
+    // 6. Rendu des cartes de sorts
     container.innerHTML = "";
     if (filtered.length === 0) {
       if (noResults) noResults.classList.remove("hidden");
@@ -147,8 +154,9 @@
         const nameSlug = slugify(spellName);
 
         const spellElem = getSpellElement(spell);
-        const spellRank = getSpellRank(spell);
+        const spellRank = getRank(spell);
         const badgeClass = getElementBadgeClass(spellElem);
+        const rankLabel = spellRank === 0 ? "(Universel)" : `— Rang ${spellRank}`;
 
         const keywordsRaw = spell.keywords || spell.motsCles;
         const keywordsStr = Array.isArray(keywordsRaw) ? keywordsRaw.join(", ") : (keywordsRaw || "");
@@ -164,20 +172,20 @@
             <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
               <div>
                 <h2 class="font-bold font-imperial text-amber-200 text-sm md:text-base leading-tight">
-                  <a href="#${cardId}" class="hover:underline hover:text-amber-300" title="Lien direct vers ce sort">
-                    ${spellName}
+                  <a href="#${escapeHtml(cardId)}" class="hover:underline hover:text-amber-300" title="Lien direct vers ce sort">
+                    ${escapeHtml(spellName)}
                   </a>
                 </h2>
                 <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                   <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${badgeClass}">
-                    ${spellElem.toUpperCase()} ${spellRank === 0 ? "(Universel)" : `— Rang ${spellRank}`}
+                    ${escapeHtml(spellElem.toUpperCase())} ${escapeHtml(rankLabel)}
                   </span>
-                  ${keywordsStr ? `<span class="text-[9px] text-stone-500 italic">[${keywordsStr}]</span>` : ""}
+                  ${keywordsStr ? `<span class="text-[9px] text-stone-500 italic">[${escapeHtml(keywordsStr)}]</span>` : ""}
                 </div>
               </div>
               <button 
                 type="button"
-                onclick="copySpellDirectLink('${cardId}')" 
+                onclick="copySpellDirectLink('${escapeHtml(cardId)}')" 
                 class="text-stone-500 hover:text-amber-300 text-xs p-1" 
                 title="Copier le lien permanent de ce sort"
               >
@@ -185,24 +193,24 @@
               </button>
             </div>
 
-            <!-- Paramètres techniques -->
+            <!-- Caractéristiques techniques -->
             <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] text-stone-400 mt-2 bg-black/40 p-2 rounded border border-stone-900">
-              <div><b class="text-stone-300">Portée :</b> ${spell.range || spell.portee || "Personnelle"}</div>
-              <div><b class="text-stone-300">Zone :</b> ${spell.area || spell.zone || "1 cible"}</div>
-              <div><b class="text-stone-300">Durée :</b> ${spell.duration || spell.duree || "Instantanée"}</div>
-              <div><b class="text-stone-300">Augmentations :</b> ${spell.raises || spell.augmentations || "Aucune"}</div>
+              <div><b class="text-stone-300">Portée :</b> ${escapeHtml(spell.range || spell.portee || "Personnelle")}</div>
+              <div><b class="text-stone-300">Zone :</b> ${escapeHtml(spell.area || spell.zone || "1 cible")}</div>
+              <div><b class="text-stone-300">Durée :</b> ${escapeHtml(spell.duration || spell.duree || "Instantanée")}</div>
+              <div><b class="text-stone-300">Augmentations :</b> ${escapeHtml(spell.raises || spell.augmentations || "Aucune")}</div>
             </div>
 
             <!-- Description / Effet -->
             <div class="mt-2.5 text-stone-300 text-xs leading-relaxed space-y-1.5">
-              <p>${spell.desc || spell.description || spell.effet || ""}</p>
+              <p>${escapeHtml(spell.desc || spell.description || spell.effet || "")}</p>
             </div>
           </div>
 
           <!-- Pied de carte -->
           <div class="pt-2 border-t border-stone-900 text-[9px] text-stone-600 flex justify-between items-center">
-            <span>${spell.source || "Livre de Base 4e Édition"}</span>
-            <span class="text-[8px] font-mono text-stone-700">#${cardId}</span>
+            <span>${escapeHtml(spell.source || "Livre de Base 4e Édition")}</span>
+            <span class="text-[8px] font-mono text-stone-700">#${escapeHtml(cardId)}</span>
           </div>
         `;
 
@@ -213,6 +221,9 @@
     renderActiveFilterBadges();
   }
 
+  // =========================================================================
+  // GESTION SÉCURISÉE DES BADGES (ANTI-XSS & ÉCOUTEURS LOCAUX)
+  // =========================================================================
   function renderActiveFilterBadges() {
     const container = document.getElementById("active-filters-badges");
     if (!container) return;
@@ -222,34 +233,79 @@
     const elementSelect = document.getElementById("element-select");
     const rankSelect = document.getElementById("rank-select");
 
-    if (searchInput && searchInput.value.trim()) {
-      container.innerHTML += `
-        <span class="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-600/40 text-amber-300 text-[10px] flex items-center gap-1">
-          « ${searchInput.value.trim()} »
-          <button onclick="document.getElementById('search-input').value=''; applyFilters(); syncFiltersToURL();" class="hover:text-white font-bold ml-0.5">✕</button>
-        </span>
-      `;
+    // Badge 1 : Texte de recherche (?q=) — Protection XSS via textContent
+    const queryVal = searchInput ? searchInput.value.trim() : "";
+    if (queryVal) {
+      const badge = document.createElement("span");
+      badge.className = "px-2 py-0.5 rounded bg-amber-950/60 border border-amber-600/40 text-amber-300 text-[10px] flex items-center gap-1";
+
+      const textNode = document.createTextNode(`« ${queryVal} »`);
+      badge.appendChild(textNode);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hover:text-white font-bold ml-1 cursor-pointer";
+      btn.textContent = "✕";
+      btn.title = "Effacer la recherche";
+      btn.addEventListener("click", () => {
+        searchInput.value = "";
+        applyFilters();
+        syncFiltersToURL();
+      });
+
+      badge.appendChild(btn);
+      container.appendChild(badge);
     }
+
+    // Badge 2 : Élément (?el=)
     if (elementSelect && elementSelect.value !== "tous") {
-      container.innerHTML += `
-        <span class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-300 text-[10px] flex items-center gap-1">
-          ${elementSelect.value.toUpperCase()}
-          <button onclick="document.getElementById('element-select').value='tous'; applyFilters(); syncFiltersToURL();" class="hover:text-white font-bold ml-0.5">✕</button>
-        </span>
-      `;
+      const badge = document.createElement("span");
+      badge.className = "px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-300 text-[10px] flex items-center gap-1";
+
+      const label = elementSelect.options[elementSelect.selectedIndex]?.text || elementSelect.value.toUpperCase();
+      badge.appendChild(document.createTextNode(label));
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hover:text-white font-bold ml-1 cursor-pointer";
+      btn.textContent = "✕";
+      btn.title = "Réinitialiser l'élément";
+      btn.addEventListener("click", () => {
+        elementSelect.value = "tous";
+        applyFilters();
+        syncFiltersToURL();
+      });
+
+      badge.appendChild(btn);
+      container.appendChild(badge);
     }
+
+    // Badge 3 : Rang de Maîtrise (?rang=)
     if (rankSelect && rankSelect.value !== "tous") {
-      container.innerHTML += `
-        <span class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-300 text-[10px] flex items-center gap-1">
-          Rang ${rankSelect.value}
-          <button onclick="document.getElementById('rank-select').value='tous'; applyFilters(); syncFiltersToURL();" class="hover:text-white font-bold ml-0.5">✕</button>
-        </span>
-      `;
+      const badge = document.createElement("span");
+      badge.className = "px-2 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-300 text-[10px] flex items-center gap-1";
+
+      const label = parseInt(rankSelect.value, 10) === 0 ? "Universel" : `Rang ${rankSelect.value}`;
+      badge.appendChild(document.createTextNode(label));
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hover:text-white font-bold ml-1 cursor-pointer";
+      btn.textContent = "✕";
+      btn.title = "Réinitialiser le rang";
+      btn.addEventListener("click", () => {
+        rankSelect.value = "tous";
+        applyFilters();
+        syncFiltersToURL();
+      });
+
+      badge.appendChild(btn);
+      container.appendChild(badge);
     }
   }
 
   // =========================================================================
-  // URL SEARCH PARAMS & ANCRES (#sort-<id>)
+  // SYNCHRONISATION URL (SEARCH PARAMS & ANCRES)
   // =========================================================================
   function syncFiltersToURL() {
     const searchInput = document.getElementById("search-input");
@@ -317,7 +373,6 @@
     if (!hash || !hash.startsWith("#sort-")) return;
 
     const targetId = hash.slice(1);
-    // Recherche par ID direct (ex: sort-air-1-blessed-wind) ou par alias (ex: sort-le-vent-bienveillant)
     let targetElement = document.getElementById(targetId);
     if (!targetElement) {
       targetElement = document.querySelector(`[data-alias="${CSS.escape(targetId)}"]`);
@@ -406,8 +461,12 @@
     });
   };
 
+  // Exposition globale pour prévenir toute ReferenceError externe
+  window.applyFilters = applyFilters;
+  window.syncFiltersToURL = syncFiltersToURL;
+
   // =========================================================================
-  // INITIALISATION
+  // INITIALISATION AU CHARGEMENT DU DOM
   // =========================================================================
   function initApp() {
     try {
