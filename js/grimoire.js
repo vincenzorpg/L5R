@@ -32,9 +32,18 @@
       .replace(/^-+|-+$/g, "");
   }
 
-  // Lecture prioritaire et stricte du rang de maîtrise (mastery -> maitrise -> rang)
+  function isSpellKiho(spell) {
+    if (spell.isKiho) return true;
+    const elemStr = normalizeText(spell.element || spell.anneau || spell.type || "");
+    if (elemStr.includes("kiho")) return true;
+    const kw = Array.isArray(spell.keywords || spell.motsCles) 
+      ? (spell.keywords || spell.motsCles).join(" ") 
+      : (spell.keywords || spell.motsCles || "");
+    return normalizeText(kw).includes("kiho");
+  }
+
   function getRank(spell) {
-    const r = spell.mastery ?? spell.maitrise ?? spell.rang ?? spell.rank ?? spell.niveau ?? 0;
+    const r = spell.mastery ?? spell.maitrise ?? spell.ring_mastery ?? spell.ringMastery ?? spell.rang ?? spell.rank ?? spell.niveau ?? 0;
     return normalizeText(r) === "universel" ? 0 : (parseInt(r, 10) || 0);
   }
 
@@ -46,6 +55,8 @@
 
   function getSpellElement(spell) {
     if (spell.isMaho) return "maho";
+    if (isSpellKiho(spell)) return "kiho";
+
     const raw = spell.element || spell.anneau || spell.ring || spell.elem || "";
     const norm = normalizeText(raw);
 
@@ -54,8 +65,6 @@
     if (norm.includes("feu") || norm.includes("fire")) return "feu";
     if (norm.includes("air")) return "air";
     if (norm.includes("vide") || norm.includes("void")) return "vide";
-    if (norm.includes("kiho") || spell.isKiho) return "kiho";
-    if (norm.includes("maho")) return "maho";
     if (norm.includes("universel") || norm.includes("universal")) return "universel";
 
     return norm || "universel";
@@ -94,16 +103,29 @@
 
     const allSpells = getSpellsData();
 
-    // 1. Filtrage Mahō
+    // 1. Protection Mahō
     let filtered = allSpells.filter(spell => {
       const el = getSpellElement(spell);
       if (el === "maho" && !isMahoUnlocked) return false;
       return true;
     });
 
-    // 2. Filtre par Élément
+    // 2. Filtre par Élément / Voie
     if (selectedElement !== "tous") {
-      filtered = filtered.filter(spell => getSpellElement(spell) === selectedElement);
+      filtered = filtered.filter(spell => {
+        const el = getSpellElement(spell);
+        if (selectedElement === "kiho") {
+          return el === "kiho" || isSpellKiho(spell);
+        }
+        // Si filtre classique (terre, eau, feu, air, vide) : match les sorts de cet élément
+        // ou les Kihos rattachés à cet anneau
+        if (el === selectedElement) return true;
+        if (isSpellKiho(spell)) {
+          const kihoRing = normalizeText(spell.ring || spell.anneau || "");
+          return kihoRing.includes(selectedElement);
+        }
+        return false;
+      });
     }
 
     // 3. Filtre par Rang de Maîtrise
@@ -121,8 +143,9 @@
           ? (spell.keywords || spell.motsCles).join(" ") 
           : (spell.keywords || spell.motsCles));
         const portee = normalizeText(spell.range || spell.portee);
+        const kihoRing = normalizeText(spell.ring || "");
 
-        return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query);
+        return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query) || kihoRing.includes(query);
       });
     }
 
@@ -143,6 +166,11 @@
         const spellElem = getSpellElement(spell);
         const spellRank = getRank(spell);
         const badgeClass = getElementBadgeClass(spellElem);
+
+        let badgeTitle = spellElem.toUpperCase();
+        if (spellElem === "kiho" && spell.ring) {
+          badgeTitle = `KIHO (${spell.ring.toUpperCase()})`;
+        }
         const rankLabel = spellRank === 0 ? "(Universel)" : `— Rang ${spellRank}`;
 
         const keywordsRaw = spell.keywords || spell.motsCles;
@@ -164,7 +192,7 @@
                 </h2>
                 <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                   <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${badgeClass}">
-                    ${escapeHtml(spellElem.toUpperCase())} ${escapeHtml(rankLabel)}
+                    ${escapeHtml(badgeTitle)} ${escapeHtml(rankLabel)}
                   </span>
                   ${keywordsStr ? `<span class="text-[9px] text-stone-500 italic">[${escapeHtml(keywordsStr)}]</span>` : ""}
                 </div>
