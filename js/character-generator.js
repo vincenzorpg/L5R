@@ -6,14 +6,122 @@
  * - Toucher : (Compétence d'arme + Agilité ou Réflexes) g Trait
  * - Dégâts : VD de l'Arme + Force (+ École / Avantages)
  * - ND d'Armure : 5 + (5 x Réflexes) + Armure (+ Modificateurs)
+ * - Paliers de Maîtrise des compétences (Mastery Abilities : Rangs 3, 5 et 7)
  * - Gestion interactive des choix de compétences d'école (Bugei, Noble, Libre)
  * - Arbre des 5 Techniques d'École avec mise en surbrillance selon l'Insight Rank
  * - Plafond de 15 XP maximum pour les Désavantages
- * - Exportation vers fiche officielle A4 vectorielle
+ * - Exportation vers fiche officielle A4 vectorielle & Carnet de Rokugan
  */
 
 const MAX_DISADVANTAGE_XP = 15;
 
+// =============================================================================
+// 1. PALIERS DE MAÎTRISE OFFICIELS (LIVRE DE BASE 4E ÉDITION)
+// =============================================================================
+const SKILL_MASTERIES = {
+  "kenjutsu": [
+    { rank: 3, label: "Dégainé Éclair", desc: "Dégainer un sabre devient une Action Gratuite." },
+    { rank: 5, label: "Tranchant Affûté", desc: "Les dés de dégâts avec un sabre explosent sur 9 et 10." },
+    { rank: 7, label: "Frappe Fluide", desc: "Porter une attaque de mêlée devient une Action Simple." }
+  ],
+  "iaijutsu": [
+    { rank: 3, label: "Dégainé Réflexe", desc: "Dégainer un sabre devient une Action Gratuite." },
+    { rank: 5, label: "Focalisation", desc: "+1g0 sur les jets de Concentration (Focus) en duel." },
+    { rank: 7, label: "Frappe Ultime", desc: "Les dés de frappe d'Iaijutsu (Strike) explosent sur 9 et 10." }
+  ],
+  "kyujutsu": [
+    { rank: 3, label: "Encoche Rapide", desc: "Encocher et viser devient une Action Gratuite." },
+    { rank: 5, label: "Tir à Bout Portant", desc: "Aucun malus pour tirer sur une cible engagée en mêlée." },
+    { rank: 7, label: "Flèche Éclair", desc: "Les attaques à l'arc deviennent des Actions Simples." }
+  ],
+  "armes lourdes": [
+    { rank: 3, label: "Impact Brutal", desc: "Ignore 3 points de Réduction d'armure adverse." },
+    { rank: 5, label: "Renversement", desc: "1 Augmentation Gratuite pour la manœuvre Renversement (Knockdown)." },
+    { rank: 7, label: "Broyeur", desc: "Les attaques avec armes lourdes deviennent des Actions Simples." }
+  ],
+  "jiujutsu": [
+    { rank: 3, label: "Prise Solide", desc: "+1g0 pour prendre ou maintenir le contrôle d'une Lutte." },
+    { rank: 5, label: "Poings d'Acier", desc: "Dégâts à mains nues augmentés à 0g2 (au lieu de 0g1) + Force." },
+    { rank: 7, label: "Enchaînement", desc: "Les attaques à mains nues deviennent des Actions Simples." }
+  ],
+  "defense": [
+    { rank: 3, label: "Garde Souple", desc: "Ajoute +3 supplémentaire au ND d'Armure en posture Défense." },
+    { rank: 5, label: "Esquive Totale", desc: "Conserve la totalité (au lieu de la moitié) du jet de Défense en Défense Totale." },
+    { rank: 7, label: "Mur Infranchissable", desc: "+5 permanent au ND d'Armure quelle que soit la posture." }
+  ],
+  "courtisan": [
+    { rank: 3, label: "Étiquette Aiguisée", desc: "Gain de +1g0 sur les jets de commérage et d'observation en cour." },
+    { rank: 5, label: "Réseau d'Indiscrétions", desc: "Dépenser 1 point de Vide confère +2g1 (au lieu de +1g1) sur les jets de Cour." },
+    { rank: 7, label: "Maître des Salons", desc: "Immunité contre les pénalités sociales infligées par autrui." }
+  ],
+  "enquete": [
+    { rank: 3, label: "Coup d'Œil", desc: "Augmentation Gratuite sur la recherche d'indices matériels." },
+    { rank: 5, label: "Déduction Pure", desc: "Permet de déceler immédiatement les mensonges flagrants." },
+    { rank: 7, label: "Infaillible", desc: "Les indices et énigmes évidents sont résolus sans jet de dé." }
+  ],
+  "athletisme": [
+    { rank: 3, label: "Bond Aérien", desc: "Distance de saut augmentée de 50 %." },
+    { rank: 5, label: "Course Endurante", desc: "Mouvement gratuit par tour augmenté de +1,5 mètre." },
+    { rank: 7, label: "Agilité Suprême", desc: "Se relever de terre (Prone) est une Action Gratuite." }
+  ],
+  "armes d'hast": [
+    { rank: 3, label: "Allonge Supérieure", desc: "+5 à l'Initiative au premier round d'escarmouche." },
+    { rank: 5, label: "Faucheur", desc: "+1g0 aux dégâts contre cibles montées ou de grande taille." },
+    { rank: 7, label: "Manieuse d'Hast", desc: "Dégainer/armer une arme d'hast est une Action Gratuite." }
+  ],
+  "lances": [
+    { rank: 3, label: "Percée", desc: "Ignore 3 points de Réduction au premier round d'escarmouche." },
+    { rank: 5, label: "Pointe Précise", desc: "Portée de jet de lance augmentée de +1,5 mètre." },
+    { rank: 7, label: "Garde de Pique", desc: "Dégainer/armer une lance est une Action Gratuite." }
+  ]
+};
+
+// Utilitaires de détection des maîtrises
+function getMasteriesHtml(skillName, currentRank) {
+  const normKey = (skillName || "").split('(')[0].trim().toLowerCase();
+  const list = SKILL_MASTERIES[normKey];
+  if (!list || list.length === 0) return "";
+
+  let html = `<div class="mt-2 pt-1.5 border-t border-stone-800/80 space-y-1">`;
+  list.forEach(m => {
+    const isUnlocked = currentRank >= m.rank;
+    if (isUnlocked) {
+      html += `
+        <div class="flex items-start gap-1.5 p-1 rounded bg-amber-950/40 border border-amber-600/40 text-[10px] text-amber-200">
+          <span class="px-1 py-0.2 rounded bg-amber-600 text-black font-extrabold text-[9px] shrink-0 font-imperial">R${m.rank}</span>
+          <div class="leading-tight">
+            <b class="text-amber-300 font-bold">${m.label} :</b>
+            <span class="text-stone-300 text-[9.5px]"> ${m.desc}</span>
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="flex items-start gap-1.5 p-1 rounded bg-black/40 border border-stone-800/60 text-[10px] text-stone-500 opacity-60">
+          <span class="px-1 py-0.2 rounded bg-stone-800 text-stone-400 font-bold text-[9px] shrink-0 font-imperial">R${m.rank}</span>
+          <div class="leading-tight">
+            <span class="font-medium">${m.label}</span>
+            <span class="text-[9px] text-stone-600"> (débloqué au rang ${m.rank})</span>
+          </div>
+        </div>`;
+    }
+  });
+  html += `</div>`;
+  return html;
+}
+
+function getMasteriesSummary(skillName, rank) {
+  const normKey = (skillName || "").split('(')[0].trim().toLowerCase();
+  const list = SKILL_MASTERIES[normKey];
+  if (!list) return "";
+  return list
+    .filter(m => rank >= m.rank)
+    .map(m => `[R${m.rank}: ${m.label}]`)
+    .join(" ");
+}
+
+// =============================================================================
+// 2. PRÉNOMS ROKUGANI
+// =============================================================================
 const ROKUGANI_NAMES = {
   m: [
     { n: "Okado", m: "Porte de la sagesse" }, { n: "Akira", m: "Lumière claire et tranchante" },
@@ -92,7 +200,6 @@ function bootstrap() {
   initClans();
   initCatalogSelectors();
 
-  // Sécurise la sélection de l'armure par défaut si Hida au chargement
   const armSel = document.getElementById('pc-armor');
   if (armSel && (!armSel.value || armSel.value === "0")) {
     if (armSel.querySelector('option[value="10"]')) {
@@ -127,7 +234,7 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // 1. Compétences (Filtrage intelligent incluant les variantes d'école avec parenthèses)
+  // 1. Compétences
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
     const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
@@ -212,7 +319,7 @@ function initCatalogSelectors() {
     }
   }
 
-  // 4. Avantages (Filtrage de ceux déjà sélectionnés)
+  // 4. Avantages
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     const ownedAdvNames = new Set((advantagesList || []).map(a => a.name.toLowerCase().trim()));
@@ -241,7 +348,7 @@ function initCatalogSelectors() {
     if (typeof updateAdvPreview === 'function') updateAdvPreview();
   }
 
-  // 5. Désavantages (Filtrage de ceux déjà sélectionnés)
+  // 5. Désavantages
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     const ownedDisNames = new Set((disadvantagesList || []).map(d => d.name.toLowerCase().trim()));
@@ -273,7 +380,6 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
-// Filtrage strict des écoles selon la famille sélectionnée
 function updateSchoolOptions() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -286,11 +392,8 @@ function updateSchoolOptions() {
   if (!schSel) return;
 
   schSel.innerHTML = "";
-
-  // Filtre les écoles associées à cette famille précise
   let matchingSchools = clan.schools.filter(s => s.family === selectedFamily);
 
-  // Fallback si aucune école n'est spécifiquement étiquetée
   if (matchingSchools.length === 0) {
     matchingSchools = clan.schools;
   }
@@ -332,7 +435,6 @@ function onSchoolChange() {
   resetSheetToNewSelection();
 }
 
-// Réinitialisation lors d'un changement de sélection
 function resetSheetToNewSelection() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -359,7 +461,6 @@ function resetSheetToNewSelection() {
     updateStickyName();
   }
 
-  // Badges visuels de bonus
   ['sta','wil','str','per','ref','awa','agi','int'].forEach(id => {
     const el = document.getElementById(`badge-${id}`);
     if (el) el.textContent = "";
@@ -379,7 +480,6 @@ function resetSheetToNewSelection() {
     if (el) el.textContent = el.textContent ? "+2 F+É" : "+1 École";
   }
 
-  // Remise à zéro stricte des Traits
   for (const [traitName, inputId] of Object.entries(TRAIT_INPUT_IDS)) {
     const input = document.getElementById(inputId);
     if (!input) continue;
@@ -392,7 +492,6 @@ function resetSheetToNewSelection() {
     input.value = baseVal;
   }
 
-  // Compétences d'école avec détection des choix libres
   currentSkills = sch.skills.map(s => {
     const sLower = s.toLowerCase();
     const isChoice = sLower.includes("compétence") || sLower.includes("choix") || sLower.includes("any");
@@ -414,7 +513,6 @@ function resetSheetToNewSelection() {
   });
   renderSkills();
 
-  // Équipement par défaut
   const w1Sel = document.getElementById('pc-weapon-1');
   if (w1Sel) {
     if (sch.id?.includes("hida") || sch.name?.includes("Hida")) {
@@ -447,7 +545,6 @@ function resetSheetToNewSelection() {
   updateAll();
 }
 
-// Rendu des 5 techniques avec mise en valeur selon l'Insight Rank
 function renderSchoolTechniques(currentRank) {
   const container = document.getElementById('school-techniques-container');
   if (!container) return;
@@ -512,7 +609,6 @@ function renderSchoolTechniques(currentRank) {
   }).join('');
 }
 
-// Verrouillage du bouton des désavantages (cap 15 XP)
 function updateDisadvButtonState() {
   const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
   const btnAddDisadv = document.querySelector("button[onclick='addDisadvFromCatalog()']");
@@ -619,7 +715,9 @@ function renderAdvDisadv() {
   updateDisadvButtonState();
 }
 
-// Rendu des compétences avec sélecteur pour les choix libres & boutons - / +
+// =============================================================================
+// RENDU DES COMPÉTENCES AVEC PALIERS DE MAÎTRISE INTÉGRÉS
+// =============================================================================
 function renderSkills() {
   const container = document.getElementById('skills-list');
   if (!container) return;
@@ -655,27 +753,34 @@ function renderSkills() {
     }
 
     const isChoiceActive = sk.isChoice && sk.chosen;
-    return `
-      <div class="p-2.5 rounded bg-black/60 border ${isChoiceActive ? 'border-amber-500/50' : 'border-stone-800'} flex items-center justify-between gap-2">
-        <div class="flex-1 truncate">
-          <span class="font-bold text-amber-200">${sk.name}</span>
-          ${sk.isSchool ? `<span class="text-[9px] px-1 rounded bg-amber-950 text-amber-400 ml-1 border border-amber-900">${isChoiceActive ? 'École (Choix)' : 'École'}</span>` : ''}
-          ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5">⇄ Changer</button>` : ''}
-        </div>
-        <div class="flex items-center gap-1.5">
-          <label class="text-[10px] text-stone-400 flex items-center gap-1">
-            <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
-          </label>
-          
-          <!-- Boutons ergonomiques - et + -->
-          <div class="flex items-center gap-1 ml-1">
-            <button type="button" onclick="adjustSkillRank(${idx}, -1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs">-</button>
-            <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
-            <button type="button" onclick="adjustSkillRank(${idx}, 1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs">+</button>
-          </div>
+    const masteriesHtml = getMasteriesHtml(sk.name, sk.rank);
 
-          <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1 ml-0.5">✕</button>
+    return `
+      <div class="p-2.5 rounded bg-black/60 border ${isChoiceActive ? 'border-amber-500/50' : 'border-stone-800'} flex flex-col gap-1.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex-1 truncate">
+            <span class="font-bold text-amber-200">${sk.name}</span>
+            ${sk.isSchool ? `<span class="text-[9px] px-1 rounded bg-amber-950 text-amber-400 ml-1 border border-amber-900">${isChoiceActive ? 'École (Choix)' : 'École'}</span>` : ''}
+            ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5">⇄ Changer</button>` : ''}
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <label class="text-[10px] text-stone-400 flex items-center gap-1">
+              <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
+            </label>
+            
+            <!-- Boutons - et + -->
+            <div class="flex items-center gap-1 ml-1">
+              <button type="button" onclick="adjustSkillRank(${idx}, -1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
+              <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
+              <button type="button" onclick="adjustSkillRank(${idx}, 1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">+</button>
+            </div>
+
+            <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1 ml-0.5 cursor-pointer">✕</button>
+          </div>
         </div>
+
+        <!-- Paliers de Maîtrise Débloqués ou Grisés -->
+        ${masteriesHtml}
       </div>
     `;
   }).join('');
@@ -737,7 +842,6 @@ function addSkillFromCatalog() {
   const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
   const targetRoot = normalizeSkill(name);
 
-  // Empêche l'ajout d'une compétence déjà possédée sous forme de spécialité d'école
   if (currentSkills.some(s => (s.chosen || !s.isChoice) && normalizeSkill(s.name) === targetRoot)) {
     alert(`La compétence « ${name} » est déjà maîtrisée par votre personnage.`);
     return;
@@ -795,6 +899,7 @@ function changeSkillRank(idx, val) {
   if (!sk) return;
   const minRank = sk.isSchool ? 1 : 0;
   sk.rank = Math.max(minRank, parseInt(val) || minRank);
+  renderSkills();
   updateAll();
 }
 
@@ -850,9 +955,9 @@ function toggleNameOrder() {
   updateStickyName();
 }
 
-// =========================================================================
+// =============================================================================
 // CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
-// =========================================================================
+// =============================================================================
 function updateAll() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -1069,7 +1174,7 @@ function updateAll() {
     stickyDmgDetail.title = dmgDetailStr;
   }
 
-  // 6. Initiative (Formule officielle 4e : Insight + Réflexes g Réflexes)
+  // 6. Initiative (Insight + Réflexes g Réflexes)
   let initRoll = insightRank + ref;
   let initKeep = ref;
   let initStatic = 0;
@@ -1139,7 +1244,7 @@ function updateAll() {
   }
   document.getElementById('stat-armor-tn').textContent = finalArmorTN;
 
-  // Récupération nocturne & vitalité
+  // Vitalité & Récupération
   let effSta = sta;
   if (hasAdv("quick_heal")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
@@ -1157,6 +1262,42 @@ function updateAll() {
   }
 
   updateDisadvButtonState();
+
+  // Synchronisation avec export-carnet.js
+  if (typeof window !== "undefined") {
+    window.currentChar = {
+      name: document.getElementById('pc-name')?.value || "Samouraï",
+      clan: clans[clanKey]?.name || "Crabe",
+      family: fam?.name || "",
+      school: sch?.name || "École de bushi Hida",
+      traits: {
+        stamina: sta, willpower: wil, strength: str, perception: per,
+        reflexes: ref, awareness: awa, agility: agi, intelligence: int
+      },
+      voidRing: voi,
+      voidPoints: voi,
+      honor: parseFloat(document.getElementById('stat-honor')?.textContent || "4.5"),
+      glory: 1.0,
+      status: 1.0,
+      xpTotal: totalXP,
+      xpSpent: xpSpent,
+      skills: currentSkills,
+      armor: {
+        name: armorName,
+        bonus: armorBonus,
+        reduction: armorBonus === 10 ? 5 : (armorBonus === 5 ? 3 : 0),
+        catalogId: armorBonus === 10 ? "heavy" : (armorBonus === 5 ? "light" : "none")
+      },
+      weapons: [
+        { name: weapon1Name, skill: weaponData.skill, dr: weaponData.vd },
+        ...(weapon2Name !== "Aucune" ? [{ name: weapon2Name }] : [])
+      ],
+      advantages: advantagesList.map(a => a.name).join(", "),
+      disadvantages: disadvantagesList.map(d => d.name).join(", "),
+      notes: document.getElementById('pc-outfit')?.value || ""
+    };
+    window.character = window.currentChar;
+  }
 }
 
 function randomizeAll() {
@@ -1317,149 +1458,3 @@ function exportOfficialPDF() {
   document.getElementById('p-xp').textContent = `${document.getElementById('xp-remaining')?.textContent} / ${document.getElementById('xp-total')?.textContent} XP`;
   document.getElementById('p-insight').textContent = document.getElementById('insight-display')?.textContent || "120 pts (Rang 1)";
   document.getElementById('p-honor').textContent = document.getElementById('stat-honor')?.textContent || "4.5";
-
-  // Traits et Anneaux
-  const sta = document.getElementById('trait-stamina').value;
-  const wil = document.getElementById('trait-willpower').value;
-  const str = document.getElementById('trait-strength').value;
-  const per = document.getElementById('trait-perception').value;
-  const ref = document.getElementById('trait-reflexes').value;
-  const awa = document.getElementById('trait-awareness').value;
-  const agi = document.getElementById('trait-agility').value;
-  const int = document.getElementById('trait-intelligence').value;
-  const voi = document.getElementById('trait-void').value;
-
-  document.getElementById('p-t-sta').textContent = sta;
-  document.getElementById('p-t-wil').textContent = wil;
-  document.getElementById('p-t-str').textContent = str;
-  document.getElementById('p-t-per').textContent = per;
-  document.getElementById('p-t-ref').textContent = ref;
-  document.getElementById('p-t-awa').textContent = awa;
-  document.getElementById('p-t-agi').textContent = agi;
-  document.getElementById('p-t-int').textContent = int;
-  document.getElementById('p-t-voi').textContent = voi;
-
-  document.getElementById('p-r-earth').textContent = document.getElementById('ring-earth').textContent;
-  document.getElementById('p-r-water').textContent = document.getElementById('ring-water').textContent;
-  document.getElementById('p-r-air').textContent = document.getElementById('ring-air').textContent;
-  document.getElementById('p-r-fire').textContent = document.getElementById('ring-fire').textContent;
-  document.getElementById('p-r-void').textContent = document.getElementById('ring-void').textContent;
-
-  // Combat
-  document.getElementById('p-init').textContent = document.getElementById('sticky-init')?.textContent || "3g2";
-  document.getElementById('p-init-note').textContent = document.getElementById('sticky-init-detail')?.textContent || "";
-  document.getElementById('p-armor-tn').textContent = document.getElementById('sticky-armor-tn')?.textContent || "20";
-  document.getElementById('p-armor-note').textContent = document.getElementById('sticky-armor-detail')?.textContent || "";
-  document.getElementById('p-heal').textContent = document.getElementById('stat-heal')?.textContent || "5 PV";
-
-  const armorSel = document.getElementById('pc-armor');
-  document.getElementById('p-armor-name').textContent = armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0] || "Aucune";
-  document.getElementById('p-armor-reduc').textContent = armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0");
-
-  // Compétences
-  const skillsBody = document.getElementById('p-skills-body');
-  skillsBody.innerHTML = currentSkills.map(sk => {
-    const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
-    const traitVal = parseInt(agi);
-    const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + traitVal}g${traitVal}`;
-    return `
-      <tr class="border-b border-stone-200">
-        <td class="p-1 font-bold">${displayName}</td>
-        <td class="p-1 text-center">${sk.isSchool ? '✓' : ''}</td>
-        <td class="p-1 text-center font-bold font-imperial">${sk.rank}</td>
-        <td class="p-1 text-center font-bold">${roll}</td>
-        <td class="p-1 text-stone-600">${sk.spec ? 'Spécialisation active (relance les 1)' : ''}</td>
-      </tr>
-    `;
-  }).join('');
-
-  // Armes
-  const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
-  const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
-  const wBox = document.getElementById('p-weapons-box');
-  wBox.innerHTML = `
-    <div class="border-b border-stone-200 pb-1">
-      <div class="font-bold font-imperial">${w1} (Principale)</div>
-      <div><b>Toucher :</b> ${document.getElementById('sticky-atk')?.textContent || '3g2'} | <b>Dégâts :</b> ${document.getElementById('sticky-dmg')?.textContent || '4g2'}</div>
-      <div class="text-stone-500 text-[7px]">${document.getElementById('sticky-atk-detail')?.textContent || ''}</div>
-    </div>
-    ${w2 !== 'Aucune' ? `
-      <div class="pt-1">
-        <div class="font-bold font-imperial">${w2} (Secondaire)</div>
-      </div>
-    ` : ''}
-  `;
-
-  // Paliers de blessures
-  const woundLevels = [
-    { name: "Indemne (+0)", id: "w-0" },
-    { name: "Égratigné (+3)", id: "w-1" },
-    { name: "Blessé Léger (+5)", id: "w-2" },
-    { name: "Blessé (+10)", id: "w-3" },
-    { name: "Gravement (+15)", id: "w-4" },
-    { name: "Estropié (+20)", id: "w-5" },
-    { name: "Inconscient (+40)", id: "w-6" },
-    { name: "Mortel", id: "w-7" }
-  ];
-  document.getElementById('p-wounds-body').innerHTML = woundLevels.map(wl => `
-    <tr class="border-b border-stone-200">
-      <td class="text-left pl-1 font-bold">${wl.name}</td>
-      <td>${wl.name.includes('+') ? wl.name.split('(')[1].replace(')', '') : '—'}</td>
-      <td class="font-bold">${document.getElementById(wl.id)?.textContent || '4 PV'}</td>
-      <td class="border-l border-stone-300"></td>
-    </tr>
-  `).join('');
-
-  // Avantages & Désavantages
-  document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
-  document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
-    const full = getAdvantages().avantages?.find(x => x.name === a.name);
-    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
-  }).join('') : '<div class="text-stone-400 italic">Aucun avantage sélectionné.</div>';
-
-  document.getElementById('p-disadv-total').textContent = `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`;
-  document.getElementById('p-disadv-list').innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
-    const full = getAdvantages().desavantages?.find(x => x.name === d.name);
-    return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
-  }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
-
-  // Techniques d'École
-  const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
-  const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
-  document.getElementById('p-tech-name').textContent = sch ? `${sch.name} (Progression)` : "Techniques";
-  document.getElementById('p-tech-desc').innerHTML = techList.map(t => {
-    const tag = t.rank === currentRank ? "<b>[ACTIF]</b> " : (t.rank < currentRank ? "<i>[MAÎTRISÉ]</i> " : "[Verrouillé] ");
-    return `<div class="mb-1">${tag}<b>Rang ${t.rank} - ${t.name} :</b> ${t.effect}</div>`;
-  }).join('');
-
-  document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
-
-  window.print();
-}
-
-// Fonctions d'ajustement ergonomique (+ et -)
-function adjustSkillRank(idx, delta) {
-  const sk = currentSkills[idx];
-  if (!sk) return;
-  const minRank = sk.isSchool ? 1 : 0;
-  let newRank = (parseInt(sk.rank) || 0) + delta;
-  if (newRank < minRank) newRank = minRank;
-  if (newRank > 10) newRank = 10;
-  sk.rank = newRank;
-  renderSkills();
-  updateAll();
-}
-
-function adjustTrait(traitId, delta) {
-  const input = document.getElementById(traitId);
-  if (!input) return;
-  const min = parseInt(input.min) || 2;
-  const max = parseInt(input.max) || 6;
-  let val = (parseInt(input.value) || 2) + delta;
-  if (val < min) val = min;
-  if (val > max) val = max;
-  input.value = val;
-  updateAll();
-}
-
-window.addEventListener('DOMContentLoaded', bootstrap);
