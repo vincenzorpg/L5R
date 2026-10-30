@@ -80,8 +80,11 @@ const NAV_CONFIG = {
     const header = document.getElementById("site-header");
     if (!header) return;
 
+    // Rendre l'en-tête collant automatiquement sur toutes les pages
+    header.classList.add("sticky", "top-0", "z-50");
+
     let navHtml = `
-      <nav class="bg-[#0a0808] border-b border-amber-500/40 text-stone-300 text-xs shadow-2xl relative z-50">
+      <nav class="bg-[#0a0808]/95 backdrop-blur-md border-b border-amber-500/40 text-stone-300 text-xs shadow-2xl relative z-50">
         <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
           
           <!-- LOGO & TITRE -->
@@ -117,7 +120,7 @@ const NAV_CONFIG = {
               <div class="rounded-xl bg-[#120d0d] border border-amber-500/40 shadow-2xl py-1.5 overflow-hidden">
                 ${item.children.map(sub => {
                   const kanjiBadge = sub.kanji ? `
-                    <span class="w-6 h-6 rounded flex items-center justify-center font-serif font-bold text-sm mr-2.5 bg-black/70 border border-stone-800" style="color: ${sub.color}; text-shadow: 0 0 6px ${sub.color}40;">
+                    <span class="w-6 h-6 rounded flex items-center justify-center font-serif font-bold text-sm mr-2.5 bg-black/70 border border-stone-800" style="color: ${sub.color}; text-shadow: 0 0 6px${sub.color}40;">
                       ${sub.kanji}
                     </span>` : "";
                   return `
