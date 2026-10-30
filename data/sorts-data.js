@@ -4,7 +4,7 @@
  */
 
 (function () {
-  // Récupération sécurisée des listes (supporte Array ou Object d'ID)
+  // Récupération sécurisée des listes (supporte Array ou Dictionnaire d'objets)
   function toArray(raw) {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -21,49 +21,34 @@
   var rawKiho       = toArray((typeof window !== "undefined" && (window.SORTS_KIHO || window.sortsKiho)));
   var rawMaho       = toArray((typeof window !== "undefined" && (window.SORTS_MAHO || window.sortsMaho)));
 
-  // Détecteur tout-terrain de rang (gère "maîtrise", "level", chiffres arabes et romains)
+  // Extraction ciblée du rang de maîtrise (exclut rigoureusement "range" / portée)
   function detectRank(s) {
-    function parseVal(v) {
-      if (typeof v === "number") return v;
-      if (!v) return null;
-      var str = v.toString().trim();
-      var m = str.match(/\b([0-6])\b/) || str.match(/\d+/);
-      if (m) return parseInt(m[0] || m[1], 10);
+    var raw = s.mastery !== undefined ? s.mastery :
+             (s.maitrise !== undefined ? s.maitrise :
+             (s.rang !== undefined ? s.rang :
+             (s.rank !== undefined ? s.rank :
+             (s.niveau !== undefined ? s.niveau : null))));
 
-      var u = str.toUpperCase();
-      if (/\bVI\b/.test(u)) return 6;
-      if (/\bV\b/.test(u)) return 5;
-      if (/\bIV\b/.test(u)) return 4;
-      if (/\bIII\b/.test(u)) return 3;
-      if (/\bII\b/.test(u)) return 2;
-      if (/\bI\b/.test(u)) return 1;
-      return null;
+    if (raw !== null && raw !== undefined) {
+      if (typeof raw === "number") return raw;
+      var str = raw.toString().trim().toLowerCase();
+      if (str === "universel" || str === "universal") return 0;
+      var m = str.match(/\d+/);
+      if (m) return parseInt(m[0], 10);
     }
-
-    for (var k in s) {
-      if (!s.hasOwnProperty(k)) continue;
-      var lk = k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      if (lk.indexOf("rang") !== -1 || lk.indexOf("maitr") !== -1 || lk.indexOf("rank") !== -1 || lk.indexOf("level") !== -1 || lk.indexOf("niveau") !== -1) {
-        var parsed = parseVal(s[k]);
-        if (parsed !== null) return parsed;
-      }
-    }
-
-    var ringStr = (s.anneau || s.element || s.ring || s.nom || s.name || "").toString();
-    var ringParsed = parseVal(ringStr);
-    if (ringParsed !== null) return ringParsed;
 
     return 0;
   }
 
-  // Traite et étiquette chaque liste par élément
+  // Traitement et normalisation uniforme de chaque sort
   function prepareList(list, defaultElem, isMaho, isKiho) {
     return list.map(function (item) {
       var s = Object.assign({}, item);
       s.element = s.element || s.anneau || s.ring || defaultElem;
       s.anneau = s.element;
-      s.rang = detectRank(s);
-      s.maitrise = s.rang;
+      s.mastery = detectRank(s);
+      s.rang = s.mastery;
+      s.maitrise = s.mastery;
       if (isMaho || s.isMaho) { s.isMaho = true; s.element = "maho"; s.anneau = "maho"; }
       if (isKiho || s.isKiho) { s.isKiho = true; }
       return s;
