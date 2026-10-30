@@ -10,11 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- SCRIPT DU MENU GLOBAL -->
-  <script src="../js/navbar.js" defer></script>
-  
   <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
 
   <style>
     :root {
@@ -44,7 +44,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- CONTENEUR DU MENU GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <!-- CONTENEUR DU MENU GLOBAL -->
   <header id="site-header"></header>
 
   <!-- CONTENU PRINCIPAL -->
@@ -62,63 +62,77 @@
         <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide lion-gradient">
           LE CLAN DU LION
         </h1>
-        <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial">
-          « Mon honneur est ma vie, mon devoir est ma tombe. »
-        </p>
         <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
-          Le Clan du Lion est la force militaire suprême de Rokugan[cite: 2, 10]. Gardien sans compromis du code du Bushido et des traditions ancestrales, le Lion veille sur la souveraineté du Trône d'Émeraude grâce à la discipline inflexible de ses légions[cite: 2, 10]. Là où d'autres clans manient la flatterie des cours ou le mysticisme contemplatif, le Lion répond par la clarté stratégique, le culte des héros défunts et le fracas des charges d'infanterie[cite: 2, 10].
+          Force armée prééminente de Rokugan, le Clan du Lion incarne la rigueur martiale, la mémoire historique et la fidélité inconditionnelle au Trône d'Émeraude. Fondé par le Kami Akodo, le clan fait reposer sa puissance sur la science tactique, le culte des ancêtres héroïques et l'application stricte des préceptes de l'Honneur et du Devoir.
         </p>
+        <div class="pt-2 text-[11px] text-amber-300/80 font-mono">
+          Références : Livre de Règles 4e Édition, p. 62-63, 115-118 ; The Great Clans, p. 107-143.
+        </div>
       </div>
     </section>
 
-    <!-- 1. MYTHE FONDATEUR & RÔLE DANS L'EMPIRE -->
+    <!-- 1. ORIGINE SACRÉE & CADRE TECHNIQUE -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-4">
         <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
           1. Origine Sacrée & Vocation Martiale
         </h2>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Lorsque les Kami chutèrent du Paradis Céleste, <b>Akodo</b> était le tacticien par excellence, le maître de la guerre éclairée et de la discipline stoïque[cite: 2]. C'est lui qui rédigea le légendaire traité <i>Commandement</i> (*Leadership*), référence absolue en matière de stratégie militaire étudiée dans tous les dojos de l'Empire[cite: 2].
+          Lors de la chute des Kami, <b>Akodo</b> se distingua par son génie de la guerre et sa maîtrise tactique. Auteur du traité militaire fondamental <i>Commandement</i> (<i>Leadership</i>), il posa les bases de la doctrine de bataille étudiée par tous les officiers de Rokugan.
         </p>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Pour forger son armée, Akodo scella l'alliance avec la redoutable matriarche guerrière <b>Matsu</b> et l'historien <b>Ikoma</b>[cite: 2, 10]. Plus tard, après la disparition tragique de la race primitive des Kitsu lors des guerres de l'Aube, les survivants s'unirent aux humains pour donner naissance à la lignée chamanique des <i>Sodan-Senzo</i>, capables d'invoquer directement les esprits des héros défunts sur le champ de bataille[cite: 2, 10].
+          Le clan s'est développé autour de piliers complémentaires : l'art stratégique d'Akodo, la ferveur offensive des troupes de la matriarche <b>Matsu</b>, l'éloquence historique d'<b>Ikoma</b> et les traditions chamaniques des <b>Kitsu</b>, gardiens des lignées et interlocuteurs des ancêtres héroïques résidant dans le Yomi.
         </p>
-        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
-          <span class="text-amber-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
-          <span class="text-stone-300">Ocre doré, jaune fauve et écarlate (armures laquées d'or patiné, crinières de casque en poil teinté et bannières chargées du Mon du Lion)[cite: 2, 10].</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-amber-400 font-bold uppercase text-[10px] tracking-wider block">Héraldique & Uniforme</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Ocre doré, fauve, jaune safran et rouge bordeaux. Armures laquées soignées, daisho porté avec solennité et crinières de casque en crin teinté lors des manœuvres de guerre.
+            </p>
+          </div>
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-amber-400 font-bold uppercase text-[10px] tracking-wider block">Ouvrages de Référence</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Histoire clanique : <i>The Great Clans</i>, p. 107-115. Traité du Bushido : <i>Emerald Empire</i>, p. 28-30. Science du combat de masse : <i>The Book of Fire</i>, p. 52-56.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- CARTE D'IDENTITÉ TACTIQUE -->
+      <!-- CARTE D'IDENTITÉ DU JOUEUR -->
       <div class="card-clean rounded-xl p-6 space-y-3">
         <h3 class="text-sm font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
-          Profil de Clan
+          Profil de Création PJ
         </h3>
         <ul class="text-xs space-y-2 text-stone-300">
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Vertu Maîtresse :</span>
-            <b class="text-amber-300">Honneur (Meiyo)[cite: 2]</b>
+            <span class="text-stone-500">Vertu Fondamentale :</span>
+            <b class="text-amber-300">Honneur (Meiyo)</b>
+          </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Honneur de Base :</span>
+            <b class="text-amber-400">6,5 (Très élevé)</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Kami Fondateur :</span>
-            <b>Akodo le Borgne[cite: 2]</b>
+            <b>Akodo</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Capitale :</span>
-            <b>Shiro Akodo[cite: 2, 10]</b>
+            <span class="text-stone-500">Forteresse Principale :</span>
+            <b>Shiro Akodo</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Doctrine de Guerre :</span>
-            <b>Les Légions Royales[cite: 2, 10]</b>
+            <span class="text-stone-500">Armes Clés :</span>
+            <b>Katana, Yari, No-Dachi, Arc</b>
           </li>
           <li class="flex justify-between">
-            <span class="text-stone-500">Arme Emblématique :</span>
-            <b>Katana & Yari de ligne[cite: 2, 10]</b>
+            <span class="text-stone-500">Livre de Base 4e :</span>
+            <b class="text-amber-400">Pages 115-118</b>
           </li>
         </ul>
         <div class="pt-2">
           <a href="../createcharacter.html" class="w-full block py-2 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-center text-xs uppercase tracking-wider transition">
-            Créer un samouraï Lion
+            Forger un samouraï Lion
           </a>
         </div>
       </div>
@@ -126,9 +140,9 @@
 
     <!-- 2. LES QUATRE FAMILLES DU LION -->
     <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">2. Les Familles du Clan & Leurs Devoirs</h2>
-        <span class="text-xs text-stone-400">Le mariage indestructible du génie tactique, de la fureur martiale, de la mémoire épique et du dialogue avec les morts[cite: 2, 10].</span>
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">2. Les Familles du Clan</h2>
+        <span class="text-xs text-stone-400">Livre de Règles 4e Édition, p. 115 ; The Great Clans, p. 116-123.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -137,115 +151,99 @@
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Akodo</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Perception[cite: 2]</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Perception</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            La lignée des seigneurs et des stratèges[cite: 2]. Les guerriers Akodo approchent le combat avec un sang-froid absolu[cite: 2]. Éduqués dans l'art du placement, de la manœuvre de masse et de la lecture des lignes adverses, ils ne tirent jamais leur sabre sans savoir précisément où et quand la victoire sera scellée[cite: 2, 10].
+            Seigneurs et théoriciens de la guerre. Les Akodo cultivent le sang-froid, la discipline et la vision tactique globale. Formés à l'analyse méthodique des faiblesses adverses, ils subordonnent l'impulsivité martiale à la précision des manœuvres et au respect absolu des ordres.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Généraux d'armées, stratèges de siège et maîtres d'escrime[cite: 2, 10].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Officiers d'état-major, stratèges de siège, duellistes et maîtres d'armes d'infanterie.
+          </div>
         </div>
 
         <!-- MATSU -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Matsu</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Force[cite: 2]</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Force</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            La plus populeuse et agressive des familles de Rokugan[cite: 2, 10]. Fièrement matriarcale, la maison Matsu prône l'offensive sauvage et sans compromis[cite: 2]. Leurs légions de furies guerrières (*Fierté du Lion*) chargent en hurlant, terrifiant leurs adversaires avant même le contact des lames[cite: 2, 7].
+            Plus vaste famille militaire de Rokugan, à forte tradition matriarcale. Connus pour leur combativité sans concession, les guerriers Matsu mènent les assauts frontaux et canalisent leur rage au combat sans jamais déroger aux impératifs d'honneur personnel.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Infanterie d'assaut, berserkers de choc et choc frontal[cite: 2, 10].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Troupes de choc, berserkers, membres de la Fierté du Lion et capitaines d'avant-garde.
+          </div>
         </div>
 
         <!-- IKOMA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Ikoma</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Intelligence[cite: 2]</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intuition</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            La voix et la mémoire du clan[cite: 2, 10]. Tandis que le reste du Lion cultive le silence stoïque, les bardes Ikoma racontent les exploits héroïques des ancêtres avec une ferveur passionnée[cite: 2, 10]. Dans les cours, ils jouent le rôle d'ambassadeurs capables d'extérioriser les émotions que leurs frères doivent taire[cite: 2, 10].
+            Chroniqueurs, historiens et orateurs du clan. Tandis que leurs frères cultivent le stoïcisme, les Ikoma utilisent la verve poétique et le rappel solennel des victoires passées pour émouvoir les assemblées de cour, galvaniser le moral des armées et préserver la lignée des héros défunts.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Bardes épiques, historiens, diplomates et hérauts[cite: 2, 10].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Bardes héroïques, diplomates énergiques, hérauts et historiens de cour.
+          </div>
         </div>
 
         <!-- KITSU -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kitsu</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Volonté[cite: 2]</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Volonté</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Les prêtres gardiens des tombes ancestrales[cite: 2, 10]. Descendants partiels des Kitsu primitifs, ils possèdent des yeux dorés et une sensibilité unique au monde spirituel de Meido et Yomi[cite: 2, 10]. Leurs shugenja ne se contentent pas de prier les éléments : ils communient intimement avec les ancêtres défunts[cite: 2, 10].
+            Prêtres et médiums dépositaires des rites funéraires. Descendant en partie des anciens êtres mystiques Kitsu, ils possèdent une affinité naturelle avec le royaume des défunts (Yomi) et peuvent invoquer l'appui spirituel et la sagesse des ancêtres samouraïs.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Prêtres de lignée (Sodan-Senzo), médiums et archivistes spirituels[cite: 2, 10].</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Shugenja ancestraux (Sodan-Senzo), officiers de liturgie et gardiens des nécropoles.
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- 3. LE LION ET LE BUSHIDO -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
-        3. Le Cœur du Roleplay : Le Lion face au Bushido
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/40 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
-            <span class="font-bold text-amber-200 text-sm">L'Honneur (Meiyo) & Le Devoir (Chugo)[cite: 2]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Pour un Lion, la vie d'un samouraï n'a de sens que si elle sert la gloire de son seigneur et l'éclat de son clan[cite: 2]. Tout ordre émanant d'un supérieur est exécuté immédiatement, sans débat ni réserve[cite: 2]. Reculer ou transiger avec sa conscience morale équivaut à la mort de l'âme[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/40 font-bold uppercase text-[10px]">La Faille Tragique</span>
-            <span class="font-bold text-amber-200 text-sm">L'Orgueil Militaire & la Rigidité Dogmatique[cite: 2, 10]</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            L'obsession de la rectitude rend le Lion aisément manipulable par des intrigants subtils[cite: 2]. Piqué dans son orgueil ou accusé de lâcheté, un officier Matsu déclenchera un affrontement sanglant au mépris du bon sens politique[cite: 2]. Leur mépris de la ruse et des compromis leur coûte souvent cher face au Scorpion ou à la Grue[cite: 2].
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
-        4. Guide d'Interprétation : Jouer un Samouraï du Lion
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        <div class="space-y-2">
-          <h3 class="font-bold text-amber-200 font-imperial text-sm">Allure & Comportement</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Votre posture est droite, martiale et sans relâchement[cite: 2]. Vous portez votre daisho avec fierté et saluez vos pairs avec une déférence rigoureuse[cite: 2]. Vous considérez le confort excessif comme un signe d'amollissement et préférez la camaraderie rude des casernes aux intrigues parfumées[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-amber-200 font-imperial text-sm">Rapports avec les autres Clans</h3>
-          <p class="text-stone-400 leading-relaxed">
-            La <b>Grue</b> est votre rivale séculaire : vous jugez ses victoires de cour artificielles et douteuses[cite: 2]. Vous éprouvez un dégoût viscéral pour la duplicité du <b>Scorpion</b>[cite: 2]. En revanche, vous comprenez le dévouement brutal du <b>Crabe</b>, bien que vous désapprouviez son manque de bienséance[cite: 2].
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-amber-200 font-imperial text-sm">Dépasser le Cliché du « Fanatique »</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Votre personnage peut être un <b>stratège Akodo</b> terrifié par le prix en vies humaines de ses ordres ; un <b>barde Ikoma</b> forcé de composer un poème héroïque sur une bataille qu'il sait avoir été un massacre déshonorant[cite: 10] ; ou une jeune <b>Matsu</b> qui cherche à tempérer sa colère par la peinture.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. ÉCOLES FONDAMENTALES & ARSENAL -->
-    <section class="space-y-4">
+    <!-- 3. DOCTRINE & PERCEPTION DU BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-5">
       <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">5. Écoles Fondamentales de la 4e Édition</h2>
-        <span class="text-xs text-stone-400">Styles martiaux et disciplines représentés dans le générateur de fiches[cite: 2, 10].</span>
+        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">
+          3. Doctrine Martiale & Pratique du Bushido
+        </h2>
+        <span class="text-xs text-stone-400">Références : Livre de Règles 4e Édition, p. 62-63, 91-94 ; Emerald Empire, p. 28-30.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Primauté de l'Honneur (Meiyo)</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Pour le Lion, l'Honneur n'est pas une simple notion théorique mais la mesure concrète de la valeur de l'âme. Tout acte est évalué selon sa conformité avec la tradition et le devoir envers le seigneur et les ancêtres. Une mort glorieuse est toujours préférable à une victoire obtenue par des expédients déloyaux.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Discipline & Obéissance (Chugo)</h3>
+          <p class="text-stone-300 leading-relaxed">
+            La chaîne de commandement possède un caractère sacré. Les samouraïs du Lion apprennent à obéir promptement aux ordres tactiques sans discussion. La cohérence des mouvements de bataillons et la cohésion de groupe priment systématiquement sur les initiatives individuelles non autorisées.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Diplomatie Clanique</h3>
+          <p class="text-stone-300 leading-relaxed">
+            La rivalité séculaire avec le <b>Clan de la Grue</b> s'articule autour de l'influence politique et de la frontière des plaines centrales. La duplicité du <b>Scorpion</b> suscite une opposition doctrinale ouverte. La fermeté du <b>Crabe</b> au combat est reconnue, tandis que le détachement du <b>Dragon</b> est souvent considéré comme de l'indécision.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LES QUATRE ÉCOLES FONDAMENTALES (LIVRE DE RÈGLES 4E ÉDITION) -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">4. Écoles Fondamentales de Base</h2>
+        <span class="text-xs text-stone-400">Règles officielles : Livre de Règles 4e Édition, pages 115 à 118.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -253,40 +251,110 @@
         <!-- BUSHI AKODO -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-amber-200 text-sm font-imperial">École de Bushi Akodo[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Tacticien • Sang-Froid[cite: 2]</span>
+            <span class="font-bold text-amber-200 text-sm font-imperial">École de Bushi Akodo</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Bushi • Livre de Base p. 116</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Voie du Lion.</b> Peut relancer tous les dés d'attaque affichant un résultat inférieur ou égal à son Rang d'Honneur[cite: 2]. Ajoute +1g0 aux jets de dégâts au sabre. Aux rangs supérieurs, il s'immunise contre la Peur et transforme l'attaque en Action Simple rapide[cite: 2].
+            <b>Bonus de Trait :</b> +1 Agilité.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Art de la Guerre, Connaissance : Histoire, Défense, Iaijutsu, Kenjutsu (Katana), Kyujutsu, une compétence de Bugei au choix.<br>
+            <b>Technique de Rang 1 (La Voie du Lion) :</b> Lors d'un jet d'Attaque, le bushi peut relancer tous les dés affichant un résultat inférieur ou égal à son Rang d'Honneur (le second résultat doit être conservé). Il bénéficie en outre d'un bonus de +1g0 à tous ses jets de dégâts lorsqu'il manie un sabre (katana, wakizashi, no-dachi).
           </p>
         </div>
 
-        <!-- BUSHI MATSU -->
+        <!-- BERSERKER MATSU -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
-            <span class="font-bold text-amber-200 text-sm font-imperial">École de Bushi Matsu[cite: 2]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Assaut • Furie[cite: 2]</span>
+            <span class="font-bold text-amber-200 text-sm font-imperial">École de Berserker Matsu</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Bushi • Livre de Base p. 117</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : Le Rugissement du Lion.</b> En posture d'Attaque Totale, ajoute son Rang d'Honneur au résultat de tous ses jets de dégâts[cite: 2]. Ses charges font vaciller les défenses adverses et rendent ses ripostes destructrices[cite: 2].
+            <b>Bonus de Trait :</b> +1 Force.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Art de la Guerre, Athlétisme, Jiujutsu, Kenjutsu, Kyujutsu, une compétence de Bugei au choix, une compétence Noble au choix.<br>
+            <b>Technique de Rang 1 (Le Rugissement du Lion) :</b> En posture d'Attaque Totale, le guerrier ajoute son Rang d'Honneur au total de tous ses jets de dégâts. De plus, la manœuvre d'Attaque Supplémentaire ne requiert de sa part que 3 Augmentations au lieu des 4 habituelles.
+          </p>
+        </div>
+
+        <!-- SHUGENJA KITSU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-200 text-sm font-imperial">École de Shugenja Kitsu</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-emerald-300 font-bold border border-emerald-500/30">Shugenja • Livre de Base p. 117-118</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Volonté.<br>
+            <b>Affinité / Déficience :</b> Affinité Eau, Déficience Feu.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Calligraphie (Chiffres), Connaissance : Histoire, Connaissance : Théologie, Méditation, deux compétences Nobles ou de Bugei au choix.<br>
+            <b>Technique (Les Yeux des Ancêtres) :</b> Permet de communier avec les esprits ancestraux du Yomi. Le shugenja peut dépenser un emplacement de sort d'Eau pour déceler l'ascendance exacte d'un individu ou solliciter un avis spirituel pour résoudre une situation tactique.
+          </p>
+        </div>
+
+        <!-- BARDE IKOMA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-200 text-sm font-imperial">École de Barde Ikoma</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Courtisan • Livre de Base p. 118</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Intuition.<br>
+            <b>Honneur de départ :</b> 6,5.<br>
+            <b>Compétences de Départ :</b> Art de la Guerre, Comédie (Art du Conteur), Connaissance : Histoire, Courtisan, Étiquette, Intimidation, Sincérité.<br>
+            <b>Technique de Rang 1 (Le Cœur du Lion) :</b> En déclamant les exploits des ancêtres de ses compagnons, l'Ikoma peut accorder des relances et des bonus de moral à ses alliés. En joute verbale, il peut dépenser un point de Vide pour ajouter son Rang de Connaissance : Histoire à son jet social.
           </p>
         </div>
 
       </div>
     </section>
 
-    <!-- NAVIGATION ENTRE LES CLANS -->
-    <nav aria-label="Navigation des clans" class="pt-6 border-t border-amber-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
-      <a href="dragon.html" class="text-emerald-300 hover:text-emerald-200 font-imperial">← Clan du Dragon</a>
-      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
-      <a href="mante.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-blue-400 border border-stone-800 font-imperial">Clan de la Mante →</a>
-    </nav>
+    <!-- 5. VOIES ALTERNATIVES & PROFILS AVANCÉS -->
+    <section class="card-clean rounded-xl p-6 space-y-3">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h3 class="text-sm font-bold font-imperial text-amber-300">
+          5. Voies Alternatives & Écoles Avancées (Pour optimiser son PJ)
+        </h3>
+        <span class="text-[11px] text-stone-400">Options officielles complémentaires pour développer son personnage.</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs pt-1">
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Akodo Tactical Master</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 136 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Commandant supérieur optimisant les jets d'Art de la Guerre et les manœuvres d'escouade.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Lion Bushido Paragon</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Livre de Règles 4e Édition, p. 248 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Incarnation absolue du code d'honneur, convertissant sa pureté morale en bonus martiaux.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Lion's Pride (La Fierté du Lion)</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 138 (Voie Alternative Rang 3)</span>
+          <p class="text-stone-300 text-[11px]">Ordre d'élite féminin Matsu accentuant la percussion des charges dévastatrices.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Kitsu Sodan-Senzo</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 225 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Maître spirite capable d'invoquer temporairement l'esprit d'un ancêtre sur le champ de bataille.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Matsu Beastmaster</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 138-139 (Voie Alternative Rang 2)</span>
+          <p class="text-stone-300 text-[11px]">Dresseur de guerre combattant en tandem avec des fauves de combat entraînés.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Ikoma Spymaster</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 139 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Maître des renseignements officieux assurant la protection du clan contre les intrigues occultes.</p>
+        </div>
+      </div>
+    </section>
 
   </main>
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan du Lion
+    Chronique L5R 4e Édition — MJ David • Fiche technique du Clan du Lion
   </footer>
 
 </body>
