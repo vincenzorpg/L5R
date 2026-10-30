@@ -1,5 +1,5 @@
 /**
- * data/avantages-data.js — L5R 4e Édition (Livre de Base p. 146-163)
+ * data/avantages-desavantages.js — L5R 4e Édition (Livre de Base p. 146-163)
  * Structure hybride (Tableau + Dictionnaires .avantages et .desavantages)
  * Compatible à 100% avec character-generator.js et createcharacter.html
  */
@@ -343,7 +343,7 @@
     }
   ];
 
-  // 3. CRÉATION DES DICTIONNAIRES ATTENDUS PAR CHARACTER-GENERATOR.JS
+  // 3. DICTIONNAIRES ATTENDUS PAR CHARACTER-GENERATOR.JS
   const advDict = {};
   AVANTAGES_LIST.forEach(item => {
     advDict[item.id] = item;
@@ -356,8 +356,7 @@
     disadvDict[item.name] = item;
   });
 
-  // 4. STRUCTURE HYBRIDE : L'OBJET GLOBAL EST AUSSI UN TABLEAU
-  // (permet à adv.avantages[idx] et à AVANTAGES_DATA.find() de fonctionner simultanément)
+  // 4. STRUCTURE HYBRIDE : L'objet est un tableau ET possède les clés .avantages / .desavantages
   const masterData = {
     avantages: advDict,
     desavantages: disadvDict,
@@ -365,7 +364,6 @@
     disadvantages: disadvDict
   };
 
-  // On injecte les listes dans masterData pour les boucles
   AVANTAGES_LIST.avantages = advDict;
   AVANTAGES_LIST.desavantages = disadvDict;
   AVANTAGES_LIST.advantages = advDict;
@@ -378,7 +376,7 @@
 
   // 5. EXPOSITION GLOBALE
   if (typeof window !== "undefined") {
-    // Crucial pour addAdvFromCatalog() qui fait : const adv = getAdvantages(); adv.avantages[idx]
+    // Requis par addAdvFromCatalog() qui fait : const adv = getAdvantages(); adv.avantages[idx]
     window.AVANTAGES_DATA = AVANTAGES_LIST;
     window.DESAVANTAGES_DATA = DESAVANTAGES_LIST;
     window.TRAITS_DATA = [...AVANTAGES_LIST, ...DESAVANTAGES_LIST];
@@ -389,7 +387,6 @@
     window.L5R_DATA.advantages = advDict;
     window.L5R_DATA.disadvantages = disadvDict;
 
-    // Dictionnaire direct de secours
     window.avantages = advDict;
     window.desavantages = disadvDict;
     window.ADVANTAGES_DATA = masterData;
