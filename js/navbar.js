@@ -4,7 +4,7 @@
  */
 
 // =============================================================================
-// 1. CONFIGURATION DU MENU & KANJIS DES HUIT GRANDS CLANS
+// 1. CONFIGURATION DU MENU & KANJIS COLORÉS DES CLANS
 // =============================================================================
 const NAV_CONFIG = {
   brand: {
@@ -31,14 +31,14 @@ const NAV_CONFIG = {
       label: "Les Huit Clans",
       icon: "🏯",
       children: [
-        { kanji: "蟹", label: "Clan du Crabe", url: "clans/crabe.html" },
-        { kanji: "鶴", label: "Clan de la Grue", url: "clans/grue.html" },
-        { kanji: "龍", label: "Clan du Dragon", url: "clans/dragon.html" },
-        { kanji: "獅", label: "Clan du Lion", url: "clans/lion.html" },
-        { kanji: "蟷", label: "Clan de la Mante", url: "clans/mante.html" },
-        { kanji: "鳳", label: "Clan du Phénix", url: "clans/phenix.html" },
-        { kanji: "蠍", label: "Clan du Scorpion", url: "clans/scorpion.html" },
-        { kanji: "麒", label: "Clan de la Licorne", url: "clans/licorne.html" }
+        { kanji: "蟹", color: "#38bdf8", label: "Clan du Crabe", url: "clans/crabe.html" },
+        { kanji: "鶴", color: "#67e8f9", label: "Clan de la Grue", url: "clans/grue.html" },
+        { kanji: "龍", color: "#34d399", label: "Clan du Dragon", url: "clans/dragon.html" },
+        { kanji: "獅", color: "#fbbf24", label: "Clan du Lion", url: "clans/lion.html" },
+        { kanji: "蟷", color: "#2dd4bf", label: "Clan de la Mante", url: "clans/mante.html" },
+        { kanji: "鳳", color: "#f97316", label: "Clan du Phénix", url: "clans/phenix.html" },
+        { kanji: "蠍", color: "#f43f5e", label: "Clan du Scorpion", url: "clans/scorpion.html" },
+        { kanji: "麒", color: "#c084fc", label: "Clan de la Licorne", url: "clans/licorne.html" }
       ]
     },
     {
@@ -46,8 +46,8 @@ const NAV_CONFIG = {
       icon: "📜",
       children: [
         { label: "⚔️ Mémento de Combat", url: "aides/combat-memento.html" },
-        { label: "⚡ Duels d'Iaijutsu", url: "aides/duels.html" },
-        { label: "⚖️ Honneur & Gloire", url: "aides/honneur-gloire.html" }
+        { label: "⚖️ Bushido & Honneur", url: "aides/bushido-honneur.html" },
+        { label: "🎎 Étiquette & Coutumes", url: "aides/etiquette-coutumes.html" }
       ]
     },
     {
@@ -113,15 +113,18 @@ const NAV_CONFIG = {
             </button>
             
             <!-- Menu déroulant totalement opaque avec pont de survol -->
-            <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-1.5 w-56 z-50">
+            <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-1.5 w-60 z-50">
               <div class="rounded-xl bg-[#120d0d] border border-amber-500/40 shadow-2xl py-1.5 overflow-hidden">
                 ${item.children.map(sub => {
-                  const prefix = sub.kanji ? `<span class="font-serif text-amber-400 font-bold text-sm mr-2">${sub.kanji}</span>` : "";
+                  const kanjiBadge = sub.kanji ? `
+                    <span class="w-6 h-6 rounded flex items-center justify-center font-serif font-bold text-sm mr-2.5 bg-black/70 border border-stone-800" style="color: ${sub.color}; text-shadow: 0 0 6px ${sub.color}40;">
+                      ${sub.kanji}
+                    </span>` : "";
                   return `
                     <a href="${resolveUrl(sub.url)}" 
                        ${sub.external ? 'target="_blank" rel="noopener noreferrer"' : ""}
                        class="block px-3.5 py-2 text-xs text-stone-300 hover:bg-[#201414] hover:text-amber-200 transition flex items-center">
-                      ${prefix}<span>${sub.label}</span>
+                      ${kanjiBadge}<span>${sub.label}</span>
                     </a>
                   `;
                 }).join("")}
