@@ -13,8 +13,8 @@
   <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
-  <!-- BASE DE DONNÉES EN SECOURS (compatibilité file:// et navigateurs sans ESM direct) -->
-  <script src="data/sorts-data.js" defer></script>
+  <!-- BASE DE DONNÉES DES SORTS -->
+  <script src="data/sorts-data.js"></script>
 
   <!-- NAVIGATION COMMUNE -->
   <script src="js/navbar.js" defer></script>
@@ -221,21 +221,18 @@
     Chronique L5R 4e Édition — MJ David • Grimoire complet des Sorts & Invocations
   </footer>
 
-  <!-- SCRIPT DU GRIMOIRE -->
-  <script type="module">
+  <!-- SCRIPT DU GRIMOIRE (STANDARD JAVASCRIPT, COMPATIBLE FILE:// ET HTTP://) -->
+  <script>
     let allSpells = [];
-
-    try {
-      const module = await import('./data/sorts-data.js');
-      allSpells = module.SORTS_DATA || window.SORTS_DATA || [];
-    } catch (e) {
-      console.warn("Import ESM direct indisponible, bascule sur window.SORTS_DATA...", e);
-      allSpells = window.SORTS_DATA || [];
-    }
-
     let currentElement = 'all';
     const MAHO_SECRET_PASS = "JIGOKU";
-    let isMahoUnlocked = sessionStorage.getItem("l5r_maho_unlocked") === "true";
+    let isMahoUnlocked = false;
+
+    try {
+      isMahoUnlocked = sessionStorage.getItem("l5r_maho_unlocked") === "true";
+    } catch (e) {
+      isMahoUnlocked = false;
+    }
 
     const searchInput = document.getElementById('search-input');
     const masterySelect = document.getElementById('mastery-select');
@@ -282,13 +279,12 @@
       render();
     }
 
-    // Défloutage individuel au clic (exposé au scope global pour onclick HTML)
-    window.revealMahoSpell = function(btn) {
-      const card = btn.closest('.maho-card');
+    // Défloutage d'une carte Mahō individuelle
+    window.revealMahoSpell = function(overlayEl) {
+      const card = overlayEl.closest('.maho-card');
       if (!card) return;
       card.classList.remove('sealed');
-      const overlay = card.querySelector('.maho-overlay');
-      if (overlay) overlay.remove();
+      overlayEl.remove();
     };
 
     function render() {
@@ -306,7 +302,7 @@
           return false;
         }
 
-        // Règle 2 : en mode "Tous", masquer Mahō pour garder un grimoire noble
+        // Règle 2 : en mode "Tous", masquer Mahō pour préserver un grimoire noble
         if (currentElement === 'all' && spell.element === 'Maho') {
           return false;
         }
@@ -417,31 +413,63 @@
       mahoModal?.classList.add('hidden');
     });
 
-    document.getElementById('maho-unlock-btn')?.addEventListener('click', () => {
+    function tryUnlockMaho() {
       if (mahoInput?.value.trim().toUpperCase() === MAHO_SECRET_PASS) {
         isMahoUnlocked = true;
-        sessionStorage.setItem("l5r_maho_unlocked", "true");
+        try {
+          sessionStorage.setItem("l5r_maho_unlocked", "true");
+        } catch (e) {}
         mahoModal?.classList.add('hidden');
         setElementFilter('Maho');
       } else {
         mahoError?.classList.remove('hidden');
       }
-    });
+    }
+
+    document.getElementById('maho-unlock-btn')?.addEventListener('click', tryUnlockMaho);
 
     mahoInput?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') document.getElementById('maho-unlock-btn')?.click();
+      if (e.key === 'Enter') tryUnlockMaho();
     });
 
     // Reverrouillage de session
     mahoRelockBtn?.addEventListener('click', () => {
       isMahoUnlocked = false;
-      sessionStorage.removeItem("l5r_maho_unlocked");
+      try {
+        sessionStorage.removeItem("l5r_maho_unlocked");
+      } catch (e) {}
       setElementFilter('all');
     });
 
-    // Initialisation
-    updateMahoState();
-    render();
+    // Initialisation robuste avec attente du chargement de sorts-data.js
+    let retryCount = 0;
+    function loadDataAndStart() {
+      if (window.SORTS_DATA && Array.isArray(window.SORTS_DATA) && window.SORTS_DATA.length > 0) {
+        allSpells = window.SORTS_DATA;
+        updateMahoState();
+        render();
+      } else {
+        if (retryCount++ < 80) {
+          setTimeout(loadDataAndStart, 50);
+        } else {
+          if (spellsGrid) {
+            spellsGrid.innerHTML = `
+              <div class="col-span-full text-center py-12 card-clean rounded-xl border-red-900/60">
+                <span class="text-3xl block mb-2">⚠️</span>
+                <span class="font-imperial font-bold text-red-400 text-base">Données non détectées</span>
+                <p class="text-xs text-stone-400 mt-2">Vérifiez que le fichier <code>data/sorts-data.js</code> est bien présent et contient <code>window.SORTS_DATA = [...]</code>.</p>
+              </div>
+            `;
+          }
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadDataAndStart);
+    } else {
+      loadDataAndStart();
+    }
   </script>
 
 </body>
