@@ -1,4 +1,4 @@
-export const SORTS_TERRE = [
+const SORTS_TERRE = [
   {
     id: "earth-1-armor-earth",
     name: "Armure de Terre (Armor of Earth)",
