@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grimoire des Sorts & Kihō — L5R 4e Édition | Campagne MJ David</title>
+  <title>Grimoire des Éléments & Sortilèges — L5R 4e Édition</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,23 +11,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- FAVICON DES 5 ANNEAUX -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='%23d4af37' stroke-width='3'/%3E<text x='64' y='76' font-family='serif' font-size='32' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3E%E5%B7%BB%3C/text%3E%3C/svg%3E">
 
-  <!-- 1. CHARGEMENT DES 8 SOUS-FICHIERS DE SORTS -->
-  <script src="data/sorts/sorts-universels.js"></script>
-  <script src="data/sorts/sorts-air.js"></script>
-  <script src="data/sorts/sorts-terre.js"></script>
-  <script src="data/sorts/sorts-feu.js"></script>
-  <script src="data/sorts/sorts-eau.js"></script>
-  <script src="data/sorts/sorts-vide.js"></script>
-  <script src="data/sorts/sorts-kiho.js"></script>
-  <script src="data/sorts/sorts-maho.js"></script>
-
-  <!-- 2. CHARGEMENT DU FICHIER QUI ASSEMBLE TOUT -->
-  <script src="data/sorts-data.js"></script>
-
-  <!-- 3. NAVIGATION COMMUNE -->
+  <!-- SCRIPTS DU PROJET -->
   <script src="js/navbar.js" defer></script>
+  <script src="data/sorts-data.js" defer></script>
+  <script src="js/grimoire.js" defer></script>
 
   <style>
     :root {
@@ -37,427 +26,224 @@
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 5%, #181014 0%, #0a0808 85%);
+      background-image: radial-gradient(circle at 50% 5%, #1f0b0b 0%, #0a0808 85%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
     h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
-    .card-clean {
-      background: rgba(18, 14, 16, 0.94);
-      border: 1px solid rgba(212, 175, 55, 0.25);
-      transition: border-color 0.2s ease, transform 0.2s ease;
+    
+    .card-spell {
+      background: rgba(18, 14, 14, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.22);
+      transition: all 0.25s ease;
     }
-    .card-clean:hover {
-      border-color: rgba(212, 175, 55, 0.5);
+    .card-spell:hover {
+      border-color: rgba(212, 175, 55, 0.55);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     }
-    .gold-text { color: var(--gold); }
-    .gold-gradient {
-      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    
     input, select {
-      background-color: #0d0b0b !important;
-      border: 1px solid #3a3028 !important;
+      background-color: #0e0b0b !important;
+      border: 1px solid #3d3126 !important;
       color: #f3e5ab !important;
     }
     input:focus, select:focus {
       outline: none;
       border-color: var(--gold) !important;
-      box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
-    }
-    .badge-univ { background: #262626; color: #f5f5f5; border: 1px solid #525252; }
-    .badge-air { background: #082f49; color: #7dd3fc; border: 1px solid #0284c7; }
-    .badge-earth { background: #271a0c; color: #fde047; border: 1px solid #a16207; }
-    .badge-fire { background: #450a0a; color: #fca5a5; border: 1px solid #dc2626; }
-    .badge-water { background: #082f49; color: #93c5fd; border: 1px solid #2563eb; }
-    .badge-void { background: #2e1065; color: #d8b4fe; border: 1px solid #7c3aed; }
-    .badge-maho { background: #4c0519; color: #fda4af; border: 1px solid #e11d48; }
-    .badge-kiho { background: #064e3b; color: #6ee7b7; border: 1px solid #059669; }
-
-    /* Filtre Mahō verrouillé */
-    .elem-btn[data-elem="Maho"].locked {
-      border-color: #881337 !important;
-      color: #fda4af !important;
-      opacity: 0.85;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.35);
     }
 
-    /* Voile d'occultation des cartes Mahō */
-    .maho-card {
-      position: relative;
-      overflow: hidden;
+    /* BADGES ÉLÉMENTAIRES */
+    .badge-terre { background: rgba(120, 53, 15, 0.35); color: #fde68a; border: 1px solid #b45309; }
+    .badge-eau { background: rgba(30, 58, 138, 0.35); color: #93c5fd; border: 1px solid #2563eb; }
+    .badge-feu { background: rgba(153, 27, 27, 0.35); color: #fca5a5; border: 1px solid #dc2626; }
+    .badge-air { background: rgba(19, 78, 74, 0.35); color: #99f6e4; border: 1px solid #0d9488; }
+    .badge-vide { background: rgba(88, 28, 135, 0.35); color: #e9d5ff; border: 1px solid #9333ea; }
+    .badge-universel { background: rgba(68, 64, 60, 0.4); color: #f5f5f4; border: 1px solid #78716c; }
+    .badge-kiho { background: rgba(180, 83, 9, 0.35); color: #fed7aa; border: 1px solid #ea580c; }
+    .badge-maho { background: rgba(136, 19, 55, 0.5); color: #fecdd3; border: 1px solid #e11d48; }
+
+    /* ANIMATION DE MISE EN ÉVIDENCE D'UN SORT CIBLÉ PAR ANCRE (#sort-<id>) */
+    @keyframes pulseGlow {
+      0% {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.9), 0 0 25px rgba(245, 158, 11, 0.7);
+        transform: scale(1.015);
+      }
+      60% {
+        border-color: #d4af37;
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.6), 0 0 15px rgba(212, 175, 55, 0.4);
+      }
+      100% {
+        border-color: rgba(212, 175, 55, 0.45);
+        box-shadow: none;
+        transform: scale(1);
+      }
     }
-    .maho-card.sealed .maho-content {
-      filter: blur(6px);
-      user-select: none;
-      pointer-events: none;
-    }
-    .maho-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(18, 8, 12, 0.92);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      z-index: 10;
-      border-radius: 0.75rem;
-      transition: background 0.2s ease;
-    }
-    .maho-overlay:hover {
-      background: rgba(28, 10, 18, 0.95);
+    .sort-highlight {
+      animation: pulseGlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- NAVIGATION SUPÉRIEURE INJECTÉE PAR NAVBAR.JS -->
+  <!-- HEADER / MENU CENTRALISÉ -->
   <header id="site-header"></header>
 
-  <!-- MODALE VERROU MAHŌ -->
-  <div id="maho-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="card-clean rounded-2xl max-w-md w-full p-6 border-rose-900 shadow-2xl space-y-4">
-      <div class="flex items-center gap-2 text-rose-500 font-imperial font-bold text-sm tracking-wider uppercase">
-        <span>🩸</span> Sceau des Tsukai-Sagasu
-      </div>
-      <h3 class="text-xl font-bold font-imperial text-rose-200">Accès Restreint : Magie du Sang</h3>
-      <p class="text-xs text-stone-400 leading-relaxed">
-        Ce savoir corrompt quiconque y pose les yeux sans y avoir été préparé par les inquisiteurs Kuni. Entrez le mot de passe MJ pour lever le sceau.
+  <!-- CONTENU PRINCIPAL DU GRIMOIRE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- TITRE & ACCROCHE -->
+    <div class="text-center space-y-2">
+      <h1 class="text-2xl md:text-4xl font-extrabold font-imperial tracking-wide text-amber-300">
+        Grimoire des Prières & Sortilèges
+      </h1>
+      <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto">
+        Recueil officiel des invocations aux Kami élémentaires, Kihos de la Confrérie et magies sacrées de Rokugan (4ᵉ Édition).
       </p>
-      <div class="space-y-2">
-        <input type="password" id="maho-password-input" placeholder="Mot de passe MJ..." class="w-full p-2.5 rounded text-sm font-medium">
-        <p id="maho-error" class="hidden text-[11px] text-rose-400 font-bold">Mot de passe incorrect.</p>
+    </div>
+
+    <!-- BANDEAU DE RECHERCHE ET FILTRES -->
+    <section class="card-spell rounded-xl p-4 md:p-5 space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 text-xs items-end">
+        
+        <!-- Recherche textuelle (q) -->
+        <div class="md:col-span-5 space-y-1">
+          <label for="search-input" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Recherche par nom, mot-clé ou effet
+          </label>
+          <div class="relative">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Ex: Frappe de jade, Guérison, Armure..." 
+              class="w-full p-2.5 pl-8 rounded text-xs font-medium placeholder-stone-600 focus:ring-1 focus:ring-amber-500"
+            >
+            <span class="absolute left-2.5 top-2.5 text-stone-500">🔍</span>
+          </div>
+        </div>
+
+        <!-- Filtre Élément (el) -->
+        <div class="md:col-span-3 space-y-1">
+          <label for="element-select" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Élément / Voie
+          </label>
+          <select id="element-select" class="w-full p-2.5 rounded text-xs font-medium cursor-pointer">
+            <option value="tous">Tous les Éléments</option>
+            <option value="universel">Universels (Communion / Sentir)</option>
+            <option value="terre">Terre (Défense & Purification)</option>
+            <option value="eau">Eau (Guérison & Mouvement)</option>
+            <option value="feu">Feu (Destruction & Énergie)</option>
+            <option value="air">Air (Illusion & Détection)</option>
+            <option value="vide">Vide (Ishiken-dō)</option>
+            <option value="kiho">Kihos (Moines & Shinsei)</option>
+            <option value="maho" id="opt-maho" class="text-red-400">🩸 Mahō (Magie du Sang)</option>
+          </select>
+        </div>
+
+        <!-- Filtre Rang (rang) -->
+        <div class="md:col-span-2 space-y-1">
+          <label for="rank-select" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Rang de Maîtrise
+          </label>
+          <select id="rank-select" class="w-full p-2.5 rounded text-xs font-medium cursor-pointer">
+            <option value="tous">Tous les Rangs</option>
+            <option value="0">Rang 0 (Universels)</option>
+            <option value="1">Rang 1</option>
+            <option value="2">Rang 2</option>
+            <option value="3">Rang 3</option>
+            <option value="4">Rang 4</option>
+            <option value="5">Rang 5</option>
+            <option value="6">Rang 6</option>
+          </select>
+        </div>
+
+        <!-- Bouton Reset & Sceau Mahō -->
+        <div class="md:col-span-2 flex gap-2">
+          <button 
+            type="button" 
+            id="btn-reset-filters" 
+            onclick="resetAllFilters()" 
+            class="flex-1 p-2.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-bold transition text-xs"
+            title="Effacer les filtres et réinitialiser l'adresse"
+          >
+            Réinitialiser
+          </button>
+
+          <button 
+            type="button" 
+            id="btn-toggle-maho" 
+            onclick="toggleMahoSecurityModal()" 
+            class="p-2.5 rounded bg-stone-950 hover:bg-stone-900 text-stone-500 border border-stone-800 transition text-xs" 
+            title="Sceau du Mahō (Verrouillé)"
+          >
+            🔒
+          </button>
+        </div>
+
       </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button id="maho-cancel-btn" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-imperial">
-          Annuler
-        </button>
-        <button id="maho-unlock-btn" class="px-4 py-1.5 rounded bg-rose-900 hover:bg-rose-800 text-rose-100 font-bold text-xs font-imperial transition">
-          Rompre le Sceau
-        </button>
+
+      <!-- COMPTEUR DE RÉSULTATS & LIEN RAPIDE -->
+      <div class="flex flex-wrap justify-between items-center text-[11px] border-t border-amber-500/15 pt-2 text-stone-400">
+        <div>
+          Résultats affichés : <b id="results-count" class="text-amber-300 font-bold font-imperial">0</b> sort(s)
+        </div>
+        <div id="active-filters-badges" class="flex gap-1.5 flex-wrap"></div>
+      </div>
+    </section>
+
+    <!-- LISTE DES SORTS GOUVERNÉE DYNAMIQUEMENT -->
+    <section id="spells-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+
+    <!-- ÉTAT AUCUN RÉSULTAT -->
+    <div id="no-results" class="hidden text-center py-16 card-spell rounded-xl space-y-3">
+      <div class="text-3xl">📭</div>
+      <p class="text-stone-300 font-bold text-sm">Aucun sort ne correspond à votre recherche.</p>
+      <p class="text-stone-500 text-xs">Vérifiez l'orthographe du sort, réduisez les filtres d'élément ou de rang, ou effacez la recherche.</p>
+      <button onclick="resetAllFilters()" class="mt-2 px-3 py-1.5 bg-amber-600/30 hover:bg-amber-600/50 text-amber-200 border border-amber-500/40 rounded text-xs font-bold transition">
+        Effacer tous les filtres
+      </button>
+    </div>
+
+  </main>
+
+  <!-- MODALE DU SCEAU DE MAHŌ (PROTECTION CONTRE LA SOUILLURE) -->
+  <div id="maho-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="card-spell rounded-xl max-w-md w-full p-6 border-red-900/60 bg-[#12080a] space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-red-900/40 pb-2">
+        <h3 class="font-imperial font-bold text-red-400 text-base flex items-center gap-2">
+          <span>🩸</span> Sceau Interdit de Mahō
+        </h3>
+        <button onclick="toggleMahoSecurityModal(false)" class="text-stone-500 hover:text-stone-300 font-bold">✕</button>
+      </div>
+
+      <p class="text-xs text-stone-300 leading-relaxed">
+        Les parchemins de Mahō appellent la Souillure de Jigoku. Pour des raisons d'orthodoxie impériale, ces sortilèges sont strictement dissimulés aux yeux des magistrats et joueurs profanes.
+      </p>
+
+      <div class="space-y-1.5 text-xs">
+        <label for="maho-password-input" class="block text-red-300 font-bold">Mot de passe ou sceau de déverrouillage :</label>
+        <input 
+          type="password" 
+          id="maho-password-input" 
+          placeholder="Entrez le mot de passe..." 
+          class="w-full p-2.5 rounded text-xs border-red-900 focus:border-red-500"
+          onkeydown="if(event.key === 'Enter') unlockMahoWithPassword()"
+        >
+        <span id="maho-error" class="hidden text-[10px] text-red-400 block">Sceau rejeté. Les Kamis de la Terre refusent l'accès.</span>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 text-xs">
+        <button onclick="toggleMahoSecurityModal(false)" class="px-3 py-1.5 rounded bg-stone-900 text-stone-400 hover:text-white">Annuler</button>
+        <button onclick="unlockMahoWithPassword()" class="px-3 py-1.5 rounded bg-red-900 hover:bg-red-800 text-red-100 font-bold transition">Rompre le Sceau</button>
       </div>
     </div>
   </div>
 
-  <!-- CONTENU PRINCIPAL -->
-  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
-
-    <!-- HERO SECTION -->
-    <section class="card-clean rounded-2xl p-6 md:p-10 border-amber-500/40 relative overflow-hidden">
-      <div class="max-w-3xl space-y-3 relative z-10">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/40 text-[10px] uppercase tracking-widest text-purple-200 font-bold">
-          <span>📜</span> Bibliothèque Théologique & Spirituelle
-        </div>
-        <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide gold-gradient">
-          LE GRIMOIRE DE ROKUGAN
-        </h1>
-        <p class="text-xs md:text-sm text-stone-300 italic">
-          « Les Kami ne sont pas des serviteurs que l’on commande, mais les esprits primordiaux du monde avec lesquels le sage entre en harmonie. »
-        </p>
-        <p class="text-xs md:text-sm text-stone-400 leading-relaxed pt-1">
-          Compendium officiel des prières aux Éléments (Air, Terre, Feu, Eau, Vide), des mystères interdits de la Magie du Sang (Mahō) et des techniques d'éveil intérieur (Kihō) de la 4e Édition.
-        </p>
-      </div>
-    </section>
-
-    <!-- BARRE DE RECHERCHE ET FILTRES DYNAMIQUES -->
-    <section class="card-clean rounded-xl p-5 space-y-4 border-amber-500/30">
-      
-      <!-- Ligne 1 : Recherche texte & Filtre Maîtrise -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="md:col-span-2">
-          <label class="block text-stone-400 mb-1 font-bold">Recherche par nom, mot-clé ou effet :</label>
-          <div class="relative">
-            <input type="text" id="search-input" placeholder="Ex: Soin, Armure de Terre, Invocation, Vol, Peur..." class="w-full p-2.5 rounded text-sm font-medium pr-10">
-            <button id="clear-search-btn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-300 text-xs px-1">✕</button>
-          </div>
-        </div>
-        <div>
-          <label class="block text-stone-400 mb-1 font-bold">Rang de Maîtrise (Niveau) :</label>
-          <select id="mastery-select" class="w-full p-2.5 rounded text-sm font-medium">
-            <option value="all">Tous les Rangs (1 à 6)</option>
-            <option value="Universel">Sorts Fondamentaux (Universels)</option>
-            <option value="1">Rang 1 (Initié)</option>
-            <option value="2">Rang 2 (Adepte)</option>
-            <option value="3">Rang 3 (Maître)</option>
-            <option value="4">Rang 4 (Éminent)</option>
-            <option value="5">Rang 5 (Légendaire)</option>
-            <option value="6">Rang 6 (Céleste)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Ligne 2 : Boutons d'Éléments & Verrou MJ -->
-      <div class="pt-2 border-t border-stone-800 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-stone-400 font-bold uppercase text-[10px] mr-1">Élément / Voie :</span>
-          <button class="elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow" data-elem="all">Tous</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Air">風 Air</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Terre">土 Terre</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Feu">火 Feu</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Eau">水 Eau</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Vide">空 Vide (Ishiken)</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Kiho">気 Kihō (Moines)</button>
-          <button class="elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition" data-elem="Maho">血 Mahō (Interdit)</button>
-        </div>
-
-        <button id="maho-relock-btn" class="hidden text-[10px] text-stone-500 hover:text-rose-400 font-imperial transition flex items-center gap-1 px-2 py-1 rounded bg-stone-950 border border-stone-800">
-          <span>🔒</span> Reverrouiller Mahō
-        </button>
-      </div>
-
-      <!-- Résumé du filtrage -->
-      <div class="text-[11px] text-stone-400 flex flex-wrap justify-between items-center gap-2 pt-1">
-        <span>Résultats affichés : <b id="results-count" class="text-amber-300">0</b></span>
-        <span class="italic text-stone-500">Rappel : ND du Sort = 5 + (Maîtrise × 5) • Jet d'incantation = Anneau + Théologie</span>
-      </div>
-
-    </section>
-
-    <!-- LISTE DES SORTS ET POUVOIRS (GRILLE DE CARTES) -->
-    <section id="spells-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <div class="col-span-full text-center py-12 card-clean rounded-xl">
-        <span class="text-stone-400 text-sm font-imperial">Chargement du grimoire...</span>
-      </div>
-    </section>
-
-  </main>
-
   <!-- PIED DE PAGE -->
-  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Grimoire complet des Sorts & Invocations
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60">
+    Campagne L5R – Grimoire Shugenja & Moines • Liaison dynamique avec le Carnet de Rokugan
   </footer>
-
-  <!-- SCRIPT DU GRIMOIRE (STANDARD JS, PAS D'IMPORT) -->
-  <script>
-    let allSpells = [];
-    let currentElement = 'all';
-    const MAHO_SECRET_PASS = "JIGOKU";
-    let isMahoUnlocked = false;
-
-    try {
-      isMahoUnlocked = sessionStorage.getItem("l5r_maho_unlocked") === "true";
-    } catch (e) {
-      isMahoUnlocked = false;
-    }
-
-    const searchInput = document.getElementById('search-input');
-    const masterySelect = document.getElementById('mastery-select');
-    const clearSearchBtn = document.getElementById('clear-search-btn');
-    const resultsCount = document.getElementById('results-count');
-    const spellsGrid = document.getElementById('spells-grid');
-    const elemButtons = document.querySelectorAll('.elem-btn');
-    const mahoModal = document.getElementById('maho-modal');
-    const mahoInput = document.getElementById('maho-password-input');
-    const mahoError = document.getElementById('maho-error');
-    const mahoBtn = document.querySelector('.elem-btn[data-elem="Maho"]');
-    const mahoRelockBtn = document.getElementById('maho-relock-btn');
-
-    function updateMahoState() {
-      if (mahoBtn) {
-        mahoBtn.innerHTML = isMahoUnlocked ? '🩸 Mahō (Déverrouillé)' : '🔒 Mahō (Scellé)';
-        mahoBtn.classList.toggle('locked', !isMahoUnlocked);
-      }
-      if (mahoRelockBtn) {
-        mahoRelockBtn.classList.toggle('hidden', !isMahoUnlocked);
-      }
-    }
-
-    function setElementFilter(elem) {
-      if (elem === 'Maho' && !isMahoUnlocked) {
-        mahoError?.classList.add('hidden');
-        if (mahoInput) mahoInput.value = '';
-        mahoModal?.classList.remove('hidden');
-        mahoInput?.focus();
-        return;
-      }
-
-      currentElement = elem;
-      elemButtons.forEach(btn => {
-        const isTarget = btn.getAttribute('data-elem') === elem;
-        if (isTarget) {
-          btn.className = "elem-btn px-3 py-1.5 rounded bg-amber-600 text-black font-bold font-imperial transition shadow";
-        } else {
-          btn.className = "elem-btn px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-imperial transition";
-        }
-      });
-
-      updateMahoState();
-      render();
-    }
-
-    window.revealMahoSpell = function(overlayEl) {
-      const card = overlayEl.closest('.maho-card');
-      if (!card) return;
-      card.classList.remove('sealed');
-      overlayEl.remove();
-    };
-
-    function render() {
-      if (!spellsGrid) return;
-      const q = searchInput?.value.toLowerCase().trim() || "";
-      const m = masterySelect?.value || "all";
-
-      if (clearSearchBtn) {
-        clearSearchBtn.classList.toggle('hidden', q.length === 0);
-      }
-
-      const filtered = allSpells.filter(spell => {
-        if (spell.element === 'Maho' && !isMahoUnlocked) {
-          return false;
-        }
-
-        if (currentElement === 'all' && spell.element === 'Maho') {
-          return false;
-        }
-
-        if (currentElement !== 'all' && spell.element !== currentElement) {
-          return false;
-        }
-
-        if (m !== 'all') {
-          if (m === 'Universel' && spell.mastery !== 'Universel') return false;
-          if (m !== 'Universel' && String(spell.mastery) !== m) return false;
-        }
-
-        if (q) {
-          const matchName = (spell.name || "").toLowerCase().includes(q);
-          const matchDesc = (spell.desc || "").toLowerCase().includes(q);
-          const matchKeyw = (spell.keywords || []).some(k => k.toLowerCase().includes(q));
-          if (!matchName && !matchDesc && !matchKeyw) return false;
-        }
-
-        return true;
-      });
-
-      if (resultsCount) resultsCount.textContent = filtered.length;
-
-      if (filtered.length === 0) {
-        spellsGrid.innerHTML = `
-          <div class="col-span-full text-center py-12 card-clean rounded-xl">
-            <span class="text-3xl block mb-2">📜</span>
-            <span class="font-imperial font-bold text-amber-300 text-base">Aucun sort ou pouvoir ne correspond à vos critères</span>
-            <p class="text-xs text-stone-500 mt-1">Modifiez vos mots-clés ou sélectionnez une autre catégorie d'éléments.</p>
-          </div>
-        `;
-        return;
-      }
-
-      spellsGrid.innerHTML = filtered.map(s => {
-        const isMaho = s.element === "Maho";
-        let badgeClass = "badge-earth";
-        if (s.element === "Universel") badgeClass = "badge-univ";
-        else if (s.element === "Air") badgeClass = "badge-air";
-        else if (s.element === "Feu") badgeClass = "badge-fire";
-        else if (s.element === "Eau") badgeClass = "badge-water";
-        else if (s.element === "Vide") badgeClass = "badge-void";
-        else if (isMaho) badgeClass = "badge-maho";
-        else if (s.element === "Kiho") badgeClass = "badge-kiho";
-
-        const ndCalculated = s.mastery === "Universel" 
-          ? "ND 10" 
-          : (s.element === "Kiho" ? "Kihō" : `ND ${5 + (parseInt(s.mastery, 10) * 5)}`);
-
-        return `
-          <div class="card-clean rounded-xl p-5 space-y-3 flex flex-col justify-between shadow-lg ${isMaho ? 'maho-card sealed border-rose-900/60' : ''}">
-            ${isMaho ? `
-              <div class="maho-overlay" onclick="revealMahoSpell(this)">
-                <span class="text-2xl mb-1">🩸</span>
-                <span class="text-rose-300 font-imperial font-bold text-xs uppercase tracking-wide">Pacte Maudit Scellé</span>
-                <p class="text-[10px] text-stone-400 mt-1">Cliquer pour rompre le sceau et lire ce rituel</p>
-              </div>
-            ` : ''}
-
-            <div class="space-y-2 maho-content">
-              <div class="flex justify-between items-start gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial ${badgeClass}">
-                  ${s.element} ${s.mastery === 'Universel' ? '• Universel' : (s.element === 'Kiho' ? '• Éveil ' + s.mastery : '• Rang ' + s.mastery)}
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-bold text-amber-300 font-imperial">
-                  ${ndCalculated}
-                </span>
-              </div>
-              <h3 class="text-sm font-bold font-imperial ${isMaho ? 'text-rose-300' : 'text-amber-200'}">${s.name}</h3>
-              <div class="flex flex-wrap gap-1 text-[9px] text-stone-400">
-                ${(s.keywords || []).map(k => `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-800">${k}</span>`).join('')}
-              </div>
-            </div>
-
-            <div class="space-y-2 pt-2 border-t border-stone-800/80 text-xs maho-content">
-              <p class="text-stone-300 leading-relaxed text-[11px]">${s.desc}</p>
-              
-              <div class="p-2 rounded bg-black/50 border border-stone-800 text-[10px] space-y-1 text-stone-400">
-                <div><b class="text-stone-300">Portée :</b> ${s.range} | <b class="text-stone-300">Zone :</b> ${s.area}</div>
-                <div><b class="text-stone-300">Durée :</b> ${s.duration}</div>
-                ${s.raises ? `<div class="pt-1 border-t border-stone-800/60 text-amber-400/90"><b class="text-amber-300">Augmentations :</b> ${s.raises}</div>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    searchInput?.addEventListener('input', render);
-    masterySelect?.addEventListener('change', render);
-
-    clearSearchBtn?.addEventListener('click', () => {
-      if (searchInput) searchInput.value = '';
-      render();
-    });
-
-    elemButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        setElementFilter(btn.getAttribute('data-elem'));
-      });
-    });
-
-    document.getElementById('maho-cancel-btn')?.addEventListener('click', () => {
-      mahoModal?.classList.add('hidden');
-    });
-
-    function tryUnlockMaho() {
-      if (mahoInput?.value.trim().toUpperCase() === MAHO_SECRET_PASS) {
-        isMahoUnlocked = true;
-        try {
-          sessionStorage.setItem("l5r_maho_unlocked", "true");
-        } catch (e) {}
-        mahoModal?.classList.add('hidden');
-        setElementFilter('Maho');
-      } else {
-        mahoError?.classList.remove('hidden');
-      }
-    }
-
-    document.getElementById('maho-unlock-btn')?.addEventListener('click', tryUnlockMaho);
-
-    mahoInput?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') tryUnlockMaho();
-    });
-
-    mahoRelockBtn?.addEventListener('click', () => {
-      isMahoUnlocked = false;
-      try {
-        sessionStorage.removeItem("l5r_maho_unlocked");
-      } catch (e) {}
-      setElementFilter('all');
-    });
-
-    // Chargement immédiat des données globales
-    function init() {
-      allSpells = window.SORTS_DATA || [];
-      updateMahoState();
-      render();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-  </script>
 
 </body>
 </html>
