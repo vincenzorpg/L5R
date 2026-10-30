@@ -5,7 +5,7 @@
 (function () {
   let isMahoUnlocked = false;
 
-  // Normalisation Unicode : suppression des accents, mise en minuscules
+  // Normalisation Unicode : minuscules, suppression des accents et espaces superflus
   function normalizeText(str) {
     return (str || "")
       .toString()
@@ -22,28 +22,60 @@
       .replace(/^-+|-+$/g, "");
   }
 
-  // Récupération sécurisée et aplatissement des sorts
+  // Récupération universelle des sorts
   function getSpellsData() {
     const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
     if (Array.isArray(raw)) return raw;
     return Object.values(raw).filter(v => v && typeof v === "object");
   }
 
+  // Extraction fiable de l'élément canonique
+  function getSpellElement(spell) {
+    if (spell.isMaho) return "maho";
+    const raw = spell.element || spell.anneau || spell.ring || spell.elem || spell.type || "";
+    const norm = normalizeText(raw);
+
+    if (norm.includes("terre") || norm.includes("earth")) return "terre";
+    if (norm.includes("eau") || norm.includes("water")) return "eau";
+    if (norm.includes("feu") || norm.includes("fire")) return "feu";
+    if (norm.includes("air")) return "air";
+    if (norm.includes("vide") || norm.includes("void")) return "vide";
+    if (norm.includes("kiho") || spell.isKiho) return "kiho";
+    if (norm.includes("maho")) return "maho";
+    if (norm.includes("universel") || norm.includes("universal") || norm.includes("tous")) return "universel";
+
+    return norm || "universel";
+  }
+
+  // Extraction fiable du rang numérique (0 à 6)
+  function getSpellRank(spell) {
+    const val = spell.rang !== undefined ? spell.rang :
+               (spell.maitrise !== undefined ? spell.maitrise :
+               (spell.rank !== undefined ? spell.rank :
+               (spell.niveau !== undefined ? spell.niveau : null)));
+
+    if (val !== null && val !== undefined) {
+      const m = val.toString().match(/\d+/);
+      if (m) return parseInt(m[0], 10);
+    }
+
+    // Tente de trouver un chiffre dans la chaîne d'anneau (ex: "Air 3")
+    const str = (spell.anneau || spell.element || "").toString();
+    const mStr = str.match(/\d+/);
+    if (mStr) return parseInt(mStr[0], 10);
+
+    return 0;
+  }
+
   // Badge CSS selon l'élément
   function getElementBadgeClass(element) {
-    const el = normalizeText(element);
-    switch (el) {
-      case "terre":
-      case "earth": return "badge-terre";
-      case "eau":
-      case "water": return "badge-eau";
-      case "feu":
-      case "fire": return "badge-feu";
+    switch (element) {
+      case "terre": return "badge-terre";
+      case "eau": return "badge-eau";
+      case "feu": return "badge-feu";
       case "air": return "badge-air";
-      case "vide":
-      case "void": return "badge-vide";
-      case "universel":
-      case "universal": return "badge-universel";
+      case "vide": return "badge-vide";
+      case "universel": return "badge-universel";
       case "kiho": return "badge-kiho";
       case "maho": return "badge-maho";
       default: return "badge-universel";
@@ -51,7 +83,7 @@
   }
 
   // =========================================================================
-  // FILTRAGE ET RENDU
+  // APPLICATION DES FILTRES ET RENDU
   // =========================================================================
   function applyFilters() {
     const searchInput = document.getElementById("search-input");
@@ -69,43 +101,37 @@
 
     const allSpells = getSpellsData();
 
-    // 1. Protection Mahō
+    // 1. Filtrage Mahō (masqué sans mot de passe)
     let filtered = allSpells.filter(spell => {
-      const el = normalizeText(spell.element || spell.ring || spell.elem || "");
-      const isMahoSpell = el === "maho" || spell.isMaho === true;
-      if (isMahoSpell && !isMahoUnlocked) return false;
+      const el = getSpellElement(spell);
+      if (el === "maho" && !isMahoUnlocked) return false;
       return true;
     });
 
-    // 2. Filtre par Élément (support FR & EN)
+    // 2. Filtre par Élément / Voie
     if (selectedElement !== "tous") {
       filtered = filtered.filter(spell => {
-        const el = normalizeText(spell.element || spell.ring || spell.elem || "");
-        if (selectedElement === "terre") return el === "terre" || el === "earth";
-        if (selectedElement === "eau") return el === "eau" || el === "water";
-        if (selectedElement === "feu") return el === "feu" || el === "fire";
-        if (selectedElement === "air") return el === "air";
-        if (selectedElement === "vide") return el === "vide" || el === "void";
-        if (selectedElement === "universel") return el === "universel" || el === "universal";
+        const el = getSpellElement(spell);
         return el === selectedElement;
       });
     }
 
     // 3. Filtre par Rang de Maîtrise
     if (selectedRank !== "tous") {
-      const rNum = parseInt(selectedRank, 10);
+      const targetRank = parseInt(selectedRank, 10);
       filtered = filtered.filter(spell => {
-        const r = parseInt(spell.rang !== undefined ? spell.rang : spell.rank, 10);
-        return r === rNum;
+        return getSpellRank(spell) === targetRank;
       });
     }
 
-    // 4. Recherche texte tolérante (Nom, Descriptif, Mots-clés)
+    // 4. Recherche texte (nom, effet/description, mots-clés, portée)
     if (query !== "") {
       filtered = filtered.filter(spell => {
         const nom = normalizeText(spell.nom || spell.name);
         const desc = normalizeText(spell.description || spell.effet || spell.effect || spell.desc);
-        const mots = normalizeText(Array.isArray(spell.motsCles || spell.keywords) ? (spell.motsCles || spell.keywords).join(" ") : (spell.motsCles || spell.keywords));
+        const mots = normalizeText(Array.isArray(spell.motsCles || spell.keywords) 
+          ? (spell.motsCles || spell.keywords).join(" ") 
+          : (spell.motsCles || spell.keywords));
         const portee = normalizeText(spell.portee || spell.range);
 
         return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query);
@@ -127,8 +153,8 @@
         const spellId = spell.id || slugify(spellName);
         const cardId = `sort-${spellId}`;
 
-        const spellElem = spell.element || spell.ring || "Universel";
-        const spellRank = spell.rang !== undefined ? spell.rang : (spell.rank !== undefined ? spell.rank : 0);
+        const spellElem = getSpellElement(spell);
+        const spellRank = getSpellRank(spell);
         const badgeClass = getElementBadgeClass(spellElem);
 
         const keywordsRaw = spell.motsCles || spell.keywords;
@@ -140,6 +166,7 @@
 
         card.innerHTML = `
           <div>
+            <!-- En-tête -->
             <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
               <div>
                 <h2 class="font-bold font-imperial text-amber-200 text-sm md:text-base leading-tight">
@@ -149,7 +176,7 @@
                 </h2>
                 <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                   <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${badgeClass}">
-                    ${spellElem.toUpperCase()} ${parseInt(spellRank) === 0 ? "(Universel)" : `— Rang ${spellRank}`}
+                    ${spellElem.toUpperCase()} ${spellRank === 0 ? "(Universel)" : `— Rang ${spellRank}`}
                   </span>
                   ${keywordsStr ? `<span class="text-[9px] text-stone-500 italic">[${keywordsStr}]</span>` : ""}
                 </div>
@@ -164,6 +191,7 @@
               </button>
             </div>
 
+            <!-- Caractéristiques techniques -->
             <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] text-stone-400 mt-2 bg-black/40 p-2 rounded border border-stone-900">
               <div><b class="text-stone-300">Portée :</b> ${spell.portee || spell.range || "Personnelle"}</div>
               <div><b class="text-stone-300">Zone :</b> ${spell.zone || spell.area || "1 cible"}</div>
@@ -171,11 +199,13 @@
               <div><b class="text-stone-300">Augmentations :</b> ${spell.augmentations || spell.raises || "Aucune"}</div>
             </div>
 
+            <!-- Description / Effet -->
             <div class="mt-2.5 text-stone-300 text-xs leading-relaxed space-y-1.5">
               <p>${spell.description || spell.effet || spell.effect || spell.desc || ""}</p>
             </div>
           </div>
 
+          <!-- Source / Pied de carte -->
           ${spell.source ? `
             <div class="pt-2 border-t border-stone-900 text-[9px] text-stone-600 flex justify-between items-center">
               <span>Source : ${spell.source}</span>
@@ -271,7 +301,7 @@
 
     const elParam = p.get("el");
     if (elParam && elementSelect) {
-      const elLower = elParam.toLowerCase();
+      const elLower = normalizeText(elParam);
       if (elLower === "maho") {
         if (isMahoUnlocked) elementSelect.value = "maho";
       } else {
