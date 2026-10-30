@@ -61,6 +61,41 @@
     .badge-void { background: #2e1065; color: #d8b4fe; border: 1px solid #7c3aed; }
     .badge-maho { background: #4c0519; color: #fda4af; border: 1px solid #e11d48; }
     .badge-kiho { background: #064e3b; color: #6ee7b7; border: 1px solid #059669; }
+    /* Style du filtre Mahō verrouillé */
+    .elem-btn[data-elem="Maho"].locked {
+      border-color: #881337 !important;
+      color: #fda4af !important;
+      opacity: 0.85;
+    }
+    
+    /* Voile d'occultation des cartes Mahō */
+    .maho-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .maho-card.sealed .maho-content {
+      filter: blur(6px);
+      user-select: none;
+      pointer-events: none;
+    }
+    .maho-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 8, 12, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 0.75rem;
+      transition: background 0.2s ease;
+    }
+    .maho-overlay:hover {
+      background: rgba(28, 10, 18, 0.95);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
