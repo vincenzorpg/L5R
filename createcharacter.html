@@ -794,6 +794,67 @@
       card.classList.remove('hidden');
     }
   </script>
+<!-- PRÉREMPLISSAGE DEPUIS L'URL (?clan=...&famille=...) -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const clanParam = params.get('clan');
+      const familyParam = params.get('famille') || params.get('family');
 
+      if (!clanParam) return;
+
+      // Fonction d'aide pour normaliser (minuscules, sans accents)
+      const clean = str => (str || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+      // Attendre que data/clans-data.js et character-generator.js aient peuplé sel-clan
+      function tryAutoSelect(attempts = 0) {
+        const selClan = document.getElementById('sel-clan');
+        if (!selClan || selClan.options.length <= 1) {
+          if (attempts < 20) setTimeout(() => tryAutoSelect(attempts + 1), 50);
+          return;
+        }
+
+        // 1. Sélectionner le Clan
+        const targetClan = clean(clanParam);
+        const clanOpt = Array.from(selClan.options).find(opt => 
+          clean(opt.value).includes(targetClan) || clean(opt.text).includes(targetClan)
+        );
+
+        if (clanOpt) {
+          selClan.value = clanOpt.value;
+          // Déclencher le changement pour que character-generator.js remplisse sel-family
+          if (typeof onClanChange === 'function') {
+            onClanChange();
+          } else {
+            selClan.dispatchEvent(new Event('change'));
+          }
+
+          // 2. Sélectionner la Famille si précisée
+          if (familyParam) {
+            setTimeout(() => {
+              const selFamily = document.getElementById('sel-family');
+              if (!selFamily) return;
+
+              const targetFam = clean(familyParam);
+              const famOpt = Array.from(selFamily.options).find(opt => 
+                clean(opt.value).includes(targetFam) || clean(opt.text).includes(targetFam)
+              );
+
+              if (famOpt) {
+                selFamily.value = famOpt.value;
+                if (typeof onFamilyChange === 'function') {
+                  onFamilyChange();
+                } else {
+                  selFamily.dispatchEvent(new Event('change'));
+                }
+              }
+            }, 60);
+          }
+        }
+      }
+
+      tryAutoSelect();
+    });
+  </script>
 </body>
 </html>
