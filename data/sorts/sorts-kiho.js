@@ -1,4 +1,4 @@
-export const SORTS_KIHO = [
+const SORTS_KIHO = [
   {
     id: "kiho-air-way-willow",
     name: "La Voie du Saule (Way of the Willow)",
