@@ -913,27 +913,43 @@
       tryAutoSelect();
     });
   </script>
-  <script>
+<script>
     // =========================================================================
-    // GESTION DU MENU DÉROULANT MULTI-SÉLECTION DES COMPÉTENCES
+    // GESTION DU MENU DÉROULANT MULTI-SÉLECTION DES COMPÉTENCES (CORRIGÉ)
     // =========================================================================
-    let originalAddSkillFn = null;
+    function getAddSkillFunction() {
+      // 1. Recherche par scope global direct (const / let / function)
+      try {
+        if (typeof addSkillFromCatalog === "function") {
+          return addSkillFromCatalog;
+        }
+      } catch (e) {}
+
+      // 2. Recherche sur l'objet window
+      if (typeof window.addSkillFromCatalog === "function") {
+        return window.addSkillFromCatalog;
+      }
+
+      return null;
+    }
 
     function initSkillsMultiSelect() {
       const origSelect = document.getElementById("sel-add-skill");
       const container = document.getElementById("skills-checkboxes-container");
       if (!origSelect || !container) return;
 
-      // Sauvegarde de la fonction d'origine de character-generator.js
-      if (!originalAddSkillFn && typeof window.addSkillFromCatalog === "function") {
-        originalAddSkillFn = window.addSkillFromCatalog;
-      }
+      // Conserver les compétences déjà cochées si une réactualisation survient
+      const previouslyChecked = new Set(
+        Array.from(container.querySelectorAll("input.skill-cb:checked")).map(cb => cb.value)
+      );
 
-      // Construit la liste des cases à cocher à partir des options du catalogue
-      const options = Array.from(origSelect.options).filter(opt => opt.value !== "");
+      // Filtrer les options factices ("-- Choisir --" ou vides)
+      const options = Array.from(origSelect.options).filter(opt => 
+        opt.value !== "" && opt.value !== "none" && !opt.text.includes("--")
+      );
+
       if (options.length === 0) {
-        // Si le select n'est pas encore peuplé par character-generator.js, on réessaie après 100ms
-        setTimeout(initSkillsMultiSelect, 100);
+        setTimeout(initSkillsMultiSelect, 150);
         return;
       }
 
@@ -941,12 +957,16 @@
       options.forEach(opt => {
         const row = document.createElement("label");
         row.className = "flex items-center gap-2 p-1.5 rounded hover:bg-stone-900/80 cursor-pointer text-stone-300 hover:text-amber-200 transition text-xs select-none";
+        
+        const isChecked = previouslyChecked.has(opt.value) ? "checked" : "";
         row.innerHTML = `
-          <input type="checkbox" value="${opt.value}" onchange="updateSelectedSkillsCount()" class="skill-cb accent-amber-500 rounded">
+          <input type="checkbox" value="${opt.value}" ${isChecked} onchange="updateSelectedSkillsCount()" class="skill-cb accent-amber-500 rounded">
           <span class="skill-name">${opt.text}</span>
         `;
         container.appendChild(row);
       });
+
+      updateSelectedSkillsCount();
     }
 
     function toggleSkillsDropdown(forceClose = false) {
@@ -958,6 +978,8 @@
         panel.classList.add("hidden");
         arrow?.classList.remove("rotate-180");
       } else {
+        // Synchroniser les options disponibles avec le catalogue actuel avant ouverture
+        initSkillsMultiSelect();
         panel.classList.remove("hidden");
         arrow?.classList.add("rotate-180");
         document.getElementById("filter-skills-input")?.focus();
@@ -978,6 +1000,8 @@
       const countLabel = document.getElementById("skills-selected-count");
       const summaryLabel = document.getElementById("skills-checked-summary");
 
+      if (!countLabel || !summaryLabel) return;
+
       if (checked.length === 0) {
         countLabel.textContent = "Choisir des compétences...";
         summaryLabel.textContent = "0 sélectionnée(s)";
@@ -992,31 +1016,61 @@
       updateSelectedSkillsCount();
     }
 
-    // Ajoute l'ensemble des compétences cochées en réutilisant la logique d'origine
     function addSelectedSkills() {
-      const checkedBoxes = document.querySelectorAll("#skills-checkboxes-container input.skill-cb:checked");
+      const checkedBoxes = Array.from(document.querySelectorAll("#skills-checkboxes-container input.skill-cb:checked"));
       const origSelect = document.getElementById("sel-add-skill");
 
-      if (checkedBoxes.length === 0) {
+      if (!checkedBoxes || checkedBoxes.length === 0) {
         alert("Veuillez cocher au moins une compétence dans la liste.");
         return;
       }
 
-      const addFn = originalAddSkillFn || window.addSkillFromCatalog;
+      const addFn = getAddSkillFunction();
+      if (!addFn || !origSelect) {
+        alert("Erreur technique : fonction d'ajout de compétence introuvable.");
+        return;
+      }
 
-      if (typeof addFn === "function" && origSelect) {
-        checkedBoxes.forEach(cb => {
-          origSelect.value = cb.value;
+      // Traitement séquentiel de chaque compétence cochée
+      checkedBoxes.forEach(cb => {
+        const targetVal = cb.value;
+
+        // Repérer l'option dans le <select> d'origine (par value ou par text)
+        const matchedOption = Array.from(origSelect.options).find(o => 
+          o.value === targetVal || o.text === targetVal || o.text.startsWith(targetVal)
+        );
+
+        if (matchedOption) {
+          origSelect.selectedIndex = matchedOption.index;
+          origSelect.value = matchedOption.value;
+        } else {
+          origSelect.value = targetVal;
+        }
+
+        // Déclencher le changement et exécuter la fonction d'ajout officielle
+        origSelect.dispatchEvent(new Event("change", { bubbles: true }));
+        try {
           addFn();
-          cb.checked = false;
-        });
+        } catch (err) {
+          console.error("Erreur lors de l'ajout de la compétence :", targetVal, err);
+        }
+
+        cb.checked = false;
+      });
+
+      // Recalcul global du personnage si disponible
+      if (typeof updateAll === "function") {
+        updateAll();
       }
 
       updateSelectedSkillsCount();
       toggleSkillsDropdown(true);
+
+      // Rafraîchir les compétences restantes dans le panneau
+      setTimeout(initSkillsMultiSelect, 100);
     }
 
-    // Fermer le menu lors d'un clic en dehors
+    // Fermer le panneau si on clique en dehors
     document.addEventListener("click", (e) => {
       const wrapper = document.getElementById("skills-dropdown-wrapper");
       if (wrapper && !wrapper.contains(e.target)) {
@@ -1024,9 +1078,12 @@
       }
     });
 
-    // Initialisation dès que le DOM et les scripts de données sont prêts
+    // Synchronisation automatique si le clan ou l'école change
     window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(initSkillsMultiSelect, 150);
+      setTimeout(initSkillsMultiSelect, 200);
+
+      document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(initSkillsMultiSelect, 200));
+      document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(initSkillsMultiSelect, 200));
     });
   </script>
 </body>
