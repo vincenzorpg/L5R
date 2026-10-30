@@ -118,14 +118,26 @@ function initCatalogSelectors() {
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // 1. Compétences (Filtrage des compétences déjà possédées)
+// 1. Compétences (Filtrage intelligent incluant les variantes d'école avec parenthèses)
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
-    const ownedSkillNames = new Set((currentSkills || []).map(s => s.name.toLowerCase().trim()));
+    // Fonction utilitaire pour extraire le nom racine : "Kenjutsu (Katana)" -> "kenjutsu"
+    const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
+
+    // On stocke tous les noms racines déjà possédés par le samouraï
+    const ownedSkillRoots = new Set(
+      (currentSkills || [])
+        .filter(s => !s.isChoice || s.chosen)
+        .map(s => normalizeSkill(s.name))
+    );
+
     const previousVal = skSel.value;
     skSel.innerHTML = "";
 
-    const availableSkills = (skills || []).filter(s => !ownedSkillNames.has(s.name.toLowerCase().trim()));
+    const availableSkills = (skills || []).filter(s => {
+      const root = normalizeSkill(s.name);
+      return !ownedSkillRoots.has(root);
+    });
 
     if (availableSkills.length === 0) {
       let opt = document.createElement('option');
