@@ -408,10 +408,57 @@
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
-        <div class="flex items-center gap-2 text-xs">
-          <select id="sel-add-skill" class="p-1.5 rounded text-xs"></select>
-          <button onclick="addSkillFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold">+ Ajouter</button>
+      <div class="flex flex-wrap items-center gap-2 text-xs relative">
+        <!-- Select d'origine conservé pour compatibilité avec le script -->
+        <select id="sel-add-skill" class="hidden"></select>
+
+        <!-- Menu déroulant personnalisé multi-sélection -->
+        <div class="relative" id="skills-dropdown-wrapper">
+          <button 
+            type="button" 
+            id="btn-toggle-skills-dropdown" 
+            onclick="toggleSkillsDropdown()" 
+            class="p-2 rounded bg-[#0d0b0b] border border-[#3a3028] hover:border-amber-500/50 text-[#f3e5ab] text-xs font-medium flex items-center gap-2 min-w-[240px] justify-between cursor-pointer"
+          >
+            <span id="skills-selected-count">Choisir des compétences...</span>
+            <span class="text-[9px] text-stone-500 transition-transform" id="skills-dropdown-arrow">▼</span>
+          </button>
+
+          <!-- Panneau déroulant avec cases à cocher -->
+          <div 
+            id="skills-dropdown-panel" 
+            class="hidden absolute left-0 top-full mt-1.5 w-80 max-h-72 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
+          >
+            <!-- Recherche rapide dans les compétences -->
+            <input 
+              type="text" 
+              id="filter-skills-input" 
+              placeholder="🔍 Filtrer les compétences..." 
+              oninput="filterSkillsList()" 
+              class="w-full p-1.5 rounded text-xs bg-black/60 border border-stone-800 text-amber-200"
+            >
+
+            <!-- Liste des cases à cocher -->
+            <div id="skills-checkboxes-container" class="space-y-1 overflow-y-auto max-h-52 pr-1"></div>
+
+            <!-- Pied du panneau -->
+            <div class="flex justify-between items-center pt-1.5 border-t border-stone-800 text-[10px] text-stone-400">
+              <span id="skills-checked-summary">0 sélectionnée(s)</span>
+              <button type="button" onclick="clearAllSkillCheckboxes()" class="hover:text-amber-300 underline">Tout décocher</button>
+            </div>
+          </div>
         </div>
+
+        <!-- Bouton d'ajout groupé -->
+        <button 
+          type="button" 
+          onclick="addSelectedSkills()" 
+          class="px-3.5 py-2 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition shadow flex items-center gap-1.5 cursor-pointer"
+        >
+          <span>+</span>
+          <span>Ajouter</span>
+        </button>
+      </div>
       </div>
       <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
     </section>
@@ -864,6 +911,122 @@
       }
 
       tryAutoSelect();
+    });
+  </script>
+  <script>
+    // =========================================================================
+    // GESTION DU MENU DÉROULANT MULTI-SÉLECTION DES COMPÉTENCES
+    // =========================================================================
+    let originalAddSkillFn = null;
+
+    function initSkillsMultiSelect() {
+      const origSelect = document.getElementById("sel-add-skill");
+      const container = document.getElementById("skills-checkboxes-container");
+      if (!origSelect || !container) return;
+
+      // Sauvegarde de la fonction d'origine de character-generator.js
+      if (!originalAddSkillFn && typeof window.addSkillFromCatalog === "function") {
+        originalAddSkillFn = window.addSkillFromCatalog;
+      }
+
+      // Construit la liste des cases à cocher à partir des options du catalogue
+      const options = Array.from(origSelect.options).filter(opt => opt.value !== "");
+      if (options.length === 0) {
+        // Si le select n'est pas encore peuplé par character-generator.js, on réessaie après 100ms
+        setTimeout(initSkillsMultiSelect, 100);
+        return;
+      }
+
+      container.innerHTML = "";
+      options.forEach(opt => {
+        const row = document.createElement("label");
+        row.className = "flex items-center gap-2 p-1.5 rounded hover:bg-stone-900/80 cursor-pointer text-stone-300 hover:text-amber-200 transition text-xs select-none";
+        row.innerHTML = `
+          <input type="checkbox" value="${opt.value}" onchange="updateSelectedSkillsCount()" class="skill-cb accent-amber-500 rounded">
+          <span class="skill-name">${opt.text}</span>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleSkillsDropdown(forceClose = false) {
+      const panel = document.getElementById("skills-dropdown-panel");
+      const arrow = document.getElementById("skills-dropdown-arrow");
+      if (!panel) return;
+
+      if (forceClose || !panel.classList.contains("hidden")) {
+        panel.classList.add("hidden");
+        arrow?.classList.remove("rotate-180");
+      } else {
+        panel.classList.remove("hidden");
+        arrow?.classList.add("rotate-180");
+        document.getElementById("filter-skills-input")?.focus();
+      }
+    }
+
+    function filterSkillsList() {
+      const q = (document.getElementById("filter-skills-input")?.value || "").toLowerCase().trim();
+      const labels = document.querySelectorAll("#skills-checkboxes-container label");
+      labels.forEach(lbl => {
+        const text = lbl.textContent.toLowerCase();
+        lbl.style.display = text.includes(q) ? "flex" : "none";
+      });
+    }
+
+    function updateSelectedSkillsCount() {
+      const checked = document.querySelectorAll("#skills-checkboxes-container input.skill-cb:checked");
+      const countLabel = document.getElementById("skills-selected-count");
+      const summaryLabel = document.getElementById("skills-checked-summary");
+
+      if (checked.length === 0) {
+        countLabel.textContent = "Choisir des compétences...";
+        summaryLabel.textContent = "0 sélectionnée(s)";
+      } else {
+        countLabel.textContent = `${checked.length} compétence(s) cochée(s)`;
+        summaryLabel.textContent = `${checked.length} sélectionnée(s)`;
+      }
+    }
+
+    function clearAllSkillCheckboxes() {
+      document.querySelectorAll("#skills-checkboxes-container input.skill-cb").forEach(cb => cb.checked = false);
+      updateSelectedSkillsCount();
+    }
+
+    // Ajoute l'ensemble des compétences cochées en réutilisant la logique d'origine
+    function addSelectedSkills() {
+      const checkedBoxes = document.querySelectorAll("#skills-checkboxes-container input.skill-cb:checked");
+      const origSelect = document.getElementById("sel-add-skill");
+
+      if (checkedBoxes.length === 0) {
+        alert("Veuillez cocher au moins une compétence dans la liste.");
+        return;
+      }
+
+      const addFn = originalAddSkillFn || window.addSkillFromCatalog;
+
+      if (typeof addFn === "function" && origSelect) {
+        checkedBoxes.forEach(cb => {
+          origSelect.value = cb.value;
+          addFn();
+          cb.checked = false;
+        });
+      }
+
+      updateSelectedSkillsCount();
+      toggleSkillsDropdown(true);
+    }
+
+    // Fermer le menu lors d'un clic en dehors
+    document.addEventListener("click", (e) => {
+      const wrapper = document.getElementById("skills-dropdown-wrapper");
+      if (wrapper && !wrapper.contains(e.target)) {
+        toggleSkillsDropdown(true);
+      }
+    });
+
+    // Initialisation dès que le DOM et les scripts de données sont prêts
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(initSkillsMultiSelect, 150);
     });
   </script>
 </body>
