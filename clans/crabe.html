@@ -26,7 +26,7 @@
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #1f1208 0%, #0a0808 85%);
+      background-image: radial-gradient(circle at 50% 10%, #1a1410 0%, #0a0808 85%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
@@ -45,7 +45,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- CONTENEUR DU MENU GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <!-- CONTENEUR DU MENU GLOBAL (GÉRÉ PAR JS/NAVBAR.JS) -->
   <header id="site-header"></header>
 
   <!-- CONTENU PRINCIPAL -->
@@ -63,73 +63,87 @@
         <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide gold-gradient">
           LE CLAN DU CRABE
         </h1>
-        <p class="text-xs md:text-sm text-stone-300 italic font-imperial">
-          « Tant que le Mur tient, l'Empire respire. »
+        <p class="text-xs md:text-sm text-stone-300 leading-relaxed pt-2">
+          Gardiens militaires des frontières méridionales de Rokugan, les samouraïs du Clan du Crabe tiennent le Mur Kaiu face aux légions démoniaques et corrompues de l'Outremonde. Fondé par le Kami Hida, le clan a pour mandat impérial la survie brute de l'Empire, subordonnant l'étiquette et le raffinement de cour à l'efficacité guerrière, à la maîtrise des armes lourdes, au génie de siège et à la résistance spirituelle face à la Souillure.
         </p>
-        <p class="text-xs md:text-sm text-stone-400 leading-relaxed pt-2">
-          Gardiens solitaires des frontières méridionales de Rokugan, les samouraïs du Crabe montent une garde ininterrompue sur le Mur Kaiu. Face à eux s'étendent les Terres de l'Outremonde, un gouffre impie peuplé d'oni, de gobelins et de morts-vivants asservis au Dieu Sombre Fu Leng. Là où les autres clans cultivent la poésie et l'intrigue de cour, le Crabe forge l'acier, le jade et la volonté brute.
-        </p>
+        <div class="pt-2 text-[11px] text-amber-300/80 font-mono">
+          Références : Livre de Règles 4e Édition, p. 48-49, 106-109 ; The Great Clans, p. 11-45.
+        </div>
       </div>
     </section>
 
-    <!-- 1. MYTHE FONDATEUR & MISSION IMPÉRIALE -->
+    <!-- 1. ORIGINE SACRÉE & CADRE TECHNIQUE -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-3">
+      <div class="card-clean rounded-xl p-6 md:col-span-2 space-y-4">
         <h2 class="text-base md:text-lg font-bold font-imperial gold-text border-b border-amber-500/20 pb-2">
-          1. Mythe Fondateur & Rôle Géopolitique
+          1. Origine Sacrée & Mandat Impérial
         </h2>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Lors de la chute des Kami depuis les Cieux Célestes, <b>Hida</b> était le plus imposant, le plus fort et le plus résistant de ses frères et sœurs. Lorsque l'Empire fut fondé après le tournoi disputé face à Hantei, Hida reçut pour mission solennelle de défendre le flanc sud contre leur frère déchu, Fu Leng.
+          Lors de la chute des Kami, <b>Hida</b> s'illustra par sa stature et son endurance hors du commun. À la suite du Premier Tournoi où Hantei monta sur le trône, Hida reçut la charge imprescriptible de défendre la frontière sud contre leur frère déchu, Fu Leng, confiné dans les Terres de l'Outremonde.
         </p>
         <p class="text-xs text-stone-300 leading-relaxed">
-          Au VIIIe siècle, sous le règne de l'Empereur Hantei XXXVIII et l'ingénierie magistrale de la famille Kaiu, fut érigé le monumental <b>Mur des Bâtisseurs (Mur Kaiu)</b>: une muraille colossale de pierre, de fer et de terre sacrée s'étendant sur plus de cent lieues, renforcée de tours de guet, de douves d'huile enflammée et de catapultes.
+          Au VIIIe siècle, sous l'égide de l'ingénieur en chef Kaiu Sukune et par décret impérial, le clan acheva l'édification du <b>Mur des Bâtisseurs (Mur Kaiu)</b> : une ligne fortifiée de plus de cent lieues combinant blocs cyclopéens, pièges balistiques, fosses d'huile naphte et enchantements sacrés de Terre pour repousser les assauts ininterrompus de Jigoku.
         </p>
-        <div class="p-3.5 rounded bg-black/60 border border-stone-800 text-xs space-y-1 mt-2">
-          <span class="text-amber-400 font-bold block uppercase text-[10px] tracking-wider">Couleurs officielles :</span>
-          <span class="text-stone-300">Bleu foncé et gris ardoise (garnis d'armures lourdes noircies au charbon et de fourrures brutes).</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-amber-400 font-bold uppercase text-[10px] tracking-wider block">Héraldique & Apparence</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Bleu nuit profond, gris ardoise et fer brossé. Armures lourdes renforcées, doigtiers de jade protecteurs contre la Souillure et peaux épaisses pour les gardes d'hiver.
+            </p>
+          </div>
+          <div class="p-3 rounded bg-black/60 border border-stone-800 space-y-1">
+            <span class="text-amber-400 font-bold uppercase text-[10px] tracking-wider block">Ouvrages de Référence</span>
+            <p class="text-stone-300 text-[11px] leading-relaxed">
+              Histoire clanique : <i>The Great Clans</i>, p. 11-19. Architecture militaire : <i>Emerald Empire</i>, p. 138-142. Traité de la Terre : <i>The Book of Earth</i>, p. 32-58.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- CARTE D'IDENTITÉ TACTIQUE -->
+      <!-- CARTE D'IDENTITÉ DU JOUEUR -->
       <div class="card-clean rounded-xl p-6 space-y-3">
         <h3 class="text-sm font-bold font-imperial text-amber-300 border-b border-amber-500/20 pb-2">
-          Profil de Clan
+          Profil de Création PJ
         </h3>
         <ul class="text-xs space-y-2 text-stone-300">
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Anneau Majeur :</span>
-            <b class="text-amber-300">Terre (Chi)</b>
+            <b class="text-amber-300">Terre (Endurance & Volonté)</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
             <span class="text-stone-500">Kami Fondateur :</span>
             <b>Hida</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Capitale :</span>
+            <span class="text-stone-500">Forteresse Principale :</span>
             <b>Shiro Hida</b>
           </li>
           <li class="flex justify-between border-b border-stone-800 pb-1">
-            <span class="text-stone-500">Défense Primordiale :</span>
+            <span class="text-stone-500">Élément de Siège :</span>
             <b>Le Mur Kaiu</b>
           </li>
+          <li class="flex justify-between border-b border-stone-800 pb-1">
+            <span class="text-stone-500">Armes de Prédilection :</span>
+            <b>Tetsubo, Dai Tsuchi, Yari</b>
+          </li>
           <li class="flex justify-between">
-            <span class="text-stone-500">Arme Emblématique :</span>
-            <b>Tetsubo & Dai Tsuchi</b>
+            <span class="text-stone-500">Livre de Base 4e :</span>
+            <b class="text-amber-400">Pages 106-109</b>
           </li>
         </ul>
         <div class="pt-2">
           <a href="../createcharacter.html" class="w-full block py-2 rounded bg-amber-600/80 hover:bg-amber-600 text-black font-bold text-center text-xs uppercase tracking-wider transition">
-            Créer un samouraï Crabe
+            Forger un samouraï Crabe
           </a>
         </div>
       </div>
     </section>
 
-    <!-- 2. LES CINQ FAMILLES FONDATRICES -->
+    <!-- 2. LES CINQ FAMILLES DU CLAN -->
     <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Les Familles du Clan & Leurs Devoirs</h2>
-        <span class="text-xs text-stone-400">Chaque famille répond à une nécessité absolue pour maintenir la survie du Mur.</span>
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Les Familles du Clan</h2>
+        <span class="text-xs text-stone-400">Livre de Règles 4e Édition, p. 106 ; The Great Clans, p. 20-27.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
@@ -138,138 +152,127 @@
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Hida</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Force</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Force</span>
           </div>
-          <p class="text-stone-400 leading-relaxed">
-            La lignée dirigeante et les géants du clan. Éduqués pour encaisser des chocs capables de broyer des hommes ordinaires, ils manient les armes lourdes à deux mains (Tetsubo, massues, marteaux de guerre) avec un mépris total de la douleur.
+          <p class="text-stone-300 leading-relaxed">
+            Lignée dirigeante du clan et noyau d'infanterie lourde. Entraînés à encaisser des impacts destructeurs et à manier les armes à deux mains broyeuses de carapaces chitineuses, les Hida méprisent la douleur et incarnent la force de rupture sur le rempart.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Fantassins lourds d'élite et chefs de guerre.</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Fantassins d'assaut, généraux de première ligne, défenseurs du Mur.
+          </div>
         </div>
 
         <!-- HIRUMA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Hiruma</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Agilité</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Volonté</span>
           </div>
-          <p class="text-stone-400 leading-relaxed">
-            Les éclaireurs intrépides et les traqueurs de l'Outremonde. Leurs terres ancestrales furent dévastées par la Chute du Château Hiruma ; depuis, ils s'infiltrent dans les friches impies en petites patrouilles légères pour débusquer les hordes avant qu'elles ne frappent le Mur.
+          <p class="text-stone-300 leading-relaxed">
+            Éclaireurs, pisteurs et tirailleurs. Privés temporairement de leurs terres ancestrales lors de la chute du château Hiruma, ils mènent des patrouilles de reconnaissance avancées en plein territoire ennemi pour identifier les rassemblements de hordes avant l'assaut.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Éclaireurs, tireurs d'élite à l'arc et pisteurs.</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Rôdeurs de l'Outremonde, tireurs d'élite, espions tactiques.
+          </div>
         </div>
 
         <!-- KAIU -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kaiu</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Intelligence</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intelligence</span>
           </div>
-          <p class="text-stone-400 leading-relaxed">
-            Les plus grands architectes, ingénieurs et forgerons de Rokugan. Concepteurs des machines de siège géantes, des fortifications du Mur et des forges trempant l'acier le plus solide de l'Empire. Sans eux, la logistique du clan s'effondrerait.
+          <p class="text-stone-300 leading-relaxed">
+            Maîtres de l'architecture militaire, du génie de siège et de la métallurgie. Concepteurs des pièces d'artillerie, des meurtrières et des forges trempant l'acier de garnison, les Kaiu fournissent l'infrastructure logistique sans laquelle le Mur cèderait.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Ingénieurs de siège, forgerons et tacticiens.</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Ingénieurs de combat, maîtres forgerons, tacticiens de garnison.
+          </div>
         </div>
 
         <!-- KUNI -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kuni</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Intelligence</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Volonté</span>
           </div>
-          <p class="text-stone-400 leading-relaxed">
-            Shugenja mystiques et chasseurs de sorcières (*Tsukai-sagasu*). Ils étudient les secrets interdits de la Souillure et les faiblesses des créatures de Jigoku pour les détruire. Leurs visages peints de motifs kabuki blancs et noirs effraient même leurs alliés.
+          <p class="text-stone-300 leading-relaxed">
+            Prêtres et inquisiteurs du clan. Arborant les peintures de guerre rituelles faciales blanches et noires, ils étudient les faiblesses anatomiques et magiques des abominations de Jigoku et assurent la purification spirituelle des soldats exposés à la Souillure.
           </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Prêtres de la Terre, inquisiteurs et occultistes.</div>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Shugenja de combat, chasseurs de sorcières (Tsukai-sagasu), exorcistes.
+          </div>
         </div>
 
         <!-- YASUKI -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
           <div class="flex justify-between items-baseline">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Yasuki</h3>
-            <span class="text-[10px] text-amber-400 font-bold">+1 Perception</span>
-          </div>
-          <p class="text-stone-400 leading-relaxed">
-            Anciennement vassaux de la Grue ralliés au Crabe lors de la Guerre Yasuki au IVe siècle. Diplomates roublards et marchands d'envergure, ils négocient le ravitaillement en riz, en fer et en jade dont le clan a un besoin vital, en employant des méthodes marchandes que les autres clans jugent impures mais dont ils reconnaissent la redoutable efficacité.
-          </p>
-          <div class="text-[10px] text-stone-500 italic">Rôle : Intendants, diplomates et financiers.</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 3. LE CRABE ET LE BUSHIDO -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial gold-text border-b border-amber-500/20 pb-2">
-        3. Le Cœur du Roleplay : Le Crabe face au Bushido
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold uppercase text-[10px]">La Vertu Cardinale</span>
-            <span class="font-bold text-amber-200 text-sm">Le Courage (Yū)</span>
+            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Perception</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            Pour un samouraï du Crabe, le courage n'est pas une posture d'apparat adoptée dans les salons d'un palais d'hiver. C'est la capacité de regarder un oni haut de quatre mètres dans les yeux, de lever son tetsubo et de maintenir son rang sans ciller. Le Crabe méprise la vanité de mourir dans un duel stérile : la vraie bravoure consiste à <b>survivre pour continuer à tenir le Mur</b>.
+            Ralliés au Crabe au IVe siècle lors de la Guerre Yasuki contre la Grue. Intendants, diplomates et financiers d'envergure, ils négocient l'approvisionnement en jade, en riz et en minerai impératif pour la garnison, maniant le commerce avec une efficacité pragmatique.
           </p>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">La Faille Tragique</span>
-            <span class="font-bold text-amber-200 text-sm">La Courtoisie Délaissée (Rei)</span>
+          <div class="text-[10px] text-stone-500 border-t border-stone-800 pt-1">
+            <b>Profils de jeu :</b> Courtisans pragmatiques, négociants en ressources d'État, intendants militaires.
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Le protocole rokugani paraît souvent futile à ceux qui voient leurs frères mourir chaque jour dans la boue et le sang. Les Crabes sont directs, brusques, parfois grossiers aux yeux des courtisans raffinés de la Grue ou du Phénix. Ils supportent mal les détours poétiques quand des vies sont en jeu, ce qui les isole politiquement dans les cours d'Otosan Uchi.
-          </p>
         </div>
+
       </div>
     </section>
 
-    <!-- 4. GUIDE D'INTERPRÉTATION DU JOUEUR -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold font-imperial gold-text border-b border-amber-500/20 pb-2">
-        4. Guide d'Interprétation : Jouer un Samouraï du Crabe
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        <div class="space-y-2">
-          <h3 class="font-bold text-amber-200 font-imperial text-sm">Allure & Comportement</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Votre armure porte les stigmates de la forge ou des coups reçus. Vous gardez toujours une arme à portée immédiate et vérifiez régulièrement votre doigtier de jade. Vous mangez copieusement, riez bruyamment et jugez un samouraï à sa solidité sous la pression plutôt qu'à sa prose.
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-amber-200 font-imperial text-sm">Rapports avec les autres Clans</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Vous respectez la valeur guerrière du <b>Lion</b> (même si vous trouvez son sens de l'honneur rigide et suicidaire). Vous tolérez les <b>Yasuki</b> parce qu'ils financent le Mur. Vous avez peu de patience pour les mondanités de la <b>Grue</b>, mais comprenez l'utilité des devins du <b>Phénix</b>.
-          </p>
-        </div>
-
-        <div class="space-y-2">
-          <h3 class="font-bold text-amber-200 font-imperial text-sm">Dépasser le Cliché de la « Brute »</h3>
-          <p class="text-stone-400 leading-relaxed">
-            Votre personnage peut être un <b>ingénieur Kaiu</b> méticuleux obsédé par les angles balistiques, un <b>Kuni</b> tourmenté par les horreurs qu'il a disséquées, ou un jeune bushi hanté par la peur de défaillir le jour où les tambours d'alarme retentiront sur le rempart.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. ÉCOLES FONDAMENTALES & ARSENAL -->
-    <section class="space-y-4">
+    <!-- 3. DOCTRINE & PERCEPTION DU BUSHIDO -->
+    <section class="card-clean rounded-xl p-6 space-y-5">
       <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">5. Écoles Fondamentales de la 4e Édition</h2>
-        <span class="text-xs text-stone-400">Styles de combat et disciplines représentés dans le générateur de fiches.</span>
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">
+          3. Doctrine Martiale & Pratique du Bushido
+        </h2>
+        <span class="text-xs text-stone-400">Références : Livre de Règles 4e Édition, p. 48-49, 92 ; Emerald Empire, p. 30-33.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Le Courage (Yū) & Survie</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Pour le Crabe, la bravoure ne réside pas dans une mort esthétique lors d'un duel courtois, mais dans le devoir impérieux de survivre pour maintenir le rempart opérationnel le lendemain. Le sacrifice n'est toléré que s'il achète un avantage tactique décisif pour l'escouade.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Rapport à la Courtoisie (Rei)</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Les artifices de la cour impériale sont perçus comme un luxe dangereux par des soldats confrontés quotidiennement à des menaces existentielles. Le parler Crabe est direct, sans circonlocution, ce qui engendre de fréquentes frictions avec les courtisans de la Grue ou du Scorpion.
+          </p>
+        </div>
+
+        <div class="space-y-2 bg-black/50 p-4 rounded-lg border border-stone-800">
+          <h3 class="font-bold text-amber-200 font-imperial text-sm">Perception des Autres Clans</h3>
+          <p class="text-stone-300 leading-relaxed">
+            Le <b>Lion</b> est respecté pour sa pugnacité militaire, bien que son sens rigide de l'honneur soit jugé inadapté à l'Outremonde. Le <b>Dragon</b> est tenu pour un allié de confiance. La <b>Grue</b> et le <b>Phénix</b> sont jugés complaisants, profitant de la sécurité garantie par le sang versé au sud.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LES CINQ ÉCOLES FONDAMENTALES (LIVRE DE RÈGLES 4E ÉDITION) -->
+    <section class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">4. Écoles Fondamentales de Base</h2>
+        <span class="text-xs text-stone-400">Règles officielles : Livre de Règles 4e Édition, pages 106 à 109.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        
         <!-- BUSHI HIDA -->
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
             <span class="font-bold text-amber-200 text-sm font-imperial">École de Bushi Hida</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-400 font-bold">Lourd • Mêlée</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Bushi • Livre de Base p. 107</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Voie du Crabe.</b> Ignore les pénalités d'armure lourde sur les compétences physiques (sauf Discrétion) et gagne +1g0 aux dégâts avec les Armes Lourdes. Aux rangs supérieurs, il développe une Réduction de dégâts égale à son Anneau de Terre et peut attaquer en Action Simple.
+            <b>Bonus de Trait :</b> +1 Constitution.<br>
+            <b>Compétences de Départ :</b> Armes Lourdes (Tetsubo), Athlétisme, Défense, Intimidation, Kenjutsu, Connaissance : Outremonde, une compétence de Bugei au choix.<br>
+            <b>Technique de Rang 1 (La Voie du Crabe) :</b> Le bushi ne subit aucun malus de mouvement ni de ND aux compétences physiques lors du port d'une Armure Lourde (hors Discrétion). Il bénéficie d'un bonus de +1g0 aux jets de dégâts avec les Armes Lourdes.
           </p>
         </div>
 
@@ -277,28 +280,105 @@
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
             <span class="font-bold text-amber-200 text-sm font-imperial">École d'Éclaireur Hiruma</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold">Survie • Vitesse</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold border border-blue-800/40">Bushi • Livre de Base p. 107</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
-            <b>Technique Rang 1 : La Flamme de la Torche Vacille.</b> En posture d'Attaque, gagne +1g0 à tous ses jets pour toucher. Ses connaissances en survie permettent de doubler la durée des vivres et des rations de jade pour son escouade en territoire hostile.
+            <b>Bonus de Trait :</b> +1 Agilité.<br>
+            <b>Compétences de Départ :</b> Arc, Athlétisme, Chasse, Discrétion, Kenjutsu, Connaissance : Outremonde, Armes de Tir ou Jiujutsu.<br>
+            <b>Technique de Rang 1 (La Flamme Vacillante) :</b> En posture d'Attaque, l'éclaireur ajoute son Rang d'École à ses jets d'attaque. Il double sa vitesse de base lors des déplacements hors combat et optimise la consommation des rations et du jade en expédition.
           </p>
+        </div>
+
+        <!-- INGÉNIEUR KAIU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-200 text-sm font-imperial">École d'Ingénieur Kaiu</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Artisan / Bushi • p. 107-108</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Volonté.<br>
+            <b>Compétences de Départ :</b> Armes Lourdes, Armes de Siège, Artisanat (Forge ou Charpente), Connaissance : Architecture, Connaissance : Outremonde, Défense, une compétence au choix.<br>
+            <b>Technique de Rang 1 (La Forge de l'Ingénieur) :</b> L'ingénieur peut réparer et renforcer armures, portes et barricades, réduisant le ND d'attaque adverse ou conférant des points de structure supplémentaires aux ouvrages fortifiés.
+          </p>
+        </div>
+
+        <!-- SHUGENJA KUNI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-200 text-sm font-imperial">École de Shugenja Kuni</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-emerald-300 font-bold border border-emerald-500/30">Shugenja • Livre de Base p. 108</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Volonté.<br>
+            <b>Affinité / Déficience :</b> Affinité Terre, Déficience Air.<br>
+            <b>Compétences de Départ :</b> Calligraphie, Connaissance : Outremonde, Connaissance : Théologie, Défense, Enquête, Kenjutsu ou Armes Lourdes, Méditation.<br>
+            <b>Technique (La Pureté de la Terre) :</b> Dépenser un emplacement de sort de Terre pour ajouter son Rang d'École à la résistance contre la Souillure. Les sorts offensifs de Terre infligent des dégâts majorés contre les créatures portant la Marque de l'Outremonde.
+          </p>
+        </div>
+
+        <!-- COURTISAN YASUKI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 md:col-span-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-200 text-sm font-imperial">École de Courtisan Yasuki</span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-cyan-300 font-bold border border-cyan-500/30">Courtisan • Livre de Base p. 109</span>
+          </div>
+          <p class="text-stone-300 leading-relaxed">
+            <b>Bonus de Trait :</b> +1 Intuition.<br>
+            <b>Compétences de Départ :</b> Commerce, Droit, Enquête, Étiquette, Marchandage, Sincérité, une compétence Basse ou Bugei au choix.<br>
+            <b>Technique de Rang 1 (Le Poids des Richesses) :</b> Permet de jauger instantanément les convoitises matérielles d'un interlocuteur par un jet opposé de Marchandage/Intuition contre Sincérité/Volonté. Facilite l'approvisionnement clandestin ou légal d'équipement de guerre.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. VOIES ALTERNATIVES & PROFILS AVANCÉS -->
+    <section class="card-clean rounded-xl p-6 space-y-3">
+      <div class="border-b border-amber-500/20 pb-2">
+        <h3 class="text-sm font-bold font-imperial text-amber-300">
+          5. Voies Alternatives & Écoles Avancées (Pour optimiser son PJ)
+        </h3>
+        <span class="text-[11px] text-stone-400">Options officielles complémentaires pour développer son personnage.</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs pt-1">
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Kuni Witch Hunter (Tsukai-sagasu)</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 218 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Inquisiteur d'élite traquant la corruption maho-tsukai, immunisé aux tromperies occultes.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Defender of the Wall</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Livre de Règles 4e Édition, p. 245 (École Avancée)</span>
+          <p class="text-stone-300 text-[11px]">Gardien du rempart absorbant les coups massifs et interposant son armure pour ses compagnons.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Hida Pragmatist</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 38 (Voie Alternative Rang 3)</span>
+          <p class="text-stone-300 text-[11px]">Combattant urbain exploitant le corps à corps brutal et les frappes sous la ceinture au mépris de l'honneur.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Hiruma Sniper</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 38 (Voie Alternative Rang 2)</span>
+          <p class="text-stone-300 text-[11px]">Tireur embusqué abattant les officiers ennemis et monstres majeurs à portée extrême.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Kaiu Wall Knight</b>
+          <span class="text-[10px] text-stone-500 block mb-1">The Great Clans, p. 37 (Voie Alternative Rang 2)</span>
+          <p class="text-stone-300 text-[11px]">Spécialiste de la défense statique avec marteau lourd et bouclier de tranchée.</p>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <b class="text-amber-300 block">Hida Wrestler (Lutteur Sumai)</b>
+          <span class="text-[10px] text-stone-500 block mb-1">Emerald Empire, p. 219 (Voie Alternative Rang 3)</span>
+          <p class="text-stone-300 text-[11px]">Maître du Jiujutsu projetant et immobilisant les humanoïdes et ogres au sol.</p>
         </div>
       </div>
     </section>
 
-    <!-- NAVIGATION ENTRE LES CLANS -->
-    <nav aria-label="Navigation des clans" class="pt-6 border-t border-amber-500/20 flex flex-wrap justify-between items-center gap-4 text-xs">
-      <a href="../index.html" class="text-stone-400 hover:text-amber-300 font-imperial">← Retour à l'accueil</a>
-      <div class="flex items-center gap-2">
-        <span class="text-stone-500">Autre Clan :</span>
-        <a href="grue.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-cyan-300 border border-stone-800 font-imperial">Clan de la Grue →</a>
-      </div>
-    </nav>
-
   </main>
 
+  <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Fiche d'allégeance du Clan du Crabe
+    Chronique L5R 4e Édition — MJ David • Fiche technique du Clan du Crabe
   </footer>
 
 </body>
