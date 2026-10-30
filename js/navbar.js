@@ -4,7 +4,7 @@
  */
 
 // =============================================================================
-// 1. CONFIGURATION DYNAMIQUE DU MENU (Ajoutez vos futures pages ici)
+// 1. CONFIGURATION DU MENU & KANJIS DES HUIT GRANDS CLANS
 // =============================================================================
 const NAV_CONFIG = {
   brand: {
@@ -31,14 +31,14 @@ const NAV_CONFIG = {
       label: "Les Huit Clans",
       icon: "🏯",
       children: [
-        { label: "🦀 Clan du Crabe", url: "clans/crabe.html" },
-        { label: "🪶 Clan de la Grue", url: "clans/grue.html" },
-        { label: "🐉 Clan du Dragon", url: "clans/dragon.html" },
-        { label: "🦁 Clan du Lion", url: "clans/lion.html" },
-        { label: "🦗 Clan de la Mante", url: "clans/mante.html" },
-        { label: "🔥 Clan du Phénix", url: "clans/phenix.html" },
-        { label: "🦂 Clan du Scorpion", url: "clans/scorpion.html" },
-        { label: "🦄 Clan de la Licorne", url: "clans/licorne.html" }
+        { kanji: "蟹", label: "Clan du Crabe", url: "clans/crabe.html" },
+        { kanji: "鶴", label: "Clan de la Grue", url: "clans/grue.html" },
+        { kanji: "龍", label: "Clan du Dragon", url: "clans/dragon.html" },
+        { kanji: "獅", label: "Clan du Lion", url: "clans/lion.html" },
+        { kanji: "蟷", label: "Clan de la Mante", url: "clans/mante.html" },
+        { kanji: "鳳", label: "Clan du Phénix", url: "clans/phenix.html" },
+        { kanji: "蠍", label: "Clan du Scorpion", url: "clans/scorpion.html" },
+        { kanji: "麒", label: "Clan de la Licorne", url: "clans/licorne.html" }
       ]
     },
     {
@@ -64,10 +64,9 @@ const NAV_CONFIG = {
 };
 
 // =============================================================================
-// 2. MOTEUR DE GÉNÉRATION & GESTION DES CHEMINS RELATIFS
+// 2. MOTEUR DE GÉNÉRATION & RÉSOLUTION DES CHEMINS
 // =============================================================================
 (function () {
-  // Ajuste automatiquement les chemins relatifs selon la profondeur du dossier
   function resolveUrl(targetUrl) {
     if (!targetUrl || targetUrl.startsWith("http://") || targetUrl.startsWith("https://") || targetUrl.startsWith("#")) {
       return targetUrl;
@@ -82,7 +81,7 @@ const NAV_CONFIG = {
     if (!header) return;
 
     let navHtml = `
-      <nav class="bg-[#0a0808]/95 backdrop-blur-md border-b border-amber-500/30 text-stone-300 text-xs shadow-2xl relative z-50">
+      <nav class="bg-[#0a0808] border-b border-amber-500/40 text-stone-300 text-xs shadow-2xl relative z-50">
         <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
           
           <!-- LOGO & TITRE -->
@@ -100,59 +99,58 @@ const NAV_CONFIG = {
             </div>
           </a>
 
-          <!-- LIENS DE NAVIGATION CENTRAUX -->
+          <!-- LIENS DU MENU (DESKTOP) -->
           <div class="hidden lg:flex items-center gap-1.5 xl:gap-2.5">
     `;
 
-    // Génération dynamique des éléments
     NAV_CONFIG.menu.forEach((item, idx) => {
       if (item.children) {
-        // Menu déroulant
         navHtml += `
           <div class="nav-dropdown-wrapper relative" data-dropdown-id="${idx}">
-            <button type="button" class="nav-dropdown-trigger px-2.5 py-1.5 rounded hover:bg-stone-900 text-stone-300 hover:text-amber-200 transition font-medium flex items-center gap-1 cursor-pointer">
+            <button type="button" class="nav-dropdown-trigger px-2.5 py-1.5 rounded hover:bg-[#181212] text-stone-300 hover:text-amber-200 transition font-medium flex items-center gap-1 cursor-pointer">
               <span>${item.icon ? `${item.icon} ` : ""}${item.label}</span>
               <span class="text-[8px] text-stone-500 transition-transform duration-200 arrow-icon">▼</span>
             </button>
             
-            <!-- Panneau déroulant avec pont de survol invisible (évite la fermeture intempestive) -->
+            <!-- Menu déroulant totalement opaque avec pont de survol -->
             <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-1.5 w-56 z-50">
-              <div class="rounded-xl bg-[#120e0e]/98 border border-amber-500/35 shadow-2xl py-1.5 backdrop-blur-md overflow-hidden">
-                ${item.children.map(sub => `
-                  <a href="${resolveUrl(sub.url)}" 
-                     ${sub.external ? 'target="_blank" rel="noopener noreferrer"' : ""}
-                     class="block px-3.5 py-2 text-xs text-stone-300 hover:bg-amber-950/60 hover:text-amber-200 transition flex items-center justify-between">
-                    <span>${sub.label}</span>
-                  </a>
-                `).join("")}
+              <div class="rounded-xl bg-[#120d0d] border border-amber-500/40 shadow-2xl py-1.5 overflow-hidden">
+                ${item.children.map(sub => {
+                  const prefix = sub.kanji ? `<span class="font-serif text-amber-400 font-bold text-sm mr-2">${sub.kanji}</span>` : "";
+                  return `
+                    <a href="${resolveUrl(sub.url)}" 
+                       ${sub.external ? 'target="_blank" rel="noopener noreferrer"' : ""}
+                       class="block px-3.5 py-2 text-xs text-stone-300 hover:bg-[#201414] hover:text-amber-200 transition flex items-center">
+                      ${prefix}<span>${sub.label}</span>
+                    </a>
+                  `;
+                }).join("")}
               </div>
             </div>
           </div>
         `;
       } else if (item.isPill) {
-        // Bouton spécial Carnet de Rokugan (sans flèche)
         navHtml += `
           <a href="${resolveUrl(item.url)}" 
              ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ""}
-             class="px-3 py-1.5 rounded-lg border border-amber-500/40 bg-amber-950/30 hover:bg-amber-900/50 text-amber-300 hover:text-amber-200 transition font-bold flex items-center gap-1.5 shadow-sm">
+             class="px-3 py-1.5 rounded-lg border border-amber-500/40 bg-[#160d0d] hover:bg-[#241313] text-amber-300 hover:text-amber-200 transition font-bold flex items-center gap-1.5 shadow-sm">
             <span>📖</span>
             <span>${item.label}</span>
           </a>
         `;
       } else {
-        // Lien simple
         navHtml += `
-          <a href="${resolveUrl(item.url)}" class="px-2.5 py-1.5 rounded hover:bg-stone-900 text-stone-300 hover:text-amber-200 transition font-medium">
+          <a href="${resolveUrl(item.url)}" class="px-2.5 py-1.5 rounded hover:bg-[#181212] text-stone-300 hover:text-amber-200 transition font-medium">
             ${item.label}
           </a>
         `;
       }
     });
 
-    // Bouton d'action Forger
     navHtml += `
           </div>
 
+          <!-- BOUTON D'ACTION FORGER -->
           <div class="flex items-center gap-2">
             <a href="${resolveUrl(NAV_CONFIG.actionButton.url)}" 
                class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-black font-extrabold font-imperial text-xs tracking-wider shadow-md transition transform hover:scale-105 shrink-0">
@@ -169,7 +167,7 @@ const NAV_CONFIG = {
   }
 
   // =============================================================================
-  // 3. LOGIQUE D'OUVERTURE / FERMETURE AVEC TAMPON DE DÉLAI
+  // 3. LOGIQUE D'OUVERTURE AVEC TAMPON DE DÉLAI
   // =============================================================================
   function attachMenuEvents() {
     const dropdownWrappers = document.querySelectorAll(".nav-dropdown-wrapper");
@@ -182,7 +180,6 @@ const NAV_CONFIG = {
 
       function openMenu() {
         clearTimeout(leaveTimeout);
-        // Ferme les autres sous-menus
         dropdownWrappers.forEach(other => {
           if (other !== wrapper) {
             other.querySelector(".nav-dropdown-menu")?.classList.add("hidden");
@@ -197,14 +194,12 @@ const NAV_CONFIG = {
         leaveTimeout = setTimeout(() => {
           menu.classList.add("hidden");
           arrow?.classList.remove("rotate-180");
-        }, 200); // 200ms de confort : empêche la disparition en cas de mouvement rapide
+        }, 200);
       }
 
-      // Événements Souris (Desktop)
       wrapper.addEventListener("mouseenter", openMenu);
       wrapper.addEventListener("mouseleave", closeMenuWithDelay);
 
-      // Événement Clic / Tactile (Mobile)
       trigger.addEventListener("click", (e) => {
         e.stopPropagation();
         const isHidden = menu.classList.contains("hidden");
@@ -213,7 +208,6 @@ const NAV_CONFIG = {
       });
     });
 
-    // Clic extérieur pour fermer les menus
     document.addEventListener("click", () => {
       dropdownWrappers.forEach(wrapper => {
         wrapper.querySelector(".nav-dropdown-menu")?.classList.add("hidden");
