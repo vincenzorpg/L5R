@@ -221,9 +221,11 @@
     Chronique L5R 4e Édition — MJ David • Grimoire complet des Sorts & Invocations
   </footer>
 
-  <!-- SCRIPT DU GRIMOIRE (STANDARD JAVASCRIPT, COMPATIBLE FILE:// ET HTTP://) -->
-  <script>
-    let allSpells = [];
+<!-- SCRIPT DU GRIMOIRE (MODULE ES6 GITHUB PAGES) -->
+  <script type="module">
+    import { SORTS_DATA } from './data/sorts-data.js';
+
+    const allSpells = SORTS_DATA || [];
     let currentElement = 'all';
     const MAHO_SECRET_PASS = "JIGOKU";
     let isMahoUnlocked = false;
@@ -279,7 +281,7 @@
       render();
     }
 
-    // Défloutage d'une carte Mahō individuelle
+    // Défloutage individuel au clic (exposé à window pour l'attribut onclick inline)
     window.revealMahoSpell = function(overlayEl) {
       const card = overlayEl.closest('.maho-card');
       if (!card) return;
@@ -393,7 +395,7 @@
       }).join('');
     }
 
-    // Écouteurs de filtrage
+    // Événements
     searchInput?.addEventListener('input', render);
     masterySelect?.addEventListener('change', render);
 
@@ -408,7 +410,6 @@
       });
     });
 
-    // Écouteurs modale Mahō
     document.getElementById('maho-cancel-btn')?.addEventListener('click', () => {
       mahoModal?.classList.add('hidden');
     });
@@ -432,7 +433,6 @@
       if (e.key === 'Enter') tryUnlockMaho();
     });
 
-    // Reverrouillage de session
     mahoRelockBtn?.addEventListener('click', () => {
       isMahoUnlocked = false;
       try {
@@ -441,35 +441,9 @@
       setElementFilter('all');
     });
 
-    // Initialisation robuste avec attente du chargement de sorts-data.js
-    let retryCount = 0;
-    function loadDataAndStart() {
-      if (window.SORTS_DATA && Array.isArray(window.SORTS_DATA) && window.SORTS_DATA.length > 0) {
-        allSpells = window.SORTS_DATA;
-        updateMahoState();
-        render();
-      } else {
-        if (retryCount++ < 80) {
-          setTimeout(loadDataAndStart, 50);
-        } else {
-          if (spellsGrid) {
-            spellsGrid.innerHTML = `
-              <div class="col-span-full text-center py-12 card-clean rounded-xl border-red-900/60">
-                <span class="text-3xl block mb-2">⚠️</span>
-                <span class="font-imperial font-bold text-red-400 text-base">Données non détectées</span>
-                <p class="text-xs text-stone-400 mt-2">Vérifiez que le fichier <code>data/sorts-data.js</code> est bien présent et contient <code>window.SORTS_DATA = [...]</code>.</p>
-              </div>
-            `;
-          }
-        }
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadDataAndStart);
-    } else {
-      loadDataAndStart();
-    }
+    // Lancement immédiat
+    updateMahoState();
+    render();
   </script>
 
 </body>
