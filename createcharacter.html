@@ -44,12 +44,14 @@
     }
     .card-clean:hover { border-color: rgba(212, 175, 55, 0.45); }
     .gold-text { color: var(--gold); }
+    
     input, select, textarea {
       background-color: #0d0b0b !important;
       border: 1px solid #3a3028 !important;
       color: #f3e5ab !important;
     }
-    /* Masquer les flèches haut/bas (spinners) sur tous les champs numériques */
+
+    /* Masquer les flèches haut/bas sur tous les champs numériques */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -59,6 +61,7 @@
       -moz-appearance: textfield;
       appearance: textfield;
     }
+
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--gold) !important;
@@ -75,7 +78,6 @@
       border: 1px solid #e11d48;
     }
 
-    /* RÈGLES D'IMPRESSION ET D'EXPORTATION PDF */
     @media screen {
       #official-print-dossier { display: none !important; }
     }
@@ -127,16 +129,14 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- 1. MENU DE NAVIGATION GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <!-- 1. MENU DE NAVIGATION GLOBAL -->
   <header id="site-header"></header>
 
-  <!-- 2. BANDEAU DE COMBAT PERSISTANT (STICKY TOP-0 LORS DU SCROLL) -->
+  <!-- 2. BANDEAU DE COMBAT PERSISTANT -->
   <aside aria-label="État du personnage" class="sticky top-0 z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
     <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
       
-      <!-- Ligne 1 : Nom + École (Gauche) | XP + Réputation (Centre) | Boutons d'Action (Droite) -->
       <div class="flex flex-wrap justify-between items-center gap-3">
-        
         <!-- Bloc Identité -->
         <div class="flex items-center gap-2">
           <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
@@ -175,54 +175,47 @@
             <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
           </label>
           <button onclick="exportOfficialPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition">🖨️ PDF</button>
-          <button type="button"   id="btn-export-carnet"   onclick="exportToCarnetRokugan()"   class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 hover:border-amber-400 font-bold text-xs tracking-wider transition flex items-center gap-2 shadow-md">
-          <span>📖</span>
-          <span>Exporter</span>
+          <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-3 py-1 rounded-lg bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 hover:border-amber-400 font-bold text-xs tracking-wider transition flex items-center gap-1.5 shadow-md">
+            <span>📖</span>
+            <span>Exporter</span>
           </button>
           <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
         </div>
-
       </div>
 
-      <!-- Ligne 2 : Les 4 Métriques Clés avec Détails Explicatifs -->
+      <!-- Ligne 2 : Les 4 Métriques Clés -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
-        
-        <!-- 1. Jet pour Toucher -->
         <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
           <div class="flex justify-between items-baseline">
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Toucher</span>
             <span id="sticky-atk" class="text-sm font-bold text-amber-300 font-imperial">3g2</span>
           </div>
-          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Katana : Kenjutsu (1) + Agilité (2)</div>
+          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Katana : Kenjutsu (1) + Agilité (2)</div>
         </div>
 
-        <!-- 2. Jet de Dégâts -->
         <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
           <div class="flex justify-between items-baseline">
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Dégâts</span>
             <span id="sticky-dmg" class="text-sm font-bold text-red-400 font-imperial">4g2</span>
           </div>
-          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Katana (3g2) + Force (2)</div>
+          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Katana (3g2) + Force (2)</div>
         </div>
 
-        <!-- 3. Jet d'Initiative -->
         <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
           <div class="flex justify-between items-baseline">
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Initiative</span>
             <span id="sticky-init" class="text-sm font-bold text-amber-200 font-imperial">3g2</span>
           </div>
-          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Insight 1 + Réfl. 2 (3g2)</div>
+          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Insight 1 + Réfl. 2 (3g2)</div>
         </div>
 
-        <!-- 4. ND d'Armure -->
         <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
           <div class="flex justify-between items-baseline">
             <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">ND Armure</span>
             <span id="sticky-armor-tn" class="text-sm font-bold text-emerald-400 font-imperial">20</span>
           </div>
-          <div id="sticky-armor-detail" class="text-[9px] text-stone-400 truncate mt-0.5" title="">Base 5 + Réfl. (10) + Armure (+5)</div>
+          <div id="sticky-armor-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Base 5 + Réfl. (10) + Armure (+5)</div>
         </div>
-
       </div>
 
     </div>
@@ -231,7 +224,7 @@
   <!-- CONTENU PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <!-- 1. IDENTITÉ, CLAN, FAMILLE ET ÉCOLE -->
+    <!-- 1. ALLÉGEANCE, IDENTITÉ & LIGNÉE -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">1. Allégeance, Identité & Lignée</h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
@@ -263,7 +256,6 @@
         </div>
       </div>
 
-      <!-- ARBRE DES TECHNIQUES D'ÉCOLE (RANGS 1 À 5) -->
       <div class="mt-4 pt-3 border-t border-amber-500/20">
         <div class="flex justify-between items-center mb-2">
           <span class="text-xs font-bold text-amber-300 font-imperial tracking-wide uppercase">Progression des Techniques d'École (Rangs 1 à 5)</span>
@@ -273,7 +265,7 @@
       </div>
     </section>
 
-    <!-- 2. LES 5 ANNEAUX ET TRAITS (AVEC BOUTONS - ET +) -->
+    <!-- 2. ANNEAUX & TRAITS -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux & 8 Traits Élémentaires</h2>
@@ -291,17 +283,17 @@
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Constitution</span><span id="badge-sta" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-stamina', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-stamina', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-stamina" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-stamina', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-stamina', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Volonté</span><span id="badge-wil" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-willpower', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-willpower', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-willpower" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-willpower', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-willpower', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
           </div>
@@ -317,17 +309,17 @@
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Force</span><span id="badge-str" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-strength', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-strength', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-strength" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-strength', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-strength', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Perception</span><span id="badge-per" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-perception', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-perception', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-perception" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-perception', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-perception', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
           </div>
@@ -343,17 +335,17 @@
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Réflexes</span><span id="badge-ref" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-reflexes', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-reflexes', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-reflexes" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-reflexes', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-reflexes', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Intuition</span><span id="badge-awa" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-awareness', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-awareness', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-awareness" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-awareness', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-awareness', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
           </div>
@@ -369,17 +361,17 @@
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Agilité</span><span id="badge-agi" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-agility', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-agility', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-agility" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-agility', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-agility', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-0.5 text-stone-400"><span>Intelligence</span><span id="badge-int" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="adjustTrait('trait-intelligence', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+                <button type="button" onclick="adjustTrait('trait-intelligence', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-intelligence" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-                <button type="button" onclick="adjustTrait('trait-intelligence', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+                <button type="button" onclick="adjustTrait('trait-intelligence', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
               </div>
             </div>
           </div>
@@ -394,9 +386,9 @@
           <div>
             <div class="flex justify-between mb-0.5 text-stone-400"><span>Anneau du Vide</span></div>
             <div class="flex items-center gap-1">
-              <button type="button" onclick="adjustTrait('trait-void', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">-</button>
+              <button type="button" onclick="adjustTrait('trait-void', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
               <input type="number" id="trait-void" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
-              <button type="button" onclick="adjustTrait('trait-void', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center">+</button>
+              <button type="button" onclick="adjustTrait('trait-void', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
             </div>
           </div>
           <div class="text-[10px] text-stone-500 italic text-center">Points de Vide</div>
@@ -404,68 +396,63 @@
       </div>
     </section>
 
-    <!-- 3. COMPÉTENCES -->
+    <!-- 3. COMPÉTENCES (AVEC MULTI-SÉLECTION & BOUTON UNIQUE +) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
-      <div class="flex flex-wrap items-center gap-2 text-xs relative">
-        <!-- Select d'origine conservé pour compatibilité avec le script -->
-        <select id="sel-add-skill" class="hidden"></select>
+        
+        <div class="flex flex-wrap items-center gap-2 text-xs relative">
+          <!-- Select d'origine conservé pour compatibilité logicielle -->
+          <select id="sel-add-skill" class="hidden"></select>
 
-        <!-- Menu déroulant personnalisé multi-sélection -->
-        <div class="relative" id="skills-dropdown-wrapper">
-          <button 
-            type="button" 
-            id="btn-toggle-skills-dropdown" 
-            onclick="toggleSkillsDropdown()" 
-            class="p-2 rounded bg-[#0d0b0b] border border-[#3a3028] hover:border-amber-500/50 text-[#f3e5ab] text-xs font-medium flex items-center gap-2 min-w-[240px] justify-between cursor-pointer"
-          >
-            <span id="skills-selected-count">Choisir des compétences...</span>
-            <span class="text-[9px] text-stone-500 transition-transform" id="skills-dropdown-arrow">▼</span>
-          </button>
-
-          <!-- Panneau déroulant avec cases à cocher -->
-          <div 
-            id="skills-dropdown-panel" 
-            class="hidden absolute left-0 top-full mt-1.5 w-80 max-h-72 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
-          >
-            <!-- Recherche rapide dans les compétences -->
-            <input 
-              type="text" 
-              id="filter-skills-input" 
-              placeholder="🔍 Filtrer les compétences..." 
-              oninput="filterSkillsList()" 
-              class="w-full p-1.5 rounded text-xs bg-black/60 border border-stone-800 text-amber-200"
+          <!-- Menu déroulant personnalisé multi-sélection -->
+          <div class="relative" id="skills-dropdown-wrapper">
+            <button 
+              type="button" 
+              id="btn-toggle-skills-dropdown" 
+              onclick="toggleSkillsDropdown()" 
+              class="p-2 rounded bg-[#0d0b0b] border border-[#3a3028] hover:border-amber-500/50 text-[#f3e5ab] text-xs font-medium flex items-center gap-2 min-w-[240px] justify-between cursor-pointer shadow"
             >
+              <span id="skills-selected-count">Choisir des compétences...</span>
+              <span class="text-[9px] text-stone-500 transition-transform" id="skills-dropdown-arrow">▼</span>
+            </button>
 
-            <!-- Liste des cases à cocher -->
-            <div id="skills-checkboxes-container" class="space-y-1 overflow-y-auto max-h-52 pr-1"></div>
-
-            <!-- Pied du panneau -->
-            <div class="flex justify-between items-center pt-1.5 border-t border-stone-800 text-[10px] text-stone-400">
-              <span id="skills-checked-summary">0 sélectionnée(s)</span>
-              <button type="button" onclick="clearAllSkillCheckboxes()" class="hover:text-amber-300 underline">Tout décocher</button>
+            <!-- Panneau déroulant à cases à cocher -->
+            <div 
+              id="skills-dropdown-panel" 
+              class="hidden absolute right-0 top-full mt-1.5 w-80 max-h-72 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
+            >
+              <input 
+                type="text" 
+                id="filter-skills-input" 
+                placeholder="🔍 Filtrer les compétences..." 
+                oninput="filterSkillsList()" 
+                class="w-full p-1.5 rounded text-xs bg-black/60 border border-stone-800 text-amber-200"
+              >
+              <div id="skills-checkboxes-container" class="space-y-1 overflow-y-auto max-h-52 pr-1"></div>
+              <div class="flex justify-between items-center pt-1.5 border-t border-stone-800 text-[10px] text-stone-400">
+                <span id="skills-checked-summary">0 sélectionnée(s)</span>
+                <button type="button" onclick="clearAllSkillCheckboxes()" class="hover:text-amber-300 underline">Tout décocher</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Bouton d'ajout groupé -->
-        <button 
-          type="button" 
-          onclick="addSelectedSkills()" 
-          class="px-3.5 py-2 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition shadow flex items-center gap-1.5 cursor-pointer"
-        >
-          <span>+</span>
-          <span>Ajouter</span>
-        </button>
+          <!-- Bouton unique + pour les compétences -->
+          <button 
+            type="button" 
+            onclick="addSelectedSkills()" 
+            title="Ajouter les compétences cochées"
+            class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base transition shadow flex items-center justify-center shrink-0 cursor-pointer"
+          >+</button>
+        </div>
       </div>
-      </div>
+      
+      <!-- Liste dynamique des cartes de compétences -->
       <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
     </section>
 
-    <!-- 4. AVANTAGES & DÉSAVANTAGES (AVEC FICHES DÉTAILLÉES DU LIVRE DE RÈGLES) -->
+    <!-- 4. AVANTAGES & DÉSAVANTAGES (AVEC BOUTONS UNIQUES +) -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      
       <!-- BLOC AVANTAGES -->
       <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
@@ -475,12 +462,16 @@
           <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
         </div>
         
-        <div class="flex gap-2 text-xs">
+        <div class="flex gap-2 text-xs items-center">
           <select id="sel-catalog-adv" onchange="updateAdvPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
-          <button onclick="addAdvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/30 font-bold transition shadow">+</button>
+          <button 
+            type="button" 
+            onclick="addAdvFromCatalog()" 
+            title="Ajouter cet avantage" 
+            class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+          >+</button>
         </div>
 
-        <!-- FICHE DESCRIPTIVE EN DIRECT DE L'AVANTAGE SÉLECTIONNÉ -->
         <div id="adv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-amber-500/30 space-y-2 text-xs shadow-lg">
           <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
             <div>
@@ -513,12 +504,16 @@
           <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
         </div>
         
-        <div class="flex gap-2 text-xs">
+        <div class="flex gap-2 text-xs items-center">
           <select id="sel-catalog-disadv" onchange="updateDisadvPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
-          <button onclick="addDisadvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/30 font-bold transition shadow">+</button>
+          <button 
+            type="button" 
+            onclick="addDisadvFromCatalog()" 
+            title="Ajouter ce désavantage" 
+            class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/40 hover:border-red-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+          >+</button>
         </div>
 
-        <!-- FICHE DESCRIPTIVE EN DIRECT DU DÉSAVANTAGE SÉLECTIONNÉ -->
         <div id="disadv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-rose-900/40 space-y-2 text-xs shadow-lg">
           <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
             <div>
@@ -541,7 +536,6 @@
 
         <div id="disadv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
       </div>
-
     </section>
 
     <!-- 5. COMBAT & BLESSURES -->
@@ -619,10 +613,8 @@
     Campagne L5R – MJ David • Fiche Interactive dynamique alimentée par data/ et js/
   </footer>
 
-  <!-- DOSSIER OFFICIEL IMPRIMABLE (A4 VECTORIEL POUR EXPORTATION PDF) -->
+  <!-- DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 ET PAGE 2) -->
   <div id="official-print-dossier" class="text-black text-[9px] leading-tight">
-    
-    <!-- PAGE 1 : FEUILLE MARTIALE -->
     <div class="print-page flex flex-col justify-between py-1">
       <div class="sheet-box mb-2 p-2">
         <div class="flex justify-between items-center border-b border-black pb-1 mb-1">
@@ -655,7 +647,6 @@
         </div>
       </div>
 
-      <!-- Anneaux et Traits -->
       <div class="grid grid-cols-5 gap-1.5 mb-2 text-center">
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>土 TERRE</span><span id="p-r-earth" class="font-bold">2</span></div>
@@ -695,7 +686,6 @@
         </div>
       </div>
 
-      <!-- Ligne Combat -->
       <div class="grid grid-cols-4 gap-1.5 mb-2 text-[9px]">
         <div class="sheet-box p-1.5 text-center">
           <div class="text-[8px] font-bold uppercase text-stone-500">Initiative (4e Éd.)</div>
@@ -719,7 +709,6 @@
         </div>
       </div>
 
-      <!-- Compétences -->
       <div class="sheet-box mb-2">
         <div class="sheet-title">Compétences & Spécialisations</div>
         <table class="w-full text-left border-collapse text-[8.5px]">
@@ -736,7 +725,6 @@
         </table>
       </div>
 
-      <!-- Armes & Vitalité -->
       <div class="grid grid-cols-2 gap-2 mb-1">
         <div class="sheet-box">
           <div class="sheet-title">Armes & Attaques</div>
@@ -788,10 +776,9 @@
         <div class="p-2 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
       </div>
     </div>
-
   </div>
 
-  <!-- SYNCHRONISATION DES FICHES DÉTAILLÉES AVANTAGES / DÉSAVANTAGES -->
+  <!-- SCRIPTS DU BAS DE PAGE -->
   <script>
     function updateAdvPreview() {
       const sel = document.getElementById('sel-catalog-adv');
@@ -851,85 +838,14 @@
       card.classList.remove('hidden');
     }
   </script>
-<!-- PRÉREMPLISSAGE DEPUIS L'URL (?clan=...&famille=...) -->
+
+  <!-- GESTION DE LA MULTI-SÉLECTION DES COMPÉTENCES -->
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      const clanParam = params.get('clan');
-      const familyParam = params.get('famille') || params.get('family');
-
-      if (!clanParam) return;
-
-      // Fonction d'aide pour normaliser (minuscules, sans accents)
-      const clean = str => (str || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-
-      // Attendre que data/clans-data.js et character-generator.js aient peuplé sel-clan
-      function tryAutoSelect(attempts = 0) {
-        const selClan = document.getElementById('sel-clan');
-        if (!selClan || selClan.options.length <= 1) {
-          if (attempts < 20) setTimeout(() => tryAutoSelect(attempts + 1), 50);
-          return;
-        }
-
-        // 1. Sélectionner le Clan
-        const targetClan = clean(clanParam);
-        const clanOpt = Array.from(selClan.options).find(opt => 
-          clean(opt.value).includes(targetClan) || clean(opt.text).includes(targetClan)
-        );
-
-        if (clanOpt) {
-          selClan.value = clanOpt.value;
-          // Déclencher le changement pour que character-generator.js remplisse sel-family
-          if (typeof onClanChange === 'function') {
-            onClanChange();
-          } else {
-            selClan.dispatchEvent(new Event('change'));
-          }
-
-          // 2. Sélectionner la Famille si précisée
-          if (familyParam) {
-            setTimeout(() => {
-              const selFamily = document.getElementById('sel-family');
-              if (!selFamily) return;
-
-              const targetFam = clean(familyParam);
-              const famOpt = Array.from(selFamily.options).find(opt => 
-                clean(opt.value).includes(targetFam) || clean(opt.text).includes(targetFam)
-              );
-
-              if (famOpt) {
-                selFamily.value = famOpt.value;
-                if (typeof onFamilyChange === 'function') {
-                  onFamilyChange();
-                } else {
-                  selFamily.dispatchEvent(new Event('change'));
-                }
-              }
-            }, 60);
-          }
-        }
-      }
-
-      tryAutoSelect();
-    });
-  </script>
-<script>
-    // =========================================================================
-    // GESTION DU MENU DÉROULANT MULTI-SÉLECTION DES COMPÉTENCES (CORRIGÉ)
-    // =========================================================================
     function getAddSkillFunction() {
-      // 1. Recherche par scope global direct (const / let / function)
       try {
-        if (typeof addSkillFromCatalog === "function") {
-          return addSkillFromCatalog;
-        }
+        if (typeof addSkillFromCatalog === "function") return addSkillFromCatalog;
       } catch (e) {}
-
-      // 2. Recherche sur l'objet window
-      if (typeof window.addSkillFromCatalog === "function") {
-        return window.addSkillFromCatalog;
-      }
-
+      if (typeof window.addSkillFromCatalog === "function") return window.addSkillFromCatalog;
       return null;
     }
 
@@ -938,12 +854,10 @@
       const container = document.getElementById("skills-checkboxes-container");
       if (!origSelect || !container) return;
 
-      // Conserver les compétences déjà cochées si une réactualisation survient
       const previouslyChecked = new Set(
         Array.from(container.querySelectorAll("input.skill-cb:checked")).map(cb => cb.value)
       );
 
-      // Filtrer les options factices ("-- Choisir --" ou vides)
       const options = Array.from(origSelect.options).filter(opt => 
         opt.value !== "" && opt.value !== "none" && !opt.text.includes("--")
       );
@@ -957,7 +871,6 @@
       options.forEach(opt => {
         const row = document.createElement("label");
         row.className = "flex items-center gap-2 p-1.5 rounded hover:bg-stone-900/80 cursor-pointer text-stone-300 hover:text-amber-200 transition text-xs select-none";
-        
         const isChecked = previouslyChecked.has(opt.value) ? "checked" : "";
         row.innerHTML = `
           <input type="checkbox" value="${opt.value}" ${isChecked} onchange="updateSelectedSkillsCount()" class="skill-cb accent-amber-500 rounded">
@@ -978,7 +891,6 @@
         panel.classList.add("hidden");
         arrow?.classList.remove("rotate-180");
       } else {
-        // Synchroniser les options disponibles avec le catalogue actuel avant ouverture
         initSkillsMultiSelect();
         panel.classList.remove("hidden");
         arrow?.classList.add("rotate-180");
@@ -1031,11 +943,8 @@
         return;
       }
 
-      // Traitement séquentiel de chaque compétence cochée
       checkedBoxes.forEach(cb => {
         const targetVal = cb.value;
-
-        // Repérer l'option dans le <select> d'origine (par value ou par text)
         const matchedOption = Array.from(origSelect.options).find(o => 
           o.value === targetVal || o.text === targetVal || o.text.startsWith(targetVal)
         );
@@ -1047,30 +956,24 @@
           origSelect.value = targetVal;
         }
 
-        // Déclencher le changement et exécuter la fonction d'ajout officielle
         origSelect.dispatchEvent(new Event("change", { bubbles: true }));
         try {
           addFn();
         } catch (err) {
           console.error("Erreur lors de l'ajout de la compétence :", targetVal, err);
         }
-
         cb.checked = false;
       });
 
-      // Recalcul global du personnage si disponible
       if (typeof updateAll === "function") {
         updateAll();
       }
 
       updateSelectedSkillsCount();
       toggleSkillsDropdown(true);
-
-      // Rafraîchir les compétences restantes dans le panneau
       setTimeout(initSkillsMultiSelect, 100);
     }
 
-    // Fermer le panneau si on clique en dehors
     document.addEventListener("click", (e) => {
       const wrapper = document.getElementById("skills-dropdown-wrapper");
       if (wrapper && !wrapper.contains(e.target)) {
@@ -1078,10 +981,8 @@
       }
     });
 
-    // Synchronisation automatique si le clan ou l'école change
     window.addEventListener("DOMContentLoaded", () => {
       setTimeout(initSkillsMultiSelect, 200);
-
       document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(initSkillsMultiSelect, 200));
       document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(initSkillsMultiSelect, 200));
     });
