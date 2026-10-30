@@ -1,4 +1,4 @@
-export const SORTS_EAU = [
+const SORTS_EAU = [
   {
     id: "water-1-bo-water",
     name: "Bâton Bō d'Eau (Bo of Water)",
