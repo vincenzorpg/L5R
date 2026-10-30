@@ -78,93 +78,162 @@
       </div>
     </section>
 
-    <!-- 1. LES HUIT GRANDS CLANS DE ROKUGAN (RECTANGLES ENTIÈREMENT CLIQUABLES) -->
+<!-- SECTION : LES HUIT GRANDS CLANS (HARMONISÉE AVEC LE MENU FIXE) -->
     <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">Les Huit Grands Clans</h2>
-        <span class="text-xs text-stone-400">Histoire, familles fondamentales et serments sacrés</span>
+      <div class="flex justify-between items-end border-b border-amber-500/20 pb-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200">
+            LES HUIT GRANDS CLANS
+          </h2>
+          <span class="text-xs text-stone-400">Histoire, familles fondamentales et serments sacrés de l'Empire.</span>
+        </div>
+        <span class="text-[10px] text-stone-500 font-mono hidden sm:inline">ROKUGAN 4E ÉDITION</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
 
-        <!-- CRABE -->
-        <a href="clans/crabe.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#1e140d] border border-amber-700/50 flex items-center justify-center font-bold text-amber-400 font-imperial text-xs group-hover:scale-110 transition">土</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400">Voir Clan →</span>
+        <!-- 1. CRABE (蟹 - #38bdf8) -->
+        <a href="clans/crabe.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#38bdf8]/60 transition group bg-gradient-to-br from-[#0c1318] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#38bdf8]" style="text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);">
+                蟹
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#38bdf8] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#38bdf8] group-hover:text-amber-200 transition">
+              CLAN DU CRABE
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              Les défenseurs stoïques du Mur Kaiu contre les horreurs et la Souillure de l'Outremonde.
+            </p>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial group-hover:text-amber-300">Clan du Crabe</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">Les défenseurs stoïques du Mur Kaiu contre les horreurs de l'Outremonde.</p>
         </a>
 
-        <!-- GRUE -->
-        <a href="clans/grue.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-sky-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#081a24] border border-sky-500/50 flex items-center justify-center font-bold text-sky-300 font-imperial text-xs group-hover:scale-110 transition">風</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-sky-300">Voir Clan →</span>
+        <!-- 2. GRUE (鶴 - #67e8f9) -->
+        <a href="clans/grue.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#67e8f9]/60 transition group bg-gradient-to-br from-[#0b1517] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#67e8f9]" style="text-shadow: 0 0 8px rgba(103, 232, 249, 0.45);">
+                鶴
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#67e8f9] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#67e8f9] group-hover:text-amber-200 transition">
+              CLAN DE LA GRUE
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              Maîtres de la cour, arbitres de l'étiquette et champions légendaires du duel Iaijutsu.
+            </p>
           </div>
-          <h3 class="font-bold text-sky-200 text-sm font-imperial group-hover:text-sky-300">Clan de la Grue</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">Maîtres de la cour, arbitres de l'étiquette et champions légendaires du duel Iaijutsu.</p>
         </a>
 
-        <!-- DRAGON -->
-        <a href="clans/dragon.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-emerald-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#062016] border border-emerald-500/50 flex items-center justify-center font-bold text-emerald-300 font-imperial text-xs group-hover:scale-110 transition">龍</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-emerald-300">Voir Clan →</span>
+        <!-- 3. DRAGON (龍 - #34d399) -->
+        <a href="clans/dragon.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#34d399]/60 transition group bg-gradient-to-br from-[#081813] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#34d399]" style="text-shadow: 0 0 8px rgba(52, 211, 153, 0.45);">
+                龍
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#34d399] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#34d399] group-hover:text-amber-200 transition">
+              CLAN DU DRAGON
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              Escrimeurs du style Niten à deux sabres, magistrats logiques et moines tatoués.
+            </p>
           </div>
-          <h3 class="font-bold text-emerald-200 text-sm font-imperial group-hover:text-emerald-300">Clan du Dragon</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">Escrimeurs du style Niten à deux sabres, magistrats logiques et moines tatoués.</p>
         </a>
 
-        <!-- LION -->
-        <a href="clans/lion.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#2a1605] border border-amber-500/50 flex items-center justify-center font-bold text-amber-300 font-imperial text-xs group-hover:scale-110 transition">武</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-300">Voir Clan →</span>
+        <!-- 4. LION (獅 - #fbbf24) -->
+        <a href="clans/lion.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#fbbf24]/60 transition group bg-gradient-to-br from-[#191409] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#fbbf24]" style="text-shadow: 0 0 8px rgba(251, 191, 36, 0.45);">
+                獅
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#fbbf24] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#fbbf24] group-hover:text-amber-200 transition">
+              CLAN DU LION
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              Le Sabre Droit de l'Empereur, stratèges infaillibles et légions guerrières vouées au Bushido.
+            </p>
           </div>
-          <h3 class="font-bold text-amber-200 text-sm font-imperial group-hover:text-amber-300">Clan du Lion</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">Le Sabre Droit de l'Empereur, stratèges infaillibles et légions guerrières vouées au Bushido.</p>
         </a>
 
-        <!-- MANTE -->
-        <a href="clans/mante.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-sky-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#061e29] border border-sky-400/50 flex items-center justify-center font-bold text-sky-300 font-imperial text-xs group-hover:scale-110 transition">雷</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-sky-300">Voir Clan →</span>
+        <!-- 5. MANTE (蟷 - #2dd4bf) -->
+        <a href="clans/mante.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#2dd4bf]/60 transition group bg-gradient-to-br from-[#081716] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#2dd4bf]" style="text-shadow: 0 0 8px rgba(45, 212, 191, 0.45);">
+                蟷
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#2dd4bf] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#2dd4bf] group-hover:text-amber-200 transition">
+              CLAN DE LA MANTE
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              Les fils des tempêtes océaniques, corsaires redoutables et maîtres archers de l'Empire.
+            </p>
           </div>
-          <h3 class="font-bold text-sky-200 text-sm font-imperial group-hover:text-sky-300">Clan de la Mante</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">Les fils des tempêtes océaniques, corsaires redoutables et maîtres archers de l'Empire.</p>
         </a>
 
-        <!-- PHÉNIX -->
-        <a href="clans/phenix.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-red-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#290a0a] border border-red-500/50 flex items-center justify-center font-bold text-red-400 font-imperial text-xs group-hover:scale-110 transition">鳳</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-red-300">Voir Clan →</span>
+        <!-- 6. PHÉNIX (鳳 - #f97316) -->
+        <a href="clans/phenix.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#f97316]/60 transition group bg-gradient-to-br from-[#180f08] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#f97316]" style="text-shadow: 0 0 8px rgba(249, 115, 22, 0.45);">
+                鳳
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#f97316] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#f97316] group-hover:text-amber-200 transition">
+              CLAN DU PHÉNIX
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              La voix des Kami, les plus éminents maîtres des éléments et les gardes du corps Shiba.
+            </p>
           </div>
-          <h3 class="font-bold text-red-200 text-sm font-imperial group-hover:text-red-300">Clan du Phénix</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">La voix des Kami, les plus éminents maîtres des éléments et les gardes du corps Shiba.</p>
         </a>
 
-        <!-- SCORPION -->
-        <a href="clans/scorpion.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-purple-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#20081c] border border-purple-500/50 flex items-center justify-center font-bold text-purple-300 font-imperial text-xs group-hover:scale-110 transition">忍</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-purple-300">Voir Clan →</span>
+        <!-- 7. SCORPION (蠍 - #f43f5e) -->
+        <a href="clans/scorpion.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#f43f5e]/60 transition group bg-gradient-to-br from-[#180a0f] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#f43f5e]" style="text-shadow: 0 0 8px rgba(244, 63, 94, 0.45);">
+                蠍
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#f43f5e] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#f43f5e] group-hover:text-amber-200 transition">
+              CLAN DU SCORPION
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              La Main Gauche de l'Empereur, manipulant le secret, le chantage et le devoir absolu.
+            </p>
           </div>
-          <h3 class="font-bold text-purple-200 text-sm font-imperial group-hover:text-purple-300">Clan du Scorpion</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">La Main Gauche de l'Empereur, manipulant le secret, le chantage et le devoir absolu.</p>
         </a>
 
-        <!-- LICORNE -->
-        <a href="clans/licorne.html" class="card-clean rounded-xl p-4 space-y-2 block group hover:border-purple-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
-          <div class="flex justify-between items-center">
-            <span class="w-8 h-8 rounded-full bg-[#1e0d29] border border-purple-400/50 flex items-center justify-center font-bold text-purple-300 font-imperial text-xs group-hover:scale-110 transition">馬</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-purple-300">Voir Clan →</span>
+        <!-- 8. LICORNE (麒 - #c084fc) -->
+        <a href="clans/licorne.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#c084fc]/60 transition group bg-gradient-to-br from-[#140b19] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#c084fc]" style="text-shadow: 0 0 8px rgba(192, 132, 252, 0.45);">
+                麒
+              </span>
+              <span class="text-[10px] text-stone-500 group-hover:text-[#c084fc] transition font-imperial font-bold">VOIR CLAN →</span>
+            </div>
+            <h3 class="font-bold font-imperial text-sm text-[#c084fc] group-hover:text-amber-200 transition">
+              CLAN DE LA LICORNE
+            </h3>
+            <p class="text-stone-400 text-[11px] leading-relaxed">
+              Revenus des terres lointaines avec leurs destriers fougueux et leur magie des amulettes.
+            </p>
           </div>
-          <h3 class="font-bold text-purple-200 text-sm font-imperial group-hover:text-purple-300">Clan de la Licorne</h3>
-          <p class="text-xs text-stone-400 leading-relaxed">Revenus des terres lointaines avec leurs destriers fougueux et leur magie des amulettes.</p>
         </a>
 
       </div>
