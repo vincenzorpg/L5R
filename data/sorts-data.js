@@ -1,35 +1,42 @@
 /**
  * SORTS_DATA - Point d'entrée principal réagrégé
  * L5R 4e Édition (Livre de Base complet & Suppléments)
+ * Version standard (compatible file:// et serveurs HTTP)
  */
 
-import { SORTS_UNIVERSELS } from './sorts/sorts-universels.js';
-import { SORTS_AIR } from './sorts/sorts-air.js';
-import { SORTS_TERRE } from './sorts/sorts-terre.js';
-import { SORTS_FEU } from './sorts/sorts-feu.js';
-import { SORTS_EAU } from './sorts/sorts-eau.js';
-import { SORTS_VIDE } from './sorts/sorts-vide.js';
-import { SORTS_KIHO } from './sorts/sorts-kiho.js';
-import { SORTS_MAHO } from './sorts/sorts-maho.js';
+(function () {
+  // Récupération sécurisée des listes chargées via les sous-fichiers
+  var universels = (typeof window !== "undefined" && window.SORTS_UNIVERSELS) || [];
+  var air = (typeof window !== "undefined" && window.SORTS_AIR) || [];
+  var terre = (typeof window !== "undefined" && window.SORTS_TERRE) || [];
+  var feu = (typeof window !== "undefined" && window.SORTS_FEU) || [];
+  var eau = (typeof window !== "undefined" && window.SORTS_EAU) || [];
+  var vide = (typeof window !== "undefined" && window.SORTS_VIDE) || [];
+  var kiho = (typeof window !== "undefined" && window.SORTS_KIHO) || [];
+  var maho = (typeof window !== "undefined" && window.SORTS_MAHO) || [];
 
-export const SORTS_DATA = [
-  ...SORTS_UNIVERSELS,
-  ...SORTS_AIR,
-  ...SORTS_TERRE,
-  ...SORTS_FEU,
-  ...SORTS_EAU,
-  ...SORTS_VIDE,
-  ...SORTS_KIHO,
-  ...SORTS_MAHO
-];
+  // Fusion de l'ensemble des sorts
+  var SORTS_DATA = [
+    ...universels,
+    ...air,
+    ...terre,
+    ...feu,
+    ...eau,
+    ...vide,
+    ...kiho,
+    ...maho
+  ];
 
-// Indexation rapide par ID pour la recherche O(1)
-export const SORTS_BY_ID = Object.fromEntries(
-  SORTS_DATA.map(sort => [sort.id, sort])
-);
+  // Indexation par ID pour accès direct O(1)
+  var SORTS_BY_ID = Object.fromEntries(
+    SORTS_DATA.map(function (sort) {
+      return [sort.id, sort];
+    })
+  );
 
-// Rétrocompatibilité navigateur direct sans bundler
-if (typeof window !== "undefined") {
-  window.SORTS_DATA = SORTS_DATA;
-  window.SORTS_BY_ID = SORTS_BY_ID;
-}
+  // Exposition globale dans window
+  if (typeof window !== "undefined") {
+    window.SORTS_DATA = SORTS_DATA;
+    window.SORTS_BY_ID = SORTS_BY_ID;
+  }
+})();
