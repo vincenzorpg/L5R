@@ -17,7 +17,7 @@
   <script src="data/clans-data.js" defer></script>
   <script src="data/competences-data.js" defer></script>
   <script src="data/equipement-data.js" defer></script>
-  <script src="data/avantages-data.js" defer></script>
+  <script src="data/avantages-desavantages-data.js" defer></script>
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/navbar.js" defer></script>
@@ -52,6 +52,16 @@
       outline: none;
       border-color: var(--gold) !important;
       box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+    }
+    .badge-adv {
+      background: rgba(120, 53, 15, 0.4);
+      color: #fde68a;
+      border: 1px solid #d97706;
+    }
+    .badge-dis {
+      background: rgba(136, 19, 55, 0.4);
+      color: #fecdd3;
+      border: 1px solid #e11d48;
     }
 
     /* RÈGLES D'IMPRESSION ET D'EXPORTATION PDF */
@@ -355,31 +365,85 @@
       <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
     </section>
 
-    <!-- 4. AVANTAGES & DÉSAVANTAGES -->
+    <!-- 4. AVANTAGES & DÉSAVANTAGES (AVEC FICHES DÉTAILLÉES DU LIVRE DE RÈGLES) -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="card-clean rounded-xl p-5 space-y-3">
+      
+      <!-- BLOC AVANTAGES -->
+      <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
-          <h3 class="font-bold text-emerald-400 font-imperial text-sm">Avantages (Coût XP)</h3>
+          <h3 class="font-bold text-emerald-400 font-imperial text-sm flex items-center gap-1.5">
+            <span>🌟</span> Avantages (Traits Héroïques)
+          </h3>
           <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
         </div>
+        
         <div class="flex gap-2 text-xs">
-          <select id="sel-catalog-adv" class="flex-1 p-2 rounded"></select>
-          <button onclick="addAdvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/30 font-bold">+ Ajouter</button>
+          <select id="sel-catalog-adv" onchange="updateAdvPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+          <button onclick="addAdvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/30 font-bold transition shadow">+ Ajouter</button>
         </div>
-        <div id="adv-container" class="space-y-1.5 text-xs max-h-48 overflow-y-auto"></div>
+
+        <!-- FICHE DESCRIPTIVE EN DIRECT DE L'AVANTAGE SÉLECTIONNÉ -->
+        <div id="adv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-amber-500/30 space-y-2 text-xs shadow-lg">
+          <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
+            <div>
+              <h4 id="adv-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+              <span id="adv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-adv inline-block mt-1"></span>
+            </div>
+            <div class="text-right">
+              <span id="adv-preview-cost" class="px-2 py-0.5 rounded bg-amber-600 text-black font-bold font-imperial text-[11px] shadow"></span>
+              <div id="adv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+            </div>
+          </div>
+          <p id="adv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+          <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+            <span class="text-amber-300 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+              📜 Effet Mécanique Officiel (4e Édition) :
+            </span>
+            <p id="adv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+          </div>
+        </div>
+
+        <div id="adv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
       </div>
 
-      <div class="card-clean rounded-xl p-5 space-y-3">
+      <!-- BLOC DÉSAVANTAGES -->
+      <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
-          <h3 class="font-bold text-red-400 font-imperial text-sm">Désavantages (Max 15 XP)</h3>
+          <h3 class="font-bold text-red-400 font-imperial text-sm flex items-center gap-1.5">
+            <span>🩸</span> Désavantages (Failles & Fardeaux)
+          </h3>
           <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
         </div>
+        
         <div class="flex gap-2 text-xs">
-          <select id="sel-catalog-disadv" class="flex-1 p-2 rounded"></select>
-          <button onclick="addDisadvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/30 font-bold">+ Ajouter</button>
+          <select id="sel-catalog-disadv" onchange="updateDisadvPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+          <button onclick="addDisadvFromCatalog()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/30 font-bold transition shadow">+ Ajouter</button>
         </div>
-        <div id="disadv-container" class="space-y-1.5 text-xs max-h-48 overflow-y-auto"></div>
+
+        <!-- FICHE DESCRIPTIVE EN DIRECT DU DÉSAVANTAGE SÉLECTIONNÉ -->
+        <div id="disadv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-rose-900/40 space-y-2 text-xs shadow-lg">
+          <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
+            <div>
+              <h4 id="disadv-preview-name" class="font-bold font-imperial text-rose-200 text-sm"></h4>
+              <span id="disadv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-dis inline-block mt-1"></span>
+            </div>
+            <div class="text-right">
+              <span id="disadv-preview-cost" class="px-2 py-0.5 rounded bg-rose-900 text-rose-100 font-bold font-imperial text-[11px] shadow"></span>
+              <div id="disadv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+            </div>
+          </div>
+          <p id="disadv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+          <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+            <span class="text-rose-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+              ⚖️ Pénalité Mécanique Officielle (4e Édition) :
+            </span>
+            <p id="disadv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+          </div>
+        </div>
+
+        <div id="disadv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
       </div>
+
     </section>
 
     <!-- 5. COMBAT & BLESSURES -->
@@ -628,6 +692,103 @@
     </div>
 
   </div>
+
+  <!-- SYNCHRONISATION DES FICHES DÉTAILLÉES AVANTAGES / DÉSAVANTAGES -->
+  <script>
+    function updateAdvPreview() {
+      const sel = document.getElementById('sel-catalog-adv');
+      const card = document.getElementById('adv-preview-card');
+      if (!sel || !card) return;
+      
+      const val = sel.value;
+      const list = window.AVANTAGES_DATA || [];
+      const adv = list.find(a => a.id === val || a.name === val || (val && a.name.toLowerCase().includes(val.toLowerCase())));
+      
+      if (!adv) {
+        card.classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('adv-preview-name').textContent = adv.name;
+      document.getElementById('adv-preview-type').textContent = `Catégorie : ${adv.type}`;
+      document.getElementById('adv-preview-cost').textContent = `Coût : ${adv.cost} XP`;
+      document.getElementById('adv-preview-prereq').textContent = adv.prerequisite ? `Prérequis : ${adv.prerequisite}` : '';
+      document.getElementById('adv-preview-desc').textContent = adv.desc ? `« ${adv.desc} »` : '';
+      document.getElementById('adv-preview-rule').textContent = adv.rule || '';
+      card.classList.remove('hidden');
+    }
+
+    function updateDisadvPreview() {
+      const sel = document.getElementById('sel-catalog-disadv');
+      const card = document.getElementById('disadv-preview-card');
+      if (!sel || !card) return;
+      
+      const val = sel.value;
+      const list = window.DESAVANTAGES_DATA || [];
+      const dis = list.find(d => d.id === val || d.name === val || (val && d.name.toLowerCase().includes(val.toLowerCase())));
+      
+      if (!dis) {
+        card.classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('disadv-preview-name').textContent = dis.name;
+      document.getElementById('disadv-preview-type').textContent = `Catégorie : ${dis.type}`;
+      document.getElementById('disadv-preview-cost').textContent = `Gain : +${dis.cost} XP`;
+      document.getElementById('disadv-preview-prereq').textContent = dis.prerequisite ? `Condition : ${dis.prerequisite}` : '';
+      document.getElementById('disadv-preview-desc').textContent = dis.desc ? `« ${dis.desc} »` : '';
+      document.getElementById('disadv-preview-rule').textContent = dis.rule || '';
+      card.classList.remove('hidden');
+    }
+
+    // Peuple les sélecteurs groupés par type si non géré par character-generator
+    function initCatalogsFallback() {
+      const selAdv = document.getElementById('sel-catalog-adv');
+      const selDis = document.getElementById('sel-catalog-disadv');
+
+      if (selAdv && selAdv.options.length <= 1 && window.AVANTAGES_DATA) {
+        selAdv.innerHTML = '<option value="">-- Sélectionner un Avantage --</option>';
+        const types = [...new Set(window.AVANTAGES_DATA.map(a => a.type))];
+        types.forEach(t => {
+          const group = document.createElement('optgroup');
+          group.label = `— Avantages ${t}s —`;
+          window.AVANTAGES_DATA.filter(a => a.type === t).forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a.id || a.name;
+            opt.textContent = `${a.name} (${a.cost} XP)`;
+            group.appendChild(opt);
+          });
+          selAdv.appendChild(group);
+        });
+      }
+
+      if (selDis && selDis.options.length <= 1 && window.DESAVANTAGES_DATA) {
+        selDis.innerHTML = '<option value="">-- Sélectionner un Désavantage --</option>';
+        const types = [...new Set(window.DESAVANTAGES_DATA.map(d => d.type))];
+        types.forEach(t => {
+          const group = document.createElement('optgroup');
+          group.label = `— Désavantages ${t}s —`;
+          window.DESAVANTAGES_DATA.filter(d => d.type === t).forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.id || d.name;
+            opt.textContent = `${d.name} (+${d.cost} XP)`;
+            group.appendChild(opt);
+          });
+          selDis.appendChild(group);
+        });
+      }
+
+      selAdv?.addEventListener('change', updateAdvPreview);
+      selDis?.addEventListener('change', updateDisadvPreview);
+
+      updateAdvPreview();
+      updateDisadvPreview();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initCatalogsFallback, 80);
+    });
+  </script>
 
 </body>
 </html>
