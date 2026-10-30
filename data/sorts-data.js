@@ -4,7 +4,6 @@
  */
 
 (function () {
-  // Récupération sécurisée des listes (supporte Array ou Dictionnaire d'objets)
   function toArray(raw) {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -12,22 +11,29 @@
     return [];
   }
 
-  var rawUniversels = toArray((typeof window !== "undefined" && (window.SORTS_UNIVERSELS || window.sortsUniversels)));
-  var rawAir        = toArray((typeof window !== "undefined" && (window.SORTS_AIR || window.sortsAir)));
-  var rawTerre      = toArray((typeof window !== "undefined" && (window.SORTS_TERRE || window.sortsTerre)));
-  var rawFeu        = toArray((typeof window !== "undefined" && (window.SORTS_FEU || window.sortsFeu)));
-  var rawEau        = toArray((typeof window !== "undefined" && (window.SORTS_EAU || window.sortsEau)));
-  var rawVide       = toArray((typeof window !== "undefined" && (window.SORTS_VIDE || window.sortsVide)));
-  var rawKiho       = toArray((typeof window !== "undefined" && (window.SORTS_KIHO || window.sortsKiho)));
-  var rawMaho       = toArray((typeof window !== "undefined" && (window.SORTS_MAHO || window.sortsMaho)));
+  var rawUniversels = toArray(typeof window !== "undefined" && (window.SORTS_UNIVERSELS || window.sortsUniversels || window.UNIVERSELS));
+  var rawAir        = toArray(typeof window !== "undefined" && (window.SORTS_AIR || window.sortsAir || window.AIR_DATA));
+  var rawTerre      = toArray(typeof window !== "undefined" && (window.SORTS_TERRE || window.sortsTerre || window.TERRE_DATA));
+  var rawFeu        = toArray(typeof window !== "undefined" && (window.SORTS_FEU || window.sortsFeu || window.FEU_DATA));
+  var rawEau        = toArray(typeof window !== "undefined" && (window.SORTS_EAU || window.sortsEau || window.EAU_DATA));
+  var rawVide       = toArray(typeof window !== "undefined" && (window.SORTS_VIDE || window.sortsVide || window.VIDE_DATA));
+  
+  // Prise en charge de toutes les variantes de nommage (singulier, pluriel, DATA)
+  var rawKiho       = toArray(typeof window !== "undefined" && (
+    window.SORTS_KIHO || window.SORTS_KIHOS || window.KIHOS || window.KIHO || window.KIHO_DATA || window.sortsKiho || window.sortsKihos
+  ));
+  
+  var rawMaho       = toArray(typeof window !== "undefined" && (window.SORTS_MAHO || window.sortsMaho || window.MAHO_DATA || window.MAHO));
 
-  // Extraction ciblée du rang de maîtrise (exclut rigoureusement "range" / portée)
+  // Extraction ciblée du rang de maîtrise (exclut range/portée)
   function detectRank(s) {
     var raw = s.mastery !== undefined ? s.mastery :
              (s.maitrise !== undefined ? s.maitrise :
+             (s.ring_mastery !== undefined ? s.ring_mastery :
+             (s.ringMastery !== undefined ? s.ringMastery :
              (s.rang !== undefined ? s.rang :
              (s.rank !== undefined ? s.rank :
-             (s.niveau !== undefined ? s.niveau : null))));
+             (s.niveau !== undefined ? s.niveau : null))))));
 
     if (raw !== null && raw !== undefined) {
       if (typeof raw === "number") return raw;
@@ -36,21 +42,32 @@
       var m = str.match(/\d+/);
       if (m) return parseInt(m[0], 10);
     }
-
     return 0;
   }
 
-  // Traitement et normalisation uniforme de chaque sort
+  // Traitement et normalisation uniforme
   function prepareList(list, defaultElem, isMaho, isKiho) {
     return list.map(function (item) {
       var s = Object.assign({}, item);
-      s.element = s.element || s.anneau || s.ring || defaultElem;
-      s.anneau = s.element;
+      var rawRing = s.ring || s.anneau || (s.element && s.element.toLowerCase() !== "kiho" ? s.element : "");
+
+      if (isKiho || s.isKiho) {
+        s.isKiho = true;
+        s.element = "kiho";
+        s.anneau = "kiho";
+        s.ring = rawRing || "Terre"; // Anneau élémentaire associé au Kiho
+      } else if (isMaho || s.isMaho) {
+        s.isMaho = true;
+        s.element = "maho";
+        s.anneau = "maho";
+      } else {
+        s.element = s.element || s.anneau || defaultElem;
+        s.anneau = s.element;
+      }
+
       s.mastery = detectRank(s);
       s.rang = s.mastery;
       s.maitrise = s.mastery;
-      if (isMaho || s.isMaho) { s.isMaho = true; s.element = "maho"; s.anneau = "maho"; }
-      if (isKiho || s.isKiho) { s.isKiho = true; }
       return s;
     });
   }
