@@ -1,6 +1,6 @@
 /**
- * CLANS_DATA - Les Huit Grands Clans de Rokugan (L5R 4e Édition)
- * Écoles classées par famille d'attache avec les 5 Rangs de Techniques.
+ * CLANS_DATA — Les Huit Grands Clans de Rokugan
+ * Règles officielles L5R 4e Édition (Livre de Base, The Great Clans, Emerald Empire)
  */
 const CLANS_DATA = {
 
@@ -17,7 +17,7 @@ const CLANS_DATA = {
       { name: "Yasuki", trait: "Perception", bonus: "+1 Perception" }
     ],
     schools: [
-      // Écoles Famille Hida
+      // ÉCOLE BUSHI HIDA (Core p. 106)
       {
         id: "bushi-hida",
         family: "Hida",
@@ -26,76 +26,58 @@ const CLANS_DATA = {
         trait: "Force",
         bonus: "+1 Force",
         honor: 3.5,
-        skills: ["Armes Lourdes (Tetsubo)", "Athlétisme", "Bataille", "Défense", "Kenjutsu", "Jiujutsu", "Une compétence Bugei"],
-        outfit: "Armure lourde, Daisho, Tetsubo, Nécessaire de voyage, 3 koku",
+        skills: ["Armes Lourdes (Tetsubo)", "Athlétisme", "Bataille", "Défense", "Jiujutsu", "Kenjutsu", "Une compétence Bugei au choix"],
+        outfit: "Armure lourde, Daisho, Tetsubo ou Dai Tsuchi, Nécessaire de voyage, 3 koku",
         techniques: [
-          { rank: 1, name: "La Voie du Crabe", effect: "Porte les armures lourdes sans subir leurs pénalités de ND (sauf en Discrétion). Obtient un bonus de +1g0 à tous les jets de dégâts avec les Armes Lourdes." },
-          { rank: 2, name: "La Montagne ne Bouge Pas", effect: "Gagne une Réduction de dégâts permanente égale à son Anneau de Terre." },
-          { rank: 3, name: "Deux Pinces, Un Seul Esprit", effect: "Peut effectuer ses attaques comme des Actions Simples avec les Armes Lourdes ou armes possédant le mot-clé Samouraï." },
-          { rank: 4, name: "Frappe Dévastatrice", effect: "Une fois par escarmouche avec une Arme Lourde : réduit la Réduction adverse de 4. Si l'attaque touche, la cible est Étourdie (Dazed)." },
-          { rank: 5, name: "La Montagne ne Tombe Jamais", effect: "Dépensez 1 point de Vide en phase de Réaction : vous agissez comme étant au palier Indemne (+0) durant tout votre prochain tour et ignorez Étourdi et Fatigué." }
-        ]
-      },
-      {
-        id: "berserker-hida",
-        family: "Hida",
-        name: "Berserker du Crabe (Hida)",
-        type: "Bushi",
-        trait: "Constitution",
-        bonus: "+1 Constitution",
-        honor: 2.5,
-        skills: ["Armes Lourdes", "Athlétisme", "Défense", "Intimidation", "Jiujutsu", "Kenjutsu", "Une compétence Bugei"],
-        outfit: "Armure lourde ou moyenne, Daisho, Grande Hache Ono ou Tetsubo, 2 koku",
-        techniques: [
-          { rank: 1, name: "La Fureur du Rempart", effect: "En posture d'Attaque Totale, ajoute son Anneau de Terre au résultat de ses jets de dégâts et ignore le malus de ND d'Armure lié à cette posture." },
-          { rank: 2, name: "La Rage du Berserker", effect: "Une fois par combat : entre en transe furieuse durant 2x Terre rounds. Ignore les pénalités de blessures et gagne +2g1 à tous ses jets d'attaque et de dégâts." },
-          { rank: 3, name: "Le Coup Démolisseur", effect: "Attaquer devient une Action Simple lorsqu'il manie une Arme Lourde en rage." },
-          { rank: 4, name: "L'Insensibilité Totale", effect: "Tant qu'il est en rage, les dégâts subis ne peuvent pas faire descendre ses blessures sous le palier Inconscient." },
-          { rank: 5, name: "Le Dernier Souffle du Crabe", effect: "S'il subit un coup mortel, continue de combattre jusqu'à la fin de la scène avant de succomber." }
+          { rank: 1, name: "La Voie du Crabe", effect: "Le port d'une Armure Lourde n'augmente pas le ND de vos jets d'Athlétisme ou basés sur l'Agilité (la Discrétion reste pénalisée). Lorsque vous maniez une Arme Lourde, vous ajoutez +1g0 à tous vos jets de dégâts." },
+          { rank: 2, name: "La Montagne ne Bouge Pas", effect: "Vous gagnez une valeur de Réduction de dégâts permanente égale à votre Anneau de Terre. Cette Réduction se cumule avec celle de votre armure." },
+          { rank: 3, name: "Deux Pinces, Un Seul Esprit", effect: "Porter une attaque devient une Action Simple (au lieu de Complexe) lorsque vous maniez une Arme Lourde ou une arme portant le mot-clé Samouraï." },
+          { rank: 4, name: "La Poigne de la Terre", effect: "Lorsque vous touchez avec une Arme Lourde, vous ignorez une quantité de Réduction adverse égale à votre Anneau de Terre. Vous effectuez la manœuvre Renversement pour 1 Augmentation de moins (minimum 1)." },
+          { rank: 5, name: "La Montagne ne Tombe Jamais", effect: "Au début de votre tour ou en phase de Réactions, dépensez 1 point de Vide : durant 1 round complet, vous ignorez tous vos malus de blessures (vous agissez au palier Indemne +0) et vous ne pouvez pas être rendu Inconscient ou Mis Hors de Combat par les dégâts." }
         ]
       },
 
-      // École Famille Hiruma
+      // ÉCOLE BUSHI HIRUMA (Core p. 108)
       {
-        id: "eclaireur-hiruma",
+        id: "bushi-hiruma",
         family: "Hiruma",
-        name: "Éclaireur Hiruma",
+        name: "Bushi Hiruma (Éclaireur)",
         type: "Bushi",
         trait: "Agilité",
         bonus: "+1 Agilité",
         honor: 4.5,
-        skills: ["Athlétisme", "Chasse", "Discrétion", "Défense", "Kenjutsu", "Kyujutsu", "Connaissance : Outremonde"],
-        outfit: "Armure légère, Daisho, Arc Yumi avec 20 flèches, Nécessaire de survie, 3 koku",
+        skills: ["Athlétisme", "Chasse (Pistage)", "Connaissance : Outremonde", "Défense", "Discrétion", "Kenjutsu", "Kyujutsu"],
+        outfit: "Armure légère, Daisho, Arc Yumi avec 20 flèches, Nécessaire de voyage et de pistage, 3 koku",
         techniques: [
-          { rank: 1, name: "La Flamme de la Torche Vacille", effect: "En posture d'Attaque, gagne +1g0 à tous ses jets d'attaque. Double la durée des rations de survie et du jade pour son groupe." },
-          { rank: 2, name: "La Leçon du Loup", effect: "Ajoute son rang d'Athlétisme + 5 à son ND d'Armure par Augmentation déclarée sur une attaque." },
-          { rank: 3, name: "Ailes du Colibri", effect: "Une fois par round : esquive réactive avec un jet opposé d'Agilité + Défense contre l'attaque adverse." },
-          { rank: 4, name: "L'Odorat du Requin", effect: "Attaquer devient une Action Simple, ou permet d'effectuer deux esquives réactives par round." },
-          { rank: 5, name: "Le Jour sans Geste Superflu", effect: "Obtient une Action de Mouvement gratuite supplémentaire chaque tour et inflige +2g2 lors d'attaques par surprise." }
+          { rank: 1, name: "La Flamme de la Torche Vacille", effect: "En posture d'Attaque, vous gagnez +1g0 à tous vos jets d'attaque. Votre entraînement de traqueur divise par deux vos besoins quotidiens en nourriture, eau et sommeil." },
+          { rank: 2, name: "La Leçon du Loup", effect: "En posture de Défense Totale, vous ajoutez votre rang de compétence Athlétisme à votre ND d'Armure. Vous pouvez substituer l'Agilité à la Force pour tous vos jets d'Athlétisme." },
+          { rank: 3, name: "Courir comme le Vent", effect: "Attaquer devient une Action Simple lorsque vous maniez un sabre (Kenjutsu), un arc (Kyujutsu) ou une lance." },
+          { rank: 4, name: "Le Requin Sent le Sang", effect: "Face à une cible blessée ou souillée, ou contre un adversaire ayant manqué son attaque contre vous au round précédent, vous gagnez +2g0 à vos jets d'attaque." },
+          { rank: 5, name: "Le Jour sans Regrets", effect: "Une fois par combat en Action Gratuite, ajoutez votre Volonté × 5 à votre ND d'Armure pour 1 round. Vos attaques infligent +2g2 de dégâts supplémentaires en frappant un point vital." }
         ]
       },
 
-      // École Famille Kaiu
+      // ÉCOLE INGÉNIEUR KAIU (The Great Clans p. 39)
       {
         id: "ingenieur-kaiu",
         family: "Kaiu",
-        name: "Ingénieur de Siège Kaiu",
+        name: "Ingénieur Kaiu",
         type: "Bushi",
         trait: "Intelligence",
         bonus: "+1 Intelligence",
         honor: 4.5,
-        skills: ["Artisanat (Forge)", "Bataille", "Connaissance : Architecture", "Défense", "Ingénierie (Siège)", "Kenjutsu", "Éventail de Guerre"],
-        outfit: "Armure lourde, Daisho, Outils d'architecte et de forge, Marteau de guerre ou Éventail, 3 koku",
+        skills: ["Artisanat (Forge de Siège)", "Bataille", "Connaissance : Architecture", "Connaissance : Ingénierie (Siège)", "Défense", "Kenjutsu", "Éventail de Guerre"],
+        outfit: "Armure lourde, Daisho, Marteau de guerre lourd ou Éventail d'acier, Outils d'architecte et de forge, 3 koku",
         techniques: [
-          { rank: 1, name: "La Méthode Kaiu", effect: "Gagne +1g0 à tous ses jets de compétences d'école. Dépenser 1 point de Vide sur ces compétences octroie +2g2 au lieu de +1g1." },
-          { rank: 2, name: "La Voie de Pierre", effect: "Peut renforcer la résistance d'une structure ou forteresse. Relance les dés de dégâts des armes de siège affichant moins que son Rang d'École." },
-          { rank: 3, name: "La Voie de la Carapace", effect: "Lorsqu'il forge ou répare une armure, peut ajouter son Rang d'École à la Réduction de celle-ci." },
-          { rank: 4, name: "L'Art de la Brèche", effect: "Attaquer devient une Action Simple avec le katana, le marteau de guerre ou l'éventail." },
-          { rank: 5, name: "La Voie de l'Acier", effect: "Peut conférer des bonus permanents de +1g0 au toucher ou +0g1 aux dégâts sur les armes qu'il forge." }
+          { rank: 1, name: "La Méthode Kaiu", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets d'Ingénierie, Artisanat et Architecture. Dépenser 1 point de Vide sur ces compétences ajoute +2g2 au lieu de +1g1." },
+          { rank: 2, name: "La Voie de Pierre", effect: "Vous pouvez réparer ou fortifier n'importe quel édifice. Les armes de siège sous vos ordres relancent tous les dés de dégâts inférieurs à votre Rang d'École." },
+          { rank: 3, name: "Artisan de la Carapace", effect: "Attaquer devient une Action Simple avec les armes de siège, marteaux lourds ou sabres. Lorsque vous entretenez une armure, vous augmentez sa Réduction de 1." },
+          { rank: 4, name: "Percer la Brèche", effect: "Vos cibles ne bénéficient d'aucun bonus de couvert ou de retranchement contre vos assauts ou ceux des troupes que vous dirigez." },
+          { rank: 5, name: "La Voie de l'Acier", effect: "Lorsque vous forgez une arme, vous lui conférez de manière permanente soit +1g0 à l'attaque, soit +0g1 aux dégâts. En dépensant vos points de Vide, vous pouvez rendre une lame Incassable." }
         ]
       },
 
-      // École Famille Kuni
+      // ÉCOLE SHUGENJA KUNI (Core p. 107)
       {
         id: "shugenja-kuni",
         family: "Kuni",
@@ -104,18 +86,18 @@ const CLANS_DATA = {
         trait: "Volonté",
         bonus: "+1 Volonté",
         honor: 2.5,
-        skills: ["Calligraphie", "Connaissance : Outremonde", "Connaissance : Théologie", "Défense", "Enquête", "Méditation", "Une compétence Bugei"],
-        outfit: "Robes, Daisho ou Tanto, Nécessaire de parchemin, Bâton Bo, 3 koku",
+        skills: ["Calligraphie (Chiffre)", "Connaissance : Outremonde", "Connaissance : Théologie", "Défense", "Enquête", "Méditation", "Une compétence Bugei au choix"],
+        outfit: "Robes austères, Wakizashi, Bâton Bo, Nécessaire de calligraphie, Boîte de parchemins, 3 koku",
         techniques: [
-          { rank: 1, name: "L'Œil Purificateur", effect: "Affinité : Terre. Déficience : Air. Reconnaît la présence de la Souillure chez tout individu à portée de vue. Ses sorts de Terre infligent +1g1 dégâts aux créatures de l'Outremonde." },
-          { rank: 2, name: "La Barrière de Jade", effect: "Érige des cercles protecteurs repoussant les monstres souillés. Les oni subissent un malus de -1g1 sur tous leurs jets contre lui." },
-          { rank: 3, name: "L'Ancrage Tellurique", effect: "Peut lancer les sorts de Terre de Maîtrise 1 et 2 en Action Simple." },
-          { rank: 4, name: "Le Châtiment de la Terre", effect: "Double la zone d'effet de tous ses sorts de Terre de combat." },
-          { rank: 5, name: "L'Exorcisme Suprême", effect: "Dépensez 1 point de Vide pour purger temporairement la Souillure d'une cible ou détruire instantanément un mort-vivant mineur." }
+          { rank: 1, name: "L'Œil Purificateur", effect: "Affinité : Terre. Déficience : Air. Vous détectez la Souillure chez toute créature à moins de 9 m. Vos sorts de Terre infligent +1g1 de dégâts supplémentaires aux cibles portant au moins 1 point de Souillure." },
+          { rank: 2, name: "La Voie de la Barrière", effect: "Vos sorts de protection de Terre augmentent de +5 le ND d'Armure des bénéficiaires contre les créatures de l'Outremonde." },
+          { rank: 3, name: "La Poigne Minérale", effect: "Lancer un sort de Terre de Rang de Maîtrise 1 ou 2 dont le temps d'incantation est d'une Action Complexe devient une Action Simple." },
+          { rank: 4, name: "La Frappe Purificatrice", effect: "Les créatures de l'Outremonde ciblées par vos sorts de dégâts voient leur Armure et leur Réduction ignorées." },
+          { rank: 5, name: "La Colère de la Terre", effect: "Dépensez 1 point de Vide : double la zone d'effet ou la durée d'un sort de Terre lancé ce round." }
         ]
       },
 
-      // École Famille Yasuki
+      // ÉCOLE COURTISAN YASUKI (Core p. 107)
       {
         id: "courtisan-yasuki",
         family: "Yasuki",
@@ -124,14 +106,14 @@ const CLANS_DATA = {
         trait: "Intuition",
         bonus: "+1 Intuition",
         honor: 2.5,
-        skills: ["Artisanat", "Commerce", "Comédie", "Courtisan", "Étiquette", "Intimidation", "Sincérité"],
-        outfit: "Kimono de voyage résistant, Wakizashi, Bourse de monnaies, 10 koku",
+        skills: ["Art de la Scène (Conteur)", "Artisanat", "Commerce (Évaluation)", "Courtisan", "Enquête", "Étiquette", "Sincérité (Tromperie)"],
+        outfit: "Kimono de voyage résistant et soigné, Wakizashi, Sacoche de marchandises, Bourse de koku, 10 koku",
         techniques: [
-          { rank: 1, name: "L'Évaluation du Marchand", effect: "Connaît instantanément la valeur marchande exacte de tout objet et la situation financière d'un interlocuteur." },
-          { rank: 2, name: "L'Art du Compromis", effect: "Gagne +1g1 à tous ses jets de Commerce et de persuasion lorsqu'une transaction matérielle est en jeu." },
+          { rank: 1, name: "La Voie de la Carpe", effect: "Vous jaugez d'instinct la valeur marchande exacte de tout bien et les désirs financiers d'un interlocuteur. Vous gagnez +1g1 à vos jets de Commerce et de Courtisan lors d'accords matériels." },
+          { rank: 2, name: "La Ruse du Marchand", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets de Tentation et d'Intimidation subtile en cour." },
           { rank: 3, name: "L'Or du Mur", effect: "Réduit de 10 points le ND des faveurs sollicitées auprès de clans marchands ou de magistrats." },
-          { rank: 4, name: "Les Ficelles de la Bourse", effect: "Peut relancer deux dés sur tous ses jets de compétences Marchandes ou Sociales." },
-          { rank: 5, name: "La Fortune Souffle où Elle Veut", effect: "Peut couper les lignes de crédit et de ravitaillement d'un rival pour le paralyser en cour." }
+          { rank: 4, name: "Les Ficelles de la Bourse", effect: "Vous pouvez relancer deux dés sur tous vos jets de compétences Marchandes ou Sociales." },
+          { rank: 5, name: "La Fortune Souffle où Elle Veut", effect: "Dépensez 1 point de Vide pour paralyser les lignes de crédit et l'approvisionnement d'un rival, ruinant ses alliances en cour." }
         ]
       }
     ]
@@ -149,24 +131,27 @@ const CLANS_DATA = {
       { name: "Asahina", trait: "Intelligence", bonus: "+1 Intelligence" }
     ],
     schools: [
+      // ÉCOLE BUSHI KAKITA (DUELLISTE) (Core p. 109)
       {
         id: "duelliste-kakita",
         family: "Kakita",
-        name: "Duelliste Kakita",
+        name: "Bushi Kakita (Duelliste)",
         type: "Bushi",
         trait: "Réflexes",
         bonus: "+1 Réflexes",
         honor: 6.5,
-        skills: ["Artisanat", "Courtisan", "Défense", "Étiquette", "Iaijutsu", "Kenjutsu", "Sincérité"],
-        outfit: "Kimono raffiné, Daisho de maître, Nécessaire d'entretien, 5 koku",
+        skills: ["Art de la Scène", "Courtisan", "Défense", "Étiquette", "Iaijutsu", "Kenjutsu", "Sincérité"],
+        outfit: "Kimono raffiné brodé, Daisho de maître, Nécessaire d'entretien, 5 koku",
         techniques: [
-          { rank: 1, name: "La Voie de la Grue", effect: "Ajoute le double de son rang d'Iaijutsu à son Initiative. En posture du Centre, gagne +1g1 + Rang d'École aux jets d'attaque et de Concentration." },
-          { rank: 2, name: "Vélocité de l'Éclair", effect: "Gagne un bonus de +2g0 à tous ses jets d'attaque contre les adversaires ayant une Initiative inférieure à la sienne." },
-          { rank: 3, name: "Première et Dernière Frappe", effect: "En duel d'Iaijutsu, frappe en premier dès que la marge de victoire au jet de Concentration atteint 3 (au lieu de 5)." },
-          { rank: 4, name: "Une Frappe, Deux Entailles", effect: "Peut attaquer en Action Simple avec les armes portant le mot-clé Samouraï." },
-          { rank: 5, name: "Frapper sans Pensée", effect: "Peut effectuer une Action Simple en posture du Centre et y demeurer autant de rounds consécutifs que souhaité." }
+          { rank: 1, name: "La Voie de la Grue", effect: "Vous ajoutez le double de votre rang de compétence Iaijutsu (+Iaijutsu × 2) à vos jets d'Initiative. En posture du Centre, vous gagnez +1g1 + Rang d'École à votre prochain jet d'attaque ou de Concentration." },
+          { rank: 2, name: "La Frappe Soudaine", effect: "Lors d'un duel ou d'une escarmouche, lorsque vous attaquez un adversaire dont l'Initiative est inférieure à la vôtre, vous gagnez un bonus de +2g0 à votre jet d'attaque." },
+          { rank: 3, name: "La Frappe de l'Esprit", effect: "Porter une attaque devient une Action Simple lorsque vous maniez une arme possédant le mot-clé Samouraï." },
+          { rank: 4, name: "Une Frappe, Deux Entailles", effect: "Lors de la phase de Concentration d'un duel d'Iaijutsu, vous n'avez besoin que d'une marge de victoire de 3 (au lieu de 5) pour remporter une Augmentation Gratuite." },
+          { rank: 5, name: "La Frappe Ultime", effect: "Vous pouvez adopter la posture du Centre et effectuer malgré tout une Action Simple d'attaque lors du même tour. En duel, si vous subissez un coup mortel, vous portez votre frappe au même instant avant de tomber." }
         ]
       },
+
+      // ÉCOLE COURTISAN DOJI (Core p. 110-111)
       {
         id: "courtisan-doji",
         family: "Doji",
@@ -175,34 +160,38 @@ const CLANS_DATA = {
         trait: "Intuition",
         bonus: "+1 Intuition",
         honor: 6.5,
-        skills: ["Cérémonie du Thé", "Courtisan", "Étiquette", "Oratoire", "Représentation", "Sincérité", "Une compétence Noble"],
-        outfit: "Kimono de cour somptueux, Wakizashi, Nécessaire d'écriture, 10 koku",
+        skills: ["Cérémonie du Thé", "Courtisan (Manipulation)", "Étiquette (Courtoisie)", "Sincérité (Honnêteté)", "Une compétence d'Art de la Scène", "Deux compétences Nobles au choix"],
+        outfit: "Kimono de cour somptueux en soie Doji, Wakizashi, Nécessaire d'écriture calligraphique, 10 koku",
         techniques: [
-          { rank: 1, name: "La Grâce Impériale", effect: "Reconnaît d'instinct le rang d'Honneur et de Statut exacts d'autrui. Réduit de 5 le ND de toutes les faveurs sollicitées en cour." },
-          { rank: 2, name: "Murmures de la Cour", effect: "Peut relancer un jet de compétence sociale raté en dépensant 1 point de Vide. Gagne +1g1 permanent à Sincérité et Étiquette." },
-          { rank: 3, name: "L'Épreuve d'Honneur", effect: "En joute verbale, force un adversaire à tester sa Volonté contre son jet de Courtisan sous peine de perdre 1 rang d'Honneur." },
-          { rank: 4, name: "Mille Murmures dans l'Ombre", effect: "Immunité totale contre la perte de Gloire liée aux manœuvres de cour." },
-          { rank: 5, name: "La Volonté de l'Empereur", effect: "Une requête officielle formulée avec déférence impose un jet de Volonté ND 30 pour oser refuser." }
+          { rank: 1, name: "Le Don de la Grâce", effect: "Vous reconnaissez d'instinct le rang d'Honneur et de Statut exacts de toute personne rencontrée. Vous réduisez de 5 le ND de toutes les faveurs et requêtes polies formulées en cour." },
+          { rank: 2, name: "La Douce Vérité", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets de Courtisan et d'Étiquette lorsqu'ils font appel à l'Honnêteté ou la Courtoisie." },
+          { rank: 3, name: "L'Épreuve d'Honneur", effect: "En joute verbale, vous forcez un rival à tester sa Volonté contre votre jet de Courtisan sous peine de perdre 1 point de Statut ou d'Honneur." },
+          { rank: 4, name: "Mille Murmures dans l'Ombre", effect: "Immunité totale contre la perte de Gloire résultant des intrigues ou calomnies adverses." },
+          { rank: 5, name: "La Voix de l'Empereur", effect: "Dépensez 1 point de Vide : quiconque souhaite vous attaquer ou agir contre vous en cour doit réussir un jet de Volonté opposé à votre Statut sous peine de renoncer." }
         ]
       },
+
+      // ÉCOLE GUERRIER DAIDOJI (Core p. 111)
       {
         id: "guerrier-daidoji",
         family: "Daidoji",
         name: "Guerrier Daidoji (Grue de Fer)",
         type: "Bushi",
-        trait: "Force",
-        bonus: "+1 Force",
+        trait: "Constitution",
+        bonus: "+1 Constitution",
         honor: 5.5,
-        skills: ["Armes d'Hast (Naginata)", "Athlétisme", "Bataille", "Défense", "Kenjutsu", "Kyujutsu", "Une compétence Bugei"],
-        outfit: "Armure lourde Daidoji, Daisho, Naginata ou Yari, 3 koku",
+        skills: ["Armes d'Hast (Naginata)", "Athlétisme", "Bataille", "Défense", "Iaijutsu", "Kenjutsu (Katana)", "Une compétence Bugei au choix"],
+        outfit: "Armure lourde Daidoji laquée de gris, Daisho, Naginata ou Lance Yari, Nécessaire de voyage, 3 koku",
         techniques: [
-          { rank: 1, name: "La Grue d'Acier", effect: "Calcule ses blessures avec son Rang d'Honneur s'il est supérieur à son Anneau de Terre. Gagne +1g0 pour toucher en protégeant un allié." },
-          { rank: 2, name: "Le Feu Intérieur", effect: "En posture de Défense Totale, remporte automatiquement la plus haute Initiative du round suivant." },
-          { rank: 3, name: "Déplacer l'Ombre", effect: "Ajoute la valeur de l'armure adverse à son propre ND d'Armure en combat singulier." },
-          { rank: 4, name: "Frapper sous le Voile", effect: "Peut attaquer en Action Simple avec les armes de mêlée." },
-          { rank: 5, name: "Marcher sur la Lame", effect: "Dépensez 1 point de Vide pour intercepter une attaque mortelle destinée à un allié et en diviser les dégâts par deux." }
+          { rank: 1, name: "La Force de l'Honneur", effect: "Vous utilisez votre Rang d'Honneur à la place de votre Anneau de Terre pour déterminer le nombre de PV de vos Paliers de Blessures (si votre Honneur est supérieur). Lorsqu'un allié adjacent est attaqué, vous pouvez ajouter +5 à son ND d'Armure en Action Gratuite." },
+          { rank: 2, name: "Le Feu Intérieur", effect: "Si vous choisissez la posture de Défense Totale pendant un round, vous remportez automatiquement la plus haute Initiative du round suivant, sans jet de dés." },
+          { rank: 3, name: "La Forêt d'Acier", effect: "Porter une attaque devient une Action Simple avec les sabres, armes d'hast ou lances." },
+          { rank: 4, name: "La Vigueur de la Grue", effect: "Vous ajoutez votre Rang d'Honneur au résultat de tous vos jets de dégâts au corps-à-corps." },
+          { rank: 5, name: "Le Rempart Vivant", effect: "Lorsqu'un allié à portée de mouvement est ciblé par une attaque, vous dépensez 1 point de Vide pour intercepter le coup. L'attaque vous frappe à sa place, mais tous les dégâts sont réduits de moitié après application de votre Réduction." }
         ]
       },
+
+      // ÉCOLE SHUGENJA ASAHINA (Core p. 110)
       {
         id: "shugenja-asahina",
         family: "Asahina",
@@ -211,13 +200,13 @@ const CLANS_DATA = {
         trait: "Intelligence",
         bonus: "+1 Intelligence",
         honor: 6.5,
-        skills: ["Artisanat", "Calligraphie", "Connaissance : Théologie", "Méditation", "Sincérité", "Cérémonie du Thé", "Une compétence Noble"],
-        outfit: "Robes blanches Asahina, Wakizashi, Nécessaire d'origami et de parchemin, 4 koku",
+        skills: ["Artisanat (Origami)", "Calligraphie", "Cérémonie du Thé", "Connaissance : Théologie", "Méditation", "Sincérité", "Une compétence Noble au choix"],
+        outfit: "Robes blanches monastiques, Wakizashi, Nécessaire de calligraphie et d'origami sacré, 4 koku",
         techniques: [
-          { rank: 1, name: "La Pureté du Vent", effect: "Affinité : Air. Déficience : Feu. Gagne une Augmentation gratuite sur tous les sorts de soins et de protection spirituelle." },
-          { rank: 2, name: "Le Souffle Paisible", effect: "Peut apaiser les émotions belliqueuses dans un rayon de 10 mètres d'un jet d'Air / Sincérité." },
-          { rank: 3, name: "L'Envol de l'Esprit", effect: "Peut lancer les sorts de communication et d'illusion d'Air en Action Simple." },
-          { rank: 4, name: "L'Harmonie Céleste", effect: "Confère un bonus de +5 au ND d'Armure de tous les alliés sous sa garde spirituelle." },
+          { rank: 1, name: "L'Âme Paisible", effect: "Affinité : Air. Déficience : Feu. Vous gagnez une Augmentation Gratuite sur tous les sorts d'Air qui n'infligent pas de dégâts directs, ainsi que sur tous les sorts de soins et de protection spirituelle." },
+          { rank: 2, name: "Le Souffle Apaisant", effect: "Vous pouvez calmer les émotions belliqueuses dans un rayon de 9 mètres par un jet d'Air / Sincérité opposé." },
+          { rank: 3, name: "L'Envol de l'Esprit", effect: "Lancer un sort de communication ou d'illusion d'Air devient une Action Simple." },
+          { rank: 4, name: "L'Harmonie Céleste", effect: "Confère un bonus de +5 au ND d'Armure de tous les alliés sous votre garde spirituelle." },
           { rank: 5, name: "La Bénédiction de Dame Doji", effect: "Dépensez 1 point de Vide : annule tous les dégâts infligés par un sort élémentaire à proximité." }
         ]
       }
@@ -231,11 +220,12 @@ const CLANS_DATA = {
     name: "Clan du Dragon",
     families: [
       { name: "Mirumoto", trait: "Agilité", bonus: "+1 Agilité" },
-      { name: "Kitsuki", trait: "Perception", bonus: "+1 Perception" },
+      { name: "Kitsuki", trait: "Intuition", bonus: "+1 Intuition" },
       { name: "Tamori", trait: "Volonté", bonus: "+1 Volonté" },
-      { name: "Togashi", trait: "Constitution", bonus: "+1 Constitution" }
+      { name: "Togashi", trait: "Réflexes", bonus: "+1 Réflexes" }
     ],
     schools: [
+      // ÉCOLE BUSHI MIRUMOTO (Core p. 112-113)
       {
         id: "bushi-mirumoto",
         family: "Mirumoto",
@@ -244,68 +234,74 @@ const CLANS_DATA = {
         trait: "Agilité",
         bonus: "+1 Agilité",
         honor: 4.5,
-        skills: ["Défense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Méditation", "Connaissance : Théologie", "Une compétence Bugei"],
-        outfit: "Armure légère ou lourde, Daisho Mirumoto, 3 koku",
+        skills: ["Défense", "Iaijutsu", "Kenjutsu (Katana)", "Kenjutsu (Wakizashi)", "Connaissance : Théologie", "Méditation", "Une compétence Bugei au choix"],
+        outfit: "Armure légère ou lourde, Daisho Mirumoto, Nécessaire de voyage, 3 koku",
         techniques: [
-          { rank: 1, name: "Le Style Niten", effect: "Maniement simultané Katana et Wakizashi sans malus de main faible. Confère +5 permanent au ND d'Armure." },
-          { rank: 2, name: "Fort comme la Montagne", effect: "Attaques insensibles aux malus de terrain et immunité au désarmement." },
-          { rank: 3, name: "Frapper comme l'Eau", effect: "Attaquer devient une Action Simple avec deux lames en main." },
-          { rank: 4, name: "Maîtrise des Deux Lames", effect: "Gagne deux Augmentations gratuites pour Feinte, Désarmement ou Garde." },
-          { rank: 5, name: "La Double Frappe du Dragon", effect: "Chaque coup réussi en Attaque Simple déclenche une riposte immédiate de la seconde arme." }
+          { rank: 1, name: "La Voie du Dragon", effect: "Vous maniez simultanément le katana en main principale et le wakizashi en main secondaire sans pénalité de main faible. Vous ajoutez votre rang de compétence Kenjutsu (Wakizashi) à votre ND d'Armure en permanence." },
+          { rank: 2, name: "Les Racines de la Montagne", effect: "Vous ne pouvez jamais être désarmé. De plus, vous ignorez totalement les pénalités de déplacement ou de combat dues aux terrains difficiles ou accidentés." },
+          { rank: 3, name: "L'Eau Tournoyante", effect: "Porter une attaque devient une Action Simple lorsque vous combattez avec vos deux lames (katana et wakizashi)." },
+          { rank: 4, name: "Représailles Furieuses", effect: "Lors de l'Étape de Réactions, vous pouvez désigner un adversaire qui vous a attaqué ce round. Durant votre prochain tour, vous gagnez un bonus de +3k0 à tous vos jets d'attaque contre cette cible." },
+          { rank: 5, name: "Le Cœur du Dragon", effect: "Si vous attaquez deux fois lors de votre tour en maniant le katana et le wakizashi, vous pouvez effectuer une troisième attaque immédiate avec votre main secondaire en tant qu'Action Gratuite." }
         ]
       },
+
+      // ÉCOLE ENQUÊTEUR KITSUKI (Core p. 114)
       {
         id: "magistrat-kitsuki",
         family: "Kitsuki",
-        name: "Magistrat Enquêteur Kitsuki",
+        name: "Enquêteur Kitsuki",
         type: "Courtisan",
         trait: "Perception",
         bonus: "+1 Perception",
         honor: 5.5,
-        skills: ["Courtisan", "Défense", "Droit", "Enquête", "Étiquette", "Kenjutsu", "Sincérité"],
-        outfit: "Kimono de magistrat, Daisho, Nécessaire d'enquêteur, 5 koku",
+        skills: ["Courtisan", "Défense", "Droit", "Enquête (Recherche)", "Étiquette", "Kenjutsu", "Sincérité"],
+        outfit: "Kimono de magistrat, Daisho, Nécessaire d'enquête et carnet d'indices, 5 koku",
         techniques: [
-          { rank: 1, name: "La Clarté de l'Esprit", effect: "Détecte le mensonge d'un jet d'Intuition contre l'adversaire. Double les bonus d'Enquête avec un point de Vide." },
-          { rank: 2, name: "Le Doute Méthodique", effect: "Gagne +2g0 pour résister aux tromperies, illusions et manipulations." },
-          { rank: 3, name: "L'Évidence Irréfutable", effect: "Présenter une preuve matérielle impose -10 au Statut adverse pour contester." },
-          { rank: 4, name: "Regard Pénétrant", effect: "Ajoute son rang d'Enquête à son Initiative." },
-          { rank: 5, name: "La Vérité Nue", effect: "Dépensez 1 point de Vide : force un suspect à confesser ses actes s'il échoue contre Volonté ND 30." }
+          { rank: 1, name: "La Méthode Kitsuki", effect: "Vous gagnez +1k1 sur tous vos jets d'Enquête. Vous pouvez dépenser 1 point de Vide pour doubler vos dés gardés sur un jet d'Observation ou pour analyser logiquement la véracité d'un témoignage." },
+          { rank: 2, name: "Le Doute Méthodique", effect: "Vous gagnez un bonus de +2g0 pour résister à toutes les tromperies, illusions et manipulations mentales." },
+          { rank: 3, name: "L'Évidence Irréfutable", effect: "Présenter une preuve matérielle impose un malus de -10 au Statut adverse pour la contester." },
+          { rank: 4, name: "Regard Pénétrant", effect: "Vous ajoutez votre rang de compétence Enquête à votre Initiative." },
+          { rank: 5, name: "La Vérité Nue", effect: "Dépensez 1 point de Vide : forcez un suspect à confesser ses actes s'il échoue à un jet de Volonté opposé à votre Perception." }
         ]
       },
+
+      // ORDRE TATOUÉ TOGASHI (Core p. 114-115)
       {
         id: "moine-togashi",
         family: "Togashi",
-        name: "Moine Tatoué Togashi (Ise Zumi)",
+        name: "Ordre Tatoué Togashi (Ise Zumi)",
         type: "Moine",
         trait: "Constitution",
         bonus: "+1 Constitution",
         honor: 4.5,
-        skills: ["Athlétisme", "Défense", "Jiujutsu", "Méditation", "Représentation", "Connaissance : Théologie", "Une compétence Noble"],
-        outfit: "Robes simples, Bâton Bo ou mains nues, 1 koku",
+        skills: ["Athlétisme", "Connaissance : Théologie", "Défense", "Jiujutsu", "Méditation", "Art de la Scène (Récit)", "Une compétence Noble ou Bugei"],
+        outfit: "Robes monastiques simples, Bâton Bo ou combat à mains nues, Bol à aumônes, 1 koku",
         techniques: [
-          { rank: 1, name: "Le Sang du Kami", effect: "Obtient deux Tatouages mystiques au choix conférant des pouvoirs surnaturels." },
-          { rank: 2, name: "Le Corps de Pierre", effect: "Gagne +1g1 aux attaques et dégâts à mains nues (Jiujutsu). Obtient un 3e Tatouage." },
-          { rank: 3, name: "L'Harmonie du Souffle", effect: "Attaquer à mains nues devient une Action Simple. Obtient un 4e Tatouage." },
-          { rank: 4, name: "La Transcendance de la Chair", effect: "Ignore les malus de blessures jusqu'au palier Inconscient. Obtient un 5e Tatouage." },
-          { rank: 5, name: "L'Éveil du Dragon", effect: "Dépensez 1 point de Vide pour activer 3 tatouages simultanément pendant 3 rounds. Obtient un 6e Tatouage." }
+          { rank: 1, name: "Le Sang du Dragon", effect: "Vous recevez deux Tatouages magiques de l'Ordre Togashi. Vous apprenez un nouveau Tatouage à chaque Rang d'École supplémentaire (Rangs 2, 3, 4 et 5). Vos frappes à mains nues (Jiujutsu) infligent des dégâts de base de 0g2 (au lieu de 0g1)." },
+          { rank: 2, name: "L'Endurance du Roc", effect: "Vous gagnez +1g1 sur tous vos jets d'attaque et de dégâts à mains nues (Jiujutsu). Obtention du 3e Tatouage." },
+          { rank: 3, name: "L'Harmonie du Souffle", effect: "Attaquer à mains nues devient une Action Simple. Obtention du 4e Tatouage." },
+          { rank: 4, name: "La Transcendance de la Chair", effect: "Vous ignorez les malus de blessures jusqu'au palier Inconscient. Obtention du 5e Tatouage." },
+          { rank: 5, name: "L'Éveil du Dragon", effect: "Dépensez 1 point de Vide pour activer simultanément 3 tatouages durant 3 rounds. Obtention du 6e Tatouage." }
         ]
       },
+
+      // ÉCOLE SHUGENJA TAMORI (Core p. 113)
       {
         id: "shugenja-tamori",
         family: "Tamori",
-        name: "Shugenja Alchimiste Tamori",
+        name: "Shugenja Tamori",
         type: "Shugenja",
         trait: "Volonté",
         bonus: "+1 Volonté",
         honor: 4.5,
-        skills: ["Alchimie", "Athlétisme", "Calligraphie", "Connaissance : Théologie", "Défense", "Kenjutsu", "Méditation"],
-        outfit: "Robes renforcées de voyage, Daisho, Fioles d'argile, 3 koku",
+        skills: ["Artisanat (Alchimie)", "Athlétisme", "Calligraphie", "Connaissance : Théologie", "Défense", "Kenjutsu", "Méditation"],
+        outfit: "Robes robustes de montagne, Daisho, Fioles d'alchimie préparées, 3 koku",
         techniques: [
-          { rank: 1, name: "Le Chaudron des Esprits", effect: "Affinité : Terre. Déficience : Eau. Enferme ses sorts dans des potions prêtes à briser en combat." },
-          { rank: 2, name: "Le Souffle Volcanique", effect: "Ajoute +1g0 à tous ses sorts offensifs de Terre et de Feu." },
-          { rank: 3, name: "La Pierre Foudroyante", effect: "Peut lancer ou briser ses potions en Action Simple." },
-          { rank: 4, name: "L'Écorce de Montagne", effect: "Gagne une Réduction de 3 lorsqu'il est sous l'effet d'un sort de Terre personnel." },
-          { rank: 5, name: "La Fureur Tellurique", effect: "Dépensez 1 point de Vide pour déclencher une explosion de roche infligeant 5g3 aux ennemis proches." }
+          { rank: 1, name: "Le Chaudron des Kami", effect: "Affinité : Terre. Déficience : Air. Vous pouvez emprisonner l'effet d'un sort de Terre ou de Feu dans une fiole d'argile ou potion alchimique. Briser la fiole libère instantanément le sort sans incantation." },
+          { rank: 2, name: "La Fureur Volcanique", effect: "Ajoute +1g0 à tous vos sorts offensifs de Terre et de Feu." },
+          { rank: 3, name: "La Pierre Foudroyante", effect: "Lancer ou briser vos potions au combat devient une Action Simple." },
+          { rank: 4, name: "L'Écorce Minérale", effect: "Gagne une Réduction de dégâts de 3 lorsque vous bénéficiez d'un sort de Terre personnel." },
+          { rank: 5, name: "L'Éruption des Cimes", effect: "Dépensez 1 point de Vide pour déclencher une onde de choc tellurique infligeant 5g3 sur 6 mètres de rayon." }
         ]
       }
     ]
@@ -317,12 +313,13 @@ const CLANS_DATA = {
   lion: {
     name: "Clan du Lion",
     families: [
-      { name: "Akodo", trait: "Perception", bonus: "+1 Perception" },
+      { name: "Akodo", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Matsu", trait: "Force", bonus: "+1 Force" },
       { name: "Ikoma", trait: "Intelligence", bonus: "+1 Intelligence" },
       { name: "Kitsu", trait: "Volonté", bonus: "+1 Volonté" }
     ],
     schools: [
+      // ÉCOLE BUSHI AKODO (Core p. 117)
       {
         id: "bushi-akodo",
         family: "Akodo",
@@ -331,68 +328,74 @@ const CLANS_DATA = {
         trait: "Perception",
         bonus: "+1 Perception",
         honor: 6.5,
-        skills: ["Art de la Guerre (Bataille)", "Défense", "Iaijutsu", "Kenjutsu", "Kyujutsu", "Connaissance : Histoire", "Sincérité"],
-        outfit: "Armure lourde Lion, Daisho, 3 koku",
+        skills: ["Bataille", "Défense", "Iaijutsu", "Kenjutsu (Katana)", "Kyujutsu", "Connaissance : Histoire", "Sincérité"],
+        outfit: "Armure lourde Lion laquée d'or et marron, Daisho, Arc Yumi avec 20 flèches, Nécessaire de voyage, 3 koku",
         techniques: [
-          { rank: 1, name: "La Voie du Lion", effect: "Relance les dés d'attaque inférieurs ou égaux à son Rang d'Honneur. Ajoute +1g0 aux dégâts de sabre." },
-          { rank: 2, name: "La Force de la Certitude", effect: "Ajoute son Rang d'Honneur à ses jets de Volonté et résistance à la Peur." },
-          { rank: 3, name: "Rapide comme le Lion", effect: "Attaquer devient une Action Simple avec les armes de Samouraï." },
-          { rank: 4, name: "La Furie d'Akodo", effect: "Ajoute le nombre d'alliés adjacents au résultat de ses jets d'attaque (max Insight x 2)." },
-          { rank: 5, name: "La Victoire Finale", effect: "Dépensez 1 point de Vide : ajoute son Rang d'Honneur à tous les jets de dégâts et compétences Bugei du tour." }
+          { rank: 1, name: "La Voie du Lion", effect: "Lorsque vous portez une attaque au sabre, vous pouvez relancer tous les dés de votre jet d'attaque dont le résultat est inférieur ou égal à votre Rang d'Honneur. Vous devez conserver les nouveaux résultats." },
+          { rank: 2, name: "La Force de la Certitude", effect: "Vous ajoutez votre Rang d'Honneur au total de tous vos jets de Volonté pour résister à la Peur, aux manœuvres d'intimidation ou à la tentation." },
+          { rank: 3, name: "Vif comme le Vent", effect: "Porter une attaque devient une Action Simple lorsque vous maniez une arme possédant le mot-clé Samouraï." },
+          { rank: 4, name: "Le Rugissement d'Akodo", effect: "Une fois par round, après avoir réussi une attaque au corps-à-corps, vous poussez un cri de ralliement qui accorde un bonus de +1g0 au prochain jet d'attaque de tous vos alliés situés à moins de 9 mètres." },
+          { rank: 5, name: "La Victoire Finale", effect: "Une fois par round, vous pouvez dépenser 1 point de Vide pour ajouter deux fois votre Rang d'Honneur (+Honneur × 2) au total d'un jet de compétence de Bugei ou d'un jet de dégâts." }
         ]
       },
+
+      // ÉCOLE BERSERKER MATSU (Core p. 119)
       {
         id: "bushi-matsu",
         family: "Matsu",
-        name: "Bushi Berserker Matsu",
+        name: "Berserker Matsu",
         type: "Bushi",
         trait: "Force",
         bonus: "+1 Force",
         honor: 6.5,
-        skills: ["Athlétisme", "Bataille", "Défense", "Jiujutsu", "Kenjutsu", "Kyujutsu", "Une compétence Bugei"],
-        outfit: "Armure lourde rouge et or, Daisho, 3 koku",
+        skills: ["Athlétisme", "Bataille", "Défense", "Jiujutsu", "Kenjutsu", "Kyujutsu", "Une compétence Bugei au choix"],
+        outfit: "Armure lourde rouge et or, Daisho, Nécessaire de guerre, 3 koku",
         techniques: [
-          { rank: 1, name: "Le Rugissement du Lion", effect: "En posture d'Attaque Totale, ajoute son Rang d'Honneur à tous ses jets de dégâts." },
-          { rank: 2, name: "La Charge Indomptable", effect: "Ignore les malus de terrain difficile lorsqu'il charge un adversaire." },
-          { rank: 3, name: "La Fureur de Matsu", effect: "Attaquer devient une Action Simple en posture d'Attaque Totale." },
-          { rank: 4, name: "Les Griffes de la Lionne", effect: "Gagne une attaque supplémentaire gratuite après avoir abattu un adversaire." },
-          { rank: 5, name: "Le Courage sans Limite", effect: "Ignore complètement tous les malus de blessures tant qu'il est en Attaque Totale." }
+          { rank: 1, name: "Le Rugissement du Lion", effect: "En posture d'Attaque Totale, vous ajoutez votre Rang d'Honneur à tous vos jets de dégâts. Vous gagnez de plus un bonus de +1g0 pour résister à la Peur." },
+          { rank: 2, name: "La Charge de Matsu", effect: "Lorsque vous effectuez une Charge, vous ignorez les pénalités de terrain difficile et gagnez un bonus de +1g1 à votre jet d'attaque." },
+          { rank: 3, name: "Dévotion Féroce", effect: "Porter une attaque devient une Action Simple lorsque vous avez adopté la posture d'Attaque Totale." },
+          { rank: 4, name: "Les Griffes du Lion", effect: "Une fois par round, si votre attaque réduit un adversaire au palier Inconscient ou Mortel, vous pouvez effectuer immédiatement une attaque supplémentaire gratuite contre un ennemi adjacent." },
+          { rank: 5, name: "Le Courage de Matsu", effect: "Tant que vous combattez en posture d'Attaque Totale, vous ignorez totalement tous les malus de blessures." }
         ]
       },
+
+      // ÉCOLE BARDE IKOMA (Core p. 118-119)
       {
         id: "barde-ikoma",
         family: "Ikoma",
-        name: "Barde & Historien Ikoma",
+        name: "Barde Ikoma",
         type: "Courtisan",
         trait: "Intelligence",
         bonus: "+1 Intelligence",
-        honor: 5.5,
-        skills: ["Art de la Guerre (Bataille)", "Comédie", "Connaissance : Histoire", "Courtisan", "Étiquette", "Oratoire", "Sincérité"],
-        outfit: "Kimono de voyage aux armoiries Lion, Wakizashi, Tambour, 6 koku",
+        honor: 6.5,
+        skills: ["Art de la Scène (Conteur)", "Bataille", "Cérémonie du Thé", "Connaissance : Histoire", "Courtisan", "Étiquette", "Sincérité"],
+        outfit: "Vêtements nobles aux armoiries du Lion, Wakizashi, Tambour ou Biwa traditionnel, Nécessaire d'écriture, 5 koku",
         techniques: [
-          { rank: 1, name: "Le Chant des Héros", effect: "Confère +1g1 aux jets de Volonté et résistance à la Peur de ses compagnons d'un récit héroïque." },
-          { rank: 2, name: "La Voix des Ancêtres", effect: "Gagne +2g0 sur tous les jets d'Oratoire et de persuasion face à d'autres clans." },
-          { rank: 3, name: "La Gloire Partagée", effect: "Peut transférer des points de Gloire à un allié méritant pour rehausser son statut." },
-          { rank: 4, name: "La Flamme Inaltérable", effect: "Immunise ses compagnons contre la panique en bataille de masse." },
-          { rank: 5, name: "Le Dit des Mille Générations", effect: "Dépensez 1 point de Vide : invoque la mémoire d'un ancêtre pour réussir un jet d'histoire ou de tactique." }
+          { rank: 1, name: "La Voix de la Gloire", effect: "Vous captivez votre auditoire par les chroniques des ancêtres. Vous gagnez un bonus de +1g1 sur vos jets d'Art de la Scène et d'Oratoire. D'une harangue martiale, vous accordez +1g0 à la résistance à la Peur de vos alliés." },
+          { rank: 2, name: "La Voix des Héros", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets de Courtisan face à des samouraïs ayant un Rang d'Honneur d'au moins 4.0." },
+          { rank: 3, name: "La Flamme Inaltérable", effect: "Vos compagnons de bataille sont totalement immunisés contre la panique en combat de masse." },
+          { rank: 4, name: "La Gloire Partagée", effect: "Vous pouvez transférer temporairement des points de Gloire à un allié méritant pour rehausser son statut en cour." },
+          { rank: 5, name: "Le Dit des Mille Générations", effect: "Dépensez 1 point de Vide : invoquez l'esprit d'un aïeul légendaire pour réussir automatiquement un test d'histoire ou de tactique." }
         ]
       },
+
+      // ÉCOLE SHUGENJA KITSU (Core p. 117)
       {
         id: "shugenja-kitsu",
         family: "Kitsu",
         name: "Shugenja Kitsu (Sodan-Senzo)",
         type: "Shugenja",
-        trait: "Intuition",
-        bonus: "+1 Intuition",
+        trait: "Volonté",
+        bonus: "+1 Volonté",
         honor: 6.5,
         skills: ["Calligraphie", "Connaissance : Histoire", "Connaissance : Théologie", "Défense", "Enquête", "Méditation", "Sincérité"],
-        outfit: "Robes cérémonielles ocre et or, Daisho ou Bâton Bo, 4 koku",
+        outfit: "Robes traditionnelles ocre et or, Wakizashi, Bâton de pèlerin, Parchemins ancestraux, 3 koku",
         techniques: [
-          { rank: 1, name: "La Vue des Ancêtres", effect: "Affinité : Eau. Déficience : Feu. Perçoit et dialogue avec les esprits des morts (Yomi). +1 Augmentation gratuite sur sorts d'Eau." },
-          { rank: 2, name: "Le Sang des Premiers Hommes", effect: "Gagne +2g0 sur une compétence Bugei pendant 3 rounds en invoquant un aïeul." },
-          { rank: 3, name: "Le Fleuve Spirituel", effect: "Peut lancer les sorts de détection d'Eau en Action Simple." },
-          { rank: 4, name: "L'Appel aux Braves", effect: "Invoque un esprit guerrier pour dévier un coup mortel porté à un allié." },
-          { rank: 5, name: "L'Armée des Ombres Épiques", effect: "Dépensez 1 point de Vide : matérialise des spectres désorientant l'armée ennemie." }
+          { rank: 1, name: "Le Regard des Esprits", effect: "Affinité : Eau. Déficience : Feu. Vous pouvez percevoir et converser avec les esprits des défunts vertueux (Sodan-Senzo). Vous gagnez une Augmentation Gratuite sur tous les sorts d'Eau liés à la divination, la mémoire ou l'histoire." },
+          { rank: 2, name: "La Force des Aïeux", effect: "Vous gagnez +2g0 sur une compétence Bugei pendant 3 rounds en invoquant les exploits d'un aïeul." },
+          { rank: 3, name: "Le Fleuve Spirituel", effect: "Lancer un sort de perception ou de mémoire d'Eau devient une Action Simple." },
+          { rank: 4, name: "L'Appel aux Braves", effect: "Invoque un esprit guerrier pour dévier un coup critique porté à un allié." },
+          { rank: 5, name: "L'Armée des Ombres Épiques", effect: "Dépensez 1 point de Vide pour matérialiser les mânes des guerriers du Lion, désorientant l'armée ennemie." }
         ]
       }
     ]
@@ -406,45 +409,71 @@ const CLANS_DATA = {
     families: [
       { name: "Yoritomo", trait: "Constitution", bonus: "+1 Constitution" },
       { name: "Tsuruchi", trait: "Perception", bonus: "+1 Perception" },
-      { name: "Moshi", trait: "Intelligence", bonus: "+1 Intelligence" }
+      { name: "Moshi", trait: "Intelligence", bonus: "+1 Intelligence" },
+      { name: "Kitsune", trait: "Volonté", bonus: "+1 Volonté" }
     ],
     schools: [
+      // ÉCOLE BUSHI YORITOMO (Core p. 120-121)
       {
         id: "bushi-yoritomo",
         family: "Yoritomo",
         name: "Bushi Yoritomo",
         type: "Bushi",
-        trait: "Constitution",
-        bonus: "+1 Constitution",
+        trait: "Force",
+        bonus: "+1 Force",
         honor: 2.5,
         skills: ["Armes de Paysan (Kama)", "Athlétisme", "Bataille", "Commerce", "Défense", "Kenjutsu", "Navigation"],
-        outfit: "Armure de cuir verni, Paire de Kama, Katana, 3 koku",
+        outfit: "Armure légère de cuir laqué marin, Paire de Kama, Katana, Nécessaire de navigation, 5 koku",
         techniques: [
-          { rank: 1, name: "La Fureur de l'Océan", effect: "Maniement de deux armes sans malus (Kama). Gagne +10 au ND d'Armure s'il bouge d'au moins 1,5 m durant son tour." },
-          { rank: 2, name: "Le Pied Marin", effect: "Ne subit jamais de pénalité de terrain instable (navire, boue, cordages)." },
-          { rank: 3, name: "L'Abordage Sauvage", effect: "Attaquer devient une Action Simple avec deux armes ou des armes de paysan." },
-          { rank: 4, name: "La Vague Déferlante", effect: "Gagne deux Augmentations gratuites pour renverser un adversaire au sol." },
-          { rank: 5, name: "La Main d'Osano-Wo", effect: "Dépensez 1 point de Vide : ajoute sa Force en dés gardés à ses dégâts. +0g2 si la cible est à terre." }
+          { rank: 1, name: "La Fureur de la Tempête", effect: "Vous maniez deux armes sans malus de main faible lorsqu'il s'agit d'armes de paysan ou de petites armes. Si vous vous déplacez d'au moins 1,5 m durant votre tour, vous gagnez +10 à votre ND d'Armure jusqu'à votre prochain tour." },
+          { rank: 2, name: "Le Pied Marin", effect: "Vous ne perdez jamais l'équilibre et ignorez toutes les pénalités de déplacement liées aux surfaces instables (ponts de navires, cordages, boue, récifs)." },
+          { rank: 3, name: "L'Assaut de la Mante", effect: "Porter une attaque devient une Action Simple lorsque vous maniez des armes de paysan ou deux armes simultanément." },
+          { rank: 4, name: "La Vague Déferlante", effect: "Si vous vous êtes déplacé d'au moins 1,5 m ce tour, vous pouvez renoncer à votre bonus de +10 au ND d'Armure pour gagner 2 Augmentations Gratuites utilisables exclusivement pour la manœuvre Renversement (Knockdown)." },
+          { rank: 5, name: "La Main d'Osano-Wo", effect: "Dépensez 1 point de Vide en Action Gratuite : vous gardez un nombre de dés de dégâts supplémentaire égal à votre Force (+Force dés gardés). Si la cible est à terre, vous infligez +0g2 supplémentaire." }
         ]
       },
+
+      // ÉCOLE ARCHER TSURUCHI (Core p. 122)
       {
         id: "archer-tsuruchi",
         family: "Tsuruchi",
         name: "Archer Tsuruchi",
         type: "Bushi",
-        trait: "Réflexes",
-        bonus: "+1 Réflexes",
+        trait: "Perception",
+        bonus: "+1 Perception",
         honor: 4.5,
-        skills: ["Athlétisme", "Chasse", "Discrétion", "Défense", "Enquête", "Kyujutsu", "Une compétence Bugei"],
-        outfit: "Arc Yumi de maître, Carquois de 30 flèches, Daisho, 3 koku",
+        skills: ["Athlétisme", "Chasse (Pistage)", "Défense", "Discrétion", "Enquête", "Kyujutsu", "Une compétence Bugei au choix"],
+        outfit: "Arc Yumi de maître, Carquois de 30 flèches variées, Daisho, Nécessaire d'archer, 3 koku",
         techniques: [
-          { rank: 1, name: "L'Œil du Faucon", effect: "Ignore les malus de portée d'arc. Encocher et tirer devient une Action Simple avec un arc Yumi." },
-          { rank: 2, name: "La Précision du Vent", effect: "Ajoute son rang de Kyujutsu au total de tous ses jets de dégâts à l'arc." },
-          { rank: 3, name: "Flèche sans Pensée", effect: "Tirer à l'arc devient une Action Simple permettant deux attaques complètes par tour." },
-          { rank: 4, name: "Le Vol Mortel", effect: "Toutes les flèches tirées ignorent 5 points de Réduction ou d'Armure de la cible." },
-          { rank: 5, name: "L'Œil de Tsuruchi", effect: "Action Complexe : concentre son tir pour obtenir +4g1 sur l'attaque et les dégâts de la flèche." }
+          { rank: 1, name: "Toujours Prêt", effect: "Encocher une flèche devient une Action Gratuite. Vous ne subissez aucune pénalité de portée lorsque vous tirez à l'arc à portée normale ou moyenne." },
+          { rank: 2, name: "Vol sans Pensée", effect: "Vous ajoutez votre rang de compétence Kyujutsu au total de tous vos jets de dégâts à l'arc." },
+          { rank: 3, name: "La Flèche Vole", effect: "Effectuer une attaque à distance avec un arc devient une Action Simple (permettant deux tirs complets par tour)." },
+          { rank: 4, name: "La Cible Percée", effect: "Toutes vos flèches ignorent l'équivalent de 5 points de Réduction ou de protection d'armure de la cible." },
+          { rank: 5, name: "L'Œil de Tsuruchi", effect: "Vous pouvez effectuer une attaque à distance en Action Complexe : vous gagnez un bonus massif de +4k1 au jet d'attaque et au jet de dégâts de cette flèche." }
         ]
       },
+
+      // ÉCOLE COURTISAN YORITOMO (Core p. 121)
+      {
+        id: "courtisan-yoritomo",
+        family: "Yoritomo",
+        name: "Courtisan Yoritomo",
+        type: "Courtisan",
+        trait: "Volonté",
+        bonus: "+1 Volonté",
+        honor: 2.5,
+        skills: ["Commerce", "Courtisan", "Défense", "Étiquette", "Intimidation", "Sincérité", "Une compétence Marchande ou Bugei"],
+        outfit: "Vêtements de cour luxueux bordés d'or insulaire, Wakizashi, Éventail orné, 10 koku",
+        techniques: [
+          { rank: 1, name: "Le Prix du Pouvoir", effect: "Vous utilisez votre Volonté à la place de l'Intuition pour vos jets de Commerce et d'Intimidation. Vous pouvez jauger le prix de corruption d'un interlocuteur et exploiter ses désirs matériels." },
+          { rank: 2, name: "L'Audace des Mers", effect: "Vous gagnez une Augmentation Gratuite sur vos jets de Commerce et d'Intimidation face à des samouraïs d'Honneur supérieur." },
+          { rank: 3, name: "La Pression Financière", effect: "Vous pouvez imposer un malus de -1g1 aux jets sociaux d'un rival en contrôlant ses créanciers." },
+          { rank: 4, name: "Le Monopole", effect: "Immunité contre toute manœuvre visant à bloquer vos avoirs ou confisquer vos biens marchands." },
+          { rank: 5, name: "L'Alliance Incontournable", effect: "Dépensez 1 point de Vide : forcez un noble à signer un pacte économique sous peine de sanctions commerciales dévastatrices." }
+        ]
+      },
+
+      // ÉCOLE SHUGENJA MOSHI (Core p. 120)
       {
         id: "shugenja-moshi",
         family: "Moshi",
@@ -453,14 +482,14 @@ const CLANS_DATA = {
         trait: "Intelligence",
         bonus: "+1 Intelligence",
         honor: 5.5,
-        skills: ["Astrologie", "Calligraphie", "Connaissance : Théologie", "Méditation", "Navigation", "Sincérité", "Une compétence Noble"],
-        outfit: "Robes blanches et dorées, Bâton Bo ou Tanto, Miroir solaire, 4 koku",
+        skills: ["Astrologie", "Calligraphie", "Cérémonie du Thé", "Connaissance : Théologie", "Méditation", "Navigation", "Une compétence Noble"],
+        outfit: "Robes blanches et safran de prêtresse solaire, Bâton Bo ou Tanto, Miroir solaire de bronze, 4 koku",
         techniques: [
-          { rank: 1, name: "La Ferveur Solaire", effect: "Affinité : Feu. Déficience : Eau. Gagne une Augmentation gratuite sur les sorts de lumière et de chaleur solaires." },
-          { rank: 2, name: "La Danse de l'Aurore", effect: "Peut aveugler temporairement ses assaillants d'un jet d'Intelligence / Méditation." },
-          { rank: 3, name: "L'Éclair Céleste", effect: "Peut lancer les sorts d'orage et de feu de Maîtrise 1 et 2 en Action Simple." },
-          { rank: 4, name: "Les Rayons Purificateurs", effect: "Ses sorts de Feu ignorent la résistance magique des créatures impures." },
-          { rank: 5, name: "La Colère de Dame Soleil", effect: "Dépensez 1 point de Vide pour déclencher un faisceau solaire infligeant 6g3 brûlures sur 20 mètres." }
+          { rank: 1, name: "La Ferveur Solaire", effect: "Affinité : Feu (ou Air). Déficience : Eau. Vous gagnez une Augmentation Gratuite sur tous les sorts invoquant la lumière, la chaleur ou la purification céleste." },
+          { rank: 2, name: "La Danse de l'Aurore", effect: "Vous pouvez aveugler temporairement vos assaillants d'un jet d'Intelligence / Méditation." },
+          { rank: 3, name: "L'Éclair Céleste", effect: "Lancer un sort de Feu de Maîtrise 1 ou 2 devient une Action Simple." },
+          { rank: 4, name: "Les Rayons Purificateurs", effect: "Vos sorts de Feu ignorent la résistance magique et la Réduction des créatures souillées." },
+          { rank: 5, name: "La Colère de Dame Soleil", effect: "Dépensez 1 point de Vide pour déclencher un faisceau de lumière solaire infligeant 6g3 brûlures sur 20 mètres." }
         ]
       }
     ]
@@ -474,9 +503,11 @@ const CLANS_DATA = {
     families: [
       { name: "Isawa", trait: "Volonté", bonus: "+1 Volonté" },
       { name: "Shiba", trait: "Perception", bonus: "+1 Perception" },
-      { name: "Asako", trait: "Intuition", bonus: "+1 Intuition" }
+      { name: "Asako", trait: "Intuition", bonus: "+1 Intuition" },
+      { name: "Agasha", trait: "Perception", bonus: "+1 Perception" }
     ],
     schools: [
+      // ÉCOLE BUSHI SHIBA (Core p. 123)
       {
         id: "bushi-shiba",
         family: "Shiba",
@@ -486,49 +517,73 @@ const CLANS_DATA = {
         bonus: "+1 Agilité",
         honor: 5.5,
         skills: ["Armes d'Hast (Yari)", "Athlétisme", "Défense", "Iaijutsu", "Kenjutsu", "Méditation", "Connaissance : Théologie"],
-        outfit: "Armure lourde Phénix, Daisho, Lance Yari, 3 koku",
+        outfit: "Armure lourde Phénix, Daisho, Lance Yari, Nécessaire d'entretien, 3 koku",
         techniques: [
-          { rank: 1, name: "La Voie du Phénix", effect: "Peut dépenser 2 points de Vide pour obtenir +2g2 sur un jet. L'action Protéger devient une Action Gratuite (+5 ND Armure allié)." },
-          { rank: 2, name: "Danse avec les Éléments", effect: "À 10 mètres, peut augmenter ou diminuer le ND de n'importe quel sort allié ou ennemi de 5 points." },
-          { rank: 3, name: "Le Bouclier de Shiba", effect: "Attaquer devient une Action Simple avec les armes de Samouraï ou armes d'hast." },
-          { rank: 4, name: "L'Esprit Immortel", effect: "Subir des blessures mortelles permet de dépenser 1 point de Vide pour continuer d'agir 1 tour." },
-          { rank: 5, name: "L'Harmonie du Néant", effect: "Dépensez 1 point de Vide pour dissoudre une attaque physique subie dans le Vide." }
+          { rank: 1, name: "La Voie du Phénix", effect: "Vous pouvez dépenser 2 points de Vide sur un même jet pour bénéficier d'un bonus de +2g2 (au lieu de +1g1). De plus, lorsque vous protégez un allié adjacent, vous prenez une Action Gratuite pour ajouter +5 à son ND d'Armure." },
+          { rank: 2, name: "La Danse des Éléments", effect: "Lorsqu'un shugenja allié à portée de voix lance un sort, vous pouvez augmenter ou réduire le ND de lancement de ce sort de 5 points." },
+          { rank: 3, name: "Le Bouclier de Shiba", effect: "Porter une attaque devient une Action Simple lorsque vous maniez une arme d'hast, une lance ou une arme possédant le mot-clé Samouraï." },
+          { rank: 4, name: "La Victoire Inévitable", effect: "Si une attaque devait vous faire basculer au palier Inconscient, Hors de Combat ou Mortel, vous pouvez dépenser 1 point de Vide pour ignorer entièrement les dégâts de cette attaque." },
+          { rank: 5, name: "La Touche du Vide", effect: "Une fois par combat, vous pouvez dépenser 1 point de Vide pour porter une attaque de mêlée qui ignore totalement l'armure et la Réduction de la cible." }
         ]
       },
+
+      // ÉCOLE SHUGENJA ISAWA (Core p. 124)
       {
         id: "shugenja-isawa",
         family: "Isawa",
-        name: "Shugenja des Éléments Isawa",
+        name: "Shugenja Isawa",
         type: "Shugenja",
         trait: "Volonté",
         bonus: "+1 Volonté",
         honor: 4.5,
-        skills: ["Calligraphie", "Connaissance : Histoire", "Connaissance : Théologie", "Défense", "Enquête", "Méditation", "Une compétence Noble"],
-        outfit: "Robes somptueuses, Wakizashi, Rouleaux sacrés, 5 koku",
+        skills: ["Calligraphie", "Connaissance : Histoire", "Connaissance : Théologie", "Méditation", "Spellcraft", "Deux compétences Nobles au choix"],
+        outfit: "Robes somptueuses brodées de flammes, Wakizashi, Étui de parchemins sacrés, 5 koku",
         techniques: [
-          { rank: 1, name: "La Maîtrise des Éléments", effect: "Affinité : au choix. Aucune Déficience. Gagne une Augmentation gratuite sur son élément d'affinité. Peut acheter Ishiken-do pour 8 XP." },
-          { rank: 2, name: "La Voix de la Création", effect: "Peut relancer un dé raté sur n'importe quel jet d'incantation." },
-          { rank: 3, name: "Le Flux Élémentaire", effect: "Peut lancer les sorts de son élément de Maîtrise 1 et 2 en Action Simple." },
-          { rank: 4, name: "La Fusion Cosmique", effect: "Augmente la portée et la durée de tous ses sorts de 50 %." },
-          { rank: 5, name: "L'Apothéose Élémentaire", effect: "Dépensez 1 point de Vide pour convertir un emplacement de sort dans n'importe quel élément sans pénalité." }
+          { rank: 1, name: "Les Maîtres des Éléments", effect: "Affinité : Au choix (Air, Terre, Feu ou Eau). Aucune Déficience. Vous gagnez une Augmentation Gratuite sur tous les sorts de votre élément d'affinité. Vous pouvez acquérir l'Avantage Ishiken-do (Magie du Vide) pour 8 XP." },
+          { rank: 2, name: "La Voix de la Création", effect: "Vous pouvez relancer un dé sur n'importe quel jet d'incantation de sort." },
+          { rank: 3, name: "Le Flux Élémentaire", effect: "Lancer un sort de votre élément d'affinité de Maîtrise 1 ou 2 devient une Action Simple." },
+          { rank: 4, name: "La Fusion Cosmique", effect: "Vous augmentez la portée et la durée de tous vos sorts élémentaires de 50 %." },
+          { rank: 5, name: "L'Apothéose Élémentaire", effect: "Dépensez 1 point de Vide pour convertir un emplacement de sort dans n'importe quel autre élément sans subir de malus." }
         ]
       },
+
+      // ÉCOLE ÉRUDIT ASAKO (Core p. 124-125)
       {
         id: "erudit-asako",
         family: "Asako",
-        name: "Érudit & Médecin Asako",
+        name: "Érudit Asako (Loremaster)",
         type: "Courtisan",
         trait: "Intelligence",
         bonus: "+1 Intelligence",
         honor: 5.5,
-        skills: ["Cérémonie du Thé", "Connaissance : Histoire", "Connaissance : Théologie", "Courtisan", "Étiquette", "Médecine", "Sincérité"],
-        outfit: "Robes sobres, Wakizashi, Trousse de médecin aux herbes sacrées, 5 koku",
+        skills: ["Cérémonie du Thé", "Connaissance : Histoire", "Connaissance : Théologie", "Courtisan", "Enquête", "Étiquette", "Sincérité"],
+        outfit: "Robes sobres de lettré, Wakizashi, Nécessaire de calligraphie, Bibliothèque portative, 5 koku",
         techniques: [
-          { rank: 1, name: "La Mémoire du Ciel", effect: "Mémoire absolue. Réduit de 10 points le ND des diagnostics médicaux et soigne +2g1 PV supplémentaires." },
-          { rank: 2, name: "L'Équilibre Corporel", effect: "Immunité totale contre les poisons naturels et maladies contagieuses." },
-          { rank: 3, name: "La Sérénité du Sage", effect: "Peut calmer un personnage paniqué ou terrifié d'une parole posée." },
-          { rank: 4, name: "Les Vérités Oubliées", effect: "Découvre les faiblesses historiques et généalogiques d'un rival en cour." },
-          { rank: 5, name: "Le Toucher Restaurateur", effect: "Dépensez 1 point de Vide : soigne instantanément un allié de 30 PV et purge toutes ses toxines." }
+          { rank: 1, name: "Le Don du Savoir", effect: "Vous gagnez une Augmentation Gratuite sur tous les jets utilisant une compétence de Connaissance (Lore). Vous pouvez dépenser 1 point de Vide pour relancer un jet de Connaissance ou de Mémoire." },
+          { rank: 2, name: "La Vérité du Monde", effect: "Vous ajoutez votre rang d'Intelligence à tous vos jets de compétences sociales lorsqu'il s'agit de résoudre un dilemme historique ou philosophique." },
+          { rank: 3, name: "La Voix de l'Ancien", effect: "Vous pouvez déduire les failles morales ou les scandales cachés d'une lignée rivale en étudiant ses annales." },
+          { rank: 4, name: "L'Esprit Inaltérable", effect: "Immunité totale contre la Peur, la Tentation et les tentatives de déstabilisation oratoire." },
+          { rank: 5, name: "La Sagesse des Âges", effect: "Vous gagnez un bonus permanent de +5k0 au total de tous vos jets de compétences de Connaissance (Lore)." }
+        ]
+      },
+
+      // ÉCOLE SHUGENJA AGASHA (Core p. 125)
+      {
+        id: "shugenja-agasha",
+        family: "Agasha",
+        name: "Shugenja Agasha",
+        type: "Shugenja",
+        trait: "Perception",
+        bonus: "+1 Perception",
+        honor: 4.5,
+        skills: ["Artisanat (Alchimie)", "Calligraphie", "Connaissance : Théologie", "Défense", "Méditation", "Spellcraft", "Une compétence Noble au choix"],
+        outfit: "Robes de voyage pourpres et or, Wakizashi, Fioles d'alchimiste, Nécessaire de parchemins, 4 koku",
+        techniques: [
+          { rank: 1, name: "La Transmutation Élémentaire", effect: "Affinité : Feu. Déficience : Eau. Vous pouvez dépenser un emplacement de sort d'un élément pour lancer un sort d'un autre élément en effectuant deux Augmentations lors de l'incantation." },
+          { rank: 2, name: "L'Harmonie du Creuset", effect: "Vous gagnez une Augmentation Gratuite sur tous vos jets d'Artisanat (Alchimie)." },
+          { rank: 3, name: "Le Mélange Énergétique", effect: "Lancer un sort de Feu de Maîtrise 1 ou 2 devient une Action Simple." },
+          { rank: 4, name: "La Vague Alchimique", effect: "Double la zone d'effet de vos préparations ou sorts élémentaires de transmutation." },
+          { rank: 5, name: "Le Secret des Deux Éléments", effect: "Dépensez 1 point de Vide : invoquez les effets conjoints d'un sort de Feu et d'un sort de Terre dans la même action." }
         ]
       }
     ]
@@ -542,11 +597,11 @@ const CLANS_DATA = {
     families: [
       { name: "Bayushi", trait: "Agilité", bonus: "+1 Agilité" },
       { name: "Shosuro", trait: "Intuition", bonus: "+1 Intuition" },
-      { name: "Soshi", trait: "Perception", bonus: "+1 Perception" },
+      { name: "Soshi", trait: "Intelligence", bonus: "+1 Intelligence" },
       { name: "Yogo", trait: "Volonté", bonus: "+1 Volonté" }
     ],
     schools: [
-      // Écoles Famille Bayushi
+      // ÉCOLE BUSHI BAYUSHI (Core p. 126-127)
       {
         id: "bushi-bayushi",
         family: "Bayushi",
@@ -555,36 +610,38 @@ const CLANS_DATA = {
         trait: "Réflexes",
         bonus: "+1 Réflexes",
         honor: 2.5,
-        skills: ["Comédie", "Défense", "Discrétion", "Enquête", "Iaijutsu", "Kenjutsu", "Une compétence Bugei"],
-        outfit: "Armure légère noire, Masque personnel, Daisho, 3 koku",
+        skills: ["Art de la Scène (Comédie)", "Défense", "Discrétion", "Iaijutsu", "Kenjutsu", "Sincérité (Tromperie)", "Une compétence Bugei au choix"],
+        outfit: "Armure légère noire et pourpre, Masque personnel laqué, Daisho, Nécessaire de voyage, 3 koku",
         techniques: [
-          { rank: 1, name: "La Ruse du Scorpion", effect: "Ajoute son rang d'Iaijutsu à son Initiative. Toute feinte réussie prive temporairement l'adversaire de son armure." },
-          { rank: 2, name: "Le Regard des Ombres", effect: "Gagne un bonus de +2g0 à tous ses jets d'attaque contre un ennemi ayant une Initiative inférieure à la sienne." },
-          { rank: 3, name: "Frappe depuis l'Obscurité", effect: "Attaquer devient une Action Simple avec les armes de Samouraï." },
-          { rank: 4, name: "L'Ombre Dérobée", effect: "Lorsqu'un ennemi manque son attaque contre lui, riposte immédiate en Action Gratuite." },
-          { rank: 5, name: "Le Venin du Scorpion", effect: "Chaque coup de mêlée applique un venin paralysant infligeant des blessures continues." }
+          { rank: 1, name: "La Voie du Scorpion", effect: "Vous ajoutez votre rang de compétence Iaijutsu à votre jet d'Initiative. Lorsque vous effectuez une Feinte en combat, le ND d'Armure de la cible est réduit d'une valeur supplémentaire égale à votre Agilité." },
+          { rank: 2, name: "Frapper depuis l'Ombre", effect: "Lorsque vous attaquez un adversaire dont le résultat d'Initiative est inférieur au vôtre, vous gagnez un bonus de +1k0 à votre jet d'attaque." },
+          { rank: 3, name: "L'Ombre Rapide", effect: "Porter une attaque devient une Action Simple lorsque vous maniez une arme possédant le mot-clé Samouraï." },
+          { rank: 4, name: "Frapper d'en Haut, Frapper d'en Bas", effect: "Vous pouvez effectuer toutes vos attaques de mêlée sous la forme d'Actions Simples, quelle que soit l'arme utilisée." },
+          { rank: 5, name: "Les Pinces Retiennent, la Queue Frappe", effect: "Une fois par combat en Action Complexe, portez une attaque de mêlée : si elle réussit, la cible est Étourdie (Stunned) jusqu'à ce qu'elle réussisse un jet de Terre contre le montant des blessures infligées." }
         ]
       },
+
+      // ÉCOLE COURTISAN BAYUSHI (Core p. 127)
       {
         id: "courtisan-bayushi",
         family: "Bayushi",
-        name: "Courtisan Manipulateur Bayushi",
+        name: "Courtisan Bayushi",
         type: "Courtisan",
         trait: "Intuition",
         bonus: "+1 Intuition",
         honor: 2.5,
-        skills: ["Comédie", "Courtisan", "Enquête", "Étiquette", "Intimidation", "Séduction", "Sincérité"],
-        outfit: "Kimono de cour rouge et noir somptueux, Masque de laque raffiné, Wakizashi, 8 koku",
+        skills: ["Art de la Scène (Comédie)", "Courtisan (Manipulation)", "Enquête", "Étiquette", "Intimidation", "Séduction", "Sincérité (Tromperie)"],
+        outfit: "Kimono de cour rouge sombre et noir, Masque raffiné, Wakizashi, 8 koku",
         techniques: [
-          { rank: 1, name: "Les Faiblesses du Cœur", effect: "Détecte intuitivement les Désavantages sociaux et moraux d'un rival. Incite une cible à enfreindre l'étiquette sans paraître impliqué." },
-          { rank: 2, name: "Le Filet Invisible", effect: "Gagne +2g0 à tous ses jets de chantage et d'intimidation voilée." },
-          { rank: 3, name: "Le Poison de la Rumeur", effect: "Détruit 1 point de Gloire d'un rival en répandant une calomnie indétectable." },
-          { rank: 4, name: "L'Armure du Secret", effect: "Immunité totale contre les jets d'enquête visant à découvrir ses propres méfaits." },
-          { rank: 5, name: "Le Maître des Pantins", effect: "Dépensez 1 point de Vide : force un interlocuteur compromis à obéir sous la menace d'un scandale mortel." }
+          { rank: 1, name: "Les Faiblesses du Cœur", effect: "Vous identifiez les Désavantages sociaux et mentaux d'un rival d'un jet d'Intuition / Courtisan opposé à sa Volonté. Vous réduisez de 5 le ND de vos manœuvres de manipulation en exploitant ses failles." },
+          { rank: 2, name: "Le Filet Invisible", effect: "Vous gagnez +2g0 à tous vos jets de chantage et d'intimidation voilée." },
+          { rank: 3, name: "Le Poison de la Rumeur", effect: "Vous pouvez détruire 1 point de Gloire d'un rival en répandant une rumeur indétectable." },
+          { rank: 4, name: "L'Armure du Secret", effect: "Immunité totale contre les jets d'enquête visant à découvrir vos propres intrigues." },
+          { rank: 5, name: "Le Maître des Pantins", effect: "Dépensez 1 point de Vide : forcez un interlocuteur compromis à obéir à une directive sous peine d'un scandale public déshonorant." }
         ]
       },
 
-      // École Famille Shosuro
+      // ÉCOLE INFILTRATEUR SHOSURO (Core p. 128)
       {
         id: "infiltrateur-shosuro",
         family: "Shosuro",
@@ -593,38 +650,38 @@ const CLANS_DATA = {
         trait: "Agilité",
         bonus: "+1 Agilité",
         honor: 1.5,
-        skills: ["Athlétisme", "Comédie", "Discrétion (Furtivité)", "Enquête", "Kenjutsu (Ninja-to)", "Poison", "Tantojutsu"],
-        outfit: "Vêtements d'obscurité réversibles, Masque de tissu, Ninja-to, 3 Tanto, Poisons, 2 koku",
+        skills: ["Art de la Scène (Comédie)", "Athlétisme", "Discrétion (Furtivité)", "Enquête", "Kenjutsu (Ninja-to)", "Ninjutsu", "Tantojutsu"],
+        outfit: "Tenue d'infiltrateur réversible sombre, Masque de gaze noire, Ninja-to, 3 Tanto, Nécessaire d'escalade, 2 koku",
         techniques: [
-          { rank: 1, name: "Le Pas Silencieux", effect: "Gagne +1g1 sur tous les jets de Discrétion. Toute attaque portée depuis l'invisibilité bénéficie de +2g0 pour toucher." },
-          { rank: 2, name: "L'Ombre Vivante", effect: "Peut se fondre dans les ténèbres même sans abri direct d'un jet d'Agilité / Discrétion." },
-          { rank: 3, name: "L'Attaque Fantôme", effect: "Attaquer devient une Action Simple lorsqu'il utilise des lames courtes ou dissimulées." },
-          { rank: 4, name: "La Dague Mortelle", effect: "Ses attaques surprises infligent +2g2 dégâts supplémentaires." },
-          { rank: 5, name: "Le Sommeil Éternel", effect: "Dépensez 1 point de Vide après un coup réussi : deux dés de dégâts affichent automatiquement 10 sans exploser." }
+          { rank: 1, name: "Le Pas Silencieux", effect: "Vous gagnez un bonus de +1g1 sur tous vos jets de Discrétion. Toute attaque portée depuis l'invisibilité ou par surprise bénéficie d'une Augmentation Gratuite." },
+          { rank: 2, name: "Une Ombre dans la Nuit", effect: "Vous pouvez entrer en Discrétion même sous observation directe si vous disposez d'un abri partiel ou de la pénombre." },
+          { rank: 3, name: "Frappe Dissimulée", effect: "Porter une attaque avec une arme de Ninja ou une petite arme devient une Action Simple." },
+          { rank: 4, name: "La Dague Empoisonnée", effect: "Vos attaques par surprise infligent +2g2 de dégâts supplémentaires et le ND pour résister à vos poisons augmente de 5." },
+          { rank: 5, name: "Le Sommeil Sans Réveil", effect: "Après avoir réussi une frappe par surprise, vous pouvez dépenser 1 point de Vide pour forcer deux de vos dés de dégâts à afficher la valeur 10 sans exploser." }
         ]
       },
 
-      // École Famille Soshi
+      // ÉCOLE SHUGENJA SOSHI (Core p. 127)
       {
         id: "shugenja-soshi",
         family: "Soshi",
-        name: "Shugenja des Ombres Soshi",
+        name: "Shugenja Soshi",
         type: "Shugenja",
         trait: "Perception",
         bonus: "+1 Perception",
         honor: 2.5,
         skills: ["Calligraphie", "Connaissance : Théologie", "Courtisan", "Défense", "Discrétion", "Enquête", "Méditation"],
-        outfit: "Robes sombres amples, Masque de gaze noire, Tanto, Bâton Bo, 3 koku",
+        outfit: "Robes sombres amples, Masque de gaze, Tanto, Boîte de parchemins secrets, 3 koku",
         techniques: [
-          { rank: 1, name: "Le Voile des Murmures", effect: "Affinité : Air. Déficience : Terre. Gagne une Augmentation gratuite sur tous les sorts d'illusion, de silence et de dissimulation." },
-          { rank: 2, name: "L'Ombre Écoutante", effect: "Peut entendre les conversations tenues dans une pièce fermée à 30 mètres de distance." },
-          { rank: 3, name: "L'Effacement", effect: "Peut lancer les sorts de dissimulation et d'illusion d'Air en Action Simple." },
-          { rank: 4, name: "La Brume Illusoire", effect: "Crée des mirages et des doubles désorientant les assaillants." },
-          { rank: 5, name: "Le Puits des Ténèbres", effect: "Dépensez 1 point de Vide pour plonger une zone de 15 mètres dans une obscurité magique totale." }
+          { rank: 1, name: "Le Voile des Murmures", effect: "Affinité : Air. Déficience : Terre. Vous gagnez une Augmentation Gratuite sur tous les sorts d'illusion, d'ombre et de silence." },
+          { rank: 2, name: "L'Ombre Écoutante", effect: "Vous pouvez entendre distinctement les paroles prononcées dans une pièce fermée à 30 mètres de distance." },
+          { rank: 3, name: "L'Effacement", effect: "Lancer un sort de dissimulation ou d'illusion d'Air devient une Action Simple." },
+          { rank: 4, name: "La Brume Trompeuse", effect: "Vous créez des mirages désorientant les assaillants, augmentant votre ND d'Armure de +10." },
+          { rank: 5, name: "Le Puits des Ténèbres", effect: "Dépensez 1 point de Vide pour plonger une zone de 15 mètres de rayon dans une obscurité magique totale impénétrable." }
         ]
       },
 
-      // École Famille Yogo
+      // ÉCOLE MAÎTRE DES SCEAUX YOGO (The Great Clans p. 229)
       {
         id: "maitre-sceaux-yogo",
         family: "Yogo",
@@ -633,14 +690,14 @@ const CLANS_DATA = {
         trait: "Volonté",
         bonus: "+1 Volonté",
         honor: 2.5,
-        skills: ["Calligraphie (Sceaux)", "Connaissance : Outremonde", "Connaissance : Théologie", "Défense", "Enquête", "Méditation", "Une compétence Noble"],
-        outfit: "Robes pourpres et noires, Masque rigide impassible, Boîte de parchemins de scellement, 4 koku",
+        skills: ["Calligraphie (Sceaux)", "Connaissance : Outremonde", "Connaissance : Théologie", "Défense", "Enquête", "Méditation", "Une compétence Noble au choix"],
+        outfit: "Robes pourpres et noires aux caractères talismaniques, Masque rigide, Boîte de parchemins ofuda, 4 koku",
         techniques: [
-          { rank: 1, name: "La Barrière Inviolable", effect: "Affinité : Terre. Déficience : Air. Gagne une Augmentation gratuite sur tous les sorts de protection et sceaux (Wards)." },
-          { rank: 2, name: "La Malédiction Domptée", effect: "Gagne +2g0 pour résister à la Souillure et à toute forme de contrôle mental ou magique." },
-          { rank: 3, name: "Le Sceau Instantané", effect: "Peut tracer et activer un sceau protecteur de Terre en Action Simple." },
-          { rank: 4, name: "Le Mur d'Airain", effect: "Double la résistance physique et le seuil d'absorption de tous ses glyphes protecteurs." },
-          { rank: 5, name: "Le Sceau de Prison Éternelle", effect: "Dépensez 1 point de Vide pour enfermer un oni, un esprit malveillant ou un sort ennemi dans un parchemin sacré." }
+          { rank: 1, name: "La Barrière Protectrice", effect: "Affinité : Terre. Déficience : Air. Vous gagnez une Augmentation Gratuite sur tous les sorts de protection et de scellement (Wards). Vous pouvez préparer des parchemins de scellement à l'avance pour les déployer en combat." },
+          { rank: 2, name: "La Malédiction Domptée", effect: "Vous gagnez +2g0 pour résister à la Souillure et à toute forme de contrôle mental ou magique." },
+          { rank: 3, name: "Le Sceau Instantané", effect: "Tracer et activer un sceau protecteur de Terre devient une Action Simple." },
+          { rank: 4, name: "Le Mur d'Airain", effect: "Double la résistance physique et le seuil d'absorption de tous vos glyphes protecteurs." },
+          { rank: 5, name: "La Prison Éternelle", effect: "Dépensez 1 point de Vide pour enfermer un oni, un esprit malveillant ou un sort ennemi dans un parchemin sacré." }
         ]
       }
     ]
@@ -655,10 +712,11 @@ const CLANS_DATA = {
       { name: "Moto", trait: "Force", bonus: "+1 Force" },
       { name: "Shinjo", trait: "Réflexes", bonus: "+1 Réflexes" },
       { name: "Utaku", trait: "Constitution", bonus: "+1 Constitution" },
-      { name: "Iuchi", trait: "Intuition", bonus: "+1 Intuition" },
-      { name: "Ide", trait: "Volonté", bonus: "+1 Volonté" }
+      { name: "Iuchi", trait: "Perception", bonus: "+1 Perception" },
+      { name: "Ide", trait: "Intuition", bonus: "+1 Intuition" }
     ],
     schools: [
+      // ÉCOLE BUSHI MOTO (Core p. 130)
       {
         id: "bushi-moto",
         family: "Moto",
@@ -667,34 +725,38 @@ const CLANS_DATA = {
         trait: "Force",
         bonus: "+1 Force",
         honor: 3.5,
-        skills: ["Armes d'Hast", "Bataille", "Défense", "Équitation", "Kenjutsu (Cimeterre)", "Kyujutsu", "Une compétence Bugei"],
-        outfit: "Armure lourde de cuir et écailles, Cimeterre, Poney des steppes harnaché, 3 koku",
+        skills: ["Armes d'Hast", "Bataille", "Défense", "Équitation", "Kenjutsu (Cimeterre)", "Kyujutsu", "Une compétence Bugei au choix"],
+        outfit: "Armure lourde d'écailles et cuir renforcé, Cimeterre ou Katana, Poney des steppes harnaché, 3 koku",
         techniques: [
-          { rank: 1, name: "La Charge du Tonnerre", effect: "+2g0 aux jets de dégâts en charge montée. Annule toutes les pénalités de combat à cheval." },
-          { rank: 2, name: "L'Esprit des Steppes", effect: "Immunité totale contre les effets de Peur de rang inférieur ou égal à son Rang d'École." },
-          { rank: 3, name: "La Fureur Inaltérable", effect: "Attaquer devient une Action Simple avec les sabres, cimeterres ou armes d'hast." },
-          { rank: 4, name: "La Rage du Tonnerre", effect: "Peut relancer tous les dés de dégâts inférieurs à son rang de Force." },
-          { rank: 5, name: "Le Galop Éternel", effect: "Double sa vitesse de déplacement montée et inflige des dégâts d'écrasement dévastateurs." }
+          { rank: 1, name: "La Charge Foudroyante", effect: "En selle ou lors d'une charge, vous gagnez un bonus de +2g0 à vos jets de dégâts. Vous ignorez toutes les pénalités habituelles dues au combat monté." },
+          { rank: 2, name: "Le Cœur Invincible", effect: "Vous gagnez une immunité totale contre tous les effets de Peur de rang inférieur ou égal à votre Rang d'École." },
+          { rank: 3, name: "La Lame Inarrêtable", effect: "Porter une attaque devient une Action Simple lorsque vous maniez un cimeterre, un sabre ou une arme d'hast." },
+          { rank: 4, name: "L'Impact Brutal", effect: "Vos attaques montées réussies renversent automatiquement les cibles à pied ayant une Force inférieure à la vôtre." },
+          { rank: 5, name: "Le Moto ne Fléchit Pas", effect: "Lorsque vous combattez en selle ou que vous adoptez la posture d'Attaque Totale, vous gardez un nombre de dés de dégâts supplémentaire égal à la moitié de votre Force arrondie à l'inférieur (+Force/2 dés gardés) avec une arme à deux mains ou une arme de Samouraï." }
         ]
       },
+
+      // ÉCOLE CAVALIER SHINJO (Emerald Empire p. 31 / Core p. 255)
       {
         id: "bushi-shinjo",
         family: "Shinjo",
-        name: "Éclaireur & Cavalier Shinjo",
+        name: "Cavalier Shinjo (Bushi)",
         type: "Bushi",
         trait: "Réflexes",
         bonus: "+1 Réflexes",
         honor: 5.5,
-        skills: ["Athlétisme", "Chasse", "Défense", "Équitation", "Kenjutsu", "Kyujutsu (Tir monté)", "Une compétence Bugei"],
-        outfit: "Armure légère, Arc équestre avec 30 flèches, Daisho, Cheval Shinjo, 4 koku",
+        skills: ["Athlétisme", "Chasse (Pistage)", "Défense", "Équitation", "Kenjutsu", "Kyujutsu (Tir monté)", "Une compétence Bugei au choix"],
+        outfit: "Armure légère souple, Arc équestre avec 30 flèches, Daisho, Destrier Shinjo, 4 koku",
         techniques: [
-          { rank: 1, name: "Le Vent des Steppes", effect: "Ajoute son rang d'Équitation à son Initiative. Tire à l'arc à cheval sans pénalité de galop." },
-          { rank: 2, name: "La Traque Nomade", effect: "Gagne +2g0 sur tous ses jets de Chasse et de pistage." },
-          { rank: 3, name: "La Flèche Tournoyante", effect: "Attaquer à l'arc ou au sabre devient une Action Simple." },
-          { rank: 4, name: "L'Éperon Rapide", effect: "Permet à sa monture d'effectuer une attaque de sabot en Action Gratuite." },
-          { rank: 5, name: "La Danse de Shinjo", effect: "Dépensez 1 point de Vide pour désengager son escadron sans subir d'attaque d'opportunité." }
+          { rank: 1, name: "La Voie des Steppes", effect: "Vous ajoutez votre rang de compétence Équitation à vos jets d'Initiative. Vous tirez à l'arc à cheval sans pénalité de galop." },
+          { rank: 2, name: "La Danse du Sabre", effect: "Lorsque vous combattez en selle ou que vous vous déplacez d'au moins 3 mètres à pied durant votre tour, vous gagnez un bonus de +5 à votre ND d'Armure." },
+          { rank: 3, name: "Vif comme le Vent", effect: "Porter une attaque devient une Action Simple avec les sabres, arcs ou lances." },
+          { rank: 4, name: "La Ruade Céleste", effect: "Votre monture peut effectuer une attaque de sabots en tant qu'Action Gratuite lors de votre tour." },
+          { rank: 5, name: "La Danse de Shinjo", effect: "Vous pouvez vous désengager du combat monté sans subir d'attaque d'opportunité et votre monture double sa vitesse de déplacement." }
         ]
       },
+
+      // ÉCOLE VIERGE GUERRIÈRE UTAKU (Core p. 132)
       {
         id: "vierge-utaku",
         family: "Utaku",
@@ -703,50 +765,54 @@ const CLANS_DATA = {
         trait: "Constitution",
         bonus: "+1 Constitution",
         honor: 6.5,
-        skills: ["Bataille", "Défense", "Équitation (Destrier Utaku)", "Iaijutsu", "Kenjutsu", "Sincérité", "Une compétence Bugei"],
-        outfit: "Armure de plates légères raffinée, Destrier de guerre Utaku, Katana de maître, 5 koku",
+        skills: ["Bataille", "Défense", "Équitation (Destrier Utaku)", "Iaijutsu", "Kenjutsu", "Sincérité", "Une compétence Bugei au choix"],
+        outfit: "Armure de plates fines laquée, Destrier de guerre Utaku, Katana de maître, 5 koku",
         techniques: [
-          { rank: 1, name: "Chevaucher en Harmonie", effect: "Ajoute son Rang d'Honneur aux dégâts et au ND d'Armure lorsqu'elle combat en selle sur son destrier Utaku." },
-          { rank: 2, name: "La Pureté du Sabre", effect: "Gagne +2g0 sur tous ses jets d'attaque contre des cibles d'Honneur inférieur à 2.0." },
-          { rank: 3, name: "Le Galop de la Justice", effect: "Attaquer devient une Action Simple lorsqu'elle est en selle." },
-          { rank: 4, name: "L'Étoile du Matin", effect: "Ses charges équestres renversent automatiquement les ennemis frappés." },
-          { rank: 5, name: "La Bénédiction d'Otaku", effect: "Dépensez 1 point de Vide : ajoute son Rang d'Honneur à tous les jets de dés du tour." }
+          { rank: 1, name: "Chevaucher en Harmonie", effect: "Lorsque vous combattez en selle sur votre destrier Utaku, vous ajoutez votre Rang d'Honneur à tous vos jets de dégâts et à votre ND d'Armure." },
+          { rank: 2, name: "Le Fil de la Pureté", effect: "Vous gagnez un bonus de +2g0 à tous vos jets d'attaque contre des adversaires dont le Rang d'Honneur est inférieur à 2.0." },
+          { rank: 3, name: "Le Galop Céleste", effect: "Porter une attaque devient une Action Simple lorsque vous combattez en selle." },
+          { rank: 4, name: "La Justice du Ciel", effect: "Vos charges équestres infligent +2g1 de dégâts supplémentaires et peuvent étourdir la cible en cas de coup critique." },
+          { rank: 5, name: "La Bénédiction d'Otaku", effect: "Au début de votre tour, vous pouvez dépenser 1 point de Vide en Action Gratuite : vous ajoutez votre Rang d'Honneur à tous vos jets de dégâts et à tous vos jets de compétences de Bugei pour l'ensemble du tour." }
         ]
       },
+
+      // ÉCOLE ÉMISSAIRE IDE (Core p. 131)
       {
         id: "courtisan-ide",
         family: "Ide",
-        name: "Émissaire Diplomate Ide",
+        name: "Émissaire Ide",
         type: "Courtisan",
         trait: "Intuition",
         bonus: "+1 Intuition",
         honor: 5.5,
-        skills: ["Commerce", "Courtisan", "Équitation", "Étiquette", "Oratoire", "Sincérité", "Une compétence Noble"],
-        outfit: "Manteau de voyage garni de fourrure fine, Wakizashi, 10 koku",
+        skills: ["Commerce", "Courtisan", "Équitation", "Étiquette", "Oratoire", "Sincérité", "Une compétence Noble au choix"],
+        outfit: "Vêtements de voyage luxueux garnis de fourrure, Wakizashi, Monture de selle, 10 koku",
         techniques: [
-          { rank: 1, name: "Le Cœur Ouvert", effect: "Perçoit immédiatement le niveau d'hostilité d'une personne. Réduit de 5 points le ND des tentatives d'apaisement." },
-          { rank: 2, name: "Le Verbe Conciliant", effect: "Gagne +2g0 à tous ses jets pour désamorcer une querelle ou prévenir un duel." },
-          { rank: 3, name: "L'Écoute Bienveillante", effect: "Permet de regagner 1 point de Vide après avoir négocié un traité de paix accepté." },
-          { rank: 4, name: "Le Pont des Cultures", effect: "Immunise ses alliés contre les malus liés aux faux pas culturels face aux traditionalistes." },
-          { rank: 5, name: "L'Harmonie du Voyageur", effect: "Dépensez 1 point de Vide pour imposer une trêve inviolable de 24 heures entre délégations armées." }
+          { rank: 1, name: "Le Cœur Ouvert", effect: "Vous évaluez instinctivement le degré de bienveillance d'un individu. Vous réduisez de 5 le ND de toutes les tentatives visant à désamorcer une situation hostile ou pacifier une querelle." },
+          { rank: 2, name: "Le Verbe Conciliant", effect: "Vous gagnez un bonus de +2g0 à tous vos jets d'Étiquette et d'Oratoire pour désamorcer une dispute avant l'appel aux armes." },
+          { rank: 3, name: "L'Écoute Bienveillante", effect: "Permet de regagner 1 point de Vide après avoir négocié avec succès un traité de paix accepté par les deux parties." },
+          { rank: 4, name: "Le Pont des Cultures", effect: "Vos alliés sous votre escorte sont totalement immunisés contre les malus liés aux faux pas culturels face aux traditionalistes." },
+          { rank: 5, name: "L'Harmonie du Voyageur", effect: "Dépensez 1 point de Vide : imposez une trêve inviolable de 24 heures entre délégations armées." }
         ]
       },
+
+      // ÉCOLE SHUGENJA IUCHI (Core p. 130-131)
       {
         id: "shugenja-iuchi",
         family: "Iuchi",
-        name: "Shugenja Voyageur Iuchi",
+        name: "Shugenja Iuchi",
         type: "Shugenja",
         trait: "Perception",
         bonus: "+1 Perception",
         honor: 4.5,
-        skills: ["Calligraphie", "Connaissance : Théologie", "Défense", "Équitation", "Herboristerie", "Méditation", "Une compétence Bugei"],
-        outfit: "Robes nomades souples, Cheval de selle, Amulettes Meishodo, Bâton Bo, 4 koku",
+        skills: ["Calligraphie", "Connaissance : Théologie", "Défense", "Équitation", "Méditation", "Spellcraft", "Une compétence Bugei au choix"],
+        outfit: "Robes nomades de voyage souples, Cheval de selle, Wakizashi ou Bâton Bo, Rouleaux et amulettes de voyage, 4 koku",
         techniques: [
-          { rank: 1, name: "Le Secret des Amulettes", effect: "Affinité : Eau. Déficience : Feu. Lie ses sorts dans des amulettes Meishodo pour les déclencher sans incantation." },
-          { rank: 2, name: "Le Vent Guidant", effect: "Gagne +1g1 sur tous les sorts d'orientation, de voyage et de mouvement." },
-          { rank: 3, name: "L'Éveil de l'Amulette", effect: "Peut activer une amulette Meishodo en Action Gratuite." },
-          { rank: 4, name: "Le Pas des Brumes", effect: "Permet de téléporter son cheval et lui-même à 15 mètres de distance." },
-          { rank: 5, name: "La Tempête Nomade", effect: "Dépensez 1 point de Vide pour libérer trois sorts d'Eau simultanément dans le même tour." }
+          { rank: 1, name: "Le Voyageur des Éléments", effect: "Affinité : Eau. Déficience : Feu. Vous gagnez une Augmentation Gratuite sur tous les sorts d'Eau liés au mouvement, à la guérison et au voyage." },
+          { rank: 2, name: "Le Vent Guidant", effect: "Vous gagnez +1g1 sur tous vos sorts d'orientation, de repérage et de météo." },
+          { rank: 3, name: "L'Amulette Éveillée", effect: "Lancer un sort de déplacement ou de vitesse d'Eau devient une Action Simple." },
+          { rank: 4, name: "Le Pas des Brumes", effect: "Permet de téléporter votre monture et vous-même à 15 mètres de distance." },
+          { rank: 5, name: "La Tempête Nomade", effect: "Dépensez 1 point de Vide pour déclencher les effets de deux sorts d'Eau au cours du même tour." }
         ]
       }
     ]
