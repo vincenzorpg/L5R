@@ -7,8 +7,9 @@
  * - Dégâts : VD de l'Arme + Force (+ École / Avantages)
  * - ND d'Armure : 5 + (5 x Réflexes) + Armure (+ Modificateurs)
  * - Paliers de Maîtrise des compétences (Mastery Abilities : Rangs 3, 5 et 7)
+ * - Prise en charge de l'avantage « École Multiple » (seconde école et choix du rang)
  * - Gestion interactive des choix de compétences d'école (Bugei, Noble, Libre)
- * - Arbre des 5 Techniques d'École avec mise en surbrillance selon l'Insight Rank
+ * - Arbre des Techniques d'École (principale et secondaire) avec mise en valeur
  * - Plafond de 15 XP maximum pour les Désavantages
  * - Exportation vers fiche officielle A4 vectorielle & Carnet de Rokugan
  */
@@ -76,7 +77,6 @@ const SKILL_MASTERIES = {
   ]
 };
 
-// Utilitaires de détection des maîtrises
 function getMasteriesHtml(skillName, currentRank) {
   const normKey = (skillName || "").split('(')[0].trim().toLowerCase();
   const list = SKILL_MASTERIES[normKey];
@@ -120,7 +120,53 @@ function getMasteriesSummary(skillName, rank) {
 }
 
 // =============================================================================
-// 2. PRÉNOMS ROKUGANI
+// 2. GESTION DE L'AVANTAGE « ÉCOLE MULTIPLE »
+// =============================================================================
+function isMultipleSchoolsAdv(advName) {
+  const n = (advName || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return n.includes("ecole multiple") || n.includes("multiple school");
+}
+
+function getAllSchoolsCatalog() {
+  const clans = getClans();
+  const allSchools = [];
+  for (const cKey in clans) {
+    const clan = clans[cKey];
+    (clan.schools || []).forEach((sch, sIdx) => {
+      allSchools.push({
+        clanKey: cKey,
+        clanName: clan.name,
+        schoolIndex: sIdx,
+        id: sch.id,
+        name: sch.name,
+        bonus: sch.bonus,
+        techniques: sch.techniques || (sch.technique ? [sch.technique] : [])
+      });
+    });
+  }
+  return allSchools;
+}
+
+function updateSecondarySchoolSelection(advIdx, schoolId, rankVal) {
+  if (!advantagesList[advIdx]) return;
+  
+  if (schoolId !== undefined) {
+    advantagesList[advIdx].secondarySchoolId = schoolId;
+    const all = getAllSchoolsCatalog();
+    const found = all.find(s => s.id === schoolId);
+    advantagesList[advIdx].secondarySchoolName = found ? `${found.name} (${found.clanName})` : "";
+  }
+  
+  if (rankVal !== undefined) {
+    advantagesList[advIdx].secondarySchoolRank = Math.max(1, Math.min(5, parseInt(rankVal, 10) || 1));
+  }
+  
+  renderAdvDisadv();
+  updateAll();
+}
+
+// =============================================================================
+// 3. PRÉNOMS ROKUGANI & CONFIGURATION DE BASE
 // =============================================================================
 const ROKUGANI_NAMES = {
   m: [
@@ -545,6 +591,9 @@ function resetSheetToNewSelection() {
   updateAll();
 }
 
+// =============================================================================
+// RENDU DES TECHNIQUES : ÉCOLE PRINCIPALE + SECONDE ÉCOLE (ÉCOLE MULTIPLE)
+// =============================================================================
 function renderSchoolTechniques(currentRank) {
   const container = document.getElementById('school-techniques-container');
   if (!container) return;
@@ -564,7 +613,14 @@ function renderSchoolTechniques(currentRank) {
     techList = [school.technique || { rank: 1, name: "Technique Rang 1", effect: "Description..." }];
   }
 
-  container.innerHTML = techList.map(t => {
+  let html = `
+    <div class="text-[11px] font-bold text-amber-200/80 uppercase font-imperial mb-1.5">
+      École Principale : ${school.name}
+    </div>
+    <div class="space-y-2">
+  `;
+
+  html += techList.map(t => {
     const isCurrent = (t.rank === currentRank);
     const isMastered = (t.rank < currentRank);
 
@@ -607,6 +663,63 @@ function renderSchoolTechniques(currentRank) {
       `;
     }
   }).join('');
+  html += `</div>`;
+
+  // Bloc de la seconde école si l'avantage École Multiple est sélectionné
+  const multiAdv = advantagesList.find(a => isMultipleSchoolsAdv(a.name));
+  if (multiAdv && multiAdv.secondarySchoolId) {
+    const allSchools = getAllSchoolsCatalog();
+    const secSchool = allSchools.find(s => s.id === multiAdv.secondarySchoolId);
+
+    if (secSchool) {
+      const secRank = multiAdv.secondarySchoolRank || 1;
+      html += `
+        <div class="mt-4 pt-3 border-t-2 border-amber-500/30">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold text-amber-300 uppercase font-imperial flex items-center gap-1.5">
+              <span>📜</span> Seconde École : ${secSchool.name} (${secSchool.clanName}) — Rang ${secRank}
+            </span>
+            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-400 font-bold">
+              Avantage École Multiple
+            </span>
+          </div>
+          <div class="space-y-2">
+      `;
+
+      html += (secSchool.techniques || []).map(t => {
+        const isUnlocked = t.rank <= secRank;
+        if (isUnlocked) {
+          return `
+            <div class="p-2.5 rounded-lg border border-amber-500/50 bg-amber-950/20">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded bg-amber-600 text-black font-extrabold uppercase text-[9px]">
+                  RANG ${t.rank} (ACQUIS)
+                </span>
+                <span class="font-bold text-amber-200 text-xs font-imperial">${t.name}</span>
+              </div>
+              <p class="text-stone-300 text-xs leading-relaxed pl-1">${t.effect}</p>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="p-2.5 rounded-lg border border-stone-800/40 bg-black/40 opacity-40">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded bg-stone-900 text-stone-500 text-[9px]">
+                  RANG ${t.rank}
+                </span>
+                <span class="text-stone-500 text-xs font-imperial">${t.name}</span>
+              </div>
+              <p class="text-stone-600 text-xs italic leading-relaxed pl-1">${t.effect}</p>
+            </div>
+          `;
+        }
+      }).join('');
+
+      html += `</div></div>`;
+    }
+  }
+
+  container.innerHTML = html;
 }
 
 function updateDisadvButtonState() {
@@ -647,7 +760,17 @@ function addAdvFromCatalog() {
     return;
   }
 
-  advantagesList.push({ name: item.name, cost: item.cost });
+  const newAdv = { name: item.name, cost: item.cost };
+
+  if (isMultipleSchoolsAdv(item.name)) {
+    const allSchools = getAllSchoolsCatalog();
+    const defaultSec = allSchools[0] || null;
+    newAdv.secondarySchoolId = defaultSec ? defaultSec.id : "";
+    newAdv.secondarySchoolName = defaultSec ? `${defaultSec.name} (${defaultSec.clanName})` : "";
+    newAdv.secondarySchoolRank = 1;
+  }
+
+  advantagesList.push(newAdv);
   renderAdvDisadv();
   initCatalogSelectors();
   updateAll();
@@ -694,12 +817,59 @@ function removeDisadv(idx) {
 function renderAdvDisadv() {
   const advContainer = document.getElementById('adv-container');
   if (advContainer) {
-    advContainer.innerHTML = advantagesList.map((a, i) => `
-      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
-        <span class="text-stone-300">${a.name} (${a.cost} XP)</span>
-        <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
-      </div>
-    `).join('');
+    const allSchools = getAllSchoolsCatalog();
+
+    advContainer.innerHTML = advantagesList.map((a, i) => {
+      const isMulti = isMultipleSchoolsAdv(a.name);
+      let extraHtml = "";
+
+      if (isMulti) {
+        const currentSecId = a.secondarySchoolId || (allSchools[0]?.id || "");
+        const currentSecRank = a.secondarySchoolRank || 1;
+
+        const schoolOptions = allSchools.map(sch => `
+          <option value="${sch.id}" ${sch.id === currentSecId ? 'selected' : ''}>
+            ${sch.clanName} — ${sch.name}
+          </option>
+        `).join('');
+
+        extraHtml = `
+          <div class="mt-2 p-2.5 rounded bg-stone-950 border border-amber-500/40 space-y-2">
+            <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block font-imperial">
+              Configuration de la Seconde École :
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="sm:col-span-2">
+                <label class="text-[9px] text-stone-400 block mb-0.5">École suivie :</label>
+                <select onchange="updateSecondarySchoolSelection(${i}, this.value, undefined)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200">
+                  ${schoolOptions}
+                </select>
+              </div>
+              <div>
+                <label class="text-[9px] text-stone-400 block mb-0.5">Rang atteint :</label>
+                <select onchange="updateSecondarySchoolSelection(${i}, undefined, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 text-center font-bold">
+                  <option value="1" ${currentSecRank === 1 ? 'selected' : ''}>Rang 1</option>
+                  <option value="2" ${currentSecRank === 2 ? 'selected' : ''}>Rang 2</option>
+                  <option value="3" ${currentSecRank === 3 ? 'selected' : ''}>Rang 3</option>
+                  <option value="4" ${currentSecRank === 4 ? 'selected' : ''}>Rang 4</option>
+                  <option value="5" ${currentSecRank === 5 ? 'selected' : ''}>Rang 5</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="p-2 rounded bg-black/40 border border-stone-800 flex flex-col gap-1">
+          <div class="flex justify-between items-center">
+            <span class="text-stone-300 font-bold">${a.name} (${a.cost} XP)</span>
+            <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
+          </div>
+          ${extraHtml}
+        </div>
+      `;
+    }).join('');
   }
 
   const disadvContainer = document.getElementById('disadv-container');
@@ -707,7 +877,7 @@ function renderAdvDisadv() {
     disadvContainer.innerHTML = disadvantagesList.map((d, i) => `
       <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
         <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
-        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1">✕</button>
+        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
       </div>
     `).join('');
   }
@@ -1293,6 +1463,7 @@ function updateAll() {
         ...(weapon2Name !== "Aucune" ? [{ name: weapon2Name }] : [])
       ],
       advantages: advantagesList.map(a => a.name).join(", "),
+      advantagesList: advantagesList,
       disadvantages: disadvantagesList.map(d => d.name).join(", "),
       notes: document.getElementById('pc-outfit')?.value || ""
     };
@@ -1556,11 +1727,15 @@ function exportOfficialPDF() {
     </tr>
   `).join('');
 
-  // Avantages & Désavantages
+  // Avantages & Désavantages (inclut la seconde école si présente)
   document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
   document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
     const full = getAdvantages().avantages?.find(x => x.name === a.name);
-    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
+    let secSchoolNote = "";
+    if (isMultipleSchoolsAdv(a.name) && a.secondarySchoolName) {
+      secSchoolNote = ` — <i>Choix : ${a.secondarySchoolName} (Rang ${a.secondarySchoolRank || 1})</i>`;
+    }
+    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.desc || ''}${secSchoolNote}</span></div>`;
   }).join('') : '<div class="text-stone-400 italic">Aucun avantage sélectionné.</div>';
 
   document.getElementById('p-disadv-total').textContent = `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`;
@@ -1569,15 +1744,31 @@ function exportOfficialPDF() {
     return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
   }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
 
-  // Techniques d'École
+  // Techniques d'École (Principale + Seconde École si École Multiple)
   const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
   const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
   document.getElementById('p-tech-name').textContent = sch ? `${sch.name} (Progression)` : "Techniques";
-  document.getElementById('p-tech-desc').innerHTML = techList.map(t => {
+
+  let printTechHtml = techList.map(t => {
     const tag = t.rank === currentRank ? "<b>[ACTIF]</b> " : (t.rank < currentRank ? "<i>[MAÎTRISÉ]</i> " : "[Verrouillé] ");
     return `<div class="mb-1">${tag}<b>Rang ${t.rank} - ${t.name} :</b> ${t.effect}</div>`;
   }).join('');
 
+  const multiAdv = advantagesList.find(a => isMultipleSchoolsAdv(a.name));
+  if (multiAdv && multiAdv.secondarySchoolId) {
+    const allSchools = getAllSchoolsCatalog();
+    const secSchool = allSchools.find(s => s.id === multiAdv.secondarySchoolId);
+    if (secSchool) {
+      const secRank = multiAdv.secondarySchoolRank || 1;
+      printTechHtml += `<div class="mt-2 pt-1 border-t border-stone-300 font-bold text-stone-800">Seconde École : ${secSchool.name} (${secSchool.clanName}) — Rang ${secRank}</div>`;
+      printTechHtml += (secSchool.techniques || []).map(t => {
+        const tag = t.rank <= secRank ? "<b>[ACQUIS]</b> " : "[Non acquis] ";
+        return `<div class="mb-0.5 text-stone-700">${tag}Rang ${t.rank} - ${t.name} : ${t.effect}</div>`;
+      }).join('');
+    }
+  }
+
+  document.getElementById('p-tech-desc').innerHTML = printTechHtml;
   document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
 
   window.print();
