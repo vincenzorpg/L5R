@@ -24,7 +24,7 @@
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #1c0e07 0%, #0a0808 85%);
+      background-image: radial-gradient(circle at 50% 10%, #1e1108 0%, #0a0808 85%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
@@ -43,20 +43,48 @@
       color: #d1b87a;
       font-style: italic;
     }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .scene-figure:hover img {
+      transform: scale(1.015);
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- MENU GLOBAL -->
+  <!-- EN-TÊTE DU SITE -->
   <header id="site-header"></header>
 
-  <!-- CONTENU PRINCIPAL -->
   <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <!-- NAVIGATION RETOUR & LIENS ACTES -->
+    <!-- FIL D'ARIANE & LIENS RAPIDES -->
     <div class="flex items-center justify-between text-xs">
       <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
-        ← Retour aux Actes de Campagne
+        ← Retour au Journal de Campagne
       </a>
       <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
         <span class="text-stone-600">◄ Prologue</span>
@@ -65,7 +93,7 @@
       </div>
     </div>
 
-    <!-- EN-TÊTE DU RÉCIT -->
+    <!-- EN-TÊTE DE L'ÉPISODE -->
     <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
@@ -81,7 +109,7 @@
       </p>
     </header>
 
-    <!-- MODULE DU LECTEUR AUDIO NARRATEUR -->
+    <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
     <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95">
       <div class="flex items-center gap-3">
         <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
@@ -92,12 +120,11 @@
             Voix Narrative Prête
           </div>
           <div class="text-[10px] text-stone-400">
-            Lecture vocale intégrale du texte de Tsuruchi Akira
+            Lecture vocale intégrale du récit de Tsuruchi Akira
           </div>
         </div>
       </div>
 
-      <!-- BOUTONS DU LECTEUR -->
       <div class="flex items-center gap-2">
         <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
           <span>▶</span> Écouter le Récit
@@ -110,7 +137,6 @@
         </button>
       </div>
 
-      <!-- VITESSE DE VOCALISATION -->
       <div class="flex items-center gap-2 text-xs text-stone-400">
         <span>Vitesse :</span>
         <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
@@ -136,6 +162,14 @@
         <p>
           Je marche sur la route pour participer au centenaire du <b>tournoi de topaze</b>. Je sais que des personnalités importantes seront présentes et je me sens angoissé presque nauséeux. Je ne suis pas seul sur la route menant à <b>Tsuma</b>, d'autres samouraïs de mon âge marchent devant et derrière. Je sens l'aiguchi de mon père contre ma poitrine et sa présence me rassure. Je suis maintenant livré à moi-même et je dois être capable de réagir dans n'importe quelle circonstance. Je me répète sans cesse que je ne suis plus un enfant et que je marche vers mon avenir. Je n'ai pas le droit de faillir….
         </p>
+
+        <!-- ILLUSTRATION 1 : LA ROUTE VERS TSUMA -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Topaze-1.jpg" alt="Les prétendants sur la route de Tsuma" />
+          <figcaption class="scene-caption">
+            Jour 1 — Les jeunes novices des différents clans cheminant le long des rizières vers Tsuma.
+          </figcaption>
+        </figure>
 
         <p>
           A moins d'un demi porté de flèches devant moi, il y a deux samouraïs qui ont l'air de se connaitre. <span class="inner-thought">— Avoir un ami comme Jin à mes côtés m'aurait vraiment rassuré. Je n'ai plus eu de nouvelles de lui depuis longtemps, j'espère que lui aussi va bientôt passer son gempukku. Peut-être sera-t-il présent au tournoi ? Qui sait ? —</span>
@@ -256,6 +290,14 @@
           A la fin des épreuves, nous allons au dîner organisé en l'honneur de l'Empereur. Je suis heureux de voir que nous sommes placés au fond de la salle. Durant le repas j'observe que le daimyo du clan du blaireau est courtisé par des nombreux magistrats. Le repas achevé nous quittons la salle avec un samouraï du clan de la licorne. Nous passons par les jardins quand soudainement des bruits de lutte retentissent non loin ! « Allons voir » cri <b>Okado</b>-san qui s'élance. Je hoche la tête et lui emboite le pas ! Le reste du groupe fait de même. Nous traversons un pont et tombons quelques dizaines de mètres plus loin sur 5 cadavres. Nous reconnaissons immédiatement le daimyo du clan du blaireau, vu au diner quelques heures plus tôt, étendu au milieu de ses 4 gardes du corps. Les samouraïs du clan du blaireau ont été tués par des kunaï, je passe immédiatement une corde à mon arc et essaie de voir à travers de l'obscurité et de ressentir les moindres mouvements. Je sens quelque chose et je hurle au groupe : « du mouvement sur les toits ! Faites attention ! ».
         </p>
 
+        <!-- ILLUSTRATION 2 : CONFRONTATION NOCTURNE SUR LE PONT -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Topaze-2.jpg" alt="Confrontation avec le Scorpion sur le pont" />
+          <figcaption class="scene-caption">
+            Jour 2 — Face-à-face nocturne avec le samouraï du Scorpion au katana ensanglanté sur le pont des jardins.
+          </figcaption>
+        </figure>
+
         <p>
           <b>Ryumitaka</b>-san tente d'y voir plus clair en invoquant les esprits. Mais un jeune samouraï du clan du scorpion apparaît soudainement sur le pont. Son katana est dégainé et couvert de sang.
         </p>
@@ -317,6 +359,14 @@
           L'objectif de la dernière épreuve est de réussir à récupérer trois œufs de Tsu caché dans la forêt. Nous décidons de former une équipe et nous pénétrons ensemble dans le bois, Ryumitaka-san et moi passons devant et réussissons à prendre les œufs sans nous faire remarquer.
         </p>
 
+        <!-- ILLUSTRATION 3 : L'EMBUSCADE DES RÔNINS DANS LA FORÊT -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Topaze-3.jpg" alt="Combat contre les rônins dans la forêt" />
+          <figcaption class="scene-caption">
+            Jour 3 — L'embuscade brutale des huit rônins dans les sous-bois lors de la quête des œufs de Tsu.
+          </figcaption>
+        </figure>
+
         <p>
           Mais sur le chemin du retour vers le château, 8 rônins nous attaquent ! Le combat tourne rapidement en notre faveur. Pendant que Sutokhu-san tranche de haut en bas un rônin, Samui-san d'un coup vertical fait exploser la tête d'un autre. Je suis persuadé d'avoir entendu ses genoux craquer sous le choc ! Okado-san et Mansouri-san remporte aussi leur combat mais notre Shugenja prend une flèche dans l'épaule. Je couvre tant bien que mal mes camarades en tuant deux rônins resté à distance. Une fois le combat terminé, nous apportons les œufs aux juges et validons l'épreuve.
         </p>
@@ -350,7 +400,7 @@
 
     </article>
 
-    <!-- LIENS DE FIN DE PAGE VERS LE BLOG ORIGINAL & L'ACTE SUIVANT -->
+    <!-- LIENS DE BAS DE PAGE -->
     <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
       <a href="https://campagnel5rdavid2015.wordpress.com/2015/08/15/scenario-1-championnat-de-topaze/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
         <span>📖</span> Consulter l'article source sur le blog WordPress ↗
@@ -408,7 +458,7 @@
 
       utterance.onstart = () => {
         isPlaying = true;
-        statusEl.textContent = "Lecture vocale en cours...";
+        statusEl.textContent = "Lecture vocale en cours : Championnat de Topaze";
         btnPlay.classList.add('bg-amber-500');
       };
 
