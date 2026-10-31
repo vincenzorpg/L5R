@@ -2,122 +2,106 @@ backend:
   name: github
   repo: vincenzorpg/L5R
   branch: main
+  # Permet aux contributeurs externes sans droits d'écriture directs de soumettre des corrections via Pull Request
+  open_authoring: true
 
-media_folder: "assets/uploads"
-public_folder: "assets/uploads"
+# Active la gestion en trois temps : Brouillon -> En revue -> Publié
+publish_mode: editorial_workflow
+
+# Dossiers pour le téléversement éventuel d'illustrations ou documents
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+# Affichage du titre du site dans l'interface d'administration
+site_url: https://vincenzorpg.github.io/L5R
+display_url: https://vincenzorpg.github.io/L5R
+logo_url: https://vincenzorpg.github.io/L5R/favicon.ico
 
 collections:
-
   # =========================================================================
-  # 1. SCÉNARIOS & ÉPISODES (MARKDOWN + FRONTMATTER)
-  # =========================================================================
-  - name: "scenarios"
-    label: "Scénarios & Campagne"
-    folder: "content/scenarios"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Numéro ou Tag", name: "episode_num", widget: "string" }
-      - { label: "Titre du Scénario", name: "title", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "Narrateur", name: "author", widget: "string", default: "MJ David" }
-      - { label: "Résumé court", name: "summary", widget: "text" }
-      - { label: "Illustration (Image IA)", name: "thumbnail", widget: "image", required: false }
-      - { label: "Podcast Audio (MP3)", name: "podcast_audio", widget: "file", required: false }
-      - { label: "Récit complet", name: "body", widget: "markdown" }
-
-  # =========================================================================
-  # 2. LES HUIT GRANDS CLANS (FICHIERS HTML BRUTS)
-  # =========================================================================
-  - name: "clans"
-    label: "Fiches des Huit Clans"
-    format: "raw"
-    delete: false
-    files:
-      - name: "crabe"
-        label: "Clan du Crabe"
-        file: "clans/crabe.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "grue"
-        label: "Clan de la Grue"
-        file: "clans/grue.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "dragon"
-        label: "Clan du Dragon"
-        file: "clans/dragon.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "lion"
-        label: "Clan du Lion"
-        file: "clans/lion.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "mante"
-        label: "Clan de la Mante"
-        file: "clans/mante.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "phenix"
-        label: "Clan du Phénix"
-        file: "clans/phenix.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "scorpion"
-        label: "Clan du Scorpion"
-        file: "clans/scorpion.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "licorne"
-        label: "Clan de la Licorne"
-        file: "clans/licorne.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-  # =========================================================================
-  # 3. AIDES DE JEU (FICHIERS HTML BRUTS)
+  # 1. AIDES DE JEU (Combat, Bushido, Étiquette...)
   # =========================================================================
   - name: "aides"
     label: "Aides de Jeu"
-    format: "raw"
-    delete: false
-    files:
-      - name: "combat"
-        label: "Mémento du Combat & Duels"
-        file: "aides/combat-memento.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "bushido"
-        label: "Code du Bushido & Honneur"
-        file: "aides/bushido-honneur.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
-
-      - name: "etiquette"
-        label: "Étiquette & Coutumes"
-        file: "aides/etiquette-coutumes.html"
-        fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+    label_singular: "Aide de Jeu"
+    folder: "data/aides"
+    create: true
+    format: "json"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Identifiant / Slug", name: "id", widget: "string", hint: "Ex: combat-memento, bushido-honneur" }
+      - { label: "Titre de l'Aide", name: "title", widget: "string" }
+      - { label: "Badge / Sous-titre", name: "badge", widget: "string", required: false, hint: "Ex: Guide Tactique, Code Moral" }
+      - { label: "Références Officielles", name: "references", widget: "string", required: false, hint: "Ex: Livre de Règles 4e Édition, p. 82-89" }
+      - { label: "Résumé d'accroche", name: "summary", widget: "text" }
+      - { label: "Contenu Détaillé (Règles & Mémentos)", name: "body", widget: "markdown" }
 
   # =========================================================================
-  # 4. PAGES PRINCIPALES
+  # 2. FICHES DE CLAN (Crabe, Lion, Licorne, Mante, Phénix, Scorpion...)
   # =========================================================================
-  - name: "pages"
-    label: "Portail & Accueil"
-    format: "raw"
-    delete: false
-    files:
-      - name: "home"
-        label: "Portail d'Accueil (index.html)"
-        file: "index.html"
+  - name: "clans"
+    label: "Fiches de Clan"
+    label_singular: "Clan"
+    folder: "data/clans"
+    create: false
+    format: "json"
+    slug: "{{fields.clan_id}}"
+    fields:
+      - { label: "Identifiant Clan", name: "clan_id", widget: "string", hint: "crabe, lion, licorne, mante, dragon, grue, phenix, scorpion" }
+      - { label: "Nom Complet", name: "clan_name", widget: "string", hint: "Ex: Clan du Crabe" }
+      - { label: "Monogramme / Kanji", name: "kanji", widget: "string", hint: "Ex: 土, 武, 馬" }
+      - { label: "Titre honorifique", name: "subtitle", widget: "string", hint: "Ex: Le Bouclier de l'Empire" }
+      - { label: "Présentation Principale", name: "description", widget: "text" }
+      - { label: "Références de Base", name: "book_refs", widget: "string" }
+
+      # Carte d'identité / Profil PJ
+      - label: "Profil PJ"
+        name: "profile"
+        widget: "object"
         fields:
-          - { label: "Contenu de la Page (HTML)", name: "body", widget: "code", default_language: "html" }
+          - { label: "Anneau Majeur / Vertu", name: "ring_or_virtue", widget: "string" }
+          - { label: "Kami Fondateur / Champion", name: "founder", widget: "string" }
+          - { label: "Forteresse Principale", name: "stronghold", widget: "string" }
+          - { label: "Spécificité / Armes", name: "specialty", widget: "string" }
+          - { label: "Pages Livre de Base", name: "rulebook_pages", widget: "string" }
+
+      # Liste des Familles du Clan
+      - label: "Familles du Clan"
+        name: "families"
+        widget: "list"
+        fields:
+          - { label: "Nom de la Famille", name: "name", widget: "string" }
+          - { label: "Bonus de Trait", name: "bonus", widget: "string", hint: "Ex: +1 Force, +1 Volonté" }
+          - { label: "Description & Histoire", name: "description", widget: "text" }
+          - { label: "Profils de Jeu", name: "roles", widget: "string" }
+
+      # Doctrine & Bushido
+      - label: "Doctrine & Bushido"
+        name: "bushido_sections"
+        widget: "list"
+        fields:
+          - { label: "Titre du Précepte", name: "title", widget: "string" }
+          - { label: "Texte explicatif", name: "content", widget: "text" }
+
+      # Écoles Fondamentales
+      - label: "Écoles Fondamentales"
+        name: "schools"
+        widget: "list"
+        fields:
+          - { label: "Nom de l'École", name: "name", widget: "string" }
+          - { label: "Type & Réf", name: "type_ref", widget: "string", hint: "Ex: Bushi • Livre de Base p. 107" }
+          - { label: "Détails Techniques (Traits, Compétences, Rang 1)", name: "technique", widget: "text" }
+
+  # =========================================================================
+  # 3. TEXTES DE L'ACCUEIL & ANNONCES
+  # =========================================================================
+  - name: "accueil"
+    label: "Page d'Accueil"
+    files:
+      - file: "data/accueil.json"
+        label: "Textes d'Accueil"
+        name: "accueil_content"
+        fields:
+          - { label: "Titre du Portail", name: "hero_title", widget: "string" }
+          - { label: "Message du MJ", name: "mj_notice", widget: "text" }
+          - { label: "Pied de page", name: "footer_text", widget: "string" }
