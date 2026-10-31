@@ -11,7 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- FAVICON DES 5 ANNEAUX -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
   <!-- SCRIPT DU MENU GLOBAL -->
   <script src="../js/navbar.js" defer></script>
@@ -24,7 +24,7 @@
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #1e1108 0%, #0a0808 85%);
+      background-image: radial-gradient(circle at 50% 10%, #1c0e07 0%, #0a0808 85%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
@@ -39,51 +39,50 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .inner-thought {
+      color: #d1b87a;
+      font-style: italic;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- EN-TÊTE DU SITE -->
+  <!-- MENU GLOBAL -->
   <header id="site-header"></header>
 
+  <!-- CONTENU PRINCIPAL -->
   <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <!-- FIL D'ARIANE & LIENS RAPIDES -->
+    <!-- NAVIGATION RETOUR & LIENS ACTES -->
     <div class="flex items-center justify-between text-xs">
       <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
-        ← Retour au Journal de Campagne
+        ← Retour aux Actes de Campagne
       </a>
       <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
-        <span class="text-stone-600">◄ Début de la Campagne</span>
+        <span class="text-stone-600">◄ Prologue</span>
         <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 01 / 10</span>
-        <a href="scenario-2.html" class="text-amber-400 hover:text-amber-200">Acte 2 : Château de Kyoteï ►</a>
+        <a href="scenario-2.html" class="text-amber-400 hover:text-amber-200">Acte 2 : Meurtre au Château de Kyoteï ►</a>
       </div>
     </div>
 
-    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <!-- EN-TÊTE DU RÉCIT -->
     <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
-          ACTE 1 • SESSION INITIALE (GEMPUKKU)
+          ACTE 1 • GEMPUKKU À TSUMA
         </span>
-        <span class="text-xs text-stone-400">Lieu : Village de Tsuma (Terres de la Grue) • Récit de : Tsuruchi Akira</span>
+        <span class="text-xs text-stone-400">Récit de : <b>Tsuruchi Akira</b> • Publié le 15 août 2015</span>
       </div>
       <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
         Scénario 1 : Championnat de Topaze
       </h1>
-      <p class="text-xs md:text-sm text-amber-100/80 italic leading-relaxed" id="story-summary">
-        « C'est au village de Tsuma, au cœur des terres du Clan de la Grue, que nos jeunes novices se sont réunis pour passer leur tournoi d'initiation et de passage à l'âge adulte. Mais derrière les épreuves courtoises et le maniement du boken grondent déjà les complots qui scelleront le destin de l'Empire. »
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
       </p>
-      <div class="pt-1 flex flex-wrap gap-2 text-[10px] font-mono">
-        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Gempukku</span>
-        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#ChampionnatTopaze</span>
-        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Iaijutsu</span>
-        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Tsuma</span>
-      </div>
     </header>
 
-    <!-- BARRE DE COMMANDE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
-    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/90">
+    <!-- MODULE DU LECTEUR AUDIO NARRATEUR -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95">
       <div class="flex items-center gap-3">
         <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
           🔊
@@ -93,15 +92,15 @@
             Voix Narrative Prête
           </div>
           <div class="text-[10px] text-stone-400">
-            Lecture à haute voix en français du récit du Championnat
+            Lecture vocale intégrale du texte de Tsuruchi Akira
           </div>
         </div>
       </div>
 
-      <!-- BOUTONS DE CONTRÔLE -->
+      <!-- BOUTONS DU LECTEUR -->
       <div class="flex items-center gap-2">
         <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
-          <span>▶</span> Écouter
+          <span>▶</span> Écouter le Récit
         </button>
         <button id="btn-pause" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
           ⏸ Pause
@@ -111,9 +110,9 @@
         </button>
       </div>
 
-      <!-- RÉGLAGE DU DÉBIT -->
+      <!-- VITESSE DE VOCALISATION -->
       <div class="flex items-center gap-2 text-xs text-stone-400">
-        <span>Rythme :</span>
+        <span>Vitesse :</span>
         <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
           <option value="0.9">0.9x (Chronique posée)</option>
           <option value="1.0" selected>1.0x (Standard)</option>
@@ -122,91 +121,253 @@
       </div>
     </section>
 
-    <!-- CORPS DU RÉCIT DU SCÉNARIO 1 -->
-    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+    <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-8 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
       
-      <div class="border-b border-amber-500/20 pb-4">
-        <h2 class="text-lg font-bold font-imperial text-amber-200">
-          I. L'Arrivée à Tsuma & Les Épreuves Préliminaires
-        </h2>
-        <p class="mt-2">
-          Le voyage vers le village côtier de Tsuma a permis aux postulants de mesurer l'importance de ce moment solennel. Venus des quatre coins de l'Empire — des remparts brumeux des terres du Crabe jusqu'aux forteresses du Lion et aux sanctuaires de la Mante —, chaque jeune samouraï devait faire honneur à ses ancêtres et prouver sa valeur pour obtenir le droit de porter le daisho.
-        </p>
-        <p class="mt-3">
-          Dès l'ouverture des joutes, sous le regard attentif des examinateurs impériaux et des maîtres d'armes de la Grue, les épreuves se sont enchaînées avec sévérité : calligraphie, poésie cérémonielle, équitation et connaissance approfondie du code du Bushido. Pour de jeunes guerriers habitués au fracas de l'acier plutôt qu'au maniement délicat du pinceau, chaque point accordé par les juges s'est arraché au prix d'une concentration sans faille.
-        </p>
-      </div>
+      <!-- =====================================================================
+           JOUR 1
+           ===================================================================== -->
+      <section class="space-y-4 border-b border-amber-500/20 pb-8">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <h2 class="text-lg md:text-xl font-bold font-imperial text-amber-200">Jour 1</h2>
+        </div>
 
-      <div class="border-b border-amber-500/20 pb-4">
-        <h2 class="text-lg font-bold font-imperial text-amber-200">
-          II. Les Tournois d'Armes & Le Duel au Boken
-        </h2>
-        <p class="mt-2">
-          La tension a monté d'un cran lors des épreuves de tir à l'arc (Kyujutsu) et des combats au sabre d'entraînement en bois (boken). C'est au cours de ces affrontements directs que les rivalités séculaires entre les délégations ont refait surface, notamment lors d'échanges particulièrement vifs entre les prétendants du Clan du Lion et les duellistes Kakita.
+        <p>
+          Je marche sur la route pour participer au centenaire du <b>tournoi de topaze</b>. Je sais que des personnalités importantes seront présentes et je me sens angoissé presque nauséeux. Je ne suis pas seul sur la route menant à <b>Tsuma</b>, d'autres samouraïs de mon âge marchent devant et derrière. Je sens l'aiguchi de mon père contre ma poitrine et sa présence me rassure. Je suis maintenant livré à moi-même et je dois être capable de réagir dans n'importe quelle circonstance. Je me répète sans cesse que je ne suis plus un enfant et que je marche vers mon avenir. Je n'ai pas le droit de faillir….
         </p>
-        <p class="mt-3">
-          Tandis que la foule des villageois et des courtisans retenait son souffle, les futurs héros de notre campagne ont démontré un sens tactique aiguisé et une précision martiale exemplaire, remportant plusieurs victoires décisives qui leur assurèrent les points nécessaires pour valider leur statut de samouraï à part entière.
-        </p>
-      </div>
 
-      <blockquote class="p-4 rounded-lg bg-black/60 border-l-2 border-amber-500 text-amber-200 italic my-4">
-        « Le boken ne coupe pas la chair, mais l'échec en place publique blesse l'honneur d'une lignée pour des générations. »
-        <span class="block text-right text-[10px] text-stone-400 font-normal mt-1">— Note d'instruction des arbitres Kakita</span>
-      </blockquote>
+        <p>
+          A moins d'un demi porté de flèches devant moi, il y a deux samouraïs qui ont l'air de se connaitre. <span class="inner-thought">— Avoir un ami comme Jin à mes côtés m'aurait vraiment rassuré. Je n'ai plus eu de nouvelles de lui depuis longtemps, j'espère que lui aussi va bientôt passer son gempukku. Peut-être sera-t-il présent au tournoi ? Qui sait ? —</span>
+        </p>
 
-      <div>
-        <h2 class="text-lg font-bold font-imperial text-amber-200">
-          III. Les Murmures dans l'Ombre et le Gempukku
-        </h2>
-        <p class="mt-2">
-          Cependant, le tournoi ne s'est pas déroulé sans ombres. Plusieurs incidents suspects dans les réserves et les dortoirs des concurrents ont laissé entrevoir des manœuvres de sabotage destinées à discréditer l'organisation du tournoi. Grâce à la perspicacité et au sang-froid de quelques compétiteurs vigilants, les pièges ont été déjoués avant que le déshonneur ne frappe la compétition.
+        <p>
+          Malgré la portée, j'entends leurs éclats de voix et vu leur « finesse », ils doivent être du clan du crabe. Celui de gauche est gigantesque et porte un tetsubo dans son dos. Sa puissance de frappe doit être dévastatrice. L'autre est suivi d'un gros chien mais sa démarche me fait penser aux loups que j'ai vus dans la forêt avec mon père.
         </p>
-        <p class="mt-3">
-          Au terme du tournoi, lors de la cérémonie officielle du <b>Gempukku</b>, les maîtres de cérémonie ont remis solennellement les lames et ont proclamé les récipiendaires adultes et serviteurs du trône. La table du MJ David venait de forger son unité : d'humbles aspirants devenus désormais de véritables samouraïs de Rokugan, prêts à répondre aux périls de la cour et du champ de bataille.
+
+        <p>
+          Entre eux et moi, marche d'une manière bien trop fière (presque arrogante) un samouraï du clan de la grue avec ses cheveux blancs.
         </p>
-      </div>
+
+        <p>
+          Un rapide coup d'œil derrière moi me permet de voir un samouraï portant son <i>daishō</i> sur son côté gauche et un second katana à sa hanche droite. D'après ce que j'ai appris chez Li Er, seule l'école Matsumoto du clan du dragon forme ses apprentis à la technique des deux sabres.
+        </p>
+
+        <p>
+          Un autre individu marche derrière lui. Mais il est étrange car il a plus l'air d'un paysan que d'un samouraï. Ses vêtements sont en loques et il semble marcher sans se soucier de ce qui l'entoure, traçant sa route comme s'il était seul et j'ai du mal à sentir sa présence.
+        </p>
+
+        <p>
+          C'est alors que j'entends le bruit d'un objet qui tombe dans l'eau. Un paysan qui devait être entre les samouraïs du clan du crabe et celui du clan de la grue a chuté dans les roseaux avec sa malle et appelle à l'aide. Le samouraï du clan de la grue part l'aider et met les pieds dans l'eau. Le grand samouraï du clan du crabe les aide à remonter sur la rive. L'action a duré moins de 5 minutes et nous sommes tous là à regarder le vieillard reprendre son souffle. Il s'incline pose sa tête sur le sol et remercie les samouraïs, avec tout le respect dû à notre rang, pour l'avoir sauvé. Le vieillard nous propose de nous offrir du thé dans sa modeste cabane un peu plus loin sur la route.
+        </p>
+
+        <p>
+          Je suis le groupe car cela me permettra de me reposer un peu et peut-être de jauger mes futures adversaires. <span class="inner-thought">— Ce vieillard m'intrigue, je ne sais pas pourquoi mais je sens quelque chose de louche qui l'entoure. C'est peut-être la fatigue du voyage ou mon imagination qui me joue des tours mais je préfère rester prudent —</span>
+        </p>
+
+        <p>
+          Nous arrivons à la cabane mais je refuse de prendre part à la cérémonie du thé orchestré par le paysan et le samouraï de la grue. Je redoute que le thé soit empoisonné. Je reste à l'affut car mon arc ne me servirait pas à grand-chose dans la cabane.
+        </p>
+
+        <p>
+          Je ne connais pas grand-chose à la cérémonie du thé mais la manière mais elle me paraît plutôt bien réussie. Comment un simple paysan peut-il avoir ce type de connaissance et disposer d'un service à thé et d'un tapis de cérémonie de cette qualité. Il est finement brodé de fils de couleur bleue et on peut apercevoir deux personnages tissés au centre.
+        </p>
+
+        <p>
+          Durant la cérémonie, les langues se délient. Le paysan se présente sous le nom de <b>Megumi</b> et insiste pour nous prêter sa maison de Tsuma pour la première nuit. Tous les samouraïs présents annoncent participer au tournoi et se présentent tour à tour :
+        </p>
+
+        <ul class="space-y-2 pl-4 border-l-2 border-stone-800 my-3">
+          <li>
+            • « Je suis <b>Samui Hida</b> du clan du crabe. » <span class="inner-thought">— Ce samouraï est impressionnant par sa taille et sa carrure —</span>
+          </li>
+          <li>
+            • « Et moi, <b>Okado Hiruma</b> également du clan du crabe. » <span class="inner-thought">— Les fortunes n'ont pas été généreuses avec lui à sa naissance car il possède des yeux jaunes et des cheveux gris. Ce n'est pas un chien qui l'accompagne mais bel et bien un loup, il est en train d'attendre dehors. —</span>
+          </li>
+          <li>
+            • « Je me nomme <b>Sutokhu Kakita</b> du clan de la grue. » <span class="inner-thought">— L'intonation de sa voix est légèrement hautaine, ce qui m'énerve un peu. Je n'aime pas trop que l'on prenne les gens de haut…. —</span>
+          </li>
+          <li>
+            • « On m'appelle <b>Isawa Ryumitaka</b> du clan du phœnix. » <span class="inner-thought">— C'est le samouraï le plus étrange qu'il m'a été donné de voir. Mis à part son daimyo et les vêtements qu'il porte, il ne possède rien d'autre. Mais son extravagance ne m'étonne au final qu'à moitié venant de la part d'un membre du clan du phœnix —</span>
+          </li>
+          <li>
+            • « Et je m'appelle <b>Mansouri Mirumoto</b> du clan du dragon. » <span class="inner-thought">— Lui aussi est gigantesque, je ne voudrai pas l'affronter en 1 contre 1 —</span>
+          </li>
+        </ul>
+
+        <p>
+          Puis les questions se tournent vers le vieillard. Je ne suis pas le seul à avoir senti quelque chose de louche. Assailli de questions auxquelles, le paysan ne sait visiblement pas répondre de manière claire, il s'embrouille dans ses explications et nous annonce qu'il doit partir et s'échappe par la porte de la cabane. <b>Ryumitaka</b>-san et moi-même sortons de la cabane alors que le vieil homme vient de passer le pas de la porte. Mais une fois dehors, plus personne ! Seule des grues s'envolent de la rizière sur notre droite <span class="inner-thought">— Étrange !! Comment a-t-il pu disparaitre sans laisser de trace ! —</span> Avant de partir, je regarde le tapis de cérémonie et comprends qu'il représente <b>Akodo Masashi</b> et <b>Mirumoto Puhabo-Natsumu</b> combattant l'oni légendaire <b>Kusatte Iru</b>.
+        </p>
+
+        <p>
+          Le groupe décide de continuer la route vers <b>Tsuma</b> ensemble. En chemin, j'écoute discrètement la conversation entre <b>Sutokhu</b>-san et <b>Okado</b>-san qui tourne autour du loup de ce dernier.
+        </p>
+
+        <p>
+          Nous arrivons aux portes de <b>Tsuma</b> et déjà un marchand nous appelle en vantant ses produits. <b>Mansouri</b>-san, <b>Sutokhu</b>-san et Samui-san s'arrêtent discutailler avec le marchant du nom de <b>Yasuki</b> et achètent des babioles qui, je le vois au premier coup d'œil, ne valent rien. La vie ne pardonne pas aux personnes naïves et les marchands les repèrent facilement.
+        </p>
+
+        <p>
+          Les deux samouraïs du clan du crabe et moi-même décidons d'aller à la maison de Megumi pendant que les autres vont au temple. La maison est composée de 2 chambres, d'une pièce à vivre et d'un jardin. Je retrouve la fresque du tapis de cérémonie du thé sur un mur. Elle doit vraiment être importante pour Megumi.
+        </p>
+
+        <p>
+          Une fois le groupe réunit, nous décidons d'aller présenter nos hommages aux dirigeants de la ville et nous inscrire au tournoi mais nous nous faisons refouler aux portes de la ville fortifiée. Les gardes nous demandent de repasser demain.
+        </p>
+
+        <p>
+          En rentrant, le groupe décide d'aller à la maison de geisha. <b>Ryumitaka</b>-san et moi-même décidons de rentrer. Je suis trop angoissé pour aller dans une maison de plaisir pour le moment. Je dois me concentrer sur les futures épreuves. En attendant de trouver le sommeil, je nettoie mon arc et fais connaissance avec le loup pendant que le Shugenja médite dans le jardin.
+        </p>
+      </section>
+
+      <!-- =====================================================================
+           JOUR 2
+           ===================================================================== -->
+      <section class="space-y-4 border-b border-amber-500/20 pb-8">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <h2 class="text-lg md:text-xl font-bold font-imperial text-amber-200">Jour 2</h2>
+        </div>
+
+        <p>
+          Nous nous levons tous aux aurores, le visage de <b>Sutokhu</b>-san et d'<b>Okado</b>-san sont marqués par le manque de sommeil. La plupart d'entre nous déjeunons et nous quittons la maison pour aller nous inscrire au tournoi.
+        </p>
+
+        <p>
+          Une fois l'administratif réglé, nous entendons une clameur s'élevant du fleuve. Nous suivons la foule pour assister à l'arrivée de l'<b>Empereur</b> sur sa barque impériale.
+        </p>
+
+        <p>
+          C'est alors que j'entends quelqu'un chuchoter un juron visant <b>l'Empereur</b> à mes oreilles. Un coup d'œil discret sur le côté me permet de voir l'auteur de ses viles paroles. C'est un samouraï du clan du crabe portant une vilaine balafre sur la tête. Je décide de ne pas relever l'insulte car personne d'autre n'a entendu ce qui a été dit par le crabe et que je ne souhaite pas faire tout un esclandre juste devant l'empereur. Cela ne pourrait m'être que préjudiciable.
+        </p>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <h3 class="font-bold text-amber-300 font-imperial text-xs">Le tournoi commence enfin ! Cinq épreuves sont prévues aujourd'hui :</h3>
+          <ol class="space-y-1.5 pl-4 list-decimal text-stone-300">
+            <li><b>Sumo (matin) :</b> Je remporte mon combat de sumo en utilisant la force de mon adversaire pour la retourner contre lui. <span class="text-amber-400 font-bold">— 1ère victoire ! —</span></li>
+            <li><b>Héraldique (matin) :</b> Je remporte mon duel d'héraldique. <span class="text-amber-400 font-bold">— 2nde victoire ! —</span></li>
+            <li><b>Course d'obstacles (matin) :</b> Je termine à la malheureuse 7ème place de la course d'obstacles et je ne valide donc pas cette épreuve.</li>
+            <li><b>Équitation (après-midi) :</b> Je réussis sans forcer l'épreuve d'équitation, certains n'arrive même pas à monter sur leur monture…. <span class="text-amber-400 font-bold">— 3ème victoire —</span></li>
+            <li><b>Étiquette / comportement (après-midi) :</b> J'échoue à cette épreuve alors que je connaissais les réponses mais elles me sont revenues trop tard.</li>
+          </ol>
+        </div>
+
+        <p>
+          A la fin des épreuves, nous allons au dîner organisé en l'honneur de l'Empereur. Je suis heureux de voir que nous sommes placés au fond de la salle. Durant le repas j'observe que le daimyo du clan du blaireau est courtisé par des nombreux magistrats. Le repas achevé nous quittons la salle avec un samouraï du clan de la licorne. Nous passons par les jardins quand soudainement des bruits de lutte retentissent non loin ! « Allons voir » cri <b>Okado</b>-san qui s'élance. Je hoche la tête et lui emboite le pas ! Le reste du groupe fait de même. Nous traversons un pont et tombons quelques dizaines de mètres plus loin sur 5 cadavres. Nous reconnaissons immédiatement le daimyo du clan du blaireau, vu au diner quelques heures plus tôt, étendu au milieu de ses 4 gardes du corps. Les samouraïs du clan du blaireau ont été tués par des kunaï, je passe immédiatement une corde à mon arc et essaie de voir à travers de l'obscurité et de ressentir les moindres mouvements. Je sens quelque chose et je hurle au groupe : « du mouvement sur les toits ! Faites attention ! ».
+        </p>
+
+        <p>
+          <b>Ryumitaka</b>-san tente d'y voir plus clair en invoquant les esprits. Mais un jeune samouraï du clan du scorpion apparaît soudainement sur le pont. Son katana est dégainé et couvert de sang.
+        </p>
+
+        <div class="space-y-1.5 p-3 rounded bg-black/50 border border-stone-800 text-stone-200">
+          <p><b>Scorpion :</b> « Que faites-vous là ? »</p>
+          <p><b>Le Shugenja de notre équipe :</b> « Et vous ? Avec votre katana couvert de sang ? »</p>
+          <p><b>Scorpion :</b> « Je n'ai pas à vous répondre. Vous avez tué ces gens ! J'appelle les gardes ! »</p>
+          <p><b>Moi :</b> « Allons les trouver et nous expliquerons votre comportement suspect. »</p>
+        </div>
+
+        <p>
+          <b>Ryumitaka</b>-san et les samouraïs du clan du crabe restent sur place pour tenter d'y voir plus clair et nous suivons le samouraï du clan du scorpion pour aller chercher du renfort.
+        </p>
+
+        <p>
+          On nous introduit auprès du champion d'émeraude, <b>Satsume Doji</b>. Je sens mon estomac se serrer pendant que nous nous inclinons pour le saluer. Le samouraï du scorpion nous prend de court et commence par nous accuser du meurtre du daimyo du clan du blaireau. Je le laisse terminer et demande humblement au champion d'émeraude de nous laisser nous expliquer. Malgré nos explications <b>Satsume Doji</b>-sama semble sceptique.
+        </p>
+
+        <p>
+          C'est alors que le samouraï de la licorne s'écrit : « C'est le scorpion ! C'est lui qui a assassiné tous ces samouraïs ! Il les a piégés comme il le fait avec nous ! Vous vous trompez de coupable … ! » En prenant conscience de la portée de ses paroles, ses derniers mots restent coincés dans sa gorge… « Ce sont des accusations mensongères ! Je demande un duel pour laver cet affront ! » s'exclame le samouraï du scorpion. Le champion d'émeraude acquiesce de la tête. L'affrontement est bref. Le scorpion, bien meilleur duelliste, tranche le samouraï de la licorne qui s'effondre sur le sol.
+        </p>
+
+        <p>
+          C'est alors que Samui-san entre dans la salle à bout de souffle et cri : « Des ninjas ! Dans le jardin ! Ils cherchent à faire disparaitre les corps ! ». Le champion d'émeraude ordonne alors à 10 de ses samouraïs de suivre le crabe pour aller protéger la zone.
+        </p>
+
+        <p>
+          Peu de temps après, ce sont <b>Ryumitaka</b>-san et <b>Okado</b>-san qui arrivent en titubant. Visiblement mal en point, <b>Ryumitaka</b>-san déclare en tenant une fléchette dans la main « Nous n'avons pas pu empêcher les ninjas de s'approcher du cadavre et nous avons été attaqués avec des sarbacanes ! ». Je me précipite vers eux en sortant mon nécessaire de médecin. Je commence par soigner <b>Okado</b>-san puis nous soulageons <b>Ryumitaka</b>-san.
+        </p>
+
+        <p>
+          Nous rentrons à notre logement épuisé après avoir vu la mort d'un peu trop près. Mais nous commençons à peine à dormir quand nous entendons des bruits dans le couloir. Certains vont voir ce qui se passe mais revienne bredouille et retourne se coucher.
+        </p>
+      </section>
+
+      <!-- =====================================================================
+           JOUR 3
+           ===================================================================== -->
+      <section class="space-y-4 border-b border-amber-500/20 pb-8">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <h2 class="text-lg md:text-xl font-bold font-imperial text-amber-200">Jour 3</h2>
+        </div>
+
+        <p>
+          Levés aux aurores, nous déjeunons et rejoignons le terrain d'entrainement. Il reste 6 épreuves :
+        </p>
+
+        <ol class="space-y-1.5 pl-4 list-decimal text-stone-300">
+          <li><b>Combat en escarmouche :</b> J'arrive à décocher ma flèche avant l'attaque de mon adversaire et fait mouche. <span class="text-amber-400 font-bold">— 4ème victoire ! —</span></li>
+          <li><b>Poésie / calligraphie :</b> Je réussi à convaincre mon examinateur. <span class="text-amber-400 font-bold">— 5ème victoire ! —</span></li>
+          <li><b>Question sociétale (ordre céleste) :</b> Je réussi cette épreuve de justesse. <span class="text-amber-400 font-bold">— 6ème victoire ! —</span></li>
+          <li><b>Jeu de go :</b> Mon adversaire me bat.</li>
+          <li><b>Tir à l'arc :</b> Épreuve la plus facile pour moi. Je réussi haut la main. <span class="text-amber-400 font-bold">— 7ème victoire ! —</span></li>
+        </ol>
+
+        <p>
+          L'objectif de la dernière épreuve est de réussir à récupérer trois œufs de Tsu caché dans la forêt. Nous décidons de former une équipe et nous pénétrons ensemble dans le bois, Ryumitaka-san et moi passons devant et réussissons à prendre les œufs sans nous faire remarquer.
+        </p>
+
+        <p>
+          Mais sur le chemin du retour vers le château, 8 rônins nous attaquent ! Le combat tourne rapidement en notre faveur. Pendant que Sutokhu-san tranche de haut en bas un rônin, Samui-san d'un coup vertical fait exploser la tête d'un autre. Je suis persuadé d'avoir entendu ses genoux craquer sous le choc ! Okado-san et Mansouri-san remporte aussi leur combat mais notre Shugenja prend une flèche dans l'épaule. Je couvre tant bien que mal mes camarades en tuant deux rônins resté à distance. Une fois le combat terminé, nous apportons les œufs aux juges et validons l'épreuve.
+        </p>
+
+        <p class="pl-4">
+          6. <b>Chasse aux œufs de Tsu :</b> <span class="text-amber-400 font-bold">— 8ème victoire ! —</span>
+        </p>
+      </section>
+
+      <!-- =====================================================================
+           JOUR 4
+           ===================================================================== -->
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <h2 class="text-lg md:text-xl font-bold font-imperial text-amber-200">Jour 4</h2>
+        </div>
+
+        <p>
+          Le tournoi débute et je suis éliminé au premier tour par un moine qui avait pourtant accepté une escarmouche mais le terrain de 2m² m'empêchait de faire le moindre mouvement.
+        </p>
+
+        <p>
+          Le Kakita remporte la finale du tournoi contre le Mirumoto.
+        </p>
+
+        <p>
+          Après le tournoi vient notre cérémonie du gempukku ainsi que la cérémonie d'intronisation du nouveau magistrat d'émeraude.
+        </p>
+      </section>
 
     </article>
 
-    <!-- DÉBRIEFING DE LA SESSION & RÉCOMPENSES -->
-    <section class="card-clean rounded-xl p-5 border-stone-800 space-y-3">
-      <div class="flex items-center justify-between border-b border-stone-800 pb-2">
-        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider">
-          Bilan de l'Acte 1 • Session Initiale
-        </h3>
-        <span class="text-[10px] text-stone-500 font-mono">VALIDATION GEMPUKKU</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-black/50 rounded border border-stone-800">
-          <span class="text-stone-500 block text-[10px]">Points d'Expérience (XP)</span>
-          <b class="text-emerald-400 font-imperial text-sm">+4 XP de départ</b>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800">
-          <span class="text-stone-500 block text-[10px]">Statut & Renommée</span>
-          <b class="text-amber-300 font-imperial text-sm">Passage au Statut 1.0 (Samouraï)</b>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800">
-          <span class="text-stone-500 block text-[10px]">Armement officiel reçu</span>
-          <b class="text-stone-300 text-[11px]">Le Daisho (Katana & Wakizashi)</b>
-        </div>
-      </div>
-      <div class="pt-2 flex justify-between items-center text-[11px]">
-        <a href="https://campagnel5rdavid2015.wordpress.com/2015/08/15/scenario-1-championnat-de-topaze/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
-          <span>📖</span> Consulter l'article original sur WordPress (15 Août 2015) ↗
-        </a>
-        <a href="scenario-2.html" class="text-amber-400 hover:text-amber-200 font-imperial font-bold">
-          Passer au Scénario 2 : Meurtre au Château de Kyoteï →
-        </a>
-      </div>
+    <!-- LIENS DE FIN DE PAGE VERS LE BLOG ORIGINAL & L'ACTE SUIVANT -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/2015/08/15/scenario-1-championnat-de-topaze/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur le blog WordPress ↗
+      </a>
+      <a href="scenario-2.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 2 : Meurtre au Château de Kyoteï →
+      </a>
     </section>
 
   </main>
 
+  <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Acte 1 : Championnat de Topaze
+    Chronique L5R 4e Édition — MJ David • Acte 1 : Championnat de Topaze (par Tsuruchi Akira)
   </footer>
 
-  <!-- CODE DU LECTEUR VOCAL NARRATEUR -->
+  <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
   <script>
     const synth = window.speechSynthesis;
     let utterance = null;
@@ -233,22 +394,21 @@
       synth.cancel();
 
       const title = document.getElementById('story-title').textContent.trim();
-      const summary = document.getElementById('story-summary').textContent.trim();
+      const motto = document.getElementById('story-motto').textContent.trim();
       const content = document.getElementById('story-content').innerText.trim();
-      const speechText = `${title}. ${summary}. ${content}`;
+      const fullSpeechText = `${title}. ${motto}. ${content}`;
 
-      utterance = new SpeechSynthesisUtterance(speechText);
+      utterance = new SpeechSynthesisUtterance(fullSpeechText);
       utterance.lang = 'fr-FR';
       utterance.rate = parseFloat(rateEl.value);
 
-      // Détecter une voix française de qualité
       const voices = synth.getVoices();
       const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
       if (frVoice) utterance.voice = frVoice;
 
       utterance.onstart = () => {
         isPlaying = true;
-        statusEl.textContent = "Lecture en cours : Championnat de Topaze";
+        statusEl.textContent = "Lecture vocale en cours...";
         btnPlay.classList.add('bg-amber-500');
       };
 
@@ -260,7 +420,7 @@
 
       utterance.onerror = () => {
         isPlaying = false;
-        statusEl.textContent = "Erreur ou interruption de lecture";
+        statusEl.textContent = "Erreur ou interruption";
         btnPlay.classList.remove('bg-amber-500');
       };
 
