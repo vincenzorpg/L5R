@@ -96,18 +96,108 @@
   </footer>
 
   <script>
-    const SCENARIOS_DATA = [
-      { id: 1, file: "campagne/scenario-1.html", title: "Le Tournoi du Champion d'Émeraude", date: "Session 1", place: "Kyuden Doji", desc: "Les samouraïs des différents clans se rencontrent pour la première fois à l'occasion des joutes cérémonielles marquant le début de l'année impériale." },
-      { id: 2, file: "campagne/scenario-2.html", title: "Les Ombres de la Forêt de Shinomen", date: "Session 2", place: "Forêt de Shinomen", desc: "Une caravane d'approvisionnement doit traverser la canopée mystique peuplée d'esprits anciens et de nagas assoupis." },
-      { id: 3, file: "campagne/scenario-3.html", title: "Le Festin empoisonné à Shiro Matsu", date: "Session 3", place: "Château Matsu", desc: "Une célébration militaire d'honneur tourne au drame suite à la mort foudroyante d'un dignitaire impérial." },
-      { id: 4, file: "campagne/scenario-4.html", title: "Murmures sur le Mur Kaiu", date: "Session 4", place: "Mur Kaiu", desc: "Affectation temporaire sur le rempart méridional pour prêter main-forte à l'infanterie lourde du Crabe." },
-      { id: 5, file: "campagne/scenario-5.html", title: "Le Monastère des Parchemins Oubliés", date: "Session 5", place: "Terres Phénix", desc: "Recherche d'un ancien traité d'alchimie capable d'inverser une malédiction spirituelle ancestrale." },
-      { id: 6, file: "campagne/scenario-6.html", title: "L'Embuscade du Col de la Brume", date: "Session 6", place: "Cols des Montagnes", desc: "Traversée sous haute tension d'un défilé rocheux balayé par la brume et harcelé par des archers invisibles." },
-      { id: 7, file: "campagne/scenario-7.html", title: "Négociations à la Cité des Riches Plaines", date: "Session 7", place: "Marchés Yasuki", desc: "Dispute commerciale intense pour sécuriser l'acheminement de minerai et de jade pour l'armée impériale." },
-      { id: 8, file: "campagne/scenario-8.html", title: "Le Masque de l'Acteur Déchu", date: "Session 8", place: "Cité Impériale", desc: "Une pièce de théâtre kabuki sert de camouflage à un rituel occulte menaçant la lignée dirigeante." },
-      { id: 9, file: "campagne/scenario-9.html", title: "La Bataille du Gué des Saules", date: "Session 9", place: "Frontières des Plaines", desc: "Bataille de masse où les PJ prennent le commandement d'une aile d'infanterie face aux charges montées." },
-      { id: 10, file: "campagne/scenario-10.html", title: "Le Jugement devant le Champion d'Émeraude", date: "Session 10", place: "Haute Cour Impériale", desc: "Climax de la campagne : témoignages sous serment, présentation des preuves et verdict solennel sur l'avenir de l'Empire." }
-    ];
+ const SCENARIOS_DATA = [
+  {
+    id: 1,
+    file: "campagne/scenario-1.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/2015/08/15/scenario-1-championnat-de-topaze/",
+    title: "Championnat de Topaze",
+    author: "Tsuruchi Akira",
+    date: "Acte 1",
+    place: "Village de Tsuma",
+    desc: "Le passage à l'âge adulte (gempukku) des jeunes samouraïs lors du prestigieux tournoi impérial, entre épreuves d'armes, étiquette et premiers complots."
+  },
+  {
+    id: 2,
+    file: "campagne/scenario-2.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Meurtre au Château de Kyoteï",
+    author: "Table du MJ David",
+    date: "Acte 2",
+    place: "Château de Kyoteï",
+    desc: "Une enquête sous haute tension dans la forteresse où l'honneur des clans et les apparences de cour s'affrontent."
+  },
+  {
+    id: 3,
+    file: "campagne/scenario-3.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Le dernier voyage",
+    author: "Table du MJ David",
+    date: "Acte 3",
+    place: "Routes de Rokugan",
+    desc: "Une mission d'escorte et de pèlerinage confrontant le groupe aux aléas du voyage et aux périls spirituels."
+  },
+  {
+    id: 4,
+    file: "campagne/scenario-4.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Aux côtés de mes frères morts",
+    author: "Table du MJ David",
+    date: "Acte 4",
+    place: "Lisière de l'Outremonde",
+    desc: "L'épreuve du sang et de la poussière auprès des défenseurs du Mur, au contact des esprits des défunts."
+  },
+  {
+    id: 5,
+    file: "campagne/scenario-5.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Entre le ciel et l'enfer",
+    author: "Table du MJ David",
+    date: "Acte 5",
+    place: "Sanctuaires de Montagne",
+    desc: "Un choix moral et spirituel déchirant entre le devoir envers les cieux célestes et la réalité crue du monde terrestre."
+  },
+  {
+    id: 6,
+    file: "campagne/scenario-6.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Le mariage d'Okado Hiruma",
+    author: "Table du MJ David",
+    date: "Acte 6",
+    place: "Terres du Crabe",
+    desc: "Une alliance matrimoniale capitale pour la famille Hiruma, mêlant protocole sévère, rivalités claniques et festivités martiales."
+  },
+  {
+    id: 7,
+    file: "campagne/scenario-7.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Meurtre à Ryoko Owari",
+    author: "Table du MJ David",
+    date: "Acte 7",
+    place: "Ryoko Owari (Cité des Histoires Vertes)",
+    desc: "Plongée dans la cité de l'opium et des intrigues du Clan du Scorpion pour dénouer un homicide politique particulièrement trouble."
+  },
+  {
+    id: 8,
+    file: "campagne/scenario-8.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Le crépuscule de l'honneur",
+    author: "Table du MJ David",
+    date: "Acte 8",
+    place: "Provinces disputées",
+    desc: "Lorsque les ordres d'un seigneur s'opposent frontalement au code du Bushido : l'heure des serments brisés et des tragédies personnelles."
+  },
+  {
+    id: 9,
+    file: "campagne/scenario-9.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "« Ce qui ne meurt pas »",
+    author: "Table du MJ David",
+    date: "Acte 9",
+    place: "Terres ancestrales",
+    desc: "Face à une menace occulte défiant les âges, les héros cherchent le secret de ce qui survit au trépas et aux malédictions."
+  },
+  {
+    id: 10,
+    file: "campagne/scenario-10.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/2026/10/14/scenario-10-la-tombe-de-iuchiban/",
+    title: "La tombe de Iuchiban",
+    author: "Akira Tsuruchi (avec Okado, HiroHito et Ryujin)",
+    date: "Acte 10",
+    place: "Le Tombeau Maudit",
+    desc: "L'apogée héroïque de la campagne : l'exploration du repaire scellé du plus grand adepte du sang de Rokugan, Iuchiban."
+  }
+];
 
     const grid = document.getElementById("scenarios-grid");
     grid.innerHTML = SCENARIOS_DATA.map(s => `
