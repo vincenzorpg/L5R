@@ -8,8 +8,8 @@
 // =============================================================================
 const NAV_CONFIG = {
   brand: {
-    name: "ROKUGAN",
-    subtitle: "CHRONIQUES DU MJ DAVID",
+    name: "LES CHRONIQUES DE ROKUGAN",
+    subtitle: "Samouraïs HAJIME !",
     icon: "竜",
     url: "index.html"
   },
