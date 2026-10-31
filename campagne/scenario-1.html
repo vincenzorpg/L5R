@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acte 1 : Le Tournoi du Champion d'Émeraude — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL (GÈRE LES SOUS-DOSSIERS AUTOMATIQUEMENT) -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1c0e07 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- NAVIGATION RETOUR & ÉTAPES -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour aux 10 Actes
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <span class="text-stone-600">◄ Acte Précédent</span>
+        <span class="text-amber-300 font-bold">Acte 1 / 10</span>
+        <a href="scenario-2.html" class="text-amber-400 hover:text-amber-200">Acte Suivant ►</a>
+      </div>
+    </div>
+
+    <!-- HERO DU SCÉNARIO -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE I • SESSION DU 12 MARS
+        </span>
+        <span class="text-xs text-stone-400">Lieu : Kyuden Doji • MJ : David</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Le Tournoi du Champion d'Émeraude
+      </h1>
+      <p class="text-xs md:text-sm text-amber-100/80 italic" id="story-summary">
+        « Les jeunes samouraïs des différents clans se rencontrent pour la première fois à l'occasion des joutes cérémonielles marquant le début de l'année impériale. »
+      </p>
+    </header>
+
+    <!-- MODULE DU LECTEUR AUDIO NARRATEUR -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/90">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
+          🔊
+        </span>
+        <div>
+          <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">
+            Voix Narrative Prête
+          </div>
+          <div class="text-[10px] text-stone-400">
+            Lecture à haute voix en français du compte-rendu
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+          <span>▶</span> Lire
+        </button>
+        <button id="btn-pause" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
+          ⏸ Pause
+        </button>
+        <button id="btn-stop" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">
+          ⏹ Arrêt
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs text-stone-400">
+        <span>Rythme :</span>
+        <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+          <option value="0.9">0.9x (Solennel)</option>
+          <option value="1.0" selected>1.0x (Standard)</option>
+          <option value="1.15">1.15x (Rapide)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- CORPS DU RÉCIT -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+      <h2 class="text-lg font-bold font-imperial text-amber-200 border-b border-amber-500/20 pb-2">
+        1. L'Arrivée aux Jardins Givrés
+      </h2>
+      <p>
+        L'aube s'est levée sur les jardins givrés de Kyuden Doji. Invités par décret officiel, les protagonistes se sont présentés devant les hérauts de la Grue pour faire enregistrer leurs armoiries respectives. Dès les premières passes d'armes au dojo d'Iaijutsu, la tension était palpable entre la délégation du Lion et les émissaires de la Grue.
+      </p>
+
+      <h2 class="text-lg font-bold font-imperial text-amber-200 border-b border-amber-500/20 pb-2 pt-4">
+        2. L'Incident au Dojo et la Sentence
+      </h2>
+      <p>
+        Un premier incident d'étiquette au sujet du protocole des sabres a contraint les magistrats d'Émeraude à intervenir avant que le sang ne soit versé hors des règles sacrées. Un geste provocateur a nécessité un arbitrage immédiat par un jet d'Étiquette opposé à la Sincérité du courtisan Doji.
+      </p>
+
+      <blockquote class="p-4 rounded-lg bg-black/60 border-l-2 border-amber-500 text-amber-200 italic my-4">
+        « Dans la cour d'un empereur, un mot mal choisi est plus tranchant qu'une lame de forge Akodo. »
+      </blockquote>
+
+      <h2 class="text-lg font-bold font-imperial text-amber-200 border-b border-amber-500/20 pb-2 pt-4">
+        3. Le Parchemin Scellé au Crépuscule
+      </h2>
+      <p>
+        Au crépuscule, un parchemin anonyme portant un sceau de cire brisé a été découvert dans les quartiers des invités, laissant présager un complot contre l'un des juges du tournoi. Les samouraïs ont dû décider s'ils devaient en avertir sur-le-champ le seigneur hôte ou enquêter discrètement dans les ombres de la galerie est.
+      </p>
+    </article>
+
+    <!-- DÉBRIEFING DE SESSION (XP, HONNEUR & RÉCOMPENSES) -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 space-y-3">
+      <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider">
+        Bilan & Récompenses de la Séance
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <span class="text-stone-500 block text-[10px]">Expérience accordée</span>
+          <b class="text-emerald-400 font-imperial text-sm">+4 XP</b>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <span class="text-stone-500 block text-[10px]">Variation d'Honneur</span>
+          <b class="text-amber-300 font-imperial text-sm">+3 Points d'Honneur</b>
+        </div>
+        <div class="p-3 bg-black/50 rounded border border-stone-800">
+          <span class="text-stone-500 block text-[10px]">Objet / Renommée acquise</span>
+          <b class="text-stone-300 text-[11px]">Lettre de passage Kyuden Doji</b>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 1
+  </footer>
+
+  <!-- SCRIPT DU LECTEUR VOCAL -->
+  <script>
+    const synth = window.speechSynthesis;
+    let utterance = null;
+    let isPlaying = false;
+
+    const btnPlay = document.getElementById('btn-play');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const statusEl = document.getElementById('audio-status');
+    const rateEl = document.getElementById('audio-rate');
+
+    function playAudio() {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par ce navigateur.");
+        return;
+      }
+      if (synth.paused && isPlaying) {
+        synth.resume();
+        statusEl.textContent = "Lecture en cours...";
+        return;
+      }
+
+      synth.cancel();
+
+      const title = document.getElementById('story-title').textContent;
+      const summary = document.getElementById('story-summary').textContent;
+      const content = document.getElementById('story-content').innerText;
+      const textToRead = `${title}. ${summary}. ${content}`;
+
+      utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'fr-FR';
+      utterance.rate = parseFloat(rateEl.value);
+
+      const voices = synth.getVoices();
+      const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
+      if (frVoice) utterance.voice = frVoice;
+
+      utterance.onstart = () => {
+        isPlaying = true;
+        statusEl.textContent = "Lecture vocale en cours...";
+        btnPlay.classList.add('bg-amber-500');
+      };
+      utterance.onend = () => {
+        isPlaying = false;
+        statusEl.textContent = "Lecture terminée";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+      utterance.onerror = () => {
+        isPlaying = false;
+        statusEl.textContent = "Erreur de lecture";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      synth.speak(utterance);
+    }
+
+    function pauseAudio() {
+      if (synth.speaking && !synth.paused) {
+        synth.pause();
+        statusEl.textContent = "Lecture en pause";
+      }
+    }
+
+    function stopAudio() {
+      if (synth.speaking) {
+        synth.cancel();
+      }
+      isPlaying = false;
+      statusEl.textContent = "Voix Narrative Prête";
+      btnPlay.classList.remove('bg-amber-500');
+    }
+
+    btnPlay.addEventListener('click', playAudio);
+    btnPause.addEventListener('click', pauseAudio);
+    btnStop.addEventListener('click', stopAudio);
+  </script>
+</body>
+</html>
