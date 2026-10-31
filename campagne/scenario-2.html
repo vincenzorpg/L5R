@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 2 : Meurtre au Château de Kyoteï — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1e1108 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .inner-thought {
+      color: #d1b87a;
+      font-style: italic;
+    }
+    .tab-btn.active {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: rgba(212, 175, 55, 0.8);
+      color: #f5e096;
+    }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-1.html" class="text-amber-400 hover:text-amber-200">◄ Acte 1 : Championnat de Topaze</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 02 / 10</span>
+        <a href="scenario-3.html" class="text-amber-400 hover:text-amber-200">Acte 3 : Le dernier voyage ►</a>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE 2 • FESTIVAL DES MORTS À KYOTEÏ
+        </span>
+        <span class="text-xs text-stone-400">Lieu : Forteresse de Kyoteï (Vallée de Kintani) • 3 Chroniques PJ</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 2 : Meurtre au Château de Kyoteï
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
+      </p>
+      <div class="pt-2 flex flex-wrap gap-2 text-[10px] font-mono">
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#ChateauKyotei</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Enquête</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#TsumeRetsu</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#PlancherRossignol</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#MaisonDuPin</span>
+      </div>
+    </header>
+
+    <!-- SÉLECTEUR DE VERSION (3 JOUEURS / 3 PERSPECTIVES) -->
+    <div class="card-clean rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 border-amber-500/30">
+      <div class="text-xs font-imperial text-amber-300 font-bold px-2">Point de vue du Chroniqueur :</div>
+      <div class="flex flex-wrap gap-1.5" id="tab-container">
+        <button onclick="switchVersion('v1')" id="tab-v1" class="tab-btn active px-3 py-1.5 rounded-lg border border-stone-800 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🐺</span> Version 1 : Okado Hiruma
+        </button>
+        <button onclick="switchVersion('v2')" id="tab-v2" class="tab-btn px-3 py-1.5 rounded-lg border border-stone-800 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🏹</span> Version 2 : Tsuruchi Akira
+        </button>
+        <button onclick="switchVersion('v3')" id="tab-v3" class="tab-btn px-3 py-1.5 rounded-lg border border-stone-800 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🔨</span> Version 3 : Hida Samui (5 Chapitres)
+        </button>
+      </div>
+    </div>
+
+    <!-- MODULE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
+          🔊
+        </span>
+        <div>
+          <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">
+            Voix Narrative Prête
+          </div>
+          <div class="text-[10px] text-stone-400" id="audio-detail">
+            Lecture vocale de la chronique sélectionnée
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+          <span>▶</span> Écouter
+        </button>
+        <button id="btn-pause" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
+          ⏸ Pause
+        </button>
+        <button id="btn-stop" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">
+          ⏹ Arrêt
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs text-stone-400">
+        <span>Vitesse :</span>
+        <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+          <option value="0.9">0.9x (Posé)</option>
+          <option value="1.0" selected>1.0x (Standard)</option>
+          <option value="1.15">1.15x (Rythmé)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- ZONE DE LECTURE DU CONTENU -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+      
+      <!-- =====================================================================
+           VERSION 1 : OKADO HIRUMA
+           ===================================================================== -->
+      <div id="content-v1" class="version-block space-y-4">
+        <div class="border-b border-amber-500/20 pb-3">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200 flex items-center gap-2">
+            <span>🐺</span> Version 1 : Okado Hiruma
+          </h2>
+          <span class="text-[11px] text-stone-500">Récit de l'éclaireur du Clan du Crabe</span>
+        </div>
+
+        <p>
+          A peine remis de mon passage à la vie d'adulte suite au gempukku, je vais devoir user de la facette du bushido que je comprends le moins : REI, l'étiquette…
+        </p>
+
+        <p>
+          Nous voilà donc invité au château de Kyotei par TSUME Retsu (clan de la Grue). Ce dernier organise un banquet pour honorer les participants aux phases finals du tournoi de Topaze. Une telle invitation ne se refuse pas et ne serait-ce que pour faire honneur à ma famille et à mon clan, je me rends sur place.
+        </p>
+
+        <p>
+          En chemin, j'apprends que le château de Kyotei a un emplacement stratégique qui attire les convoitises des clans de la région : Grue, Lion et Phoenix. D'ailleurs le château est souvent passé entre les mains de ces différents clans, le dernier en date étant justement la prise du château par TSUME Retsu des mains du clan du Lion. Le château surplombe la bourgade de Kyotei qui est assez grande.
+        </p>
+
+        <p>
+          TSUME Retsu est connu pour être un homme de guerre et de poigne ce qui contraste avec le clan qu'il sert et est source de conflits internes… Ces Grues… Ils ne savent même pas reconnaitre la vraie valeur d'un samouraï.
+        </p>
+
+        <p>
+          Arrivés sur place nous allons donc à ce repas. La nourriture est bonne mais une pression latente se fait sentir dans la salle. Des Daimyo représentants les autres clans sont là : Shiba Katsuda du clan du Phoenix, Hikoma Hiujaki du clan du Lion et Daidoji Uji du clan de la Grue. Lors du repas la réputation de Retsu ne tarde pas à se faire sentir. Une altercation éclate entre lui est son fils : TSUME Takashi-san, qui quitte la salle. Le banquet suit son cours comme si de rien n'était.
+        </p>
+
+        <p>
+          Des appartements nous sont mis à disposition pour passer la nuit sur place. Ils sont collés à la partie interne du château. A l'aube, des cris se font entendre, puis un brouhaha. Des gens qui courent et s'affaire. Je retrouve d'autres samouraïs du championnat de Topaze dans la cour qui fait face aux portes fermées de la partie intérieur du château. L'annonce arrive vite à nos oreilles : TSUME Retsu a été assassiné pendant la nuit.
+        </p>
+
+        <p>
+          Suite à une partie de chasse où j'ai pu montrer mes talents de chasseur contrairement à mes camarades, Takashi nous avoue qu'elle était venue dans sa chambre le soir du meurtre mais il ne se souvient de rien. L'enquête dans la chambre de Takashi met en évidence un empoisonnement de Takashi par Kaïra et l'utilisation d'un passage au plafond qui mène à la chambre de Retsu.
+        </p>
+
+        <p>
+          Nous allons donc à la maison du pin (maison de geisha) pour essayer de la retrouver mais elle est absente. 1 koku plus tard la propriétaire nous révèle que Kaira entretient une relation avec un rônin du nom d'ITO. Il est très apprécié à Kyotei car il défend les pauvres gens contre l'oppression locale. Il habiterait une cahute à l'entrée de Kyotei.
+        </p>
+
+        <p>
+          Une fois devant sa cahute, Samui défonce la porte. Il a raison, assez perdu de temps. Kaira est là et nous révèle son histoire :
+        </p>
+
+        <blockquote class="p-4 rounded-lg bg-black/60 border-l-2 border-amber-500 text-amber-200 italic my-3">
+          « Je m'appelle Damatsu Kaira. Il y a longtemps ma famille a été attaquée par Tsume Retsu. Tout le monde périt sauf une fille et deux garçons. La fille a été vendue à la maison du Pin. La fille c'était moi. Heureusement Itto avait survécu , un samouraï de ma famille. Il m'a retrouvé et tout expliqué. J'ai décidé avec son aide de me venger et j'ai réussi ma mission ».
+        </blockquote>
+
+        <p>
+          Mais du bruit se fit entendre à l'extérieur. En sortant Itto était là… Avec 10 heimins équipés d'armure et de katana, une véritable armée.
+        </p>
+
+        <p>
+          La bataille éclata et ces paysans maniaient aussi bien le katana qu'un samurai. J'ai été grièvement blessé mais heureusement que la mort d'ITO et de Kaira ont permis de faire fuir les paysans car je ne donnais pas cher de notre peau…
+        </p>
+
+        <p>
+          Mais peu importe, comme nous l'avait demandé Hikoma Hiujaki, la justice a été rendu.
+        </p>
+
+        <p>
+          Shiba katsuda nous a remercié ainsi que TSUME Takashi qui a la lourde tâche de reprendre les rênes du château de Kyotei.
+        </p>
+
+        <div class="text-right italic text-amber-400 font-imperial pt-2">— Okado.</div>
+      </div>
+
+      <!-- =====================================================================
+           VERSION 2 : TSURUCHI AKIRA
+           ===================================================================== -->
+      <div id="content-v2" class="version-block space-y-6 hidden">
+        <div class="border-b border-amber-500/20 pb-3">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200 flex items-center gap-2">
+            <span>🏹</span> Version 2 : Tsuruchi Akira
+          </h2>
+          <span class="text-[11px] text-stone-500">Journal d'enquête et déductions logiques</span>
+        </div>
+
+        <p>
+          Le lendemain de la cérémonie de mon gempukku, j'ai eu l'honneur de recevoir une invitation au <b>château de Kyoteï</b> estampillé du sceau du daimyo du clan de la grue, <b>Tsume Retsu</b>. La missive conviait tous les participants du tournoi à commémorer la fête des morts à <b>Kyoteï</b>.
+        </p>
+
+        <p>
+          Après une discussion rapide, notre groupe (formé durant le tournoi de topaze) décida de faire la route ensemble. Il fallait compter environ 1 semaine de route à cheval pour aller jusqu'à Kyoteï. Durant le voyage, je me suis rappelé de certaines choses apprises lors de ma formation auprès de Li Er. <b>La forteresse de Kyoteï</b> se trouve dans <b>la vallée de Kintani</b>, frontières du territoire du phœnix, du lion et de la grue, qui est très fertile grâce aux grandes rivières qui la traverse. Cette position stratégique a toujours été très controversée et de grandes batailles éclatèrent pour son contrôle. Un proverbe bushi dit même : <i>“ Celui qui contrôle la vallée Kintani, contrôle l'empire”</i>.
+        </p>
+
+        <p>
+          De nos jours, le propriétaire du château de Kyoteï est Tsume Retsu. <b>Li Er</b> m'en avait parlé comme un homme ambitieux, inflexible et cruel. Sa bataille contre <b>Damashu Kojima</b> (feu daimyo du clan du lion) 20 ans plus tôt au château de Kyoteï avait démontré aux yeux de tous, sa passion pour les champs de bataille.
+        </p>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-3">
+          <h3 class="font-bold text-amber-300 font-imperial text-xs">Jour 1 :</h3>
+          <p>
+            Le soir de notre arrivée, nous sommes invités à dîner au château. Deux tables sur l'extérieur de la salle sont pour les participants du tournoi de Topaze et au centre de la pièce une table de 9 places est réservée aux samouraïs et courtisans de renom :
+          </p>
+          <ul class="space-y-1 pl-4 border-l-2 border-stone-800 text-stone-300">
+            <li>• <b>Daidoji Uji</b> (ambassadeur du clan de la grue)</li>
+            <li>• <b>Hikoma Ujiaki</b> (ambassadeur lion)</li>
+            <li>• <b>Doji Satsume</b> (champion émeraude)</li>
+            <li>• Personnage qui m'est inconnu</li>
+            <li>• <b>Retsu Tsume</b> (daimyo du clan de la grue)</li>
+            <li>• <b>Takashi Tsume</b> (fils de Retsu Tsume)</li>
+            <li>• <b>Natsu Jijusme</b> (général de Retsu Tsume)</li>
+            <li>• <b>Sutokhu</b></li>
+            <li>• <b>Mansouri</b></li>
+          </ul>
+          <p>
+            Le repas est magnifiquement orchestré les excellents plats sont agrémentés de spectacles de marionnettes et de danse.
+          </p>
+          <p>
+            Cependant, vers la fin du repas je perçois une tension entre <b>Tsume Retsu</b> et son fils. Celui-ci semble vouloir quelque chose que lui refuse son père mais je détourne les yeux pour ne pas risquer d'offenser notre hôte. Le repas touchant à sa fin nous décidons d'aller nous coucher dans les chambres mises à notre disposition dans le quartier des invités.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="font-bold text-amber-300 font-imperial text-xs">Jour 2 :</h3>
+          <p>
+            Aux aurores, c'est un tumulte et des cris qui nous font tous sortir de nos lits. Une servante passe en courant devant ma porte en criant que <b>Retsu Tsume</b> a été assassiné durant la nuit.
+          </p>
+          <p>
+            Nous décidons donc d'aller chercher plus d'informations auprès des gardes mais ils nous ordonnent de rester dans l'enceinte du château sans aucune explication.
+          </p>
+          <p>
+            En discutant avec d'autres samouraïs, nous apprîmes que seul l'ambassadeur du clan du phœnix était resté au château cette nuit.
+          </p>
+          <p>
+            En fin de matinée, des gardes vinrent nous chercher et nous escortèrent jusqu'au château. Shiba Katsuda (ambassadeur du clan du phœnix) nous propose alors d'aider à l'enquête pour trouver le meurtrier du daimyo. C'est avec circonspection que j'accepte avec le reste du groupe et il nous remet un papier officiel nous délivrant le titre de magistrat.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-500/20 space-y-3">
+          <div class="font-imperial font-bold text-amber-300 text-xs tracking-wider">——- Début de l'enquête ——–</div>
+          <p>
+            Nous montons immédiatement dans la chambre du daimyo. Le général s'y trouve ainsi qu'une servante entrain de nettoyer les traces de sang sur le sol et sur le futon. En entrant dans la pièce, je remarque que le corps n'est plus là et que le plancher grince bruyamment sous mes pas. Les autres discutent avec le général pendant que j'examine la petite pièce. Un parchemin accroché au mur représente un vieux plan de l'étage, un coffre est contre le mur ainsi qu'un râtelier d'arme vide. De l'autre côté de la pièce, il y a un cabinet de toilette avec deux coffres en nacre. Je note que les coffres n'ont pas été fracturés et que rien ne semble avoir été dérobé. Par la fenêtre, j'aperçois une autre tour où une sentinelle est postée.
+          </p>
+          <p>
+            Pendant que j'examinais la pièce, J'écoutais le général nous décrire la situation aux autres. Les seules informations importantes étaient :
+          </p>
+          <ul class="space-y-1 pl-4 list-disc text-stone-300">
+            <li>Toutes les nuits, les chambres du daimyo ainsi que celle de son fils étaient gardées par deux gardes.</li>
+            <li>Le corps ainsi que l'arme du crime ont été emmenés par les etas pour laver le cadavre</li>
+            <li>Le cadavre a été découvert par la servante personnelle de <b>Retsu Tsume</b> qui est entrain de laver le sang sur le sol.</li>
+            <li><b>Retsu Tsume</b> a été poignardé en plein cœur.</li>
+            <li>Le fils devrait succéder à son père</li>
+          </ul>
+
+          <div class="pt-2">
+            <b class="text-amber-200">Nous faisons le point sur l'enquête :</b>
+            <div class="mt-2 pl-3 border-l-2 border-stone-800 space-y-1.5 text-stone-300">
+              <p><b>Mode opératoire :</b> Une personne est allée depuis la chambre du fils vers celle du père ce qui a permis d'éviter les gardes et ne pas faire de bruit.</p>
+              <p><b>Suspects :</b></p>
+              <p class="pl-3">• <b>Le fils (Tsume Takashi)</b> — Mobile : (Politique) Prendre la direction du château. Mais il aurait seulement commandité l'assassinat. — Alibi : Aucun.</p>
+              <p class="pl-3">• <b>Le général :</b> — Mobile : (Politique) Prendre la direction du château — Alibi : Dans sa chambre.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Au vu des personnes suspectées, nous ne pouvons rien dire pour le moment. Nous décidons de nous séparer en deux groupes pour accélérer l'enquête. Les deux compères crabes vont voir le cadavre alors que <b>Ryumitaka</b> et moi allons voir les gardes qui étaient en faction.
+        </p>
+
+        <p>
+          Nous interrogeons les deux gardes qui sont (comme on pouvait s'y attendre) honteux et dépités. Ils confirment avoir été en poste durant toute la nuit et qu'ils n'ont rien entendu. L'interrogatoire continu et <b>Ryumitaka</b> sent que les gardes deviennent de moins en moins sincères lorsque l'on commence à poser des questions sur les éventuelles visites ce soir-là. Étrange… Nous laissons les deux gardes à leur sort funeste et nous allons questionner les gardes de la chambre du fils. Ces derniers sont encore moins loquaces et ils refusent presque de répondre à nos questions malgré nos menaces déguisées. Notre travail achevé nous nous rendons à l'auberge pour faire le point avec le reste du groupe.
+        </p>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <p>Les deux crabes ont eu plus de chances que nous avec les eta :</p>
+          <ul class="space-y-1.5 pl-4 list-disc text-stone-300">
+            <li>L'ancien daimyo était a priori en grande négociation avec l'ambassadeur Grue avant sa mort. S'ils n'ont pas pu apprendre le sujet des négoces, la discussion était assez houleuse d'après un témoin, Ouji a même menacé clairement de mort Retsu.</li>
+            <li>Le fils ne s'intéressait pas à la politique mais était très porté sur l'art ce qui contredit notre mobile. Son père était très contrarié par les projets de son fils car il souhaitait que ce soit lui qui reprenne les rênes du château à sa mort.</li>
+            <li>Enfin, le père et le fils allaient tous deux à la <b>maison de geisha 'les chrysanthèmes'.</b></li>
+          </ul>
+        </div>
+
+        <p>
+          Quand soudain, le serviteur qui nous servait s'effondre à nos pieds. Une baffe du crabe le réveil et nous lui posons quelques questions dans l'arrière-boutique (nous soupçonnions qu'il est voulu nous empoissonner…). Il nous apprend qu'il ne se sent pas bien depuis qu'il a fini les deux coupes de saké de <b>Takashi Retsu</b> en rangeant sa chambre le matin même. Nous en déduisons que le fils a été drogué ce qui le sort de la liste des suspects.
+        </p>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 text-stone-300">
+          <p><b>Mise à jour des suspects :</b></p>
+          <p>• <b>Le général :</b> Mobile (Politique) Prendre la direction du château. Mais il aurait seulement commandité l'assassinat. — Alibi : Dans sa chambre — Preuves : Aucune</p>
+          <p>• <b>L'ambassadeur grue :</b> Mobile : Un refus de la part de Retsu sur un sujet inconnu. Mais il aurait seulement commandité l'assassinat. — Alibi : Dans sa chambre — Preuves : Aucune</p>
+        </div>
+
+        <p>
+          Pour résoudre cette enquête nous devons retrouver la personne qui accompagnait le fils ce soir-là. Nous nous dirigeons donc vers la maison des chrysanthèmes.
+        </p>
+
+        <p>
+          C'est la patronne de l'établissement qui nous reçoit. Elle ne reconnaît pas la broche mais nous confirme que <b>Retsu Tsume</b> fréquentait l'établissement de manière non officiel. Son fils en revanche préférait aller à <b>la maison du pin</b> (connu pour être dirigé par des scorpions). Sitôt sorties de la maison des chrysanthèmes, nous allons à la maison des pins (cette balade aurait plu à <b>Sutokhu</b> !).
+        </p>
+
+        <p>
+          <b>Kumiku</b> (la patronne) n'est pas là et nous discutons le serviteur qui nous a ouverts. Il nous apprend que la broche appartient à <b>Reikka</b> qui est la préférée de <b>Takashi Tsume</b> (d'où la présence de la broche dans la chambre du fils). Au moment où il nous apprend que <b>Reikka</b> travaille à la maison des pins depuis longtemps la patronne arrive et le congédie. Le dialogue est plus compliqué avec elle et Okado la soudoie en lui donnant 1 koku (je me dis qu'il ne doit pas connaître la valeur de l'argent et qu'il n'a jamais dû manquer de rien…). Grâce à ce “don”, <b>Kumiku</b> nous explique que <b>Reikka</b> est amuseuse de <b>Itto</b> est qu'elle passe beaucoup de temps chez lui. D'après ses dires, <b>Itto</b> est le rônin le plus populaire du village. Il a sa propre milice pour faire régner l'ordre.
+        </p>
+
+        <p>
+          A la sortie de la maison de geisha, un rapide résumé de la situation fait clairement apparaître deux voies différentes :
+        </p>
+        <ul class="space-y-1.5 pl-4 list-disc text-stone-300">
+          <li>Soit le meurtre vient du côté des maisons closes. Mais nous n'avons aucun mobile. Nous savons seulement que Reikka était avec le fils le soir du meurtre et qu'il a sûrement été drogué.</li>
+          <li>Soit le meurtre est politique et vient de l'ambassadeur du clan du phœnix.</li>
+        </ul>
+
+        <p>
+          Les deux crabes étant un peu trop bourrin pour dialoguer convenablement avec l'ambassadeur du phœnix, <b>Ryumitaka</b> et moi nous nous chargeons de cette mission pendant que les deux crabes et le loup vont rencontrer <b>Itto</b>.
+        </p>
+
+        <p>
+          En attendant la partie de chasse, nous sommes rejoints par nos compères qui nous annoncent avoir retrouvé l'obi à la perle manquante chez <b>Itto</b> et que ce dernier commence à poser des questions sur notre groupe d'enquêteur. Il devient donc notre suspect n°1 comme commanditaire du meurtre mais pour une raison que l'on ignore.
+        </p>
+
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 text-stone-300">
+          <p><b>Synthèse finale du mode opératoire :</b></p>
+          <p><b>Reikka</b> a drogué <b>Takashi Tsume</b> pour qu'il s'endorme. Puis elle est montée dans le faux plafond pour accéder à la chambre de <b>Retsu Tsume</b>. Elle l'a assassiné durant son sommeil et a fait le chemin en sens inverse pour retourner dans la chambre de <b>Takashi Tsume</b>.</p>
+          <p><b>Coupables :</b> <b>Reikka</b> la favorite de Takashi Tsume • <b>Itto</b>, le rônin du village (commanditaire).</p>
+        </div>
+
+        <p>
+          Pendant que nous réfléchissons à la situation, la cérémonie de seppuku des gardes de <b>Retsu Tsume</b> a lieu devant nous. Je me dis que ces idiots avaient protégé les secrets de leur seigneur jusqu'à leur mort (ce qui nous a fait perdre du temps) même si c'était tout à leur honneur il n'aurait jamais pu monter dans la hiérarchie car il ne voyait pas plus loin que les ordres qu'on leur donnait. Combien d'autres secrets emmenaient- ils avec eux dans la tombe…
+        </p>
+
+        <p>
+          <b>Takashi Tsume</b> lança la partie de chasse avec un rapide galop, ce qui semblait poser quelques problèmes aux autres participants. Le prince tira un faisan et un lapin (que je lui laissai bien volontiers). Peu après, je tuai un lapin d'une flèche en plein cou. Le style de chasse d'<b>Okado</b> était particulier puisque c'est son loup qui lui ramenait les proies abattues.
+        </p>
+
+        <p>
+          Dès que nous pouvons quitter le repas sans offenser nos hôtes, nous nous rendons d'un pas décidé à l'auberge pour interroger <b>Itto</b> mais celui-ci n'est pas là. Nous persuadons l'aubergiste de nous indiquer sa maison et nous nous rendons chez lui. Nous approchons de sa cabane à pas de loup et nous entendons chantonner à l'intérieur. Alors que je m'approche de la seule fenêtre pour observer l'intérieur. Ce gros bourrin de <b>Samui</b> défonce la porte d'un coup d'épaule et tombe nez à nez avec une femme (qui ressemble au descriptif que l'on nous a donné de <b>Reikka</b>) qui commence à hurler. <b>Samui</b> semble passablement énervé par les cris stridents de la jeune fille et la menace. C'est en pleure qu'elle nous avoue tout. Son vrai nom est “<b>Damatsu Kaira</b>”. Enfant elle a survécu au pillage et massacre de son château par l'armée de <b>Retsu Tsume</b>. C'est le feu daimyo en personne qui a fait exécuter sa famille devant ses yeux et qui la vendue ensuite à la maison des pins. Un jour, <b>Itto</b> est venu la rencontrer. Il lui apprit qu'il était un ancien samouraï de son père et qu'il voulait venger sa mort. Ainsi, elle a mis tout en œuvre pour séduire <b>Takashi</b> afin de pouvoir entrer librement dans le château et mettre leur plan à exécution.
+        </p>
+
+        <div class="border-t border-amber-500/20 pt-3 flex justify-between items-baseline">
+          <span class="font-imperial text-amber-300 font-bold text-xs">——- Fin de l'enquête ——–</span>
+          <span class="text-stone-400 text-xs">Rapport remis à Takashi Tsume</span>
+        </div>
+        <p>
+          Nous rentrons au <b>château de Kyoteï</b> faire notre rapport à <b>Takashi Tsume</b>. Il semble attristé par la nouvelle mais il est heureux que la mort de son père ait été vengée. Il doit désormais se préparer à être son digne successeur.
+        </p>
+      </div>
+
+      <!-- =====================================================================
+           VERSION 3 : HIDA SAMUI (LES 5 CHAPITRES)
+           ===================================================================== -->
+      <div id="content-v3" class="version-block space-y-6 hidden">
+        <div class="border-b border-amber-500/20 pb-3">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200 flex items-center gap-2">
+            <span>🔨</span> Version 3 : Par Hida Samui
+          </h2>
+          <span class="text-[11px] text-stone-500">Chronique brute en 5 chapitres du bushi du Mur Kaiu</span>
+        </div>
+
+        <!-- CHAPITRE I -->
+        <div class="space-y-3">
+          <h3 class="font-bold text-amber-300 font-imperial text-sm">Chapitre I : Un banquet mortel</h3>
+          <p>
+            Toute la clique se retrouve, soit les seize finalistes du tournoi de Topaze. Certains sympathique, d'autres aussi aimable qu'une descente de lit. Le Scorpion par exemple, il a triché tout le long, tout le temps dans les mauvais coups, et pourtant il reste invité. Je ne comprendrai jamais l'Empire a vouloir continuer de faire confiance aux Scorpion, sachant qu'ils les ont trahi plus de fois qu'un contrôleur des impôts sur le riz. Le mystère n'a pas subsisté très longtemps ; quand je vois que ce sont des Grue qui organisent le banquet, je remarque que leur faiblesse n'est pas juste dans leur muscles, mais aussi dans leur siamoises.
+          </p>
+          <p>
+            J'arrive au château de Kyoteï avec Okado-kun où Retsu TSUME est notre hôte pour le festival des morts. Sur le chemin, j'ai entendu des histoires agréables à son sujet, comme sa poigne de fer ou bien des histoires de guerres sanglantes datant d'il y a vingts ans entre le clan Grue, Phoenix et Lion. Retsu TSUME remporta la victoire et récupéra en guise de récompense le château de Kyoteï.
+          </p>
+          <p>
+            Nous voilà donc au festival des morts. Je ne suis pas très à l'aise avec toutes ses festivités autour d'un sujet aussi macabre. Je ne connais rien à leurs coutumes, mais c'est dans ces moments que l'on remarque qu'ils ont oublié ce qu'il se passe derrière le mur. Mes frères meurent chaque jour de la main des onis.
+          </p>
+          <p>
+            Nous passons au banquet. À côté de moi Okado HIRUMA, mon compagnon de voyage et avant tout Crabe, Ryu ISAWA un Phoenix qui manie les mots mieux que les armes, et presque aussi bien que sa magie. Un peu plus loin Akira TSURUCHI, un du clan de la Licorne, habile à l'arc mais faible dans tout le reste, et Mansaru MIRUMOTO un gars silencieux du clan du Dragon. Sur la table principale, je reconnais notre hôte Retsu TSUME, je devine son fils qui se nomme Takashi et à côté qui se pavane Suthoku KAKITA : le champion de Topaze.
+          </p>
+          <p>
+            Au cours de la soirée, Ryu et Akira remarque que Retsu et son fils se dispute et que le père tranche le dialogue par un non clair et précis.
+          </p>
+          <p>
+            – Takashi est plus intéressé par la calligraphie et l'art que la guerre, ce qui l'éloigne beaucoup de son père, nous partage Ryu.
+          </p>
+          <p>
+            On peut aussi apercevoir les trois ambassadeurs Lion, Phoenix et Grue. La politique m'intéresse autant que le nom du cleps à Okado, donc je ne m'éterniserais pas dessus.
+          </p>
+          <p>
+            Nous partons nous coucher au château, dans le quartier des invités.
+          </p>
+        </div>
+
+        <!-- CHAPITRE II -->
+        <div class="space-y-3 border-t border-stone-800 pt-4">
+          <h3 class="font-bold text-amber-300 font-imperial text-sm">Chapitre II : Une promenade dans les jardins</h3>
+          <p>
+            J'ai dormi comme un loir, mais mon réveil reste un peu gâché par les cris des servantes.
+          </p>
+          <p>– Retsu-sama est mort ! S'écrit l'une d'elles.</p>
+          <p>
+            Il fallait s'en douter. Une homme avec autant de pouvoir possède de nombreux ennemis, et sa position au sein de son clan ne lui en ramène que beaucoup plus.
+          </p>
+          <p>
+            On se retrouve tous dans le couloir et on part direction des jardins, seul point d'accès vers la tour du donjon où se situe la chambre du roi.
+          </p>
+          <p>
+            La chance ne nous souris pas, un mur de garde est posté à l'entrée du donjon.
+          </p>
+          <p>
+            Déjà qu'il ne sert pas à grand-chose, il aurait au moins pu nous servir à entrer et commencer à investiguer. Personne ne semble l'avoir vu aujourd'hui. Bizarre, mais je m'en fout.
+          </p>
+          <p>– Allons vers la ville, je leur propose. Suthoku est certainement dans un salon de geïcha.</p>
+          <p>
+            Je vous le donne en mille, la porte du jardin qui mène à la ville est gardé par des gardes.
+          </p>
+          <p>– Nous souhaitons nous rendre en ville.</p>
+          <p>– Impossible répond le garde, personne n'est autorisé à sortir tant que le meurtrier n'a pas été découvert.</p>
+          <p>Le garde nous entend parler de Suthoku et nous donne l'information suivante :</p>
+          <p>– Le champion de Topaze et le champion d'Émeraude sont partit hier soir après le banquet.</p>
+          <p>
+            Merde… Notre laissez-passer vient de se tirer. Je vous avoue que je n'ai pas grand-chose à faire de Retsu, mais mon honneur m'oblige à rendre justice.
+          </p>
+          <p>
+            – Il est toujours dans les mauvais coup Satsume DOJI… Dit Ryu d'un air pensif. Pour ceux qui se demande, Satsume DOJI est le champion d'Émeraude.
+          </p>
+          <p>
+            On croise Sugaï, le Scorpion dont je vous narrais les exploit tout à l'heure, et si vous avez plus de mémoire qu'un pot de chambre, vous vous souviendrez que c'est un salaud fini.
+          </p>
+          <p>
+            Plus rien ne nous retiens, nous partons chercher des indices dans le quartier des invités. A l'instant où nous arrivons, un messager nous tend une lettre. Celle-ci nous demande de nous rendre aux appartements de l'Ambassadeur Phoenix. Je sens que ça va nous retomber dessus…
+          </p>
+          <p>
+            Nous arrivons chez l'Ambassadeur. A se moment quatre samouraïs comme nous sortent de la pièce.
+          </p>
+          <p>– Bonjour samouraïs, nous dit l'ambassadeur.</p>
+          <p>Il salue Ryu, du clan du Phoenix comme lui, Akira, Okado et moi pour terminer.</p>
+          <p>– Vous avez entendu parler de la tragédie de cette nuit, n'est-ce pas ?</p>
+          <p>Nous acquiesçons.</p>
+          <p>– J'aimerais vous mandater pour enquêter sur la mort de Retsu-sama.</p>
+          <p>
+            Il nous tend une lettre qu'il signe et pose son sceau. Ce document fait de nous des magistrat Phoenix. Il se lève, ce qui est sa façon de nous dire qu'il nous a assez vu. Nous sortons.
+          </p>
+          <p>– Il est étrange que ce soit le clan Phoenix qui nous demande d'enquêter, non ? Akira soulève cette question ?</p>
+          <p>Que l'on soit manipulé ou non, l'important est que nous pouvons entrer dans le donjon.</p>
+        </div>
+
+        <!-- CHAPITRE III -->
+        <div class="space-y-3 border-t border-stone-800 pt-4">
+          <h3 class="font-bold text-amber-300 font-imperial text-sm">Chapitre III : Une tache de vin sur le sol</h3>
+          <p>
+            Nous présentons le laissez-passer, les gardes s'écartent. Une fois arrivé devant la chambre de Retsu, le Général Shizuma NASU nous attends.
+          </p>
+          <p>– Bonjour, je vous attendais, dit-il.</p>
+          <p>– Bonjour General-sama, commençai-je. Nous avons été mandaté par l'ambassadeur Phoenix en tant que magistrat pour enquêter sur la mort du Daimyo.</p>
+          <p>– Oui, c'est horrible. Nous l'avons retrouver mort face contre le sol avec une dague plantée en plein cœur.</p>
+          <p>– Il n'était pas dans son lit ?</p>
+          <p>– Non, il a du se lever et être surpris par son agresseur.</p>
+          <p>– N'y avait-il pas des gardes à la porte ?</p>
+          <p>
+            – Si, deux. Mais ils n'ont rien entendu. Cela est surprenant car Retsu-sama tenait à ce que son plancher craque. Grâce à cela, les gardes pouvait connaître les déplacements dans la chambre.
+          </p>
+          <p>
+            Pour être étrange, c'est étrange. Le vieux qui se retrouve planté dans sa chambre pourrait ressembler à un suicide si vous étiez un abruti fini, mais le fait de n'avoir rien entendu peut supposer deux choses. Soit il s'agit d'un ninja, soit les gardes mentent… Ce seraient-ils assoupi ?
+          </p>
+          <p>– Le râtelier est vide, y avait-il une arme avant le meurtre ?</p>
+          <p>– Oui il y en avait une. Mais elle a été transmise à son fils ce matin même, il a hérité du statut de Daimyo.</p>
+          <p>
+            Nous commençons à fouiller la chambre. Okado se dirige vers la fenêtre, mais il est certain qu'il n'y a aucune trace d'effraction. Je cherche de la fenêtre vers le lit mais rien non plus… Par contre, dans le coin de la pièce, j'aperçois une petite perle. Ryu et Akira sont d'accord, il s'agit d'une perle venant d'une ceinture appartenant au clan Lion.
+          </p>
+          <p>– Mais qu'est-ce que les Lions ont à voir dans cette affaire ? Se demande Akira.</p>
+          <p>– Il s'agit peut-être d'un indice laissé exprès, ajoute Ryu.</p>
+          <p>– Franchement, je ne pense pas. Vu comment c'était caché, autant la mettre un peu plus en évidence, dis-je.</p>
+          <p>
+            Pour avoir plus de réponse, Ryu invoque un Kami de l'air. Il a le droit à deux questions. Le magicien Phoenix réfléchi un peu, et soumet sa première question.
+          </p>
+          <p>– Y'a-t-il eu l'utilisation de la magie dans cette chambre, cette nuit ?</p>
+          <p>Il ressent que la réponse est non.</p>
+          <p>
+            – Je me souviens que le kami de l'air est connu pour être sensible aux sensations, commença Ryu. Pouvez-vous me faire ressentir la mort de Retsu-sama ?
+          </p>
+          <p>
+            Nous ressentons le vent plat, lorsqu'une bourrasque vient du haut vers le bas, et enfin le vent redevient plat.
+          </p>
+          <p>
+            Mouais, c'est pas très utile cette dernière question, mais la première nous apprend quand même qu'il s'agit très probablement d'un ninja du clan du Lion. Il est possible qu'un clan est demandé de faire cette assassinat, mais ce n'est pas une logique Lion. Normalement, ils sont moins sournois.
+          </p>
+          <p>
+            Ryu utilise une fois de plus sa magie. Je ne suis pas très fan de se type de pratique, mais c'est assez utile dans notre cas. D'ailleurs, il nous partage le fait qu'il vient de lancer un sort de détection des passages secrets, mais infructueux.
+          </p>
+          <p>– Ah non, s'exclame-t-il. Il regarde au plafond. Une trappe !</p>
+          <p>
+            Effectivement, une trappe est bien dissimulée au plafond proche du lit. Je la soulève et passe la tête. Je ne vois pas grand-chose, mise à part que des traces dans la poussière mène à une chambre annexe : celle de Takashi TSUME.
+          </p>
+          <p>
+            Nous nous séparons en deux groupes : Ryu et Akira vont parler aux gardes, Okado et moi allons examiner le corps de Retsu d'un peu plus près.
+          </p>
+        </div>
+
+        <!-- CHAPITRE IV -->
+        <div class="space-y-3 border-t border-stone-800 pt-4">
+          <h3 class="font-bold text-amber-300 font-imperial text-sm">Chapitre IV : Beaucoup d'ennemis</h3>
+          <p>
+            Un serviteur nous accompagne vers le mort. J'essaie de relever le drap mais on m'y empêche car seul le serviteur peut le faire. Le problème, c'est que la mort à l'aide de le déranger. Bref, on ne choisit pas son métier, et quand on choisit de servir c'est que d'une certaine façon on est un peu bon à rien.
+          </p>
+          <p>
+            En examinant le corps, je ne remarque aucune trace de lutte ou de strangulation. Une dague banale est posée à côté du corps inerte. Dommage, pas d'indice cette fois-ci. J'essaie d'entamer la discussion avec le serviteur, pour le prendre par les sentiments. Ryu m'a inspiré tout à l'heure.
+          </p>
+          <p>– Ça a dû être dur de perdre Retsu-sama, lui dis-je d'un ton compatissant.</p>
+          <p>– Euh oui.</p>
+          <p>– Est-ce qu'il avait des ennemis ?</p>
+          <p>– Je ne sais pas trop…</p>
+          <p>Okado s'impatiente :</p>
+          <p>– Si vous savez des choses que vous refusez de nous partager vous pouvez être un complice.</p>
+          <p>– Non non ! Pas du tout, je vous promets je ne sais rien.</p>
+          <p>Il continue de s'acharner sur cette loque, qu'il finit par pleurer de nous avouer un indice :</p>
+          <p>– J'ai entendu parler d'une dispute le soir du meurtre, snif, snif, c'est la servante de Retsu qui m'en a parlé. Elle sait des choses…</p>
+          <p>
+            Comme quoi, rien ne vaut les sentiments. Surtout quand on les fait pleurer comme des fillettes.
+          </p>
+          <p>
+            Lorsque nous retouvons Akira et Ryu, ils nous disent que les gardes refusent d'avouer qu'il y a bien eu de la compagnie chez Takashi le soir du meurtre. Ils sont certains qu'ils ont menti. Peut-être essaient-ils de protéger leur maître ?
+          </p>
+          <p>
+            On retourne voir Truki, c'est le nom de la servante. Elle s'assure que personne n'écoute notre conversation et nous avoue qu'il y a eu une altercation entre l'ambassadeur Grue et Retsu. Elle a très peur du général, mais elle nous conseille d'aller jeter un coup d'oeil au salon de Geïcha.
+          </p>
+          <p>
+            Dans le premier bordel, il s'agit du salon préféré de Retsu-sama. Maintenant, il y ira beaucoup moins. En longeant les façades, on entend parler d'un autre salon, celui des Pins. Il est tenu par le clan des Scorpions.
+          </p>
+          <p>
+            Nous nous installons dans le salon et demandons de voir la geïcha préférée du fils à Retsu. On nous annonce qu'elle n'est pas là pour le moment. Mince alors… Du coup, je prends rendez-vous à 16h avec elle. On nous apprend aussi qu'elle se trouve certainement chez son amoureux, un certain Ito, qui est un héros pour les villageois.
+          </p>
+          <p>
+            En allant vers la cabane d'Ito, nous le croisons justement. Quand on lui parle de la geïcha, il sait qu'elle l'aime mais lui semble assez détaché.
+          </p>
+          <p>– Je ne l'ai pas vu depuis hier soir, nous répond-il. Je vais aller boire un coup, vous voulez venir ?</p>
+          <p>
+            On réfléchit un peu, mais on décide quand même d'aller fouiller sa cabane. Qui sait, on pourrait trouver quelque chose d'intéressant !
+          </p>
+          <p>
+            La cabane est en bois, un peu à l'extérieur de la ville. Personne n'est à l'intérieur, alors on entre. Le gredin a bien caché son jeu, on retrouve près du lit une ceinture. Il manque à celle-ci une perle, exactement celle qu'on a retrouvée dans la chambre de Retsu-sama.
+          </p>
+          <p>
+            Cette histoire commence un peu à me fatiguer. Il est temps d'arrêter de se faire avoir, et reprendre en main cette enquête. Nous hésitons à nous séparer pour aller chercher Ito, car c'est un suspect parfait. La voix du groupe l'emporte, nous n'allons pas poursuivre Ito à la taverne mais plutôt retourner voir l'ambassadeur Phoenix.
+          </p>
+        </div>
+
+        <!-- CHAPITRE V -->
+        <div class="space-y-3 border-t border-stone-800 pt-4">
+          <h3 class="font-bold text-amber-300 font-imperial text-sm">Chapitre V : Carte Blanche</h3>
+          <p>
+            Il se passe deux, trois histoires et enfin on retrouve le jeune roi. On lui raconte tout ce que l'on sait. D'abord avec des pincettes… et puis je m'emporte.
+          </p>
+          <p>– Rikka a tué votre père ! Même si vous l'aimez il faut absolument l'arrêter !</p>
+          <p>
+            C'est alors qu'il nous avoue tout. Oui, elle était bien dans sa chambre la nuit du meurtre. Malheureusement il ne se souvient de rien, il s'est endormi très rapidement… Trop rapidement. Du somnifère, la garce. Il se rend à l'évidence et nous donne carte blanche pour arrêter Ito et Rikka.
+          </p>
+          <p>
+            Pour se changer on fait une petite chasse à court. Je ne vais pas m'étendre là-dessus, car je n'ai pas spécialement brillé. Et quand je ne brille pas, ce n'est pas intéressant.
+          </p>
+          <p>Par contre, je peux vous raconter le dénouement !</p>
+          <p>
+            Direction la taverne. Il fait nuit et l'accueil n'est pas très sympathique. Personne ne tient à nous aider. Le couard se cache peut-être chez lui.
+          </p>
+          <p>
+            En approchant près de sa cabane, une lumière à la fenêtre nous indique la présence d'au moins une personne. On le tient !
+          </p>
+          <p>
+            J'aperçois Akira qui espère entrer sans se faire repérer. Moi, je ne veux pas lui courir après, alors je défonce la porte.
+          </p>
+          <div class="text-amber-300 font-bold font-imperial text-sm">BLAM !</div>
+          <p>
+            Une femme est en train de préparer le thé, et cette femme est Rikka. Elle est surprise de nous, et elle essaie de nous parler. Personnellement, je ne tiens pas à me faire enfumer alors je la choppe direct. Je crois qu'elle veut nous faire une cérémonie du thé et nous expliquer sa vie, mais je n'oublie pas qu'elle est sournoise et a déjà tué le roi.
+          </p>
+          <p>
+            Sauf que dehors, Ito nous attend. Et il n'est pas seul, quelques villageois sont bien armés avec lui. Ito nous raconte leur histoire : Enfant, leur clan Lion s'est fait attaquer par Retsu, seuls Ito et Rikka ont survécu et ont passé ces dernières décennies à élaborer un plan pour se venger.
+          </p>
+          <p>
+            Ito décide de nous tuer, alors Ryu commence à attaquer en calcinant Ito. Pour le terminer, je fonce sur lui et je lui défonce le crâne avec mon Tetsubo. Malgré le fait que Rikka a réussi à rejoindre le combat en nous faisant face, nous allons nous faire un plaisir de la capturer vivante.
+          </p>
+          <p>Malheureusement, elle se tranche la gorge à la fin du combat.</p>
+          <p>
+            Le roi est heureux que nous ayons rendu justice à son père. Vous remarquerez peut-être la différence de discours dans ce texte, mais lors de la fouille de la chambre du fils à Retsu, j'ai perdu mon crayon. Je ne l'ai retrouvé que trois mois plus tard. Dommage.
+          </p>
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- LIENS DE BAS DE PAGE VERS WORDPRESS & ACTE 3 -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/2015/11/03/scenario-2-meurtre-au-chateau-de-kyotei-par-okado-hiruma/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur WordPress (3 nov. 2015) ↗
+      </a>
+      <a href="scenario-3.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 3 : Le dernier voyage →
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 2 : Meurtre au Château de Kyoteï
+  </footer>
+
+  <!-- SCRIPT DU SWITCHER D'ONGLETS & DU LECTEUR VOCAL NARRATEUR -->
+  <script>
+    let activeVersion = 'v1';
+
+    function switchVersion(ver) {
+      stopAudio();
+      activeVersion = ver;
+
+      // Masquer tous les blocs
+      document.querySelectorAll('.version-block').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      // Afficher le bloc actif
+      const targetContent = document.getElementById(`content-${ver}`);
+      const targetTab = document.getElementById(`tab-${ver}`);
+      if (targetContent) targetContent.classList.remove('hidden');
+      if (targetTab) targetTab.classList.add('active');
+
+      const names = {
+        v1: "Okado Hiruma (Clan du Crabe)",
+        v2: "Tsuruchi Akira (Enquête détaillée)",
+        v3: "Hida Samui (5 Chapitres)"
+      };
+      document.getElementById('audio-detail').textContent = `Chronique active : ${names[ver]}`;
+    }
+
+    // GESTION DU LECTEUR AUDIO SYNTHÉTISEUR
+    const synth = window.speechSynthesis;
+    let utterance = null;
+    let isPlaying = false;
+
+    const btnPlay = document.getElementById('btn-play');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const statusEl = document.getElementById('audio-status');
+    const rateEl = document.getElementById('audio-rate');
+
+    function playAudio() {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+
+      if (synth.paused && isPlaying) {
+        synth.resume();
+        statusEl.textContent = "Lecture en cours...";
+        return;
+      }
+
+      synth.cancel();
+
+      const title = document.getElementById('story-title').textContent.trim();
+      const activeContainer = document.getElementById(`content-${activeVersion}`);
+      const contentText = activeContainer ? activeContainer.innerText.trim() : "";
+      const fullSpeechText = `${title}. ${contentText}`;
+
+      utterance = new SpeechSynthesisUtterance(fullSpeechText);
+      utterance.lang = 'fr-FR';
+      utterance.rate = parseFloat(rateEl.value);
+
+      const voices = synth.getVoices();
+      const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
+      if (frVoice) utterance.voice = frVoice;
+
+      utterance.onstart = () => {
+        isPlaying = true;
+        statusEl.textContent = "Lecture vocale en cours...";
+        btnPlay.classList.add('bg-amber-500');
+      };
+
+      utterance.onend = () => {
+        isPlaying = false;
+        statusEl.textContent = "Lecture terminée";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      utterance.onerror = () => {
+        isPlaying = false;
+        statusEl.textContent = "Erreur ou interruption";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      synth.speak(utterance);
+    }
+
+    function pauseAudio() {
+      if (synth.speaking && !synth.paused) {
+        synth.pause();
+        statusEl.textContent = "Lecture en pause";
+      }
+    }
+
+    function stopAudio() {
+      if (synth.speaking) {
+        synth.cancel();
+      }
+      isPlaying = false;
+      statusEl.textContent = "Voix Narrative Prête";
+      btnPlay.classList.remove('bg-amber-500');
+    }
+
+    btnPlay.addEventListener('click', playAudio);
+    btnPause.addEventListener('click', pauseAudio);
+    btnStop.addEventListener('click', stopAudio);
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {};
+    }
+  </script>
+
+</body>
+</html>
