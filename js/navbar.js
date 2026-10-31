@@ -23,7 +23,7 @@ const NAV_CONFIG = {
       label: "Campagne",
       icon: "巻",
       children: [
-        { label: "📜 Les 10 Épisodes Joués", url: "campagne.html" },
+        { label: "📜 La campagne", url: "campagne.html" },
         { label: "➕ Déposer un Scénario (Upload)", url: "campagne-ajouter.html" },
         { label: "⚙️ Administration CMS", url: "admin/index.html" }
       ]
