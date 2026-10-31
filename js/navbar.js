@@ -18,6 +18,16 @@ const NAV_CONFIG = {
       label: "Accueil",
       url: "index.html"
     },
+    // NOUVELLE ENTRÉE : CAMPAGNE (HUB, SCÉNARIOS & CRÉATEUR)
+    {
+      label: "Campagne",
+      icon: "巻",
+      children: [
+        { label: "📜 Les 10 Épisodes Joués", url: "campagne.html" },
+        { label: "➕ Déposer un Scénario (Upload)", url: "campagne-ajouter.html" },
+        { label: "⚙️ Administration CMS", url: "admin/index.html" }
+      ]
+    },
     {
       label: "Outils",
       icon: "⚙️",
@@ -72,7 +82,8 @@ const NAV_CONFIG = {
       return targetUrl;
     }
     const path = window.location.pathname;
-    const isSubfolder = path.includes("/aides/") || path.includes("/clans/") || (path.split("/").length > 3 && !path.endsWith("/L5R/"));
+    // Reconnaissance automatique des sous-dossiers (aides/, clans/ et campagne/)
+    const isSubfolder = path.includes("/aides/") || path.includes("/clans/") || path.includes("/campagne/") || (path.split("/").length > 3 && !path.endsWith("/L5R/"));
     return isSubfolder ? `../${targetUrl}` : targetUrl;
   }
 
@@ -80,14 +91,12 @@ const NAV_CONFIG = {
     const header = document.getElementById("site-header");
     if (!header) return;
 
-    // Fixer l'en-tête de manière absolue au défilement (insensible au flexbox du body)
     header.style.position = "fixed";
     header.style.top = "0";
     header.style.left = "0";
     header.style.right = "0";
     header.style.zIndex = "1000";
 
-    // Ajouter automatiquement un dégagement sur le body pour que le haut de page ne soit pas tronqué
     document.body.style.paddingTop = "54px";
 
     let navHtml = `
@@ -122,7 +131,6 @@ const NAV_CONFIG = {
               <span class="text-[8px] text-stone-500 transition-transform duration-200 arrow-icon">▼</span>
             </button>
             
-            <!-- Menu déroulant totalement opaque avec pont de survol -->
             <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-1.5 w-60 z-50">
               <div class="rounded-xl bg-[#120d0d] border border-amber-500/40 shadow-2xl py-1.5 overflow-hidden">
                 ${item.children.map(sub => {
@@ -179,9 +187,6 @@ const NAV_CONFIG = {
     attachMenuEvents();
   }
 
-  // =============================================================================
-  // 3. LOGIQUE D'OUVERTURE AVEC TAMPON DE DÉLAI
-  // =============================================================================
   function attachMenuEvents() {
     const dropdownWrappers = document.querySelectorAll(".nav-dropdown-wrapper");
 
