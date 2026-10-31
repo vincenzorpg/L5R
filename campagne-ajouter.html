@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Déposer un Scénario — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1e1008 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <header id="site-header"></header>
+
+  <main class="max-w-4xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <div class="border-b border-amber-500/20 pb-3 flex justify-between items-baseline">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold font-imperial gold-gradient">Téléverser & Forger une Page Scénario</h1>
+        <p class="text-xs text-stone-400">Déposez un fichier texte ou rédigez votre séance pour générer la page HTML avec lecteur vocal.</p>
+      </div>
+      <a href="campagne.html" class="text-xs text-amber-400 hover:text-amber-300 font-imperial">← Retour aux Actes</a>
+    </div>
+
+    <!-- ZONE DE DÉPÔT / GLISSER-DÉPOSER -->
+    <div id="drop-zone" class="border-2 border-dashed border-amber-500/40 hover:border-amber-400 rounded-2xl p-8 text-center cursor-pointer transition bg-black/40 space-y-2">
+      <div class="text-4xl text-amber-400">📥</div>
+      <div class="text-sm font-bold font-imperial text-amber-200">Glissez-déposez ici votre document de session</div>
+      <div class="text-xs text-stone-400">Prend en charge les fichiers texte brut (.txt, .md, .doc exporté)</div>
+      <input type="file" id="file-input" accept=".txt,.md" class="hidden">
+    </div>
+
+    <!-- FORMULAIRE DE PERSONNALISATION -->
+    <section class="card-clean rounded-xl p-6 space-y-4 text-xs">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-amber-300 font-bold mb-1">Numéro d'Acte</label>
+          <input type="number" id="sc-num" value="11" class="w-full p-2 rounded bg-black/60 border border-stone-800 text-stone-200">
+        </div>
+        <div>
+          <label class="block text-amber-300 font-bold mb-1">Date de la Séance</label>
+          <input type="text" id="sc-date" value="Session 11" class="w-full p-2 rounded bg-black/60 border border-stone-800 text-stone-200">
+        </div>
+        <div>
+          <label class="block text-amber-300 font-bold mb-1">Lieu / Province</label>
+          <input type="text" id="sc-place" value="Terres du Lion" class="w-full p-2 rounded bg-black/60 border border-stone-800 text-stone-200">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-amber-300 font-bold mb-1">Titre du Scénario</label>
+        <input type="text" id="sc-title" placeholder="Ex: L'Éveil de l'Ombre sur la Plaine" class="w-full p-2.5 rounded bg-black/60 border border-stone-800 text-stone-200 text-sm font-imperial">
+      </div>
+
+      <div>
+        <label class="block text-amber-300 font-bold mb-1">Résumé court d'accroche</label>
+        <textarea id="sc-summary" rows="2" placeholder="Résumé introductif lu avant le corps du texte..." class="w-full p-2.5 rounded bg-black/60 border border-stone-800 text-stone-200"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-amber-300 font-bold mb-1">Corps du récit de la session</label>
+        <textarea id="sc-body" rows="8" placeholder="Collez ou déposez votre texte ici..." class="w-full p-2.5 rounded bg-black/60 border border-stone-800 text-stone-200 leading-relaxed font-serif"></textarea>
+      </div>
+
+      <!-- BOUTONS D'EXPORTATION -->
+      <div class="pt-2 flex flex-wrap gap-3 justify-end">
+        <button type="button" onclick="testAudio()" class="px-4 py-2 rounded bg-stone-900 border border-amber-500/40 hover:border-amber-300 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition">
+          <span>🔊</span> Tester la lecture audio
+        </button>
+        <button type="button" onclick="generateAndDownloadHTML()" class="px-5 py-2.5 rounded bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition shadow flex items-center gap-2">
+          <span>💾</span> Télécharger la Page HTML (Prête pour /campagne/)
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Générateur de Page
+  </footer>
+
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    dropZone.onclick = () => fileInput.click();
+
+    dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-amber-400'); };
+    dropZone.ondragleave = () => dropZone.classList.remove('border-amber-400');
+    dropZone.ondrop = (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-amber-400');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    };
+
+    fileInput.onchange = (e) => {
+      if (e.target.files.length) handleFile(e.target.files[0]);
+    };
+
+    function handleFile(file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target.result;
+        const cleanName = file.name.replace(/\.[^/.]+$/, "");
+        document.getElementById('sc-title').value = cleanName;
+        document.getElementById('sc-body').value = text;
+        document.getElementById('sc-summary').value = text.substring(0, 160) + "...";
+      };
+      reader.readAsText(file);
+    }
+
+    function testAudio() {
+      const title = document.getElementById('sc-title').value || "Scénario";
+      const summary = document.getElementById('sc-summary').value;
+      const body = document.getElementById('sc-body').value;
+      const speech = `${title}. ${summary}. ${body.substring(0, 300)}`;
+
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(speech);
+      u.lang = 'fr-FR';
+      window.speechSynthesis.speak(u);
+    }
+
+    function generateAndDownloadHTML() {
+      const num = document.getElementById('sc-num').value;
+      const date = document.getElementById('sc-date').value;
+      const place = document.getElementById('sc-place').value;
+      const title = document.getElementById('sc-title').value || `Acte ${num}`;
+      const summary = document.getElementById('sc-summary').value;
+      const body = document.getElementById('sc-body').value;
+
+      const formattedParagraphs = body.split("\n\n").map(p => `<p class="mb-4">${p.trim()}</p>`).join("");
+
+      const htmlContent = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acte ${num} : ${title} — L5R | MJ David</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="../js/navbar.js" defer><\/script>
+  <style>
+    body { background-color: #0a0808; background-image: radial-gradient(circle at 50% 10%, #1c0e07 0%, #0a0808 85%); color: #e5dec9; font-family: 'Noto Serif JP', serif; }
+    h1, h2, h3, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean { background: rgba(18, 14, 14, 0.94); border: 1px solid rgba(212, 175, 55, 0.25); }
+    .gold-gradient { background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+  <header id="site-header"></header>
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 font-imperial font-bold">← Retour aux Actes</a>
+      <span class="text-amber-300 font-mono">Acte ${num}</span>
+    </div>
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-2">
+      <div class="text-[10px] text-amber-300 font-mono">ACTE ${num} • ${date} • ${place}</div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">${title}</h1>
+      <p class="text-xs md:text-sm text-amber-100/80 italic" id="story-summary">« ${summary} »</p>
+    </header>
+    <section class="card-clean rounded-xl p-4 flex items-center justify-between gap-4 sticky top-16 z-30 bg-black/90 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="text-xl">🔊</span>
+        <span class="text-xs font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</span>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="readText()" class="px-3.5 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs">▶ Lire</button>
+        <button onclick="window.speechSynthesis.pause()" class="px-3 py-1.5 rounded bg-stone-900 border border-stone-800 text-xs text-amber-300">⏸ Pause</button>
+        <button onclick="window.speechSynthesis.cancel()" class="px-3 py-1.5 rounded bg-stone-900 border border-stone-800 text-xs text-stone-300">⏹ Arrêt</button>
+      </div>
+    </section>
+    <article class="card-clean rounded-2xl p-6 md:p-10 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+      ${formattedParagraphs}
+    </article>
+  </main>
+  <script>
+    function readText() {
+      if (window.speechSynthesis.paused) { window.speechSynthesis.resume(); return; }
+      window.speechSynthesis.cancel();
+      const txt = document.getElementById('story-title').innerText + ". " + document.getElementById('story-summary').innerText + ". " + document.getElementById('story-content').innerText;
+      const u = new SpeechSynthesisUtterance(txt);
+      u.lang = 'fr-FR';
+      window.speechSynthesis.speak(u);
+    }
+  <\/script>
+</body>
+</html>`;
+
+      const blob = new Blob([htmlContent], { type: "text/html" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `scenario-${num}.html`;
+      a.click();
+    }
+  </script>
+</body>
+</html>
