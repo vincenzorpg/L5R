@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 3 : Le dernier voyage — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1e1108 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tab-btn.active {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: rgba(212, 175, 55, 0.8);
+      color: #f5e096;
+    }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .scene-figure:hover img {
+      transform: scale(1.015);
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-2.html" class="text-amber-400 hover:text-amber-200">◄ Acte 2 : Meurtre au Château de Kyoteï</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 03 / 10</span>
+        <a href="scenario-4.html" class="text-amber-400 hover:text-amber-200">Acte 4 : Aux côtés de mes frères morts ►</a>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE 3 • EXPÉDITION EN TERRES LICORNE
+        </span>
+        <span class="text-xs text-stone-400">Lieux : Kyuden Shinjo & Terres Brûlées • Chroniques de Ryûmitaka Isawa & Tsuruchi Akira</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 3 : Le dernier voyage
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
+      </p>
+      <div class="pt-2 flex flex-wrap gap-2 text-[10px] font-mono">
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#XianLeDestrier</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#ShinjoShimura</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Megumi</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Kolat</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#IkkoLÉta</span>
+      </div>
+    </header>
+
+    <!-- SÉLECTEUR DE VERSION -->
+    <div class="card-clean rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 border-amber-500/30">
+      <div class="text-xs font-imperial text-amber-300 font-bold px-2">Point de vue du Chroniqueur :</div>
+      <div class="flex flex-wrap gap-1.5" id="tab-container">
+        <button onclick="switchVersion('v1')" id="tab-v1" class="tab-btn active px-3 py-1.5 rounded-lg border border-stone-800 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🔥</span> Version 1 : Ryûmitaka Isawa
+        </button>
+        <button onclick="switchVersion('v2')" id="tab-v2" class="tab-btn px-3 py-1.5 rounded-lg border border-stone-800 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🏹</span> Version 2 : Tsuruchi Akira (Récit complet)
+        </button>
+      </div>
+    </div>
+
+    <!-- MODULE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
+          🔊
+        </span>
+        <div>
+          <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">
+            Voix Narrative Prête
+          </div>
+          <div class="text-[10px] text-stone-400" id="audio-detail">
+            Chronique active : Ryûmitaka Isawa (Trafic à Shinjo Kyuden)
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+          <span>▶</span> Écouter
+        </button>
+        <button id="btn-pause" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
+          ⏸ Pause
+        </button>
+        <button id="btn-stop" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">
+          ⏹ Arrêt
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs text-stone-400">
+        <span>Vitesse :</span>
+        <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+          <option value="0.9">0.9x (Posé)</option>
+          <option value="1.0" selected>1.0x (Standard)</option>
+          <option value="1.15">1.15x (Rythmé)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- ZONE DE LECTURE DU CONTENU -->
+    <article class="card-clean rounded-xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+      
+      <!-- =====================================================================
+           VERSION 1 : RYÛMITAKA ISAWA
+           ===================================================================== -->
+      <div id="content-v1" class="version-block space-y-4">
+        <div class="border-b border-amber-500/20 pb-3">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-emerald-300 flex items-center gap-2">
+            <span>🔥</span> Trafic à Shinjo Kyuden, une aventure épique et hippique
+          </h2>
+          <span class="text-[11px] text-stone-500">Par Ryûmitaka Isawa • Publié le 29 novembre 2015</span>
+        </div>
+
+        <p>
+          Une fois de plus la Grue championne des travaux finis Doji Satsume, nous confie une mission des plus importantes (tellement importante qu'on la confie à des Jeunes Samouraïs!).
+        </p>
+
+        <!-- ILLUSTRATION 1 : XIAN ET OKADO -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Voyage-1.jpg" alt="Xian le destrier et Okado" />
+          <figcaption class="scene-caption">
+            La rencontre avec Xian — Okado gagne la confiance du légendaire destrier de Shinjo Shimura.
+          </figcaption>
+        </figure>
+
+        <p>
+          Je n'écoutais que d'une oreille, mais j'ai compris qu'il s'agissait de parvenir à apprivoiser un cheval du nom de Xian. Ce nom m'a tout de suite interpellé, il y a très peu de monture aussi fidèle et renommée dans toutes l'histoire de Rokugan.
+        </p>
+
+        <p>
+          Okado Iruma qui « sait y faire avec les bêtes », compris alors que le cheval nous entraînerait sur la piste de son maître disparu, Shimura Shinjo, afin de parachever sa quête.
+        </p>
+
+        <p>
+          Nous avons croisé de nouveau Megumi, la fortune de la conduite heroïque, qui nous mit en garde sur un choix futur auquel on devra faire face : suivre la loi des hommes ou suivre son cœur.
+        </p>
+
+        <p>
+          Le long périple de sire canasson nous mena à Kyuden Shinjo, ville des terres de la Licorne. Rapidement nous obtenons des renseignement du Karro (chef de la sécurité), ainsi que des admirateurs de Shimura-sama ; ce dernier aurait entrepris de démanteler une organisation secrète, spécialisée dans la vente d'objets illégalement acquis dans les terres brûlées.
+        </p>
+
+        <p>
+          Notre enquête nous amena donc à soupçonner les marchands de la ville, en particulier le plus prospère d'entre eux Ide Yujo. Dans notre recherche d'informations un voleur nous subtilisa l'or en notre possession, et voyant que l'entraînement des bushis ne suffisait pas à rattraper un va-nu-pied, je pris sur moi donc, de rattraper ce malandrin. Plutôt que de l'éliminer séance tenante, on décide de se servir de lui pour s'offrir un accès au réseau de contrebande.
+        </p>
+
+        <p>
+          Finalement en contact avec un marchand de l'organisation, nous ne parvenons pas à lui soutirer davantage d'informations sur la taille, les membres de leur groupe. C'est alors que nous repérons qu'une personne suspecte nous suit. Okado-san parvint à rattraper cet individu qui se révéla être une eta du nom de Ikko. En revanche bien qu'issu de faible naissance, chacun d'entre nous, ressentit à quel point cet être dégageait de la bienveillance.
+        </p>
+
+        <!-- ILLUSTRATION 2 : LE JARDIN ZEN D'IKKO -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Voyage-2.jpg" alt="Le jardin zen de Ikko" />
+          <figcaption class="scene-caption">
+            Le sanctuaire secret — La retraite zen d'Ikko dans les montagnes sauvages de la Licorne.
+          </figcaption>
+        </figure>
+
+        <p>
+          Son état de plénitude et d'éveil, eu la fâcheuse conséquence de la faire exclure des siens, mais nous avons réussi à la retrouver dans les montagnes, où elle s'était retiré, et où elle avait établi un jardin zen, dont la perfection n'avait d'égal que sa propre beauté.
+        </p>
+
+        <p>
+          Après une discussion avec l'être parfait, nous comprîmes que l'heure du choix de Megumi était venu. Épargner ou non cette eta qui n'avait pas porté secours à Shimura-sama quand elle le pouvait, et qui avait gardé le secret sur sa mort ainsi que sur le repère de l'organisation secrète.
+        </p>
+
+        <p>
+          Bien que les charges contre elle soient lourdes, il nous était impossible de rester indifférents face au dévouement dont elle avait fait preuve envers la sépulture du samouraï défunt. Elle avait par ailleurs reçu une bénédiction des dieux, cela ne faisait aucun doute. Enfin mes enseignements prenait un sens, les paroles vides de mes senseï se sont remplis d'une couleur bien vive et réelle.
+        </p>
+
+        <p>
+          Finalement nous décidions de nous rendre au repaire caché, dont Ikko connaissait l'emplacement afin de mettre un terme aux trafics. Après une rude escarmouche, qui allait se transformer en véritable bataille, un groupe de Samouraïs du clan du scorpion nous vint en aide et tua les derniers scélérats.
+        </p>
+
+        <!-- ILLUSTRATION 3 : LA BATAILLE CONTRE LE KOLAT -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Voyage-3.jpg" alt="La bataille de l'entrepôt" />
+          <figcaption class="scene-caption">
+            L'assaut de l'entrepôt — Les boules de feu et l'irruption des Scorpions contre le réseau du Kolat.
+          </figcaption>
+        </figure>
+
+        <p>
+          Parmi les objets volés, il y avait un coffre très solide que Samui ouvra d'une « douce caresse », comme savent si bien le faire les Bushis Ida . Ce coffre contenait des documents inquiétants qui apparemment justifiaient à eux seuls la présence des Scorpions. Il était très dangereux pour nous de chercher à les garder…
+        </p>
+
+        <p>
+          Cette aventure pris fin par l'ascension sociale de Ikko, qui nous semblait juste et méritée, ainsi que le départ de Xian pour rejoindre son maître aux côtés des Kamis.
+        </p>
+
+        <p class="text-stone-400 italic pt-2">
+          PS : il est aussi à noter que nous avons relancé toute l'économie de la cité par l'achat de colliers et de flèches…
+        </p>
+      </div>
+
+      <!-- =====================================================================
+           VERSION 2 : TSURUCHI AKIRA
+           ===================================================================== -->
+      <div id="content-v2" class="version-block space-y-4 hidden">
+        <div class="border-b border-amber-500/20 pb-3">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200 flex items-center gap-2">
+            <span>🏹</span> Version 2 : Par Tsuruchi Akira
+          </h2>
+          <span class="text-[11px] text-stone-500">Chronique détaillée de la traque de Xian et du Kolat</span>
+        </div>
+
+        <p>
+          Cela faisait 3 mois que j'étais rentré à mon dojo. Le récit de mes aventures m'avait précédé et j'avais été félicité par le maître en personne. Il avait entrepris de me former personnellement et je sentais que je progressais de jour en jour. Un matin un messager officiel de <b>Doji Satsume</b> vint m'apporter ce court message : “Akira Tsuruchi, vous êtes sommés de venir dans les plus brefs délais à <b>Shiro Agasha</b>”. La fin de cette parenthèse enchanteresse prit fin brutalement.
+        </p>
+
+        <p>
+          Cela fait maintenant 2 jours que je suis parti de mon dojo à cheval en direction de la capitale. J'ai la tête pleine de questions qui restent sans réponses et je sens le froid engourdir mes mains crisper sur les rênes. L'hiver s'installe et les routes vont devenir impraticables…
+        </p>
+
+        <p>
+          Je me présente aux portes du palais du champion d'émeraude et je suis accueilli par <b>Sutokhu</b> qui me montre mes quartiers. Nous devons encore attendre <b>Okado</b> et <b>Samui</b> qui sont les plus éloignés. En attendant, nous sommes tous consignés dans nos quartiers. Je passe ainsi deux jours à lire les livres de la bibliothèque de ma chambre et à entretenir mon arc. En l'observant, je suis persuadé que je pourrai l'améliorer mais je ne parviens pas encore à trouver une idée intéressante.
+        </p>
+
+        <p>
+          C'est dans la matinée du troisième jour que nous sommes autorisés à sortir de nos chambres pour rencontrer Doji Satsume et connaître la raison de notre présence. Nous nous présentons en rang et saluons comme il se doit (dogeza) le champion d'émeraude. Il nous apprend qu'il a une mission peu commune pour nous. <b>Xian</b>, le cheval de <b>Shinjo Shimura</b>, est rentré à la capitale sans son maître. Il semble attendre quelqu'un dans la cour du château mais toutes les personnes qui ont essayé de l'approcher se sont fait blessées par un coup de sabot ou de dents. L'absence de Shinjo Shimura ne présageant rien de bon, nous devons comprendre ce que veut l'animal et retrouver son maître (ou le venger si quelque chose lui était arrivé). Avant de partir, on nous apprend que Shinjo Shimura cherchait à mettre fin à une organisation spécialisée dans le recel d'objets venant du nord-ouest de l'empire.
+        </p>
+
+        <!-- ILLUSTRATION 1 : XIAN ET OKADO -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Voyage-1.jpg" alt="Xian dans la cour du palais" />
+          <figcaption class="scene-caption">
+            La quête du destrier — L'approche de Xian dans la cour enneigée de la capitale.
+          </figcaption>
+        </figure>
+
+        <p>
+          En allant voir le cheval, je fis un point sur mes connaissances de Shinjo Shimura. C'était un samouraï légendaire du clan de la licorne qui avait combattu des années durant avec Doji Satsume mais il était de notoriété publique qu'il avait pris sa retraite il y a quelques années dans un coin reclus de l'empire d'émeraude.
+        </p>
+
+        <p>
+          Nous sortons dans la cour, la neige tombe à gros flocon et le sol est recouvert d'une pellicule blanche. Pourtant nous voyons Xian dehors, visiblement nerveux faisant des allers-retours entre la porte des écuries et l'entrée principale. Okado s'approche de l'énorme cheval paume vers le bas en gardant le contact avec le regard de l'animal. Le cheval s'arrête à quelques pas de lui, tapant le sol de ses sabots de manière saccadé et renâclant fort. Okado continue de se rapprocher doucement de l'animal jusqu'à ce que ce dernier puisse sentir la paume de sa main. Puis le samurai se penche à l'oreille du cheval et lui murmure quelques mots. Le cheval lui agrippe alors la manche et l'attire vers la sortie du palais. Nous nous précipitons vers l'écurie pour prendre nos chevaux afin de les suivre.
+        </p>
+
+        <p>
+          Nous quittons donc la capitale, guidé par Xian qui nous fait emprunter des petits sentiers de campagne. Nous poursuivons notre route pendant 6 jours dans le froid en direction de l'ouest. Les rations prises rapidement lors de notre départ commencent à s'épuiser et nous n'avons rencontré personnes.
+        </p>
+
+        <p>
+          Une nuit, Ryumitaka, Okado et moi-même sommes réveillés par des bruits à l'extérieur de l'abri que nous avions trouvé pour passer la nuit. Arme à la main nous sortons tous les trois. A quelques dizaines de mètres de nous, 4 ours émergent du bois et commencent à nous charger. Je tir une première flèche qui se plante dans l'épaule d'un des ours. Quasiment simultanément, le Shugenja envoie une boule de feu sur un autre ours qui s'enflamme. Désorienté et terrorisé, la meute repart dans la forêt en poussant des rugissements féroces. Au petit matin, l'histoire amusa beaucoup nos deux compagnons dont le tumulte ne les avait pas dérangés le moins du monde.
+        </p>
+
+        <p>
+          Nous arrivons à <b>Tambo</b> affamé après deux jours de diètes. La périphérie de la ville est à moitié dévasté, des bâtiments sont en ruines et il n'y pratiquement personnes dans la rue. Seuls quelques Heimins fouillent les décombres des maisons. Nous nous dirigeons vers la demeure du chef local pour l'informer de notre présence et avoir des informations sur les causes de ce désastre. En nous rapprochant du centre, la population et les habitations se densifient. Arrivé à la demeure du seigneur local, les gardes nous introduisent auprès de leur maitre <b>Bato</b>-sama. Nous échangeons quelques banalités et il nous explique que la ville est en reconstruction à cause des guerres. Nous mangeons et dormons en ville avant de reprendre la route le lendemain matin et avec le plein de provisions.
+        </p>
+
+        <p>
+          A une journée de cheval des terres de la licorne environ, Xian s'arrête près d'une cabane. De la fumée sort de la cheminé et à notre approche, une voix de vieil homme nous invite à entrer. Alors que nous pénétrons à tour de rôle dans la petite maisonnée, je reconnais <b>Megumi</b>-sama assis en tailleur. Ce dernier nous invite à partager le thé avec lui, tout est prêt comme si ce dernier s'attendait à nous recevoir. Après quelques échanges courtois et enjoués, Megumi prend une voix plus sérieuse. Il nous prophétie que des choix difficiles nous attendent mais qu'il a confiance en notre groupe. Puis il termine la conversation par cet énigmatique psaume : <i>“ Pourvu que le cœur soit sincère les dieux protégeront sans qu'on ait à les prier ”</i>.
+        </p>
+
+        <p>
+          C'est le matin, nous émergeons tous en même temps de ce qui semble n'avoir été qu'un songe mais nous ne sommes pas dupes. Megumi nous a encore joué un sacré tour.
+        </p>
+
+        <p>
+          Nous reprenons la route toujours guider par Xian et nous arrivons sur le territoire du <b>clan de la licorne</b>. De grandes plaines enneigés s'étende devant nous et nous poursuivons notre route pour arriver à <b>Shiro Utaku Shojo</b>.
+        </p>
+
+        <p>
+          Nous ne voyons quasiment que des femmes et c'est <b>Rika Otaku</b> qui nous accueil en tant que chef de cette ville. L'entretien est bref et pas des plus agréable. Rika Otaku nous fait comprendre que nous ne sommes pas les bienvenus et que nous devons reprendre la route. De retour aux chevaux, un attroupement s'est formé autour de Xian qui semble étrangement heureux de ce bain de foule lui qui, 2 semaines auparavant, ne se laissait pas approcher.
+        </p>
+
+        <p>
+          Un homme nous explique que cela fait deux ans que Xian n'était pas revenu. Visiblement ému, il nous invite dans son auberge pour nous raconter son histoire. Pendant que nous mangeons, il ne se lasse pas de raconter des récits sur Shinjo Shimura et de son majestueux destrier Xian. Ce binôme était adulé de tous sur ces terres. Nous remercions notre hôte et reprenons la route jusqu'à <b>Shiro Kanashimi no Komichi</b> dernière ville à la frontière entre Rokugan <b>et le territoire Gaijin « Les Sables Ardents »</b>. Les chemins pour accéder à cette ville dans les montagnes sont escarpés. Nous arrivons fourbu dans cette forteresse densément peuplée.
+        </p>
+
+        <p>
+          Nous allons directement chez le Karo de la ville pour lui présenter nos hommages. Alors que nous entrons dans sa maison, je vois Xian s'allonger devant la bâtisse comme soulagé et serin d'être enfin arrivé à destination. Cette fois-ci, le Karo nous accueille avec joie, nous fait servir une collation et nous interroge sur la raison de notre venu. Nous répondons sans détour et une fois l'entrevue achevé nous sortons de sa maison.
+        </p>
+
+        <p>
+          Trois samurais Licorne nous attendent à la porte. Au centre, un magistrat nous fait savoir que le Daimyo de la ville nous invite au palais ce soir pour s'entretenir avec nous. Le message délivré, le magistrat et son escorte, un grand samurai avec une épée bâtarde et une femme Otaku, se retire vers les hauteurs de la ville.
+        </p>
+
+        <p>
+          En attendant le soir, nous partons explorer le marché pour essayer de trouver des objets intéressants. Je constate que Samui se fait encore plumer en achetant des babioles dix fois leur prix. Pour ma part, je refais un stock de flèche (un peu moins d'une centaine) afin d'être sûre de ne pas en manquer. Je les fais livrer à notre auberge.
+        </p>
+
+        <p>
+          A la nuit tombée, nous nous rendons chez le daimyo. Nous sommes les seuls samurais de la réception mais nous réussissons à rester discret et à échanger avec le maitre des lieux sur notre mission. Il nous demande de reprendre l'enquête de Shinjo Shimura pour retrouver les coupables. <b>Ide Fusaaki</b> (le Karo) se tient à notre disposition. De retour à l'auberge, nous sombrons tous dans un profond sommeil jusqu'au matin.
+        </p>
+
+        <p>
+          Okado et moi allons interroger les samurais licorne du palais du Daimyo mais personne ne semble avoir d'informations intéressantes et nous rentrons à l'auberge bredouille. Les autres ont eu plus de chance, en fouillant les fontes de Xian, qui se laisse maintenant docilement approcher, ils ont trouvé le tsuba du katana de Shinjo Shimura. Ce dernier a surement été cassé lors d'un combat.
+        </p>
+
+        <p>
+          En début d'après-midi, nous nous rendons chez Ide Fusaaki pour essayer d'en savoir plus sur le commerce dans la région. Il nous apprend qu'il y a un marché noir sur les objets des terres brulées et nous donne une liste des marchands qu'ils ont déjà repéré.
+        </p>
+
+        <p>
+          Nous décidons de leur tendre un piège. Je passe mon après-midi dans tous les commerces exotiques en ouvrant volontiers ma bourse en grand à chaque fois pour attirer l'attention sur moi. J'achète plein de petits objets mais surtout je fais courir le bruit que je recherche des objets d'art rares et venant de l'étranger pour mon maitre. Au détour d'un étal, je sens qu'on me bouscule et d'instinct je remarque que l'on me prend ma bourse. Je me relève et part aussitôt à la poursuite du fuyard. Ryu qui me filait de près, me dépasse et arrive après une longue course poursuite à le rattraper et le maitriser. Nous récupérons la bourse et nous lui proposons un marché. Il peut soit mourir pour ses idées soit gagner deux kokus en échanges de quelques réponses. Son choix est rapidement fait.
+        </p>
+
+        <!-- ILLUSTRATION 2 : LE JARDIN ZEN D'IKKO -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Voyage-2.jpg" alt="Le jardin zen de Ikko" />
+          <figcaption class="scene-caption">
+            La retraite spirituelle — Visite du jardin zen d'Ikko dans les hauteurs enneigées.
+          </figcaption>
+        </figure>
+
+        <p>
+          A notre arrivé, le chef du village répondant au nom de « <b>Osso</b> » nous accueille. A la description de la êta, Osso crache sur le sol. « Nous avons chassé <b>Ikko</b> ! C'est une mauvaise fille, une mythomane et une voleuse ! Elle vit seule à la sortie du village désormais ». Nous suivons les indications du vieil homme et nous arrivons à la cabane de Ikko dans laquelle elle nous invite à rentrer.
+        </p>
+
+        <p>
+          Sa voix est douce et agréable et nous nous asseyons pour écouter son histoire. Elle nous apprend qu'elle connaissait Shinjo Shimura. Qu'elle savait qu'il avait découvert un entrepôt non loin de là il y a quelques années. Malheureusement des brigands l'ont surpris en train d'enquêter et l'ont tué dans un combat sanglant. En sanglot, elle nous expliqua n'avoir rien pu faire pour le protéger mais qu'elle avait trouvé le courage de ramasser ses armes et d'enterrer son corps sans sépulture mais pour éviter que les animaux ne se charge de faire disparaitre le corps. Après son récit glaçant, nous partons pour l'entrepôt finir le travail commencé par Shinjo Shimura.
+        </p>
+
+        <p>
+          Nous trouvons et pénétrons sans mal dans la bâtisse décrit par Ikko. Nous y découvrons une montagne d'objets illicites et notre attention se porte plus particulièrement sur un coffre dans une petite pièce adjacente à la zone de stockage principale. J'essaie de crocheter la serrure mais celle-ci résiste ce qui agace Samui qui me prend le coffre des mains, le pose sur le sol, et lui assène un grand coup de tetsubo mais qui n'a que peu d'effet. Attiré par le bruit, un garde arrive dans notre direction. Je l'abats d'une flèche mais il arrive à donner l'alerte avant de s'effondrer. Samui redonne un coup de tetsubo encore plus fort sur le coffre qui cède sous l'impact. Celui-ci contenait plusieurs papiers administratifs. Nous les ramassons en hâte et avant l'arrivée de nos ennemies.
+        </p>
+
+        <!-- ILLUSTRATION 3 : LA BATAILLE DE L'ENTREPÔT -->
+        <figure class="scene-figure">
+          <img src="../assets/images/scenarios/Voyage-3.jpg" alt="La bataille de l'entrepôt" />
+          <figcaption class="scene-caption">
+            L'affrontement final — Magie de feu et intervention des Scorpions à l'entrepôt du Kolat.
+          </figcaption>
+        </figure>
+
+        <p>
+          Une bataille spectaculaire commence alors. Je vois des boules de feux voler et enflammer des samurais adverses. Okado découpe littéralement en deux tous ceux qui se présentent devant lui tandis que Samui fracasse crânes et côtes avec son tetsubo. Je couvre mes compagnons en tirant sur les samurais qui arrivent au loin. Sans les avoir vu arrivé, des samurais du clan du scorpion arrive dans notre dos mais, heureusement, nous soutienne dans notre combat.
+        </p>
+
+        <p>
+          Une fois la bataille terminée, le chef de leur détachement <b>Bayushi Yojiro</b> nous demande de leur remettre l'ensemble des documents du coffre. C'est avec étonnement que je reconnais le samurai qui s'avance pour les récupérer. C'est <b>Bayushi Sugai</b> que nous croisé lors de notre Gempukku. Une fois les documents remis, Bayushi Yojiro nous donne quelques informations pour que nous puissions nous aussi faire un rapport. « Tout ceci est l'œuvre du <b>Kolat</b>, une organisation secrète diriger par <b>Ide Yuga</b> un marchand. ».
+        </p>
+
+        <p>
+          Nous quittons l'entrepôt pour retourner faire notre rapport au daimyo de Shiro Kanashimi no Komichi. Nous demandons à Ikko de nous accompagner pour la faire sacraliser car c'est elle qui a permis la résolution de cette affaire et par la même occasion de venger Shinjo Shimura le héros de tout un clan.
+        </p>
+      </div>
+
+    </article>
+
+    <!-- LIENS DE BAS DE PAGE VERS LE BLOG ORIGINAL & L'ACTE SUIVANT -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/2015/11/29/scenario-3-le-dernier-voyage-par-ryumitaka-isawa/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur WordPress (29 nov. 2015) ↗
+      </a>
+      <a href="scenario-4.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 4 : Aux côtés de mes frères morts →
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 3 : Le dernier voyage
+  </footer>
+
+  <!-- SCRIPT DU SWITCHER D'ONGLETS & DU LECTEUR VOCAL NARRATEUR -->
+  <script>
+    let activeVersion = 'v1';
+
+    function switchVersion(ver) {
+      stopAudio();
+      activeVersion = ver;
+
+      document.querySelectorAll('.version-block').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      const targetContent = document.getElementById(`content-${ver}`);
+      const targetTab = document.getElementById(`tab-${ver}`);
+      if (targetContent) targetContent.classList.remove('hidden');
+      if (targetTab) targetTab.classList.add('active');
+
+      const names = {
+        v1: "Ryûmitaka Isawa (Trafic à Shinjo Kyuden)",
+        v2: "Tsuruchi Akira (Récit complet)"
+      };
+      document.getElementById('audio-detail').textContent = `Chronique active : ${names[ver]}`;
+    }
+
+    // LECTEUR AUDIO SYNTHÉTISEUR
+    const synth = window.speechSynthesis;
+    let utterance = null;
+    let isPlaying = false;
+
+    const btnPlay = document.getElementById('btn-play');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const statusEl = document.getElementById('audio-status');
+    const rateEl = document.getElementById('audio-rate');
+
+    function playAudio() {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+
+      if (synth.paused && isPlaying) {
+        synth.resume();
+        statusEl.textContent = "Lecture en cours...";
+        return;
+      }
+
+      synth.cancel();
+
+      const title = document.getElementById('story-title').textContent.trim();
+      const activeContainer = document.getElementById(`content-${activeVersion}`);
+      const contentText = activeContainer ? activeContainer.innerText.trim() : "";
+      const fullSpeechText = `${title}. ${contentText}`;
+
+      utterance = new SpeechSynthesisUtterance(fullSpeechText);
+      utterance.lang = 'fr-FR';
+      utterance.rate = parseFloat(rateEl.value);
+
+      const voices = synth.getVoices();
+      const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
+      if (frVoice) utterance.voice = frVoice;
+
+      utterance.onstart = () => {
+        isPlaying = true;
+        statusEl.textContent = "Lecture vocale en cours...";
+        btnPlay.classList.add('bg-amber-500');
+      };
+
+      utterance.onend = () => {
+        isPlaying = false;
+        statusEl.textContent = "Lecture terminée";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      utterance.onerror = () => {
+        isPlaying = false;
+        statusEl.textContent = "Erreur ou interruption";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      synth.speak(utterance);
+    }
+
+    function pauseAudio() {
+      if (synth.speaking && !synth.paused) {
+        synth.pause();
+        statusEl.textContent = "Lecture en pause";
+      }
+    }
+
+    function stopAudio() {
+      if (synth.speaking) {
+        synth.cancel();
+      }
+      isPlaying = false;
+      statusEl.textContent = "Voix Narrative Prête";
+      btnPlay.classList.remove('bg-amber-500');
+    }
+
+    btnPlay.addEventListener('click', playAudio);
+    btnPause.addEventListener('click', pauseAudio);
+    btnStop.addEventListener('click', stopAudio);
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {};
+    }
+  </script>
+
+</body>
+</html>
