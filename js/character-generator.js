@@ -244,6 +244,12 @@ function bootstrap() {
     return;
   }
   initClans();
+  const urlParams = new URLSearchParams(window.location.search);
+  const clanParam = urlParams.get('clan');
+  if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
+  document.getElementById('sel-clan').value = clanParam;
+  onClanChange();
+}
   initCatalogSelectors();
 
   const armSel = document.getElementById('pc-armor');
