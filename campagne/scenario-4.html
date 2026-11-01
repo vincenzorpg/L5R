@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 4 : Aux côtés de mes frères morts — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1e1108 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .inner-thought {
+      color: #d1b87a;
+      font-style: italic;
+    }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .scene-figure:hover img {
+      transform: scale(1.015);
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE & LIENS RAPIDES -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-3.html" class="text-amber-400 hover:text-amber-200">◄ Acte 3 : Le dernier voyage</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 04 / 10</span>
+        <a href="scenario-5.html" class="text-amber-400 hover:text-amber-200">Acte 5 : Entre le ciel et l'enfer ►</a>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE 4 • TERRES DU CLAN DU LION & MONTAGNE DES 7 TONNERRES
+        </span>
+        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Ryumitaka, Sutokhu et Samui) • Publié le 17 février 2016</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 4 : Aux côtés de mes frères morts
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
+      </p>
+      <div class="pt-2 flex flex-wrap gap-2 text-[10px] font-mono">
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#ArbreDeVie</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#CitadelleSanglante</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#ShuChen</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#AkodoToturi</span>
+        <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 text-stone-400">#Seppuku</span>
+      </div>
+    </header>
+
+    <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
+          🔊
+        </span>
+        <div>
+          <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">
+            Voix Narrative Prête
+          </div>
+          <div class="text-[10px] text-stone-400">
+            Lecture vocale intégrale du récit d'Akira Tsuruchi
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+          <span>▶</span> Écouter le Récit
+        </button>
+        <button id="btn-pause" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
+          ⏸ Pause
+        </button>
+        <button id="btn-stop" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">
+          ⏹ Arrêt
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs text-stone-400">
+        <span>Vitesse :</span>
+        <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+          <option value="0.9">0.9x (Chronique posée)</option>
+          <option value="1.0" selected>1.0x (Standard)</option>
+          <option value="1.15">1.15x (Rythmé)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+
+      <p>
+        Le mystère de <b>Xian</b> à la frontière nord étant résolu, notre groupe retourne voir le champion d'Emeraude <b>Satsume Doji</b> pour faire un rapport[cite: 3]. <b>Okado</b> est resté avec <b>Ikko</b> pour l'aider à préparer ses affaires pour aller vivre dans la capitale[cite: 3].
+      </p>
+
+      <p>
+        Lors d'une halte dans une auberge sur les terres du clan du lion, un enfant vient se planter devant notre table et nous remet un origami en nous saluant[cite: 3]. Pendant que <b>Ryumitaka</b> et <b>Sutokhu</b> regardent l'objet, le gamin me dit qu'un vieux monsieur lui a demandé de nous l'apporter[cite: 3]. L'origami contenait un message de notre protecteur <b>Megumi</b>, il nous avertissait que <b>la bataille de l'arbre de vie</b> allait refaire surface et que nous allions y être mêlés[cite: 3]. Le message se terminait sur une phrase étrange nous avertissant que la mort était parfois un meilleur choix que la défaite[cite: 3]. Nous commencions à être habitués aux conseils singuliers de Megumi mais ce dernier était encore plus intrigant[cite: 3].
+      </p>
+
+      <p>
+        Notre passage à Kyuden Ikoma fut bref, nous passâmes saluer le daimyo local et nous fîmes chou blanc à la bibliothèque[cite: 3]. Mais lors de notre seconde rencontre avec le daimyo, il nous conseilla d'aller au <b>village de la source de mémoire</b> qui se trouvait dans <b>la montagne des 7 tonnerres</b>[cite: 3]. Mon passage dans la bibliothèque me laissa perplexe car aucun livre sur l'archerie n'était vraiment digne d'intérêt[cite: 3]. J'ai évidemment gardé cette réflexion pour moi car les bibliothécaires avaient vraiment l'air fier des ouvrages qu'ils gardaient[cite: 3].
+      </p>
+
+      <p>
+        En chemin, nous tuâmes un membre d'une troupe de bandits qui s'enfuyait avec des sacs de riz[cite: 3]. Sac qui fut donné au daimyo du village d'après afin de ne pas nous surcharger[cite: 3]. A notre arrivée au village de la source de mémoire, les habitants et <b>Ikoma Yoshisuka</b> (daimyo) nous firent un très bon accueil[cite: 3]. Il répondit favorablement et demanda à son fils <b>Tadashira</b> de nous emmener voir l'arbre de vie dès le lendemain[cite: 3].
+      </p>
+
+      <p>
+        Après une petite marche depuis le village, nous sommes arrivés sur le lieu où reposent nos ancêtres[cite: 3]. Contemplant du haut d'une falaise, le paysage en contrebas était impressionnant[cite: 3]. La falaise surplombait une large plaine vide de toute végétation et bordée de vide de l'autre côté[cite: 3]. En son centre trônait un arbre gigantesque[cite: 3]. Son tronc semblait avoir été tailladé à plusieurs endroits et sur plusieurs niveaux[cite: 3]. Je senti au fond de moi mon ancêtre Gusai pleurer, rempli d'une profonde tristesse[cite: 3].
+      </p>
+
+      <p>
+        Sur le chemin du retour nous sommes pris en embuscade, mais nous maitrisons rapidement la situation car nous commençons à être presque habitués à ce genre d'escarmouche[cite: 3]. (Note à moi-même, il faudrait peut-être, la prochaine fois, essayer de détecter les ennemis avant…)[cite: 3]
+      </p>
+
+      <p>
+        Nous apprenons, grâce à la force de persuasion de Ryumitaka, que ces brigands ont été envoyés par le sorcier <b>Shu Chen</b>[cite: 3]. Nous forçons l'allure pour rentrer au village mais nous arrivons trop tard, tout le monde est déjà mort ou presque[cite: 3]. Ryumitaka persuade un samouraï à moitié mort de nous donner l'emplacement où réside le sorcier[cite: 3].
+      </p>
+
+      <p>
+        Nous prenons donc la route vers <b>la citadelle sanglante</b>[cite: 3]. Le château est entouré d'une épaisse brume, les pierres sont rouge sang et nous pouvons entendre des cris affreux qui n'ont plus rien d'humain[cite: 3]. La herse étant levée nous adoptons une posture en tête de flèche avec Ryumitaka et moi à l'arrière garde, Sutokhu au centre et Samui en éclaireur[cite: 3].
+      </p>
+
+      <p>
+        Mais à peine la herse passée, celle-ci retombe sur Samui qui n'a pas le temps de l'éviter et la prend sur le dos[cite: 3]. Sutokhu et Ryumitaka se précipitent pour la lever pendant que je me jette de l'autre côté et aide à la soulever[cite: 3]. Nous sortons Samui de dessous et reprenons le chemin vers la porte principale de l'édifice[cite: 3]. L'entrée est gigantesque et les hurlements semblent venir du haut d'un escalier de taille cyclopéenne[cite: 3]. Des cadavres sont accrochés aux murs, l'ambiance est vraiment lugubre, mais ça n'a pas l'air de déranger Samui qui commence à monter les escaliers quatre par quatre[cite: 3]. Le premier étage est composé de salles de tortures dans lesquelles des hommes et des femmes sont en piteux état[cite: 3]. Il leur manque des membres et le sang coagulé par terre montre bien les terribles épreuves qu'ils ont dû endurer[cite: 3]. Samui décide d'achever les blessés graves pour mettre fin à leur tourment et de libérer les autres, nous acceptons[cite: 3].
+      </p>
+
+      <p>
+        Le rez-de-chaussée est semblable au premier étage et nous accompagnons finalement tout le monde dehors avant de revenir dans le château et entamer la descente vers les sous-sols[cite: 3]. Nous descendons un couloir sur une cinquantaine de mètres, je sens la température monter au fur et à mesure que nous descendons[cite: 3]. Au bout du couloir, trois chemins s'offrent à nous[cite: 3]. Nous commençons à explorer le chemin de droite qui semble peu usitée[cite: 3]. Nous arrivons dans une grotte dans laquelle se trouve une statue de « celui que l'on ne peut pas nommer » (<b>Fu Leng</b>) d'au moins 30 mètres de haut[cite: 3]. Son bras est tendu au-dessus d'une crevasse dans laquelle on aperçoit, le sorcier, un général lion et plus de 3.000 oni[cite: 3]. La main de la statue semble contenir des choses, Samui se lance donc à l'escalade de la statue[cite: 3]. Et après quelques sueurs froides, il redescend sain et sauf avec quinze livres dont le livre de la bataille de l'arbre de vie[cite: 3]. Il nous apprend que tous les 100 ans à lieu une terrible bataille entre un sorcier maléfique et une armée du Rokugan au pied de l'arbre de vie[cite: 3]. La bataille aura lieu dans 7 jours[cite: 3]. Nous devons donc lever une armée pour combattre les forces du mal et protéger l'arbre quoi qu'il en coûte[cite: 3].
+      </p>
+
+      <!-- ILLUSTRATION 1 : LA CITADELLE SANGLANTE ET LA STATUE DE FU LENG -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/FreresMorts-1.jpg" alt="La citadelle sanglante et la statue colossale de Fu Leng" />
+        <figcaption class="scene-caption">
+          La Citadelle Sanglante — Les sous-sols menaçants, la statue de Fu Leng et le rassemblement des 3 000 onis de Shu Chen[cite: 3].
+        </figcaption>
+      </figure>
+
+      <p>
+        Nous partons chacun de notre côté demander de l'aide aux différents clans lions des environs, le rendez-vous est fixé dans 7 jours au plus tard du côté Ouest de la plaine de l'arbre de vie[cite: 3]. Samui part chez les Matsu, Sutokhu chez la famille Kitsu à Shiro Sano Ken Hayai, Ryumitaka à Kyuden Ikoma et moi je dois aller convaincre <b>Akodo Toturi</b> le chef incontesté des lions[cite: 3].
+      </p>
+
+      <p>
+        Je me lance sur la route à bride abattue et je limite mes arrêts afin de gagner du temps car il joue contre nous[cite: 3]. J'aperçois enfin mon objectif, je me rends directement au château déposer mon cheval aux écuries et demande une audience de toute urgence auprès du daimyo[cite: 3]. Les kamis sont avec moi car <b>Akodo Toturi</b> me reçoit après deux heures d'attente durant lesquelles j'ai eu le temps de me décrasser du voyage[cite: 3].
+      </p>
+
+      <p>
+        Il n'est pas encore midi quand je rentre dans la salle d'audience[cite: 3]. Elle est gigantesque et finement décorée[cite: 3]. Après les salutations d'usage envers une personne si prestigieuse, je raconte mon histoire et implore l'aide du clan Akodo pour protéger l'arbre de vie[cite: 3]. Ayant fini mon récit, je suis congédié dans une chambre où je trouve de la nourriture et un lit[cite: 3]. Je suis réveillé dans l'après-midi par un serviteur qui m'annonce qu'Akodo Toturi va de nouveau me recevoir pour me donner une réponse[cite: 3].
+      </p>
+
+      <p>
+        J'arrive dans la salle, serein d'avoir fait le maximum mais terrorisé à l'idée de pouvoir échouer[cite: 3]. Sans fioritures, le daimyo me fait part de sa crainte de voir les oni parcourir ses terres mais pour lui prouver ma bonne foi je dois me faire seppuku[cite: 3]. J'ai jusqu'au lendemain matin pour réfléchir[cite: 3]. Le soleil se couche lorsque l'on me raccompagne à mes quartiers, je sens que la nuit va être longue[cite: 3]. Les heures passent et je suis plongé dans mes réflexions, ma vie en échange de la sauvegarde de l'Empire d'Émeraude[cite: 3]. Dans ma tête, mes souvenirs se bousculent : la tristesse de mon ancêtre Gusai lorsque nous admirions l'arbre de vie ; les paroles de Megumi sur la mort et la victoire ; Les ouvrages de Li Er sur les samouraïs, d'ailleurs l'un d'eux disait « la voie du samouraï, c'est la mort »[cite: 3].
+      </p>
+
+      <p>
+        Au matin ma décision est prise, je ne pourrai plus me regarder en face si je n'accepte pas l'offre qui m'est proposée[cite: 3]. C'est avec le cœur lourd mais l'esprit léger que l'on m'amène dans une salle où est disposé un grand drap blanc sur le sol[cite: 3]. Akodo Toturi a son daisho à ses côtés, c'est donc lui qui m'assistera dans l'épreuve[cite: 3]. C'est avec une conviction renouvelée par l'honneur que me fait le daimyo que je m'assois sur le drap, prend mon wakizashi et m'ouvre le ventre[cite: 3]. Je sens le sang couler sur mes mains, ma vue se trouble, j'attends de sentir la lame du katana sur mon cou mais rien ne vient[cite: 3]. J'entends des cris qui s'éloignent de plus en plus, puis je sens une vague de chaleur au fond de moi[cite: 3].
+      </p>
+
+      <!-- ILLUSTRATION 2 : LE SEPPUKU DEVANT AKODO TOTURI -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/FreresMorts-2.jpg" alt="L'épreuve du seppuku devant Akodo Toturi" />
+        <figcaption class="scene-caption">
+          L'Épreuve d'Honneur — Akira assis sur le drap blanc face à Akodo Toturi, prêt à donner sa vie pour sauver l'Arbre de Vie[cite: 3].
+        </figcaption>
+      </figure>
+
+      <p>
+        Lorsque je reprends mes esprits je suis toujours dans la salle, le drap blanc est gorgé de sang et des Shugenja s'affairent autour de moi[cite: 3]. Akodo Toturi me regarde et m'annonce que j'aie prouvé ma valeur et qu'il accède à ma requête[cite: 3]. J'avais réussi ma mission, le clan Akodo allait renforcer notre armée de 1500 hommes[cite: 3]. Nous partîmes le lendemain pour arriver à l'aube du septième jour[cite: 3].
+      </p>
+
+      <p>
+        Mes compagnons avaient également tous réussi leur objectif et nous alignions une troupe de 3500 hommes face à l'armée des morts de Shu Shen[cite: 3]. Regroupé à l'arrière garde, je retrouvais mes camarades avec Akodo Toturi[cite: 3]. Tous s'inclinèrent avec respect pour ce chef de guerre[cite: 3]. Mais lorsque Samui lui demanda comment il comptait mener la bataille ce dernier se retourna vers moi et lui répondit que le commandement de cette armée me revenait de droit au vu du sacrifice que j'étais prêt à faire[cite: 3]. J'acceptais l'offre en m'inclinant mais je savais que je n'avais pas le droit à l'erreur[cite: 3].
+      </p>
+
+      <p>
+        Étant novice j'allais devoir m'appuyer sur mes compagnons pour que l'on gagne cette bataille[cite: 3]. Notre objectif étant de protéger l'arbre à tout prix, je décidais de faire avancer les archers jusqu'à son pied[cite: 3]. Ils devaient être notre dernière ligne de défense[cite: 3]. Samui et Sutokhu se proposèrent d'aller en première ligne afin de les renforcer[cite: 3]. Les deux armées étaient de taille semblable, il fallait donc tenter de profiter du terrain[cite: 3]. C'est la proposition de Sutokhu qui fut retenue, il fallait tenter une brèche du côté des montagnes pour rabattre l'ennemi vers le vide[cite: 3].
+      </p>
+
+      <p>
+        Après ce bref conseil de guerre, les troupes se mirent en route car l'armée des morts commençait à s'organiser de l'autre côté de la plaine[cite: 3]. Ryumitaka allait rester avec moi près de l'arbre et faire en sorte que cette tête brûlée de Samui reste en un seul morceau[cite: 3]. Lorsque l'armée adverse chargea dans un grondement sourd, je beuglais mes derniers ordres et me concentra sur la bataille[cite: 3]. Les ennemies approchaient en courant car il avait vu nos archers[cite: 3]. Mais dès qu'ils furent à 100 mètres, j'ordonnai de tirer la première salve de flèches[cite: 3]. Malheureusement, le clan du lion ne disposait pas d'archer assez performant et beaucoup trop de flèches tombèrent trop courtes[cite: 3]. J'avais déjà décoché deux autres flèches avant qu'ils soient de nouveau prêts à tirer[cite: 3]. La seconde salve fut plus efficace et de nombreux mort vivant tombèrent[cite: 3]. Je fis passer l'ordre de tirer à volonté et vis les deux premières lignes s'entrechoquer dans un fracas assourdissant[cite: 3]. La suite de la bataille resta à jamais floue dans mon esprit car le chaos qui régnait est indescriptible[cite: 3].
+      </p>
+
+      <!-- ILLUSTRATION 3 : LA BATAILLE DE L'ARBRE DE VIE -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/FreresMorts-3.jpg" alt="La bataille de l'Arbre de Vie" />
+        <figcaption class="scene-caption">
+          La Bataille de l'Arbre de Vie — Les archers d'Akira et les légions du Lion défendant l'arbre millénaire contre les hordes de morts-vivants[cite: 3].
+        </figcaption>
+      </figure>
+
+      <p>
+        Après plusieurs heures de combat farouches, le reste de notre armée formait une poche de résistance près de l'arbre[cite: 3]. Nous étions à un contre deux mais aucun samouraï ne flanchait[cite: 3]. Dans un dernier hurlement, nous réussîmes finalement à reprendre le dessus[cite: 3]. Pendant que nous achevions les blessés adverses, mon regard se posa sur l'arbre de vie[cite: 3]. Aucune nouvelle blessure ne lui avait été infligée, nos ancêtres pouvaient être fiers de ce que nous avions accompli aujourd'hui[cite: 3]. Et même si Shu Chen s'était enfuie, nous pouvions nous sentir digne de notre rang[cite: 3]. Les lions se feraient un plaisir de le traquer et de le détruire[cite: 3]. Un conseil de guerre se tint le soir même et Akodo Toturi nous félicita en personne pour notre exploit et notre bravoure[cite: 3]. Il annonça qu'il avait une dette envers nous et que nous pourrions à jamais demander une faveur au clan Akodo[cite: 3].
+      </p>
+
+    </article>
+
+    <!-- LIENS DE BAS DE PAGE -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/2016/02/17/scenario-4-aux-cotes-de-mes-freres-morts-par-akira-tsuruchi/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur le blog WordPress ↗[cite: 3]
+      </a>
+      <a href="scenario-5.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 5 : Entre le ciel et l'enfer →
+      </a>
+    </section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 4 : Aux côtés de mes frères morts (par Akira Tsuruchi)[cite: 3]
+  </footer>
+
+  <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
+  <script>
+    const synth = window.speechSynthesis;
+    let utterance = null;
+    let isPlaying = false;
+
+    const btnPlay = document.getElementById('btn-play');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const statusEl = document.getElementById('audio-status');
+    const rateEl = document.getElementById('audio-rate');
+
+    function playAudio() {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+
+      if (synth.paused && isPlaying) {
+        synth.resume();
+        statusEl.textContent = "Lecture en cours...";
+        return;
+      }
+
+      synth.cancel();
+
+      const title = document.getElementById('story-title').textContent.trim();
+      const motto = document.getElementById('story-motto').textContent.trim();
+      const content = document.getElementById('story-content').innerText.trim();
+      const fullSpeechText = `${title}. ${motto}. ${content}`;
+
+      utterance = new SpeechSynthesisUtterance(fullSpeechText);
+      utterance.lang = 'fr-FR';
+      utterance.rate = parseFloat(rateEl.value);
+
+      const voices = synth.getVoices();
+      const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
+      if (frVoice) utterance.voice = frVoice;
+
+      utterance.onstart = () => {
+        isPlaying = true;
+        statusEl.textContent = "Lecture vocale en cours : Aux côtés de mes frères morts";
+        btnPlay.classList.add('bg-amber-500');
+      };
+
+      utterance.onend = () => {
+        isPlaying = false;
+        statusEl.textContent = "Lecture terminée";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      utterance.onerror = () => {
+        isPlaying = false;
+        statusEl.textContent = "Erreur ou interruption";
+        btnPlay.classList.remove('bg-amber-500');
+      };
+
+      synth.speak(utterance);
+    }
+
+    function pauseAudio() {
+      if (synth.speaking && !synth.paused) {
+        synth.pause();
+        statusEl.textContent = "Lecture en pause";
+      }
+    }
+
+    function stopAudio() {
+      if (synth.speaking) {
+        synth.cancel();
+      }
+      isPlaying = false;
+      statusEl.textContent = "Voix Narrative Prête";
+      btnPlay.classList.remove('bg-amber-500');
+    }
+
+    btnPlay.addEventListener('click', playAudio);
+    btnPause.addEventListener('click', pauseAudio);
+    btnStop.addEventListener('click', stopAudio);
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {};
+    }
+  </script>
+
+</body>
+</html>
