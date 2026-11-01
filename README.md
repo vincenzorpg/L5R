@@ -127,7 +127,7 @@ Fiches détaillées pour chaque faction de l'Empire :
 
 ---
 
-### 🛠️ Architecture Technique
+## 🛠️ Architecture Technique
 Framework CSS : Tailwind CSS (chargé via CDN) avec thème sur-mesure (palette Dark Lacquer, bordures dorées, accents élémentaires).
 
 Typographie : Cinzel (titrages impériaux) et Noto Serif JP (lecture noble du texte).
@@ -139,7 +139,7 @@ Persistance des données : localStorage pour le Dojo local et encodage d'URL pou
 Audio : API native du navigateur window.speechSynthesis.
 ---
 
-### 🚀 Installation & Utilisation Locale
+## 🚀 Installation & Utilisation Locale
 Aucun gestionnaire de paquets complexe (npm/yarn) n'est requis. Le site peut être exécuté directement sur n'importe quelle machine :
 
 Option 1 : Visual Studio Code (Recommandé)
@@ -160,7 +160,7 @@ Puis ouvrez votre navigateur sur http://localhost:8000.
 
 ---
 
-### 🔄 Interopérabilité & Carnet de Rokugan
+## 🔄 Interopérabilité & Carnet de Rokugan
 La Forge de Personnage intègre un bouton d'export dédié vers Le Carnet de Rokugan, l'outil compagnon de référence pour L5R 4e Édition :
 
 Format produit : Objet JSON unique respectant rigoureusement le standard schemaVersion: 2 (v2.18.0).
@@ -177,7 +177,7 @@ Mapping des armes avec mots-clés normalisés (samourai, grande, deux-mains, arc
 
 ---
 
-### ⚙️ Administration & Rédaction (CMS)
+## ⚙️ Administration & Rédaction (CMS)
 Le site intègre une interface d'administration statique accessible sur /admin/ :
 
 Moteur : Sveltia CMS / Decap CMS connecté directement au dépôt GitHub via admin/config.yml.
@@ -186,7 +186,7 @@ Workflow : Les ajouts ou corrections de scénarios rédigés via l'éditeur visu
 
 ---
 
-### 📜 Crédits & Mentions Légales
+## 📜 Crédits & Mentions Légales
 Campagne : Scénarisée et arbitrée par le MJ David (table active depuis 2015).
 
 Chroniqueurs de table : Tsuruchi Akira, Okado Hiruma, Hida Samui, Isawa Ryumitaka, Kakita Sutokhu, Mirumoto Mansouri.
