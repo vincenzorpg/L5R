@@ -73,7 +73,7 @@
           « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
         </p>
         <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto pt-1 leading-relaxed">
-          Retrouvez les annales complètes et sonorisées de nos 10 scénarios de campagne, forgez votre samouraï selon les règles officielles de la 4e Édition, consultez le Grimoire des Kami ou révisez l'art du duel Iaijutsu.
+          Retrouvez les annales complètes et sonorisées de nos 10 scénarios de campagne, forgez et sauvegardez votre samouraï avec son histoire sur-mesure, consultez le Grimoire des Kami ou révisez l'art du duel Iaijutsu.
         </p>
 
         <!-- BOUTONS D'ACTION PRINCIPAUX -->
@@ -92,7 +92,94 @@
     </section>
 
     <!-- ===================================================================
-         2. L'ATELIER DU SAMOURAÏ (ACCÈS RAPIDE AUX 3 OUTILS INTERACTIFS)
+         2. DOJO PERSONNEL DU JOUEUR & GALERIE DES HÉROS DE LA CAMPAGNE
+         =================================================================== -->
+    <section class="space-y-4">
+      <div class="flex flex-wrap justify-between items-end border-b border-amber-500/20 pb-2 gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200 flex items-center gap-2">
+            <span>🏯</span> LE DOJO DES SAMOURAÏS — VOS CRÉATIONS & LES HÉROS DE LA TABLE
+          </h2>
+          <span class="text-xs text-stone-400">Retrouvez vos personnages sauvegardés dans la Forge ainsi que les protagonistes historiques de la campagne.</span>
+        </div>
+        <a href="createcharacter.html" class="text-xs font-imperial font-bold text-amber-400 hover:text-amber-200">
+          + Forger un nouveau Samouraï →
+        </a>
+      </div>
+
+      <!-- Conteneur dynamique des personnages sauvegardés par l'utilisateur dans localStorage -->
+      <div id="home-saved-roster" class="hidden space-y-2">
+        <div class="text-[11px] font-bold font-imperial text-emerald-400 uppercase tracking-wider">
+          📌 Vos Samouraïs enregistrés sur cet appareil :
+        </div>
+        <div id="home-saved-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs"></div>
+      </div>
+
+      <!-- Les 6 Protagonistes Historiques de la Campagne -->
+      <div class="space-y-2 pt-1">
+        <div class="text-[10px] font-bold font-imperial text-stone-400 uppercase tracking-wider">
+          📜 Les Héros Historiques de la Campagne (Gempukku de Tsuma) :
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+          <div class="card-clean rounded-xl p-3 space-y-1 border-sky-500/30">
+            <div class="flex justify-between items-center text-[10px] text-sky-400 font-mono">
+              <span>蟹 CRABE</span>
+              <span>Bushi</span>
+            </div>
+            <div class="font-bold font-imperial text-amber-200 text-xs">Okado Hiruma</div>
+            <p class="text-[10px] text-stone-400 leading-snug">Éclaireur aux yeux jaunes accompagné de son loup fidèle.</p>
+          </div>
+
+          <div class="card-clean rounded-xl p-3 space-y-1 border-sky-500/30">
+            <div class="flex justify-between items-center text-[10px] text-sky-400 font-mono">
+              <span>蟹 CRABE</span>
+              <span>Bushi</span>
+            </div>
+            <div class="font-bold font-imperial text-amber-200 text-xs">Samui Hida</div>
+            <p class="text-[10px] text-stone-400 leading-snug">Colosse inébranlable maniant un tetsubo dévastateur.</p>
+          </div>
+
+          <div class="card-clean rounded-xl p-3 space-y-1 border-teal-500/30">
+            <div class="flex justify-between items-center text-[10px] text-teal-400 font-mono">
+              <span>蟷 MANTE</span>
+              <span>Archer</span>
+            </div>
+            <div class="font-bold font-imperial text-amber-200 text-xs">Tsuruchi Akira</div>
+            <p class="text-[10px] text-stone-400 leading-snug">Tireur d'élite pragmatique, médecin et chroniqueur.</p>
+          </div>
+
+          <div class="card-clean rounded-xl p-3 space-y-1 border-orange-500/30">
+            <div class="flex justify-between items-center text-[10px] text-orange-400 font-mono">
+              <span>鳳 PHÉNIX</span>
+              <span>Shugenja</span>
+            </div>
+            <div class="font-bold font-imperial text-amber-200 text-xs">Isawa Ryumitaka</div>
+            <p class="text-[10px] text-stone-400 leading-snug">Mystique flamboyant en communion avec les Kamis.</p>
+          </div>
+
+          <div class="card-clean rounded-xl p-3 space-y-1 border-cyan-400/30">
+            <div class="flex justify-between items-center text-[10px] text-cyan-300 font-mono">
+              <span>鶴 GRUE</span>
+              <span>Duelliste</span>
+            </div>
+            <div class="font-bold font-imperial text-amber-200 text-xs">Sutokhu Kakita</div>
+            <p class="text-[10px] text-stone-400 leading-snug">Champion du tournoi de Topaze à la lame fulgurante.</p>
+          </div>
+
+          <div class="card-clean rounded-xl p-3 space-y-1 border-emerald-500/30">
+            <div class="flex justify-between items-center text-[10px] text-emerald-400 font-mono">
+              <span>龍 DRAGON</span>
+              <span>Bushi Niten</span>
+            </div>
+            <div class="font-bold font-imperial text-amber-200 text-xs">Mansouri Mirumoto</div>
+            <p class="text-[10px] text-stone-400 leading-snug">Escrimeur silencieux à la stature imposante.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         3. L'ATELIER DU SAMOURAÏ (ACCÈS RAPIDE AUX 3 OUTILS INTERACTIFS)
          =================================================================== -->
     <section class="space-y-4">
       <div class="flex flex-wrap justify-between items-end border-b border-amber-500/20 pb-2 gap-2">
@@ -100,7 +187,7 @@
           <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200">
             L'ATELIER DU SAMOURAÏ — OUTILS INTERACTIFS
           </h2>
-          <span class="text-xs text-stone-400">Création de fiche automatisée, recherche de sortilèges et export vers le Carnet de Rokugan.</span>
+          <span class="text-xs text-stone-400">Création de fiche avec générateur d'histoire, recherche de sorts et export vers le Carnet de Rokugan.</span>
         </div>
         <span class="text-[10px] text-amber-400/80 font-mono">SYSTÈME ROLL & KEEP (XkY)</span>
       </div>
@@ -112,17 +199,17 @@
           <div class="space-y-2">
             <div class="flex justify-between items-center">
               <span class="px-2.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold font-imperial text-[10px]">
-                GÉNÉRATEUR 4E ÉDITION
+                FORGE + 20 QUESTIONS + DÉS
               </span>
               <span class="text-lg">⚔️</span>
             </div>
             <h3 class="text-base font-bold font-imperial text-amber-200">Forge de Personnage</h3>
             <p class="text-stone-400 leading-relaxed text-[11px]">
-              Calcul automatique des 5 Anneaux, de la Réputation (Insight), du ND d'Armure, des Paliers de Maîtrise (Rangs 3, 5, 7) et impression sur fiche A4 officielle 2 pages.
+              Calcul automatique des 5 Anneaux, sauvegarde dans votre Dojo, générateur d'histoire sur-mesure, plateau de dés Roll & Keep intégré et impression PDF A4.
             </p>
           </div>
           <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between gap-2">
-            <span class="text-[10px] text-stone-500">8 Clans • 34 Écoles • Export JSON/PDF</span>
+            <span class="text-[10px] text-stone-500">8 Clans • 34 Écoles • Sauvegarde locale</span>
             <a href="createcharacter.html" class="px-3.5 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-[11px] transition shrink-0">
               Ouvrir la Forge →
             </a>
@@ -142,7 +229,6 @@
             <p class="text-stone-400 leading-relaxed text-[11px]">
               Consultez les invocations élémentaires (Terre, Eau, Feu, Air, Vide), les Kihos des moines et les parchemins interdits.
             </p>
-            <!-- Barre de recherche directe vers grimoire.html -->
             <form action="grimoire.html" method="GET" class="pt-1 flex gap-1.5">
               <input 
                 type="text" 
@@ -150,7 +236,7 @@
                 placeholder="Chercher un sort (ex: Jade, Guérison...)" 
                 class="w-full px-2.5 py-1.5 rounded bg-black/80 border border-stone-800 text-amber-200 placeholder-stone-600 text-[11px] focus:outline-none focus:border-amber-500"
               >
-              <button type="submit" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/30 font-bold text-[11px] shrink-0">
+              <button type="submit" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/30 font-bold text-[11px] shrink-0 cursor-pointer">
                 🔍
               </button>
             </form>
@@ -197,7 +283,7 @@
     </section>
 
     <!-- ===================================================================
-         3. VITRINE DE LA CAMPAGNE (LES VRAIS SCÉNARIOS ILLUSTRÉS & AUDIO)
+         4. VITRINE DE LA CAMPAGNE (LES VRAIS SCÉNARIOS ILLUSTRÉS & AUDIO)
          =================================================================== -->
     <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 relative overflow-hidden space-y-6 shadow-2xl">
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
@@ -209,7 +295,7 @@
             Annales de la Campagne du MJ David
           </h2>
           <p class="text-xs text-stone-400">
-            Revivez l'épopée de Samui Hida, Okado Hiruma, Tsuruchi Akira, Isawa Ryumitaka, Kakita Sutokhu et Mirumoto Mansouri.
+            Lisez ou écoutez les récits intégraux rédigés par les joueurs, illustrés scène par scène.
           </p>
         </div>
         <div class="flex items-center gap-2">
@@ -350,7 +436,7 @@
     </section>
 
     <!-- ===================================================================
-         4. LES HUIT GRANDS CLANS (LORE + RACCOURCI DE CRÉATION DIRECTE)
+         5. LES HUIT GRANDS CLANS (LORE + RACCOURCI DE CRÉATION DIRECTE)
          =================================================================== -->
     <section class="space-y-4">
       <div class="flex justify-between items-end border-b border-amber-500/20 pb-2">
@@ -402,7 +488,7 @@
               CLAN DE LA GRUE
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              La Main Gauche de l'Empereur en cour, arbitres de l'étiquette et duellistes insurpassés d'Iaijutsu.
+              Arbitres de l'étiquette à la cour impériale et duellistes insurpassés dans l'art de l'Iaijutsu.
             </p>
           </a>
           <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
@@ -561,7 +647,7 @@
     </section>
 
     <!-- ===================================================================
-         5. AIDES DE JEU & RÈGLES OFFICIELLES AUTOUR DE LA TABLE
+         6. AIDES DE JEU & RÈGLES OFFICIELLES AUTOUR DE LA TABLE
          =================================================================== -->
     <section class="space-y-4">
       <div class="border-b border-amber-500/20 pb-2">
@@ -633,6 +719,37 @@
       </div>
     </div>
   </footer>
+
+  <!-- AFFICHAGE AUTOMATIQUE DES PERSONNAGES SAUVEGARDÉS SUR L'ACCUEIL -->
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      try {
+        const roster = JSON.parse(localStorage.getItem("l5r_dojo_roster_v1") || "[]");
+        const wrapper = document.getElementById("home-saved-roster");
+        const grid = document.getElementById("home-saved-grid");
+        if (!roster.length || !wrapper || !grid) return;
+
+        wrapper.classList.remove("hidden");
+        grid.innerHTML = roster.map(c => `
+          <a href="createcharacter.html?load=${encodeURIComponent(c.id)}" class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-2 border-emerald-500/40 bg-gradient-to-br from-[#0e1914] to-[#0a0808] group">
+            <div>
+              <div class="flex justify-between items-center text-[10px] text-emerald-400 font-mono">
+                <span>${c.clanLabel || "Samouraï"}</span>
+                <span>Honneur ${c.honor || "4.5"}</span>
+              </div>
+              <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 mt-0.5">${c.name}</h3>
+              <div class="text-[11px] text-stone-400">${c.schoolLabel} • ${c.insightText}</div>
+              ${c.backgroundStory ? `<p class="text-[10px] text-stone-500 italic line-clamp-2 mt-1.5">« ${c.backgroundStory} »</p>` : ""}
+            </div>
+            <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-amber-300 font-imperial font-bold">
+              <span>Toucher ${c.atk || "3g2"} • ND ${c.armorTn || "20"}</span>
+              <span>Ouvrir dans la Forge →</span>
+            </div>
+          </a>
+        `).join("");
+      } catch (e) {}
+    });
+  </script>
 
 </body>
 </html>
