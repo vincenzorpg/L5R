@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chronique de Rokugan — L5R 4e Édition | Campagne MJ David</title>
+  <title>Les Chroniques de Rokugan — L5R 4e Édition | Campagne MJ David</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #200808 0%, #0a0808 85%);
+      background-image: radial-gradient(circle at 50% 8%, #240a0a 0%, #0a0808 80%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
@@ -32,6 +32,12 @@
     .card-clean {
       background: rgba(18, 14, 14, 0.94);
       border: 1px solid rgba(212, 175, 55, 0.25);
+      transition: all 0.22s ease;
+    }
+    .card-hover:hover {
+      border-color: rgba(212, 175, 55, 0.65);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.75);
     }
     .gold-text { color: var(--gold); }
     .gold-gradient {
@@ -47,297 +53,562 @@
   <header id="site-header"></header>
 
   <!-- CONTENU PRINCIPAL -->
-  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-12">
 
-    <!-- HERO PORTAIL -->
-    <section class="card-clean rounded-2xl p-6 md:p-12 border-amber-500/40 text-center relative overflow-hidden">
+    <!-- ===================================================================
+         1. HERO PORTAIL DE LA CAMPAGNE
+         =================================================================== -->
+    <section class="card-clean rounded-2xl p-6 md:p-12 border-amber-500/40 text-center relative overflow-hidden shadow-2xl">
+      <div class="absolute -right-6 -bottom-10 text-[160px] md:text-[220px] font-black text-amber-500/5 select-none pointer-events-none font-imperial">
+        竜
+      </div>
       <div class="max-w-3xl mx-auto space-y-4 relative z-10">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/70 border border-amber-500/40 text-[11px] uppercase tracking-widest text-amber-300 font-bold">
-          <span>🌸</span> Chronique Officielle 4e Édition
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/80 border border-amber-500/40 text-[11px] uppercase tracking-widest text-amber-300 font-bold">
+          <span>🌸</span> Portail Officiel L5R 4e Édition • Table du MJ David
         </div>
         <h1 class="text-3xl md:text-5xl font-black font-imperial tracking-wide gold-gradient">
-          L'EMPIRE D'ÉMERAUDE
+          LES CHRONIQUES DE ROKUGAN
         </h1>
-        <p class="text-xs md:text-sm text-stone-300 leading-relaxed italic">
-          « L'honneur est plus lourd qu'une montagne, et la mort est plus légère qu'une plume. »
+        <p class="text-xs md:text-base text-amber-200/90 leading-relaxed italic font-imperial">
+          « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
         </p>
-        <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto pt-2">
-          Bienvenue sur le portail de campagne de la table du MJ David. Consultez les préceptes des huit Grands Clans, révisez les règles d'escarmouche et d'Iaijutsu, ou forgez votre samouraï prêt pour l'aventure.
+        <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto pt-1 leading-relaxed">
+          Retrouvez les annales complètes et sonorisées de nos 10 scénarios de campagne, forgez votre samouraï selon les règles officielles de la 4e Édition, consultez le Grimoire des Kami ou révisez l'art du duel Iaijutsu.
         </p>
+
+        <!-- BOUTONS D'ACTION PRINCIPAUX -->
         <div class="pt-4 flex flex-wrap justify-center gap-3">
-          <a href="campagne.html" class="px-5 py-2.5 rounded bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 hover:from-amber-600 hover:to-amber-700 text-amber-100 font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition border border-amber-500/40">
-          <span>巻</span> Chroniques de Campagne
+          <a href="campagne.html" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-black font-extrabold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition transform hover:scale-105">
+            <span>巻</span> Lire le Journal de Campagne (10 Actes)
           </a>
-          <a href="createcharacter.html" class="px-5 py-2.5 rounded bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-black font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition">
+          <a href="createcharacter.html" class="px-5 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-200 border border-amber-500/50 hover:border-amber-400 font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition">
             <span>⚔️</span> Forger un Personnage
           </a>
-          <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded bg-stone-900/90 hover:bg-stone-800 text-amber-300 border border-amber-500/50 hover:border-amber-400 text-xs font-imperial font-bold tracking-wider transition flex items-center gap-2 shadow-lg">
-            <span>📖</span> Carnet de Rokugan <span class="text-[10px] text-amber-500/80 font-sans">↗</span>
-          </a>
-          <a href="aides/combat-memento.html" class="px-5 py-2.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-imperial transition flex items-center gap-2">
-            <span>📜</span> Mémento de Combat
+          <a href="grimoire.html" class="px-5 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-200 border border-amber-500/40 hover:border-amber-400 font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition">
+            <span>🔥</span> Grimoire des Sorts & Kihos
           </a>
         </div>
       </div>
     </section>
-<!-- SECTION VITRINE : ANNALES DE LA CAMPAGNE DU MJ DAVID -->
-    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 relative overflow-hidden space-y-6">
+
+    <!-- ===================================================================
+         2. L'ATELIER DU SAMOURAÏ (ACCÈS RAPIDE AUX 3 OUTILS INTERACTIFS)
+         =================================================================== -->
+    <section class="space-y-4">
+      <div class="flex flex-wrap justify-between items-end border-b border-amber-500/20 pb-2 gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200">
+            L'ATELIER DU SAMOURAÏ — OUTILS INTERACTIFS
+          </h2>
+          <span class="text-xs text-stone-400">Création de fiche automatisée, recherche de sortilèges et export vers le Carnet de Rokugan.</span>
+        </div>
+        <span class="text-[10px] text-amber-400/80 font-mono">SYSTÈME ROLL & KEEP (XkY)</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 text-xs">
+        
+        <!-- OUTIL 1 : FORGE DE PERSONNAGE -->
+        <div class="card-clean card-hover rounded-xl p-5 flex flex-col justify-between space-y-4 border-amber-500/30 bg-gradient-to-br from-[#1a110b] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="px-2.5 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold font-imperial text-[10px]">
+                GÉNÉRATEUR 4E ÉDITION
+              </span>
+              <span class="text-lg">⚔️</span>
+            </div>
+            <h3 class="text-base font-bold font-imperial text-amber-200">Forge de Personnage</h3>
+            <p class="text-stone-400 leading-relaxed text-[11px]">
+              Calcul automatique des 5 Anneaux, de la Réputation (Insight), du ND d'Armure, des Paliers de Maîtrise (Rangs 3, 5, 7) et impression sur fiche A4 officielle 2 pages.
+            </p>
+          </div>
+          <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between gap-2">
+            <span class="text-[10px] text-stone-500">8 Clans • 34 Écoles • Export JSON/PDF</span>
+            <a href="createcharacter.html" class="px-3.5 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-[11px] transition shrink-0">
+              Ouvrir la Forge →
+            </a>
+          </div>
+        </div>
+
+        <!-- OUTIL 2 : GRIMOIRE AVEC RECHERCHE EXPRESS -->
+        <div class="card-clean card-hover rounded-xl p-5 flex flex-col justify-between space-y-4 border-amber-500/30 bg-gradient-to-br from-[#190d14] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="px-2.5 py-0.5 rounded bg-purple-950/80 border border-purple-500/40 text-purple-300 font-bold font-imperial text-[10px]">
+                KAMI, KIHOS & MAHŌ
+              </span>
+              <span class="text-lg">📜</span>
+            </div>
+            <h3 class="text-base font-bold font-imperial text-amber-200">Grimoire des Prières & Sorts</h3>
+            <p class="text-stone-400 leading-relaxed text-[11px]">
+              Consultez les invocations élémentaires (Terre, Eau, Feu, Air, Vide), les Kihos des moines et les parchemins interdits.
+            </p>
+            <!-- Barre de recherche directe vers grimoire.html -->
+            <form action="grimoire.html" method="GET" class="pt-1 flex gap-1.5">
+              <input 
+                type="text" 
+                name="q" 
+                placeholder="Chercher un sort (ex: Jade, Guérison...)" 
+                class="w-full px-2.5 py-1.5 rounded bg-black/80 border border-stone-800 text-amber-200 placeholder-stone-600 text-[11px] focus:outline-none focus:border-amber-500"
+              >
+              <button type="submit" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/30 font-bold text-[11px] shrink-0">
+                🔍
+              </button>
+            </form>
+          </div>
+          <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between gap-2">
+            <div class="flex gap-1">
+              <a href="grimoire.html?el=feu" class="px-1.5 py-0.5 rounded bg-red-950/60 text-red-300 border border-red-800/40 text-[9px]">火 Feu</a>
+              <a href="grimoire.html?el=eau" class="px-1.5 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40 text-[9px]">水 Eau</a>
+              <a href="grimoire.html?el=air" class="px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-300 border border-teal-800/40 text-[9px]">風 Air</a>
+              <a href="grimoire.html?el=terre" class="px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/40 text-[9px]">土 Terre</a>
+              <a href="grimoire.html?el=kiho" class="px-1.5 py-0.5 rounded bg-orange-950/60 text-orange-300 border border-orange-800/40 text-[9px]">Kiho</a>
+            </div>
+            <a href="grimoire.html" class="text-amber-400 hover:text-amber-200 font-imperial font-bold text-[11px] shrink-0">
+              Tout voir →
+            </a>
+          </div>
+        </div>
+
+        <!-- OUTIL 3 : CARNET DE ROKUGAN & DÉPÔT SCÉNARIO -->
+        <div class="card-clean card-hover rounded-xl p-5 flex flex-col justify-between space-y-4 border-amber-500/30 bg-gradient-to-br from-[#0d1614] to-[#0a0808]">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="px-2.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-bold font-imperial text-[10px]">
+                TABLE VIRTUELLE & RÉDACTION
+              </span>
+              <span class="text-lg">📖</span>
+            </div>
+            <h3 class="text-base font-bold font-imperial text-amber-200">Carnet de Rokugan & Studio</h3>
+            <p class="text-stone-400 leading-relaxed text-[11px]">
+              Exportez votre personnage créé dans la Forge directement au format JSON compatible avec le <b>Carnet de Rokugan</b>, ou téléversez un nouveau récit de séance.
+            </p>
+          </div>
+          <div class="pt-2 border-t border-stone-800/80 flex flex-wrap items-center justify-between gap-2">
+            <a href="campagne-ajouter.html" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 font-bold text-[11px] transition">
+              ➕ Déposer un récit
+            </a>
+            <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold font-imperial text-[11px] transition flex items-center gap-1">
+              <span>Carnet L5R</span> <span>↗</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         3. VITRINE DE LA CAMPAGNE (LES VRAIS SCÉNARIOS ILLUSTRÉS & AUDIO)
+         =================================================================== -->
+    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 relative overflow-hidden space-y-6 shadow-2xl">
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
         <div>
           <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/40 text-[10px] text-amber-300 font-bold uppercase tracking-wider mb-1">
-            <span>📜</span> Journal de Table
+            <span>🔊</span> Chroniques Illustrées avec Synthèse Vocale
           </div>
-          <h2 class="text-xl md:text-2xl font-bold font-imperial gold-gradient">Chroniques & Mémoires des Sessions</h2>
-          <p class="text-xs text-stone-400">10 scénarios officiels joués sous la maîtrise de David avec lecteur audio vocal intégré.</p>
+          <h2 class="text-xl md:text-2xl font-bold font-imperial gold-gradient">
+            Annales de la Campagne du MJ David
+          </h2>
+          <p class="text-xs text-stone-400">
+            Revivez l'épopée de Samui Hida, Okado Hiruma, Tsuruchi Akira, Isawa Ryumitaka, Kakita Sutokhu et Mirumoto Mansouri.
+          </p>
         </div>
         <div class="flex items-center gap-2">
-          <a href="campagne-ajouter.html" class="px-3.5 py-2 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow">
-            <span>➕</span> Téléverser un récit
+          <a href="campagne-ajouter.html" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5">
+            <span>➕</span> Ajouter un Scénario
           </a>
-          <a href="campagne.html" class="px-4 py-2 rounded bg-amber-600 hover:bg-amber-500 text-black text-xs font-bold font-imperial tracking-wider transition shadow">
-            Explorer les 10 Actes →
+          <a href="campagne.html" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black text-xs font-extrabold font-imperial tracking-wider transition shadow-lg">
+            Voir les 10 Actes →
           </a>
         </div>
       </div>
 
-      <!-- 3 DERNIERS ACTES EN AVANT-PREMIÈRE -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <a href="campagne/scenario-10.html" class="p-4 rounded-xl bg-black/60 border border-stone-800 hover:border-amber-500/60 transition group space-y-2">
-          <div class="flex justify-between text-[10px] text-amber-400 font-mono">
-            <span>ÉPISODE 10 (CLIMAX)</span>
-            <span class="text-stone-500">Session 10</span>
+      <!-- LES 3 PREMIERS ACTES COMPLETEMENT ILLUSTRÉS ET JOUABLES -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        
+        <!-- ACTE 1 : CHAMPIONNAT DE TOPAZE -->
+        <a href="campagne/scenario-1.html" class="rounded-xl bg-black/70 border border-stone-800 hover:border-amber-500/70 transition overflow-hidden flex flex-col justify-between group shadow-lg">
+          <div>
+            <div class="h-40 w-full overflow-hidden bg-stone-950 relative">
+              <img src="assets/images/scenarios/Topaze-1.jpg" alt="Championnat de Topaze" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.style.display='none'">
+              <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 border border-amber-500/40 text-[10px] text-amber-300 font-mono font-bold">
+                ACTE 01 • GEMPUKKU
+              </div>
+              <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-amber-600 text-black text-[10px] font-bold flex items-center gap-1 shadow">
+                <span>🔊</span> Audio & 3 Images
+              </div>
+            </div>
+            <div class="p-4 space-y-2">
+              <div class="text-[10px] text-stone-400 font-mono">Village de Tsuma • Par Tsuruchi Akira</div>
+              <h3 class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 text-sm md:text-base">
+                Scénario 1 : Championnat de Topaze
+              </h3>
+              <p class="text-stone-400 text-[11px] leading-relaxed line-clamp-3">
+                La rencontre de nos jeunes novices sur la route de Tsuma, l'énigmatique Megumi, les épreuves du tournoi impérial et l'assassinat nocturne du daimyo du Clan du Blaireau.
+              </p>
+            </div>
           </div>
-          <h3 class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 text-sm">Le Jugement du Champion d'Émeraude</h3>
-          <p class="text-stone-400 text-[11px] leading-relaxed line-clamp-2">L'heure solennelle des comptes et des verdicts suprêmes devant les hautes autorités de l'Empire.</p>
+          <div class="px-4 py-2.5 bg-stone-950/80 border-t border-stone-800/80 flex justify-between items-center text-[11px] text-amber-400 font-imperial font-bold">
+            <span>Lire & Écouter l'Acte 1</span>
+            <span class="group-hover:translate-x-1 transition">→</span>
+          </div>
         </a>
 
-        <a href="campagne/scenario-9.html" class="p-4 rounded-xl bg-black/60 border border-stone-800 hover:border-amber-500/60 transition group space-y-2">
-          <div class="flex justify-between text-[10px] text-amber-400 font-mono">
-            <span>ÉPISODE 09</span>
-            <span class="text-stone-500">Session 9</span>
+        <!-- ACTE 2 : MEURTRE AU CHÂTEAU DE KYOTEÏ -->
+        <a href="campagne/scenario-2.html" class="rounded-xl bg-black/70 border border-stone-800 hover:border-amber-500/70 transition overflow-hidden flex flex-col justify-between group shadow-lg">
+          <div>
+            <div class="h-40 w-full overflow-hidden bg-stone-950 relative">
+              <img src="assets/images/scenarios/Kyotei-1.jpg" alt="Meurtre au Château de Kyoteï" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.style.display='none'">
+              <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 border border-amber-500/40 text-[10px] text-amber-300 font-mono font-bold">
+                ACTE 02 • ENQUÊTE
+              </div>
+              <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-amber-600 text-black text-[10px] font-bold flex items-center gap-1 shadow">
+                <span>🔊</span> 3 Chroniques PJ
+              </div>
+            </div>
+            <div class="p-4 space-y-2">
+              <div class="text-[10px] text-stone-400 font-mono">Vallée de Kintani • Par Okado, Akira & Samui</div>
+              <h3 class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 text-sm md:text-base">
+                Scénario 2 : Meurtre au Château de Kyoteï
+              </h3>
+              <p class="text-stone-400 text-[11px] leading-relaxed line-clamp-3">
+                Invités au banquet du Festival des Morts par le daimyo Tsume Retsu, les PJ sont mandatés comme magistrats après son assassinat derrière un plancher rossignol.
+              </p>
+            </div>
           </div>
-          <h3 class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 text-sm">La Bataille du Gué des Saules</h3>
-          <p class="text-stone-400 text-[11px] leading-relaxed line-clamp-2">L'affrontement en ligne de bataille contre les charges de cavalerie sur les rives du fleuve.</p>
+          <div class="px-4 py-2.5 bg-stone-950/80 border-t border-stone-800/80 flex justify-between items-center text-[11px] text-amber-400 font-imperial font-bold">
+            <span>Lire & Écouter l'Acte 2</span>
+            <span class="group-hover:translate-x-1 transition">→</span>
+          </div>
         </a>
 
-        <a href="campagne/scenario-1.html" class="p-4 rounded-xl bg-black/60 border border-stone-800 hover:border-amber-500/60 transition group space-y-2">
-          <div class="flex justify-between text-[10px] text-amber-400 font-mono">
-            <span>ÉPISODE 01 (PROLOGUE)</span>
-            <span class="text-stone-500">Session 1</span>
+        <!-- ACTE 3 : LE DERNIER VOYAGE -->
+        <a href="campagne/scenario-3.html" class="rounded-xl bg-black/70 border border-stone-800 hover:border-amber-500/70 transition overflow-hidden flex flex-col justify-between group shadow-lg">
+          <div>
+            <div class="h-40 w-full overflow-hidden bg-stone-950 relative">
+              <img src="assets/images/scenarios/Voyage-1.jpg" alt="Le dernier voyage" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.style.display='none'">
+              <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 border border-amber-500/40 text-[10px] text-amber-300 font-mono font-bold">
+                ACTE 03 • PÉRIPLE
+              </div>
+              <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-amber-600 text-black text-[10px] font-bold flex items-center gap-1 shadow">
+                <span>🔊</span> 2 Chroniques PJ
+              </div>
+            </div>
+            <div class="p-4 space-y-2">
+              <div class="text-[10px] text-stone-400 font-mono">Terres Licorne • Par Ryûmitaka & Akira</div>
+              <h3 class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 text-sm md:text-base">
+                Scénario 3 : Le dernier voyage
+              </h3>
+              <p class="text-stone-400 text-[11px] leading-relaxed line-clamp-3">
+                Guidés à travers la neige par Xian, le destrier fidèle de Shinjo Shimura, les samouraïs découvrent le jardin zen d'Ikko et affrontent une cellule secrète du Kolat.
+              </p>
+            </div>
           </div>
-          <h3 class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 text-sm">Le Tournoi de Kyuden Doji</h3>
-          <p class="text-stone-400 text-[11px] leading-relaxed line-clamp-2">La première rencontre des samouraïs lors des joutes cérémonielles d'Iaijutsu.</p>
+          <div class="px-4 py-2.5 bg-stone-950/80 border-t border-stone-800/80 flex justify-between items-center text-[11px] text-amber-400 font-imperial font-bold">
+            <span>Lire & Écouter l'Acte 3</span>
+            <span class="group-hover:translate-x-1 transition">→</span>
+          </div>
         </a>
+
+      </div>
+
+      <!-- FRISE RAPIDE DES ACTES SUIVANTS (4 À 10) -->
+      <div class="pt-2 border-t border-stone-800/80">
+        <div class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-2.5">
+          Suite de la Campagne (Actes 4 à 10) :
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-[11px]">
+          <a href="campagne.html" class="p-2 rounded bg-black/50 border border-stone-800 hover:border-amber-500/40 transition block truncate">
+            <span class="text-amber-400 font-mono font-bold block text-[9px]">ACTE 04</span>
+            <span class="text-stone-300 font-imperial">Frères morts</span>
+          </a>
+          <a href="campagne.html" class="p-2 rounded bg-black/50 border border-stone-800 hover:border-amber-500/40 transition block truncate">
+            <span class="text-amber-400 font-mono font-bold block text-[9px]">ACTE 05</span>
+            <span class="text-stone-300 font-imperial">Ciel et Enfer</span>
+          </a>
+          <a href="campagne.html" class="p-2 rounded bg-black/50 border border-stone-800 hover:border-amber-500/40 transition block truncate">
+            <span class="text-amber-400 font-mono font-bold block text-[9px]">ACTE 06</span>
+            <span class="text-stone-300 font-imperial">Mariage d'Okado</span>
+          </a>
+          <a href="campagne.html" class="p-2 rounded bg-black/50 border border-stone-800 hover:border-amber-500/40 transition block truncate">
+            <span class="text-amber-400 font-mono font-bold block text-[9px]">ACTE 07</span>
+            <span class="text-stone-300 font-imperial">Ryoko Owari</span>
+          </a>
+          <a href="campagne.html" class="p-2 rounded bg-black/50 border border-stone-800 hover:border-amber-500/40 transition block truncate">
+            <span class="text-amber-400 font-mono font-bold block text-[9px]">ACTE 08</span>
+            <span class="text-stone-300 font-imperial">Crépuscule</span>
+          </a>
+          <a href="campagne.html" class="p-2 rounded bg-black/50 border border-stone-800 hover:border-amber-500/40 transition block truncate">
+            <span class="text-amber-400 font-mono font-bold block text-[9px]">ACTE 09</span>
+            <span class="text-stone-300 font-imperial">Ne meurt pas</span>
+          </a>
+          <a href="campagne.html" class="p-2 rounded bg-amber-950/30 border border-amber-500/40 hover:border-amber-400 transition block truncate col-span-2 sm:col-span-1">
+            <span class="text-amber-300 font-mono font-bold block text-[9px]">ACTE 10 • CLIMAX</span>
+            <span class="text-amber-200 font-bold font-imperial">Tombe de Iuchiban</span>
+          </a>
+        </div>
       </div>
     </section>
-<!-- SECTION : LES HUIT GRANDS CLANS (HARMONISÉE AVEC LE MENU FIXE) -->
+
+    <!-- ===================================================================
+         4. LES HUIT GRANDS CLANS (LORE + RACCOURCI DE CRÉATION DIRECTE)
+         =================================================================== -->
     <section class="space-y-4">
       <div class="flex justify-between items-end border-b border-amber-500/20 pb-2">
         <div>
           <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200">
-            LES HUIT GRANDS CLANS
+            LES HUIT GRANDS CLANS DE L'EMPIRE
           </h2>
-          <span class="text-xs text-stone-400">Histoire, familles fondamentales et serments sacrés de l'Empire.</span>
+          <span class="text-xs text-stone-400">Histoire, familles vassales, doctrines du Bushido et écoles de base 4e Édition.</span>
         </div>
-        <span class="text-[10px] text-stone-500 font-mono hidden sm:inline">ROKUGAN 4E ÉDITION</span>
+        <span class="text-[10px] text-stone-500 font-mono hidden sm:inline">CLIQUEZ POUR EXPLORER OU FORGER</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
 
-        <!-- 1. CRABE (蟹 - #38bdf8) -->
-        <a href="clans/crabe.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#38bdf8]/60 transition group bg-gradient-to-br from-[#0c1318] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 1. CRABE -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#0c1318] to-[#0a0808]">
+          <a href="clans/crabe.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#38bdf8]" style="text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#38bdf8]" style="text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);">
                 蟹
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#38bdf8] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#38bdf8] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#38bdf8] group-hover:text-amber-200 transition">
               CLAN DU CRABE
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              Les défenseurs stoïques du Mur Kaiu contre les horreurs et la Souillure de l'Outremonde.
+              Défenseurs stoïques du Mur Kaiu contre les hordes de l'Outremonde. Maîtres des armes lourdes et du jade.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Hida, Hiruma, Kuni, Kaiu, Yasuki</span>
+            <a href="createcharacter.html?clan=crabe" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#38bdf8] text-[#38bdf8] hover:text-black border border-[#38bdf8]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 2. GRUE (鶴 - #67e8f9) -->
-        <a href="clans/grue.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#67e8f9]/60 transition group bg-gradient-to-br from-[#0b1517] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 2. GRUE -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#0b1517] to-[#0a0808]">
+          <a href="clans/grue.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#67e8f9]" style="text-shadow: 0 0 8px rgba(103, 232, 249, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#67e8f9]" style="text-shadow: 0 0 8px rgba(103, 232, 249, 0.45);">
                 鶴
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#67e8f9] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#67e8f9] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#67e8f9] group-hover:text-amber-200 transition">
               CLAN DE LA GRUE
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              Maîtres de la cour, arbitres de l'étiquette et champions légendaires du duel Iaijutsu.
+              La Main Gauche de l'Empereur en cour, arbitres de l'étiquette et duellistes insurpassés d'Iaijutsu.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Doji, Kakita, Daidoji, Asahina</span>
+            <a href="createcharacter.html?clan=grue" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#67e8f9] text-[#67e8f9] hover:text-black border border-[#67e8f9]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 3. DRAGON (龍 - #34d399) -->
-        <a href="clans/dragon.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#34d399]/60 transition group bg-gradient-to-br from-[#081813] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 3. DRAGON -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#081813] to-[#0a0808]">
+          <a href="clans/dragon.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#34d399]" style="text-shadow: 0 0 8px rgba(52, 211, 153, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#34d399]" style="text-shadow: 0 0 8px rgba(52, 211, 153, 0.45);">
                 龍
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#34d399] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#34d399] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#34d399] group-hover:text-amber-200 transition">
               CLAN DU DRAGON
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              Escrimeurs du style Niten à deux sabres, magistrats logiques et moines tatoués.
+              Gardiens énigmatiques des montagnes, escrimeurs Niten à deux sabres, enquêteurs Kitsuki et moines tatoués.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Mirumoto, Kitsuki, Tamori, Togashi</span>
+            <a href="createcharacter.html?clan=dragon" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#34d399] text-[#34d399] hover:text-black border border-[#34d399]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 4. LION (獅 - #fbbf24) -->
-        <a href="clans/lion.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#fbbf24]/60 transition group bg-gradient-to-br from-[#191409] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 4. LION -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#191409] to-[#0a0808]">
+          <a href="clans/lion.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#fbbf24]" style="text-shadow: 0 0 8px rgba(251, 191, 36, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#fbbf24]" style="text-shadow: 0 0 8px rgba(251, 191, 36, 0.45);">
                 獅
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#fbbf24] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#fbbf24] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#fbbf24] group-hover:text-amber-200 transition">
               CLAN DU LION
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              Le Sabre Droit de l'Empereur, stratèges infaillibles et légions guerrières vouées au Bushido.
+              Le Sabre Droit de l'Empereur, stratèges infaillibles et légions guerrières vouées corps et âme au Bushido.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Akodo, Matsu, Ikoma, Kitsu</span>
+            <a href="createcharacter.html?clan=lion" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#fbbf24] text-[#fbbf24] hover:text-black border border-[#fbbf24]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 5. MANTE (蟷 - #2dd4bf) -->
-        <a href="clans/mante.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#2dd4bf]/60 transition group bg-gradient-to-br from-[#081716] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 5. MANTE -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#081716] to-[#0a0808]">
+          <a href="clans/mante.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#2dd4bf]" style="text-shadow: 0 0 8px rgba(45, 212, 191, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#2dd4bf]" style="text-shadow: 0 0 8px rgba(45, 212, 191, 0.45);">
                 蟷
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#2dd4bf] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#2dd4bf] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#2dd4bf] group-hover:text-amber-200 transition">
               CLAN DE LA MANTE
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              Les fils des tempêtes océaniques, corsaires redoutables et maîtres archers de l'Empire.
+              Fils des tempêtes océaniques, maîtres du commerce maritime et archers d'élite de la lignée Tsuruchi.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Yoritomo, Tsuruchi, Moshi</span>
+            <a href="createcharacter.html?clan=mante" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#2dd4bf] text-[#2dd4bf] hover:text-black border border-[#2dd4bf]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 6. PHÉNIX (鳳 - #f97316) -->
-        <a href="clans/phenix.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#f97316]/60 transition group bg-gradient-to-br from-[#180f08] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 6. PHÉNIX -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#180f08] to-[#0a0808]">
+          <a href="clans/phenix.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#f97316]" style="text-shadow: 0 0 8px rgba(249, 115, 22, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#f97316]" style="text-shadow: 0 0 8px rgba(249, 115, 22, 0.45);">
                 鳳
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#f97316] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#f97316] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#f97316] group-hover:text-amber-200 transition">
               CLAN DU PHÉNIX
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              La voix des Kami, les plus éminents maîtres des éléments et les gardes du corps Shiba.
+              Gardiens de la voix des Kami, maîtres des cinq éléments et du Vide, protégés par les yojimbo Shiba.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Isawa, Shiba, Asako, Agasha</span>
+            <a href="createcharacter.html?clan=phenix" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#f97316] text-[#f97316] hover:text-black border border-[#f97316]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 7. SCORPION (蠍 - #f43f5e) -->
-        <a href="clans/scorpion.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#f43f5e]/60 transition group bg-gradient-to-br from-[#180a0f] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 7. SCORPION -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#180a0f] to-[#0a0808]">
+          <a href="clans/scorpion.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#f43f5e]" style="text-shadow: 0 0 8px rgba(244, 63, 94, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#f43f5e]" style="text-shadow: 0 0 8px rgba(244, 63, 94, 0.45);">
                 蠍
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#f43f5e] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#f43f5e] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#f43f5e] group-hover:text-amber-200 transition">
               CLAN DU SCORPION
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              La Main Gauche de l'Empereur, manipulant le secret, le chantage et le devoir absolu.
+              Les gardiens masqués des secrets de l'Empire, maîtres de l'ombre, du chantage et de la loyauté absolue.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Bayushi, Shosuro, Soshi, Yogo</span>
+            <a href="createcharacter.html?clan=scorpion" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#f43f5e] text-[#f43f5e] hover:text-black border border-[#f43f5e]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
-        <!-- 8. LICORNE (麒 - #c084fc) -->
-        <a href="clans/licorne.html" class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-[#c084fc]/60 transition group bg-gradient-to-br from-[#140b19] to-[#0a0808]">
-          <div class="space-y-2">
+        <!-- 8. LICORNE -->
+        <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br from-[#140b19] to-[#0a0808]">
+          <a href="clans/licorne.html" class="space-y-2 block group">
             <div class="flex items-center justify-between">
-              <span class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-base bg-black/80 border border-stone-800 text-[#c084fc]" style="text-shadow: 0 0 8px rgba(192, 132, 252, 0.45);">
+              <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800 text-[#c084fc]" style="text-shadow: 0 0 8px rgba(192, 132, 252, 0.45);">
                 麒
               </span>
-              <span class="text-[10px] text-stone-500 group-hover:text-[#c084fc] transition font-imperial font-bold">VOIR CLAN →</span>
+              <span class="text-[10px] text-stone-400 group-hover:text-[#c084fc] transition font-imperial font-bold">LORE & ÉCOLES →</span>
             </div>
             <h3 class="font-bold font-imperial text-sm text-[#c084fc] group-hover:text-amber-200 transition">
               CLAN DE LA LICORNE
             </h3>
             <p class="text-stone-400 text-[11px] leading-relaxed">
-              Revenus des terres lointaines avec leurs destriers fougueux et leur magie des amulettes.
+              Seigneurs des steppes revenus des Terres Brûlées, maîtres de la cavalerie lourde et de la magie Meishōdō.
             </p>
+          </a>
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px]">
+            <span class="text-stone-500">Shinjo, Moto, Utaku, Ide, Iuchi</span>
+            <a href="createcharacter.html?clan=licorne" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-[#c084fc] text-[#c084fc] hover:text-black border border-[#c084fc]/40 font-bold transition">
+              ⚡ Forger
+            </a>
           </div>
-        </a>
+        </div>
 
       </div>
     </section>
 
-    <!-- 2. AIDES DE JEU & RÈGLES OFFICIELLES (RECTANGLES ENTIÈREMENT CLIQUABLES) -->
+    <!-- ===================================================================
+         5. AIDES DE JEU & RÈGLES OFFICIELLES AUTOUR DE LA TABLE
+         =================================================================== -->
     <section class="space-y-4">
       <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">Aides de Jeu & Règles Officielles</h2>
-        <span class="text-xs text-stone-400">Guides de référence immédiate pour les joueurs et le MJ autour de la table.</span>
+        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">Aides de Jeu & Arbitrage Rapide</h2>
+        <span class="text-xs text-stone-400">Guides de référence immédiate imprimables pour les joueurs et le MJ en pleine séance.</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
 
-        <!-- CARTE CLIQUABLE : MÉMENTO COMBAT -->
-        <a href="aides/combat-memento.html" class="card-clean rounded-xl p-5 space-y-3 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+        <!-- CARTE 1 : MÉMENTO COMBAT -->
+        <a href="aides/combat-memento.html" class="card-clean card-hover rounded-xl p-5 space-y-3 block group">
           <div class="flex justify-between items-center">
             <span class="w-9 h-9 rounded-full bg-red-950/60 border border-red-500/40 flex items-center justify-center text-red-300 font-bold group-hover:scale-110 transition">⚔️</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400 tracking-wider">Guide Tactique →</span>
+            <span class="text-[10px] uppercase font-bold text-stone-400 group-hover:text-amber-400 tracking-wider">Guide Tactique →</span>
           </div>
           <div>
             <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 transition">Combat & Duels Iaijutsu</h3>
             <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
-              Déroulement d'un round d'escarmouche, les 5 postures de combat, les 3 rounds du duel formel au sabre et les manœuvres d'augmentation.
+              Les 3 étapes d'un round d'escarmouche, les 5 postures (Attaque, Attaque Totale, Défense, Défense Totale, Centre), le duel en 3 phases et les Augmentations.
             </p>
           </div>
         </a>
 
-        <!-- CARTE CLIQUABLE : BUSHIDO & HONNEUR -->
-        <a href="aides/bushido-honneur.html" class="card-clean rounded-xl p-5 space-y-3 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+        <!-- CARTE 2 : BUSHIDO & HONNEUR -->
+        <a href="aides/bushido-honneur.html" class="card-clean card-hover rounded-xl p-5 space-y-3 block group">
           <div class="flex justify-between items-center">
             <span class="w-9 h-9 rounded-full bg-amber-950/60 border border-amber-500/40 flex items-center justify-center text-amber-300 font-bold font-imperial group-hover:scale-110 transition">義</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400 tracking-wider">Code Moral →</span>
+            <span class="text-[10px] uppercase font-bold text-stone-400 group-hover:text-amber-400 tracking-wider">Code Moral →</span>
           </div>
           <div>
             <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 transition">Code du Bushido & Honneur</h3>
             <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
-              Les 7 vertus cardinales, distinction entre Honneur, Gloire et Statut, et le barème officiel des gains et pertes d'honneur (Table 2.3).
+              Les 7 vertus cardinales, la trinité sociale (Honneur, Gloire, Statut), le barème officiel de la Table 2.3 et les règles des Doigts de Jade contre la Souillure.
             </p>
           </div>
         </a>
 
-        <!-- CARTE CLIQUABLE : ÉTIQUETTE & COUTUMES -->
-        <a href="aides/etiquette-coutumes.html" class="card-clean rounded-xl p-5 space-y-3 block group hover:border-amber-400/80 transition duration-200 hover:-translate-y-0.5 shadow-lg">
+        <!-- CARTE 3 : ÉTIQUETTE & COUTUMES -->
+        <a href="aides/etiquette-coutumes.html" class="card-clean card-hover rounded-xl p-5 space-y-3 block group">
           <div class="flex justify-between items-center">
             <span class="w-9 h-9 rounded-full bg-emerald-950/60 border border-emerald-500/40 flex items-center justify-center text-emerald-300 font-bold group-hover:scale-110 transition">🍵</span>
-            <span class="text-[10px] uppercase font-bold text-stone-500 group-hover:text-amber-400 tracking-wider">Us & Coutumes →</span>
+            <span class="text-[10px] uppercase font-bold text-stone-400 group-hover:text-amber-400 tracking-wider">Us & Coutumes →</span>
           </div>
           <div>
             <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 transition">Étiquette & Coutumes</h3>
             <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
-              L'Ordre Céleste et les castes, le protocole des sabres, la règle des cadeaux en trois temps, la cérémonie du thé et l'art de sauver la face.
+              L'Ordre Céleste (Kuge, Buke, Heimin, Hinin), le protocole du Daisho, la règle des cadeaux en 3 refus, la cérémonie du thé et l'art de sauver la face.
             </p>
           </div>
         </a>
@@ -347,9 +618,20 @@
 
   </main>
 
-  <!-- PIED DE PAGE -->
-  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Portail de Campagne
+  <!-- PIED DE PAGE ENRICHI -->
+  <footer class="py-8 px-4 border-t border-stone-900 bg-black/80 mt-12 text-xs text-stone-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-6 h-6 rounded-full bg-amber-600 text-black font-bold font-imperial flex items-center justify-center text-[10px]">竜</span>
+        <span class="font-imperial text-amber-200/80 font-bold">LES CHRONIQUES DE ROKUGAN — Campagne L5R 4e Édition • MJ David</span>
+      </div>
+      <div class="flex flex-wrap gap-4 text-[11px]">
+        <a href="campagne.html" class="hover:text-amber-300 transition">Journal de Campagne</a>
+        <a href="createcharacter.html" class="hover:text-amber-300 transition">Forge PJ</a>
+        <a href="grimoire.html" class="hover:text-amber-300 transition">Grimoire</a>
+        <a href="https://campagnel5rdavid2015.wordpress.com/" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition">Archive WordPress 2015 ↗</a>
+      </div>
+    </div>
   </footer>
 
 </body>
