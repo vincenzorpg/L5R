@@ -1203,8 +1203,16 @@ function updateAll() {
     }
   });
 
-  if (voi > 2) {
-    for (let r = 3; r <= voi; r++) xpSpent += r * 6;
+  // Prise en compte du bonus gratuit d'École ou de Famille sur l'Anneau du Vide
+  const voidBonus = (fam?.trait === "Vide" ? 1 : 0) + (sch?.trait === "Vide" ? 1 : 0);
+  const baseVoid = 2 + voidBonus;
+
+  if (voi > baseVoid) {
+    for (let r = baseVoid + 1; r <= voi; r++) {
+      // Coût normal : Rang suivant × 6 XP (réduit de 2 si avantage Illuminé)
+      const costPerRank = hasAdv("enlightened") ? Math.max(1, (r * 6) - 2) : (r * 6);
+      xpSpent += costPerRank;
+    }
   }
 
   currentSkills.forEach(sk => {
