@@ -318,7 +318,7 @@ function generateCarnetJSON() {
   const familyName = (famEl?.options[famEl.selectedIndex]?.text?.split("(")[0]?.trim() || "").substring(0, 80);
 
   const schoolEl = document.getElementById("sel-school");
-  const schoolDisplayed = (schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
+//  const schoolDisplayed = (schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
 
   // Détection de l'ID d'école du catalogue (§5.2) compatible avec « Études dans une Autre École »
   const resolvedSchObj = typeof window.getSelectedSchoolObject === "function" ? window.getSelectedSchoolObject() : null;
@@ -326,7 +326,6 @@ function generateCarnetJSON() {
   const schoolDisplayed = (currentSchoolData?.name || schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
   const internalSchoolId = currentSchoolData?.id || "";
 
-  const canonSchoolId = resolveSchoolIdFromText(schoolDisplayed, internalSchoolId);
   const canonSchoolId = resolveSchoolIdFromText(schoolDisplayed, internalSchoolId);
 
   // 2. Traits et Anneau du Vide
