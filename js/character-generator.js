@@ -549,8 +549,8 @@ function resetSheetToNewSelection() {
     const isChoice = sLower.includes("compétence") || sLower.includes("choix") || sLower.includes("any");
     let filterType = null;
     if (sLower.includes("bugei")) filterType = "Bugei";
-    else if (sLower.includes("noble") || sLower.includes("haute")) filterType = "Haute";
-    else if (sLower.includes("marchande")) filterType = "Marchande";
+    else if (sLower.includes("noble") || sLower.includes("haute") || sLower.includes("high")) filterType = "Noble";
+    else if (sLower.includes("marchande") || sLower.includes("merchant")) filterType = "Marchande";
 
     return {
       name: s,
@@ -901,10 +901,17 @@ function renderSkills() {
   const catalogSkills = getSkills();
 
   container.innerHTML = currentSkills.map((sk, idx) => {
-    if (sk.isChoice && !sk.chosen) {
+  if (sk.isChoice && !sk.chosen) {
       let filtered = catalogSkills;
       if (sk.choiceFilter) {
-        filtered = catalogSkills.filter(s => s.type?.toLowerCase() === sk.choiceFilter.toLowerCase());
+        const targetType = sk.choiceFilter.toLowerCase();
+        filtered = catalogSkills.filter(s => {
+          const t = (s.type || "").toLowerCase();
+          if (targetType === "noble" || targetType === "haute") {
+            return t === "noble" || t === "haute";
+          }
+          return t === targetType;
+        });
       }
       filtered = filtered.filter(s => !currentSkills.some(cs => (cs.chosen || !cs.isChoice) && cs.name === s.name));
 
