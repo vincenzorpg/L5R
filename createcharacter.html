@@ -51,7 +51,6 @@
       color: #f3e5ab !important;
     }
 
-    /* Masquer les flèches haut/bas sur tous les champs numériques */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -78,6 +77,15 @@
       border: 1px solid #e11d48;
     }
 
+    @keyframes dicePop {
+      0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+      70% { transform: scale(1.08) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .die-anim {
+      animation: dicePop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
     @media screen {
       #official-print-dossier { display: none !important; }
     }
@@ -91,7 +99,7 @@
         color: #111 !important;
         font-family: 'Noto Serif JP', serif;
       }
-      .no-print, header, aside, main, footer {
+      .no-print, header, aside, main, footer, #dice-roller-drawer {
         display: none !important;
       }
       #official-print-dossier {
@@ -132,8 +140,8 @@
   <!-- 1. MENU DE NAVIGATION GLOBAL -->
   <header id="site-header"></header>
 
-  <!-- 2. BANDEAU DE COMBAT PERSISTANT -->
-  <aside aria-label="État du personnage" class="sticky top-0 z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
+  <!-- 2. BANDEAU DE COMBAT PERSISTANT (AVEC JETS CLIQUABLES) -->
+  <aside aria-label="État du personnage" class="sticky top-[54px] z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
     <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
       
       <div class="flex flex-wrap justify-between items-center gap-3">
@@ -166,52 +174,57 @@
           </div>
         </div>
 
-        <!-- Bloc Actions & Raccourcis -->
-        <div class="flex items-center gap-1.5">
-          <button onclick="randomizeAll()" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition">⚡ Auto</button>
-          <button onclick="exportJSON()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800">💾 JSON</button>
+        <!-- Bloc Actions & Sauvegarde Dojo -->
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button onclick="saveToDojo()" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition flex items-center gap-1 shadow cursor-pointer" title="Sauvegarder dans le navigateur (Dojo Personnel)">
+            <span>📌</span> <span>Sauvegarder</span>
+          </button>
+          <button onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct de cette fiche">
+            🔗 Lien
+          </button>
+          <button onclick="randomizeAll(); generateCharacterBackground();" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition cursor-pointer">⚡ Auto</button>
+          <button onclick="exportJSON()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer">💾 JSON</button>
           <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
             📂 Charger
             <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
           </label>
-          <button onclick="exportOfficialPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition">🖨️ PDF</button>
-          <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-3 py-1 rounded-lg bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 hover:border-amber-400 font-bold text-xs tracking-wider transition flex items-center gap-1.5 shadow-md">
-            <span>📖</span>
-            <span>Exporter</span>
+          <button onclick="prepareAndPrintPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition cursor-pointer">🖨️ PDF</button>
+          <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer">
+            <span>📖</span> <span>Carnet</span>
           </button>
-          <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40">Reset</button>
+          <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer">Reset</button>
         </div>
       </div>
 
-      <!-- Ligne 2 : Les 4 Métriques Clés -->
+      <!-- Ligne 2 : Les 4 Métriques Clés (CLIQUABLES POUR LANCER LES DÉS) -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
-        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
-          <div class="flex justify-between items-baseline">
-            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Toucher</span>
+        <button type="button" onclick="rollFromSticky('sticky-atk', 'Jet pour Toucher')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-amber-950/40 border border-stone-800 hover:border-amber-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer le jet d'attaque !">
+          <div class="flex justify-between items-baseline w-full">
+            <span class="text-[10px] text-stone-400 group-hover:text-amber-300 font-bold uppercase tracking-wider">🎲 Toucher</span>
             <span id="sticky-atk" class="text-sm font-bold text-amber-300 font-imperial">3g2</span>
           </div>
-          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Katana : Kenjutsu (1) + Agilité (2)</div>
-        </div>
+          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5 w-full">Katana : Kenjutsu (1) + Agilité (2)</div>
+        </button>
 
-        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
-          <div class="flex justify-between items-baseline">
-            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Dégâts</span>
+        <button type="button" onclick="rollFromSticky('sticky-dmg', 'Jet de Dégâts')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-red-950/40 border border-stone-800 hover:border-red-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer les dégâts !">
+          <div class="flex justify-between items-baseline w-full">
+            <span class="text-[10px] text-stone-400 group-hover:text-red-300 font-bold uppercase tracking-wider">🎲 Dégâts</span>
             <span id="sticky-dmg" class="text-sm font-bold text-red-400 font-imperial">4g2</span>
           </div>
-          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Katana (3g2) + Force (2)</div>
-        </div>
+          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5 w-full">Katana (3g2) + Force (2)</div>
+        </button>
 
-        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
-          <div class="flex justify-between items-baseline">
-            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Initiative</span>
+        <button type="button" onclick="rollFromSticky('sticky-init', 'Jet d\'Initiative')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-amber-950/40 border border-stone-800 hover:border-amber-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer l'Initiative !">
+          <div class="flex justify-between items-baseline w-full">
+            <span class="text-[10px] text-stone-400 group-hover:text-amber-200 font-bold uppercase tracking-wider">🎲 Initiative</span>
             <span id="sticky-init" class="text-sm font-bold text-amber-200 font-imperial">3g2</span>
           </div>
-          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Insight 1 + Réfl. 2 (3g2)</div>
-        </div>
+          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5 w-full">Insight 1 + Réfl. 2 (3g2)</div>
+        </button>
 
         <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
           <div class="flex justify-between items-baseline">
-            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">ND Armure</span>
+            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">🛡️ ND Armure</span>
             <span id="sticky-armor-tn" class="text-sm font-bold text-emerald-400 font-imperial">20</span>
           </div>
           <div id="sticky-armor-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Base 5 + Réfl. (10) + Armure (+5)</div>
@@ -223,6 +236,34 @@
 
   <!-- CONTENU PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- ===================================================================
+         0. MON DOJO PERSONNEL (CASERNE DES PERSONNAGES SAUVEGARDÉS)
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 bg-gradient-to-r from-[#16100c] via-[#120e0e] to-[#16100c] space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🏯</span>
+          <div>
+            <h2 class="text-xs md:text-sm font-bold font-imperial text-amber-200 uppercase tracking-wider">
+              Mon Dojo Personnel — Samouraïs Enregistrés
+            </h2>
+            <p class="text-[11px] text-stone-400">
+              Vos personnages sont conservés dans votre navigateur et accessibles depuis la page d'accueil.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="dojo-save-toast" class="hidden text-[11px] text-emerald-400 font-bold font-imperial">✓ Samouraï enregistré !</span>
+          <button type="button" onclick="saveToDojo()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs transition shadow cursor-pointer">
+            📌 Enregistrer le personnage actuel
+          </button>
+        </div>
+      </div>
+
+      <!-- Liste horizontale des personnages sauvegardés -->
+      <div id="dojo-roster-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 text-xs"></div>
+    </section>
 
     <!-- 1. ALLÉGEANCE, IDENTITÉ & LIGNÉE -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
@@ -246,13 +287,13 @@
           <div class="flex justify-between items-center mb-1">
             <label class="text-stone-400">Nom du Samouraï</label>
             <div class="flex gap-1.5">
-              <button onclick="generateRandomName('m')" title="Prénom Masculin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700">♂ Aléa</button>
-              <button onclick="generateRandomName('f')" title="Prénom Féminin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700">♀ Aléa</button>
-              <button onclick="toggleNameOrder()" title="Inverser Prénom/Famille" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-900 text-stone-400 hover:text-amber-300">⇄</button>
+              <button onclick="generateRandomName('m')" title="Prénom Masculin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♂ Aléa</button>
+              <button onclick="generateRandomName('f')" title="Prénom Féminin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♀ Aléa</button>
+              <button onclick="toggleNameOrder()" title="Inverser Prénom/Famille" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-900 text-stone-400 hover:text-amber-300 cursor-pointer">⇄</button>
             </div>
           </div>
           <input type="text" id="pc-name" value="Okado Hiruma" oninput="updateStickyName()" class="w-full p-2.5 rounded font-bold">
-          <div id="name-meaning" class="text-[11px] text-stone-400 italic mt-1">Signification : Épée vigoureuse et loyale</div>
+          <div id="name-meaning" class="text-[11px] text-stone-400 italic mt-1">Signification : Porte de la sagesse</div>
         </div>
       </div>
 
@@ -396,16 +437,14 @@
       </div>
     </section>
 
-    <!-- 3. COMPÉTENCES (AVEC MULTI-SÉLECTION & BOUTON UNIQUE +) -->
+    <!-- 3. COMPÉTENCES -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
         
         <div class="flex flex-wrap items-center gap-2 text-xs relative">
-          <!-- Select d'origine conservé pour compatibilité logicielle -->
           <select id="sel-add-skill" class="hidden"></select>
 
-          <!-- Menu déroulant personnalisé multi-sélection -->
           <div class="relative" id="skills-dropdown-wrapper">
             <button 
               type="button" 
@@ -417,7 +456,6 @@
               <span class="text-[9px] text-stone-500 transition-transform" id="skills-dropdown-arrow">▼</span>
             </button>
 
-            <!-- Panneau déroulant à cases à cocher -->
             <div 
               id="skills-dropdown-panel" 
               class="hidden absolute right-0 top-full mt-1.5 w-80 max-h-72 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
@@ -437,7 +475,6 @@
             </div>
           </div>
 
-          <!-- Bouton unique + pour les compétences -->
           <button 
             type="button" 
             onclick="addSelectedSkills()" 
@@ -447,11 +484,10 @@
         </div>
       </div>
       
-      <!-- Liste dynamique des cartes de compétences -->
       <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
     </section>
 
-    <!-- 4. AVANTAGES & DÉSAVANTAGES (AVEC BOUTONS UNIQUES +) -->
+    <!-- 4. AVANTAGES & DÉSAVANTAGES -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- BLOC AVANTAGES -->
       <div class="card-clean rounded-xl p-5 space-y-4">
@@ -607,14 +643,131 @@
       </div>
     </section>
 
+    <!-- ===================================================================
+         7. GÉNÉRATEUR DE LÉGENDE, BACKGROUND & LES 20 QUESTIONS DE ROKUGAN
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#16100e] to-[#0d0a0a]">
+      <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
+        <div>
+          <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
+            <span>📜</span> 6. Légende Personnelle, Background & Les 20 Questions
+          </h2>
+          <p class="text-xs text-stone-400">
+            Génère un récit sur-mesure à partir de votre Clan, votre École, vos Anneaux et vos Avantages/Désavantages (imprimé sur la Page 2 du PDF).
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" onclick="generateCharacterBackground()" class="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-extrabold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-1.5 transition transform hover:scale-105 cursor-pointer">
+            <span>✨</span> Forger mon Histoire & les 20 Questions
+          </button>
+        </div>
+      </div>
+
+      <!-- Biographie Narrative en 3 Actes -->
+      <div class="space-y-1.5 text-xs">
+        <div class="flex justify-between items-center">
+          <label for="pc-background-story" class="text-amber-300 font-bold font-imperial uppercase tracking-wider text-[11px]">
+            Chronique biographique du Samouraï (Éditable)
+          </label>
+          <button type="button" onclick="readBackgroundAloud()" class="text-[11px] text-amber-400 hover:text-amber-200 flex items-center gap-1 cursor-pointer">
+            <span>🔊</span> Écouter la biographie
+          </button>
+        </div>
+        <textarea id="pc-background-story" rows="6" placeholder="Cliquez sur « Forger mon Histoire » ci-dessus pour générer un récit unique basé sur vos choix..." class="w-full p-3 rounded-lg text-xs leading-relaxed font-serif"></textarea>
+      </div>
+
+      <!-- Les 4 Piliers du Jeu des 20 Questions -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
+        <div class="space-y-1">
+          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
+            1. Comment s'est déroulé votre Gempukku et qui est votre Sensei ?
+          </label>
+          <textarea id="q20-gempukku" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+        </div>
+        <div class="space-y-1">
+          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
+            2. Quelle est votre vision personnelle du Bushido et du Devoir ?
+          </label>
+          <textarea id="q20-bushido" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+        </div>
+        <div class="space-y-1">
+          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
+            3. Quel est votre plus lourd fardeau, secret ou rivalité ?
+          </label>
+          <textarea id="q20-secret" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+        </div>
+        <div class="space-y-1">
+          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
+            4. De quelle manière honorable envisagez-vous votre mort ?
+          </label>
+          <textarea id="q20-death" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print">
-    Campagne L5R – MJ David • Fiche Interactive dynamique alimentée par data/ et js/
+  <!-- =====================================================================
+       PLATEAU DE DÉS INTERACTIF FLOTTANT (ROLL & KEEP XgY AVEC EXPLOSION DES 10)
+       ===================================================================== -->
+  <div id="dice-roller-drawer" class="fixed bottom-4 right-4 z-50 no-print">
+    <!-- Bouton d'ouverture réduit -->
+    <button type="button" id="dice-fab" onclick="toggleDiceTray()" class="px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-extrabold font-imperial text-xs shadow-2xl border border-amber-300/60 flex items-center gap-2 cursor-pointer transition transform hover:scale-105">
+      <span class="text-base">🎲</span>
+      <span>Plateau Roll & Keep (XkY)</span>
+    </button>
+
+    <!-- Fenêtre du lanceur de dés -->
+    <div id="dice-tray-panel" class="hidden w-80 sm:w-96 rounded-2xl bg-[#120d0d]/98 border-2 border-amber-500/60 shadow-2xl p-4 space-y-3 text-xs backdrop-blur-md mt-2">
+      <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
+        <span class="font-imperial font-bold text-amber-300 text-sm flex items-center gap-1.5">
+          <span>🎲</span> Lanceur Roll & Keep (4e Éd.)
+        </span>
+        <button type="button" onclick="toggleDiceTray(false)" class="text-stone-400 hover:text-white font-bold px-1.5 cursor-pointer">✕</button>
+      </div>
+
+      <!-- Sélecteur manuel XgY -->
+      <div class="grid grid-cols-3 gap-2 items-end">
+        <div>
+          <label class="text-[10px] text-stone-400 block mb-0.5">Dés lancés (X)</label>
+          <input type="number" id="manual-roll-x" value="5" min="1" max="20" class="w-full p-1.5 rounded text-center font-bold">
+        </div>
+        <div>
+          <label class="text-[10px] text-stone-400 block mb-0.5">Dés gardés (Y)</label>
+          <input type="number" id="manual-keep-y" value="3" min="1" max="10" class="w-full p-1.5 rounded text-center font-bold">
+        </div>
+        <button type="button" onclick="executeManualRoll()" class="py-1.5 px-3 rounded bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial transition cursor-pointer">
+          Lancer !
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between text-[11px] text-stone-400">
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="dice-explode-cb" checked class="accent-amber-500"> 10 Explosifs
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="dice-spec-cb" class="accent-amber-500"> Spécialisation (Relance les 1)
+        </label>
+      </div>
+
+      <!-- Résultat du jet -->
+      <div id="dice-result-box" class="p-3 rounded-xl bg-black/80 border border-stone-800 space-y-2 min-h-[76px] flex flex-col justify-center">
+        <div class="text-center text-stone-500 italic text-[11px]">
+          Cliquez sur Toucher, Dégâts, Initiative ou lancez manuellement vos dés.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
+    Campagne L5R – MJ David • Fiche Interactive avec Dojo de Sauvegarde & Générateur de Légende
   </footer>
 
-  <!-- DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 ET PAGE 2) -->
+  <!-- =====================================================================
+       DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 ET PAGE 2 AVEC BACKGROUND)
+       ===================================================================== -->
   <div id="official-print-dossier" class="text-black text-[9px] leading-tight">
+    <!-- PAGE 1 : CARACTÉRISTIQUES, COMPÉTENCES & COMBAT -->
     <div class="print-page flex flex-col justify-between py-1">
       <div class="sheet-box mb-2 p-2">
         <div class="flex justify-between items-center border-b border-black pb-1 mb-1">
@@ -744,7 +897,7 @@
       </div>
     </div>
 
-    <!-- PAGE 2 : IDENTITÉ, AVANTAGES & TECHNIQUES -->
+    <!-- PAGE 2 : IDENTITÉ, AVANTAGES, TECHNIQUES & BACKGROUND / 20 QUESTIONS -->
     <div class="print-page flex flex-col justify-between py-1">
       <div class="sheet-box mb-2 p-1.5 flex justify-between items-center text-[9px]">
         <div><b>Samouraï :</b> <span id="p-name-2" class="font-imperial font-bold text-xs"></span></div>
@@ -755,11 +908,11 @@
       <div class="grid grid-cols-2 gap-2 mb-2">
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>Avantages</span><span id="p-adv-total">0 XP</span></div>
-          <div class="p-1.5 space-y-1.5 text-[8px]" id="p-adv-list"></div>
+          <div class="p-1.5 space-y-1 text-[8px]" id="p-adv-list"></div>
         </div>
         <div class="sheet-box">
           <div class="sheet-title flex justify-between"><span>Désavantages (Max 15 XP)</span><span id="p-disadv-total">0 XP</span></div>
-          <div class="p-1.5 space-y-1.5 text-[8px]" id="p-disadv-list"></div>
+          <div class="p-1.5 space-y-1 text-[8px]" id="p-disadv-list"></div>
         </div>
       </div>
 
@@ -771,35 +924,34 @@
         </div>
       </div>
 
-      <div class="sheet-box mb-1">
+      <div class="sheet-box mb-2">
         <div class="sheet-title">Équipement, Dotation (*Outfit*) & Richesse</div>
-        <div class="p-2 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
+        <div class="p-1.5 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
+      </div>
+
+      <!-- NOUVEAU BLOC IMPRIMÉ : HISTOIRE & LES 20 QUESTIONS -->
+      <div class="sheet-box mb-1 flex-1">
+        <div class="sheet-title">Chronique Biographique & Les 20 Questions de Rokugan</div>
+        <div class="p-2 space-y-2 text-[8px] leading-relaxed">
+          <div id="p-background-story" class="whitespace-pre-line text-stone-800"></div>
+          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-stone-300" id="p-20questions-box"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- SCRIPTS DU BAS DE PAGE -->
+  <!-- SCRIPTS D'APERÇU DES AVANTAGES & MULTI-SÉLECTION -->
   <script>
     function updateAdvPreview() {
       const sel = document.getElementById('sel-catalog-adv');
       const card = document.getElementById('adv-preview-card');
       if (!sel || !card) return;
-
       const val = sel.value;
-      if (val === "") {
-        card.classList.add('hidden');
-        return;
-      }
-
+      if (val === "") { card.classList.add('hidden'); return; }
       const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
       const list = advContainer?.avantages || [];
       const adv = list[val] || list.find(a => a.id === val || a.name === val);
-
-      if (!adv) {
-        card.classList.add('hidden');
-        return;
-      }
-
+      if (!adv) { card.classList.add('hidden'); return; }
       document.getElementById('adv-preview-name').textContent = adv.name;
       document.getElementById('adv-preview-type').textContent = `Catégorie : ${adv.type}`;
       document.getElementById('adv-preview-cost').textContent = `Coût : ${adv.cost} XP`;
@@ -813,22 +965,12 @@
       const sel = document.getElementById('sel-catalog-disadv');
       const card = document.getElementById('disadv-preview-card');
       if (!sel || !card) return;
-
       const val = sel.value;
-      if (val === "") {
-        card.classList.add('hidden');
-        return;
-      }
-
+      if (val === "") { card.classList.add('hidden'); return; }
       const advContainer = (typeof window.getAdvantages === 'function') ? window.getAdvantages() : window.AVANTAGES_DATA;
       const list = advContainer?.desavantages || [];
       const dis = list[val] || list.find(d => d.id === val || d.name === val);
-
-      if (!dis) {
-        card.classList.add('hidden');
-        return;
-      }
-
+      if (!dis) { card.classList.add('hidden'); return; }
       document.getElementById('disadv-preview-name').textContent = dis.name;
       document.getElementById('disadv-preview-type').textContent = `Catégorie : ${dis.type}`;
       document.getElementById('disadv-preview-cost').textContent = `Gain : +${dis.gain || dis.cost} XP`;
@@ -837,14 +979,9 @@
       document.getElementById('disadv-preview-rule').textContent = dis.rule || '';
       card.classList.remove('hidden');
     }
-  </script>
 
-  <!-- GESTION DE LA MULTI-SÉLECTION DES COMPÉTENCES -->
-  <script>
     function getAddSkillFunction() {
-      try {
-        if (typeof addSkillFromCatalog === "function") return addSkillFromCatalog;
-      } catch (e) {}
+      try { if (typeof addSkillFromCatalog === "function") return addSkillFromCatalog; } catch (e) {}
       if (typeof window.addSkillFromCatalog === "function") return window.addSkillFromCatalog;
       return null;
     }
@@ -853,32 +990,17 @@
       const origSelect = document.getElementById("sel-add-skill");
       const container = document.getElementById("skills-checkboxes-container");
       if (!origSelect || !container) return;
-
-      const previouslyChecked = new Set(
-        Array.from(container.querySelectorAll("input.skill-cb:checked")).map(cb => cb.value)
-      );
-
-      const options = Array.from(origSelect.options).filter(opt => 
-        opt.value !== "" && opt.value !== "none" && !opt.text.includes("--")
-      );
-
-      if (options.length === 0) {
-        setTimeout(initSkillsMultiSelect, 150);
-        return;
-      }
-
+      const previouslyChecked = new Set(Array.from(container.querySelectorAll("input.skill-cb:checked")).map(cb => cb.value));
+      const options = Array.from(origSelect.options).filter(opt => opt.value !== "" && opt.value !== "none" && !opt.text.includes("--"));
+      if (options.length === 0) { setTimeout(initSkillsMultiSelect, 150); return; }
       container.innerHTML = "";
       options.forEach(opt => {
         const row = document.createElement("label");
         row.className = "flex items-center gap-2 p-1.5 rounded hover:bg-stone-900/80 cursor-pointer text-stone-300 hover:text-amber-200 transition text-xs select-none";
         const isChecked = previouslyChecked.has(opt.value) ? "checked" : "";
-        row.innerHTML = `
-          <input type="checkbox" value="${opt.value}" ${isChecked} onchange="updateSelectedSkillsCount()" class="skill-cb accent-amber-500 rounded">
-          <span class="skill-name">${opt.text}</span>
-        `;
+        row.innerHTML = `<input type="checkbox" value="${opt.value}" ${isChecked} onchange="updateSelectedSkillsCount()" class="skill-cb accent-amber-500 rounded"><span class="skill-name">${opt.text}</span>`;
         container.appendChild(row);
       });
-
       updateSelectedSkillsCount();
     }
 
@@ -886,7 +1008,6 @@
       const panel = document.getElementById("skills-dropdown-panel");
       const arrow = document.getElementById("skills-dropdown-arrow");
       if (!panel) return;
-
       if (forceClose || !panel.classList.contains("hidden")) {
         panel.classList.add("hidden");
         arrow?.classList.remove("rotate-180");
@@ -900,10 +1021,8 @@
 
     function filterSkillsList() {
       const q = (document.getElementById("filter-skills-input")?.value || "").toLowerCase().trim();
-      const labels = document.querySelectorAll("#skills-checkboxes-container label");
-      labels.forEach(lbl => {
-        const text = lbl.textContent.toLowerCase();
-        lbl.style.display = text.includes(q) ? "flex" : "none";
+      document.querySelectorAll("#skills-checkboxes-container label").forEach(lbl => {
+        lbl.style.display = lbl.textContent.toLowerCase().includes(q) ? "flex" : "none";
       });
     }
 
@@ -911,16 +1030,9 @@
       const checked = document.querySelectorAll("#skills-checkboxes-container input.skill-cb:checked");
       const countLabel = document.getElementById("skills-selected-count");
       const summaryLabel = document.getElementById("skills-checked-summary");
-
       if (!countLabel || !summaryLabel) return;
-
-      if (checked.length === 0) {
-        countLabel.textContent = "Choisir des compétences...";
-        summaryLabel.textContent = "0 sélectionnée(s)";
-      } else {
-        countLabel.textContent = `${checked.length} compétence(s) cochée(s)`;
-        summaryLabel.textContent = `${checked.length} sélectionnée(s)`;
-      }
+      countLabel.textContent = checked.length === 0 ? "Choisir des compétences..." : `${checked.length} compétence(s) cochée(s)`;
+      summaryLabel.textContent = `${checked.length} sélectionnée(s)`;
     }
 
     function clearAllSkillCheckboxes() {
@@ -931,44 +1043,19 @@
     function addSelectedSkills() {
       const checkedBoxes = Array.from(document.querySelectorAll("#skills-checkboxes-container input.skill-cb:checked"));
       const origSelect = document.getElementById("sel-add-skill");
-
-      if (!checkedBoxes || checkedBoxes.length === 0) {
-        alert("Veuillez cocher au moins une compétence dans la liste.");
-        return;
-      }
-
+      if (!checkedBoxes.length) { alert("Veuillez cocher au moins une compétence dans la liste."); return; }
       const addFn = getAddSkillFunction();
-      if (!addFn || !origSelect) {
-        alert("Erreur technique : fonction d'ajout de compétence introuvable.");
-        return;
-      }
-
+      if (!addFn || !origSelect) return;
       checkedBoxes.forEach(cb => {
         const targetVal = cb.value;
-        const matchedOption = Array.from(origSelect.options).find(o => 
-          o.value === targetVal || o.text === targetVal || o.text.startsWith(targetVal)
-        );
-
-        if (matchedOption) {
-          origSelect.selectedIndex = matchedOption.index;
-          origSelect.value = matchedOption.value;
-        } else {
-          origSelect.value = targetVal;
-        }
-
+        const matchedOption = Array.from(origSelect.options).find(o => o.value === targetVal || o.text === targetVal || o.text.startsWith(targetVal));
+        if (matchedOption) { origSelect.selectedIndex = matchedOption.index; origSelect.value = matchedOption.value; }
+        else { origSelect.value = targetVal; }
         origSelect.dispatchEvent(new Event("change", { bubbles: true }));
-        try {
-          addFn();
-        } catch (err) {
-          console.error("Erreur lors de l'ajout de la compétence :", targetVal, err);
-        }
+        try { addFn(); } catch (err) {}
         cb.checked = false;
       });
-
-      if (typeof updateAll === "function") {
-        updateAll();
-      }
-
+      if (typeof updateAll === "function") updateAll();
       updateSelectedSkillsCount();
       toggleSkillsDropdown(true);
       setTimeout(initSkillsMultiSelect, 100);
@@ -976,15 +1063,510 @@
 
     document.addEventListener("click", (e) => {
       const wrapper = document.getElementById("skills-dropdown-wrapper");
-      if (wrapper && !wrapper.contains(e.target)) {
-        toggleSkillsDropdown(true);
-      }
+      if (wrapper && !wrapper.contains(e.target)) toggleSkillsDropdown(true);
     });
+  </script>
 
+  <!-- =====================================================================
+       MOTEUR DU DOJO PERSONNEL, GÉNÉRATEUR DE BACKGROUND & DÉS ROLL & KEEP
+       ===================================================================== -->
+  <script>
+    const DOJO_STORAGE_KEY = "l5r_dojo_roster_v1";
+
+    // 1. COLLECTE COMPLÈTE DE L'ÉTAT DU PERSONNAGE (INCLUANT BACKGROUND)
+    function captureFullCharacterState() {
+      const clanSel = document.getElementById('sel-clan');
+      const schoolSel = document.getElementById('sel-school');
+      return {
+        id: "samurai-" + (document.getElementById('pc-name').value || "inconnu").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        savedAt: new Date().toLocaleDateString('fr-FR'),
+        name: document.getElementById('pc-name').value || "Samouraï",
+        baseXP: document.getElementById('base-xp-input')?.value || "40",
+        clan: clanSel?.value || "crabe",
+        clanLabel: clanSel?.options[clanSel.selectedIndex]?.text || "Clan du Crabe",
+        family: document.getElementById('sel-family')?.value || "0",
+        school: schoolSel?.value || "0",
+        schoolLabel: schoolSel?.options[schoolSel.selectedIndex]?.text?.split('(')[0]?.trim() || "École",
+        insightText: document.getElementById('insight-display')?.textContent?.trim() || "120 pts (Rang 1)",
+        honor: document.getElementById('stat-honor')?.textContent?.trim() || "4.5",
+        atk: document.getElementById('sticky-atk')?.textContent || "3g2",
+        dmg: document.getElementById('sticky-dmg')?.textContent || "4g2",
+        armorTn: document.getElementById('sticky-armor-tn')?.textContent || "20",
+        traits: {
+          sta: document.getElementById('trait-stamina').value,
+          wil: document.getElementById('trait-willpower').value,
+          str: document.getElementById('trait-strength').value,
+          per: document.getElementById('trait-perception').value,
+          ref: document.getElementById('trait-reflexes').value,
+          awa: document.getElementById('trait-awareness').value,
+          agi: document.getElementById('trait-agility').value,
+          int: document.getElementById('trait-intelligence').value,
+          voi: document.getElementById('trait-void').value
+        },
+        skills: typeof currentSkills !== "undefined" ? JSON.parse(JSON.stringify(currentSkills)) : [],
+        advantages: typeof advantagesList !== "undefined" ? JSON.parse(JSON.stringify(advantagesList)) : [],
+        disadvantages: typeof disadvantagesList !== "undefined" ? JSON.parse(JSON.stringify(disadvantagesList)) : [],
+        armor: document.getElementById('pc-armor').value,
+        weapon1: document.getElementById('pc-weapon-1').value,
+        weapon2: document.getElementById('pc-weapon-2').value,
+        outfit: document.getElementById('pc-outfit').value,
+        backgroundStory: document.getElementById('pc-background-story')?.value || "",
+        q20: {
+          gempukku: document.getElementById('q20-gempukku')?.value || "",
+          bushido: document.getElementById('q20-bushido')?.value || "",
+          secret: document.getElementById('q20-secret')?.value || "",
+          death: document.getElementById('q20-death')?.value || ""
+        }
+      };
+    }
+
+    // 2. CHARGEMENT D'UN ÉTAT COMPLET DANS LA FORGE
+    function applyFullCharacterState(d) {
+      if (!d) return;
+      if (d.baseXP !== undefined && document.getElementById('base-xp-input')) {
+        document.getElementById('base-xp-input').value = d.baseXP;
+      }
+      document.getElementById('sel-clan').value = d.clan || "crabe";
+      onClanChange();
+      document.getElementById('sel-family').value = d.family || "0";
+      updateSchoolOptions();
+      document.getElementById('sel-school').value = d.school || "0";
+      resetSheetToNewSelection();
+
+      document.getElementById('pc-name').value = d.name || "Samouraï";
+      updateStickyName();
+
+      if (d.traits) {
+        document.getElementById('trait-stamina').value = d.traits.sta || 2;
+        document.getElementById('trait-willpower').value = d.traits.wil || 2;
+        document.getElementById('trait-strength').value = d.traits.str || 2;
+        document.getElementById('trait-perception').value = d.traits.per || 2;
+        document.getElementById('trait-reflexes').value = d.traits.ref || 2;
+        document.getElementById('trait-awareness').value = d.traits.awa || 2;
+        document.getElementById('trait-agility').value = d.traits.agi || 2;
+        document.getElementById('trait-intelligence').value = d.traits.int || 2;
+        document.getElementById('trait-void').value = d.traits.voi || 2;
+      }
+
+      if (Array.isArray(d.skills)) currentSkills = d.skills;
+      if (Array.isArray(d.advantages)) advantagesList = d.advantages;
+      if (Array.isArray(d.disadvantages)) disadvantagesList = d.disadvantages;
+
+      if (d.armor) document.getElementById('pc-armor').value = d.armor;
+      if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
+      if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
+      if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
+
+      if (document.getElementById('pc-background-story')) {
+        document.getElementById('pc-background-story').value = d.backgroundStory || "";
+      }
+      if (d.q20) {
+        if (document.getElementById('q20-gempukku')) document.getElementById('q20-gempukku').value = d.q20.gempukku || "";
+        if (document.getElementById('q20-bushido')) document.getElementById('q20-bushido').value = d.q20.bushido || "";
+        if (document.getElementById('q20-secret')) document.getElementById('q20-secret').value = d.q20.secret || "";
+        if (document.getElementById('q20-death')) document.getElementById('q20-death').value = d.q20.death || "";
+      }
+
+      renderSkills();
+      renderAdvDisadv();
+      initCatalogSelectors();
+      updateAll();
+    }
+
+    // 3. SAUVEGARDE ET GESTION DU DOJO (LOCALSTORAGE)
+    function getDojoRoster() {
+      try {
+        return JSON.parse(localStorage.getItem(DOJO_STORAGE_KEY) || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveToDojo() {
+      updateAll();
+      const charState = captureFullCharacterState();
+      const roster = getDojoRoster();
+      const existingIdx = roster.findIndex(c => c.id === charState.id || c.name.toLowerCase() === charState.name.toLowerCase());
+
+      if (existingIdx !== -1) {
+        roster[existingIdx] = charState;
+      } else {
+        roster.unshift(charState);
+      }
+
+      try {
+        localStorage.setItem(DOJO_STORAGE_KEY, JSON.stringify(roster));
+        renderDojoRoster();
+        const toast = document.getElementById('dojo-save-toast');
+        if (toast) {
+          toast.classList.remove('hidden');
+          setTimeout(() => toast.classList.add('hidden'), 2800);
+        }
+      } catch (e) {
+        alert("Impossible d'enregistrer dans le navigateur.");
+      }
+    }
+
+    function loadFromDojo(id) {
+      const roster = getDojoRoster();
+      const found = roster.find(c => c.id === id);
+      if (found) applyFullCharacterState(found);
+    }
+
+    function deleteFromDojo(id, event) {
+      if (event) event.stopPropagation();
+      const roster = getDojoRoster().filter(c => c.id !== id);
+      localStorage.setItem(DOJO_STORAGE_KEY, JSON.stringify(roster));
+      renderDojoRoster();
+    }
+
+    function renderDojoRoster() {
+      const container = document.getElementById('dojo-roster-list');
+      if (!container) return;
+      const roster = getDojoRoster();
+
+      if (roster.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full p-3 rounded-lg bg-black/40 border border-stone-800/80 text-stone-500 italic text-center">
+            Aucun samouraï enregistré pour le moment. Cliquez sur « 📌 Enregistrer le personnage actuel » pour conserver vos créations ici.
+          </div>
+        `;
+        return;
+      }
+
+      const clanColors = {
+        crabe: "#38bdf8", grue: "#67e8f9", dragon: "#34d399", lion: "#fbbf24",
+        mante: "#2dd4bf", phenix: "#f97316", scorpion: "#f43f5e", licorne: "#c084fc"
+      };
+
+      container.innerHTML = roster.map(c => {
+        const color = clanColors[c.clan] || "#d4af37";
+        return `
+          <div onclick="loadFromDojo('${c.id}')" class="p-2.5 rounded-lg bg-black/70 border border-stone-800 hover:border-amber-500/60 transition cursor-pointer flex justify-between items-center gap-2 group">
+            <div class="truncate">
+              <div class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 truncate">${c.name}</div>
+              <div class="text-[10px] text-stone-400 truncate">
+                <span style="color:${color}" class="font-bold">${c.schoolLabel}</span> • ${c.insightText}
+              </div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-stone-900 text-amber-300 border border-stone-800">Charger</span>
+              <button type="button" onclick="deleteFromDojo('${c.id}', event)" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Supprimer du Dojo">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 4. LIEN DE PARTAGE PAR URL
+    function shareCharacterUrl() {
+      updateAll();
+      const state = captureFullCharacterState();
+      const encoded = btoa(encodeURIComponent(JSON.stringify(state)));
+      const url = `${window.location.origin}${window.location.pathname}?char=${encoded}`;
+      navigator.clipboard.writeText(url).then(() => {
+        alert("🔗 Lien de partage copié dans le presse-papier ! Vous pouvez l'envoyer au MJ ou à vos compagnons.");
+      }).catch(() => {
+        prompt("Copiez ce lien de partage :", url);
+      });
+    }
+
+    // =========================================================================
+    // 5. GÉNÉRATEUR PROCÉDURAL DE LÉGENDE & DES 20 QUESTIONS DE ROKUGAN
+    // =========================================================================
+    const CLAN_LORE_HOOKS = {
+      crabe: {
+        lands: "sur les terres rocailleuses bordant le Mur Kaiu, sous le ciel cendreux qui fait face à l'Outremonde",
+        Atmosphere: "au rythme des tambours de garde, de l'odeur du fer forgé et des patrouilles portant le jade sacré",
+        bushidoView: "Pour moi, le Courage (Yū) et la survie de l'Empire priment sur les politesses de salon : chaque jour où le Mur tient debout est une victoire sacrée.",
+        deaths: [
+          "Debout sur la crête du Mur Kaiu, mon arme brisée au milieu d'une pile d'adversaires de Jigoku afin de laisser le temps à mon escouade de sceller la brèche.",
+          "En menant une dernière expédition de reconnaissance au-delà de la rivière des Doigts de Jade pour avertir Shiro Hida d'une invasion imminente."
+        ]
+      },
+      grue: {
+        lands: "au cœur des jardins givrés et des pavillons de soie de Kyuden Doji, là où un murmure vaut un décret",
+        Atmosphere: "entre l'étude rigoureuse de la calligraphie, la cérémonie du thé et le sifflement fulgurant des lames Kakita à l'aube",
+        bushidoView: "La Courtoisie (Rei) et l'Honneur (Meiyo) distinguent l'Empire de la barbarie ; mon sabre et ma parole ne tolèrent aucune imperfection.",
+        deaths: [
+          "Dans la clarté silencieuse d'un duel d'Iaijutsu au lever du soleil, pour défendre l'honneur de ma lignée face à un champion insurmontable.",
+          "En protégeant un émissaire impérial contre une embuscade, sans qu'une seule goutte de sang ne vienne souiller le traité que nous escortions."
+        ]
+      },
+      dragon: {
+        lands: "dans les monastères escarpés et les cols brumeux des Montagnes du Nord, près de Kyuden Togashi",
+        Atmosphere: "nourri par les énigmes philosophiques des moines, la méditation zazen et l'équilibre des deux sabres du style Niten",
+        bushidoView: "La Sincérité (Makoto) et la quête de la vérité intérieure importent bien plus que les apparences rigides imposées par les cours.",
+        deaths: [
+          "Au sommet d'un col enneigé, après avoir résolu l'énigme de ma destinée et transmis mes sabres à un disciple digne de les porter.",
+          "En révélant au grand jour une conspiration menaçant l'équilibre de l'Empire, quitte à payer le prix fort pour la vérité."
+        ]
+      },
+      lion: {
+        lands: "dans les plaines dorées dominées par Shiro Akodo, au milieu des sanctuaires dédiés aux héros du passé",
+        Atmosphere: "guidé par la lecture du traité Commandement d'Akodo et les chants généalogiques des bardes Ikoma",
+        bushidoView: "L'Honneur (Meiyo) est plus lourd qu'une montagne et la mort plus légère qu'une plume ; je ne vis que pour être digne du regard de mes ancêtres.",
+        deaths: [
+          "À la pointe d'une charge héroïque en première ligne, la bannière de mon clan levée bien haut face aux ennemis de l'Empereur.",
+          "En accomplissant un ordre impossible donné par mon Daimyo, fidèle jusqu'au dernier souffle à mon serment féodal."
+        ]
+      },
+      mante: {
+        lands: "sur les quais animés des Îles de la Soie et de l'Épice, bercé par la houle et les orages d'Osano-Wo",
+        Atmosphere: "au milieu des navires de haute mer, des marchands audacieux et des maîtres archers de la lignée Tsuruchi",
+        bushidoView: "On mesure la valeur d'un samouraï à son audace et à ses actes sous la tempête, jamais à l'ancienneté poussiéreuse de son nom.",
+        deaths: [
+          "Sur le pont d'un navire amiral en pleine tempête, en décochant une dernière flèche décisive au cœur du commandant ennemi.",
+          "Lors d'un abordage désespéré pour sauver ma flotte et préserver la liberté des mers."
+        ]
+      },
+      phenix: {
+        lands: "à l'ombre des bibliothèques millénaires et des sanctuaires élémentaires de Kyuden Isawa",
+        Atmosphere: "imprégné par l'encens des prières aux Kami, la sagesse des érudits Asako et le serment protecteur de Shiba",
+        bushidoView: "La Compassion (Jin) et l'harmonie spirituelle des cinq éléments doivent guider chaque geste ; la violence n'est que le dernier recours.",
+        deaths: [
+          "En consumant ma dernière étincelle de Vide pour sceller à jamais un parchemin de Mahō ou protéger le shugenja confié à ma garde.",
+          "Dans la sérénité d'un sanctuaire élémentaire, après avoir rétabli l'équilibre des Kami dans une province dévastée."
+        ]
+      },
+      scorpion: {
+        lands: "derrière les paravents de laque noire et les jardins silencieux de Kyuden Bayushi",
+        Atmosphere: "formé à dissimuler mes émotions derrière un masque et à observer les failles secrètes du cœur humain",
+        bushidoView: "Le Devoir (Chūgo) et la Loyauté absolue envers le Trône justifient tous les sacrifices : nous portons la honte pour que l'Empire reste pur.",
+        deaths: [
+          "Dans l'ombre d'un palais, après avoir neutralisé en silence un traître que la justice officielle ne pouvait atteindre, emportant mes secrets dans la tombe.",
+          "Le sourire aux lèvres derrière mon masque, en détournant sur moi le poison ou la lame destinés à mon seigneur."
+        ]
+      },
+      licorne: {
+        lands: "à travers les vastes plaines herbeuses de l'ouest, là où galopent les grands destriers de guerre",
+        Atmosphere: "élevé en selle dès l'enfance, entouré de talismans Meishōdō et des récits du long exil dans les Terres Brûlées",
+        bushidoView: "La Compassion (Jin) et l'ouverture d'esprit font notre force : un vrai guerrier juge les hommes sur leur cœur et non sur les préjugés.",
+        deaths: [
+          "Au grand galop sur mon destrier, en brisant l'encerclement ennemi pour ouvrir une voie de retraite à mes compagnons.",
+          "À la frontière des terres inconnues, face au vent des steppes, après avoir accompli une ultime chevauchée pour mon clan."
+        ]
+      }
+    };
+
+    function generateCharacterBackground() {
+      updateAll();
+      const name = document.getElementById('pc-name').value || "Okado Hiruma";
+      const clanKey = document.getElementById('sel-clan').value || "crabe";
+      const clanName = document.getElementById('sel-clan').options[document.getElementById('sel-clan').selectedIndex]?.text || "Clan du Crabe";
+      const famName = document.getElementById('sel-family').options[document.getElementById('sel-family').selectedIndex]?.text?.split('(')[0]?.trim() || "";
+      const schName = document.getElementById('sel-school').options[document.getElementById('sel-school').selectedIndex]?.text?.split('(')[0]?.trim() || "École";
+      const honor = parseFloat(document.getElementById('stat-honor')?.textContent || "4.5");
+      const weapon1 = document.getElementById('pc-weapon-1')?.value || "Katana";
+
+      const lore = CLAN_LORE_HOOKS[clanKey] || CLAN_LORE_HOOKS.crabe;
+
+      // Détecter l'Anneau le plus fort
+      const rings = [
+        { name: "la Terre", val: parseInt(document.getElementById('ring-earth').textContent) || 2, desc: "une endurance stoïque et une volonté de roc qui ne plie devant aucune épreuve" },
+        { name: "l'Eau", val: parseInt(document.getElementById('ring-water').textContent) || 2, desc: "une adaptabilité fluide, une force vive et un sens de l'observation affûté" },
+        { name: "l'Air", val: parseInt(document.getElementById('ring-air').textContent) || 2, desc: "une grâce instinctive, des réflexes fulgurants et une intuition subtile en société" },
+        { name: "le Feu", val: parseInt(document.getElementById('ring-fire').textContent) || 2, desc: "une agilité ardente, un esprit ingénieux et une fougue martiale redoutable" },
+        { name: "le Vide", val: parseInt(document.getElementById('ring-void').textContent) || 2, desc: "une connexion profonde avec l'harmonie cosmique et une sérénité troublante" }
+      ];
+      rings.sort((a, b) => b.val - a.val);
+      const topRing = rings[0];
+
+      // Intégration des Avantages et Désavantages
+      const advNames = (typeof advantagesList !== "undefined" ? advantagesList : []).map(a => a.name.split('(')[0].trim());
+      const disadvNames = (typeof disadvantagesList !== "undefined" ? disadvantagesList : []).map(d => d.name.split('(')[0].trim());
+
+      const advSentence = advNames.length > 0
+        ? `Parmi ses pairs, ${name} se distingue tout particulièrement par des dons remarquables (${advNames.join(", ")}), qui ont attiré très tôt l'attention de ses maîtres.`
+        : `Formé avec une rigueur sans faille, ${name} compense par sa détermination constante et sa maîtrise de son ${weapon1.toLowerCase()}.`;
+
+      const disadvSentence = disadvNames.length > 0
+        ? `Cependant, le destin n'est pas sans ombres : son parcours est marqué par un fardeau personnel (${disadvNames.join(", ")}) qui met régulièrement sa résolution à l'épreuve.`
+        : `Bien qu'épargné par les malédictions majeures jusqu'ici, la pression de représenter dignement la famille ${famName} pèse sur chacun de ses pas.`;
+
+      // Construction des 3 paragraphes biographiques
+      const story = [
+        `Né(e) au sein de la famille ${famName} (${clanName}), ${name} a grandi ${lore.lands}. Dès son plus jeune âge, son éducation s'est déroulée ${lore.Atmosphere}, jusqu'à son admission au dojo de l'école « ${schName} ».`,
+        `Guidé(e) par une affinité naturelle avec l'élément de ${topRing.name} (${topRing.desc}), ${name} s'est forgé une réputation prometteuse. ${advSentence}`,
+        `${disadvSentence} Aujourd'hui, avec un Honneur de ${honor} et son ${weapon1.toLowerCase()} à la ceinture, ${name} parcourt les routes de l'Empire d'Émeraude pour accomplir son devoir et inscrire son nom dans les chroniques de Rokugan.`
+      ].join("\n\n");
+
+      document.getElementById('pc-background-story').value = story;
+
+      // Remplissage intelligent des 4 questions clés (Les 20 Questions)
+      document.getElementById('q20-gempukku').value = `Validé sous le regard exigeant des sensei de l'école ${schName}. C'est au terme d'une épreuve mettant à profit mon affinité avec ${topRing.name} et le maniement de mon ${weapon1.toLowerCase()} que j'ai reçu le droit de porter le daisho de la famille ${famName}.`;
+      document.getElementById('q20-bushido').value = lore.bushidoView;
+      document.getElementById('q20-secret').value = disadvNames.length > 0
+        ? `Mon plus lourd fardeau est directement lié à « ${disadvNames.join(" & ")} ». Si mes ennemis à la cour venaient à l'exploiter, l'honneur de ma lignée pourrait en souffrir.`
+        : `Je porte la dette morale de ne jamais décevoir mon sensei qui a placé sa foi en moi face à des rivaux plus influents de la cour.`;
+      document.getElementById('q20-death').value = lore.deaths[Math.floor(Math.random() * lore.deaths.length)];
+    }
+
+    function readBackgroundAloud() {
+      if (!('speechSynthesis' in window)) return;
+      const text = document.getElementById('pc-background-story')?.value || "";
+      if (!text.trim()) {
+        generateCharacterBackground();
+      }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(document.getElementById('pc-background-story').value);
+      u.lang = 'fr-FR';
+      window.speechSynthesis.speak(u);
+    }
+
+    // Impression PDF enrichie avec le Background et les 20 Questions
+    function prepareAndPrintPDF() {
+      if (!document.getElementById('pc-background-story')?.value.trim()) {
+        generateCharacterBackground();
+      }
+      document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+      const qBox = document.getElementById('p-20questions-box');
+      if (qBox) {
+        qBox.innerHTML = `
+          <div><b>1. Gempukku & Sensei :</b> ${document.getElementById('q20-gempukku').value}</div>
+          <div><b>2. Vision du Bushido :</b> ${document.getElementById('q20-bushido').value}</div>
+          <div><b>3. Fardeau & Secret :</b> ${document.getElementById('q20-secret').value}</div>
+          <div><b>4. Mort Honorable :</b> ${document.getElementById('q20-death').value}</div>
+        `;
+      }
+      exportOfficialPDF();
+    }
+
+    // =========================================================================
+    // 6. LANCEUR DE DÉS INTERACTIF ROLL & KEEP (XkY)
+    // =========================================================================
+    function toggleDiceTray(forceState) {
+      const panel = document.getElementById('dice-tray-panel');
+      if (!panel) return;
+      if (forceState !== undefined) {
+        panel.classList.toggle('hidden', !forceState);
+      } else {
+        panel.classList.toggle('hidden');
+      }
+    }
+
+    function rollL5RDicePool(rollCount, keepCount, bonusStatic = 0, label = "Jet Roll & Keep", explode = true, rerollOnes = false) {
+      toggleDiceTray(true);
+      // Règle des 10 dés maximum de L5R 4e Édition
+      let r = Math.max(1, parseInt(rollCount) || 1);
+      let k = Math.max(1, parseInt(keepCount) || 1);
+      let extraStatic = parseInt(bonusStatic) || 0;
+
+      if (r > 10) {
+        const excessRoll = r - 10;
+        r = 10;
+        k += Math.floor(excessRoll / 2);
+      }
+      if (k > 10) {
+        extraStatic += (k - 10) * 2;
+        k = 10;
+      }
+      if (k > r) k = r;
+
+      const diceResults = [];
+      for (let i = 0; i < r; i++) {
+        let die = Math.floor(Math.random() * 10) + 1;
+        let rerolledOne = false;
+        if (die === 1 && rerollOnes) {
+          die = Math.floor(Math.random() * 10) + 1;
+          rerolledOne = true;
+        }
+        let totalDie = die;
+        let explosions = 0;
+        while (die === 10 && explode && explosions < 10) {
+          die = Math.floor(Math.random() * 10) + 1;
+          totalDie += die;
+          explosions++;
+        }
+        diceResults.push({ total: totalDie, exploded: explosions > 0, rerolledOne });
+      }
+
+      // Trier du plus grand au plus petit pour garder les k meilleurs
+      diceResults.sort((a, b) => b.total - a.total);
+      diceResults.forEach((d, idx) => d.kept = idx < k);
+
+      const sumKept = diceResults.filter(d => d.kept).reduce((acc, d) => acc + d.total, 0);
+      const grandTotal = sumKept + extraStatic;
+
+      const box = document.getElementById('dice-result-box');
+      if (box) {
+        const diceBadges = diceResults.map(d => {
+          const baseCls = d.kept
+            ? (d.exploded ? "bg-amber-500 text-black font-extrabold ring-2 ring-amber-300" : "bg-amber-950 border border-amber-500/60 text-amber-200 font-bold")
+            : "bg-stone-900 border border-stone-800 text-stone-600 line-through opacity-60";
+          return `<span class="die-anim inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs ${baseCls}" title="${d.exploded ? 'Dé explosif !' : (d.kept ? 'Dé gardé' : 'Dé non gardé')}">${d.total}${d.exploded ? '💥' : ''}</span>`;
+        }).join('');
+
+        box.innerHTML = `
+          <div class="flex justify-between items-baseline border-b border-stone-800 pb-1">
+            <span class="font-bold text-amber-300 font-imperial truncate">${label} (${r}g${k}${extraStatic > 0 ? ' +' + extraStatic : ''})</span>
+            <span class="text-lg font-black text-emerald-400 font-imperial">${grandTotal}</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-1">${diceBadges}</div>
+        `;
+      }
+    }
+
+    function rollFromSticky(elementId, label) {
+      const raw = document.getElementById(elementId)?.textContent || "3g2";
+      // Parse "4g2 + 3"
+      const match = raw.match(/(\d+)g(\d+)(?:\s*\+\s*(\d+))?/i);
+      if (!match) return;
+      const r = parseInt(match[1], 10);
+      const k = parseInt(match[2], 10);
+      const b = match[3] ? parseInt(match[3], 10) : 0;
+      document.getElementById('manual-roll-x').value = r;
+      document.getElementById('manual-keep-y').value = k;
+      const detailText = document.getElementById(elementId + '-detail')?.textContent || "";
+      const hasSpec = detailText.includes("Spé");
+      const noExplode = detailText.includes("sans explosion");
+      document.getElementById('dice-explode-cb').checked = !noExplode;
+      document.getElementById('dice-spec-cb').checked = hasSpec;
+      rollL5RDicePool(r, k, b, label, !noExplode, hasSpec);
+    }
+
+    function executeManualRoll() {
+      const r = parseInt(document.getElementById('manual-roll-x').value) || 3;
+      const k = parseInt(document.getElementById('manual-keep-y').value) || 2;
+      const explode = document.getElementById('dice-explode-cb').checked;
+      const spec = document.getElementById('dice-spec-cb').checked;
+      rollL5RDicePool(r, k, 0, "Jet Manuel", explode, spec);
+    }
+
+    // Initialisation au chargement (URL ?clan=, ?char=, ou Dojo)
     window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(initSkillsMultiSelect, 200);
-      document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(initSkillsMultiSelect, 200));
-      document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(initSkillsMultiSelect, 200));
+      setTimeout(() => {
+        initSkillsMultiSelect();
+        renderDojoRoster();
+
+        const params = new URLSearchParams(window.location.search);
+        const charParam = params.get("char");
+        const loadIdParam = params.get("load");
+        const clanParam = params.get("clan");
+
+        if (charParam) {
+          try {
+            const decoded = JSON.parse(decodeURIComponent(atob(charParam)));
+            applyFullCharacterState(decoded);
+            return;
+          } catch (e) {}
+        }
+
+        if (loadIdParam) {
+          loadFromDojo(loadIdParam);
+          return;
+        }
+
+        if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
+          document.getElementById("sel-clan").value = clanParam;
+          onClanChange();
+        }
+
+        generateCharacterBackground();
+      }, 250);
+
+      document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(() => { initSkillsMultiSelect(); generateCharacterBackground(); }, 200));
+      document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(() => { initSkillsMultiSelect(); generateCharacterBackground(); }, 200));
     });
   </script>
 </body>
