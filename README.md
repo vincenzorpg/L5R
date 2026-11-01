@@ -125,7 +125,9 @@ Fiches détaillées pour chaque faction de l'Empire :
     ├── export-carnet.js        # Moteur d'export JSON conforme Carnet de Rokugan (v2)
     └── grimoire.js             # Moteur de recherche et de filtrage des sorts
 
-🛠️ Architecture Technique
+
+
+###🛠️ Architecture Technique
 Framework CSS : Tailwind CSS (chargé via CDN) avec thème sur-mesure (palette Dark Lacquer, bordures dorées, accents élémentaires).
 
 Typographie : Cinzel (titrages impériaux) et Noto Serif JP (lecture noble du texte).
@@ -136,13 +138,13 @@ Persistance des données : localStorage pour le Dojo local et encodage d'URL pou
 
 Audio : API native du navigateur window.speechSynthesis.
 
-🚀 Installation & Utilisation Locale
+###🚀 Installation & Utilisation Locale
 Aucun gestionnaire de paquets complexe (npm/yarn) n'est requis. Le site peut être exécuté directement sur n'importe quelle machine :
 
 Option 1 : Visual Studio Code (Recommandé)
 Clonez le dépôt :
 
-Bash
+###Bash
 git clone [https://github.com/vincenzorpg/L5R.git](https://github.com/vincenzorpg/L5R.git)
 Ouvrez le dossier dans VS Code.
 
@@ -154,7 +156,7 @@ Bash
 python -m http.server 8000
 Puis ouvrez votre navigateur sur http://localhost:8000.
 
-🔄 Interopérabilité & Carnet de Rokugan
+###🔄 Interopérabilité & Carnet de Rokugan
 La Forge de Personnage intègre un bouton d'export dédié vers Le Carnet de Rokugan, l'outil compagnon de référence pour L5R 4e Édition :
 
 Format produit : Objet JSON unique respectant rigoureusement le standard schemaVersion: 2 (v2.18.0).
@@ -169,14 +171,14 @@ Résolution des identifiants d'école canoniques (hida-bushi, kakita-bushi, miru
 
 Mapping des armes avec mots-clés normalisés (samourai, grande, deux-mains, arc...) et force d'arc (bowStrength).
 
-⚙️ Administration & Rédaction (CMS)
+###⚙️ Administration & Rédaction (CMS)
 Le site intègre une interface d'administration statique accessible sur /admin/ :
 
 Moteur : Sveltia CMS / Decap CMS connecté directement au dépôt GitHub via admin/config.yml.
 
 Workflow : Les ajouts ou corrections de scénarios rédigés via l'éditeur visuel génèrent automatiquement des commits et déclenchent le déploiement continu sur GitHub Pages.
 
-📜 Crédits & Mentions Légales
+###📜 Crédits & Mentions Légales
 Campagne : Scénarisée et arbitrée par le MJ David (table active depuis 2015).
 
 Chroniqueurs de table : Tsuruchi Akira, Okado Hiruma, Hida Samui, Isawa Ryumitaka, Kakita Sutokhu, Mirumoto Mansouri.
