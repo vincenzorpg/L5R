@@ -124,3 +124,61 @@ Fiches détaillées pour chaque faction de l'Empire :
     ├── character-generator.js  # Moteur de règles L5R 4e, calculs d'XP et seuils
     ├── export-carnet.js        # Moteur d'export JSON conforme Carnet de Rokugan (v2)
     └── grimoire.js             # Moteur de recherche et de filtrage des sorts
+
+🛠️ Architecture Technique
+Framework CSS : Tailwind CSS (chargé via CDN) avec thème sur-mesure (palette Dark Lacquer, bordures dorées, accents élémentaires).
+
+Typographie : Cinzel (titrages impériaux) et Noto Serif JP (lecture noble du texte).
+
+JavaScript : Vanilla JS pur (ES6+), sans dépendance lourde, garantissant un temps de chargement immédiat et une compatibilité hors-ligne maximale.
+
+Persistance des données : localStorage pour le Dojo local et encodage d'URL pour le partage de fiches.
+
+Audio : API native du navigateur window.speechSynthesis.
+
+🚀 Installation & Utilisation Locale
+Aucun gestionnaire de paquets complexe (npm/yarn) n'est requis. Le site peut être exécuté directement sur n'importe quelle machine :
+
+Option 1 : Visual Studio Code (Recommandé)
+Clonez le dépôt :
+
+Bash
+git clone [https://github.com/vincenzorpg/L5R.git](https://github.com/vincenzorpg/L5R.git)
+Ouvrez le dossier dans VS Code.
+
+Lancez l'extension Live Server sur index.html.
+
+Option 2 : Serveur Python instantané
+Bash
+# Dans le dossier racine du projet
+python -m http.server 8000
+Puis ouvrez votre navigateur sur http://localhost:8000.
+
+🔄 Interopérabilité & Carnet de Rokugan
+La Forge de Personnage intègre un bouton d'export dédié vers Le Carnet de Rokugan, l'outil compagnon de référence pour L5R 4e Édition :
+
+Format produit : Objet JSON unique respectant rigoureusement le standard schemaVersion: 2 (v2.18.0).
+
+Correspondance automatique :
+
+Clés de traits en anglais (stamina, reflexes, etc.) et Anneaux déduits dynamiquement.
+
+Normalisation automatique des noms de compétences (ex : conversion d'« Enquête » vers « Investigation »).
+
+Résolution des identifiants d'école canoniques (hida-bushi, kakita-bushi, mirumoto-bushi...).
+
+Mapping des armes avec mots-clés normalisés (samourai, grande, deux-mains, arc...) et force d'arc (bowStrength).
+
+⚙️ Administration & Rédaction (CMS)
+Le site intègre une interface d'administration statique accessible sur /admin/ :
+
+Moteur : Sveltia CMS / Decap CMS connecté directement au dépôt GitHub via admin/config.yml.
+
+Workflow : Les ajouts ou corrections de scénarios rédigés via l'éditeur visuel génèrent automatiquement des commits et déclenchent le déploiement continu sur GitHub Pages.
+
+📜 Crédits & Mentions Légales
+Campagne : Scénarisée et arbitrée par le MJ David (table active depuis 2015).
+
+Chroniqueurs de table : Tsuruchi Akira, Okado Hiruma, Hida Samui, Isawa Ryumitaka, Kakita Sutokhu, Mirumoto Mansouri.
+
+Univers & Règles : Legend of the Five Rings (L5R) est une marque déposée d'Alderac Entertainment Group (AEG) et Fantasy Flight Games / Edge Studio. Ce projet est un site amateur à usage récréatif et non commercial.
