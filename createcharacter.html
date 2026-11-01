@@ -1120,18 +1120,25 @@
       };
     }
 
-    // 2. CHARGEMENT D'UN ÉTAT COMPLET DANS LA FORGE
+// 2. CHARGEMENT D'UN ÉTAT COMPLET DANS LA FORGE (COMPATIBLE AUTRE ÉCOLE)
     function applyFullCharacterState(d) {
       if (!d) return;
       if (d.baseXP !== undefined && document.getElementById('base-xp-input')) {
         document.getElementById('base-xp-input').value = d.baseXP;
       }
+
+      if (Array.isArray(d.advantages)) advantagesList = d.advantages;
+      if (Array.isArray(d.disadvantages)) disadvantagesList = d.disadvantages;
+
       document.getElementById('sel-clan').value = d.clan || "crabe";
       onClanChange();
       document.getElementById('sel-family').value = d.family || "0";
-      updateSchoolOptions();
-      document.getElementById('sel-school').value = d.school || "0";
-      resetSheetToNewSelection();
+
+      const resolved = typeof resolveSchoolByRef === "function" ? resolveSchoolByRef(d.school, d.clan) : null;
+      const targetSchoolId = resolved?.school?.id || d.school || "0";
+      updateSchoolOptions(targetSchoolId);
+      document.getElementById('sel-school').value = targetSchoolId;
+      resetSheetToNewSelection(true);
 
       document.getElementById('pc-name').value = d.name || "Samouraï";
       updateStickyName();
@@ -1349,19 +1356,24 @@
       }
     };
 
+// 5. GÉNÉRATEUR DE LÉGENDE TENANT COMPTE D'ÉTUDES DANS UNE AUTRE ÉCOLE
     function generateCharacterBackground() {
       updateAll();
       const name = document.getElementById('pc-name').value || "Okado Hiruma";
       const clanKey = document.getElementById('sel-clan').value || "crabe";
       const clanName = document.getElementById('sel-clan').options[document.getElementById('sel-clan').selectedIndex]?.text || "Clan du Crabe";
       const famName = document.getElementById('sel-family').options[document.getElementById('sel-family').selectedIndex]?.text?.split('(')[0]?.trim() || "";
-      const schName = document.getElementById('sel-school').options[document.getElementById('sel-school').selectedIndex]?.text?.split('(')[0]?.trim() || "École";
+      
+      const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
+      const schName = schObj?.school?.name || "École";
+      const isExternal = !!schObj?.isExternalClan;
+      const extClanName = schObj?.clanName || clanName;
+
       const honor = parseFloat(document.getElementById('stat-honor')?.textContent || "4.5");
       const weapon1 = document.getElementById('pc-weapon-1')?.value || "Katana";
 
       const lore = CLAN_LORE_HOOKS[clanKey] || CLAN_LORE_HOOKS.crabe;
 
-      // Détecter l'Anneau le plus fort
       const rings = [
         { name: "la Terre", val: parseInt(document.getElementById('ring-earth').textContent) || 2, desc: "une endurance stoïque et une volonté de roc qui ne plie devant aucune épreuve" },
         { name: "l'Eau", val: parseInt(document.getElementById('ring-water').textContent) || 2, desc: "une adaptabilité fluide, une force vive et un sens de l'observation affûté" },
@@ -1372,33 +1384,36 @@
       rings.sort((a, b) => b.val - a.val);
       const topRing = rings[0];
 
-      // Intégration des Avantages et Désavantages
       const advNames = (typeof advantagesList !== "undefined" ? advantagesList : []).map(a => a.name.split('(')[0].trim());
       const disadvNames = (typeof disadvantagesList !== "undefined" ? disadvantagesList : []).map(d => d.name.split('(')[0].trim());
 
+      const schoolingOrigin = isExternal
+        ? `Par le jeu d'alliances diplomatiques et de faveurs précieuses échangées par la famille ${famName}, ${name} a connu le privilège rare d'être envoyé(e) étudier auprès des maîtres du ${extClanName}, au sein du dojo « ${schName} », tout en conservant son allégeance indéfectible envers le ${clanName}.`
+        : `Dès son plus jeune âge, son éducation s'est déroulée ${lore.Atmosphere}, jusqu'à son admission au dojo ancestral « ${schName} ».`;
+
       const advSentence = advNames.length > 0
-        ? `Parmi ses pairs, ${name} se distingue tout particulièrement par des dons remarquables (${advNames.join(", ")}), qui ont attiré très tôt l'attention de ses maîtres.`
-        : `Formé avec une rigueur sans faille, ${name} compense par sa détermination constante et sa maîtrise de son ${weapon1.toLowerCase()}.`;
+        ? `Parmi ses pairs, ${name} se distingue par des traits remarquables (${advNames.join(", ")}), qui ont très tôt attiré l'attention de ses sensei.`
+        : `Formé(e) avec une rigueur sans faille, ${name} se démarque par sa détermination constante et sa maîtrise de son ${weapon1.toLowerCase()}.`;
 
       const disadvSentence = disadvNames.length > 0
-        ? `Cependant, le destin n'est pas sans ombres : son parcours est marqué par un fardeau personnel (${disadvNames.join(", ")}) qui met régulièrement sa résolution à l'épreuve.`
-        : `Bien qu'épargné par les malédictions majeures jusqu'ici, la pression de représenter dignement la famille ${famName} pèse sur chacun de ses pas.`;
+        ? `Cependant, son parcours est marqué par un fardeau personnel (${disadvNames.join(", ")}) qui met régulièrement sa résolution à l'épreuve.`
+        : `La responsabilité de représenter dignement la famille ${famName} pèse sur chacun de ses pas.`;
 
-      // Construction des 3 paragraphes biographiques
       const story = [
-        `Né(e) au sein de la famille ${famName} (${clanName}), ${name} a grandi ${lore.lands}. Dès son plus jeune âge, son éducation s'est déroulée ${lore.Atmosphere}, jusqu'à son admission au dojo de l'école « ${schName} ».`,
+        `Né(e) au sein de la famille ${famName} (${clanName}), ${name} a grandi ${lore.lands}. ${schoolingOrigin}`,
         `Guidé(e) par une affinité naturelle avec l'élément de ${topRing.name} (${topRing.desc}), ${name} s'est forgé une réputation prometteuse. ${advSentence}`,
-        `${disadvSentence} Aujourd'hui, avec un Honneur de ${honor} et son ${weapon1.toLowerCase()} à la ceinture, ${name} parcourt les routes de l'Empire d'Émeraude pour accomplir son devoir et inscrire son nom dans les chroniques de Rokugan.`
+        `${disadvSentence} Aujourd'hui, avec un Honneur de ${honor} et son ${weapon1.toLowerCase()} à la ceinture, ${name} parcourt les routes de l'Empire d'Émeraude pour accomplir son devoir.`
       ].join("\n\n");
 
       document.getElementById('pc-background-story').value = story;
 
-      // Remplissage intelligent des 4 questions clés (Les 20 Questions)
-      document.getElementById('q20-gempukku').value = `Validé sous le regard exigeant des sensei de l'école ${schName}. C'est au terme d'une épreuve mettant à profit mon affinité avec ${topRing.name} et le maniement de mon ${weapon1.toLowerCase()} que j'ai reçu le droit de porter le daisho de la famille ${famName}.`;
+      document.getElementById('q20-gempukku').value = isExternal
+        ? `Formé(e) hors de mes frontières natales dans l'école « ${schName} » (${extClanName}), j'ai dû prouver deux fois plus ma valeur lors de mon Gempukku pour faire honneur au ${clanName} devant mes instructeurs étrangers.`
+        : `Validé sous le regard exigeant des sensei de l'école ${schName}. C'est grâce à mon affinité avec ${topRing.name} et le maniement de mon ${weapon1.toLowerCase()} que j'ai reçu le daisho de la famille ${famName}.`;
       document.getElementById('q20-bushido').value = lore.bushidoView;
       document.getElementById('q20-secret').value = disadvNames.length > 0
-        ? `Mon plus lourd fardeau est directement lié à « ${disadvNames.join(" & ")} ». Si mes ennemis à la cour venaient à l'exploiter, l'honneur de ma lignée pourrait en souffrir.`
-        : `Je porte la dette morale de ne jamais décevoir mon sensei qui a placé sa foi en moi face à des rivaux plus influents de la cour.`;
+        ? `Mon plus lourd fardeau est lié à « ${disadvNames.join(" & ")} ». Si mes rivaux à la cour venaient à l'exploiter, l'honneur de ma lignée pourrait en souffrir.`
+        : (isExternal ? `Certains traditionalistes me regardent avec suspicion à cause de mon apprentissage chez le ${extClanName} ; je dois sans cesse prouver ma loyauté.` : `Je porte la dette morale de ne jamais décevoir mon sensei qui a placé sa foi en moi.`);
       document.getElementById('q20-death').value = lore.deaths[Math.floor(Math.random() * lore.deaths.length)];
     }
 
