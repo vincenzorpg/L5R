@@ -110,43 +110,45 @@
     </header>
 
     <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
-    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95">
-      <div class="flex items-center gap-3">
-        <span class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
-          🔊
-        </span>
-        <div>
-          <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">
-            Voix Narrative Prête
-          </div>
-          <div class="text-[10px] text-stone-400">
-            Lecture vocale intégrale du récit de Tsuruchi Akira
-          </div>
-        </div>
+<section class="card-clean rounded-xl p-4 border-amber-500/40 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95 space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
+        🔊
       </div>
-
-      <div class="flex items-center gap-2">
-        <button id="btn-play" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
-          <span>▶</span> Écouter le Récit
-        </button>
-        <button id="btn-pause" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
-          ⏸ Pause
-        </button>
-        <button id="btn-stop" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">
-          ⏹ Arrêt
-        </button>
+      <div>
+        <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
+        <div class="text-[10px] text-stone-400" id="audio-progress">Paragraphe 0 / 0</div>
       </div>
+    </div>
 
-      <div class="flex items-center gap-2 text-xs text-stone-400">
-        <span>Vitesse :</span>
-        <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
-          <option value="0.9">0.9x (Chronique posée)</option>
-          <option value="1.0" selected>1.0x (Standard)</option>
-          <option value="1.15">1.15x (Rythmé)</option>
-        </select>
-      </div>
-    </section>
+    <!-- COMMANDES DE LECTURE -->
+    <div class="flex items-center gap-1.5">
+      <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
+      <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+        <span id="play-icon">▶</span> <span id="play-text">Écouter le Récit</span>
+      </button>
+      <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
+      <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
+    </div>
 
+    <!-- SÉLECTION DE LA VOIX ET VITESSE -->
+    <div class="flex items-center gap-2 text-xs text-stone-400">
+      <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] sm:max-w-[180px] truncate"></select>
+      <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+        <option value="0.9">0.9x (Chronique posée)</option>
+        <option value="1.0" selected>1.0x (Standard)</option>
+        <option value="1.1">1.1x (Rythmé)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- BARRE DE PROGRESSION VISUELLE -->
+  <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden">
+    <div id="narrator-progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+  </div>
+</section>
+    
     <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
     <article class="card-clean rounded-2xl p-6 md:p-10 space-y-8 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
       
@@ -418,89 +420,210 @@
   </footer>
 
   <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
-  <script>
-    const synth = window.speechSynthesis;
-    let utterance = null;
-    let isPlaying = false;
+<style>
+  .reading-active {
+    background: rgba(212, 175, 55, 0.08) !important;
+    border-left: 3px solid #d4af37 !important;
+    padding-left: 0.75rem !important;
+    transition: all 0.25s ease !important;
+    box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05);
+  }
+</style>
 
-    const btnPlay = document.getElementById('btn-play');
-    const btnPause = document.getElementById('btn-pause');
-    const btnStop = document.getElementById('btn-stop');
+<script>
+  const synth = window.speechSynthesis;
+  let paragraphs = [];
+  let currentIndex = 0;
+  let isPlaying = false;
+  let selectedVoice = null;
+
+  function initNarrator() {
+    // Collecter tous les paragraphes du récit
+    const container = document.getElementById('story-content');
+    if (!container) return;
+    
+    paragraphs = Array.from(container.querySelectorAll('p')).filter(p => p.textContent.trim().length > 0);
+    updateProgressUI();
+    loadVoices();
+  }
+
+  function loadVoices() {
+    if (!('speechSynthesis' in window)) return;
+    let voices = synth.getVoices();
+
+    const frVoices = voices.filter(v => v.lang.startsWith('fr') || v.lang.includes('FR'));
+    const select = document.getElementById('voice-select');
+    if (!select) return;
+    select.innerHTML = "";
+
+    // Trier pour placer les voix neuronales / naturelles / HD en tête
+    frVoices.sort((a, b) => {
+      const isHD_A = a.name.includes("Natural") || a.name.includes("Neural") || a.name.includes("Google") || a.name.includes("Premium");
+      const isHD_B = b.name.includes("Natural") || b.name.includes("Neural") || b.name.includes("Google") || b.name.includes("Premium");
+      return (isHD_B ? 1 : 0) - (isHD_A ? 1 : 0);
+    });
+
+    frVoices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      const isHD = v.name.includes("Natural") || v.name.includes("Neural") || v.name.includes("Google");
+      opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
+      select.appendChild(opt);
+    });
+
+    if (frVoices.length > 0) {
+      selectedVoice = frVoices[0];
+      select.value = selectedVoice.name;
+    }
+  }
+
+  function onVoiceChange() {
+    const voiceName = document.getElementById('voice-select').value;
+    selectedVoice = synth.getVoices().find(v => v.name === voiceName);
+    if (isPlaying) {
+      readCurrentParagraph();
+    }
+  }
+
+  function updateProgressUI() {
     const statusEl = document.getElementById('audio-status');
-    const rateEl = document.getElementById('audio-rate');
+    const progText = document.getElementById('audio-progress');
+    const bar = document.getElementById('narrator-progress-bar');
+    const visualizer = document.getElementById('narrator-visualizer');
 
-    function playAudio() {
-      if (!('speechSynthesis' in window)) {
-        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
-        return;
-      }
-
-      if (synth.paused && isPlaying) {
-        synth.resume();
-        statusEl.textContent = "Lecture en cours...";
-        return;
-      }
-
-      synth.cancel();
-
-      const title = document.getElementById('story-title').textContent.trim();
-      const motto = document.getElementById('story-motto').textContent.trim();
-      const content = document.getElementById('story-content').innerText.trim();
-      const fullSpeechText = `${title}. ${motto}. ${content}`;
-
-      utterance = new SpeechSynthesisUtterance(fullSpeechText);
-      utterance.lang = 'fr-FR';
-      utterance.rate = parseFloat(rateEl.value);
-
-      const voices = synth.getVoices();
-      const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
-      if (frVoice) utterance.voice = frVoice;
-
-      utterance.onstart = () => {
-        isPlaying = true;
-        statusEl.textContent = "Lecture vocale en cours : Championnat de Topaze";
-        btnPlay.classList.add('bg-amber-500');
-      };
-
-      utterance.onend = () => {
-        isPlaying = false;
-        statusEl.textContent = "Lecture terminée";
-        btnPlay.classList.remove('bg-amber-500');
-      };
-
-      utterance.onerror = () => {
-        isPlaying = false;
-        statusEl.textContent = "Erreur ou interruption";
-        btnPlay.classList.remove('bg-amber-500');
-      };
-
-      synth.speak(utterance);
+    if (progText) {
+      progText.textContent = `Paragraphe ${paragraphs.length ? currentIndex + 1 : 0} / ${paragraphs.length}`;
     }
-
-    function pauseAudio() {
-      if (synth.speaking && !synth.paused) {
-        synth.pause();
-        statusEl.textContent = "Lecture en pause";
+    if (bar && paragraphs.length) {
+      const pct = ((currentIndex + 1) / paragraphs.length) * 100;
+      bar.style.width = `${pct}%`;
+    }
+    if (visualizer) {
+      if (isPlaying) {
+        visualizer.classList.add('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+        visualizer.classList.remove('bg-amber-950/90', 'text-amber-300');
+      } else {
+        visualizer.classList.remove('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+        visualizer.classList.add('bg-amber-950/90', 'text-amber-300');
       }
     }
+  }
 
-    function stopAudio() {
-      if (synth.speaking) {
-        synth.cancel();
+  function highlightParagraph(idx) {
+    paragraphs.forEach((p, i) => {
+      if (i === idx) {
+        p.classList.add('reading-active');
+        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        p.classList.remove('reading-active');
       }
+    });
+  }
+
+  function readCurrentParagraph() {
+    synth.cancel();
+    if (currentIndex >= paragraphs.length) {
+      stopAudio();
+      return;
+    }
+
+    const p = paragraphs[currentIndex];
+    highlightParagraph(currentIndex);
+    updateProgressUI();
+
+    const u = new SpeechSynthesisUtterance(p.textContent.trim());
+    u.lang = 'fr-FR';
+    u.rate = parseFloat(document.getElementById('audio-rate')?.value || 1.0);
+    u.pitch = 0.95; // Ton légèrement plus profond et posé
+
+    if (selectedVoice) u.voice = selectedVoice;
+
+    u.onend = () => {
+      if (isPlaying) {
+        currentIndex++;
+        if (currentIndex < paragraphs.length) {
+          setTimeout(readCurrentParagraph, 300); // Petite pause naturelle
+        } else {
+          stopAudio();
+        }
+      }
+    };
+
+    u.onerror = () => {
       isPlaying = false;
-      statusEl.textContent = "Voix Narrative Prête";
-      btnPlay.classList.remove('bg-amber-500');
-    }
+      updatePlayButton();
+    };
 
-    btnPlay.addEventListener('click', playAudio);
-    btnPause.addEventListener('click', pauseAudio);
-    btnStop.addEventListener('click', stopAudio);
+    synth.speak(u);
+  }
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {};
+  function togglePlay() {
+    if (isPlaying) {
+      synth.pause();
+      isPlaying = false;
+      document.getElementById('audio-status').textContent = "Lecture en pause";
+    } else {
+      if (synth.paused) {
+        synth.resume();
+      } else {
+        readCurrentParagraph();
+      }
+      isPlaying = true;
+      document.getElementById('audio-status').textContent = "Lecture vocale en cours...";
     }
-  </script>
+    updatePlayButton();
+    updateProgressUI();
+  }
+
+  function updatePlayButton() {
+    const icon = document.getElementById('play-icon');
+    const text = document.getElementById('play-text');
+    if (isPlaying) {
+      if (icon) icon.textContent = "⏸";
+      if (text) text.textContent = "Pause";
+    } else {
+      if (icon) icon.textContent = "▶";
+      if (text) text.textContent = "Reprendre";
+    }
+  }
+
+  function stopAudio() {
+    synth.cancel();
+    isPlaying = false;
+    currentIndex = 0;
+    paragraphs.forEach(p => p.classList.remove('reading-active'));
+    document.getElementById('audio-status').textContent = "Voix Narrative Prête";
+    updatePlayButton();
+    updateProgressUI();
+  }
+
+  function nextParagraph() {
+    if (currentIndex < paragraphs.length - 1) {
+      currentIndex++;
+      if (isPlaying) readCurrentParagraph();
+      else {
+        highlightParagraph(currentIndex);
+        updateProgressUI();
+      }
+    }
+  }
+
+  function prevParagraph() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      if (isPlaying) readCurrentParagraph();
+      else {
+        highlightParagraph(currentIndex);
+        updateProgressUI();
+      }
+    }
+  }
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    window.addEventListener('DOMContentLoaded', initNarrator);
+  }
+</script>
 
 </body>
 </html>
