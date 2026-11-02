@@ -223,7 +223,6 @@ const SKILL_TRAIT_MAP = {
   "artisanat": "intelligence"
 };
 
-// Dictionnaire normalisé sans accents
 const SKILL_TRAIT = Object.fromEntries(
   Object.entries(SKILL_TRAIT_MAP).map(([k, v]) => [sanitizeNorm(k), v])
 );
@@ -254,6 +253,9 @@ const CATALOG_TRANSLATIONS = new Set([
   "tir a l'arc",
   "yarijutsu",
   "bojutsu",
+  "tantojutsu",
+  "pistage & survie",
+  "legislation imperiale",
   "evaluation & negociation",
   "siege & batiment",
   "animal handling",
@@ -310,14 +312,12 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
   let cleanName = (rawName || "").trim();
   const emphases = [];
 
-  // Extraction d'éventuelles parenthèses
   const match = cleanName.match(/^(.*?)\s*\((.*?)\)$/);
   if (match) {
     const baseName = match[1].trim();
     const insideParen = match[2].trim();
     const normParen = sanitizeNorm(insideParen);
 
-    // Si la parenthèse n'est PAS une simple traduction du catalogue, c'est une spécialité (ex: Tetsubo, Pistage)
     if (!CATALOG_TRANSLATIONS.has(normParen)) {
       emphases.push(insideParen);
     }
@@ -326,7 +326,6 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
 
   const normBase = sanitizeNorm(cleanName);
 
-  // Normalisation des noms selon le standard Carnet L5R (§3.1)
   if (normBase === "enquete") {
     cleanName = "Investigation";
   } else if (normBase === "theurgie") {
@@ -339,7 +338,6 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
     cleanName = "Comédie";
   }
 
-  // Détermination du trait via la table normalisée (Bug 2 résolu)
   let traitKey = "agility";
   const normFinal = sanitizeNorm(cleanName);
 
@@ -354,7 +352,6 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
     }
   }
 
-  // Bug 4 résolu : pas d'injection arbitraire de "Général"
   return {
     name: cleanName,
     rank: Math.max(0, Math.min(10, parseInt(rankVal, 10) || 0)),
@@ -383,11 +380,24 @@ function generateCarnetJSON() {
   const schoolEl = document.getElementById("sel-school");
   const schoolDisplayed = (schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
 
-  const clansDb = typeof getClans === "function" ? getClans() : (window.CLANS_DATA || {});
-  const clanKey = clanEl?.value || "crabe";
-  const schIdx = parseInt(schoolEl?.value, 10) || 0;
-  const currentSchoolData = clansDb[clanKey]?.schools?.[schIdx] || null;
-  const internalSchoolId = currentSchoolData?.id || "";
+  // Résolution robuste de l'école (pas de parseInt qui renvoie NaN sur les chaînes ID)
+  let currentSchoolData = null;
+  let internalSchoolId = "";
+
+  if (typeof window !== "undefined" && typeof window.getSelectedSchoolObject === "function") {
+    const resolved = window.getSelectedSchoolObject();
+    if (resolved && resolved.school) {
+      currentSchoolData = resolved.school;
+      internalSchoolId = currentSchoolData.id || "";
+    }
+  }
+
+  if (!currentSchoolData && typeof resolveSchoolByRef === "function") {
+    const clanKey = clanEl?.value || "crabe";
+    const resolved = resolveSchoolByRef(schoolEl?.value, clanKey);
+    currentSchoolData = resolved?.school || null;
+    internalSchoolId = currentSchoolData?.id || schoolEl?.value || "";
+  }
 
   const canonSchoolId = resolveSchoolIdFromText(schoolDisplayed, internalSchoolId);
 
@@ -417,7 +427,7 @@ function generateCarnetJSON() {
   const rAir   = Math.min(traits.reflexes, traits.awareness);
   const ringsSum = rEarth + rWater + rFire + rAir + voidRing;
 
-  // 4. Compétences (Bug 1 résolu : lecture directe des variables globales)
+  // 4. Compétences (lecture globale directe et replis sécurisés)
   let rawSkillsList = [];
   try {
     if (typeof currentSkills !== "undefined" && Array.isArray(currentSkills)) {
@@ -429,6 +439,11 @@ function generateCarnetJSON() {
     if (typeof window !== "undefined" && Array.isArray(window.currentSkills)) {
       rawSkillsList = window.currentSkills;
     }
+  }
+
+  if (!rawSkillsList.length && typeof window !== "undefined") {
+    if (Array.isArray(window.currentChar?.skills)) rawSkillsList = window.currentChar.skills;
+    else if (Array.isArray(window.character?.skills)) rawSkillsList = window.character.skills;
   }
 
   const processedSkillsMap = new Map();
@@ -447,7 +462,6 @@ function generateCarnetJSON() {
     }
   });
 
-  // Pas de repli forcé sur Kenjutsu 1 (Bug 1 résolu)
   const skills = Array.from(processedSkillsMap.values());
   const sumSkillsRank = skills.reduce((acc, s) => acc + s.rank, 0);
 
@@ -554,7 +568,7 @@ function generateCarnetJSON() {
     });
   }
 
-  // 10. Avantages, Désavantages et Modificateurs (Bug 1 résolu)
+  // 10. Avantages, Désavantages et Modificateurs
   let advList = [];
   let disadvList = [];
   try {
@@ -565,10 +579,19 @@ function generateCarnetJSON() {
     else if (typeof window !== "undefined" && Array.isArray(window.disadvantagesList)) disadvList = window.disadvantagesList;
   } catch (e) {}
 
+  if (!advList.length && typeof window !== "undefined") {
+    if (Array.isArray(window.currentChar?.advantagesList)) advList = window.currentChar.advantagesList;
+    else if (Array.isArray(window.character?.advantagesList)) advList = window.character.advantagesList;
+  }
+  if (!disadvList.length && typeof window !== "undefined") {
+    if (Array.isArray(window.currentChar?.disadvantagesList)) disadvList = window.currentChar.disadvantagesList;
+    else if (Array.isArray(window.character?.disadvantagesList)) disadvList = window.character.disadvantagesList;
+  }
+
   const modifiers = [];
 
   advList.forEach(a => {
-    const aNorm = sanitizeNorm(a.name);
+    const aNorm = sanitizeNorm(typeof a === "object" ? a.name : a);
     if (aNorm.includes("force de la terre")) {
       modifiers.push({
         id: "force-de-la-terre",
@@ -613,7 +636,7 @@ function generateCarnetJSON() {
   });
 
   disadvList.forEach(d => {
-    const dNorm = sanitizeNorm(d.name);
+    const dNorm = sanitizeNorm(typeof d === "object" ? d.name : d);
     if (dNorm.includes("sensible a la douleur") || dNorm.includes("low pain threshold")) {
       modifiers.push({
         id: "sensible-douleur",
@@ -688,9 +711,13 @@ function generateCarnetJSON() {
     );
   }
 
-  // 12. Nettoyage des libellés (un nom par ligne sans traduction anglaise)
-  const advText = advList.map(a => (a.name || "").split("(")[0].trim()).filter(Boolean).join("\n");
-  const disadvText = disadvList.map(d => (d.name || "").split("(")[0].trim()).filter(Boolean).join("\n");
+  // 12. Nettoyage des libellés (un nom par ligne)
+  const getCleanName = item => {
+    const raw = (typeof item === "object" && item !== null) ? (item.name || "") : String(item || "");
+    return raw.split("(")[0].trim();
+  };
+  const advText = advList.map(getCleanName).filter(Boolean).join("\n");
+  const disadvText = disadvList.map(getCleanName).filter(Boolean).join("\n");
   const notesText = (document.getElementById("pc-outfit")?.value || "").trim();
 
   // 13. Assemblage de l'objet racine schemaVersion: 2
