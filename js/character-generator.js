@@ -1702,6 +1702,11 @@ function updateAll() {
 
   // Synchronisation avec export-carnet.js
   if (typeof window !== "undefined") {
+    // ➔ AJOUT INDISPENSABLE : synchronise les tableaux réassignés avec window
+    window.currentSkills = currentSkills;
+    window.advantagesList = advantagesList;
+    window.disadvantagesList = disadvantagesList;
+
     window.currentChar = {
       name: document.getElementById('pc-name')?.value || "Samouraï",
       clan: clans[clanKey]?.name || "Crabe",
@@ -1739,7 +1744,6 @@ function updateAll() {
     };
     window.character = window.currentChar;
   }
-}
 
 function randomizeAll() {
   const clans = getClans();
@@ -2064,6 +2068,9 @@ function exportOfficialPDF() {
 
 // Exposition globale pour createcharacter.html et export-carnet.js
 if (typeof window !== "undefined") {
+  window.currentSkills = currentSkills;
+  window.advantagesList = advantagesList;
+  window.disadvantagesList = disadvantagesList;
   window.addSkillFromCatalog = addSkillFromCatalog;
   window.adjustSkillRank = adjustSkillRank;
   window.adjustTrait = adjustTrait;
@@ -2074,5 +2081,7 @@ if (typeof window !== "undefined") {
   window.updateDifferentSchoolSelection = updateDifferentSchoolSelection;
   window.SKILL_MASTERIES = SKILL_MASTERIES;
 }
+
+window.addEventListener('DOMContentLoaded', bootstrap);
 
 window.addEventListener('DOMContentLoaded', bootstrap);
