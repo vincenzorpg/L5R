@@ -928,3 +928,1138 @@ function addAdvFromCatalog() {
 
   const currentRemainingXP = parseInt(document.getElementById('xp-remaining')?.textContent) || 0;
   if (currentRemainingXP - item.cost < 0) {
+    alert(`Impossible d'ajouter « ${item.name} » (${item.cost} XP) : solde insuffisant (${currentRemainingXP} XP disponible).`);
+    return;
+  }
+
+  const newAdv = { name: item.name, cost: item.cost };
+  const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
+  const allSchools = getAllSchoolsCatalog();
+
+  if (isDifferentSchoolAdv(item.name)) {
+    const currentSchObj = getSelectedSchoolObject();
+    const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
+    const defaultExt = (currentSchObj && currentSchObj.isExternalClan)
+      ? allSchools.find(s => s.id === currentSchObj.school.id)
+      : (externalSchools[0] || allSchools[0]);
+
+    if (defaultExt) {
+      newAdv.differentSchoolId = defaultExt.id;
+      newAdv.differentSchoolName = `${defaultExt.name} (${defaultExt.clanName})`;
+      advantagesList.push(newAdv);
+
+      const schSel = document.getElementById('sel-school');
+      if (schSel) {
+        updateSchoolOptions(defaultExt.id);
+        schSel.value = defaultExt.id;
+      }
+      resetSheetToNewSelection(true);
+      return;
+    }
+  }
+
+  if (isMultipleSchoolsAdv(item.name)) {
+    const defaultSec = allSchools[0] || null;
+    newAdv.secondarySchoolId = defaultSec ? defaultSec.id : "";
+    newAdv.secondarySchoolName = defaultSec ? `${defaultSec.name} (${defaultSec.clanName})` : "";
+    newAdv.secondarySchoolRank = 1;
+  }
+
+  advantagesList.push(newAdv);
+  renderAdvDisadv();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function addDisadvFromCatalog() {
+  const adv = getAdvantages();
+  const idx = document.getElementById('sel-catalog-disadv').value;
+  if (idx === "" || !adv.desavantages[idx]) return;
+
+  const item = adv.desavantages[idx];
+
+  if (disadvantagesList.some(d => d.name === item.name)) {
+    alert(`Le désavantage « ${item.name} » est déjà sélectionné.`);
+    return;
+  }
+
+  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
+  if (currentTotalGain + item.gain > MAX_DISADVANTAGE_XP) {
+    alert(`Seuil dépassé ! Vous avez déjà ${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP de désavantages. L'ajout de « ${item.name} » (+${item.gain} XP) atteindrait ${currentTotalGain + item.gain} XP.`);
+    return;
+  }
+
+  disadvantagesList.push({ name: item.name, gain: item.gain });
+  renderAdvDisadv();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function removeAdv(idx) {
+  const removed = advantagesList[idx];
+  advantagesList.splice(idx, 1);
+
+  if (removed && isDifferentSchoolAdv(removed.name)) {
+    updateSchoolOptions();
+    resetSheetToNewSelection(true);
+    return;
+  }
+
+  renderAdvDisadv();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function removeDisadv(idx) {
+  disadvantagesList.splice(idx, 1);
+  renderAdvDisadv();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function renderAdvDisadv() {
+  const advContainer = document.getElementById('adv-container');
+  if (advContainer) {
+    const allSchools = getAllSchoolsCatalog();
+    const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
+
+    advContainer.innerHTML = advantagesList.map((a, i) => {
+      const isDiff = isDifferentSchoolAdv(a.name);
+      const isMulti = isMultipleSchoolsAdv(a.name);
+      let extraHtml = "";
+
+      if (isDiff) {
+        const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
+        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (externalSchools[0]?.id || "");
+
+        const diffOptions = externalSchools.map(sch => `
+          <option value="${sch.id}" ${sch.id === currentDiffId ? 'selected' : ''}>
+            ${sch.clanName} — ${sch.name} (${sch.bonus})
+          </option>
+        `).join('');
+
+        extraHtml = `
+          <div class="mt-2 p-2.5 rounded bg-stone-950 border border-emerald-500/40 space-y-1.5">
+            <span class="text-[10px] text-emerald-300 font-bold uppercase tracking-wider block font-imperial">
+              🎓 École d'un autre Clan suivie (remplace l'école initiale) :
+            </span>
+            <select onchange="updateDifferentSchoolSelection(${i}, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 font-bold">
+              ${diffOptions}
+            </select>
+            <div class="text-[10px] text-stone-400 italic">
+              Applique le bonus de trait, l'honneur, les 7 compétences et les techniques de cette école tout en gardant votre Clan et votre Famille.
+            </div>
+          </div>
+        `;
+      }
+
+      if (isMulti) {
+        const currentSecId = a.secondarySchoolId || (allSchools[0]?.id || "");
+        const currentSecRank = a.secondarySchoolRank || 1;
+
+        const schoolOptions = allSchools.map(sch => `
+          <option value="${sch.id}" ${sch.id === currentSecId ? 'selected' : ''}>
+            ${sch.clanName} — ${sch.name}
+          </option>
+        `).join('');
+
+        extraHtml = `
+          <div class="mt-2 p-2.5 rounded bg-stone-950 border border-amber-500/40 space-y-2">
+            <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block font-imperial">
+              Configuration de la Seconde École :
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="sm:col-span-2">
+                <label class="text-[9px] text-stone-400 block mb-0.5">École suivie :</label>
+                <select onchange="updateSecondarySchoolSelection(${i}, this.value, undefined)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200">
+                  ${schoolOptions}
+                </select>
+              </div>
+              <div>
+                <label class="text-[9px] text-stone-400 block mb-0.5">Rang atteint :</label>
+                <select onchange="updateSecondarySchoolSelection(${i}, undefined, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 text-center font-bold">
+                  <option value="1" ${currentSecRank === 1 ? 'selected' : ''}>Rang 1</option>
+                  <option value="2" ${currentSecRank === 2 ? 'selected' : ''}>Rang 2</option>
+                  <option value="3" ${currentSecRank === 3 ? 'selected' : ''}>Rang 3</option>
+                  <option value="4" ${currentSecRank === 4 ? 'selected' : ''}>Rang 4</option>
+                  <option value="5" ${currentSecRank === 5 ? 'selected' : ''}>Rang 5</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="p-2 rounded bg-black/40 border border-stone-800 flex flex-col gap-1">
+          <div class="flex justify-between items-center">
+            <span class="text-stone-300 font-bold">${a.name} (${a.cost} XP)</span>
+            <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
+          </div>
+          ${extraHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  const disadvContainer = document.getElementById('disadv-container');
+  if (disadvContainer) {
+    disadvContainer.innerHTML = disadvantagesList.map((d, i) => `
+      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
+        <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
+        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
+      </div>
+    `).join('');
+  }
+
+  updateDisadvButtonState();
+}
+
+function renderSkills() {
+  const container = document.getElementById('skills-list');
+  if (!container) return;
+
+  const catalogSkills = getSkills();
+
+  container.innerHTML = currentSkills.map((sk, idx) => {
+    if (sk.isChoice && !sk.chosen) {
+      let filtered = catalogSkills;
+      if (sk.choiceFilter) {
+        const targetType = sk.choiceFilter.toLowerCase();
+        filtered = catalogSkills.filter(s => {
+          const t = (s.type || "").toLowerCase();
+          if (targetType === "noble" || targetType === "haute") {
+            return t === "noble" || t === "haute";
+          }
+          return t === targetType;
+        });
+      }
+      filtered = filtered.filter(s => !currentSkills.some(cs => (cs.chosen || !cs.isChoice) && cs.name === s.name));
+
+      const optionsHtml = filtered.map(s => 
+        `<option value="${s.name}">${s.name} (${s.type} - ${s.trait})</option>`
+      ).join('');
+
+      return `
+        <div class="p-2.5 rounded bg-amber-950/30 border-2 border-dashed border-amber-500/70 flex flex-col gap-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500 text-black font-extrabold uppercase tracking-wide">
+              Choix École (Gratuit Rang 1)
+            </span>
+            <span class="text-[10px] text-amber-300 italic">${sk.originalPlaceholder || sk.name}</span>
+          </div>
+          <select onchange="chooseSchoolSkill(${idx}, this.value)" class="w-full p-1.5 rounded text-xs bg-stone-900 border border-amber-500/60 text-amber-200 font-bold focus:ring-1 focus:ring-amber-400">
+            <option value="">-- Choisir une compétence (${sk.choiceFilter || 'Libre'}) --</option>
+            ${optionsHtml}
+          </select>
+        </div>
+      `;
+    }
+
+    const isChoiceActive = sk.isChoice && sk.chosen;
+    const masteriesHtml = getMasteriesHtml(sk.name, sk.rank);
+
+    return `
+      <div class="p-2.5 rounded bg-black/60 border ${isChoiceActive ? 'border-amber-500/50' : 'border-stone-800'} flex flex-col gap-1.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex-1 truncate">
+            <span class="font-bold text-amber-200">${sk.name}</span>
+            ${sk.isSchool ? `<span class="text-[9px] px-1 rounded bg-amber-950 text-amber-400 ml-1 border border-amber-900">${isChoiceActive ? 'École (Choix)' : 'École'}</span>` : ''}
+            ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5 cursor-pointer">⇄ Changer</button>` : ''}
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <label class="text-[10px] text-stone-400 flex items-center gap-1">
+              <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
+            </label>
+            
+            <div class="flex items-center gap-1 ml-1">
+              <button type="button" onclick="adjustSkillRank(${idx}, -1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
+              <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
+              <button type="button" onclick="adjustSkillRank(${idx}, 1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">+</button>
+            </div>
+
+            <button onclick="removeSkill(${idx})" title="${isChoiceActive ? 'Réinitialiser ce choix' : 'Supprimer'}" class="text-stone-500 hover:text-red-400 font-bold px-1 ml-0.5 cursor-pointer">✕</button>
+          </div>
+        </div>
+
+        ${masteriesHtml}
+      </div>
+    `;
+  }).join('');
+}
+
+function adjustSkillRank(idx, delta) {
+  const sk = currentSkills[idx];
+  if (!sk) return;
+  const minRank = sk.isSchool ? 1 : 0;
+  let newRank = (parseInt(sk.rank) || 0) + delta;
+  if (newRank < minRank) newRank = minRank;
+  if (newRank > 10) newRank = 10;
+  sk.rank = newRank;
+  renderSkills();
+  updateAll();
+}
+
+function adjustTrait(traitId, delta) {
+  const input = document.getElementById(traitId);
+  if (!input) return;
+  const min = parseInt(input.min) || 2;
+  const max = parseInt(input.max) || 6;
+  let val = (parseInt(input.value) || 2) + delta;
+  if (val < min) val = min;
+  if (val > max) val = max;
+  input.value = val;
+  updateAll();
+}
+
+function chooseSchoolSkill(idx, skillName) {
+  if (!skillName) return;
+  const sk = currentSkills[idx];
+  if (!sk) return;
+  sk.name = skillName;
+  sk.chosen = true;
+  sk.rank = 1;
+  sk.spec = false;
+  renderSkills();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function reopenSkillChoice(idx) {
+  const sk = currentSkills[idx];
+  if (!sk) return;
+  sk.name = sk.originalPlaceholder || "Une compétence au choix";
+  sk.chosen = false;
+  sk.rank = 1;
+  sk.spec = false;
+  renderSkills();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function addSkillFromCatalog() {
+  const name = document.getElementById('sel-add-skill').value;
+  if (!name) return;
+
+  const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
+  const targetRoot = normalizeSkill(name);
+
+  if (currentSkills.some(s => (s.chosen || !s.isChoice) && normalizeSkill(s.name) === targetRoot)) {
+    alert(`La compétence « ${name} » est déjà maîtrisée par votre personnage.`);
+    return;
+  }
+
+  const catalogSkill = getSkills().find(s => s.name === name);
+  const openChoiceIdx = currentSkills.findIndex(s => {
+    if (!s.isChoice || s.chosen) return false;
+    if (!s.choiceFilter) return true;
+    const t = (catalogSkill?.type || "").toLowerCase();
+    const f = s.choiceFilter.toLowerCase();
+    if (f === "noble" || f === "haute") return t === "noble" || t === "haute";
+    return t === f;
+  });
+
+  if (openChoiceIdx !== -1) {
+    chooseSchoolSkill(openChoiceIdx, name);
+    return;
+  }
+
+  currentSkills.push({
+    name,
+    rank: 1,
+    spec: false,
+    isSchool: false,
+    isChoice: false,
+    chosen: true,
+    originalPlaceholder: null
+  });
+  renderSkills();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function removeSkill(idx) {
+  const sk = currentSkills[idx];
+  if (!sk) return;
+
+  if (sk.isChoice) {
+    reopenSkillChoice(idx);
+    return;
+  }
+
+  if (sk.isSchool) {
+    if (!confirm(`« ${sk.name} » est une compétence fondamentale de votre école. Voulez-vous vraiment la retirer ?`)) {
+      return;
+    }
+  }
+
+  currentSkills.splice(idx, 1);
+  renderSkills();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function changeSkillRank(idx, val) {
+  const sk = currentSkills[idx];
+  if (!sk) return;
+  const minRank = sk.isSchool ? 1 : 0;
+  sk.rank = Math.max(minRank, parseInt(val) || minRank);
+  renderSkills();
+  updateAll();
+}
+
+function toggleSkillSpec(idx) {
+  if (currentSkills[idx]) {
+    currentSkills[idx].spec = !currentSkills[idx].spec;
+    updateAll();
+  }
+}
+
+function updateStickyName() {
+  const nameInput = document.getElementById('pc-name');
+  const stickyName = document.getElementById('sticky-pc-name');
+  if (nameInput && stickyName) {
+    stickyName.textContent = nameInput.value.trim() || "Samouraï";
+  }
+}
+
+function generateRandomName(gender) {
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const famIdx = parseInt(document.getElementById('sel-family')?.value) || 0;
+  const familyName = clans[clanKey]?.families?.[famIdx]?.name || "Samouraï";
+
+  const list = ROKUGANI_NAMES[gender] || ROKUGANI_NAMES['m'];
+  if (!list || !list.length) return;
+  const pick = list[Math.floor(Math.random() * list.length)];
+
+  const nameInput = document.getElementById('pc-name');
+  if (nameInput) {
+    nameInput.value = nameOrderWestern ? `${pick.n} ${familyName}` : `${familyName} ${pick.n}`;
+  }
+
+  const meaningEl = document.getElementById('name-meaning');
+  if (meaningEl) {
+    meaningEl.textContent = `Signification : ${pick.m}`;
+  }
+
+  updateStickyName();
+}
+
+function toggleNameOrder() {
+  nameOrderWestern = !nameOrderWestern;
+  const nameInput = document.getElementById('pc-name');
+  if (nameInput) {
+    const val = nameInput.value.trim();
+    const parts = val.split(' ');
+    if (parts.length >= 2) {
+      const formatted = `${parts.slice(1).join(' ')} ${parts[0]}`;
+      nameInput.value = formatted;
+    }
+  }
+  updateStickyName();
+}
+
+// =============================================================================
+// CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
+// =============================================================================
+function updateAll() {
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const famIdx = document.getElementById('sel-family')?.value;
+
+  const fam = clans[clanKey]?.families[famIdx];
+  const schObj = getSelectedSchoolObject();
+  const sch = schObj?.school;
+
+  const sta = parseInt(document.getElementById('trait-stamina').value) || 2;
+  const wil = parseInt(document.getElementById('trait-willpower').value) || 2;
+  const str = parseInt(document.getElementById('trait-strength').value) || 2;
+  const per = parseInt(document.getElementById('trait-perception').value) || 2;
+  const ref = parseInt(document.getElementById('trait-reflexes').value) || 2;
+  const awa = parseInt(document.getElementById('trait-awareness').value) || 2;
+  const agi = parseInt(document.getElementById('trait-agility').value) || 2;
+  const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
+  const voi = parseInt(document.getElementById('trait-void').value) || 2;
+
+  // 1. Anneaux
+  const rEarth = Math.min(sta, wil);
+  const rWater = Math.min(str, per);
+  const rAir = Math.min(ref, awa);
+  const rFire = Math.min(agi, int);
+  const rVoid = voi;
+
+  document.getElementById('ring-earth').textContent = rEarth;
+  document.getElementById('ring-water').textContent = rWater;
+  document.getElementById('ring-air').textContent = rAir;
+  document.getElementById('ring-fire').textContent = rFire;
+  document.getElementById('ring-void').textContent = rVoid;
+
+  const hasAdv = (impactName) => advantagesList.some(a => {
+    const found = getAdvantages().avantages?.find(x => x.name === a.name);
+    return found && found.impact === impactName;
+  });
+
+  const hasDisadv = (impactName) => disadvantagesList.some(d => {
+    const found = getAdvantages().desavantages?.find(x => x.name === d.name);
+    return found && found.impact === impactName;
+  });
+
+  // 2. Budget XP
+  let xpSpent = 0;
+  const traitsBase = [
+    { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
+    { val: wil, bonus: (fam?.trait === "Volonté" ? 1 : 0) + (sch?.trait === "Volonté" ? 1 : 0) },
+    { val: str, bonus: (fam?.trait === "Force" ? 1 : 0) + (sch?.trait === "Force" ? 1 : 0) },
+    { val: per, bonus: (fam?.trait === "Perception" ? 1 : 0) + (sch?.trait === "Perception" ? 1 : 0) },
+    { val: ref, bonus: (fam?.trait === "Réflexes" ? 1 : 0) + (sch?.trait === "Réflexes" ? 1 : 0) },
+    { val: awa, bonus: (fam?.trait === "Intuition" ? 1 : 0) + (sch?.trait === "Intuition" ? 1 : 0) },
+    { val: agi, bonus: (fam?.trait === "Agilité" ? 1 : 0) + (sch?.trait === "Agilité" ? 1 : 0) },
+    { val: int, bonus: (fam?.trait === "Intelligence" ? 1 : 0) + (sch?.trait === "Intelligence" ? 1 : 0) }
+  ];
+
+  traitsBase.forEach(t => {
+    let baseStart = 2 + t.bonus;
+    if (t.val > baseStart) {
+      for (let r = baseStart + 1; r <= t.val; r++) xpSpent += r * 4;
+    }
+  });
+
+  const voidBonus = (fam?.trait === "Vide" ? 1 : 0) + (sch?.trait === "Vide" ? 1 : 0);
+  const baseVoid = 2 + voidBonus;
+
+  if (voi > baseVoid) {
+    for (let r = baseVoid + 1; r <= voi; r++) {
+      const costPerRank = hasAdv("enlightened") ? Math.max(1, (r * 6) - 2) : (r * 6);
+      xpSpent += costPerRank;
+    }
+  }
+
+  currentSkills.forEach(sk => {
+    if (sk.isChoice && !sk.chosen) return;
+
+    let start = sk.isSchool ? 1 : 0;
+    if (sk.rank > start) {
+      for (let r = start + 1; r <= sk.rank; r++) {
+        const skillStepCost = hasAdv("prodigy") ? Math.max(1, r - 1) : r;
+        xpSpent += skillStepCost;
+      }
+    }
+    if (sk.spec) xpSpent += 2;
+  });
+
+  let advCost = advantagesList.reduce((acc, a) => acc + a.cost, 0);
+  document.getElementById('adv-cost-total').textContent = advCost;
+  xpSpent += advCost;
+
+  let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
+  let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
+  document.getElementById('disadv-gain-total').textContent = disadvGain;
+
+  const baseXPInput = document.getElementById('base-xp-input');
+  const baseXP = baseXPInput ? (parseInt(baseXPInput.value) || 0) : 40;
+
+  let totalXP = baseXP + disadvGain;
+  let remainingXP = totalXP - xpSpent;
+
+  document.getElementById('xp-total').textContent = totalXP;
+  const remEl = document.getElementById('xp-remaining');
+  remEl.textContent = remainingXP;
+  remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
+
+  // 3. Insight & Rang d'École
+  let sumRings = rEarth + rWater + rAir + rFire + rVoid;
+  let sumSkills = currentSkills.reduce((acc, sk) => {
+    if (sk.isChoice && !sk.chosen) return acc;
+    return acc + (parseInt(sk.rank) || 0);
+  }, 0);
+  let insight = (sumRings * 10) + sumSkills;
+
+  let insightRank = 1;
+  if (insight >= 225) insightRank = 5;
+  else if (insight >= 200) insightRank = 4;
+  else if (insight >= 175) insightRank = 3;
+  else if (insight >= 150) insightRank = 2;
+
+  document.getElementById('insight-display').innerHTML = `${insight} pts <span class="text-xs text-amber-400 font-bold">(Rang ${insightRank})</span>`;
+
+  const stickySchool = document.getElementById('sticky-school-badge');
+  if (stickySchool && sch) {
+    stickySchool.textContent = schObj.isExternalClan ? `${sch.name} (${schObj.clanName})` : sch.name;
+  }
+
+  renderSchoolTechniques(insightRank);
+
+  // 4. Jet pour Toucher
+  const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
+  const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
+    name: weapon1Name,
+    vd: "3g2",
+    trait: "Agilité",
+    skill: "Kenjutsu",
+    type: "Médium"
+  };
+
+  const isRanged = (weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu");
+  const atkTraitName = isRanged ? "Réflexes" : (weaponData.trait || "Agilité");
+  const atkTraitVal = (atkTraitName === "Réflexes") ? ref : agi;
+  const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
+
+  const skillObj = currentSkills.find(s => {
+    if (s.isChoice && !s.chosen) return false;
+    const sName = s.name.toLowerCase();
+    const wSkill = atkSkillName.toLowerCase();
+    const wName = weaponData.name.toLowerCase();
+    return sName.includes(wSkill) || wSkill.includes(sName) || sName.includes(wName);
+  });
+
+  const skillRank = skillObj ? skillObj.rank : 0;
+  const hasSpec = skillObj ? skillObj.spec : false;
+
+  let atkRoll = 0;
+  let atkKeep = atkTraitVal;
+  let atkDetails = [];
+
+  if (skillRank > 0) {
+    atkRoll = skillRank + atkTraitVal;
+    atkDetails.push(`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`);
+  } else {
+    atkRoll = atkTraitVal;
+    atkDetails.push(`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`);
+  }
+
+  if ((sch?.id === "bushi-hiruma" || sch?.name?.includes("Hiruma")) && !isRanged) {
+    atkRoll += 1;
+    atkDetails.push("Hiruma (+1g0)");
+  }
+
+  if (hasSpec) {
+    atkDetails.push("Spé : relance les 1");
+  }
+
+  const atkStr = `${atkRoll}g${atkKeep}`;
+  const atkDetailStr = `${weaponData.name} : ${atkDetails.join(' + ')}`;
+  const stickyAtk = document.getElementById('sticky-atk');
+  const stickyAtkDetail = document.getElementById('sticky-atk-detail');
+  if (stickyAtk) stickyAtk.textContent = atkStr;
+  if (stickyAtkDetail) {
+    stickyAtkDetail.textContent = atkDetailStr;
+    stickyAtkDetail.title = atkDetailStr;
+  }
+
+  // 5. Jet de Dégâts
+  const vdParts = (weaponData.vd || "3g2").split('g');
+  let dmgBaseRoll = parseInt(vdParts[0]) || 3;
+  let dmgBaseKeep = parseInt(vdParts[1]) || 2;
+
+  let dmgRoll = dmgBaseRoll;
+  let dmgKeep = dmgBaseKeep;
+  let dmgBonusStatic = 0;
+  let dmgDetails = [`Arme (${weaponData.vd})`];
+
+  if (!isRanged) {
+    dmgRoll += str;
+    dmgDetails.push(`Force (+${str}g0)`);
+  } else {
+    dmgRoll += 3;
+    dmgDetails.push("Force d'Arc (+3g0)");
+  }
+
+  if ((sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) && weaponData.type?.includes("Lourde")) {
+    dmgRoll += 1;
+    dmgDetails.push("Voie du Crabe (+1g0)");
+  }
+
+  if (hasAdv("large") && (weaponData.type?.includes("Grand") || weaponData.type?.includes("Lourd") || weaponData.type?.includes("2 mains"))) {
+    dmgRoll += 1;
+    dmgDetails.push("Grand (+1g0)");
+  }
+
+  if (hasDisadv("small") && !isRanged) {
+    dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
+    dmgDetails.push("Petit (-1g0)");
+  }
+
+  const dmgStr = dmgBonusStatic > 0 ? `${dmgRoll}g${dmgKeep} + ${dmgBonusStatic}` : `${dmgRoll}g${dmgKeep}`;
+  const dmgDetailStr = dmgDetails.join(' + ');
+  const stickyDmg = document.getElementById('sticky-dmg');
+  const stickyDmgDetail = document.getElementById('sticky-dmg-detail');
+  if (stickyDmg) stickyDmg.textContent = dmgStr;
+  if (stickyDmgDetail) {
+    stickyDmgDetail.textContent = dmgDetailStr;
+    stickyDmgDetail.title = dmgDetailStr;
+  }
+
+  // 6. Initiative (Insight + Réflexes g Réflexes)
+  let initRoll = insightRank + ref;
+  let initKeep = ref;
+  let initStatic = 0;
+  let initDetails = [`Insight ${insightRank} + Réfl. ${ref} (${insightRank + ref}g${ref})`];
+
+  if (hasAdv("lightning_reflexes")) {
+    initRoll += 1;
+    initDetails.push("Vitesse Éclair (+1g0)");
+  }
+
+  if (hasAdv("quick")) {
+    initStatic += rAir;
+    initDetails.push(`Vif (+${rAir})`);
+  }
+
+  const iaiSkill = currentSkills.find(s => s.name.toLowerCase().includes("iaijutsu"));
+  const iaiRank = iaiSkill ? iaiSkill.rank : 0;
+  if ((sch?.id === "duelliste-kakita" || sch?.name?.includes("Kakita")) && iaiRank > 0) {
+    initStatic += (iaiRank * 2);
+    initDetails.push(`Voie de la Grue (+${iaiRank * 2})`);
+  }
+
+  if ((sch?.id === "bushi-bayushi" || sch?.name?.includes("Bayushi")) && iaiRank > 0) {
+    initStatic += iaiRank;
+    initDetails.push(`Voie du Scorpion (+${iaiRank})`);
+  }
+
+  const initStr = initStatic > 0 ? `${initRoll}g${initKeep} + ${initStatic}` : `${initRoll}g${initKeep}`;
+  const initDetailStr = initDetails.join(' + ');
+  const stickyInit = document.getElementById('sticky-init');
+  const stickyInitDetail = document.getElementById('sticky-init-detail');
+  if (stickyInit) stickyInit.textContent = initStr;
+  if (stickyInitDetail) {
+    stickyInitDetail.textContent = initDetailStr;
+    stickyInitDetail.title = initDetailStr;
+  }
+  document.getElementById('stat-init').textContent = initStr;
+
+  // 7. ND d'Armure
+  const armorSelect = document.getElementById('pc-armor');
+  const armorBonus = parseInt(armorSelect?.value) || 0;
+  const armorName = armorSelect?.options[armorSelect.selectedIndex]?.text?.split('(')[0]?.trim() || "Armure";
+
+  let baseArmor = 5 + (5 * ref);
+  let armorDetails = [`Base (5)`, `Réfl. (+${5 * ref})`];
+
+  if (armorBonus > 0) {
+    armorDetails.push(`${armorName} (+${armorBonus})`);
+  }
+
+  const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  let nitenBonus = 0;
+  if ((sch?.id === "bushi-mirumoto" || sch?.name?.includes("Mirumoto")) && (weapon1Name.includes("Katana") || weapon2Name.includes("Wakizashi"))) {
+    const kenSkill = currentSkills.find(s => s.name.toLowerCase().includes("kenjutsu"));
+    nitenBonus = kenSkill ? kenSkill.rank : 1;
+    armorDetails.push(`Niten (+${nitenBonus})`);
+  }
+
+  const finalArmorTN = baseArmor + armorBonus + nitenBonus;
+  const armorDetailStr = armorDetails.join(' + ');
+  const stickyArmor = document.getElementById('sticky-armor-tn');
+  const stickyArmorDetail = document.getElementById('sticky-armor-detail');
+  if (stickyArmor) stickyArmor.textContent = finalArmorTN;
+  if (stickyArmorDetail) {
+    stickyArmorDetail.textContent = armorDetailStr;
+    stickyArmorDetail.title = armorDetailStr;
+  }
+  document.getElementById('stat-armor-tn').textContent = finalArmorTN;
+
+  // Vitalité & Récupération
+  let effSta = sta;
+  if (hasAdv("quick_healer")) effSta += 2;
+  document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
+
+  let woundBaseMultiplier = rEarth;
+  const honorScore = parseFloat(document.getElementById('stat-honor')?.textContent || "4.5");
+  if ((sch?.id === "guerrier-daidoji" || sch?.name?.includes("Daidoji")) && Math.floor(honorScore) > rEarth) {
+    woundBaseMultiplier = Math.floor(honorScore);
+  }
+
+  const healthyWounds = Math.max(1, (woundBaseMultiplier * 5));
+  const stepWounds = Math.max(1, (woundBaseMultiplier * 2));
+
+  document.getElementById('w-0').textContent = `${healthyWounds} PV`;
+  for (let i = 1; i <= 7; i++) {
+    document.getElementById(`w-${i}`).textContent = `${stepWounds} PV`;
+  }
+
+  updateDisadvButtonState();
+
+  // Synchronisation avec export-carnet.js
+  if (typeof window !== "undefined") {
+    window.currentSkills = currentSkills;
+    window.advantagesList = advantagesList;
+    window.disadvantagesList = disadvantagesList;
+
+    window.currentChar = {
+      name: document.getElementById('pc-name')?.value || "Samouraï",
+      clan: clans[clanKey]?.name || "Crabe",
+      family: fam?.name || "",
+      school: sch?.name || "École de bushi Hida",
+      schoolId: sch?.id || "",
+      schoolClanName: schObj?.clanName || "",
+      isExternalSchool: !!schObj?.isExternalClan,
+      traits: {
+        stamina: sta, willpower: wil, strength: str, perception: per,
+        reflexes: ref, awareness: awa, agility: agi, intelligence: int
+      },
+      voidRing: voi,
+      voidPoints: voi,
+      honor: honorScore,
+      glory: 1.0,
+      status: 1.0,
+      xpTotal: totalXP,
+      xpSpent: xpSpent,
+      skills: currentSkills,
+      armor: {
+        name: armorName,
+        bonus: armorBonus,
+        reduction: armorBonus === 10 ? 5 : (armorBonus === 5 ? 3 : 0),
+        catalogId: armorBonus === 10 ? "heavy" : (armorBonus === 5 ? "light" : "none")
+      },
+      weapons: [
+        { name: weapon1Name, skill: weaponData.skill, dr: weaponData.vd },
+        ...(weapon2Name !== "Aucune" ? [{ name: weapon2Name }] : [])
+      ],
+      advantages: advantagesList.map(a => a.name).join(", "),
+      advantagesList: advantagesList,
+      disadvantages: disadvantagesList.map(d => d.name).join(", "),
+      notes: document.getElementById('pc-outfit')?.value || ""
+    };
+    window.character = window.currentChar;
+  }
+}
+
+function randomizeAll() {
+  const clans = getClans();
+  const adv = getAdvantages();
+  const clanKeys = Object.keys(clans);
+  if (!clanKeys.length) return;
+
+  advantagesList = [];
+  disadvantagesList = [];
+
+  const randomClan = clanKeys[Math.floor(Math.random() * clanKeys.length)];
+  document.getElementById('sel-clan').value = randomClan;
+  onClanChange();
+
+  const clan = clans[randomClan];
+  const randFam = Math.floor(Math.random() * clan.families.length);
+  document.getElementById('sel-family').value = randFam;
+  updateSchoolOptions();
+
+  const ownOptions = clan.schools;
+  if (ownOptions && ownOptions.length > 0) {
+    const pickedSch = ownOptions[Math.floor(Math.random() * ownOptions.length)];
+    document.getElementById('sel-school').value = pickedSch.id;
+  }
+
+  resetSheetToNewSelection(false);
+  generateRandomName(Math.random() > 0.5 ? 'm' : 'f');
+
+  const nonSchoolAdvs = (adv.avantages || []).filter(a => !isDifferentSchoolAdv(a.name) && !isMultipleSchoolsAdv(a.name));
+  advantagesList = nonSchoolAdvs.length ? [{ name: nonSchoolAdvs[0].name, cost: nonSchoolAdvs[0].cost }] : [];
+  disadvantagesList = adv.desavantages?.length ? [{ name: adv.desavantages[0].name, gain: adv.desavantages[0].gain }] : [];
+  renderAdvDisadv();
+
+  const voidInput = document.getElementById('trait-void');
+  if (voidInput) voidInput.value = Math.max(3, parseInt(voidInput.min) || 2);
+
+  if (currentSkills.length >= 2) {
+    currentSkills[0].rank = 2;
+    currentSkills[1].rank = 2;
+    currentSkills[0].spec = true;
+  }
+  renderSkills();
+  initCatalogSelectors();
+  updateAll();
+}
+
+function exportJSON() {
+  const data = {
+    name: document.getElementById('pc-name').value,
+    baseXP: document.getElementById('base-xp-input')?.value || "40",
+    clan: document.getElementById('sel-clan').value,
+    family: document.getElementById('sel-family').value,
+    school: document.getElementById('sel-school').value,
+    traits: {
+      sta: document.getElementById('trait-stamina').value,
+      wil: document.getElementById('trait-willpower').value,
+      str: document.getElementById('trait-strength').value,
+      per: document.getElementById('trait-perception').value,
+      ref: document.getElementById('trait-reflexes').value,
+      awa: document.getElementById('trait-awareness').value,
+      agi: document.getElementById('trait-agility').value,
+      int: document.getElementById('trait-intelligence').value,
+      voi: document.getElementById('trait-void').value
+    },
+    skills: currentSkills,
+    advantages: advantagesList,
+    disadvantages: disadvantagesList,
+    armor: document.getElementById('pc-armor').value,
+    weapon1: document.getElementById('pc-weapon-1').value,
+    weapon2: document.getElementById('pc-weapon-2').value,
+    outfit: document.getElementById('pc-outfit').value
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${data.name.replace(/\s+/g, '_')}_L5R4e.json`;
+  a.click();
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const d = JSON.parse(e.target.result);
+
+      if (d.baseXP !== undefined) {
+        const baseInput = document.getElementById('base-xp-input');
+        if (baseInput) baseInput.value = d.baseXP;
+      }
+
+      advantagesList = d.advantages || [];
+      disadvantagesList = d.disadvantages || [];
+
+      document.getElementById('sel-clan').value = d.clan;
+      onClanChange();
+      document.getElementById('sel-family').value = d.family;
+
+      const resolved = resolveSchoolByRef(d.school, d.clan);
+      const targetSchoolId = resolved?.school?.id || d.school;
+      updateSchoolOptions(targetSchoolId);
+      document.getElementById('sel-school').value = targetSchoolId;
+      resetSheetToNewSelection(true);
+
+      document.getElementById('pc-name').value = d.name;
+      updateStickyName();
+
+      document.getElementById('trait-stamina').value = d.traits.sta;
+      document.getElementById('trait-willpower').value = d.traits.wil;
+      document.getElementById('trait-strength').value = d.traits.str;
+      document.getElementById('trait-perception').value = d.traits.per;
+      document.getElementById('trait-reflexes').value = d.traits.ref;
+      document.getElementById('trait-awareness').value = d.traits.awa;
+      document.getElementById('trait-agility').value = d.traits.agi;
+      document.getElementById('trait-intelligence').value = d.traits.int;
+      document.getElementById('trait-void').value = d.traits.voi;
+
+      currentSkills = d.skills || [];
+      advantagesList = d.advantages || [];
+      disadvantagesList = d.disadvantages || [];
+
+      if (d.armor) document.getElementById('pc-armor').value = d.armor;
+      if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
+      if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
+      if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
+
+      renderSkills();
+      renderAdvDisadv();
+      initCatalogSelectors();
+      updateAll();
+    } catch(err) {
+      alert("Erreur de format JSON.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetCharacter() {
+  if (confirm("Réinitialiser entièrement la fiche ?")) {
+    const baseInput = document.getElementById('base-xp-input');
+    if (baseInput) baseInput.value = 40;
+    advantagesList = [];
+    disadvantagesList = [];
+    onClanChange();
+  }
+}
+
+function exportOfficialPDF() {
+  updateAll();
+
+  const clans = getClans();
+  const clanKey = document.getElementById('sel-clan')?.value;
+  const clan = clans[clanKey];
+  const schObj = getSelectedSchoolObject();
+  const sch = schObj?.school;
+
+  const pcName = document.getElementById('pc-name')?.value || "Samouraï";
+  const schoolDisplayLabel = sch
+    ? (schObj.isExternalClan ? `${sch.name} (${schObj.clanName})` : sch.name)
+    : "École";
+
+  // Identité
+  document.getElementById('p-name').textContent = pcName;
+  document.getElementById('p-name-2').textContent = pcName;
+  document.getElementById('p-clan').textContent = clan ? clan.name : "Clan";
+  document.getElementById('p-clan-2').textContent = clan ? clan.name : "Clan";
+  document.getElementById('p-school').textContent = schoolDisplayLabel;
+  document.getElementById('p-school-2').textContent = schoolDisplayLabel;
+  document.getElementById('p-xp').textContent = `${document.getElementById('xp-remaining')?.textContent} / ${document.getElementById('xp-total')?.textContent} XP`;
+  document.getElementById('p-insight').textContent = document.getElementById('insight-display')?.textContent || "120 pts (Rang 1)";
+  document.getElementById('p-honor').textContent = document.getElementById('stat-honor')?.textContent || "4.5";
+
+  // Traits et Anneaux
+  const sta = document.getElementById('trait-stamina').value;
+  const wil = document.getElementById('trait-willpower').value;
+  const str = document.getElementById('trait-strength').value;
+  const per = document.getElementById('trait-perception').value;
+  const ref = document.getElementById('trait-reflexes').value;
+  const awa = document.getElementById('trait-awareness').value;
+  const agi = document.getElementById('trait-agility').value;
+  const int = document.getElementById('trait-intelligence').value;
+  const voi = document.getElementById('trait-void').value;
+
+  document.getElementById('p-t-sta').textContent = sta;
+  document.getElementById('p-t-wil').textContent = wil;
+  document.getElementById('p-t-str').textContent = str;
+  document.getElementById('p-t-per').textContent = per;
+  document.getElementById('p-t-ref').textContent = ref;
+  document.getElementById('p-t-awa').textContent = awa;
+  document.getElementById('p-t-agi').textContent = agi;
+  document.getElementById('p-t-int').textContent = int;
+  document.getElementById('p-t-voi').textContent = voi;
+
+  document.getElementById('p-r-earth').textContent = document.getElementById('ring-earth').textContent;
+  document.getElementById('p-r-water').textContent = document.getElementById('ring-water').textContent;
+  document.getElementById('p-r-air').textContent = document.getElementById('ring-air').textContent;
+  document.getElementById('p-r-fire').textContent = document.getElementById('ring-fire').textContent;
+  document.getElementById('p-r-void').textContent = document.getElementById('ring-void').textContent;
+
+  // Combat
+  document.getElementById('p-init').textContent = document.getElementById('sticky-init')?.textContent || "3g2";
+  document.getElementById('p-init-note').textContent = document.getElementById('sticky-init-detail')?.textContent || "";
+  document.getElementById('p-armor-tn').textContent = document.getElementById('sticky-armor-tn')?.textContent || "20";
+  document.getElementById('p-armor-note').textContent = document.getElementById('sticky-armor-detail')?.textContent || "";
+  document.getElementById('p-heal').textContent = document.getElementById('stat-heal')?.textContent || "5 PV";
+
+  const armorSel = document.getElementById('pc-armor');
+  document.getElementById('p-armor-name').textContent = armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0] || "Aucune";
+  document.getElementById('p-armor-reduc').textContent = armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0");
+
+  // Compétences
+  const skillsBody = document.getElementById('p-skills-body');
+  skillsBody.innerHTML = currentSkills.map(sk => {
+    const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
+    const traitVal = parseInt(agi);
+    const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + traitVal}g${traitVal}`;
+    const masteriesSummary = getMasteriesSummary(sk.name, sk.rank);
+    const notesParts = [];
+    if (sk.spec) notesParts.push("Spé (relance les 1)");
+    if (masteriesSummary) notesParts.push(masteriesSummary);
+
+    return `
+      <tr class="border-b border-stone-200">
+        <td class="p-1 font-bold">${displayName}</td>
+        <td class="p-1 text-center">${sk.isSchool ? '✓' : ''}</td>
+        <td class="p-1 text-center font-bold font-imperial">${sk.rank}</td>
+        <td class="p-1 text-center font-bold">${roll}</td>
+        <td class="p-1 text-stone-600 text-[8px]">${notesParts.join(' • ')}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Armes
+  const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
+  const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  const wBox = document.getElementById('p-weapons-box');
+  wBox.innerHTML = `
+    <div class="border-b border-stone-200 pb-1">
+      <div class="font-bold font-imperial">${w1} (Principale)</div>
+      <div><b>Toucher :</b> ${document.getElementById('sticky-atk')?.textContent || '3g2'} | <b>Dégâts :</b> ${document.getElementById('sticky-dmg')?.textContent || '4g2'}</div>
+      <div class="text-stone-500 text-[7px]">${document.getElementById('sticky-atk-detail')?.textContent || ''}</div>
+    </div>
+    ${w2 !== 'Aucune' ? `
+      <div class="pt-1">
+        <div class="font-bold font-imperial">${w2} (Secondaire)</div>
+      </div>
+    ` : ''}
+  `;
+
+  // Paliers de blessures
+  const woundLevels = [
+    { name: "Indemne (+0)", id: "w-0" },
+    { name: "Égratigné (+3)", id: "w-1" },
+    { name: "Blessé Léger (+5)", id: "w-2" },
+    { name: "Blessé (+10)", id: "w-3" },
+    { name: "Gravement (+15)", id: "w-4" },
+    { name: "Estropié (+20)", id: "w-5" },
+    { name: "Inconscient (+40)", id: "w-6" },
+    { name: "Mortel", id: "w-7" }
+  ];
+  document.getElementById('p-wounds-body').innerHTML = woundLevels.map(wl => `
+    <tr class="border-b border-stone-200">
+      <td class="text-left pl-1 font-bold">${wl.name}</td>
+      <td>${wl.name.includes('+') ? wl.name.split('(')[1].replace(')', '') : '—'}</td>
+      <td class="font-bold">${document.getElementById(wl.id)?.textContent || '4 PV'}</td>
+      <td class="border-l border-stone-300"></td>
+    </tr>
+  `).join('');
+
+  // Avantages & Désavantages
+  document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
+  document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
+    const full = getAdvantages().avantages?.find(x => x.name === a.name);
+    let extraNote = "";
+    if (isDifferentSchoolAdv(a.name) && a.differentSchoolName) {
+      extraNote = ` — <i>École suivie : ${a.differentSchoolName}</i>`;
+    } else if (isMultipleSchoolsAdv(a.name) && a.secondarySchoolName) {
+      extraNote = ` — <i>Seconde école : ${a.secondarySchoolName} (Rang ${a.secondarySchoolRank || 1})</i>`;
+    }
+    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.desc || ''}${extraNote}</span></div>`;
+  }).join('') : '<div class="text-stone-400 italic">Aucun avantage sélectionné.</div>';
+
+  document.getElementById('p-disadv-total').textContent = `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`;
+  document.getElementById('p-disadv-list').innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
+    const full = getAdvantages().desavantages?.find(x => x.name === d.name);
+    return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
+  }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
+
+  // Techniques d'École
+  const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
+  const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
+  document.getElementById('p-tech-name').textContent = `${schoolDisplayLabel} (Progression)`;
+
+  let printTechHtml = techList.map(t => {
+    const tag = t.rank === currentRank ? "<b>[ACTIF]</b> " : (t.rank < currentRank ? "<i>[MAÎTRISÉ]</i> " : "[Verrouillé] ");
+    return `<div class="mb-1">${tag}<b>Rang ${t.rank} - ${t.name} :</b> ${t.effect}</div>`;
+  }).join('');
+
+  const multiAdv = advantagesList.find(a => isMultipleSchoolsAdv(a.name));
+  if (multiAdv && multiAdv.secondarySchoolId) {
+    const allSchools = getAllSchoolsCatalog();
+    const secSchool = allSchools.find(s => s.id === multiAdv.secondarySchoolId);
+    if (secSchool) {
+      const secRank = multiAdv.secondarySchoolRank || 1;
+      printTechHtml += `<div class="mt-2 pt-1 border-t border-stone-300 font-bold text-stone-800">Seconde École : ${secSchool.name} (${secSchool.clanName}) — Rang ${secRank}</div>`;
+      printTechHtml += (secSchool.techniques || []).map(t => {
+        const tag = t.rank <= secRank ? "<b>[ACQUIS]</b> " : "[Non acquis] ";
+        return `<div class="mb-0.5 text-stone-700">${tag}Rang ${t.rank} - ${t.name} : ${t.effect}</div>`;
+      }).join('');
+    }
+  }
+
+  document.getElementById('p-tech-desc').innerHTML = printTechHtml;
+  document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
+
+  window.print();
+}
+
+// Exposition globale pour createcharacter.html et export-carnet.js
+if (typeof window !== "undefined") {
+  window.currentSkills = currentSkills;
+  window.advantagesList = advantagesList;
+  window.disadvantagesList = disadvantagesList;
+  window.addSkillFromCatalog = addSkillFromCatalog;
+  window.adjustSkillRank = adjustSkillRank;
+  window.adjustTrait = adjustTrait;
+  window.updateAll = updateAll;
+  window.renderSkills = renderSkills;
+  window.getSelectedSchoolObject = getSelectedSchoolObject;
+  window.resolveSchoolByRef = resolveSchoolByRef;
+  window.updateDifferentSchoolSelection = updateDifferentSchoolSelection;
+  window.SKILL_MASTERIES = SKILL_MASTERIES;
+}
+
+window.addEventListener('DOMContentLoaded', bootstrap);
