@@ -1547,7 +1547,23 @@
       const spec = document.getElementById('dice-spec-cb').checked;
       rollL5RDicePool(r, k, 0, "Jet Manuel", explode, spec);
     }
-
+    
+    // Synchronisation automatique en cas d'utilisation directe de Ctrl+P / Cmd+P
+    window.addEventListener('beforeprint', () => {
+      if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
+        document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+      }
+      const qBox = document.getElementById('p-20questions-box');
+      if (qBox && document.getElementById('q20-gempukku')) {
+        qBox.innerHTML = `
+          <div><b>1. Gempukku & Sensei :</b> ${document.getElementById('q20-gempukku').value}</div>
+          <div><b>2. Vision du Bushido :</b> ${document.getElementById('q20-bushido').value}</div>
+          <div><b>3. Fardeau & Secret :</b> ${document.getElementById('q20-secret').value}</div>
+          <div><b>4. Mort Honorable :</b> ${document.getElementById('q20-death').value}</div>
+        `;
+      }
+    });
+    
     // Initialisation au chargement (URL ?clan=, ?char=, ou Dojo)
     window.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
