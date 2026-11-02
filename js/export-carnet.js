@@ -1,6 +1,6 @@
 /**
  * js/export-carnet.js — Export officiel pour Le Carnet de Rokugan (schemaVersion: 2)
- * Conforme aux spécifications canoniques de nelsio/carnet-l5r (v2.18.0)
+ * Conforme aux spécifications canoniques de nelsio/carnet-l5r (v2.18.0+)
  */
 
 // =============================================================================
@@ -31,7 +31,7 @@ const CARNET_SCHOOL_CATALOG = {
   "mirumoto bushi": "mirumoto-bushi",
   "bushi-mirumoto": "mirumoto-bushi",
 
-  "ordre tatoué togashi": "togashi-moine",
+  "ordre tatoue togashi": "togashi-moine",
   "moine togashi": "togashi-moine",
   "ise zumi togashi": "togashi-moine",
   "moine-togashi": "togashi-moine",
@@ -164,7 +164,7 @@ const CARNET_WEAPONS_REF = {
   "ono":        { skill: "Armes lourdes", dr: "0g4", keywords: ["lourde", "grande", "deux-mains"] },
   "dai tsuchi": { skill: "Armes lourdes", dr: "5g2", keywords: ["lourde", "grande", "deux-mains"] },
   "masakari":   { skill: "Armes lourdes", dr: "2g3", keywords: ["lourde", "moyenne"] },
-  "yari":       { skill: "Lances",         dr: "2g2", keywords: ["lance", "grande"] },
+  "yari":       { skill: "Lances",        dr: "2g2", keywords: ["lance", "grande"] },
   "naginata":   { skill: "Armes d'hast",  dr: "3g2", keywords: ["hast", "samourai", "grande", "deux-mains"] },
   "bo":         { skill: "Bâtons",        dr: "1g2", keywords: ["grande", "deux-mains"] },
   "kama":       { skill: "Couteaux",      dr: "0g2", keywords: ["paysan", "petite"] },
@@ -174,45 +174,102 @@ const CARNET_WEAPONS_REF = {
 };
 
 // =============================================================================
-// 3. TABLE DES COMPÉTENCES CANONIQUES ET DE LEURS TRAITS (§3.1 & §4.1)
+// 3. TABLE DES COMPÉTENCES & TRAITS NORMALISÉS (BUG 2 RÉSOLU)
 // =============================================================================
 const SKILL_TRAIT_MAP = {
-  "athlétisme": "strength",
+  "athletisme": "strength",
   "bataille": "perception",
   "calligraphie": "intelligence",
+  "ceremonie du the": "void",
   "chasse": "perception",
-  "comédie": "awareness",
+  "comedie": "awareness",
   "commerce": "intelligence",
+  "connaissance": "intelligence",
   "courtisan": "awareness",
-  "défense": "reflexes",
-  "discrétion": "agility",
+  "couteaux": "agility",
+  "defense": "reflexes",
+  "discretion": "agility",
   "divination": "intelligence",
   "droit": "intelligence",
-  "équitation": "agility",
-  "étiquette": "awareness",
+  "equitation": "agility",
+  "etiquette": "awareness",
   "iaijutsu": "reflexes",
+  "ingenierie": "intelligence",
   "intimidation": "willpower",
   "investigation": "perception",
+  "enquete": "perception",
+  "jeux": "intelligence",
   "jiujutsu": "agility",
-  "méditation": "void",
-  "sincérité": "awareness",
-  "sortilèges": "intelligence",
-  "théurgie": "intelligence",
-  "tentation": "awareness",
   "kenjutsu": "agility",
   "kyujutsu": "reflexes",
+  "lances": "agility",
+  "medecine": "intelligence",
+  "meditation": "void",
+  "navigation": "intelligence",
+  "ninjutsu": "agility",
+  "oratoire": "awareness",
+  "poisons": "intelligence",
+  "representation": "awareness",
+  "sincerite": "awareness",
+  "sortileges": "intelligence",
+  "theurgie": "intelligence",
+  "tentation": "awareness",
+  "tromperie": "awareness",
   "armes lourdes": "agility",
   "armes d'hast": "agility",
-  "lances": "agility",
-  "bâtons": "agility",
-  "couteaux": "agility",
-  "ninjutsu": "agility",
   "armes de paysan": "agility",
-  "éventail de guerre": "agility"
+  "eventail de guerre": "agility",
+  "dressage": "awareness",
+  "artisanat": "intelligence"
 };
 
+// Dictionnaire normalisé sans accents
+const SKILL_TRAIT = Object.fromEntries(
+  Object.entries(SKILL_TRAIT_MAP).map(([k, v]) => [sanitizeNorm(k), v])
+);
+
 // =============================================================================
-// 4. UTILITAIRES DE CONVERSION
+// 4. LISTE DES TRADUCTIONS ET ANNOTATIONS DU CATALOGUE À IGNORER (BUG 3 RÉSOLU)
+// =============================================================================
+const CATALOG_TRANSLATIONS = new Set([
+  "perform",
+  "cha-no-yu",
+  "investigation",
+  "acting",
+  "art dramatique / acting",
+  "art dramatique",
+  "heraldry",
+  "war",
+  "shintao & fortunes",
+  "shintao",
+  "shugenja",
+  "games",
+  "soins & herboristerie",
+  "soins",
+  "art du discours",
+  "spellcraft",
+  "peasant weapons",
+  "horsemanship",
+  "tessenjutsu",
+  "tir a l'arc",
+  "yarijutsu",
+  "bojutsu",
+  "evaluation & negociation",
+  "siege & batiment",
+  "animal handling",
+  "forge & armurerie",
+  "stealth",
+  "forgery",
+  "sleight of hand",
+  "deceit",
+  "corruption & seduction",
+  "shadowlands",
+  "underworld",
+  "artisan"
+]);
+
+// =============================================================================
+// 5. UTILITAIRES DE CONVERSION
 // =============================================================================
 function sanitizeNorm(str) {
   return (str || "")
@@ -246,7 +303,6 @@ function resolveSchoolIdFromText(schoolName, rawId) {
   if (CARNET_SCHOOL_CATALOG[norm]) return CARNET_SCHOOL_CATALOG[norm];
   if (CARNET_SCHOOL_CATALOG[sanitizeNorm(schoolName)]) return CARNET_SCHOOL_CATALOG[sanitizeNorm(schoolName)];
   
-  // Si absente du catalogue officiel, schoolId doit être "" (§5.2)
   return "";
 }
 
@@ -254,44 +310,51 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
   let cleanName = (rawName || "").trim();
   const emphases = [];
 
-  // Extraction d'éventuelles parenthèses comme "Kenjutsu (Katana)" ou "Chasse (Pistage)"
+  // Extraction d'éventuelles parenthèses
   const match = cleanName.match(/^(.*?)\s*\((.*?)\)$/);
   if (match) {
-    cleanName = match[1].trim();
-    if (match[2].trim()) emphases.push(match[2].trim());
+    const baseName = match[1].trim();
+    const insideParen = match[2].trim();
+    const normParen = sanitizeNorm(insideParen);
+
+    // Si la parenthèse n'est PAS une simple traduction du catalogue, c'est une spécialité (ex: Tetsubo, Pistage)
+    if (!CATALOG_TRANSLATIONS.has(normParen)) {
+      emphases.push(insideParen);
+    }
+    cleanName = baseName;
   }
 
-  const norm = sanitizeNorm(cleanName);
+  const normBase = sanitizeNorm(cleanName);
 
-  // Conversion canonique "Enquête" -> "Investigation" (§3.1)
-  if (norm === "enquete") {
+  // Normalisation des noms selon le standard Carnet L5R (§3.1)
+  if (normBase === "enquete") {
     cleanName = "Investigation";
-  } else if (norm === "conteur") {
+  } else if (normBase === "theurgie") {
+    cleanName = "Sortilèges";
+  } else if (normBase === "jeux de societe") {
+    cleanName = "Jeux";
+  } else if (normBase === "art de la scene") {
     cleanName = "Représentation : Conte";
-  } else if (norm === "eloquence") {
-    cleanName = "Oratoire";
+  } else if (normBase === "comedie") {
+    cleanName = "Comédie";
   }
 
-  // Détermination du trait associé
+  // Détermination du trait via la table normalisée (Bug 2 résolu)
   let traitKey = "agility";
   const normFinal = sanitizeNorm(cleanName);
 
-  if (SKILL_TRAIT_MAP[normFinal]) {
-    traitKey = SKILL_TRAIT_MAP[normFinal];
-  } else if (normFinal.startsWith("artisanat")) {
-    traitKey = "intelligence";
-  } else if (normFinal.startsWith("connaissance")) {
-    traitKey = "intelligence";
-  } else if (normFinal.startsWith("representation")) {
-    traitKey = "awareness";
-  } else if (normFinal.startsWith("jeux")) {
-    traitKey = "intelligence";
+  if (SKILL_TRAIT[normFinal]) {
+    traitKey = SKILL_TRAIT[normFinal];
+  } else {
+    for (const [k, v] of Object.entries(SKILL_TRAIT)) {
+      if (normFinal.startsWith(k) || normFinal.includes(k)) {
+        traitKey = v;
+        break;
+      }
+    }
   }
 
-  if (isSpec && emphases.length === 0) {
-    emphases.push("Général");
-  }
-
+  // Bug 4 résolu : pas d'injection arbitraire de "Général"
   return {
     name: cleanName,
     rank: Math.max(0, Math.min(10, parseInt(rankVal, 10) || 0)),
@@ -301,7 +364,7 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
 }
 
 // =============================================================================
-// 5. EXTRACTEUR GLOBAL ET GÉNÉRATEUR DU JSON OFFICIEL (§3 à §6)
+// 6. GÉNÉRATION DU JSON CONFORME CARNET DE ROKUGAN
 // =============================================================================
 function generateCarnetJSON() {
   if (typeof updateAll === "function") updateAll();
@@ -318,12 +381,12 @@ function generateCarnetJSON() {
   const familyName = (famEl?.options[famEl.selectedIndex]?.text?.split("(")[0]?.trim() || "").substring(0, 80);
 
   const schoolEl = document.getElementById("sel-school");
-//  const schoolDisplayed = (schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
+  const schoolDisplayed = (schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
 
-  // Détection de l'ID d'école du catalogue (§5.2) compatible avec « Études dans une Autre École »
-  const resolvedSchObj = typeof window.getSelectedSchoolObject === "function" ? window.getSelectedSchoolObject() : null;
-  const currentSchoolData = resolvedSchObj?.school || null;
-  const schoolDisplayed = (currentSchoolData?.name || schoolEl?.options[schoolEl.selectedIndex]?.text?.split("(")[0]?.trim() || "École").substring(0, 120);
+  const clansDb = typeof getClans === "function" ? getClans() : (window.CLANS_DATA || {});
+  const clanKey = clanEl?.value || "crabe";
+  const schIdx = parseInt(schoolEl?.value, 10) || 0;
+  const currentSchoolData = clansDb[clanKey]?.schools?.[schIdx] || null;
   const internalSchoolId = currentSchoolData?.id || "";
 
   const canonSchoolId = resolveSchoolIdFromText(schoolDisplayed, internalSchoolId);
@@ -347,15 +410,27 @@ function generateCarnetJSON() {
 
   const voidRing = getNum("trait-void");
 
-  // 3. Calcul officiel de l'Insight et du Rang (§2.1)
+  // 3. Calcul de l'Insight et du Rang (§2.1)
   const rEarth = Math.min(traits.stamina, traits.willpower);
   const rWater = Math.min(traits.strength, traits.perception);
   const rFire  = Math.min(traits.agility, traits.intelligence);
   const rAir   = Math.min(traits.reflexes, traits.awareness);
   const ringsSum = rEarth + rWater + rFire + rAir + voidRing;
 
-  // 4. Compétences (skills[]) : dédoublonnées et normalisées
-  const rawSkillsList = Array.isArray(window.currentSkills) ? window.currentSkills : [];
+  // 4. Compétences (Bug 1 résolu : lecture directe des variables globales)
+  let rawSkillsList = [];
+  try {
+    if (typeof currentSkills !== "undefined" && Array.isArray(currentSkills)) {
+      rawSkillsList = currentSkills;
+    } else if (typeof window !== "undefined" && Array.isArray(window.currentSkills)) {
+      rawSkillsList = window.currentSkills;
+    }
+  } catch (e) {
+    if (typeof window !== "undefined" && Array.isArray(window.currentSkills)) {
+      rawSkillsList = window.currentSkills;
+    }
+  }
+
   const processedSkillsMap = new Map();
 
   rawSkillsList.forEach(sk => {
@@ -372,16 +447,7 @@ function generateCarnetJSON() {
     }
   });
 
-  // Si aucune compétence, on garantit au moins Kenjutsu 1
-  if (processedSkillsMap.size === 0) {
-    processedSkillsMap.set("kenjutsu", {
-      name: "Kenjutsu",
-      rank: 1,
-      trait: "agility",
-      emphases: ["Katana"]
-    });
-  }
-
+  // Pas de repli forcé sur Kenjutsu 1 (Bug 1 résolu)
   const skills = Array.from(processedSkillsMap.values());
   const sumSkillsRank = skills.reduce((acc, s) => acc + s.rank, 0);
 
@@ -391,7 +457,7 @@ function generateCarnetJSON() {
     insightRank = Math.min(10, 2 + Math.floor((insightPoints - 150) / 25));
   }
 
-  // 5. Honneur, Gloire, Statut (une décimale max obligatoire) (§5)
+  // 5. Honneur, Gloire, Statut (une décimale max obligatoire)
   const parseDecimal1 = (id, def = 1.0) => {
     const raw = parseFloat(document.getElementById(id)?.textContent || def);
     return isNaN(raw) ? def : parseFloat(Number(Math.max(0, Math.min(10, raw))).toFixed(1));
@@ -406,7 +472,7 @@ function generateCarnetJSON() {
   const xpRemaining = parseInt(document.getElementById("xp-remaining")?.textContent || 0, 10) || 0;
   const xpSpent = Math.max(0, xpTotal - xpRemaining);
 
-  // 7. Armure (armor) (§3.4)
+  // 7. Armure
   const armorSel = document.getElementById("pc-armor");
   const armorBonus = parseInt(armorSel?.value, 10) || 0;
   let armorName = "";
@@ -438,7 +504,7 @@ function generateCarnetJSON() {
     catalogId: armorCatalogId
   };
 
-  // 8. Armes (weapons[]) (§3.2 & §4.2)
+  // 8. Armes
   const w1Name = document.getElementById("pc-weapon-1")?.value || "Katana";
   const w2Name = document.getElementById("pc-weapon-2")?.value || "Aucune";
   const rawWeaponsList = [w1Name, ...(w2Name !== "Aucune" ? [w2Name] : [])];
@@ -474,7 +540,7 @@ function generateCarnetJSON() {
 
   const weapons = Array.from(weaponsMap.values());
 
-  // 9. Techniques libres (§3.3) : injection uniquement si l'école est hors catalogue
+  // 9. Techniques libres
   const techniques = [];
   if (canonSchoolId === "" && currentSchoolData) {
     const techList = currentSchoolData.techniques || (currentSchoolData.technique ? [currentSchoolData.technique] : []);
@@ -488,10 +554,18 @@ function generateCarnetJSON() {
     });
   }
 
-  // 10. Modificateurs de jets (modifiers[]) (§3.5)
+  // 10. Avantages, Désavantages et Modificateurs (Bug 1 résolu)
+  let advList = [];
+  let disadvList = [];
+  try {
+    if (typeof advantagesList !== "undefined" && Array.isArray(advantagesList)) advList = advantagesList;
+    else if (typeof window !== "undefined" && Array.isArray(window.advantagesList)) advList = window.advantagesList;
+
+    if (typeof disadvantagesList !== "undefined" && Array.isArray(disadvantagesList)) disadvList = disadvantagesList;
+    else if (typeof window !== "undefined" && Array.isArray(window.disadvantagesList)) disadvList = window.disadvantagesList;
+  } catch (e) {}
+
   const modifiers = [];
-  const advList = Array.isArray(window.advantagesList) ? window.advantagesList : [];
-  const disadvList = Array.isArray(window.disadvantagesList) ? window.disadvantagesList : [];
 
   advList.forEach(a => {
     const aNorm = sanitizeNorm(a.name);
@@ -563,7 +637,7 @@ function generateCarnetJSON() {
     }
   });
 
-  // 11. Sorts pour Shugenja (§3.6)
+  // 11. Sorts pour Shugenja
   const spells = [];
   const isShugenja = sanitizeNorm(schoolDisplayed).includes("shugenja") || (currentSchoolData && currentSchoolData.type === "Shugenja");
 
@@ -614,12 +688,12 @@ function generateCarnetJSON() {
     );
   }
 
-  // 12. Textes libres
-  const advText = advList.map(a => a.name).join("\n");
-  const disadvText = disadvList.map(d => d.name).join("\n");
+  // 12. Nettoyage des libellés (un nom par ligne sans traduction anglaise)
+  const advText = advList.map(a => (a.name || "").split("(")[0].trim()).filter(Boolean).join("\n");
+  const disadvText = disadvList.map(d => (d.name || "").split("(")[0].trim()).filter(Boolean).join("\n");
   const notesText = (document.getElementById("pc-outfit")?.value || "").trim();
 
-  // 13. Assemblage de l'objet racine strict (§2 à §5)
+  // 13. Assemblage de l'objet racine schemaVersion: 2
   const payload = {
     schemaVersion: 2,
     name: rawName,
@@ -627,7 +701,7 @@ function generateCarnetJSON() {
     family: familyName,
     school: schoolDisplayed,
     schoolId: canonSchoolId,
-    schoolRank: null, // null = égal au Rang d'Insight (§2)
+    schoolRank: null,
     insightRank: insightRank,
     honor: honorVal,
     glory: gloryVal,
@@ -652,7 +726,6 @@ function generateCarnetJSON() {
     notes: notesText
   };
 
-  // Affinité obligatoire si Shugenja Isawa (§5.2)
   if (canonSchoolId === "isawa-shugenja") {
     payload.affinity = "fire";
   }
@@ -661,7 +734,7 @@ function generateCarnetJSON() {
 }
 
 // =============================================================================
-// 6. DÉCLENCHEMENT DU TÉLÉCHARGEMENT CLIENT (§8)
+// 7. EXPORT CLIENT
 // =============================================================================
 function exportToCarnetRokugan() {
   try {
@@ -673,14 +746,11 @@ function exportToCarnetRokugan() {
     }
 
     const jsonString = JSON.stringify(payload, null, 2);
-
-    // Nom de fichier recommandé : <nom-du-personnage>-l5r.json (§8)
     const safeName = sanitizeNorm(payload.name)
       .replace(/[^a-z0-9\-]+/g, "-")
       .replace(/^-+|-+$/g, "") || "samourai";
 
     const fileName = `${safeName}-l5r.json`;
-
     const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
