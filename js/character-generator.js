@@ -155,10 +155,6 @@ function getAllSchoolsCatalog() {
   return allSchools;
 }
 
-/**
- * Résout l'école actuellement sélectionnée dans #sel-school, qu'elle appartienne
- * au clan du personnage ou à un autre clan (via Études dans une Autre École).
- */
 function resolveSchoolByRef(refValue, fallbackClanKey) {
   const clans = getClans();
   const currentClanKey = fallbackClanKey || document.getElementById('sel-clan')?.value || "crabe";
@@ -166,7 +162,7 @@ function resolveSchoolByRef(refValue, fallbackClanKey) {
   if (refValue !== undefined && refValue !== null && refValue !== "") {
     const strVal = String(refValue);
 
-    // 1. Recherche par identifiant unique d'école (ex: "duelliste-kakita")
+    // Recherche par identifiant unique d'école (ex: "duelliste-kakita")
     for (const cKey in clans) {
       const c = clans[cKey];
       const idx = (c.schools || []).findIndex(s => s.id === strVal);
@@ -181,7 +177,7 @@ function resolveSchoolByRef(refValue, fallbackClanKey) {
       }
     }
 
-    // 2. Format "clanKey:schoolIndex"
+    // Format "clanKey:schoolIndex"
     if (strVal.includes(":")) {
       const [cKey, sIdxStr] = strVal.split(":");
       const sIdx = parseInt(sIdxStr, 10) || 0;
@@ -197,7 +193,7 @@ function resolveSchoolByRef(refValue, fallbackClanKey) {
       }
     }
 
-    // 3. Rétrocompatibilité : index numérique simple ("0", "1"...) dans le clan actif
+    // Index numérique simple ("0", "1"...) dans le clan actif
     const numIdx = parseInt(strVal, 10);
     if (!isNaN(numIdx) && clans[currentClanKey]?.schools?.[numIdx]) {
       const c = clans[currentClanKey];
@@ -211,7 +207,6 @@ function resolveSchoolByRef(refValue, fallbackClanKey) {
     }
   }
 
-  // Fallback sur la première école du clan actif
   const fallbackClan = clans[currentClanKey];
   if (fallbackClan && fallbackClan.schools && fallbackClan.schools[0]) {
     return {
@@ -231,9 +226,6 @@ function getSelectedSchoolObject() {
   return resolveSchoolByRef(rawSchoolVal, clanKey);
 }
 
-/**
- * Met à jour l'école principale depuis la carte de l'avantage « Études dans une Autre École »
- */
 function updateDifferentSchoolSelection(advIdx, newSchoolId) {
   if (!advantagesList[advIdx] || !newSchoolId) return;
   const all = getAllSchoolsCatalog();
@@ -530,11 +522,6 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
-/**
- * Construit la liste des écoles dans #sel-school :
- * - Groupe 1 : Écoles du Clan actuel (avec l'école de la famille choisie en tête)
- * - Groupes suivants : Écoles des autres Clans (utilisables via l'avantage « Études dans une Autre École »)
- */
 function updateSchoolOptions(preferredSchoolId) {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value || "crabe";
@@ -548,7 +535,7 @@ function updateSchoolOptions(preferredSchoolId) {
 
   schSel.innerHTML = "";
 
-  // 1. Groupe des écoles du Clan actuel (école de la famille en premier)
+  // Groupe 1 : Écoles du Clan actuel
   const ownGroup = document.createElement('optgroup');
   ownGroup.label = `🏯 Écoles du ${clan.name}`;
 
@@ -567,7 +554,7 @@ function updateSchoolOptions(preferredSchoolId) {
   });
   schSel.appendChild(ownGroup);
 
-  // 2. Groupes des écoles des autres Clans (Études dans une Autre École - 5 XP)
+  // Groupes suivants : Écoles des autres Clans (Études dans une Autre École - 5 XP)
   for (const otherKey in clans) {
     if (otherKey === clanKey) continue;
     const otherClan = clans[otherKey];
@@ -583,7 +570,6 @@ function updateSchoolOptions(preferredSchoolId) {
     schSel.appendChild(extGroup);
   }
 
-  // Sélectionner l'école préférée ou celle de la famille
   const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
   if (preferredSchoolId && schSel.querySelector(`option[value="${preferredSchoolId}"]`)) {
     schSel.value = preferredSchoolId;
@@ -609,7 +595,6 @@ function onClanChange() {
     famSel.appendChild(opt);
   });
 
-  // Si l'utilisateur avait "Études dans une Autre École" qui pointe maintenant vers son propre clan, on conserve l'école choisie
   const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
   updateSchoolOptions(diffAdv?.differentSchoolId);
   resetSheetToNewSelection(true);
@@ -627,10 +612,8 @@ function onSchoolChange() {
 
   const diffAdvIdx = advantagesList.findIndex(a => isDifferentSchoolAdv(a.name));
 
-  // Si le joueur sélectionne directement une école d'un autre clan dans #sel-school
   if (schObj.isExternalClan) {
     if (diffAdvIdx === -1) {
-      // Ajout automatique de l'avantage Études dans une Autre École (5 XP)
       const catalogItem = getAdvantages().avantages?.find(a => isDifferentSchoolAdv(a.name));
       const cost = catalogItem ? catalogItem.cost : 5;
       const name = catalogItem ? catalogItem.name : "Études dans une Autre École (Different School)";
@@ -647,7 +630,6 @@ function onSchoolChange() {
     renderAdvDisadv();
     initCatalogSelectors();
   } else {
-    // Si le joueur revient sur une école de son propre clan alors qu'il avait l'avantage, on retire l'avantage devenu inutile
     if (diffAdvIdx !== -1) {
       advantagesList.splice(diffAdvIdx, 1);
       renderAdvDisadv();
@@ -771,9 +753,6 @@ function resetSheetToNewSelection(preserveAdvDisadv = true) {
   updateAll();
 }
 
-// =============================================================================
-// RENDU DES TECHNIQUES : ÉCOLE PRINCIPALE + SECONDE ÉCOLE (ÉCOLE MULTIPLE)
-// =============================================================================
 function renderSchoolTechniques(currentRank) {
   const container = document.getElementById('school-techniques-container');
   if (!container) return;
@@ -848,7 +827,6 @@ function renderSchoolTechniques(currentRank) {
   }).join('');
   html += `</div>`;
 
-  // Bloc de la seconde école si l'avantage École Multiple est sélectionné
   const multiAdv = advantagesList.find(a => isMultipleSchoolsAdv(a.name));
   if (multiAdv && multiAdv.secondarySchoolId) {
     const allSchools = getAllSchoolsCatalog();
@@ -947,7 +925,6 @@ function addAdvFromCatalog() {
   const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
   const allSchools = getAllSchoolsCatalog();
 
-  // Cas 1 : Avantage « Études dans une Autre École (Different School) »
   if (isDifferentSchoolAdv(item.name)) {
     const currentSchObj = getSelectedSchoolObject();
     const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
@@ -970,7 +947,6 @@ function addAdvFromCatalog() {
     }
   }
 
-  // Cas 2 : Avantage « Écoles Multiples (Multiple Schools) »
   if (isMultipleSchoolsAdv(item.name)) {
     const defaultSec = allSchools[0] || null;
     newAdv.secondarySchoolId = defaultSec ? defaultSec.id : "";
@@ -1012,7 +988,6 @@ function removeAdv(idx) {
   const removed = advantagesList[idx];
   advantagesList.splice(idx, 1);
 
-  // Si on retire « Études dans une Autre École », on rétablit l'école du clan d'origine
   if (removed && isDifferentSchoolAdv(removed.name)) {
     updateSchoolOptions();
     resetSheetToNewSelection(true);
@@ -1042,7 +1017,6 @@ function renderAdvDisadv() {
       const isMulti = isMultipleSchoolsAdv(a.name);
       let extraHtml = "";
 
-      // Sélecteur interactif pour « Études dans une Autre École (Different School) »
       if (isDiff) {
         const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
         const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (externalSchools[0]?.id || "");
@@ -1068,7 +1042,6 @@ function renderAdvDisadv() {
         `;
       }
 
-      // Sélecteur interactif pour « Écoles Multiples (Multiple Schools) »
       if (isMulti) {
         const currentSecId = a.secondarySchoolId || (allSchools[0]?.id || "");
         const currentSecRank = a.secondarySchoolRank || 1;
@@ -1131,9 +1104,6 @@ function renderAdvDisadv() {
   updateDisadvButtonState();
 }
 
-// =============================================================================
-// RENDU DES COMPÉTENCES AVEC PALIERS DE MAÎTRISE INTÉGRÉS
-// =============================================================================
 function renderSkills() {
   const container = document.getElementById('skills-list');
   if (!container) return;
@@ -1424,7 +1394,7 @@ function updateAll() {
     return found && found.impact === impactName;
   });
 
-  // 2. Budget XP (avec prise en compte du bonus d'école/famille sur les Traits ET sur le Vide)
+  // 2. Budget XP
   let xpSpent = 0;
   const traitsBase = [
     { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
@@ -1702,7 +1672,6 @@ function updateAll() {
 
   // Synchronisation avec export-carnet.js
   if (typeof window !== "undefined") {
-    // ➔ AJOUT INDISPENSABLE : synchronise les tableaux réassignés avec window
     window.currentSkills = currentSkills;
     window.advantagesList = advantagesList;
     window.disadvantagesList = disadvantagesList;
@@ -1744,6 +1713,7 @@ function updateAll() {
     };
     window.character = window.currentChar;
   }
+}
 
 function randomizeAll() {
   const clans = getClans();
@@ -1894,7 +1864,6 @@ function resetCharacter() {
   }
 }
 
-// Exportation vers la fiche officielle A4 vectorielle
 function exportOfficialPDF() {
   updateAll();
 
@@ -2081,7 +2050,5 @@ if (typeof window !== "undefined") {
   window.updateDifferentSchoolSelection = updateDifferentSchoolSelection;
   window.SKILL_MASTERIES = SKILL_MASTERIES;
 }
-
-window.addEventListener('DOMContentLoaded', bootstrap);
 
 window.addEventListener('DOMContentLoaded', bootstrap);
