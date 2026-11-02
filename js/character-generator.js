@@ -522,6 +522,10 @@ function initCatalogSelectors() {
   updateDisadvButtonState();
 }
 
+/**
+ * Construit et verrouille l'école selon la famille choisie.
+ * Déverrouille l'accès aux autres clans UNIQUEMENT si l'avantage est acheté (5 XP).
+ */
 function updateSchoolOptions(preferredSchoolId) {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value || "crabe";
@@ -531,72 +535,104 @@ function updateSchoolOptions(preferredSchoolId) {
 
   const selectedFamily = clan.families[famIdx]?.name;
   const schSel = document.getElementById('sel-school');
+  const lockHint = document.getElementById('school-lock-hint');
   if (!schSel) return;
 
   schSel.innerHTML = "";
 
-  // Groupe 1 : Écoles du Clan actuel
-  const ownGroup = document.createElement('optgroup');
-  ownGroup.label = `🏯 Écoles du ${clan.name}`;
+  // Vérifier si le joueur possède l'avantage « Études dans une Autre École »
+  const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
 
-  const sortedOwnSchools = [...clan.schools].sort((a, b) => {
-    const aMatch = a.family === selectedFamily ? 0 : 1;
-    const bMatch = b.family === selectedFamily ? 0 : 1;
-    return aMatch - bMatch;
-  });
+  if (diffAdv) {
+    // CAS 1 : L'avantage est payé (5 XP) -> Déverrouillage complet
+    schSel.disabled = false;
+    schSel.classList.remove('opacity-60', 'cursor-not-allowed');
 
-  sortedOwnSchools.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s.id;
-    const isFam = s.family === selectedFamily;
-    opt.textContent = `${s.name} (${s.bonus})${isFam ? ' ★' : ''}`;
-    ownGroup.appendChild(opt);
-  });
-  schSel.appendChild(ownGroup);
+    if (lockHint) {
+      lockHint.innerHTML = `<span class="text-emerald-400 font-bold">🎓 École d'adoption déverrouillée (Avantage payé : 5 XP)</span>`;
+    }
 
-  // Groupes suivants : Écoles des autres Clans (Études dans une Autre École - 5 XP)
-  for (const otherKey in clans) {
-    if (otherKey === clanKey) continue;
-    const otherClan = clans[otherKey];
-    const extGroup = document.createElement('optgroup');
-    extGroup.label = `🎓 ${otherClan.name} (Études dans une Autre École • 5 XP)`;
-
-    (otherClan.schools || []).forEach(s => {
+    // Écoles du clan d'origine
+    const ownGroup = document.createElement('optgroup');
+    ownGroup.label = `🏯 Écoles du ${clan.name}`;
+    (clan.schools || []).forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.id;
-      opt.textContent = `${s.name} [${otherClan.name}] (${s.bonus})`;
-      extGroup.appendChild(opt);
+      opt.textContent = `${s.name} (${s.bonus})`;
+      ownGroup.appendChild(opt);
     });
-    schSel.appendChild(extGroup);
-  }
+    schSel.appendChild(ownGroup);
 
-  const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
-  if (preferredSchoolId && schSel.querySelector(`option[value="${preferredSchoolId}"]`)) {
-    schSel.value = preferredSchoolId;
-  } else if (diffAdv && diffAdv.differentSchoolId && schSel.querySelector(`option[value="${diffAdv.differentSchoolId}"]`)) {
-    schSel.value = diffAdv.differentSchoolId;
-  } else if (sortedOwnSchools[0]) {
-    schSel.value = sortedOwnSchools[0].id;
+    // Écoles des autres clans
+    for (const otherKey in clans) {
+      if (otherKey === clanKey) continue;
+      const otherClan = clans[otherKey];
+      const extGroup = document.createElement('optgroup');
+      extGroup.label = `🎓 ${otherClan.name}`;
+      (otherClan.schools || []).forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.name} [${otherClan.name}] (${s.bonus})`;
+        extGroup.appendChild(opt);
+      });
+      schSel.appendChild(extGroup);
+    }
+
+    if (preferredSchoolId && schSel.querySelector(`option[value="${preferredSchoolId}"]`)) {
+      schSel.value = preferredSchoolId;
+    } else if (diffAdv.differentSchoolId && schSel.querySelector(`option[value="${diffAdv.differentSchoolId}"]`)) {
+      schSel.value = diffAdv.differentSchoolId;
+    }
+
+  } else {
+    // CAS 2 : Pas d'avantage -> Strictement restreint à la famille du personnage
+    const familySchools = (clan.schools || []).filter(s => s.family === selectedFamily);
+    const availableSchools = familySchools.length > 0 ? familySchools : clan.schools;
+
+    availableSchools.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = `${s.name} (${s.bonus})`;
+      schSel.appendChild(opt);
+    });
+
+    if (availableSchools.length <= 1) {
+      // Une seule école pour cette famille -> Verrouillage total
+      schSel.disabled = true;
+      schSel.classList.add('opacity-60', 'cursor-not-allowed');
+      if (lockHint) {
+        lockHint.innerHTML = `<span class="text-stone-500 italic">🔒 École liée à votre famille. Déverrouillable via l'avantage « Études dans une Autre École » (5 XP).</span>`;
+      }
+    } else {
+      // S'il existe 2 écoles pour la même famille (ex: Bayushi bushi / courtisan), le choix reste interne
+      schSel.disabled = false;
+      schSel.classList.remove('opacity-60', 'cursor-not-allowed');
+      if (lockHint) {
+        lockHint.innerHTML = `<span class="text-amber-500/80 italic">Écoles accessibles pour la famille ${selectedFamily}.</span>`;
+      }
+    }
+
+    if (preferredSchoolId && schSel.querySelector(`option[value="${preferredSchoolId}"]`)) {
+      schSel.value = preferredSchoolId;
+    } else if (availableSchools[0]) {
+      schSel.value = availableSchools[0].id;
+    }
   }
 }
 
-function onClanChange() {
-  const clans = getClans();
-  const clanKey = document.getElementById('sel-clan').value;
-  const clan = clans[clanKey];
-  if (!clan) return;
+function onSchoolChange() {
+  const schObj = getSelectedSchoolObject();
+  if (!schObj) return;
 
-  const famSel = document.getElementById('sel-family');
-  famSel.innerHTML = "";
-  clan.families.forEach((f, idx) => {
-    let opt = document.createElement('option');
-    opt.value = idx;
-    opt.textContent = `${f.name} (${f.bonus})`;
-    famSel.appendChild(opt);
-  });
+  const diffAdvIdx = advantagesList.findIndex(a => isDifferentSchoolAdv(a.name));
 
-  const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
-  updateSchoolOptions(diffAdv?.differentSchoolId);
+  // Si le joueur a l'avantage et change d'école dans la liste déverrouillée, on synchronise l'avantage
+  if (diffAdvIdx !== -1) {
+    advantagesList[diffAdvIdx].differentSchoolId = schObj.school.id;
+    advantagesList[diffAdvIdx].differentSchoolName = `${schObj.school.name} (${schObj.clanName})`;
+    renderAdvDisadv();
+  }
+
   resetSheetToNewSelection(true);
 }
 
