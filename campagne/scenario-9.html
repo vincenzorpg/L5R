@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 9 : « Ce qui ne meurt pas » — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1c0e07 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .inner-thought {
+      color: #d1b87a;
+      font-style: italic;
+    }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .scene-figure:hover img {
+      transform: scale(1.015);
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE & LIENS RAPIDES -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-8.html" class="text-amber-400 hover:text-amber-200">◄ Acte 8 : Le crépuscule de l'honneur</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 09 / 10</span>
+        <a href="scenario-10.html" class="text-amber-400 hover:text-amber-200">Acte 10 : La tombe de Iuchiban ►</a>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE 9 • TERRES DU CRABE & ESCORTE DE YURIKO KUNI
+        </span>
+        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Okado et HiroHito)</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 9 : « Ce qui ne meurt pas »
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
+      </p>
+    </header>
+
+    <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
+            🔊
+          </div>
+          <div>
+            <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
+            <div class="text-[10px] text-stone-400" id="audio-progress">Paragraphe 0 / 0</div>
+          </div>
+        </div>
+
+        <!-- COMMANDES DE LECTURE -->
+        <div class="flex items-center gap-1.5">
+          <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
+          <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+            <span id="play-icon">▶</span> <span id="play-text">Écouter le Récit</span>
+          </button>
+          <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
+          <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
+        </div>
+
+        <!-- SÉLECTION DE LA VOIX ET VITESSE -->
+        <div class="flex items-center gap-2 text-xs text-stone-400">
+          <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] sm:max-w-[180px] truncate"></select>
+          <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+            <option value="0.9">0.9x (Chronique posée)</option>
+            <option value="1.0" selected>1.0x (Standard)</option>
+            <option value="1.1">1.1x (Rythmé)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- BARRE DE PROGRESSION VISUELLE -->
+      <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden">
+        <div id="narrator-progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+    </section>
+
+    <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+
+      <p>
+        par <b>Akira Tsuruchi</b>, avec la participation d’<b>Okado</b> et de <b>HiroHito</b>
+      </p>
+
+      <p>
+        Trois semaines plus tard, dès mon arrivé à <b>Kyuden Hida</b>, je suis convoqué par <b>Kisada</b> et je retrouve <b>Okado</b> dans la salle d’audience. <b>Kisada</b> nous annonce qu’il souhaite nous confier une mission et nous présente <b>HiroHito Hida</b> qui nous accompagnera également. Je me rappelle l’avoir croisé lors des derniers combats contre l’outre-monde. Celui-ci m’avait fait bonne impression. Puis <b>Kisada</b> se tourne vers une femme d’âge mûre juste à côté de lui. « Vous devrez accompagner et protéger <b>Yuriko Kuni</b> depuis cette forteresse jusqu’au temple <b>Shiro Kuni</b>. Elle m’a demandé de constituer spécialement cette équipe alors ne la décevez pas » fit-il en la désignant de sa main.
+      </p>
+
+      <!-- ILLUSTRATION 1 : L'AUDIENCE AVEC KISADA -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/CeQuiNeMeurtPas-1.jpg" alt="Audience avec le seigneur Kisada à Kyuden Hida" />
+        <figcaption class="scene-caption">
+          Kyuden Hida — L'audience solennelle devant le grand seigneur Kisada et la mystérieuse shugenja Yuriko Kuni.
+        </figcaption>
+      </figure>
+
+      <p>
+        <b>Yuriko</b> s’approche de nous et nous salue d’un mouvement de tête et nous explique nous avoir choisi car notre renommé en tant que magistrat d’émeraude l’a convaincue qu’elle pouvait avoir confiance en nous. Puis elle nous pose des questions, sur notre état de santé, sur ce que nous avons fait dernièrement, ce que nous ressentons depuis la dernière grande bataille. Rien ne semble lui échapper. Elle note scrupuleusement tous les échanges dans un petit carnet. Cette Shugenja spécialisé (à ne point en douter dans l’outre-monde) semble être vif d’esprit et avoir un profil très scientifique.
+      </p>
+
+      <p>
+        Notre compagnie devant rester discret nous partons à pied de la forteresse. L’air est pesant et après plusieurs heures de route, Yuriko nous donnes quelques conseils et informations sur notre mission. Il faut absolument que nous réussissions notre mission. Des samurais vont probablement s’en prendre à elle sur le chemin pour lui dérober ce qu’elle transporte dans son sac. Elle nous avertit aussi que, pour notre bien, il est nécessaire que nous lui obéissions au doigt et à l’œil.
+      </p>
+
+      <p>
+        Le soleil commence à décliner à l’horizon, nous avons décidé que je marcherai en éclaireur avec Raiju à 15 minutes devant le groupe sur cette route assez large pour faire passer une armée mais sur laquelle, étrangement, nous n’avons croisé aucune âme ce premier jour. Apercevant une cabane, je décide d’attendre mes camarades pour leur demander s’il souhaite y passer la nuit. 
+      </p>
+
+      <p>
+        Je prends le premier tour de garde, puis passe le tour à Okado, la Shugenja s’est endormi assise dans un coin sitôt le repas fini. Je m’allonge sur une paillasse et me réveille le lendemain matin après une nuit tranquille.
+      </p>
+
+      <p>
+        Le lendemain après le déjeuner, Raiju s’arrête net sur le chemin et refuse d’avancer fixant un point au loin. Je ne vois rien mais préfère déposer l’étoffe rouge au sol comme convenu la veille avec mes compagnons en cas de danger probable ou avéré. Au bout de quelques minutes Raiju détend ses muscles, renifle le sol et repart comme si de rien n’était. Mais à peine deux heures plus tard, Raiju prend de nouveau la même posture et regarde dans la forêt qui borde la route. Cette fois-ci, j’ai l’impression de percevoir également une présence entre les arbres. Je lâche discrètement une nouvelle étoffe et demande à Raiju de poursuivre le chemin comme si de rien n’était afin de prendre d’éventuels ennemis à revers. Mais Raiju ne peut s’empêcher de continuer à grogner et à peine ai-je le dos tourné que j’entends une flèche siffler et se planter dans le sol à deux pas de notre position.
+      </p>
+
+      <!-- ILLUSTRATION 2 : L'EMBUSCADE DANS LA FORÊT -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/CeQuiNeMeurtPas-2.jpg" alt="Embuscade des samurais dans la forêt" />
+        <figcaption class="scene-caption">
+          La Forêt Frontalière — L'attaque des archers ennemis et la défense féroce aux côtés du loup Raiju.
+        </figcaption>
+      </figure>
+
+      <p>
+        En courant nous réfugier dans la forêt, j’ai le temps d’identifier au moins cinq archers. J’en abats un d’une flèche en allant me mettre à l’abri derrière un arbre. Mais au moment de tirer une seconde flèche, tous les autres guerriers ont disparu. Je décide d’avancer prudemment avec Raiju en passant d’arbre en arbre. Je repère de nouveau les samurais qui se sont replié sur les hauteurs d’un rocher. J’arrive à en tuer un autre mais de cette fois-ci, tout le groupe se met à courir vers moi katana à la main. Raiju se lance dans la bataille et lacère de ses griffes deux d’entres eux dès le premier assaut, les tuant sur le coup et j’ai le temps d’abattre les autres avant qu’ils n’arrivent au corps à corps. Je continue mon tour dans la forêt pour essayer de repérer d’autres ennemis.
+      </p>
+
+      <p>
+        Ne trouvant personne, je rejoins le groupe resté sur la route avec Raiju. Okado m’annonce avoir tué les deux samurais qui gisent à ses pieds et que Yuriko les inspecte avec minutie. Elle nous montre un tatouage en spirale sur l’avant-bras de l’un d’entre eux. « Ce n’est pas la première fois que des samurais portant ce symbole m’attaquent », annonce-t-elle. « Je suis persuadée qu’ils connaissaient notre itinéraire et qu’ils attendaient le bon moment pour nous tomber dessus. ». Nous repartons par la route avec tous nos sens en alerte…
+      </p>
+
+      <p>
+        Mais sur toute la semaine suivante est tranquille. Nous sentons néanmoins que l’air se fait de plus en plus pesant et cette marche sur route n’a rien d’une sinécure.
+      </p>
+
+      <p>
+        Lorsque nous arrivons dans le village de Kakurega, nous sentons une certaine méfiance voire animosité contre notre groupe. Les gens nous évitent et préfèrent rentrer chez eux plutôt que de croiser notre regard. Nous allons à la taverne pour y prendre un repas et demander des chambres pour la nuit.
+      </p>
+
+      <p>
+        Lors du repas, mes compères crabes ne peuvent s’empêcher d’inviter un de leur clan à notre table pour partager une coupe de saké. La présence de ce samurai (Karu) semble déplaire à Yuriko encore plus qu’à moi et elle nous fait signe qu’il est temps de monter dans nos chambres. Nous prenons donc congé et, une fois dans nos chambres à l’étage, elle nous explique que l’attitude de ce guerrier n’était pas normale et qu’il devait être fortement souillé car tous ses gestes étaient beaucoup trop réguliers et mécaniques.
+      </p>
+
+      <p>
+        Okado prend le premier tour de garde pour la nuit mais il vient me réveiller après 3 heures de surveillance car il suspecte quelque chose et me demande de l’accompagner dehors. Une fois sortie j’appelle Raiju, qui ne semble pas inquiet, mais je me rends compte également que quelque chose ne va pas. Il n’y a plus aucun bruit autour de nous, nous avons l’impression d’être dans une bulle de vide oppressante nous empêchant de percevoir correctement notre environnement. Nous faisons le tour de l’auberge tous nos sens en éveil mais nous ne détectons rien de particulier. Okado part réveiller Yuriko et HiroHito pour établir un plan.
+      </p>
+
+      <p>
+        Une fois l’équipe regroupé dans la grande salle, nous sentons que la Shugenja commence à paniquer. Elle nous avertit que l’outre-monde commence à consumer Rokugan et a réussi à passer la muraille. Nous gardons cette information en tête mais nous tentons de la rassurer. De toute façon, il faut poursuivre la mission, nous sortons donc de l’auberge en espérant trouver des chevaux pour fuir cet endroit le plus rapidement possible. Mais les étables sont vides et alors que nous allons reprendre la route, nous apercevons au loin, trois silhouettes qui ont une démarche étrangement mécanique et saccadée venir du côté de la muraille, traverser la route et s’enfoncer dans la forêt. HiroHito décide d’aller enquêter du côté de la muraille, malgré les réticences de Yuriko, pour s’assurer qu’aucune brèche n’est réellement apparu. Il nous rejoindra sur la route le plus rapidement possible. Notre groupe se divise donc temporairement en deux, HiroHito courant vers la muraille et le reste du groupe prenant la grande route vers le Nord pour poursuivre la mission.
+      </p>
+
+      <p>
+        Après à peine quelques minutes plus tard, c’est le samurai crabe croisé à la taverne la veille qui fait irruption sur la route devant nous. Il a l’ai hébété et lorsque que Okado lui pose des questions sur ce qu’il fait ici, ses réponses vont vagues. Il n’a de cesse de répéter qu’il doit se rendre dans la forêt en pointant une direction de la main. Nous le laissons reprendre sa route mais nous ne sommes pas tranquilles. Le village est en danger et si des Oni de l’outre-monde prennent possession de celui-ci, la souillure pourrait se répandre très vite si elle n’est pas endiguée. 
+      </p>
+
+      <p>
+        Yuriko refuse catégoriquement que nous nous écartions du chemin, son chargement étant plus important encore que ce village. Mais Okado et HiroHito, qui nous a rejoint durant notre réflexion, ne lui laisse pas le choix car l’honneur de leur clan est en jeu. Nous partons donc dans la forêt à la poursuite du Karu, le samurai souillé.
+      </p>
+
+      <!-- ILLUSTRATION 3 : L'ARRIVÉE AU VILLAGE DE KAKUREGA -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/CeQuiNeMeurtPas-3.jpg" alt="Arrivée au village mystérieux de Kakurega" />
+        <figcaption class="scene-caption">
+          La Clairière de l'Entrepôt — L'affrontement tendu contre les sbires du culte de Iuchiban au cœur des bois.
+        </figcaption>
+      </figure>
+
+      <p>
+        Après quelques minutes de marche, toujours dans ce silence assourdissant, nous atteignons une clairière au milieu de laquelle se trouve un entrepôt d’où provient une faible lumière. Okado et moi, nous nous approchons de la porte pour tenter de distinguer ce qu’il se passe à l’intérieur. Nous entendons au moins 3 personnes dans l’entrepôt. Nous essayons d’entrouvrir discrètement la porte mais celle-ci émet un grincement sinistre… Les silhouettes, au nombre de 4, se retournent vers nous et nous entendons au même instant du mouvement dans notre dos. Une des silhouettes qui nous fait face se présente « je suis Genzo Doji, nous vous attendions samurai ». Je bafouille quelques excuses creuses et lui répond que mon compagnon et moi-même, nous allons nous retirer. Mais nous ne pouvons allez bien loin car 10 samouraïs nous font face devant l’entrepôt. Le samouraï du clan Doji sort à son tour de l’entrepôt, passe entre Okado et moi, ne prenant même pas la peine de nous contourner. Il se tourne vers nous, dos à la dizaine de samouraï, qui le salue immédiatement en s’inclinant. Nous sommes faits comme des rats. Je regarde Okado dans les yeux et nous ne comprenons immédiatement, il va falloir livrer bataille.
+      </p>
+
+      <p>
+        HiroHito sentant la situation s’envenimer s’élance de l’orée de la forêt en défiant le samouraï grue. Celui-ci fait volteface et se dirige vers HiroHito avec deux samouraïs crabe nous laissant avec la dizaine de subalternes nous faisant face.
+      </p>
+
+      <p>
+        Le temps semble suspendu, nous nous observons tous en essayant de percevoir une faille dans la défense adverse. Un des trois samurais me faisant face s’élance sabre au clair, mais je le transperce d’une flèche en pleine poitrine avant qu’il n’ait pu faire deux pas et j’ai le temps d’encocher et de tirer deux autres flèches avant que les autres ne se rapproche assez pour m’inquiéter. De son côté Raiju a terrassé deux de ses adversaires mais le troisième parvient à lui asséner un coup de katana sur le flan. Fou de rage Raiju se jette sur lui et l’éviscère de haut en bas.
+      </p>
+
+      <p>
+        Je vois HiroHito balayer littéralement le samurai grue d’un coup de tetsubo, celui-ci meurt sur le coup et tous les adversaires restant s’effondrent alors inanimés comme des pantins auxquels on aurait coupé les fils. D’un coup, les bruits environnent reviennent comme si la bulle qui nous emprisonnait venait d’éclater.
+      </p>
+
+      <p>
+        Inspectant les cadavres, Yuriko découvre :
+      </p>
+      <ul class="space-y-1.5 pl-4 list-disc text-stone-300">
+        <li>Une lettre adressée au « seigneur des murmure » à la capitale du royaume Otosan Uchi. Elle est difficilement lisible mais nous arrivons à comprendre que l’ordre principale de leur mission était de voler les parchemins de Yuriko.</li>
+        <li>Un médaillon d’obsidienne sculpté en forme de chrysanthème flétrie</li>
+        <li>Une fiole contenant du sang noir imprégné de souillure.</li>
+      </ul>
+
+      <p>
+        Elle range ces trois éléments dans son sac et nous fait part de son analyse. Ces hommes font partie d’une faction qui sert Iuchiban, un sorcier dangereux et puissant pratiquant le mahō, et ils sont prêts à tout pour récupérer les parchemins car ils contiennent des savoirs qui pourraient les bannir définitivement.
+      </p>
+
+      <p>
+        Nous rentrons dans l’entrepôt pour soigner la blessure de Raiju et HiroHito qui semblait agité reprend peu à peu son calme. 
+      </p>
+
+      <p>
+        Avec le même grincement par lequel tout à commencer, la porte s’ouvre et nous voyons Megumi portant son tapis de cérémonie entrer dans l’entrepôt et nous saluer. Il se place face à nous, nous regarde et s’adresse à nous d’une voix cristalline « Vous avez l’air fatigués. C’est raisonnable. Vous pensez avoir compris quelque chose ce soir ? Et pourtant, vous n’avez vu que l’ombre de ce qui vient. »
+      </p>
+
+      <p>
+        Il marque une pause comme pour nous laisser le temps d’assimiler ses paroles puis reprend : « Il y a très longtemps, un homme a décidé que la mort était un problème à résoudre. Il s’appelait Iuchiban. Il a trouvé la solution. Le défaut dans sa solution, c’est qu’elle fonctionne. Pas pour lui mais pour ceux qui gardent sa mémoire vivante ».
+      </p>
+
+      <p>
+        Il me regarde et dit « Certain ont accepté cette mémoire pour avoir de la puissance. ».
+      </p>
+
+      <p>
+        Il regarde HiroHito et reprend « Certain l’ont acceptée parce qu’on ne leur a pas donné le choix. ».
+      </p>
+
+      <p>
+        Enfin il tourne sa tête vers Okado et poursuit « Et certain ont été choisi avant même de naître. »
+      </p>
+
+      <p>
+        Puis en silence, il sort de sa manche un origami. C’est un lion plié dans du papier d’une couleur faisant penser à du sang séché. Et continue tout en le déposant délicatement sur le sol « Ce lion n’est pas revenu par hasard. Il a été ramené par la même chose qui sait maintenant que vous existez. Ils savent que vous avez vu Genzo et ils savent que Yuriko voyage avec vous. Ils ne vous sous-estimeront plus. Vous pouvez ignorer tout ça et rentrer chez vous. Le Crabe trouvera bien d’autres samouraïs pour cette affaire. ».
+      </p>
+
+      <p>
+        Il se lève, replie son tapis et se dirige vers la porte en lançant sans se retourner et disparaissant dans la nuit « Mais vous n’êtes pas de ce genre-là ! »
+      </p>
+
+      <p>
+        Je range soigneusement l’origami laissé par Megumi et nous reprenons la route en méditant les paroles du sage.
+      </p>
+
+      <p>
+        Un matin, Yuriko nous fait signe de quitter l’itinéraire principale et de passer par la forêt. Après plusieurs heures de marche entre les arbres, nous parvenons à une paroi rocheuse avec deux rectangles de calcaire noir dessus. Yuriko ne tient plus en place et se met à gratter frénétiquement la paroi. Elle pose de temps en temps son oreille sur la pierre comme pour percer un secret enfoui dans la roche. Puis après un long moment, elle se retourne vers nous. Ses yeux sont secs mais quelque chose a changé dans son expression, c’était comme si elle venait de se séparer d’un poids qui pesait sur ses épaules depuis bien trop longtemps.
+      </p>
+
+      <p>
+        « Cela fait 20 ans que je recherche cet endroit. De l’autre côté de ce mur, c’est l’entrée de la tombe cachée de Iuchiban. C’est un pont entre Rokugan et l’outre-monde. Un pont entre notre territoire et le monde de Fu Leng. Un pont entre le monde des vivants et le monde des morts. »
+      </p>
+
+      <p>
+        Elle regarde les glyphes. Les protections sont intactes…
+      </p>
+
+    </article>
+
+    <!-- LIENS DE BAS DE PAGE -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/la-campagne/scenario-9-ce-qui-ne-meurt-pas/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur le blog WordPress ↗
+      </a>
+      <a href="scenario-10.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 10 : La tombe de Iuchiban →
+      </a>
+    </section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 9 : « Ce qui ne meurt pas » (par Akira Tsuruchi)
+  </footer>
+
+  <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
+  <style>
+    .reading-active {
+      background: rgba(212, 175, 55, 0.08) !important;
+      border-left: 3px solid #d4af37 !important;
+      padding-left: 0.75rem !important;
+      transition: all 0.25s ease !important;
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05);
+    }
+  </style>
+
+  <script>
+    const synth = window.speechSynthesis;
+    let paragraphs = [];
+    let currentIndex = 0;
+    let isPlaying = false;
+    let selectedVoice = null;
+
+    function initNarrator() {
+      const container = document.getElementById('story-content');
+      if (!container) return;
+      
+      paragraphs = Array.from(container.querySelectorAll('p')).filter(p => p.textContent.trim().length > 0);
+      updateProgressUI();
+      loadVoices();
+    }
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) return;
+      let voices = synth.getVoices();
+
+      const frVoices = voices.filter(v => v.lang.startsWith('fr') || v.lang.includes('FR'));
+      const select = document.getElementById('voice-select');
+      if (!select) return;
+      select.innerHTML = "";
+
+      frVoices.sort((a, b) => {
+        const isHD_A = a.name.includes("Natural") || a.name.includes("Neural") || a.name.includes("Google") || a.name.includes("Premium");
+        const isHD_B = b.name.includes("Natural") || b.name.includes("Neural") || b.name.includes("Google") || b.name.includes("Premium");
+        return (isHD_B ? 1 : 0) - (isHD_A ? 1 : 0);
+      });
+
+      frVoices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        const isHD = v.name.includes("Natural") || v.name.includes("Neural") || v.name.includes("Google");
+        opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
+        select.appendChild(opt);
+      });
+
+      if (frVoices.length > 0) {
+        selectedVoice = frVoices[0];
+        select.value = selectedVoice.name;
+      }
+    }
+
+    function onVoiceChange() {
+      const voiceName = document.getElementById('voice-select').value;
+      selectedVoice = synth.getVoices().find(v => v.name === voiceName);
+      if (isPlaying) {
+        readCurrentParagraph();
+      }
+    }
+
+    function updateProgressUI() {
+      const progText = document.getElementById('audio-progress');
+      const bar = document.getElementById('narrator-progress-bar');
+      const visualizer = document.getElementById('narrator-visualizer');
+
+      if (progText) {
+        progText.textContent = `Paragraphe ${paragraphs.length ? currentIndex + 1 : 0} / ${paragraphs.length}`;
+      }
+      if (bar && paragraphs.length) {
+        const pct = ((currentIndex + 1) / paragraphs.length) * 100;
+        bar.style.width = `${pct}%`;
+      }
+      if (visualizer) {
+        if (isPlaying) {
+          visualizer.classList.add('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+          visualizer.classList.remove('bg-amber-950/90', 'text-amber-300');
+        } else {
+          visualizer.classList.remove('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+          visualizer.classList.add('bg-amber-950/90', 'text-amber-300');
+        }
+      }
+    }
+
+    function highlightParagraph(idx) {
+      paragraphs.forEach((p, i) => {
+        if (i === idx) {
+          p.classList.add('reading-active');
+          p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          p.classList.remove('reading-active');
+        }
+      });
+    }
+
+    function readCurrentParagraph() {
+      synth.cancel();
+      if (currentIndex >= paragraphs.length) {
+        stopAudio();
+        return;
+      }
+
+      const p = paragraphs[currentIndex];
+      highlightParagraph(currentIndex);
+      updateProgressUI();
+
+      const u = new SpeechSynthesisUtterance(p.textContent.trim());
+      u.lang = 'fr-FR';
+      u.rate = parseFloat(document.getElementById('audio-rate')?.value || 1.0);
+      u.pitch = 0.95;
+
+      if (selectedVoice) u.voice = selectedVoice;
+
+      u.onend = () => {
+        if (isPlaying) {
+          currentIndex++;
+          if (currentIndex < paragraphs.length) {
+            setTimeout(readCurrentParagraph, 300);
+          } else {
+            stopAudio();
+          }
+        }
+      };
+
+      u.onerror = () => {
+        isPlaying = false;
+        updatePlayButton();
+      };
+
+      synth.speak(u);
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        synth.pause();
+        isPlaying = false;
+        document.getElementById('audio-status').textContent = "Lecture en pause";
+      } else {
+        if (synth.paused) {
+          synth.resume();
+        } else {
+          readCurrentParagraph();
+        }
+        isPlaying = true;
+        document.getElementById('audio-status').textContent = "Lecture vocale en cours...";
+      }
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function updatePlayButton() {
+      const icon = document.getElementById('play-icon');
+      const text = document.getElementById('play-text');
+      if (isPlaying) {
+        if (icon) icon.textContent = "⏸";
+        if (text) text.textContent = "Pause";
+      } else {
+        if (icon) icon.textContent = "▶";
+        if (text) text.textContent = "Reprendre";
+      }
+    }
+
+    function stopAudio() {
+      synth.cancel();
+      isPlaying = false;
+      currentIndex = 0;
+      paragraphs.forEach(p => p.classList.remove('reading-active'));
+      document.getElementById('audio-status').textContent = "Voix Narrative Prête";
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function nextParagraph() {
+      if (currentIndex < paragraphs.length - 1) {
+        currentIndex++;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    function prevParagraph() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      window.addEventListener('DOMContentLoaded', initNarrator);
+    }
+  </script>
+
+</body>
+</html>
