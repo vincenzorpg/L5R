@@ -1,1 +1,32 @@
+name: Synchronisation automatique vers Google Drive
 
+on:
+  push:
+    branches:
+      - main # Modifiez par master si votre branche principale s'appelle master
+  workflow_dispatch: # Permet aussi de déclencher la synchronisation manuellement depuis GitHub
+
+jobs:
+  deploy-to-drive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code source
+        uses: actions/checkout@v4
+
+      - name: Installation de Rclone
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone
+
+      - name: Configuration de Rclone
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "${{ secrets.RCLONE_CONFIG }}" > ~/.config/rclone/rclone.conf
+
+      - name: Envoi des fichiers vers Google Drive
+        run: |
+          # Copie l'ensemble du dépôt vers le dossier distant configuré dans Rclone
+          rclone sync . gdrive:L5R_Projet_Sync \
+            --exclude ".git/**" \
+            --exclude ".github/**" \
+            --verbose 
