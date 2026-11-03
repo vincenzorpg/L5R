@@ -1,1 +1,1725 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forge de Personnage — L5R 4e Édition | Campagne MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- BASES DE DONNÉES DÉPORTÉES -->
+  <script src="data/clans-data.js" defer></script>
+  <script src="data/competences-data.js" defer></script>
+  <script src="data/equipement-data.js" defer></script>
+  <script src="data/avantages-desavantages-data.js" defer></script>
+
+  <!-- BASES DE DONNÉES DES SORTS & KIHOS -->
+  <script src="data/sorts/sorts-universels.js" defer></script>
+  <script src="data/sorts/sorts-air.js" defer></script>
+  <script src="data/sorts/sorts-terre.js" defer></script>
+  <script src="data/sorts/sorts-feu.js" defer></script>
+  <script src="data/sorts/sorts-eau.js" defer></script>
+  <script src="data/sorts/sorts-vide.js" defer></script>
+  <script src="data/sorts/sorts-kiho.js" defer></script>
+  <script src="data/sorts-data.js" defer></script>
+
+  <!-- NOUVELLE BASE DE DONNÉES DES KATAS OFFICIELS -->
+  <script src="js/katas-data.js" defer></script>
+
+  <script src="js/export-carnet.js" defer></script>
+
+  <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
+  <script src="js/navbar.js" defer></script>
+  <script src="js/character-generator.js?v=10" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 5%, #230808 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      transition: border-color 0.2s ease;
+    }
+    .card-clean:hover { border-color: rgba(212, 175, 55, 0.45); }
+    .gold-text { color: var(--gold); }
+    
+    input, select, textarea {
+      background-color: #0d0b0b !important;
+      border: 1px solid #3a3028 !important;
+      color: #f3e5ab !important;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+    }
+    .badge-adv {
+      background: rgba(120, 53, 15, 0.4);
+      color: #fde68a;
+      border: 1px solid #d97706;
+    }
+    .badge-dis {
+      background: rgba(136, 19, 55, 0.4);
+      color: #fecdd3;
+      border: 1px solid #e11d48;
+    }
+
+    .badge-elem-terre { background: rgba(120, 53, 15, 0.4); color: #fde68a; border: 1px solid #b45309; }
+    .badge-elem-eau { background: rgba(30, 58, 138, 0.4); color: #93c5fd; border: 1px solid #2563eb; }
+    .badge-elem-feu { background: rgba(153, 27, 27, 0.4); color: #fca5a5; border: 1px solid #dc2626; }
+    .badge-elem-air { background: rgba(19, 78, 74, 0.4); color: #99f6e4; border: 1px solid #0d9488; }
+    .badge-elem-vide { background: rgba(88, 28, 135, 0.4); color: #e9d5ff; border: 1px solid #9333ea; }
+    .badge-elem-universel { background: rgba(68, 64, 60, 0.45); color: #f5f5f4; border: 1px solid #78716c; }
+    .badge-elem-kiho { background: rgba(180, 83, 9, 0.4); color: #fed7aa; border: 1px solid #ea580c; }
+
+    @keyframes dicePop {
+      0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+      70% { transform: scale(1.08) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .die-anim {
+      animation: dicePop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @media screen {
+      #official-print-dossier { display: none !important; }
+    }
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 6mm 8mm;
+      }
+      body {
+        background: white !important;
+        color: #111 !important;
+        font-family: 'Noto Serif JP', serif;
+      }
+      .no-print, header, aside, main, footer, #dice-roller-drawer {
+        display: none !important;
+      }
+      #official-print-dossier {
+        display: block !important;
+        width: 100% !important;
+        background: white !important;
+        color: black !important;
+      }
+      .print-page {
+        page-break-after: always;
+        break-after: page;
+        min-height: 280mm;
+        box-sizing: border-box;
+      }
+      .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .sheet-box {
+        border: 1.5px solid #222;
+        background: #fff;
+      }
+      .sheet-title {
+        font-family: 'Cinzel', serif;
+        font-weight: 700;
+        background: #f0ede6;
+        border-bottom: 1px solid #333;
+        padding: 2px 4px;
+        text-transform: uppercase;
+        font-size: 8px;
+        letter-spacing: 0.05em;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- 1. MENU DE NAVIGATION GLOBAL -->
+  <header id="site-header"></header>
+
+  <!-- 2. BANDEAU DE COMBAT PERSISTANT -->
+  <aside aria-label="État du personnage" class="sticky top-[54px] z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
+      
+      <div class="flex flex-wrap justify-between items-center gap-3">
+        <!-- Bloc Identité -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
+          <span id="sticky-pc-name" class="text-sm md:text-base font-bold text-amber-200 font-imperial">Okado Hiruma</span>
+          <span id="sticky-school-badge" class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-300">Bushi Hiruma</span>
+        </div>
+
+        <!-- Bloc XP & Réputation -->
+        <div class="flex items-center gap-4">
+          <div>
+            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante / Total</span>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold font-imperial">
+                <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
+              </span>
+              <div class="flex items-center gap-1 bg-black/60 border border-stone-800 rounded px-1.5 py-0.5" title="Modifier l'XP de base (40 par défaut)">
+                <span class="text-[9px] text-stone-500 uppercase font-bold">Base:</span>
+                <input type="number" id="base-xp-input" value="40" min="0" max="999" oninput="updateAll()" class="w-12 bg-transparent text-amber-300 font-bold text-center text-xs focus:outline-none">
+              </div>
+            </div>
+          </div>
+          <div class="border-l border-amber-500/20 pl-3">
+            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">Réputation</span>
+            <span class="text-sm font-bold text-amber-300 font-imperial" id="insight-display">
+              120 pts <span class="text-[10px] text-stone-400 font-normal">(Rang 1)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Bloc Actions & Sauvegarde Dojo (SANS bouton Auto) -->
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button onclick="saveToDojo()" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition flex items-center gap-1 shadow cursor-pointer" title="Sauvegarder dans le Dojo local">
+            <span>📌</span> <span>Sauvegarder</span>
+          </button>
+          <button onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct">
+            🔗 Lien
+          </button>
+          <button onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer">💾 JSON</button>
+          <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
+            📂 Charger
+            <input type="file" id="json-input" onchange="importJSONWithMystic(event)" class="hidden" accept=".json">
+          </label>
+          <button onclick="prepareAndPrintPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition cursor-pointer">🖨️ PDF</button>
+          <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer">
+            <span>📖</span> <span>Carnet</span>
+          </button>
+          <button onclick="resetCharacterWithMystic()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer">Reset</button>
+        </div>
+      </div>
+
+      <!-- Ligne 2 : Les 4 Métriques Clés -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
+        <button type="button" onclick="rollFromSticky('sticky-atk', 'Jet pour Toucher')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-amber-950/40 border border-stone-800 hover:border-amber-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer le jet d'attaque !">
+          <div class="flex justify-between items-baseline w-full">
+            <span class="text-[10px] text-stone-400 group-hover:text-amber-300 font-bold uppercase tracking-wider">🎲 Toucher</span>
+            <span id="sticky-atk" class="text-sm font-bold text-amber-300 font-imperial">3g2</span>
+          </div>
+          <div id="sticky-atk-detail" class="text-[9px] text-stone-400 truncate mt-0.5 w-full">Katana : Kenjutsu (1) + Agilité (2)</div>
+        </button>
+
+        <button type="button" onclick="rollFromSticky('sticky-dmg', 'Jet de Dégâts')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-red-950/40 border border-stone-800 hover:border-red-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer les dégâts !">
+          <div class="flex justify-between items-baseline w-full">
+            <span class="text-[10px] text-stone-400 group-hover:text-red-300 font-bold uppercase tracking-wider">🎲 Dégâts</span>
+            <span id="sticky-dmg" class="text-sm font-bold text-red-400 font-imperial">4g2</span>
+          </div>
+          <div id="sticky-dmg-detail" class="text-[9px] text-stone-400 truncate mt-0.5 w-full">Katana (3g2) + Force (2)</div>
+        </button>
+
+        <button type="button" onclick="rollFromSticky('sticky-init', 'Jet d\'Initiative')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-amber-950/40 border border-stone-800 hover:border-amber-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer l'Initiative !">
+          <div class="flex justify-between items-baseline w-full">
+            <span class="text-[10px] text-stone-400 group-hover:text-amber-200 font-bold uppercase tracking-wider">🎲 Initiative</span>
+            <span id="sticky-init" class="text-sm font-bold text-amber-200 font-imperial">3g2</span>
+          </div>
+          <div id="sticky-init-detail" class="text-[9px] text-stone-400 truncate mt-0.5 w-full">Insight 1 + Réfl. 2 (3g2)</div>
+        </button>
+
+        <div class="p-1.5 px-2.5 rounded bg-black/60 border border-stone-800 flex flex-col justify-between">
+          <div class="flex justify-between items-baseline">
+            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">🛡️ ND Armure</span>
+            <span id="sticky-armor-tn" class="text-sm font-bold text-emerald-400 font-imperial">20</span>
+          </div>
+          <div id="sticky-armor-detail" class="text-[9px] text-stone-400 truncate mt-0.5">Base 5 + Réfl. (10) + Armure (+5)</div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- 0. MON DOJO PERSONNEL -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 bg-gradient-to-r from-[#16100c] via-[#120e0e] to-[#16100c] space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🏯</span>
+          <div>
+            <h2 class="text-xs md:text-sm font-bold font-imperial text-amber-200 uppercase tracking-wider">
+              Mon Dojo Personnel — Samouraïs Enregistrés
+            </h2>
+            <p class="text-[11px] text-stone-400">
+              Vos personnages sont conservés dans votre navigateur et accessibles directement depuis l'accueil du site.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="dojo-save-toast" class="hidden text-[11px] text-emerald-400 font-bold font-imperial">✓ Samouraï enregistré !</span>
+          <button type="button" onclick="saveToDojo()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs transition shadow cursor-pointer">
+            📌 Enregistrer le personnage actuel
+          </button>
+        </div>
+      </div>
+      <div id="dojo-roster-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 text-xs"></div>
+    </section>
+
+    <!-- 1. ALLÉGEANCE, IDENTITÉ & LIGNÉE -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">1. Allégeance, Identité & Lignée</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+        <div>
+          <label class="block text-stone-400 mb-1">Grand Clan de Rokugan</label>
+          <select id="sel-clan" onchange="onClanChange()" class="w-full p-2.5 rounded font-medium"></select>
+        </div>
+        <div>
+          <label class="block text-stone-400 mb-1">Famille du Clan</label>
+          <select id="sel-family" onchange="onFamilyChange()" class="w-full p-2.5 rounded font-medium"></select>
+          <div id="family-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
+        </div>
+        <div>
+          <label class="block text-stone-400 mb-1">École de Clan (Rang 1)</label>
+          <select id="sel-school" onchange="onSchoolChange()" class="w-full p-2.5 rounded font-medium"></select>
+          <div id="school-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
+          <div id="school-lock-hint" class="text-[10px] text-stone-500 italic mt-0.5"></div>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-stone-400">Nom du Samouraï</label>
+            <div class="flex gap-1.5">
+              <button onclick="generateRandomName('m')" title="Prénom Masculin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♂ Aléa</button>
+              <button onclick="generateRandomName('f')" title="Prénom Féminin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♀ Aléa</button>
+              <button onclick="toggleNameOrder()" title="Inverser Prénom/Famille" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-900 text-stone-400 hover:text-amber-300 cursor-pointer">⇄</button>
+            </div>
+          </div>
+          <input type="text" id="pc-name" value="Okado Hiruma" oninput="updateStickyName()" class="w-full p-2.5 rounded font-bold">
+          <div id="name-meaning" class="text-[11px] text-stone-400 italic mt-1">Signification : Porte de la sagesse</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-amber-500/20">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold text-amber-300 font-imperial tracking-wide uppercase">Progression des Techniques d'École (Rangs 1 à 5)</span>
+          <span class="text-[10px] text-stone-400 italic">La technique active est surlignée selon votre Réputation</span>
+        </div>
+        <div id="school-techniques-container" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- 2. ANNEAUX & TRAITS -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux & 8 Traits Élémentaires</h2>
+        <span class="text-xs text-stone-400">Base 2 • Trait : <span class="text-amber-300">Rang suivant × 4 XP</span> • Anneau du Vide : <span class="text-amber-300">Rang suivant × 6 XP</span></span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+        <!-- TERRE -->
+        <div class="p-3.5 rounded-lg bg-black/60 border border-amber-900/40 space-y-3">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1.5">
+            <span class="font-bold text-amber-300 font-imperial text-sm">土 Terre</span>
+            <span class="text-base font-bold text-amber-400" id="ring-earth">2</span>
+          </div>
+          <div class="space-y-2">
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Constitution</span><span id="badge-sta" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-stamina', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-stamina" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-stamina', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Volonté</span><span id="badge-wil" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-willpower', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-willpower" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-willpower', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EAU -->
+        <div class="p-3.5 rounded-lg bg-black/60 border border-blue-900/40 space-y-3">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1.5">
+            <span class="font-bold text-blue-300 font-imperial text-sm">水 Eau</span>
+            <span class="text-base font-bold text-blue-400" id="ring-water">2</span>
+          </div>
+          <div class="space-y-2">
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Force</span><span id="badge-str" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-strength', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-strength" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-strength', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Perception</span><span id="badge-per" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-perception', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-perception" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-perception', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AIR -->
+        <div class="p-3.5 rounded-lg bg-black/60 border border-teal-900/40 space-y-3">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1.5">
+            <span class="font-bold text-teal-300 font-imperial text-sm">風 Air</span>
+            <span class="text-base font-bold text-teal-400" id="ring-air">2</span>
+          </div>
+          <div class="space-y-2">
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Réflexes</span><span id="badge-ref" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-reflexes', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-reflexes" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-reflexes', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Intuition</span><span id="badge-awa" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-awareness', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-awareness" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-awareness', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEU -->
+        <div class="p-3.5 rounded-lg bg-black/60 border border-red-900/40 space-y-3">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1.5">
+            <span class="font-bold text-red-300 font-imperial text-sm">火 Feu</span>
+            <span class="text-base font-bold text-red-400" id="ring-fire">2</span>
+          </div>
+          <div class="space-y-2">
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Agilité</span><span id="badge-agi" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-agility', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-agility" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-agility', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-0.5 text-stone-400"><span>Intelligence</span><span id="badge-int" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustTrait('trait-intelligence', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+                <input type="number" id="trait-intelligence" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+                <button type="button" onclick="adjustTrait('trait-intelligence', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIDE -->
+        <div class="p-3.5 rounded-lg bg-black/60 border border-purple-900/40 space-y-3 flex flex-col justify-between">
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1.5">
+            <span class="font-bold text-purple-300 font-imperial text-sm">空 Vide</span>
+            <span class="text-base font-bold text-purple-400" id="ring-void">2</span>
+          </div>
+          <div>
+            <div class="flex justify-between mb-0.5 text-stone-400"><span>Anneau du Vide</span></div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="adjustTrait('trait-void', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
+              <input type="number" id="trait-void" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
+              <button type="button" onclick="adjustTrait('trait-void', 1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">+</button>
+            </div>
+          </div>
+          <div class="text-[10px] text-stone-500 italic text-center">Points de Vide</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. COMPÉTENCES -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
+        
+        <div class="flex flex-wrap items-center gap-2 text-xs relative">
+          <select id="sel-add-skill" class="hidden"></select>
+
+          <div class="relative" id="skills-dropdown-wrapper">
+            <button 
+              type="button" 
+              id="btn-toggle-skills-dropdown" 
+              onclick="toggleSkillsDropdown()" 
+              class="p-2 rounded bg-[#0d0b0b] border border-[#3a3028] hover:border-amber-500/50 text-[#f3e5ab] text-xs font-medium flex items-center gap-2 min-w-[240px] justify-between cursor-pointer shadow"
+            >
+              <span id="skills-selected-count">Choisir des compétences...</span>
+              <span class="text-[9px] text-stone-500 transition-transform" id="skills-dropdown-arrow">▼</span>
+            </button>
+
+            <div 
+              id="skills-dropdown-panel" 
+              class="hidden absolute right-0 top-full mt-1.5 w-80 max-h-72 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
+            >
+              <input 
+                type="text" 
+                id="filter-skills-input" 
+                placeholder="🔍 Filtrer les compétences..." 
+                oninput="filterSkillsList()" 
+                class="w-full p-1.5 rounded text-xs bg-black/60 border border-stone-800 text-amber-200"
+              >
+              <div id="skills-checkboxes-container" class="space-y-1 overflow-y-auto max-h-52 pr-1"></div>
+              <div class="flex justify-between items-center pt-1.5 border-t border-stone-800 text-[10px] text-stone-400">
+                <span id="skills-checked-summary">0 sélectionnée(s)</span>
+                <button type="button" onclick="clearAllSkillCheckboxes()" class="hover:text-amber-300 underline">Tout décocher</button>
+              </div>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            onclick="addSelectedSkills()" 
+            title="Ajouter les compétences cochées"
+            class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base transition shadow flex items-center justify-center shrink-0 cursor-pointer"
+          >+</button>
+        </div>
+      </div>
+      
+      <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
+    </section>
+
+    <!-- 4. AVANTAGES & DÉSAVANTAGES -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 4A. AVANTAGES -->
+      <div class="card-clean rounded-xl p-5 space-y-4">
+        <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
+          <h3 class="font-bold text-emerald-400 font-imperial text-sm flex items-center gap-1.5">
+            <span>🌟</span> 4A. Avantages (Traits Héroïques)
+          </h3>
+          <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
+        </div>
+        
+        <div class="flex gap-2 text-xs items-center">
+          <select id="sel-catalog-adv" onchange="updateAdvPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+          <button 
+            type="button" 
+            onclick="addAdvFromCatalog()" 
+            title="Ajouter cet avantage" 
+            class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+          >+</button>
+        </div>
+
+        <div id="adv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-amber-500/30 space-y-2 text-xs shadow-lg">
+          <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
+            <div>
+              <h4 id="adv-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+              <span id="adv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-adv inline-block mt-1"></span>
+            </div>
+            <div class="text-right">
+              <span id="adv-preview-cost" class="px-2 py-0.5 rounded bg-amber-600 text-black font-bold font-imperial text-[11px] shadow"></span>
+              <div id="adv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+            </div>
+          </div>
+          <p id="adv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+          <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+            <span class="text-amber-300 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+              📜 Effet Mécanique Officiel (4e Édition) :
+            </span>
+            <p id="adv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+          </div>
+        </div>
+
+        <div id="adv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
+      </div>
+
+      <!-- 4B. DÉSAVANTAGES -->
+      <div class="card-clean rounded-xl p-5 space-y-4">
+        <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
+          <h3 class="font-bold text-red-400 font-imperial text-sm flex items-center gap-1.5">
+            <span>🩸</span> 4B. Désavantages (Failles & Fardeaux)
+          </h3>
+          <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
+        </div>
+        
+        <div class="flex gap-2 text-xs items-center">
+          <select id="sel-catalog-disadv" onchange="updateDisadvPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+          <button 
+            type="button" 
+            onclick="addDisadvFromCatalog()" 
+            title="Ajouter ce désavantage" 
+            class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/40 hover:border-red-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+          >+</button>
+        </div>
+
+        <div id="disadv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-rose-900/40 space-y-2 text-xs shadow-lg">
+          <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
+            <div>
+              <h4 id="disadv-preview-name" class="font-bold font-imperial text-rose-200 text-sm"></h4>
+              <span id="disadv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-dis inline-block mt-1"></span>
+            </div>
+            <div class="text-right">
+              <span id="disadv-preview-cost" class="px-2 py-0.5 rounded bg-rose-900 text-rose-100 font-bold font-imperial text-[11px] shadow"></span>
+              <div id="disadv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+            </div>
+          </div>
+          <p id="disadv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+          <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+            <span class="text-rose-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+              ⚖️ Pénalité Mécanique Officielle (4e Édition) :
+            </span>
+            <p id="disadv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+          </div>
+        </div>
+
+        <div id="disadv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         5. VOIES MARTIALES & MYSTIQUES (AFFICHAGE CONDITIONNEL SELON L'ÉCOLE)
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40" id="section-mystic-martial">
+      <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
+        <div>
+          <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
+            <span>⚔️</span> 5. Voies Martiales & Mystiques (Katas, Sorts & Kihos)
+          </h2>
+          <p class="text-xs text-stone-400">
+            Cette section s'ajuste dynamiquement à votre école (Katas pour les Bushis, Sorts pour les Shugenjas, Kihos pour les Moines).
+          </p>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <div id="archetype-active-badge"></div>
+          <div class="flex rounded-lg bg-black/60 border border-stone-800 p-0.5">
+            <button type="button" onclick="setMysticTab('auto')" class="px-2.5 py-1 rounded text-[10px] font-bold text-amber-300 hover:bg-stone-800 transition cursor-pointer">Auto</button>
+            <button type="button" onclick="setMysticTab('katas')" class="px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Katas</button>
+            <button type="button" onclick="setMysticTab('spells')" class="px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Sorts / Kihos</button>
+          </div>
+          <a href="grimoire.html" target="_blank" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-bold transition text-[11px]">
+            📖 Grimoire ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Note zen pour les Courtisans / Magistrats -->
+      <div id="panel-courtier-note" class="hidden p-6 rounded-xl bg-black/50 border border-stone-800 text-center space-y-2">
+        <div class="text-2xl">📜</div>
+        <div class="font-bold font-imperial text-amber-200 text-sm">Voie de la Cour & de l'Éloquence</div>
+        <p class="text-stone-400 text-xs max-w-lg mx-auto leading-relaxed">
+          Votre école forme des maîtres de l'étiquette, de la diplomatie et des lois de l'Empire. Elle ne prépare ni invocations de sorts ni katas d'armes.
+        </p>
+        <button type="button" onclick="setMysticTab('all')" class="mt-2 text-[11px] text-amber-400 hover:underline cursor-pointer">
+          Afficher quand même les katas ou sorts (personnage atypique / multiclassé) →
+        </button>
+      </div>
+
+      <!-- Barre d'Affinité, Déficience & Emplacements de Sorts (pour Shugenja) -->
+      <div id="shugenja-slots-bar" class="p-3.5 rounded-xl bg-black/60 border border-stone-800 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center text-xs">
+        <div class="lg:col-span-5 grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] text-amber-300 font-bold uppercase tracking-wider mb-1">Affinité (+1 Maîtrise)</label>
+            <select id="shugenja-affinity" onchange="renderCharacterSpells(); updateSpellPreview();" class="w-full p-2 rounded text-xs font-medium">
+              <option value="aucune">Aucune</option>
+              <option value="terre">土 Terre</option>
+              <option value="eau">水 Eau</option>
+              <option value="feu">火 Feu</option>
+              <option value="air">風 Air</option>
+              <option value="vide">空 Vide (Ishiken)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-rose-300 font-bold uppercase tracking-wider mb-1">Déficience (-1 Maîtrise)</label>
+            <select id="shugenja-deficiency" onchange="renderCharacterSpells(); updateSpellPreview();" class="w-full p-2 rounded text-xs font-medium">
+              <option value="aucune">Aucune</option>
+              <option value="terre">土 Terre</option>
+              <option value="eau">水 Eau</option>
+              <option value="feu">火 Feu</option>
+              <option value="air">風 Air</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="text-[10px] text-stone-400 uppercase font-bold tracking-wider mb-1.5 flex justify-between">
+            <span>Emplacements de sorts quotidiens (valeur de chaque Anneau) :</span>
+            <span class="text-amber-300 font-mono">ND Sort = 5 + (5 × Maîtrise)</span>
+          </div>
+          <div class="grid grid-cols-5 gap-2 text-center text-[11px]">
+            <div class="p-1.5 rounded bg-amber-950/30 border border-amber-800/40">
+              <span class="text-amber-300 font-bold block">土 Terre</span>
+              <span id="slots-earth" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-blue-950/30 border border-blue-800/40">
+              <span class="text-blue-300 font-bold block">水 Eau</span>
+              <span id="slots-water" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-teal-950/30 border border-teal-800/40">
+              <span class="text-teal-300 font-bold block">風 Air</span>
+              <span id="slots-air" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-red-950/30 border border-red-800/40">
+              <span class="text-red-300 font-bold block">火 Feu</span>
+              <span id="slots-fire" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-purple-950/30 border border-purple-800/40">
+              <span class="text-purple-300 font-bold block">空 Vide</span>
+              <span id="slots-void" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grille des Panneaux Sorts / Katas -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="mystic-panels-grid">
+        
+        <!-- PANNEAU SORTS & KIHOS -->
+        <div id="panel-spells-container" class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+              <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
+                <span>📜</span> 5A. Parchemins de Sorts & Kihos
+              </h3>
+              <span class="text-xs text-stone-400">
+                <b id="spells-count-badge" class="text-amber-300">0</b> sort(s) • Coût : <b id="spells-xp-total" class="text-amber-300">0</b> XP
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <select id="filter-spell-elem" onchange="populateSpellCatalogSelect()" class="p-2 rounded text-xs">
+                <option value="tous">Tous les Éléments & Kihos</option>
+                <option value="universel">Universels (Rang 0)</option>
+                <option value="terre">土 Terre</option>
+                <option value="eau">水 Eau</option>
+                <option value="feu">火 Feu</option>
+                <option value="air">風 Air</option>
+                <option value="vide">空 Vide (Ishiken)</option>
+                <option value="kiho">🥋 Kihos (Moines)</option>
+              </select>
+              <select id="filter-spell-rank" onchange="populateSpellCatalogSelect()" class="p-2 rounded text-xs">
+                <option value="tous">Tous les Rangs (0 à 8)</option>
+                <option value="0">Universel (Rang 0)</option>
+                <option value="1">Maîtrise 1</option>
+                <option value="2">Maîtrise 2</option>
+                <option value="3">Maîtrise 3</option>
+                <option value="4">Maîtrise 4</option>
+                <option value="5">Maîtrise 5</option>
+                <option value="6">Maîtrise 6+</option>
+              </select>
+            </div>
+
+            <div class="flex gap-2 text-xs items-center">
+              <select id="sel-catalog-spell" onchange="updateSpellPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+              <button 
+                type="button" 
+                onclick="addSpellFromCatalog()" 
+                title="Inscrire ce sort sur la fiche" 
+                class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+              >+</button>
+            </div>
+
+            <div id="spell-preview-card" class="hidden rounded-xl p-3.5 bg-black/90 border border-amber-500/35 space-y-2 text-xs shadow-lg">
+              <div class="flex justify-between items-start gap-2 border-b border-stone-800 pb-2">
+                <div>
+                  <h4 id="spell-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+                  <div class="flex flex-wrap gap-1.5 mt-1">
+                    <span id="spell-preview-elem" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded"></span>
+                    <span id="spell-preview-keywords" class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-300 border border-stone-700"></span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <span id="spell-preview-tn" class="px-2 py-0.5 rounded bg-amber-600 text-black font-bold font-imperial text-[11px] block"></span>
+                  <span id="spell-preview-cast-Access" class="text-[10px] text-emerald-400 font-bold block mt-1"></span>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5 text-[10px] text-stone-400 bg-stone-950 p-2 rounded border border-stone-800/80">
+                <div><b class="text-stone-300 block">Portée :</b> <span id="spell-preview-range"></span></div>
+                <div><b class="text-stone-300 block">Zone :</b> <span id="spell-preview-area"></span></div>
+                <div><b class="text-stone-300 block">Durée :</b> <span id="spell-preview-duration"></span></div>
+              </div>
+              <div id="spell-preview-raises-box" class="text-[10px] text-amber-300/90">
+                <b>Augmentations :</b> <span id="spell-preview-raises"></span>
+              </div>
+              <p id="spell-preview-desc" class="text-stone-300 text-[11px] leading-relaxed max-h-32 overflow-y-auto pr-1"></p>
+            </div>
+
+            <div id="char-spells-container" class="space-y-2 text-xs max-h-72 overflow-y-auto pr-1 pt-1"></div>
+          </div>
+
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-stone-500">
+            <span>Parchemins : 0 XP • Kihos : Maîtrise en XP.</span>
+            <button type="button" onclick="addUniversalSpells()" class="text-amber-400 hover:text-amber-200 underline cursor-pointer">+ 3 Universels</button>
+          </div>
+        </div>
+
+        <!-- PANNEAU KATAS MARTIAUX -->
+        <div id="panel-katas-container" class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+              <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
+                <span>⚔️</span> 5B. Katas & Postures Martiales
+              </h3>
+              <span class="text-xs text-stone-400">
+                <b id="katas-count-badge" class="text-amber-300">0</b> kata(s) • Coût : <b id="katas-xp-total" class="text-emerald-300">0</b> XP
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <select id="filter-kata-elem" onchange="populateKataCatalogSelect()" class="p-2 rounded text-xs">
+                <option value="tous">Tous les Éléments de Kata</option>
+                <option value="Terre">土 Katas de Terre</option>
+                <option value="Eau">水 Katas d'Eau</option>
+                <option value="Air">風 Katas d'Air</option>
+                <option value="Feu">火 Katas de Feu</option>
+                <option value="Vide">空 Katas du Vide</option>
+              </select>
+              <div class="p-2 rounded bg-stone-950 border border-stone-800 text-[10px] text-stone-400 flex items-center justify-center">
+                Méditation : 30 min • 1 Kata actif
+              </div>
+            </div>
+
+            <div class="flex gap-2 text-xs items-center">
+              <select id="sel-catalog-kata" onchange="updateKataPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+              <button 
+                type="button" 
+                onclick="addKataFromCatalog()" 
+                title="Apprendre ce Kata" 
+                class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+              >+</button>
+            </div>
+
+            <div id="kata-preview-card" class="hidden rounded-xl p-3.5 bg-black/90 border border-amber-500/35 space-y-2 text-xs shadow-lg">
+              <div class="flex justify-between items-start gap-2 border-b border-stone-800 pb-2">
+                <div>
+                  <h4 id="kata-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+                  <span id="kata-preview-ring" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded inline-block mt-1"></span>
+                </div>
+                <div class="text-right shrink-0">
+                  <span id="kata-preview-cost" class="px-2 py-0.5 rounded bg-emerald-700 text-white font-bold font-imperial text-[11px] block"></span>
+                  <span id="kata-preview-req-status" class="text-[10px] block mt-1"></span>
+                </div>
+              </div>
+              <div class="text-[10px] text-stone-400">
+                <b class="text-stone-300">Écoles :</b> <span id="kata-preview-schools"></span>
+              </div>
+              <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+                <span class="text-amber-300 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+                  ⚔️ Effet Martial (4e Édition) :
+                </span>
+                <p id="kata-preview-effect" class="text-stone-300 text-[11px] leading-relaxed"></p>
+              </div>
+            </div>
+
+            <div id="char-katas-container" class="space-y-2 text-xs max-h-72 overflow-y-auto pr-1 pt-1"></div>
+          </div>
+
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-stone-500">
+            <span>L'XP des Katas est automatiquement déduite de votre solde.</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. COMBAT & BLESSURES -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">6. Combat & Seuils de Vitalité (4e Édition)</h2>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs text-center">
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">ND d'Armure</div>
+          <div id="stat-armor-tn" class="text-xl font-bold text-emerald-400 font-imperial mt-1">20</div>
+          <div class="text-[10px] text-stone-500">5 + (5 × Réfl.) + Armure</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">Initiative</div>
+          <div id="stat-init" class="text-xl font-bold text-amber-300 font-imperial mt-1">3g2</div>
+          <div class="text-[10px] text-stone-500">(Insight + Réfl.) g Réfl.</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">Honneur</div>
+          <div id="stat-honor" class="text-xl font-bold text-amber-200 font-imperial mt-1">4.5</div>
+          <div class="text-[10px] text-stone-500">Défini par l'école</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">Gloire / Statut</div>
+          <div class="text-xl font-bold text-stone-300 font-imperial mt-1">1.0 / 1.0</div>
+          <div class="text-[10px] text-stone-500">Base Rang 1</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800 col-span-2 md:col-span-1">
+          <div class="text-stone-400">Récupération Nocturne</div>
+          <div id="stat-heal" class="text-xl font-bold text-blue-300 font-imperial mt-1">5 PV</div>
+          <div class="text-[10px] text-stone-500">Const. × 2 + Rang</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-xs font-bold text-stone-300 mb-2 font-imperial">Seuils de Vitalité (Multiplicateurs de Terre) :</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 text-center text-xs">
+          <div class="p-2 rounded bg-emerald-950/40 border border-emerald-800/40"><div class="text-[10px] text-emerald-400">Indemne (+0)</div><div class="font-bold text-stone-200 mt-1" id="w-0">10 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-stone-400">Égratigné (+3)</div><div class="font-bold text-stone-200 mt-1" id="w-1">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-stone-400">Blessé Léger (+5)</div><div class="font-bold text-stone-200 mt-1" id="w-2">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-amber-500">Blessé (+10)</div><div class="font-bold text-stone-200 mt-1" id="w-3">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-amber-600">Gravement (+15)</div><div class="font-bold text-stone-200 mt-1" id="w-4">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-red-500">Estropié (+20)</div><div class="font-bold text-stone-200 mt-1" id="w-5">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-red-600">Inconscient (+40)</div><div class="font-bold text-stone-200 mt-1" id="w-6">4 PV</div></div>
+          <div class="p-2 rounded bg-red-950/60 border border-red-800/60"><div class="text-[10px] text-red-400 font-bold">Mortel</div><div class="font-bold text-red-200 mt-1" id="w-7">4 PV</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. ÉQUIPEMENT & ARMES -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">7. Équipement, Armes & Dotation</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div>
+          <label class="block text-stone-400 mb-1">Armure portée</label>
+          <select id="pc-armor" onchange="updateAll()" class="w-full p-2.5 rounded font-medium"></select>
+        </div>
+        <div>
+          <label class="block text-stone-400 mb-1">Arme Principale</label>
+          <select id="pc-weapon-1" onchange="updateAll()" class="w-full p-2.5 rounded font-medium"></select>
+        </div>
+        <div>
+          <label class="block text-stone-400 mb-1">Arme Secondaire / Distance</label>
+          <select id="pc-weapon-2" onchange="updateAll()" class="w-full p-2.5 rounded font-medium"></select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-stone-400 mb-1 text-xs">Dotation d'École (*Outfit*) & Richesse</label>
+        <textarea id="pc-outfit" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         8. CHRONIQUE BIOGRAPHIQUE (EXEMPLE ÉDITABLE)
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/30">
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">
+          8. Chronique Biographique du Samouraï
+        </h2>
+        <span class="text-xs text-stone-400 italic">Exemple inspirant personnalisable</span>
+      </div>
+      <p class="text-xs text-stone-400 leading-relaxed">
+        Vous pouvez modifier librement ce texte pour raconter la jeunesse de votre personnage, ses exploits passés ou la raison de son départ sur les routes de l'Empire.
+      </p>
+      <textarea id="pc-background-story" rows="5" class="w-full p-3 rounded-lg text-xs leading-relaxed font-serif">Né sous les cieux d'encre des terres ancestrales du Clan du Crabe, Okado a grandi au rythme sourd des tambours de garde de la Grande Muraille Kaiu. Élevé dans le culte de l'endurance et de la vigilance, il a été initié dès son plus jeune âge aux secrets des éclaireurs Hiruma : pister les aberrations de Jigoku à travers les marais calcinés, survivre sans eau potable et ne faire confiance qu'à son instinct et à la pureté du jade.
+
+Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son sang-froid face au danger, il parcourt désormais les provinces de Rokugan escorté par son loup fidèle, Shiro. Malgré la rudesse de son éducation et le mépris courtois des courtisans de la capitale, il porte le regard franc d'un défenseur de l'Empire prêt à verser son sang pour que le Mur tienne un jour de plus.</textarea>
+    </section>
+
+    <!-- ===================================================================
+         9. LES VINGT QUESTIONS DE ROKUGAN (TOUT EN BAS)
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
+      <div class="border-b border-amber-500/20 pb-3 flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
+            <span>📜</span> 9. Le Jeu des Vingt Questions de Rokugan
+          </h2>
+          <p class="text-xs text-stone-400">
+            Guide officiel de création psychologique et sociale du samouraï (Livre de Base 4e Édition, p. 88 à 92).
+          </p>
+        </div>
+        <span class="text-[10px] text-amber-300 font-mono">ENREGISTRÉ AVEC LE PERSONNAGE</span>
+      </div>
+
+      <!-- VOLET 1 : IDENTITÉ & FAMILLE (Questions 1 à 5) -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          I. Identité, Lignée & Apparence (Questions 1 à 5)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">1. À quel clan appartenez-vous et qu'en pensez-vous ?</label>
+            <input type="text" id="q20-1" value="Au fier Clan du Crabe. C'est le seul clan qui comprend le vrai coût de la survie de Rokugan." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">2. À quelle famille appartenez-vous et quel est votre héritage ?</label>
+            <input type="text" id="q20-2" value="Famille Hiruma. Nous avons perdu nos terres ancestrales mais jamais notre détermination." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">3. Quelle école avez-vous suivie et quel rôle y tenez-vous ?</label>
+            <input type="text" id="q20-3" value="École d'éclaireur Hiruma. Je suis les yeux et les oreilles de mes frères d'armes." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">4. Comment vous décririez-vous physiquement ?</label>
+            <input type="text" id="q20-4" value="Carrure athlétique taillée par la marche, regard félin jaune perçant, cheveux gris coupés court." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">5. Quels sont vos plus grands traits de personnalité (forces & faiblesses) ?</label>
+            <input type="text" id="q20-5" value="Inflexible et loyal au-delà de la mort, mais peu enclin à la patience et aux flatteries de cour." class="w-full p-2 rounded text-xs">
+          </div>
+        </div>
+      </div>
+
+      <!-- VOLET 2 : CŒUR & BUSHIDO (Questions 6 à 10) -->
+      <div class="space-y-3 pt-2">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          II. Passion, Devoir & Bushido (Questions 6 à 10)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">6. Qu'est-ce qui vous passionne ou vous fait vibrer ?</label>
+            <input type="text" id="q20-6" value="Le silence sauvage des grands espaces et le dressage de mon loup Shiro." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">7. Quelle est votre vision personnelle du Bushido ?</label>
+            <input type="text" id="q20-7" value="Le Courage (Yū) et le Devoir (Chūgo) avant l'apparence. Sauver des vies vaut mieux que parader." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">8. Quelle est votre relation aux Fortunes et aux Kami ?</label>
+            <input type="text" id="q20-8" value="Je respecte les esprits de la Terre et prie Bishamon, mais j'agis par mes propres mains." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">9. Comment s'est déroulé votre Gempukku ?</label>
+            <input type="text" id="q20-9" value="Une patrouille de trois nuits au-delà de la rivière des Doigts de Jade avec mon sensei." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">10. Qui est la personne que vous respectez le plus ?</label>
+            <input type="text" id="q20-10" value="Mon vieux sensei Hiruma et le champion de clan Hida Kisada." class="w-full p-2 rounded text-xs">
+          </div>
+        </div>
+      </div>
+
+      <!-- VOLET 3 : HISTOIRE, LIENS & SECRETS (Questions 11 à 15) -->
+      <div class="space-y-3 pt-2">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          III. Liens Sociaux & Secrets (Questions 11 à 15)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">11. Avez-vous des amis précieux ou des rivaux acharnés ?</label>
+            <input type="text" id="q20-11" value="Compagnon fidèle de Samui Hida et d'Akira Tsuruchi ; rivalité froide avec la Grue." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">12. Êtes-vous fiancé(e), marié(e) ou avez-vous des obligations ?</label>
+            <input type="text" id="q20-12" value="Mariage arrangé avec Kamako Kaiu pour consolider l'alliance des familles." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">13. Quel est votre plus lourd secret ou fardeau ?</label>
+            <input type="text" id="q20-13" value="Avoir vu la silhouette corrompue de mon père parmi les monstres de l'Outremonde." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">14. Que pensez-vous sincèrement des autres clans ?</label>
+            <input type="text" id="q20-14" value="La plupart gaspillent leur énergie en courbettes tandis que nous saignons pour eux." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">15. Quelle est votre plus grande peur ou doute intérieur ?</label>
+            <input type="text" id="q20-15" value="Succomber à la Souillure et trahir mes frères sans même m'en rendre compte." class="w-full p-2 rounded text-xs">
+          </div>
+        </div>
+      </div>
+
+      <!-- VOLET 4 : AMBITIONS & TRÉPAS (Questions 16 à 20) -->
+      <div class="space-y-3 pt-2">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          IV. Ambitions & Destin (Questions 16 à 20)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">16. Quelle est votre plus haute ambition dans l'Empire ?</label>
+            <input type="text" id="q20-16" value="Reconquérir Shiro Hiruma et réhabiliter la mémoire de ma lignée." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">17. Quel est votre rapport avec les heimin et les petites gens ?</label>
+            <input type="text" id="q20-17" value="Pragmatique : ce sont eux qui forgent nos armes et cultivent notre riz. Je les protège." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">18. Quel est votre bien ou équipement le plus cher ?</label>
+            <input type="text" id="q20-18" value="Mon doigt de jade gravé et l'arc composite hérité de mon aïeul." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">19. De quelle manière honorable envisagez-vous votre mort ?</label>
+            <input type="text" id="q20-19" value="Debout sur le Mur, l'arme brisée au milieu d'une pile de gobelins pour protéger ma patrouille." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">20. Comment vos ancêtres et votre seigneur vous jugeront-ils ?</label>
+            <input type="text" id="q20-20" value="Comme un guerrier silencieux qui n'a jamais reculé d'un pas devant l'ennemi." class="w-full p-2 rounded text-xs">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       PLATEAU DE DÉS ROLL & KEEP
+       ===================================================================== -->
+  <div id="dice-roller-drawer" class="fixed bottom-4 right-4 z-50 no-print">
+    <button type="button" id="dice-fab" onclick="toggleDiceTray()" class="px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-extrabold font-imperial text-xs shadow-2xl border border-amber-300/60 flex items-center gap-2 cursor-pointer transition transform hover:scale-105">
+      <span class="text-base">🎲</span>
+      <span>Plateau Roll & Keep (XkY)</span>
+    </button>
+
+    <div id="dice-tray-panel" class="hidden w-80 sm:w-96 rounded-2xl bg-[#120d0d]/98 border-2 border-amber-500/60 shadow-2xl p-4 space-y-3 text-xs backdrop-blur-md mt-2">
+      <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
+        <span class="font-imperial font-bold text-amber-300 text-sm flex items-center gap-1.5">
+          <span>🎲</span> Lanceur Roll & Keep (4e Éd.)
+        </span>
+        <button type="button" onclick="toggleDiceTray(false)" class="text-stone-400 hover:text-white font-bold px-1.5 cursor-pointer">✕</button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 items-end">
+        <div>
+          <label class="text-[10px] text-stone-400 block mb-0.5">Dés lancés (X)</label>
+          <input type="number" id="manual-roll-x" value="5" min="1" max="20" class="w-full p-1.5 rounded text-center font-bold">
+        </div>
+        <div>
+          <label class="text-[10px] text-stone-400 block mb-0.5">Dés gardés (Y)</label>
+          <input type="number" id="manual-keep-y" value="3" min="1" max="10" class="w-full p-1.5 rounded text-center font-bold">
+        </div>
+        <button type="button" onclick="executeManualRoll()" class="py-1.5 px-3 rounded bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial transition cursor-pointer">
+          Lancer !
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between text-[11px] text-stone-400">
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="dice-explode-cb" checked class="accent-amber-500"> 10 Explosifs
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" id="dice-spec-cb" class="accent-amber-500"> Spécialisation (Relance les 1)
+        </label>
+      </div>
+
+      <div id="dice-result-box" class="p-3 rounded-xl bg-black/80 border border-stone-800 space-y-2 min-h-[76px] flex flex-col justify-center">
+        <div class="text-center text-stone-500 italic text-[11px]">
+          Cliquez sur Toucher, Dégâts, Initiative, un Sort ou lancez manuellement vos dés.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
+    Campagne L5R – MJ David • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions
+  </footer>
+
+  <!-- =====================================================================
+       SCRIPTS DE SYNCHRONISATION
+       ===================================================================== -->
+  <script>
+    window.charSpellsList = window.charSpellsList || [];
+    window.charKatasList = window.charKatasList || [];
+
+    function getElementBadgeClass(elem) {
+      const e = (elem || "").toString().toLowerCase();
+      if (e.includes("terre") || e.includes("earth")) return "badge-elem-terre";
+      if (e.includes("eau") || e.includes("water")) return "badge-elem-eau";
+      if (e.includes("feu") || e.includes("fire")) return "badge-elem-feu";
+      if (e.includes("air")) return "badge-elem-air";
+      if (e.includes("vide") || e.includes("void")) return "badge-elem-vide";
+      if (e.includes("kiho")) return "badge-elem-kiho";
+      return "badge-elem-universel";
+    }
+
+    function getRingValueForElement(elem) {
+      const e = (elem || "").toString().toLowerCase();
+      if (e.includes("terre") || e.includes("earth")) return parseInt(document.getElementById('ring-earth')?.textContent) || 2;
+      if (e.includes("eau") || e.includes("water")) return parseInt(document.getElementById('ring-water')?.textContent) || 2;
+      if (e.includes("air")) return parseInt(document.getElementById('ring-air')?.textContent) || 2;
+      if (e.includes("feu") || e.includes("fire")) return parseInt(document.getElementById('ring-fire')?.textContent) || 2;
+      if (e.includes("vide") || e.includes("void")) return parseInt(document.getElementById('ring-void')?.textContent) || 2;
+      return parseInt(document.getElementById('ring-void')?.textContent) || 2;
+    }
+
+    function getCurrentSchoolRank() {
+      const insightTxt = document.getElementById('insight-display')?.textContent || "Rang 1";
+      const m = insightTxt.match(/Rang\s*(\d+)/i);
+      return m ? parseInt(m[1], 10) : 1;
+    }
+
+    function updateArchetypePanels() {
+      const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
+      const schoolType = (schObj?.school?.type || "").toLowerCase();
+      const schoolName = (schObj?.school?.name || "").toLowerCase();
+
+      const isShugenja = schoolType.includes("shugenja") || schoolName.includes("shugenja") || schoolName.includes("isawa") || schoolName.includes("kuni") || schoolName.includes("tamori") || schoolName.includes("agasha") || schoolName.includes("soshi") || schoolName.includes("yogo") || schoolName.includes("iuchi") || schoolName.includes("asahina");
+      const isBushi = schoolType.includes("bushi") || schoolName.includes("bushi") || schoolName.includes("kakita") || schoolName.includes("mirumoto") || schoolName.includes("hida") || schoolName.includes("matsu") || schoolName.includes("akodo") || schoolName.includes("daidoji") || schoolName.includes("hiruma") || schoolName.includes("tsuruchi");
+      const isMonk = schoolType.includes("moine") || schoolType.includes("monk") || schoolName.includes("togashi") || schoolName.includes("moine") || schoolName.includes("ise zumi");
+
+      const hasMultiAdv = (advantagesList || []).some(a => isMultipleSchoolsAdv(a.name));
+
+      const spellsPanel = document.getElementById('panel-spells-container');
+      const katasPanel = document.getElementById('panel-katas-container');
+      const courtierNote = document.getElementById('panel-courtier-note');
+      const slotsBar = document.getElementById('shugenja-slots-bar');
+      const archetypeBadge = document.getElementById('archetype-active-badge');
+
+      if (!spellsPanel || !katasPanel) return;
+
+      spellsPanel.classList.remove('hidden');
+      katasPanel.classList.remove('hidden');
+      if (courtierNote) courtierNote.classList.add('hidden');
+      if (slotsBar) slotsBar.classList.remove('hidden');
+
+      if (isShugenja) {
+        if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-500/40 font-bold">Voie des Kamis (Shugenja)</span>`;
+        katasPanel.classList.add('hidden');
+      } else if (isBushi) {
+        if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/40 font-bold">Voie Martiale (Bushi)</span>`;
+        spellsPanel.classList.add('hidden');
+        if (slotsBar) slotsBar.classList.add('hidden');
+      } else if (isMonk) {
+        if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-orange-950 text-orange-300 border border-orange-500/40 font-bold">Voie de la Confrérie (Moine)</span>`;
+        katasPanel.classList.add('hidden');
+      } else {
+        if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-700 font-bold">Voie de la Cour & de la Loi</span>`;
+        if (!hasMultiAdv) {
+          spellsPanel.classList.add('hidden');
+          katasPanel.classList.add('hidden');
+          if (slotsBar) slotsBar.classList.add('hidden');
+          if (courtierNote) courtierNote.classList.remove('hidden');
+        }
+      }
+    }
+
+    function setMysticTab(tab) {
+      const spellsPanel = document.getElementById('panel-spells-container');
+      const katasPanel = document.getElementById('panel-katas-container');
+      const courtierNote = document.getElementById('panel-courtier-note');
+      const slotsBar = document.getElementById('shugenja-slots-bar');
+      if (courtierNote) courtierNote.classList.add('hidden');
+
+      if (tab === 'spells') {
+        spellsPanel?.classList.remove('hidden');
+        katasPanel?.classList.add('hidden');
+        slotsBar?.classList.remove('hidden');
+      } else if (tab === 'katas') {
+        spellsPanel?.classList.add('hidden');
+        katasPanel?.classList.remove('hidden');
+        slotsBar?.classList.add('hidden');
+      } else if (tab === 'all') {
+        spellsPanel?.classList.remove('hidden');
+        katasPanel?.classList.remove('hidden');
+        slotsBar?.classList.remove('hidden');
+      } else {
+        updateArchetypePanels();
+      }
+    }
+
+    function populateSpellCatalogSelect() {
+      const sel = document.getElementById('sel-catalog-spell');
+      if (!sel) return;
+      const allSpells = window.SORTS_DATA || [];
+      const elemFilter = document.getElementById('filter-spell-elem')?.value || "tous";
+      const rankFilter = document.getElementById('filter-spell-rank')?.value || "tous";
+
+      const filtered = allSpells.filter(s => {
+        if (s.isMaho || (s.element && s.element.toLowerCase() === "maho")) return false;
+
+        const sElem = (s.isKiho ? "kiho" : (s.element || "universel")).toLowerCase();
+        const matchElem = elemFilter === "tous" || sElem === elemFilter;
+        const sRank = Number(s.mastery) || 0;
+        const matchRank = rankFilter === "tous" || (rankFilter === "6" ? sRank >= 6 : sRank === parseInt(rankFilter, 10));
+        return matchElem && matchRank;
+      });
+
+      sel.innerHTML = `<option value="">-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --</option>`;
+      filtered.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        const tag = s.isKiho ? `Kiho ${s.ring || s.element}` : (s.element || "Univ.");
+        const rk = s.mastery === 0 ? "Univ." : `Rang ${s.mastery}`;
+        opt.textContent = `[${tag} • ${rk}] ${s.name || s.nom}`;
+        sel.appendChild(opt);
+      });
+      updateSpellPreview();
+    }
+
+    function updateSpellPreview() {
+      const sel = document.getElementById('sel-catalog-spell');
+      const card = document.getElementById('spell-preview-card');
+      if (!sel || !card) return;
+      const id = sel.value;
+      if (!id) { card.classList.add('hidden'); return; }
+
+      const allSpells = window.SORTS_DATA || [];
+      const s = allSpells.find(item => item.id === id);
+      if (!s) { card.classList.add('hidden'); return; }
+
+      const mastery = Number(s.mastery) || 0;
+      const tn = mastery === 0 ? 10 : (5 + 5 * mastery);
+      const elemLabel = s.isKiho ? `Kiho (${s.ring || "Terre"})` : (s.element || "Universel");
+      const ringToUse = s.isKiho ? (s.ring || "Terre") : (s.element || "Vide");
+      const ringVal = getRingValueForElement(ringToUse);
+      const schoolRank = getCurrentSchoolRank();
+
+      const affinity = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const deficiency = document.getElementById('shugenja-deficiency')?.value || "aucune";
+      let effRank = schoolRank;
+      if (affinity !== "aucune" && ringToUse.toLowerCase().includes(affinity)) effRank += 1;
+      if (deficiency !== "aucune" && ringToUse.toLowerCase().includes(deficiency)) effRank -= 1;
+
+      const castPool = `${ringVal + Math.max(1, effRank)}g${ringVal}`;
+
+      document.getElementById('spell-preview-name').textContent = s.name || s.nom;
+      const elemBadge = document.getElementById('spell-preview-elem');
+      elemBadge.textContent = `${elemLabel} • Maîtrise ${mastery === 0 ? 'Universel' : mastery}`;
+      elemBadge.className = `text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${getElementBadgeClass(s.isKiho ? 'kiho' : s.element)}`;
+
+      const kwEl = document.getElementById('spell-preview-keywords');
+      kwEl.textContent = Array.isArray(s.keywords) && s.keywords.length ? s.keywords.join(", ") : "Standard";
+
+      document.getElementById('spell-preview-tn').textContent = `ND ${tn}`;
+      document.getElementById('spell-preview-cast-Access').textContent = `Jet : ${castPool}`;
+      document.getElementById('spell-preview-range').textContent = s.range || "Personnelle";
+      document.getElementById('spell-preview-area').textContent = s.area || "Spéciale";
+      document.getElementById('spell-preview-duration').textContent = s.duration || "Instantanée";
+      document.getElementById('spell-preview-raises').textContent = s.raises || "Aucune";
+      document.getElementById('spell-preview-desc').textContent = s.desc || "";
+
+      card.classList.remove('hidden');
+    }
+
+    function addSpellFromCatalog() {
+      const sel = document.getElementById('sel-catalog-spell');
+      if (!sel || !sel.value) return;
+      const allSpells = window.SORTS_DATA || [];
+      const found = allSpells.find(s => s.id === sel.value);
+      if (!found) return;
+      if (window.charSpellsList.some(s => s.id === found.id)) {
+        alert("Ce sort ou kiho figure déjà dans votre grimoire personnel.");
+        return;
+      }
+      const defaultXp = found.isKiho ? (Number(found.mastery) || 3) : 0;
+      window.charSpellsList.push({
+        id: found.id,
+        name: found.name || found.nom,
+        element: found.isKiho ? "kiho" : (found.element || "Universel"),
+        ring: found.ring || found.element || "Vide",
+        mastery: Number(found.mastery) || 0,
+        range: found.range || "Personnelle",
+        area: found.area || "Spéciale",
+        duration: found.duration || "Instantanée",
+        raises: found.raises || "Aucune",
+        desc: found.desc || "",
+        isKiho: !!found.isKiho,
+        xpCost: defaultXp
+      });
+      renderCharacterSpells();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function addUniversalSpells() {
+      const allSpells = window.SORTS_DATA || [];
+      const univs = allSpells.filter(s => (s.element || "").toLowerCase() === "universel" || s.mastery === 0);
+      univs.forEach(u => {
+        if (!window.charSpellsList.some(existing => existing.id === u.id)) {
+          window.charSpellsList.push({
+            id: u.id,
+            name: u.name || u.nom,
+            element: "Universel",
+            ring: "Vide",
+            mastery: 0,
+            range: u.range || "Personnelle",
+            area: u.area || "Spéciale",
+            duration: u.duration || "Instantanée",
+            raises: u.raises || "Aucune",
+            desc: u.desc || "",
+            isKiho: false,
+            xpCost: 0
+          });
+        }
+      });
+      renderCharacterSpells();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function removeCharacterSpell(id) {
+      window.charSpellsList = window.charSpellsList.filter(s => s.id !== id);
+      renderCharacterSpells();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function updateSpellXpCost(id, newVal) {
+      const item = window.charSpellsList.find(s => s.id === id);
+      if (item) {
+        item.xpCost = Math.max(0, parseInt(newVal, 10) || 0);
+        renderCharacterSpells();
+        if (typeof updateAll === "function") updateAll();
+      }
+    }
+
+    function rollSpellCasting(spellId) {
+      const s = window.charSpellsList.find(item => item.id === spellId);
+      if (!s) return;
+      const ringToUse = s.isKiho ? (s.ring || "Terre") : (s.element || "Vide");
+      const ringVal = getRingValueForElement(ringToUse);
+      const schoolRank = getCurrentSchoolRank();
+
+      const affinity = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const deficiency = document.getElementById('shugenja-deficiency')?.value || "aucune";
+      let effRank = schoolRank;
+      if (affinity !== "aucune" && ringToUse.toLowerCase().includes(affinity)) effRank += 1;
+      if (deficiency !== "aucune" && ringToUse.toLowerCase().includes(deficiency)) effRank -= 1;
+
+      const rollX = ringVal + Math.max(1, effRank);
+      const keepY = ringVal;
+      const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
+      const shortName = (s.name || "Sort").split('(')[0].trim();
+
+      rollL5RDicePool(rollX, keepY, 0, `${shortName} [ND ${tn}]`, true, false);
+    }
+
+    function renderCharacterSpells() {
+      const container = document.getElementById('char-spells-container');
+      const countBadge = document.getElementById('spells-count-badge');
+      const xpBadge = document.getElementById('spells-xp-total');
+      if (!container) return;
+
+      const totalXp = window.charSpellsList.reduce((acc, s) => acc + (Number(s.xpCost) || 0), 0);
+      if (countBadge) countBadge.textContent = window.charSpellsList.length;
+      if (xpBadge) xpBadge.textContent = totalXp;
+
+      if (window.charSpellsList.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 rounded-lg bg-black/40 border border-stone-800/80 text-stone-500 italic text-center text-[11px]">
+            Aucun sort ou kiho inscrit sur la fiche.
+          </div>
+        `;
+        return;
+      }
+
+      const schoolRank = getCurrentSchoolRank();
+      const affinity = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const deficiency = document.getElementById('shugenja-deficiency')?.value || "aucune";
+
+      container.innerHTML = window.charSpellsList.map(s => {
+        const ringToUse = s.isKiho ? (s.ring || "Terre") : (s.element || "Vide");
+        const ringVal = getRingValueForElement(ringToUse);
+        let effRank = schoolRank;
+        if (affinity !== "aucune" && ringToUse.toLowerCase().includes(affinity)) effRank += 1;
+        if (deficiency !== "aucune" && ringToUse.toLowerCase().includes(deficiency)) effRank -= 1;
+
+        const rollX = ringVal + Math.max(1, effRank);
+        const keepY = ringVal;
+        const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
+        const badgeCls = getElementBadgeClass(s.isKiho ? 'kiho' : s.element);
+        const elemLabel = s.isKiho ? `Kiho ${s.ring || ''}` : s.element;
+
+        return `
+          <div class="p-2.5 rounded-lg bg-stone-950/90 border border-stone-800 hover:border-amber-500/40 transition space-y-1.5">
+            <div class="flex justify-between items-start gap-2">
+              <div class="truncate">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">
+                    ${elemLabel} • M${s.mastery}
+                  </span>
+                  <a href="grimoire.html#sort-${s.id}" target="_blank" class="font-bold font-imperial text-amber-200 hover:text-amber-300 text-xs truncate">
+                    ${s.name} ↗
+                  </a>
+                </div>
+                <div class="text-[10px] text-stone-400 mt-0.5">
+                  Portée : ${s.range} • <b class="text-amber-300">ND ${tn}</b>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="rollSpellCasting('${s.id}')" class="px-2 py-1 rounded bg-amber-950/80 hover:bg-amber-600 text-amber-300 hover:text-black border border-amber-500/40 font-bold font-imperial text-[10px] transition cursor-pointer" title="Lancer le jet d'incantation">
+                  🎲 ${rollX}g${keepY}
+                </button>
+                <div class="flex items-center bg-black/60 border border-stone-800 rounded px-1 py-0.5" title="Coût en XP">
+                  <input type="number" value="${s.xpCost || 0}" min="0" max="20" onchange="updateSpellXpCost('${s.id}', this.value)" class="w-7 text-center text-[10px] font-bold bg-transparent">
+                  <span class="text-[8px] text-stone-500">XP</span>
+                </div>
+                <button type="button" onclick="removeCharacterSpell('${s.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
+              </div>
+            </div>
+            <p class="text-[10px] text-stone-400 line-clamp-2 leading-snug">${s.desc}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // CATALOGUE & GESTION DES KATAS (CORRECTION FILTRE CASSE)
+    // =========================================================================
+    function populateKataCatalogSelect() {
+      const sel = document.getElementById('sel-catalog-kata');
+      if (!sel) return;
+      const rawFilter = (document.getElementById('filter-kata-elem')?.value || "tous").toLowerCase();
+      const allKatas = window.KATAS_DATA || [];
+
+      // Filtre insensible à la casse
+      const filtered = allKatas.filter(k => {
+        if (rawFilter === "tous") return true;
+        return (k.element || "").toLowerCase() === rawFilter;
+      });
+
+      sel.innerHTML = `<option value="">-- Choisir un Kata martial (${filtered.length} disponible(s)) --</option>`;
+      filtered.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k.id;
+        opt.textContent = `[${k.element} ${k.mastery} • ${k.cost} XP] ${k.name}`;
+        sel.appendChild(opt);
+      });
+      updateKataPreview();
+    }
+
+    function updateKataPreview() {
+      const sel = document.getElementById('sel-catalog-kata');
+      const card = document.getElementById('kata-preview-card');
+      if (!sel || !card) return;
+      const id = sel.value;
+      if (!id) { card.classList.add('hidden'); return; }
+
+      const k = (window.KATAS_DATA || []).find(item => item.id === id);
+      if (!k) { card.classList.add('hidden'); return; }
+
+      const charRingVal = getRingValueForElement(k.element);
+      const meetsReq = charRingVal >= k.mastery;
+
+      document.getElementById('kata-preview-name').textContent = k.name;
+      const ringBadge = document.getElementById('kata-preview-ring');
+      ringBadge.textContent = `Anneau requis : ${k.element} ${k.mastery}`;
+      ringBadge.className = `text-[9px] font-bold font-imperial px-2 py-0.5 rounded inline-block mt-1 ${getElementBadgeClass(k.element)}`;
+
+      document.getElementById('kata-preview-cost').textContent = `Coût : ${k.cost} XP`;
+      const reqStatus = document.getElementById('kata-preview-req-status');
+      reqStatus.textContent = meetsReq ? `✓ Anneau ${k.element} (${charRingVal}) suffisant` : `⚠️ Anneau ${k.element} actuel : ${charRingVal}/${k.mastery}`;
+      reqStatus.className = `text-[10px] font-bold block mt-1 ${meetsReq ? 'text-emerald-400' : 'text-amber-400'}`;
+
+      document.getElementById('kata-preview-schools').textContent = k.schools;
+      document.getElementById('kata-preview-effect').textContent = k.desc;
+
+      card.classList.remove('hidden');
+    }
+
+    function addKataFromCatalog() {
+      const sel = document.getElementById('sel-catalog-kata');
+      if (!sel || !sel.value) return;
+      const found = (window.KATAS_DATA || []).find(k => k.id === sel.value);
+      if (!found) return;
+      if (window.charKatasList.some(k => k.id === found.id)) {
+        alert("Ce Kata figure déjà sur votre fiche.");
+        return;
+      }
+      window.charKatasList.push({
+        id: found.id,
+        name: found.name,
+        element: found.element,
+        mastery: found.mastery,
+        xpCost: found.cost,
+        schools: found.schools,
+        desc: found.desc,
+        active: window.charKatasList.length === 0
+      });
+      renderCharacterKatas();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function toggleActiveKata(id) {
+      window.charKatasList.forEach(k => {
+        k.active = (k.id === id) ? !k.active : false;
+      });
+      renderCharacterKatas();
+    }
+
+    function removeCharacterKata(id) {
+      window.charKatasList = window.charKatasList.filter(k => k.id !== id);
+      renderCharacterKatas();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function renderCharacterKatas() {
+      const container = document.getElementById('char-katas-container');
+      const countBadge = document.getElementById('katas-count-badge');
+      const xpBadge = document.getElementById('katas-xp-total');
+      if (!container) return;
+
+      const totalXp = window.charKatasList.reduce((acc, k) => acc + (Number(k.xpCost) || 0), 0);
+      if (countBadge) countBadge.textContent = window.charKatasList.length;
+      if (xpBadge) xpBadge.textContent = totalXp;
+
+      if (window.charKatasList.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 rounded-lg bg-black/40 border border-stone-800/80 text-stone-500 italic text-center text-[11px]">
+            Aucun Kata appris.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = window.charKatasList.map(k => {
+        const badgeCls = getElementBadgeClass(k.element);
+        return `
+          <div class="p-2.5 rounded-lg ${k.active ? 'bg-amber-950/30 border-amber-500/60' : 'bg-stone-950/90 border-stone-800'} border transition space-y-1.5">
+            <div class="flex justify-between items-start gap-2">
+              <div class="truncate">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">
+                    ${k.element} ${k.mastery}
+                  </span>
+                  <span class="font-bold font-imperial text-amber-200 text-xs truncate">${k.name}</span>
+                </div>
+                <div class="text-[10px] text-stone-400 mt-0.5">${k.schools} • <b>${k.xpCost} XP</b></div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="toggleActiveKata('${k.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial transition cursor-pointer ${k.active ? 'bg-emerald-600 text-black' : 'bg-stone-900 text-stone-400 border border-stone-700'}">
+                  ${k.active ? '✓ Actif' : 'Activer'}
+                </button>
+                <button type="button" onclick="removeCharacterKata('${k.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
+              </div>
+            </div>
+            <p class="text-[10px] text-stone-300 leading-snug">${k.desc}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function autoPopulateMysticAndMartial(forceAdd = false) {
+      const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
+      const schoolType = (schObj?.school?.type || "").toLowerCase();
+      const schoolName = (schObj?.school?.name || "").toLowerCase();
+      const isShugenja = schoolType.includes("shugenja") || schoolName.includes("shugenja");
+
+      if (isShugenja) {
+        addUniversalSpells();
+      } else if (forceAdd && window.charKatasList.length === 0) {
+        const firstKata = (window.KATAS_DATA || [])[0];
+        if (firstKata) {
+          window.charKatasList.push({
+            id: firstKata.id, name: firstKata.name, element: firstKata.element,
+            mastery: firstKata.mastery, xpCost: firstKata.cost, schools: firstKata.schools, desc: firstKata.desc, active: true
+          });
+        }
+      }
+      renderCharacterSpells();
+      renderCharacterKatas();
+      updateArchetypePanels();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function populatePrintableMysticBox() {
+      const box = document.getElementById('p-spells-katas-box');
+      const sum = document.getElementById('p-mystic-summary');
+      if (!box) return;
+
+      const aff = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const def = document.getElementById('shugenja-deficiency')?.value || "aucune";
+      if (sum) {
+        sum.textContent = `${window.charSpellsList.length} Sort(s)/Kiho(s) • ${window.charKatasList.length} Kata(s)${aff !== 'aucune' ? ` • Affinité: ${aff.toUpperCase()}` : ''}${def !== 'aucune' ? ` / Déficience: ${def.toUpperCase()}` : ''}`;
+      }
+
+      if (window.charSpellsList.length === 0 && window.charKatasList.length === 0) {
+        box.innerHTML = `<div class="text-stone-500 italic">Aucun sort, kiho ou kata inscrit sur cette fiche.</div>`;
+        return;
+      }
+
+      const spellsHtml = window.charSpellsList.map(s => {
+        const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
+        return `<div><b>[${s.isKiho ? 'Kiho ' + s.ring : s.element} M${s.mastery} • ND ${tn}] ${s.name}</b> (${s.range}, ${s.duration}) : ${s.desc}</div>`;
+      }).join('');
+
+      const katasHtml = window.charKatasList.map(k => {
+        return `<div><b>[Kata ${k.element} ${k.mastery} • ${k.xpCost} XP${k.active ? ' • ACTIF' : ''}] ${k.name}</b> : ${k.desc}</div>`;
+      }).join('');
+
+      box.innerHTML = spellsHtml + katasHtml;
+    }
+
+    function exportJSONWithMystic() {
+      if (typeof exportJSON === "function") exportJSON();
+    }
+
+    function importJSONWithMystic(event) {
+      if (typeof importJSON === "function") importJSON(event);
+    }
+
+    function resetCharacterWithMystic() {
+      window.charSpellsList = [];
+      window.charKatasList = [];
+      if (document.getElementById('shugenja-affinity')) document.getElementById('shugenja-affinity').value = "aucune";
+      if (document.getElementById('shugenja-deficiency')) document.getElementById('shugenja-deficiency').value = "aucune";
+      if (typeof resetCharacter === "function") resetCharacter();
+      renderCharacterSpells();
+      renderCharacterKatas();
+      updateArchetypePanels();
+    }
+
+    function populatePrintable20Questions() {
+      const qBox = document.getElementById('p-20questions-box');
+      if (!qBox) return;
+      let html = "";
+      for (let i = 1; i <= 20; i++) {
+        const val = document.getElementById(`q20-${i}`)?.value || "";
+        if (val) html += `<div><b>Q${i}.</b> ${val}</div>`;
+      }
+      qBox.innerHTML = html;
+    }
+
+    function prepareAndPrintPDF() {
+      populatePrintableMysticBox();
+      populatePrintable20Questions();
+      if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
+        document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+      }
+      exportOfficialPDF();
+    }
+
+    window.addEventListener('beforeprint', () => {
+      populatePrintableMysticBox();
+      populatePrintable20Questions();
+      if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
+        document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+      }
+    });
+
+    // Initialisation
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        populateSpellCatalogSelect();
+        populateKataCatalogSelect();
+        renderCharacterSpells();
+        renderCharacterKatas();
+        initSkillsMultiSelect();
+        renderDojoRoster();
+        updateArchetypePanels();
+
+        const params = new URLSearchParams(window.location.search);
+        const charParam = params.get("char");
+        const loadIdParam = params.get("load");
+        const clanParam = params.get("clan");
+
+        if (charParam) {
+          try {
+            const decoded = JSON.parse(decodeURIComponent(atob(charParam)));
+            applyFullCharacterState(decoded);
+            return;
+          } catch (e) {}
+        }
+
+        if (loadIdParam) {
+          loadFromDojo(loadIdParam);
+          return;
+        }
+
+        if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
+          document.getElementById("sel-clan").value = clanParam;
+          onClanChange();
+        }
+      }, 200);
+
+      document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(updateArchetypePanels, 150));
+      document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(updateArchetypePanels, 150));
+    });
+  </script>
+</body>
+</html>
