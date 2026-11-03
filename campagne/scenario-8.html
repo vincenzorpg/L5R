@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 8 : Le crépuscule de l’honneur — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1a0f08 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .inner-thought {
+      color: #d1b87a;
+      font-style: italic;
+    }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .scene-figure:hover img {
+      transform: scale(1.015);
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE & LIENS RAPIDES -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-7.html" class="text-amber-400 hover:text-amber-200">◄ Acte 7 : Meurtre à Ryoko Owari</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 08 / 10</span>
+        <a href="scenario-9.html" class="text-amber-400 hover:text-amber-200">Acte 9 : Ce qui ne meurt pas ►</a>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE 8 • TERRES DU CRABE & KYUDEN HIDA
+        </span>
+        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Okado, Shinta, Samui et Gutmahïdo)</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 8 : Le crépuscule de l’honneur
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
+      </p>
+    </header>
+
+    <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
+            🔊
+          </div>
+          <div>
+            <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
+            <div class="text-[10px] text-stone-400" id="audio-progress">Paragraphe 0 / 0</div>
+          </div>
+        </div>
+
+        <!-- COMMANDES DE LECTURE -->
+        <div class="flex items-center gap-1.5">
+          <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
+          <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+            <span id="play-icon">▶</span> <span id="play-text">Écouter le Récit</span>
+          </button>
+          <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
+          <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
+        </div>
+
+        <!-- SÉLECTION DE LA VOIX ET VITESSE -->
+        <div class="flex items-center gap-2 text-xs text-stone-400">
+          <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] sm:max-w-[180px] truncate"></select>
+          <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+            <option value="0.9">0.9x (Chronique posée)</option>
+            <option value="1.0" selected>1.0x (Standard)</option>
+            <option value="1.1">1.1x (Rythmé)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- BARRE DE PROGRESSION VISUELLE -->
+      <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden">
+        <div id="narrator-progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+    </section>
+
+    <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+
+      <p>
+        Avec la participation d’<b>Okado</b>, <b>Shinta</b>, <b>Samui</b> et de <b>Gutmahïdo</b>
+      </p>
+
+      <p>
+        Déplacement depuis fin scénario 7 : Ryoko Owari à Shiro Kaiu à Ashinagabachi à Shiro Matsu à Ashinagabachi
+      </p>
+
+      <p>
+        J’étais déjà dans à Ashinagabachi depuis quelques jours et j’en profitai pour me reposer lorsqu’on m’apporta une lettre de mes compagnons. Ils étaient tous arrivés en ville et nous devions nous rencontrer le lendemain dans une taverne pour fêter nos retrouvailles.
+      </p>
+
+      <p>
+        Sur le chemin de l’auberge, les gens s’écartent et je vois dans leurs yeux un regard ahuri mêlé d’une touche d’inquiétude. Je ne passe pas inaperçu lorsque je me balade avec Shishi dans les rues de la ville. J’arrive à l’auberge et je vois Shiro qui attend sagement dehors. Le loup me reconnait et me lèche la main. Shishi n’émet même pas un grognement, il vient se poser près de <b>Shiro</b> et pose sa tête entre ses pattes. Je rentre dans l’auberge et rejoins les autres qui sont déjà tous attablés.
+      </p>
+
+      <p>
+        Pendant le repas, un messager apporte un message pour <b>Okado</b>. La missive est de sa femme (<b>kamako</b>) qui lui annonce qu’elle va accoucher d’ici peu de temps. Sitôt le repas terminé, tout le monde se sépare pour préparer son paquetage. En chemin j’achète un petit cheval en bois pour l’enfant d’Okado. Nous nous retrouvons sur la grande place devant l’auberge et nous partons pour Kyuden Hida .
+      </p>
+
+      <p>
+        Le voyage se déroule sans encombre et nous forçons un peu l’allure pour arriver dans les temps. Arrivé sur les terres du clan du crabe, le ciel se couvre de nuage noir et nous entendons au loin l’orage gronder. L’obscurité dans laquelle nous sommes plongés nous oblige à ralentir le pas et alors que la pluie commence à tomber, nous arrivons à une auberge. Tout le monde est d’accord pour y passer la nuit. Nous y serons au chaud et plus en forme pour continuer notre route. A peine avons nous poser un pied dans l’auberge que des trombes d’eau commencent à tomber dehors. Nous arrivés juste à temps !
+      </p>
+
+      <p>
+        L’auberge semble vide. Le tenancier nous remet les clés de nos chambres et nous nous installons à table pour le diner. Soudain, une voix venant du coin de la pièce se fait entendre : « Konbanwa. Que les Sept Fortunes sourient à ceux qui bravent les intempéries pour passer une telle nuit loin de chez eux. Votre voyage a été dur, mes amis, mais le pire reste encore à venir. J’aimerais que vous fassiez quelque chose pour moi. Partez au sud-ouest, vers les terres du Clan du Crabe, et, à Kyuden Hida, demandez audience au daimyo du clan afin qu’il vous autorise à vous rendre à Shiro Kuni, le château de la garde. Les remparts des forteresses du Clan du Crabe ont beau être larges et solides, ils ne suffiront pas à contenir la plus sombre des menaces. Quand vous aurez passé quelque temps à observer l’Outremonde depuis la Grande Muraille, vous comprendrez ce que j’attends de vous. N’acceptez pas ma requête à la légère car les choses ne sont pas simples dans les terres de mes frères du Clan du Crabe. Vous allez courir de grands risques et vous exposer au danger, à la trahison et à la guerre. Si vous suivez cette voie, le Clan du Dragon vous couvrira d’honneur et de gloire et vous accordera toutes les récompenses que vous jugerez bon de demander. » Enfin, en faisant apparaître le sceau métallique sur la table, il conclut : « Ceci vous servira lors des rencontres avec les représentants des familles Hida et Mirumoto. Je vous envie presque de faire ce voyage dont seul le manque de temps me prive. »
+      </p>
+
+      <!-- ILLUSTRATION 1 : L'APPARITION DE TOGASHI YOKUNI -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/Crepuscule-1.jpg" alt="Apparition de Togashi Yokuni dans l'auberge" />
+        <figcaption class="scene-caption">
+          L'Auberge de la Tempête — L'apparition silencieuse du kami Togashi Yokuni confiant la mission et le nemuranai aux samouraïs.
+        </figcaption>
+      </figure>
+
+      <p>
+        Les phrases résonnent dans ma tête comme si elle était transmise directement dans mon esprit. Le samurai marche vers la porte de l’auberge, aussi silencieux qu’un scorpion malgré l’armure lourde qu’il porte, il ouvre la porte et disparait dans la tempête.
+      </p>
+
+      <p>
+        Tout le monde sursaute lorsque l’aubergiste dépose les bols de soupe sur la table et on se regarde déconcerter. Je demande aux autres si tous vu comme moi « <b>Togashi Yokuni</b> » samurai fondateur du clan du dragon (kami, fils de dame soleil et du seigneur lune) et le seul samurai ayant aussi des compétences de Shugenja ? Mais ils regardent d’un air sceptique … <b>Gutmahïdo</b> nous explique en observant attentivement le sceau donné par le samurai que c’est un nemuranai du clan du dragon. J’en suis convaincu et les autres commencent à me croire également. De manière unanime nous partirons à l’aube pour atteindre notre destination le plus rapidement possible.
+      </p>
+
+      <p>
+        Nous ne sommes pas rassurés par l’auberge qui pourrait très bien être un vrai coupe-gorge. Chacun montra la garde un fois dans la nuit (Gutmahïdo –> Akira –&gt; <b>Samui</b> –&gt; Okado). Alors que j’ouvre les yeux naturellement aux premières lueurs de l’aube je découvre Okado entrain de dormir au lieu de monter la garde …. Je réveil tout le monde et nous partons séance tenante. Dehors le soleil est revenu et la route ne semble pas trop boueuse malgré la pluie diluvienne de cette nuit.
+      </p>
+
+      <p>
+        Après plusieurs journées de voyage, nous arrivons à <b>Kyuden Hida,</b> la demeure ancestrale de la famille Hida en ne rêvant plus qu’à l’hospitalité simple du Clan du Crabe. Alors que l’imposante forteresse se fait de plus en plus proche, je découvre <b>la rivière de l’ultime résistance</b> et ses eaux grondantes qui se jettent dans <b>la baie</b> des poissons morts, <b>Jinshin Sakana Wan</b>.
+      </p>
+
+      <!-- ILLUSTRATION 2 : L'ARRIVÉE À KYUDEN HIDA -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/Crepuscule-2.jpg" alt="Arrivée à Kyuden Hida et la rivière de l'ultime résistance" />
+        <figcaption class="scene-caption">
+          Kyuden Hida — L'arrivée de la compagnie devant la forteresse ancestrale du Crabe et les eaux tumultueuses de la rivière de l'ultime résistance.
+        </figcaption>
+      </figure>
+
+      <p>
+        A l’entrée, un capitaine de la garde nous interdit l’accès...
+      </p>
+
+      <!-- ILLUSTRATION 3 : LA CONFRONTATION AUX PORTES -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/Crepuscule-3.jpg" alt="Confrontation aux portes de Kyuden Hida" />
+        <figcaption class="scene-caption">
+          Les Portes de la Forteresse — Le face-à-face tendu avec les gardes du Crabe pour forcer le passage vers la Grande Muraille.
+        </figcaption>
+      </figure>
+
+    </article>
+
+    <!-- LIENS DE BAS DE PAGE -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/la-campagne/scenario-8-le-crepuscule-de-lhonneur/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur le blog WordPress ↗
+      </a>
+      <a href="scenario-9.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 9 : Ce qui ne meurt pas →
+      </a>
+    </section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 8 : Le crépuscule de l’honneur (par Akira Tsuruchi)
+  </footer>
+
+  <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
+  <style>
+    .reading-active {
+      background: rgba(212, 175, 55, 0.08) !important;
+      border-left: 3px solid #d4af37 !important;
+      padding-left: 0.75rem !important;
+      transition: all 0.25s ease !important;
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05);
+    }
+  </style>
+
+  <script>
+    const synth = window.speechSynthesis;
+    let paragraphs = [];
+    let currentIndex = 0;
+    let isPlaying = false;
+    let selectedVoice = null;
+
+    function initNarrator() {
+      const container = document.getElementById('story-content');
+      if (!container) return;
+      
+      paragraphs = Array.from(container.querySelectorAll('p')).filter(p => p.textContent.trim().length > 0);
+      updateProgressUI();
+      loadVoices();
+    }
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) return;
+      let voices = synth.getVoices();
+
+      const frVoices = voices.filter(v => v.lang.startsWith('fr') || v.lang.includes('FR'));
+      const select = document.getElementById('voice-select');
+      if (!select) return;
+      select.innerHTML = "";
+
+      frVoices.sort((a, b) => {
+        const isHD_A = a.name.includes("Natural") || a.name.includes("Neural") || a.name.includes("Google") || a.name.includes("Premium");
+        const isHD_B = b.name.includes("Natural") || b.name.includes("Neural") || b.name.includes("Google") || b.name.includes("Premium");
+        return (isHD_B ? 1 : 0) - (isHD_A ? 1 : 0);
+      });
+
+      frVoices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        const isHD = v.name.includes("Natural") || v.name.includes("Neural") || v.name.includes("Google");
+        opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
+        select.appendChild(opt);
+      });
+
+      if (frVoices.length > 0) {
+        selectedVoice = frVoices[0];
+        select.value = selectedVoice.name;
+      }
+    }
+
+    function onVoiceChange() {
+      const voiceName = document.getElementById('voice-select').value;
+      selectedVoice = synth.getVoices().find(v => v.name === voiceName);
+      if (isPlaying) {
+        readCurrentParagraph();
+      }
+    }
+
+    function updateProgressUI() {
+      const statusEl = document.getElementById('audio-status');
+      const progText = document.getElementById('audio-progress');
+      const bar = document.getElementById('narrator-progress-bar');
+      const visualizer = document.getElementById('narrator-visualizer');
+
+      if (progText) {
+        progText.textContent = `Paragraphe ${paragraphs.length ? currentIndex + 1 : 0} / ${paragraphs.length}`;
+      }
+      if (bar && paragraphs.length) {
+        const pct = ((currentIndex + 1) / paragraphs.length) * 100;
+        bar.style.width = `${pct}%`;
+      }
+      if (visualizer) {
+        if (isPlaying) {
+          visualizer.classList.add('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+          visualizer.classList.remove('bg-amber-950/90', 'text-amber-300');
+        } else {
+          visualizer.classList.remove('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+          visualizer.classList.add('bg-amber-950/90', 'text-amber-300');
+        }
+      }
+    }
+
+    function highlightParagraph(idx) {
+      paragraphs.forEach((p, i) => {
+        if (i === idx) {
+          p.classList.add('reading-active');
+          p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          p.classList.remove('reading-active');
+        }
+      });
+    }
+
+    function readCurrentParagraph() {
+      synth.cancel();
+      if (currentIndex >= paragraphs.length) {
+        stopAudio();
+        return;
+      }
+
+      const p = paragraphs[currentIndex];
+      highlightParagraph(currentIndex);
+      updateProgressUI();
+
+      const u = new SpeechSynthesisUtterance(p.textContent.trim());
+      u.lang = 'fr-FR';
+      u.rate = parseFloat(document.getElementById('audio-rate')?.value || 1.0);
+      u.pitch = 0.95;
+
+      if (selectedVoice) u.voice = selectedVoice;
+
+      u.onend = () => {
+        if (isPlaying) {
+          currentIndex++;
+          if (currentIndex < paragraphs.length) {
+            setTimeout(readCurrentParagraph, 300);
+          } else {
+            stopAudio();
+          }
+        }
+      };
+
+      u.onerror = () => {
+        isPlaying = false;
+        updatePlayButton();
+      };
+
+      synth.speak(u);
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        synth.pause();
+        isPlaying = false;
+        document.getElementById('audio-status').textContent = "Lecture en pause";
+      } else {
+        if (synth.paused) {
+          synth.resume();
+        } else {
+          readCurrentParagraph();
+        }
+        isPlaying = true;
+        document.getElementById('audio-status').textContent = "Lecture vocale en cours...";
+      }
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function updatePlayButton() {
+      const icon = document.getElementById('play-icon');
+      const text = document.getElementById('play-text');
+      if (isPlaying) {
+        if (icon) icon.textContent = "⏸";
+        if (text) text.textContent = "Pause";
+      } else {
+        if (icon) icon.textContent = "▶";
+        if (text) text.textContent = "Reprendre";
+      }
+    }
+
+    function stopAudio() {
+      synth.cancel();
+      isPlaying = false;
+      currentIndex = 0;
+      paragraphs.forEach(p => p.classList.remove('reading-active'));
+      document.getElementById('audio-status').textContent = "Voix Narrative Prête";
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function nextParagraph() {
+      if (currentIndex < paragraphs.length - 1) {
+        currentIndex++;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    function prevParagraph() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      window.addEventListener('DOMContentLoaded', initNarrator);
+    }
+  </script>
+
+</body>
+</html>
