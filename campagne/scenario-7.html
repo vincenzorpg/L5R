@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 7 : Meurtre à Ryoko Owari — Campagne L5R | MJ David</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 10%, #1a0f08 0%, #0a0808 85%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .gold-text { color: var(--gold); }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .inner-thought {
+      color: #d1b87a;
+      font-style: italic;
+    }
+    .scene-figure {
+      margin: 1.75rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+    .scene-figure img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .scene-figure:hover img {
+      transform: scale(1.015);
+    }
+    .scene-caption {
+      padding: 0.6rem 1rem;
+      background: rgba(10, 8, 8, 0.95);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      font-size: 0.7rem;
+      color: #d4af37;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE & LIENS RAPIDES -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-6.html" class="text-amber-400 hover:text-amber-200">◄ Acte 6 : Le mariage d'Okado Hiruma</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 07 / 10</span>
+        <a href="scenario-8.html" class="text-amber-400 hover:text-amber-200">Acte 8 : Le crépuscule de l'honneur ►</a>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
+          ACTE 7 • RYOKO OWARI & VOIE DES DOMPTEURS MATSU
+        </span>
+        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Samui et Shinta)</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 7 : Meurtre à Ryoko Owari
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
+      </p>
+    </header>
+
+    <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
+            🔊
+          </div>
+          <div>
+            <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
+            <div class="text-[10px] text-stone-400" id="audio-progress">Paragraphe 0 / 0</div>
+          </div>
+        </div>
+
+        <!-- COMMANDES DE LECTURE -->
+        <div class="flex items-center gap-1.5">
+          <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
+          <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+            <span id="play-icon">▶</span> <span id="play-text">Écouter le Récit</span>
+          </button>
+          <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
+          <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
+        </div>
+
+        <!-- SÉLECTION DE LA VOIX ET VITESSE -->
+        <div class="flex items-center gap-2 text-xs text-stone-400">
+          <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] sm:max-w-[180px] truncate"></select>
+          <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+            <option value="0.9">0.9x (Chronique posée)</option>
+            <option value="1.0" selected>1.0x (Standard)</option>
+            <option value="1.1">1.1x (Rythmé)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- BARRE DE PROGRESSION VISUELLE -->
+      <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden">
+        <div id="narrator-progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+    </section>
+
+    <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+
+      <p>
+        Avec la participation de <b>Samui</b> et de <b>Shinta</b>.
+      </p>
+
+      <p>
+        Après notre dernière aventure, mon esprit était troublé. Mes derniers combats m’ont montré que l’empire d’émeraude et particulièrement l’Outre-monde regorgeaient d’ennemis puissants. Jusque-là, nous avions triomphé car notre groupe disposait de techniques complémentaires qui nous permettait de ne laisser que peu de failles à nos ennemis lors des batailles. Ensemble nous étions puissants mais je sais qu’il arriverait un jour où je serai seul face à une horde de gobelins ou une armée de fanatiques. Et lorsque ce jour arriverai, je me devais d’être prêt. De n’avoir aucune peur, aucun doute pour pouvoir terrasser mes ennemies. Je commençai donc à réfléchir à un moyen d’être plus polyvalent dans ma façon de combattre et de renforcer mes faiblesses.
+      </p>
+
+      <p>
+        Sur le retour vers Kyuden Ashinagabachi, je fis la rencontre d’un étrange personnage.
+      </p>
+
+      <p>
+        Alors que la journée s’achève et que les lueurs du soleil déclinent sur l’horizon. Je perçois la lueur d’un feu dans une clairière et, poussé par la curiosité, je décide d’aller voir. Je vois un homme autour d’un feu et deux lions allongés à ses côtés. Au moment où mon pied se posa dans la clairière six pairs d’yeux se braquèrent sur moi. Je déglutis lentement mais décide de continuer paume en avant pour montrer que je ne suis pas armé. Je ne savais pas ce qui m’avait poussé à pénétrer dans cette clairière mais je sentais au fur et à mesure que je pourrais vraiment le regretter. A mi-chemin, je vois l’étranger lever doucement sa main en l’air pour finalement aller gratter le dos du lion le plus proche qui se remit alors immédiatement sa tête entre ses pattes comme s’il ne s’était rien passé. Je sentis une goutte de sueur froide descendre le long de ma colonne vertébrale et continue à avancer vers le centre de la clairière. « Tu ne m’as pas l’air d’un bandit. Avance sans crainte, ils sont avec moi. Viens te réchauffer près du feu » me lança-t-il l’air de rien.
+      </p>
+
+      <!-- ILLUSTRATION 1 : LA RENCONTRE DANS LA CLAIRIÈRE AVEC LEJEUNE ET SES LIONS -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/RyokoOwari-1.jpg" alt="Rencontre dans la clairière avec Lejeune et les lions" />
+        <figcaption class="scene-caption">
+          La Clairière Crépusculaire — La rencontre inattendue d'Akira avec Lejeune, le dompteur Matsu, et ses redoutables compagnons félins.
+        </figcaption>
+      </figure>
+
+      <p>
+        Je pense que c’est cette première phrase qui rompit la glace entre <b>Lejeune</b> et moi. Ce soir-là, nous fîmes connaissance et partageâmes le saké. Lejeune était un dompteur Matsu du clan du lion. Il était en mission pour son daimyo. Il devait retrouver la trace d’un groupe de brigand qui avait volé des sacs de riz dans la réserve d’un village voisin. J’étais vraiment intrigué par ses lions et lui posait des questions à leur sujet. De son côté, il me questionna sur mon arc et mes flèches. Malgré les différends entre nos deux clans, le courant passait plutôt bien entre nous. Nous étions deux jeunes samouraïs avec une soif insatiable de connaissances. Alors que nous nous apprêtions à nous coucher, je lui proposai de l’accompagner dans sa mission. Il accepta mais me demanda de rester en retrait, me faisant comprendre que personne ne devait interférer.
+      </p>
+
+      <p>
+        Après plusieurs jours à traquer la piste des brigands, Lejeune fut gravement touché à la jambe et je dus lui venir en aide. Avec l’aide de ses lions, nous achevâmes les derniers ennemis et je me dépêchai de soigner au mieux sa jambe. Sa mission achevée j’accompagnai Lejeune jusque chez lui pour qu’il puisse se rétablir tranquillement. Mais sur le chemin du retour une idée me vint et je lui en fis part. Nous avions des points communs : la chasse, notre respect pour les animaux et notre code de l’honneur. Et j’avais trouvé l’expérience de vivre en compagnie de ces lion formidable.
+      </p>
+
+      <p>
+        Un soir, je lui demande s’il pense qu’il serait possible que j’aie l’immense honneur d’être formé aux arts de l’élevage de lions ? Il me répond qu’il ne voyait pas qui oserait enseigner leur art à un étranger d’un autre clan. “Cela me paraît improbable sauf si Akodo Toturi l’autorise”… C’est à ce moment que je sus ce que j’allais faire. Nous devions faire un détour par le château d’Akodo Toturi.
+      </p>
+
+      <p>
+        Dès notre arrivé, je demandai une audience auprès du daimyo. On nous loge dans des appartements pour les invités non loin du palais en attendant d’être reçu. Par chance, Il accepta de nous recevoir le lendemain.
+      </p>
+
+      <!-- ILLUSTRATION 2 : L'AUDIENCE DEVANT AKODO TOTURI -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/RyokoOwari-2.jpg" alt="Audience d'Akira devant Akodo Toturi" />
+        <figcaption class="scene-caption">
+          La Demande Solennelle — Akira s'inclinant respectueusement devant le grand daïmyo Akodo Toturi pour solliciter la voie des dompteurs.
+        </figcaption>
+      </figure>
+
+      <p>
+        En arrivant devant lui, je m’incline front contre le sol et soumets ma requête. « Avoir combattu à vos côtés, sera un honneur gravé à tout jamais dans ma mémoire. Les quelques jours en compagnie de votre disciple m’ont montré combien les Matsu sont puissant grâce à la symbiose avec leur compagnon. Nous, les Tsuruchi sommes toujours sur les routes, c’est notre credo et avoir un lion comme compagnon serait une fierté ». Je poursuis en racontant mon dernier combat dans l’Outre-monde et notre sauvetage lors de la cérémonie de l’élection du meilleur forgeron Kaiu à Shiro Kaotsuki no Higashi. Pour essayer de donner du poids à ma réflexion et à ma requête. En conclusion de mon argumentaire j’ajoute : “Les flèches Tsuruchi sont rapides mais je sens au fond de mon âme que j’aurai besoin de la force du lion si je veux réussir à accomplir ma destinée et c’est pour cela que je me présente devant vous aujourd’hui. »
+      </p>
+
+      <p>
+        Akodo Toturi me fait comprendre qu’il n’est pas totalement contre l’idée mais a encore besoin de réfléchir. En attendant, je dois aller voir mon daimyo pour m’assurer qu’il est également d’accord. Je pars donc sur le champ à Kyuden Ashinagabachi pour soumettre ma requête à mon daimyo. Il m’écoute et lorsque j’ai fini me pose une question : « Qu’en penserait ton ancêtre Gusai ? »
+      </p>
+
+      <p>
+        Je lui réponds qu’il a donné sa vie car il pensait que ce qu’il faisait était juste et que je pense qu’il aurait compris mon choix de vouloir parfaire mon art pour mieux servir l’Empire. Mon daimyo me donne sa bénédiction, à condition que le Clan du Lion accepte formellement.
+      </p>
+
+      <p>
+        C’est ainsi que je fus conduit à Ryoko Owari, la tristement célèbre « Cité des Mensonges », repaire de tous les trafics et des intrigues du Clan du Scorpion, pour y retrouver Samui et Shinta et mener une délicate enquête sur un meurtre mystérieux au cœur des quartiers interlopes de la ville.
+      </p>
+
+      <!-- ILLUSTRATION 3 : RYOKO OWARI, LA CITÉ DES MENSONGES -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/RyokoOwari-3.jpg" alt="Ambiance de Ryoko Owari, la cité des mensonges" />
+        <figcaption class="scene-caption">
+          Ryoko Owari, la Cité des Mensonges — L'atmosphère interlope, les lanternes rouges et les ruelles sombres où s'imbriquent les secrets du Scorpion.
+        </figcaption>
+      </figure>
+
+    </article>
+
+    <!-- LIENS DE BAS DE PAGE -->
+    <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
+      <a href="https://campagnel5rdavid2015.wordpress.com/la-campagne/scenario-7-meurtre-a-ryoko-owari/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur le blog WordPress ↗
+      </a>
+      <a href="scenario-8.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 8 : Le crépuscule de l'honneur →
+      </a>
+    </section>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    Chronique L5R 4e Édition — MJ David • Acte 7 : Meurtre à Ryoko Owari (par Akira Tsuruchi)
+  </footer>
+
+  <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
+  <style>
+    .reading-active {
+      background: rgba(212, 175, 55, 0.08) !important;
+      border-left: 3px solid #d4af37 !important;
+      padding-left: 0.75rem !important;
+      transition: all 0.25s ease !important;
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05);
+    }
+  </style>
+
+  <script>
+    const synth = window.speechSynthesis;
+    let paragraphs = [];
+    let currentIndex = 0;
+    let isPlaying = false;
+    let selectedVoice = null;
+
+    function initNarrator() {
+      const container = document.getElementById('story-content');
+      if (!container) return;
+      
+      paragraphs = Array.from(container.querySelectorAll('p')).filter(p => p.textContent.trim().length > 0);
+      updateProgressUI();
+      loadVoices();
+    }
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) return;
+      let voices = synth.getVoices();
+
+      const frVoices = voices.filter(v => v.lang.startsWith('fr') || v.lang.includes('FR'));
+      const select = document.getElementById('voice-select');
+      if (!select) return;
+      select.innerHTML = "";
+
+      frVoices.sort((a, b) => {
+        const isHD_A = a.name.includes("Natural") || a.name.includes("Neural") || a.name.includes("Google") || a.name.includes("Premium");
+        const isHD_B = b.name.includes("Natural") || b.name.includes("Neural") || b.name.includes("Google") || b.name.includes("Premium");
+        return (isHD_B ? 1 : 0) - (isHD_A ? 1 : 0);
+      });
+
+      frVoices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        const isHD = v.name.includes("Natural") || v.name.includes("Neural") || v.name.includes("Google");
+        opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
+        select.appendChild(opt);
+      });
+
+      if (frVoices.length > 0) {
+        selectedVoice = frVoices[0];
+        select.value = selectedVoice.name;
+      }
+    }
+
+    function onVoiceChange() {
+      const voiceName = document.getElementById('voice-select').value;
+      selectedVoice = synth.getVoices().find(v => v.name === voiceName);
+      if (isPlaying) {
+        readCurrentParagraph();
+      }
+    }
+
+    function updateProgressUI() {
+      const statusEl = document.getElementById('audio-status');
+      const progText = document.getElementById('audio-progress');
+      const bar = document.getElementById('narrator-progress-bar');
+      const visualizer = document.getElementById('narrator-visualizer');
+
+      if (progText) {
+        progText.textContent = `Paragraphe ${paragraphs.length ? currentIndex + 1 : 0} / ${paragraphs.length}`;
+      }
+      if (bar && paragraphs.length) {
+        const pct = ((currentIndex + 1) / paragraphs.length) * 100;
+        bar.style.width = `${pct}%`;
+      }
+      if (visualizer) {
+        if (isPlaying) {
+          visualizer.classList.add('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+          visualizer.classList.remove('bg-amber-950/90', 'text-amber-300');
+        } else {
+          visualizer.classList.remove('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
+          visualizer.classList.add('bg-amber-950/90', 'text-amber-300');
+        }
+      }
+    }
+
+    function highlightParagraph(idx) {
+      paragraphs.forEach((p, i) => {
+        if (i === idx) {
+          p.classList.add('reading-active');
+          p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          p.classList.remove('reading-active');
+        }
+      });
+    }
+
+    function readCurrentParagraph() {
+      synth.cancel();
+      if (currentIndex >= paragraphs.length) {
+        stopAudio();
+        return;
+      }
+
+      const p = paragraphs[currentIndex];
+      highlightParagraph(currentIndex);
+      updateProgressUI();
+
+      const u = new SpeechSynthesisUtterance(p.textContent.trim());
+      u.lang = 'fr-FR';
+      u.rate = parseFloat(document.getElementById('audio-rate')?.value || 1.0);
+      u.pitch = 0.95;
+
+      if (selectedVoice) u.voice = selectedVoice;
+
+      u.onend = () => {
+        if (isPlaying) {
+          currentIndex++;
+          if (currentIndex < paragraphs.length) {
+            setTimeout(readCurrentParagraph, 300);
+          } else {
+            stopAudio();
+          }
+        }
+      };
+
+      u.onerror = () => {
+        isPlaying = false;
+        updatePlayButton();
+      };
+
+      synth.speak(u);
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        synth.pause();
+        isPlaying = false;
+        document.getElementById('audio-status').textContent = "Lecture en pause";
+      } else {
+        if (synth.paused) {
+          synth.resume();
+        } else {
+          readCurrentParagraph();
+        }
+        isPlaying = true;
+        document.getElementById('audio-status').textContent = "Lecture vocale en cours...";
+      }
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function updatePlayButton() {
+      const icon = document.getElementById('play-icon');
+      const text = document.getElementById('play-text');
+      if (isPlaying) {
+        if (icon) icon.textContent = "⏸";
+        if (text) text.textContent = "Pause";
+      } else {
+        if (icon) icon.textContent = "▶";
+        if (text) text.textContent = "Reprendre";
+      }
+    }
+
+    function stopAudio() {
+      synth.cancel();
+      isPlaying = false;
+      currentIndex = 0;
+      paragraphs.forEach(p => p.classList.remove('reading-active'));
+      document.getElementById('audio-status').textContent = "Voix Narrative Prête";
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function nextParagraph() {
+      if (currentIndex < paragraphs.length - 1) {
+        currentIndex++;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    function prevParagraph() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      window.addEventListener('DOMContentLoaded', initNarrator);
+    }
+  </script>
+
+</body>
+</html>
