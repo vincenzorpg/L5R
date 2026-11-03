@@ -1,10 +1,10 @@
 /**
  * js/character-generator.js — Moteur logique complet L5R 4e Édition
  * Règles officielles du Livre de Base (Book of Earth & Book of Fire) :
- * - Gestion complète de l'avantage « Études dans une Autre École (Different School) »
- * - Gestion de l'avantage « Écoles Multiples (Multiple Schools) »
- * - Correction du calcul XP de l'Anneau du Vide avec bonus d'école (+1 Vide gratuit)
- * - Prise en charge des choix de compétences (Bugei, Noble/Haute, Marchande, Libre)
+ * - Gestion de l'avantage « Études dans une Autre École » (inclut toutes les écoles)
+ * - Gestion de l'avantage « Écoles Multiples »
+ * - Gestion conditionnelle des archétypes : Bushi (Katas), Shugenja (Sorts), Moine (Kihos)
+ * - Intégration du coût XP des Katas et Kihos dans le budget
  * - Paliers de Maîtrise des compétences (Rangs 3, 5 et 7)
  * - Plafond de 15 XP maximum pour les Désavantages
  * - Exportation vers fiche officielle A4 vectorielle & Carnet de Rokugan
@@ -933,25 +933,21 @@ function addAdvFromCatalog() {
   }
 
   const newAdv = { name: item.name, cost: item.cost };
-  const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
   const allSchools = getAllSchoolsCatalog();
 
   if (isDifferentSchoolAdv(item.name)) {
     const currentSchObj = getSelectedSchoolObject();
-    const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
-    const defaultExt = (currentSchObj && currentSchObj.isExternalClan)
-      ? allSchools.find(s => s.id === currentSchObj.school.id)
-      : (externalSchools[0] || allSchools[0]);
+    const defaultSchool = (currentSchObj && currentSchObj.school) ? currentSchObj.school : allSchools[0];
 
-    if (defaultExt) {
-      newAdv.differentSchoolId = defaultExt.id;
-      newAdv.differentSchoolName = `${defaultExt.name} (${defaultExt.clanName})`;
+    if (defaultSchool) {
+      newAdv.differentSchoolId = defaultSchool.id;
+      newAdv.differentSchoolName = `${defaultSchool.name} (${defaultSchool.clanName || ''})`;
       advantagesList.push(newAdv);
 
       const schSel = document.getElementById('sel-school');
       if (schSel) {
-        updateSchoolOptions(defaultExt.id);
-        schSel.value = defaultExt.id;
+        updateSchoolOptions(defaultSchool.id);
+        schSel.value = defaultSchool.id;
       }
       resetSheetToNewSelection(true);
       return;
@@ -1021,33 +1017,41 @@ function renderAdvDisadv() {
   const advContainer = document.getElementById('adv-container');
   if (advContainer) {
     const allSchools = getAllSchoolsCatalog();
-    const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
 
     advContainer.innerHTML = advantagesList.map((a, i) => {
       const isDiff = isDifferentSchoolAdv(a.name);
       const isMulti = isMultipleSchoolsAdv(a.name);
       let extraHtml = "";
 
+      // CORRECTION : Affiche TOUTES les écoles (y compris celles de son clan/famille)
       if (isDiff) {
-        const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
-        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (externalSchools[0]?.id || "");
+        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (allSchools[0]?.id || "");
 
-        const diffOptions = externalSchools.map(sch => `
-          <option value="${sch.id}" ${sch.id === currentDiffId ? 'selected' : ''}>
-            ${sch.clanName} — ${sch.name} (${sch.bonus})
-          </option>
-        `).join('');
+        const clans = getClans();
+        let diffOptions = "";
+        for (const cKey in clans) {
+          const c = clans[cKey];
+          diffOptions += `<optgroup label="🏯 Clan ${c.name}">`;
+          (c.schools || []).forEach(sch => {
+            diffOptions += `
+              <option value="${sch.id}" ${sch.id === currentDiffId ? 'selected' : ''}>
+                ${sch.name} (${sch.bonus})
+              </option>
+            `;
+          });
+          diffOptions += `</optgroup>`;
+        }
 
         extraHtml = `
           <div class="mt-2 p-2.5 rounded bg-stone-950 border border-emerald-500/40 space-y-1.5">
             <span class="text-[10px] text-emerald-300 font-bold uppercase tracking-wider block font-imperial">
-              🎓 École d'un autre Clan suivie (remplace l'école initiale) :
+              🎓 École suivie (remplace l'école de famille initiale) :
             </span>
             <select onchange="updateDifferentSchoolSelection(${i}, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 font-bold">
               ${diffOptions}
             </select>
             <div class="text-[10px] text-stone-400 italic">
-              Applique le bonus de trait, l'honneur, les 7 compétences et les techniques de cette école tout en gardant votre Clan et votre Famille.
+              Vous pouvez choisir n'importe quelle école de votre Clan ou d'un Clan étranger. Vos compétences, votre honneur et vos techniques s'adapteront à cette école.
             </div>
           </div>
         `;
@@ -1452,6 +1456,11 @@ function updateAll() {
   document.getElementById('adv-cost-total').textContent = advCost;
   xpSpent += advCost;
 
+  // PRISE EN COMPTE DU COÛT EN XP DES KATAS ET KIHOS (NOUVEAU)
+  const spellsXpCost = (window.charSpellsList || []).reduce((acc, s) => acc + (Number(s.xpCost) || 0), 0);
+  const katasXpCost = (window.charKatasList || []).reduce((acc, k) => acc + (Number(k.xpCost) || 0), 0);
+  xpSpent += (spellsXpCost + katasXpCost);
+
   let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
   let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
   document.getElementById('disadv-gain-total').textContent = disadvGain;
@@ -1681,6 +1690,11 @@ function updateAll() {
 
   updateDisadvButtonState();
 
+  // Mise à jour de l'affichage adaptatif (Bushi / Shugenja / Moine)
+  if (typeof updateArchetypePanels === "function") {
+    updateArchetypePanels();
+  }
+
   // Synchronisation avec export-carnet.js
   if (typeof window !== "undefined") {
     window.currentSkills = currentSkills;
@@ -1720,6 +1734,8 @@ function updateAll() {
       advantages: advantagesList.map(a => a.name).join(", "),
       advantagesList: advantagesList,
       disadvantages: disadvantagesList.map(d => d.name).join(", "),
+      spells: window.charSpellsList || [],
+      katas: window.charKatasList || [],
       notes: document.getElementById('pc-outfit')?.value || ""
     };
     window.character = window.currentChar;
@@ -1792,6 +1808,8 @@ function exportJSON() {
     skills: currentSkills,
     advantages: advantagesList,
     disadvantages: disadvantagesList,
+    spells: window.charSpellsList || [],
+    katas: window.charKatasList || [],
     armor: document.getElementById('pc-armor').value,
     weapon1: document.getElementById('pc-weapon-1').value,
     weapon2: document.getElementById('pc-weapon-2').value,
@@ -1849,6 +1867,15 @@ function importJSON(event) {
       advantagesList = d.advantages || [];
       disadvantagesList = d.disadvantages || [];
 
+      if (Array.isArray(d.spells) && typeof window.charSpellsList !== "undefined") {
+        window.charSpellsList = d.spells;
+        if (typeof renderCharacterSpells === "function") renderCharacterSpells();
+      }
+      if (Array.isArray(d.katas) && typeof window.charKatasList !== "undefined") {
+        window.charKatasList = d.katas;
+        if (typeof renderCharacterKatas === "function") renderCharacterKatas();
+      }
+
       if (d.armor) document.getElementById('pc-armor').value = d.armor;
       if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
       if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
@@ -1871,6 +1898,8 @@ function resetCharacter() {
     if (baseInput) baseInput.value = 40;
     advantagesList = [];
     disadvantagesList = [];
+    if (typeof window.charSpellsList !== "undefined") window.charSpellsList = [];
+    if (typeof window.charKatasList !== "undefined") window.charKatasList = [];
     onClanChange();
   }
 }
@@ -2042,6 +2071,11 @@ function exportOfficialPDF() {
 
   document.getElementById('p-tech-desc').innerHTML = printTechHtml;
   document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
+
+  // Sorts, Kihos et Katas imprimés
+  if (typeof populatePrintableMysticBox === "function") {
+    populatePrintableMysticBox();
+  }
 
   window.print();
 }
