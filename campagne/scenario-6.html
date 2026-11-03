@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scénario 6 : Le mariage d'Okado Hiruma — Campagne L5R | MJ David</title>
+  <title>Scénario 6 : Le mariage d’Okado Hiruma — Campagne L5R | MJ David</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- FAVICON DES 5 ANNEAUX -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
   <!-- SCRIPT DU MENU GLOBAL -->
   <script src="../js/navbar.js" defer></script>
@@ -21,7 +21,6 @@
       --dark-lacquer: #0a0808;
       --gold: #d4af37;
       --gold-light: #f3e5ab;
-      --red-clan: #991b1b; /* Rouge Crabe */
     }
     body {
       background-color: var(--dark-lacquer);
@@ -68,22 +67,6 @@
       font-family: 'Cinzel', serif;
       letter-spacing: 0.05em;
     }
-    /* Styles des Onglets */
-    .tab-btn {
-      background: rgba(0,0,0,0.5);
-      color: #a8a29e;
-      border-bottom: 2px solid transparent;
-      transition: all 0.3s;
-    }
-    .tab-btn:hover { color: #f5e096; background: rgba(212,175,55,0.05); }
-    .tab-btn.active {
-      color: #d4af37;
-      border-bottom: 2px solid #d4af37;
-      background: rgba(212,175,55,0.1);
-      font-weight: bold;
-    }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -101,197 +84,172 @@
       <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
         <a href="scenario-5.html" class="text-amber-400 hover:text-amber-200">◄ Acte 5 : Entre le ciel et l'enfer</a>
         <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 06 / 10</span>
-        <span class="text-stone-600">Acte 7 : Meurtre à Ryoko Owari ►</span>
+        <a href="scenario-7.html" class="text-amber-400 hover:text-amber-200">Acte 7 : Meurtre à Ryoko Owari ►</a>
       </div>
     </div>
 
     <!-- EN-TÊTE DE L'ÉPISODE -->
     <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
-      <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d4af37' fill-opacity='1'%3E%3Cpath fill-rule='evenodd' d='M11 0l5 20H6l5-20zm42 60l5 20H48l5-20zM11 80l5-20h10l-5 20H11zm42 0l5-20h10l-5 20H53zm6-60l5-20h10l-5 20H59zM17 20l5-20h10l-5 20H17zM6 60l5-20h10l-5 20H6zm21-40l5-20h10l-5 20H27zm37 40l5-20h10l-5 20H64zM32 0l5 20H27l5-20zm37 60l5 20H64l5-20zM27 80l5-20h10l-5 20H27zm37 0l5-20h10l-5 20H64zM11 0c16.569 0 30 13.431 30 30s-13.431 30-30 30-30-13.431-30-30S-5.569 0 11 0zm0 10c-11.046 0-20 8.954-20 20s8.954 20 20 20 20-8.954 20-20-8.954-20-20-20z'/%3E%3C/g%3E%3C/svg%3E');"></div>
-      <div class="flex flex-wrap items-center justify-between gap-2 relative z-10">
+      <div class="flex flex-wrap items-center justify-between gap-2">
         <span class="px-2.5 py-0.5 rounded bg-red-950/80 border border-red-800/40 text-[10px] text-red-300 font-bold font-mono">
-          ACTE 6 • FORTERESSE HIRUMA (TERRES DU CRABE)
+          ACTE 6 • TERRES DU CRABE & INUSION DANS L'OUTREMONDE
         </span>
-        <span class="text-xs text-stone-400">Célébrations & Complots • Récits de : Okado, Akira, Samui</span>
+        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Okado, Toma et Samui)</span>
       </div>
-      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient relative z-10" id="story-title">
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
         Scénario 6 : Le mariage d’Okado Hiruma
       </h1>
-      <p class="text-xs md:text-sm text-amber-100/90 italic font-imperial relative z-10" id="story-motto">
-        « Le devoir est plus lourd qu'une montagne, la mort est plus légère qu'une plume. » — Code du Bushido
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
       </p>
     </header>
 
-    <!-- SÉLECTEUR DE CHRONIQUEUR (ONGLETS) -->
-    <section class="card-clean rounded-xl p-2 border-amber-500/40 sticky top-16 z-40 shadow-lg backdrop-blur-sm bg-black/90">
-      <nav class="flex items-center gap-2 text-sm font-imperial" role="tablist">
-        <button class="tab-btn flex-1 py-3 px-5 rounded-md active" onclick="openTab(event, 'tab-okado')" role="tab" aria-selected="true">
-          Chronique d'Okado Hiruma
-        </button>
-        <button class="tab-btn flex-1 py-3 px-5 rounded-md" onclick="openTab(event, 'tab-akira')" role="tab" aria-selected="false">
-          Journal d'Akira Tsuruchi
-        </button>
-        <button class="tab-btn flex-1 py-3 px-5 rounded-md" onclick="openTab(event, 'tab-samui')" role="tab" aria-selected="false">
-          Mémoires de Hida Samui
-        </button>
-      </nav>
-    </section>
-
     <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
-    <section class="card-clean rounded-xl p-4 border-amber-500/40 flex flex-wrap items-center justify-between gap-4 shadow-xl bg-black/95">
-      <div class="flex items-center gap-3">
-        <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
-          🔊
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
+            🔊
+          </div>
+          <div>
+            <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
+            <div class="text-[10px] text-stone-400" id="audio-progress">Paragraphe 0 / 0</div>
+          </div>
         </div>
-        <div>
-          <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
-          <div class="text-[10px] text-stone-400" id="audio-progress">Sélectionnez un chroniqueur pour démarrer</div>
+
+        <!-- COMMANDES DE LECTURE -->
+        <div class="flex items-center gap-1.5">
+          <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
+          <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+            <span id="play-icon">▶</span> <span id="play-text">Écouter le Récit</span>
+          </button>
+          <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
+          <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
+        </div>
+
+        <!-- SÉLECTION DE LA VOIX ET VITESSE -->
+        <div class="flex items-center gap-2 text-xs text-stone-400">
+          <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] sm:max-w-[180px] truncate"></select>
+          <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+            <option value="0.9">0.9x (Chronique posée)</option>
+            <option value="1.0" selected>1.0x (Standard)</option>
+            <option value="1.1">1.1x (Rythmé)</option>
+          </select>
         </div>
       </div>
 
-      <!-- COMMANDES DE LECTURE -->
-      <div class="flex items-center gap-2">
-        <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
-        <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
-          <span id="play-icon">▶</span> <span id="play-text">Écouter</span>
-        </button>
-        <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
-        <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
-      </div>
-
-      <!-- RÉGLAGE DE LA VOIX ET VITESSE -->
-      <div class="flex items-center gap-2 text-xs text-stone-400">
-        <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] truncate"></select>
-        <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
-          <option value="0.9">0.9x (Chronique posée)</option>
-          <option value="1.0" selected>1.0x (Standard)</option>
-          <option value="1.15">1.15x (Rythmé)</option>
-        </select>
+      <!-- BARRE DE PROGRESSION VISUELLE -->
+      <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden">
+        <div id="narrator-progress-bar" class="bg-gradient-to-r from-red-700 to-red-400 h-full w-0 transition-all duration-300"></div>
       </div>
     </section>
 
-    <!-- BARRE DE PROGRESSION VISUELLE -->
-    <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden -mt-2 mb-4 relative z-20">
-      <div id="narrator-progress-bar" class="bg-gradient-to-r from-red-700 to-red-400 h-full w-0 transition-all duration-300"></div>
-    </div>
+    <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
 
-    <!-- CORPS DES RÉCITS (TABULAIRES) -->
-    <article class="card-clean rounded-2xl p-6 md:p-10 text-xs md:text-sm text-stone-300 leading-relaxed">
+      <p>
+        Avec la participation d’<b>Okado</b>, <b>Toma</b> (PNJ), <b>Shinta</b> et <b>Samui</b>
+      </p>
 
-      <!-- CONTENU 1 : OKADO HIRUMA -->
-      <div id="tab-okado" class="tab-content active space-y-5" role="tabpanel" aria-labelledby="tab-okado">
-        <h2 class="text-xl font-bold font-imperial gold-text mb-6">I. L'accueil de la famille Hiruma, le château et les festivités</h2>
-        <p>
-          Me voici de retour dans mes terres natales, accompagné de mes compagnons Samui, Akira et Ryumitaka, non pas pour combattre, mais pour célébrer. Mon mariage avec la jeune <b>Kitsune</b> (fille du daimyo local), arrangé pour sceller l'alliance entre nos clans, se tiendra ici, à la forteresse Hiruma, un bastion austère et laqué de noir, perché sur une falaise surplombant les terres du Crabe et la noirceur de l'Outremonde au loin.
-        </p>
-        <p>
-          L'accueil fut sobre, militaire, comme il sied aux guerriers de la Muraille. Mon frère, <b>Kaiu Ujiro</b> (qui a remplacé mon père comme daimyo des Hiruma), nous a accueillis avec une froide correction. Je sens la pression de ma nouvelle responsabilité : intégrer cette famille puissante et prouver ma valeur, malgré mes années d'errance avec le Clan de la Mante. Les festivités ont commencé dès le soir même, dans une grande salle de la forteresse. L'ambiance était étrangement lourde, marquée par le contraste entre la joie forcée des courtisans de la Grue (invités par courtoisie) et le stoïcisme martial des Crabes.
-        </p>
-        <p>
-          Nous avons passé la journée à préparer la cérémonie, discutant avec les invités et rencontrant ma future épouse pour la première fois en privé. Elle est charmante, intelligente, et semble accepter son destin avec résignation. Mais au milieu des échanges de cadeaux et des discours de bienvenue, j'ai remarqué un détail troublant : plusieurs serviteurs du clan Scorpion (alliés de circonstance de la Grue) ont été aperçus rôdant autour des appartements privés de mon frère daimyo, échangeant des regards furtifs avec quelques uns de ses gardes personnels.
-        </p>
+      <p>
+        Okado m’a fait l’honneur de m’inviter à son mariage et je suis donc sur ses terres pour célébrer leur union. Samui est également présent et est fier de nous présenter sa petite fille.
+      </p>
 
-        <!-- ILLUSTRATION 1 : L'ARRIVÉE À LA FORTERESSE HIRUMA -->
-        <figure class="scene-figure">
-          <img src="../assets/images/scenarios/Mariage-Arrivee.jpg" alt="La délégation arrivant à la forteresse Hiruma" />
-          <figcaption class="scene-caption">
-            La Forteresse Hiruma — Vue de la forteresse austère perchée sur la falaise, le jour de l'arrivée de la délégation du Phénix et de la Mante.
-          </figcaption>
-        </figure>
+      <p>
+        L’ambiance est bon enfant et le saké ne manque pas. Je passe un très bon moment avec mes compagnons de routes.
+      </p>
 
-        <h2 class="text-xl font-bold font-imperial gold-text mt-8 mb-6">II. La cérémonie sacrée et l'échange des coupes</h2>
-        <p>
-          Le deuxième jour a été consacré au rituel sacré du mariage dans le sanctuaire de la forteresse. L'atmosphère était solennelle et silencieuse, loin de l'agitation des festivités profanes. Entourés des samouraïs du Clan du Crabe en armures laquées de rouge et de noir, sous l'œil sévère des ancêtres dont les portraits ornaient les murs, nous avons échangé les coupes de saké devant un prêtre shugenja. Le moment de l'échange des coupes fut particulièrement intense. C'est à cet instant que j'ai ressenti pour la première fois le poids réel de mon alliance.
-        </p>
-        <p>
-          La cérémonie s'est déroulée sans incident majeur, mais la tension est restée palpable. J'ai aperçu <b>Otomo Noriaki</b> (dignitaire impérial en visite) murmurant discrètement avec Kaiu Ujiro juste avant la fin du rituel. Après la cérémonie, nous nous sommes retirés pour un banquet plus intime. Ma femme et moi avons été félicités par les membres de haut rang des deux familles. C'est là qu'un messager m'a informé qu'Akira Tsuruchi avait repéré un groupe d'individus suspects tentant d'infiltrer les cuisines.
-        </p>
-      </div>
+      <!-- ILLUSTRATION 1 : LE BANQUET DE MARIAGE -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/MariageCrabe-1.jpg" alt="Le banquet de mariage d'Okado Hiruma sur les terres du Crabe" />
+        <figcaption class="scene-caption">
+          Les Festivités du Mariage — L'ambiance chaleureuse du banquet, les coupes de saké et le tournoi de lutte entre compagnons.
+        </figcaption>
+      </figure>
 
-      <!-- CONTENU 2 : AKIRA TSURUCHI -->
-      <div id="tab-akira" class="tab-content space-y-5" role="tabpanel" aria-labelledby="tab-akira">
-        <h2 class="text-xl font-bold font-imperial gold-text mb-6">I. L'Infiltration et l'Attaque des Ninjas de l'Ombre (Jour 3)</h2>
-        <p>
-          Le troisième jour devait être celui des festivités finales, mais tout a basculé avec la tombée de la nuit. J'étais resté à l'écart du banquet principal, préférant patrouiller les jardins inférieurs de la forteresse, sentant la trahison rôder. Mon pressentiment s'est confirmé lorsque j'ai aperçu, dissimulée dans les ombres, une silhouette s'approchant de l'entrée principale, vêtue d'une armure de cuir sombre et tenant une lame courte recouverte de poison.
-        </p>
-        <p>
-          J'ai immédiatement alerté mes compagnons. Le groupe de samouraïs a repoussé une attaque surprise de ninjas en armures de cuir sombre, maniant des lames courtes et du poison, infiltrés par le Clan du Scorpion. La confrontation nocturne s'est déroulée dans les jardins du château, pendant que les festivités se poursuivaient à l'intérieur. La bataille fut brutale, s'engageant au corps à corps sur les allées de pierre. J'ai abattu deux ninjas avec mes flèches avant qu'ils n'atteignent les quartiers d'Okado.
-        </p>
-        <p>
-          Pendant ce temps, Samui et Sutokhu combattaient violemment à l'intérieur de la citadelle pour sécuriser les invités. La menace, clairement identifiée comme provenant du Clan du Scorpion, visait à discréditer le Crabe en interrompant le mariage. Après avoir vaincu la première vague d'assassins, nous avons réalisé que le chef de l'opération, un maître ninja infiltré, avait disparu.
-        </p>
+      <p>
+        Samui me provoque nous finissons par nous inscrire à un tournoi de lutte. Je n’ai pas trouvé le courage de refuser (probablement aidé par les effets de l’alcool). Le tirage au sort veut que nous nous affrontions tous les deux dès le premier match et je perds de justesse. La finale est contre Okado et Toma s’affrontent en finale et c’est Toma qui sort vainqueur.
+      </p>
 
-        <!-- ILLUSTRATION 2 : LA CÉRÉMONIE DANS LE SANCTUAIRE -->
-        <figure class="scene-figure">
-          <img src="../assets/images/scenarios/Mariage-Ceremonie.jpg" alt="La cérémonie de mariage dans le sanctuaire Crabe" />
-          <figcaption class="scene-caption">
-            Le Sanctuaire Sacré — Le moment solennel de l'échange des coupes de saké entre Okado Hiruma et sa jeune épouse, entourés des ancêtres et des samouraïs en armures rouges.
-          </figcaption>
-        </figure>
+      <p>
+        S’ensuit un concours de tir à l’arc que je remporte au coude à coude avec Samui malgré mon score parfait. Je suis étonné de remporter deux koku comme prix du vainqueur.
+      </p>
 
-        <h2 class="text-xl font-bold font-imperial gold-text mt-8 mb-6">II. La Chasse à l'Homme et la Révélation de la Trahison</h2>
-        <p>
-          Nous avons immédiatement entamé une chasse à l'homme à travers la citadelle. Avec le soutien des gardes Hiruma restés loyaux, nous avons quadrillé les couloirs et les entrepôts. Guidés par les indications d'Akira, nous avons fini par coincer le maître ninja dans la crypte ancestrale des Hiruma. L'individu, un infiltré du Clan du Scorpion, tentait d'accéder aux archives secrètes pour dérober des documents sensibles.
-        </p>
-        <p>
-          La confrontation fut intense, mais nous avons réussi à le neutraliser. Sur lui, nous avons découvert non seulement les documents volés, mais aussi une lettre scellée du daimyo Scorpion ordonnant l'interruption du mariage. Le plan de déstabilisation du Scorpion a été mis en échec, mais l'identité du complice qui l'avait aidé à s'infiltrer reste encore inconnue.
-        </p>
-      </div>
+      <p>
+        La fête continue mais Okado se rend compte que sa femme (Hiruma) a disparu. Le kami de la terre nous apprend que 3 hommes sont rentrés dans la pièce et 4 en sont sorties. C’est donc un kidnapping. En sortant dans la rue, Okado reçois un caillou sur la tête. Il y a un message accroché dessus. Il nous demande de nous rendre à ½ journée dans l’Outre-monde. Okado comprend alors que c’est l’ennemi de son père qui a fait le coup. Nous passons chez le forgeron pour s’équiper : jade, flèches sifflantes, et vivre. Tout le nécessaire pour ma première virée dans l’Outre-monde !
+      </p>
 
-      <!-- CONTENU 3 : HIDA SAMUI -->
-      <div id="tab-samui" class="tab-content space-y-5" role="tabpanel" aria-labelledby="tab-samui">
-        <h2 class="text-xl font-bold font-imperial gold-text mb-6">I. Le ton décapant du colossal Hida : Une alliance sous tension</h2>
-        <p>
-          Et voilà. Notre petit Okado a décidé de se mettre la corde au cou. Pour la bonne cause, certes. Une alliance avec les Hiruma, ça ne se refuse pas, surtout pour consolider notre frontière sud-ouest. La forteresse ? Un tas de pierres noires au bord de l'Outremonde. L'ambiance ? Comme un enterrement avant même que le corps ne soit froid. Le clan de la Grue, qui a organisé le bazar, tire une tronche d'enterrement, et nous, on se prépare à la baston. Je savais que ça allait mal tourner.
-        </p>
-        <p>
-          C'était une simple opération de maintien de l'ordre. Les Scorpion, comme d'habitude, ne peuvent pas s'empêcher de mettre leur nez là où ils n'ont rien à faire. Au début, c'était juste des regards et des chuchotements dans les couloirs. Nous, on a simplement fait notre travail de Crabe : garder la porte, fermer sa gueule et serrer la main de son ennemi. Mais sous le vernis de la cérémonie, la haine pour les fils de putain de scorpion bouillait. On les sentait. Ils essayaient de saboter l'affaire, de semer la discorde entre le Crabe et le Lion.
-        </p>
-        <p>
-          Pendant le banquet, une servante a tenté d'empoisonner la coupe de saké du champion émeraude. Heureusement, Ryumitaka veillait au grain avec ses sorts d'eau purificatrice. Plus tard, un autre ninja a tenté de tuer le daimyo Akodo Toturi, qui était l'invité d'honneur. C'est là que la fête est devenue vraiment intéressante.
-        </p>
+      <p>
+        A peine la muraille passée, je ressens une chape de plomb me tomber sur les épaules. Je sens que mes jambes sont plus lourdes et j’ai plus de mal à respirer comme si l’air était vicié et épais. Le paysage est désertique et les seules traces de civilisation que nous voyons sont deux sillons creusés par une charrette.
+      </p>
 
-        <!-- ILLUSTRATION 3 : L'ATTAQUE DES NINJAS DANS LES JARDINS -->
-        <figure class="scene-figure">
-          <img src="../assets/images/scenarios/Mariage-Ninja.jpg" alt="La confrontation nocturne dans les jardins de la forteresse" />
-          <figcaption class="scene-caption">
-            La Confrontation Nocturne — Le groupe de samouraïs (Samui au centre avec son tetsubo, Akira en retrait) repoussant une attaque surprise de ninjas en cuir sombre infiltrés par le Clan du Scorpion dans les jardins du château.
-          </figcaption>
-        </figure>
+      <!-- ILLUSTRATION 2 : LA TRAVERSÉE DE LA MURAILLE VERS L'OUTREMONDE -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/MariageCrabe-2.jpg" alt="La traversée de la Grande Muraille vers l'Outre-monde" />
+        <figcaption class="scene-caption">
+          La Frontière Impie — La chape de plomb de l'Outremonde et les terres désertiques au-delà du Mur Kaiu.
+        </figcaption>
+      </figure>
 
-        <h2 class="text-xl font-bold font-imperial gold-text mt-8 mb-6">II. Hida Samui : Le grand ménage dans les cryptes</h2>
-        <p>
-          J'étais en train de siroter mon troisième bol de saké quand l'alerte a été donnée. J'ai attrapé mon tetsubo, mon arme favorite, qui traînait sous la table, et je me suis précipité dans le chaos. Les jardins du château se sont transformés en un bain de sang. Une vingtaine de ninjas du Scorpion, agiles comme des singes et silencieux comme la peste, ont surgi de nulle part. J'en ai fait de la bouillie pour chat avant qu'ils n'atteignent la salle principale.
-        </p>
-        <p>
-          Je me suis fait plaisir. J'ai écrasé le crâne du premier ninja avec mon tetsubo avant même qu'il n'ait eu le temps de dégainer son wakizashi. Un deuxième a essayé de me trancher le tendon d'Achille, mais il s'est pris un coup de mon gourdin dans les dents qui l'a envoyé voler de l'autre côté de l'allée. Puis j'ai rejoint les autres pour nettoyer l'intérieur de la citadelle, où les ninjas tentaient de s'emparer des invités de marque.
-        </p>
-        <p>
-          Après avoir assuré la sécurité de la cérémonie, nous avons lancé la traque finale avec Okado et Akira. C'est dans la crypte ancestrale que nous avons finalement coincé le dernier ninja, une femme, une vraie sorcière adepte de la magie noire. Elle a essayé de s'enfuir en invoquant des ombres, mais j'ai réussi à la bloquer en lui assénant un coup de tetsubo sur la tête. Après qu'elle se soit rendue, elle nous a donné toutes les informations sur son réseau d'infiltrés. Un bon coup de tetsubo bien placé, c'est souvent plus efficace que la diplomatie.
-        </p>
-      </div>
+      <p>
+        Je continue à marcher vers le point de rendez-vous avec les camarades mais sans jamais vraiment m’habituer à cette pression invisible.
+      </p>
+
+      <p>
+        Nous arrivons à la grotte indiquée dans le message. Okado décide d’y aller seul et nous restons à l’extérieur sur nos gardes à l’écoute du moindre bruit.
+      </p>
+
+      <p>
+        Lorsqu’il ressort enfin, il nous demande si nous souhaitons l’aider. Il doit aller affronter un oni plus loin dans l’Outre-monde. Nous acceptons volontiers.
+      </p>
+
+      <p>
+        Après quelques heures de marche, nous apercevons des silhouettes qui semblent venir vers nous. Je me rends compte le premier que c’est une marée de gobelins qui viennent vers nous ! La bataille éclate. Les gobelins tombent par dizaines sous les moulinets de mes compagnons d’armes. Je sens que le sol tremble… un ogre avec un tronc d’arbre s’approche sur un côté du champ de bataille ! Je concentre mes tirs de flèches dans sa direction. Je n’ose même pas imaginer les dégâts que pourrait causer le tronc s’il m’atteint. Plusieurs flèches l’ont déjà bien amoché lorsqu’il arrive sur nous. Ses mouvements plus lents permettent à mes compagnons de l’achever. Mais c’est alors qu’un oni apparait devant nous. Après un dur et long combat, nous réussissons à l’achever.
+      </p>
+
+      <!-- ILLUSTRATION 3 : LE COMBAT CONTRE L'OGRE ET L'ONI -->
+      <figure class="scene-figure">
+        <img src="../assets/images/scenarios/MariageCrabe-3.jpg" alt="Combat contre l'ogre au tronc d'arbre et l'oni dans l'Outre-monde" />
+        <figcaption class="scene-caption">
+          La Fureur de l'Outremonde — L'affrontement désespéré face à la horde de gobelins, l'ogre armé d'un tronc et l'oni corrompu.
+        </figcaption>
+      </figure>
+
+      <p>
+        Okado nous explique que c’était son père et qu’il est heureux de savoir qu’il repose enfin en paix.
+      </p>
+
+      <p>
+        Nous retournons en ville pour nous reposer un peu. Nous repartons le lendemain vers le repère de l’ennemi de son père, Kawa. Il nous demande de rester en retrait et pénètre seul dans le repère, sabre au clair. En ressortant quelques heures plus tard, il nous explique avoir résolu définitivement le problème et nous invite à le suivre un peu plus loin. Nous arrivons devant une maison dans laquelle nous entrons. La femme d’Okado est là, attachée à une chaise. Nous la délivrons et nous rentrons chez Okado pour nous reposer.
+      </p>
+
+      <p>
+        Deux jours plus tard, je remercie mes hôtes et je me mets en routes pour retourner sur les terres de mon clan.
+      </p>
 
     </article>
 
     <!-- LIENS DE BAS DE PAGE -->
     <section class="card-clean rounded-xl p-5 border-stone-800 flex flex-wrap justify-between items-center gap-3 text-xs">
-      <a href="https://campagnel5rdavid2015.wordpress.com/la-campagne/scenario-6-le-mariage-dokado-hiruma/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
-        <span>📖</span> Consulter les articles originaux sur WordPress (2016) ↗
+      <a href="https://campagnel5rdavid2015.wordpress.com/la-campagne/" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+        <span>📖</span> Consulter l'article source sur le blog WordPress ↗
       </a>
-      <span class="text-stone-500">Prochain : Acte 7 : Meurtre à Ryoko Owari →</span>
+      <a href="scenario-7.html" class="px-4 py-2 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial tracking-wider transition shadow">
+        Scénario 7 : Meurtre à Ryoko Owari →
+      </a>
     </section>
 
   </main>
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    Chronique L5R 4e Édition — MJ David • Acte 6 : Le mariage d’Okado Hiruma
+    Chronique L5R 4e Édition — MJ David • Acte 6 : Le mariage d’Okado Hiruma (par Akira Tsuruchi)
   </footer>
 
-  <!-- SCRIPT DES ONGLETS ET DU LECTEUR VOCAL NARRATEUR -->
+  <!-- SCRIPT DU LECTEUR VOCAL NARRATEUR -->
   <style>
     .reading-active {
-      background: rgba(153, 27, 27, 0.1) !important; /* Rouge Crabe actif */
+      background: rgba(153, 27, 27, 0.1) !important;
       border-left: 3px solid #991b1b !important;
       padding-left: 0.75rem !important;
       transition: all 0.25s ease !important;
@@ -305,40 +263,14 @@
     let currentIndex = 0;
     let isPlaying = false;
     let selectedVoice = null;
-    let currentTabId = 'tab-okado';
 
     function initNarrator() {
-      updateParagraphs();
-      loadVoices();
-      updateProgressUI();
-    }
-
-    function updateParagraphs() {
-      const container = document.getElementById(currentTabId);
+      const container = document.getElementById('story-content');
       if (!container) return;
       
       paragraphs = Array.from(container.querySelectorAll('p')).filter(p => p.textContent.trim().length > 0);
       updateProgressUI();
-      resetHighlight();
-    }
-
-    function openTab(evt, tabId) {
-      const tabcontents = document.getElementsByClassName("tab-content");
-      for (let i = 0; i < tabcontents.length; i++) {
-        tabcontents[i].classList.remove("active");
-      }
-      
-      const tablinks = document.getElementsByClassName("tab-btn");
-      for (let i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-      }
-      
-      document.getElementById(tabId).classList.add("active");
-      evt.currentTarget.classList.add("active");
-      
-      currentTabId = tabId;
-      stopAudio();
-      updateParagraphs();
+      loadVoices();
     }
 
     function loadVoices() {
@@ -352,4 +284,170 @@
 
       frVoices.sort((a, b) => {
         const isHD_A = a.name.includes("Natural") || a.name.includes("Neural") || a.name.includes("Google") || a.name.includes("Premium");
-        const is
+        const isHD_B = b.name.includes("Natural") || b.name.includes("Neural") || b.name.includes("Google") || b.name.includes("Premium");
+        return (isHD_B ? 1 : 0) - (isHD_A ? 1 : 0);
+      });
+
+      frVoices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        const isHD = v.name.includes("Natural") || v.name.includes("Neural") || v.name.includes("Google");
+        opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
+        select.appendChild(opt);
+      });
+
+      if (frVoices.length > 0) {
+        selectedVoice = frVoices[0];
+        select.value = selectedVoice.name;
+      }
+    }
+
+    function onVoiceChange() {
+      const voiceName = document.getElementById('voice-select').value;
+      selectedVoice = synth.getVoices().find(v => v.name === voiceName);
+      if (isPlaying) {
+        readCurrentParagraph();
+      }
+    }
+
+    function updateProgressUI() {
+      const progText = document.getElementById('audio-progress');
+      const bar = document.getElementById('narrator-progress-bar');
+      const visualizer = document.getElementById('narrator-visualizer');
+
+      if (progText) {
+        progText.textContent = `Paragraphe ${paragraphs.length ? currentIndex + 1 : 0} / ${paragraphs.length}`;
+      }
+      if (bar && paragraphs.length) {
+        const pct = ((currentIndex + 1) / paragraphs.length) * 100;
+        bar.style.width = `${pct}%`;
+      }
+      if (visualizer) {
+        if (isPlaying) {
+          visualizer.classList.add('scale-110', 'bg-red-600', 'text-black', 'animate-pulse');
+          visualizer.classList.remove('bg-red-950/90', 'text-red-300');
+        } else {
+          visualizer.classList.remove('scale-110', 'bg-red-600', 'text-black', 'animate-pulse');
+          visualizer.classList.add('bg-red-950/90', 'text-red-300');
+        }
+      }
+    }
+
+    function highlightParagraph(idx) {
+      paragraphs.forEach((p, i) => {
+        if (i === idx) {
+          p.classList.add('reading-active');
+          p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          p.classList.remove('reading-active');
+        }
+      });
+    }
+
+    function readCurrentParagraph() {
+      synth.cancel();
+      if (currentIndex >= paragraphs.length) {
+        stopAudio();
+        return;
+      }
+
+      const p = paragraphs[currentIndex];
+      highlightParagraph(currentIndex);
+      updateProgressUI();
+
+      const u = new SpeechSynthesisUtterance(p.textContent.trim());
+      u.lang = 'fr-FR';
+      u.rate = parseFloat(document.getElementById('audio-rate')?.value || 1.0);
+      u.pitch = 0.95;
+
+      if (selectedVoice) u.voice = selectedVoice;
+
+      u.onend = () => {
+        if (isPlaying) {
+          currentIndex++;
+          if (currentIndex < paragraphs.length) {
+            setTimeout(readCurrentParagraph, 300);
+          } else {
+            stopAudio();
+          }
+        }
+      };
+
+      u.onerror = () => {
+        isPlaying = false;
+        updatePlayButton();
+      };
+
+      synth.speak(u);
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        synth.pause();
+        isPlaying = false;
+        document.getElementById('audio-status').textContent = "Lecture en pause";
+      } else {
+        if (synth.paused) {
+          synth.resume();
+        } else {
+          readCurrentParagraph();
+        }
+        isPlaying = true;
+        document.getElementById('audio-status').textContent = "Lecture vocale en cours...";
+      }
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function updatePlayButton() {
+      const icon = document.getElementById('play-icon');
+      const text = document.getElementById('play-text');
+      if (isPlaying) {
+        if (icon) icon.textContent = "⏸";
+        if (text) text.textContent = "Pause";
+      } else {
+        if (icon) icon.textContent = "▶";
+        if (text) text.textContent = "Reprendre";
+      }
+    }
+
+    function stopAudio() {
+      synth.cancel();
+      isPlaying = false;
+      currentIndex = 0;
+      paragraphs.forEach(p => p.classList.remove('reading-active'));
+      document.getElementById('audio-status').textContent = "Voix Narrative Prête";
+      updatePlayButton();
+      updateProgressUI();
+    }
+
+    function nextParagraph() {
+      if (currentIndex < paragraphs.length - 1) {
+        currentIndex++;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    function prevParagraph() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        if (isPlaying) readCurrentParagraph();
+        else {
+          highlightParagraph(currentIndex);
+          updateProgressUI();
+        }
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      window.addEventListener('DOMContentLoaded', initNarrator);
+    }
+  </script>
+
+</body>
+</html>
