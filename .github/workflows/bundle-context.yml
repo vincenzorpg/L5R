@@ -1,0 +1,48 @@
+name: Génération du Contexte Projet
+
+on:
+  push:
+    branches:
+      - main # ou master
+  workflow_dispatch:
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Compiler les fichiers du projet en un seul Markdown
+        run: |
+          OUTPUT="L5R_FULL_CONTEXT.md"
+          echo "# État Complet du Projet L5R" > $OUTPUT
+          echo "Date de génération : $(date)" >> $OUTPUT
+          echo "" >> $OUTPUT
+
+          # Liste des fichiers clés à inclure
+          FILES=(
+            "index.html"
+            "createcharacter.html"
+            "js/character-generator.js"
+            "js/navbar.js"
+            "data/katas-data.js"
+            "data/sorts-data.js"
+          )
+
+          for file in "${FILES[@]}"; do
+            if [ -f "$file" ]; then
+              echo "## Fichier : $file" >> $OUTPUT
+              echo '```' >> $OUTPUT
+              cat "$file" >> $OUTPUT
+              echo "" >> $OUTPUT
+              echo '```' >> $OUTPUT
+              echo "" >> $OUTPUT
+            fi
+          done
+
+      - name: Publier le fichier en artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: contexte-l5r
+          path: L5R_FULL_CONTEXT.md
