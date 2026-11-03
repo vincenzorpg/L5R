@@ -13,11 +13,23 @@
   <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
-  <!-- BASES DE DONNÉES DÉPORTÉES -->
+  <!-- BASES DE DONNÉES DÉPORTÉES (CLANS, COMPÉTENCES, ÉQUIPEMENT, AVANTAGES) -->
   <script src="data/clans-data.js" defer></script>
   <script src="data/competences-data.js" defer></script>
   <script src="data/equipement-data.js" defer></script>
   <script src="data/avantages-desavantages-data.js" defer></script>
+
+  <!-- BASES DE DONNÉES DES SORTS & KIHOS -->
+  <script src="data/sorts/sorts-universels.js" defer></script>
+  <script src="data/sorts/sorts-air.js" defer></script>
+  <script src="data/sorts/sorts-terre.js" defer></script>
+  <script src="data/sorts/sorts-feu.js" defer></script>
+  <script src="data/sorts/sorts-eau.js" defer></script>
+  <script src="data/sorts/sorts-vide.js" defer></script>
+  <script src="data/sorts/sorts-kiho.js" defer></script>
+  <script src="data/sorts/sorts-maho.js" defer></script>
+  <script src="data/sorts-data.js" defer></script>
+
   <script src="js/export-carnet.js" defer></script>
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
@@ -76,6 +88,16 @@
       color: #fecdd3;
       border: 1px solid #e11d48;
     }
+
+    /* BADGES ÉLÉMENTAIRES POUR SORTS, KIHOS & KATAS */
+    .badge-elem-terre { background: rgba(120, 53, 15, 0.4); color: #fde68a; border: 1px solid #b45309; }
+    .badge-elem-eau { background: rgba(30, 58, 138, 0.4); color: #93c5fd; border: 1px solid #2563eb; }
+    .badge-elem-feu { background: rgba(153, 27, 27, 0.4); color: #fca5a5; border: 1px solid #dc2626; }
+    .badge-elem-air { background: rgba(19, 78, 74, 0.4); color: #99f6e4; border: 1px solid #0d9488; }
+    .badge-elem-vide { background: rgba(88, 28, 135, 0.4); color: #e9d5ff; border: 1px solid #9333ea; }
+    .badge-elem-universel { background: rgba(68, 64, 60, 0.45); color: #f5f5f4; border: 1px solid #78716c; }
+    .badge-elem-kiho { background: rgba(180, 83, 9, 0.4); color: #fed7aa; border: 1px solid #ea580c; }
+    .badge-elem-maho { background: rgba(136, 19, 55, 0.55); color: #fecdd3; border: 1px solid #e11d48; }
 
     @keyframes dicePop {
       0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
@@ -182,17 +204,17 @@
           <button onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct de cette fiche">
             🔗 Lien
           </button>
-          <button onclick="randomizeAll(); generateCharacterBackground();" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition cursor-pointer">⚡ Auto</button>
-          <button onclick="exportJSON()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer">💾 JSON</button>
+          <button onclick="randomizeAll(); autoPopulateMysticAndMartial(); generateCharacterBackground();" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition cursor-pointer">⚡ Auto</button>
+          <button onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer">💾 JSON</button>
           <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
             📂 Charger
-            <input type="file" id="json-input" onchange="importJSON(event)" class="hidden" accept=".json">
+            <input type="file" id="json-input" onchange="importJSONWithMystic(event)" class="hidden" accept=".json">
           </label>
           <button onclick="prepareAndPrintPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition cursor-pointer">🖨️ PDF</button>
           <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer">
             <span>📖</span> <span>Carnet</span>
           </button>
-          <button onclick="resetCharacter()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer">Reset</button>
+          <button onclick="resetCharacterWithMystic()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer">Reset</button>
         </div>
       </div>
 
@@ -249,7 +271,7 @@
               Mon Dojo Personnel — Samouraïs Enregistrés
             </h2>
             <p class="text-[11px] text-stone-400">
-              Vos personnages sont conservés dans votre navigateur et accessibles depuis la page d'accueil.
+              Vos personnages (avec leurs sorts, kihos, katas et biographie) sont conservés dans votre navigateur et accessibles depuis l'accueil.
             </p>
           </div>
         </div>
@@ -282,7 +304,6 @@
           <label class="block text-stone-400 mb-1">École de Clan (Rang 1)</label>
           <select id="sel-school" onchange="onSchoolChange()" class="w-full p-2.5 rounded font-medium"></select>
           <div id="school-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
-          <!-- Indication de verrouillage / déverrouillage -->
           <div id="school-lock-hint" class="text-[10px] text-stone-500 italic mt-0.5"></div>
         </div>
         <div>
@@ -495,7 +516,7 @@
       <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
           <h3 class="font-bold text-emerald-400 font-imperial text-sm flex items-center gap-1.5">
-            <span>🌟</span> Avantages (Traits Héroïques)
+            <span>🌟</span> 4A. Avantages (Traits Héroïques)
           </h3>
           <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
         </div>
@@ -537,7 +558,7 @@
       <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
           <h3 class="font-bold text-red-400 font-imperial text-sm flex items-center gap-1.5">
-            <span>🩸</span> Désavantages (Failles & Fardeaux)
+            <span>🩸</span> 4B. Désavantages (Failles & Fardeaux)
           </h3>
           <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
         </div>
@@ -576,9 +597,248 @@
       </div>
     </section>
 
-    <!-- 5. COMBAT & BLESSURES -->
+    <!-- ===================================================================
+         5. ARTS MYSTIQUES & MARTIAUX : GRIMOIRE DE SORTS, KIHOS & KATAS
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40">
+      <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
+        <div>
+          <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
+            <span>🔥</span> 5. Arts Mystiques & Martiaux : Sorts, Kihos & Katas (4e Édition)
+          </h2>
+          <p class="text-xs text-stone-400">
+            Gérez les parchemins de sorts de votre Shugenja, les Kihos de la Confrérie et les Katas martiaux de votre Bushi.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <button type="button" onclick="autoPopulateMysticAndMartial(true)" class="px-3 py-1.5 rounded-lg bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 border border-amber-500/40 font-bold font-imperial transition cursor-pointer" title="Ajoute automatiquement les 3 sorts Universels et une dotation de départ">
+            ⚡ Dotation Sorts / Katas Auto
+          </button>
+          <a href="grimoire.html" target="_blank" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-bold transition">
+            📖 Ouvrir le Grimoire complet ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Barre d'Affinité / Déficience & Emplacements de Sorts par Anneau -->
+      <div class="p-3.5 rounded-xl bg-black/60 border border-stone-800 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center text-xs">
+        <div class="lg:col-span-5 grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] text-amber-300 font-bold uppercase tracking-wider mb-1">Affinité (+1 Maîtrise)</label>
+            <select id="shugenja-affinity" onchange="renderCharacterSpells(); updateSpellPreview();" class="w-full p-2 rounded text-xs font-medium">
+              <option value="aucune">Aucune (Bushi / Courtisan)</option>
+              <option value="terre">土 Terre</option>
+              <option value="eau">水 Eau</option>
+              <option value="feu">火 Feu</option>
+              <option value="air">風 Air</option>
+              <option value="vide">空 Vide (Ishiken)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-rose-300 font-bold uppercase tracking-wider mb-1">Déficience (-1 Maîtrise)</label>
+            <select id="shugenja-deficiency" onchange="renderCharacterSpells(); updateSpellPreview();" class="w-full p-2 rounded text-xs font-medium">
+              <option value="aucune">Aucune</option>
+              <option value="terre">土 Terre</option>
+              <option value="eau">水 Eau</option>
+              <option value="feu">火 Feu</option>
+              <option value="air">風 Air</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="text-[10px] text-stone-400 uppercase font-bold tracking-wider mb-1.5 flex justify-between">
+            <span>Emplacements de Sorts quotidiens (égaux à la valeur de chaque Anneau) :</span>
+            <span class="text-amber-300 font-mono">ND Sort = 5 + (5 × Maîtrise)</span>
+          </div>
+          <div class="grid grid-cols-5 gap-2 text-center text-[11px]">
+            <div class="p-1.5 rounded bg-amber-950/30 border border-amber-800/40">
+              <span class="text-amber-300 font-bold block">土 Terre</span>
+              <span id="slots-earth" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-blue-950/30 border border-blue-800/40">
+              <span class="text-blue-300 font-bold block">水 Eau</span>
+              <span id="slots-water" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-teal-950/30 border border-teal-800/40">
+              <span class="text-teal-300 font-bold block">風 Air</span>
+              <span id="slots-air" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-red-950/30 border border-red-800/40">
+              <span class="text-red-300 font-bold block">火 Feu</span>
+              <span id="slots-fire" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+            <div class="p-1.5 rounded bg-purple-950/30 border border-purple-800/40">
+              <span class="text-purple-300 font-bold block">空 Vide</span>
+              <span id="slots-void" class="font-imperial font-bold text-stone-200">2 slots</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grille à 2 colonnes : 5A. Sorts & Kihos | 5B. Katas Martiaux -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- 5A. GRIMOIRE PERSONNEL (SORTS & KIHOS) -->
+        <div class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+              <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
+                <span>📜</span> 5A. Parchemins de Sorts & Kihos
+              </h3>
+              <span class="text-xs text-stone-400">
+                <b id="spells-count-badge" class="text-amber-300">0</b> sort(s) • Coût : <b id="spells-xp-total" class="text-amber-300">0</b> XP
+              </span>
+            </div>
+
+            <!-- Filtres Élément & Rang pour le sélecteur de sorts -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <select id="filter-spell-elem" onchange="populateSpellCatalogSelect()" class="p-2 rounded text-xs">
+                <option value="tous">Tous les Éléments & Kihos</option>
+                <option value="universel">Universels (Rang 0)</option>
+                <option value="terre">土 Terre</option>
+                <option value="eau">水 Eau</option>
+                <option value="feu">火 Feu</option>
+                <option value="air">風 Air</option>
+                <option value="vide">空 Vide (Ishiken)</option>
+                <option value="kiho">🥋 Kihos (Moines)</option>
+                <option value="maho">🩸 Mahō (Magie du Sang)</option>
+              </select>
+              <select id="filter-spell-rank" onchange="populateSpellCatalogSelect()" class="p-2 rounded text-xs">
+                <option value="tous">Tous les Rangs (0 à 8)</option>
+                <option value="0">Universel (Rang 0)</option>
+                <option value="1">Maîtrise 1</option>
+                <option value="2">Maîtrise 2</option>
+                <option value="3">Maîtrise 3</option>
+                <option value="4">Maîtrise 4</option>
+                <option value="5">Maîtrise 5</option>
+                <option value="6">Maîtrise 6+</option>
+              </select>
+            </div>
+
+            <!-- Sélecteur de sort + bouton Ajouter -->
+            <div class="flex gap-2 text-xs items-center">
+              <select id="sel-catalog-spell" onchange="updateSpellPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+              <button 
+                type="button" 
+                onclick="addSpellFromCatalog()" 
+                title="Inscrire ce sort ou kiho sur la fiche" 
+                class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+              >+</button>
+            </div>
+
+            <!-- Carte d'aperçu du Sort / Kiho sélectionné -->
+            <div id="spell-preview-card" class="hidden rounded-xl p-3.5 bg-black/90 border border-amber-500/35 space-y-2 text-xs shadow-lg">
+              <div class="flex justify-between items-start gap-2 border-b border-stone-800 pb-2">
+                <div>
+                  <h4 id="spell-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+                  <div class="flex flex-wrap gap-1.5 mt-1">
+                    <span id="spell-preview-elem" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded"></span>
+                    <span id="spell-preview-keywords" class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-300 border border-stone-700"></span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <span id="spell-preview-tn" class="px-2 py-0.5 rounded bg-amber-600 text-black font-bold font-imperial text-[11px] block"></span>
+                  <span id="spell-preview-cast-Access" class="text-[10px] text-emerald-400 font-bold block mt-1"></span>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5 text-[10px] text-stone-400 bg-stone-950 p-2 rounded border border-stone-800/80">
+                <div><b class="text-stone-300 block">Portée :</b> <span id="spell-preview-range"></span></div>
+                <div><b class="text-stone-300 block">Zone :</b> <span id="spell-preview-area"></span></div>
+                <div><b class="text-stone-300 block">Durée :</b> <span id="spell-preview-duration"></span></div>
+              </div>
+              <div id="spell-preview-raises-box" class="text-[10px] text-amber-300/90">
+                <b>Augmentations :</b> <span id="spell-preview-raises"></span>
+              </div>
+              <p id="spell-preview-desc" class="text-stone-300 text-[11px] leading-relaxed max-h-32 overflow-y-auto pr-1"></p>
+            </div>
+
+            <!-- Liste des Sorts & Kihos acquis par le personnage -->
+            <div id="char-spells-container" class="space-y-2 text-xs max-h-72 overflow-y-auto pr-1 pt-1"></div>
+          </div>
+
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-stone-500">
+            <span>Les parchemins de Shugenja coûtent 0 XP. Les Kihos coûtent leur Maîtrise en XP (ajustable).</span>
+            <button type="button" onclick="addUniversalSpells()" class="text-amber-400 hover:text-amber-200 underline cursor-pointer">+ 3 Universels</button>
+          </div>
+        </div>
+
+        <!-- 5B. KATAS & PRÉPARATIONS MARTIALES -->
+        <div class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+              <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
+                <span>⚔️</span> 5B. Katas & Préparations Martiales
+              </h3>
+              <span class="text-xs text-stone-400">
+                <b id="katas-count-badge" class="text-amber-300">0</b> kata(s) • Coût : <b id="katas-xp-total" class="text-emerald-300">0</b> XP
+              </span>
+            </div>
+
+            <!-- Filtre par Élément pour les Katas -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <select id="filter-kata-elem" onchange="populateKataCatalogSelect()" class="p-2 rounded text-xs">
+                <option value="tous">Tous les Éléments de Kata</option>
+                <option value="Terre">土 Katas de Terre</option>
+                <option value="Eau">水 Katas d'Eau</option>
+                <option value="Air">風 Katas d'Air</option>
+                <option value="Feu">火 Katas de Feu</option>
+                <option value="Vide">空 Katas du Vide</option>
+              </select>
+              <div class="p-2 rounded bg-stone-950 border border-stone-800 text-[10px] text-stone-400 flex items-center justify-center">
+                Méditation : 30 min • 1 Kata actif max
+              </div>
+            </div>
+
+            <!-- Sélecteur de Kata + bouton Ajouter -->
+            <div class="flex gap-2 text-xs items-center">
+              <select id="sel-catalog-kata" onchange="updateKataPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+              <button 
+                type="button" 
+                onclick="addKataFromCatalog()" 
+                title="Apprendre ce Kata" 
+                class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+              >+</button>
+            </div>
+
+            <!-- Carte d'aperçu du Kata sélectionné -->
+            <div id="kata-preview-card" class="hidden rounded-xl p-3.5 bg-black/90 border border-amber-500/35 space-y-2 text-xs shadow-lg">
+              <div class="flex justify-between items-start gap-2 border-b border-stone-800 pb-2">
+                <div>
+                  <h4 id="kata-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+                  <span id="kata-preview-ring" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded inline-block mt-1"></span>
+                </div>
+                <div class="text-right shrink-0">
+                  <span id="kata-preview-cost" class="px-2 py-0.5 rounded bg-emerald-700 text-white font-bold font-imperial text-[11px] block"></span>
+                  <span id="kata-preview-req-status" class="text-[10px] block mt-1"></span>
+                </div>
+              </div>
+              <div class="text-[10px] text-stone-400">
+                <b class="text-stone-300">Écoles autorisées :</b> <span id="kata-preview-schools"></span>
+              </div>
+              <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+                <span class="text-amber-300 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+                  ⚔️ Effet Martial Officiel (4e Édition) :
+                </span>
+                <p id="kata-preview-effect" class="text-stone-300 text-[11px] leading-relaxed"></p>
+              </div>
+            </div>
+
+            <!-- Liste des Katas appris par le personnage -->
+            <div id="char-katas-container" class="space-y-2 text-xs max-h-72 overflow-y-auto pr-1 pt-1"></div>
+          </div>
+
+          <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-stone-500">
+            <span>Chaque Kata appris coûte ses points d'XP (déduits automatiquement du total d'XP).</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. COMBAT & BLESSURES -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">4. Combat & Seuils de Vitalité (4e Édition)</h2>
+      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">6. Combat & Seuils de Vitalité (4e Édition)</h2>
       <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs text-center">
         <div class="p-3 rounded bg-black/60 border border-stone-800">
           <div class="text-stone-400">ND d'Armure</div>
@@ -622,9 +882,9 @@
       </div>
     </section>
 
-    <!-- 6. ÉQUIPEMENT & ARMES -->
+    <!-- 7. ÉQUIPEMENT & ARMES -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">5. Équipement, Armes & Dotation</h2>
+      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">7. Équipement, Armes & Dotation</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
         <div>
           <label class="block text-stone-400 mb-1">Armure portée</label>
@@ -646,13 +906,13 @@
     </section>
 
     <!-- ===================================================================
-         7. GÉNÉRATEUR DE LÉGENDE, BACKGROUND & LES 20 QUESTIONS DE ROKUGAN
+         8. GÉNÉRATEUR DE LÉGENDE, BACKGROUND & LES 20 QUESTIONS DE ROKUGAN
          =================================================================== -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#16100e] to-[#0d0a0a]">
       <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
         <div>
           <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
-            <span>📜</span> 6. Légende Personnelle, Background & Les 20 Questions
+            <span>📜</span> 8. Légende Personnelle, Background & Les 20 Questions
           </h2>
           <p class="text-xs text-stone-400">
             Génère un récit sur-mesure à partir de votre Clan, votre École, vos Anneaux et vos Avantages/Désavantages (imprimé sur la Page 2 du PDF).
@@ -713,13 +973,11 @@
        PLATEAU DE DÉS INTERACTIF FLOTTANT (ROLL & KEEP XgY AVEC EXPLOSION DES 10)
        ===================================================================== -->
   <div id="dice-roller-drawer" class="fixed bottom-4 right-4 z-50 no-print">
-    <!-- Bouton d'ouverture réduit -->
     <button type="button" id="dice-fab" onclick="toggleDiceTray()" class="px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-extrabold font-imperial text-xs shadow-2xl border border-amber-300/60 flex items-center gap-2 cursor-pointer transition transform hover:scale-105">
       <span class="text-base">🎲</span>
       <span>Plateau Roll & Keep (XkY)</span>
     </button>
 
-    <!-- Fenêtre du lanceur de dés -->
     <div id="dice-tray-panel" class="hidden w-80 sm:w-96 rounded-2xl bg-[#120d0d]/98 border-2 border-amber-500/60 shadow-2xl p-4 space-y-3 text-xs backdrop-blur-md mt-2">
       <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
         <span class="font-imperial font-bold text-amber-300 text-sm flex items-center gap-1.5">
@@ -728,7 +986,6 @@
         <button type="button" onclick="toggleDiceTray(false)" class="text-stone-400 hover:text-white font-bold px-1.5 cursor-pointer">✕</button>
       </div>
 
-      <!-- Sélecteur manuel XgY -->
       <div class="grid grid-cols-3 gap-2 items-end">
         <div>
           <label class="text-[10px] text-stone-400 block mb-0.5">Dés lancés (X)</label>
@@ -752,21 +1009,20 @@
         </label>
       </div>
 
-      <!-- Résultat du jet -->
       <div id="dice-result-box" class="p-3 rounded-xl bg-black/80 border border-stone-800 space-y-2 min-h-[76px] flex flex-col justify-center">
         <div class="text-center text-stone-500 italic text-[11px]">
-          Cliquez sur Toucher, Dégâts, Initiative ou lancez manuellement vos dés.
+          Cliquez sur Toucher, Dégâts, Initiative, un Sort ou lancez manuellement vos dés.
         </div>
       </div>
     </div>
   </div>
 
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
-    Campagne L5R – MJ David • Fiche Interactive avec Dojo de Sauvegarde & Générateur de Légende
+    Campagne L5R – MJ David • Fiche Interactive avec Sorts, Kihos, Katas, Dojo de Sauvegarde & Générateur de Légende
   </footer>
 
   <!-- =====================================================================
-       DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 ET PAGE 2 AVEC BACKGROUND)
+       DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 ET PAGE 2 AVEC SORTS, KATAS & LÉGENDE)
        ===================================================================== -->
   <div id="official-print-dossier" class="text-black text-[9px] leading-tight">
     <!-- PAGE 1 : CARACTÉRISTIQUES, COMPÉTENCES & COMBAT -->
@@ -899,7 +1155,7 @@
       </div>
     </div>
 
-    <!-- PAGE 2 : IDENTITÉ, AVANTAGES, TECHNIQUES & BACKGROUND / 20 QUESTIONS -->
+    <!-- PAGE 2 : IDENTITÉ, AVANTAGES, TECHNIQUES, SORTS/KATAS & BACKGROUND -->
     <div class="print-page flex flex-col justify-between py-1">
       <div class="sheet-box mb-2 p-1.5 flex justify-between items-center text-[9px]">
         <div><b>Samouraï :</b> <span id="p-name-2" class="font-imperial font-bold text-xs"></span></div>
@@ -926,12 +1182,20 @@
         </div>
       </div>
 
+      <!-- BLOC IMPRIMÉ : SORTS, KIHOS & KATAS -->
+      <div class="sheet-box mb-2">
+        <div class="sheet-title flex justify-between">
+          <span>Grimoire des Sorts, Kihos & Katas Martiaux</span>
+          <span id="p-mystic-summary"></span>
+        </div>
+        <div class="p-1.5 space-y-1 text-[7.5px] leading-snug" id="p-spells-katas-box"></div>
+      </div>
+
       <div class="sheet-box mb-2">
         <div class="sheet-title">Équipement, Dotation (*Outfit*) & Richesse</div>
         <div class="p-1.5 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
       </div>
 
-      <!-- NOUVEAU BLOC IMPRIMÉ : HISTOIRE & LES 20 QUESTIONS -->
       <div class="sheet-box mb-1 flex-1">
         <div class="sheet-title">Chronique Biographique & Les 20 Questions de Rokugan</div>
         <div class="p-2 space-y-2 text-[8px] leading-relaxed">
@@ -942,7 +1206,664 @@
     </div>
   </div>
 
-  <!-- SCRIPTS D'APERÇU DES AVANTAGES & MULTI-SÉLECTION -->
+  <!-- =====================================================================
+       CATALOGUE OFFICIEL DES KATAS (4E ÉDITION) & GESTION DES SORTS/KATAS
+       ===================================================================== -->
+  <script>
+    // Catalogue officiel des Katas L5R 4e Édition
+    window.KATAS_DATA = window.KATAS_DATA || [
+      // --- KATAS DE TERRE ---
+      {
+        id: "kata-terre-frapper-terre",
+        name: "Frapper comme la Terre (Striking as Earth)",
+        element: "Terre",
+        mastery: 3,
+        cost: 3,
+        schools: "Toute école de Bushi",
+        desc: " Tant que ce Kata est actif, lorsque vous adoptez la Posture d'Attaque ou d'Attaque Totale, vous gagnez une Réduction de dégâts égale à votre Anneau de Terre."
+      },
+      {
+        id: "kata-terre-force-crabe",
+        name: "La Force du Crabe (Strength of the Crab)",
+        element: "Terre",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan du Crabe (Hida, Hiruma)",
+        desc: "Lorsque vous maniez une Arme Lourde ou un Bâton, votre adversaire ne peut pas utiliser de manœuvres de Désarmement contre vous, et vous gagnez +1g0 aux jets de dégâts."
+      },
+      {
+        id: "kata-terre-fer-montagnes",
+        name: "Le Fer dans les Montagnes (Iron in the Mountains)",
+        element: "Terre",
+        mastery: 4,
+        cost: 4,
+        schools: "Toute école de Bushi",
+        desc: "Les pénalités de Blessures que vous subissez sont réduites d'une valeur égale à votre Rang d'École × 2."
+      },
+      {
+        id: "kata-terre-posture-rocher",
+        name: "L'Inébranlable Posture du Rocher (Immovable Stone Posture)",
+        element: "Terre",
+        mastery: 4,
+        cost: 4,
+        schools: "Toute école de Bushi",
+        desc: "Vous gagnez un bonus de +3g0 à tous vos jets pour résister aux manœuvres de Renversement (Knockdown) et d'Intimidation, et +3 à votre ND d'Armure tant que vous ne vous déplacez pas de plus de 1,5 m par round."
+      },
+
+      // --- KATAS D'EAU ---
+      {
+        id: "kata-eau-frapper-eau",
+        name: "Frapper comme l'Eau (Striking as Water)",
+        element: "Eau",
+        mastery: 3,
+        cost: 3,
+        schools: "Toute école de Bushi",
+        desc: "Une fois par round, après avoir réussi une attaque de mêlée, vous pouvez effectuer immédiatement un déplacement de 1,5 mètre (5') en tant qu'Action Gratuite."
+      },
+      {
+        id: "kata-eau-vague-licorne",
+        name: "La Force de la Licorne (Strength of the Unicorn)",
+        element: "Eau",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan de la Licorne (Shinjo, Moto, Utaku)",
+        desc: "Tant que vous êtes en selle sur une monture, votre monture et vous gagnez +3 m (10') à toutes vos Actions de Mouvement et +1g0 aux jets d'attaque de mêlée."
+      },
+      {
+        id: "kata-eau-assaut-mante",
+        name: "La Force de la Mante (Strength of the Mantis)",
+        element: "Eau",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan de la Mante (Yoritomo, Tsuruchi)",
+        desc: "Vous ignorez les pénalités de terrain difficile ou instable (pont de navire, boue, tempête) et gagnez +1g0 aux jets d'attaque avec les armes de paysans, arcs ou petites armes."
+      },
+      {
+        id: "kata-eau-maree-incessante",
+        name: "La Marée Incessante (Relentless Tide)",
+        element: "Eau",
+        mastery: 4,
+        cost: 4,
+        schools: "Toute école de Bushi",
+        desc: "Pendant l'Étape des Réactions, vous pouvez échanger votre score d'Initiative avec celui d'un allié volontaire situé à 6 mètres ou moins de vous."
+      },
+
+      // --- KATAS D'AIR ---
+      {
+        id: "kata-air-frapper-vent",
+        name: "Frapper comme le Vent (Striking as Wind)",
+        element: "Air",
+        mastery: 3,
+        cost: 3,
+        schools: "Toute école de Bushi",
+        desc: "Lorsque vous adoptez la Posture de Défense ou de Défense Totale, vous ajoutez un bonus supplémentaire égal à votre Anneau d'Air à votre ND d'Armure."
+      },
+      {
+        id: "kata-air-grace-grue",
+        name: "La Force de la Grue (Strength of the Crane)",
+        element: "Air",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan de la Grue (Kakita, Daidoji)",
+        desc: "Lorsque vous maniez un katana à une ou deux mains, vous gagnez +2 à votre Score d'Initiative et +2 à votre ND d'Armure contre les attaques de mêlée."
+      },
+      {
+        id: "kata-air-ruse-scorpion",
+        name: "La Force du Scorpion (Strength of the Scorpion)",
+        element: "Air",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan du Scorpion (Bayushi, Shosuro)",
+        desc: "Lorsque vous effectuez la manœuvre Feinte en combat, vous bénéficiez d'une Augmentation Gratuite."
+      },
+      {
+        id: "kata-air-oeil-tempete",
+        name: "Dans l'Œil de la Tempête (Eye of the Storm)",
+        element: "Air",
+        mastery: 4,
+        cost: 4,
+        schools: "Toute école de Bushi (Archers inclus)",
+        desc: "Vos attaques à distance ou de mêlée réduisent de 5 les bonus de couverture ou de Posture de Défense de votre cible."
+      },
+
+      // --- KATAS DE FEU ---
+      {
+        id: "kata-feu-frapper-feu",
+        name: "Frapper comme le Feu (Striking as Fire)",
+        element: "Feu",
+        mastery: 3,
+        cost: 3,
+        schools: "Toute école de Bushi",
+        desc: "Lorsque vous adoptez la Posture d'Attaque Totale, vous ajoutez un bonus égal à votre Anneau de Feu au total de tous vos jets de dégâts de mêlée."
+      },
+      {
+        id: "kata-feu-fureur-lion",
+        name: "La Force du Lion (Strength of the Lion)",
+        element: "Feu",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan du Lion (Akodo, Matsu, Ikoma)",
+        desc: "Vous êtes immunisé aux effets de Peur de Rang inférieur ou égal à votre Rang d'École, et lorsque vous chargez en Posture d'Attaque Totale, vous gagnez +1g0 au jet d'attaque."
+      },
+      {
+        id: "kata-feu-equilibre-dragon",
+        name: "La Force du Dragon (Strength of the Dragon)",
+        element: "Feu",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan du Dragon (Mirumoto)",
+        desc: "Lorsque vous combattez avec deux armes (daisho / Niten), le bonus conféré à votre ND d'Armure augmente de +2 supplémentaires et vous ignorez les malus de main non directrice."
+      },
+      {
+        id: "kata-feu-danse-lames",
+        name: "La Danse des Lames Ardentes (Blazing Blade Dance)",
+        element: "Feu",
+        mastery: 4,
+        cost: 4,
+        schools: "Toute école de Bushi",
+        desc: "Une fois par escarmouche, vous pouvez déclarer une Augmentation Gratuite pour la manœuvre Dégâts Accrus (+1g0 aux dégâts)."
+      },
+
+      // --- KATAS DU VIDE ---
+      {
+        id: "kata-vide-frapper-vide",
+        name: "Frapper comme le Vide (Striking as Void)",
+        element: "Vide",
+        mastery: 3,
+        cost: 3,
+        schools: "Toute école de Bushi",
+        desc: "Lorsque vous adoptez la Posture du Centre, le bonus accordé à votre prochain jet au round suivant passe de +1g1 à +2g1 (et votre bonus d'Initiative en sortant du Centre augmente de +3)."
+      },
+      {
+        id: "kata-vide-harmonie-phenix",
+        name: "La Force du Phénix (Strength of the Phoenix)",
+        element: "Vide",
+        mastery: 3,
+        cost: 3,
+        schools: "Bushi du Clan du Phénix (Shiba)",
+        desc: "Lorsque vous utilisez la manœuvre Garde (Guard) sur un allié, le bonus conféré au ND d'Armure de votre protégé augmente de +3 supplémentaires."
+      },
+      {
+        id: "kata-vide-souffle-absolu",
+        name: "Harmonie des Cinq Anneaux (Harmony of the Five Rings)",
+        element: "Vide",
+        mastery: 4,
+        cost: 4,
+        schools: "Toute école de Bushi",
+        desc: "Chaque fois que vous dépensez 1 point de Vide pour augmenter un jet d'attaque ou de défense, vous ajoutez également votre Rang d'Anneau du Vide au résultat final du jet."
+      }
+    ];
+
+    // Listes dynamiques du personnage pour les Sorts/Kihos et les Katas
+    var charSpellsList = [];
+    var charKatasList = [];
+
+    function getElementBadgeClass(elem) {
+      const e = (elem || "").toString().toLowerCase();
+      if (e.includes("terre") || e.includes("earth")) return "badge-elem-terre";
+      if (e.includes("eau") || e.includes("water")) return "badge-elem-eau";
+      if (e.includes("feu") || e.includes("fire")) return "badge-elem-feu";
+      if (e.includes("air")) return "badge-elem-air";
+      if (e.includes("vide") || e.includes("void")) return "badge-elem-vide";
+      if (e.includes("kiho")) return "badge-elem-kiho";
+      if (e.includes("maho")) return "badge-elem-maho";
+      return "badge-elem-universel";
+    }
+
+    function getRingValueForElement(elem) {
+      const e = (elem || "").toString().toLowerCase();
+      if (e.includes("terre") || e.includes("earth")) return parseInt(document.getElementById('ring-earth')?.textContent) || 2;
+      if (e.includes("eau") || e.includes("water")) return parseInt(document.getElementById('ring-water')?.textContent) || 2;
+      if (e.includes("air")) return parseInt(document.getElementById('ring-air')?.textContent) || 2;
+      if (e.includes("feu") || e.includes("fire")) return parseInt(document.getElementById('ring-fire')?.textContent) || 2;
+      if (e.includes("vide") || e.includes("void")) return parseInt(document.getElementById('ring-void')?.textContent) || 2;
+      return parseInt(document.getElementById('ring-void')?.textContent) || 2;
+    }
+
+    function getCurrentSchoolRank() {
+      const insightTxt = document.getElementById('insight-display')?.textContent || "Rang 1";
+      const m = insightTxt.match(/Rang\s*(\d+)/i);
+      return m ? parseInt(m[1], 10) : 1;
+    }
+
+    // Peupler le menu déroulant des Sorts & Kihos depuis window.SORTS_DATA
+    function populateSpellCatalogSelect() {
+      const sel = document.getElementById('sel-catalog-spell');
+      if (!sel) return;
+      const allSpells = window.SORTS_DATA || [];
+      const elemFilter = document.getElementById('filter-spell-elem')?.value || "tous";
+      const rankFilter = document.getElementById('filter-spell-rank')?.value || "tous";
+
+      const filtered = allSpells.filter(s => {
+        const sElem = (s.isKiho ? "kiho" : (s.isMaho ? "maho" : (s.element || "universel"))).toLowerCase();
+        const matchElem = elemFilter === "tous" || sElem === elemFilter;
+        const sRank = Number(s.mastery) || 0;
+        const matchRank = rankFilter === "tous" || (rankFilter === "6" ? sRank >= 6 : sRank === parseInt(rankFilter, 10));
+        return matchElem && matchRank;
+      });
+
+      sel.innerHTML = `<option value="">-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --</option>`;
+      filtered.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        const tag = s.isKiho ? `Kiho ${s.ring || s.element}` : (s.isMaho ? `Mahō` : (s.element || "Univ."));
+        const rk = s.mastery === 0 ? "Univ." : `Rang ${s.mastery}`;
+        opt.textContent = `[${tag} • ${rk}] ${s.name || s.nom}`;
+        sel.appendChild(opt);
+      });
+      updateSpellPreview();
+    }
+
+    function updateSpellPreview() {
+      const sel = document.getElementById('sel-catalog-spell');
+      const card = document.getElementById('spell-preview-card');
+      if (!sel || !card) return;
+      const id = sel.value;
+      if (!id) { card.classList.add('hidden'); return; }
+
+      const allSpells = window.SORTS_DATA || [];
+      const s = allSpells.find(item => item.id === id);
+      if (!s) { card.classList.add('hidden'); return; }
+
+      const mastery = Number(s.mastery) || 0;
+      const tn = mastery === 0 ? 10 : (5 + 5 * mastery);
+      const elemLabel = s.isKiho ? `Kiho (${s.ring || "Terre"})` : (s.isMaho ? "Mahō" : (s.element || "Universel"));
+      const ringToUse = s.isKiho ? (s.ring || "Terre") : (s.element || "Vide");
+      const ringVal = getRingValueForElement(ringToUse);
+      const schoolRank = getCurrentSchoolRank();
+
+      const affinity = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const deficiency = document.getElementById('shugenja-deficiency')?.value || "aucune";
+      let effRank = schoolRank;
+      if (affinity !== "aucune" && ringToUse.toLowerCase().includes(affinity)) effRank += 1;
+      if (deficiency !== "aucune" && ringToUse.toLowerCase().includes(deficiency)) effRank -= 1;
+
+      const castPool = `${ringVal + Math.max(1, effRank)}g${ringVal}`;
+
+      document.getElementById('spell-preview-name').textContent = s.name || s.nom;
+      const elemBadge = document.getElementById('spell-preview-elem');
+      elemBadge.textContent = `${elemLabel} • Maîtrise ${mastery === 0 ? 'Universel' : mastery}`;
+      elemBadge.className = `text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${getElementBadgeClass(s.isKiho ? 'kiho' : (s.isMaho ? 'maho' : s.element))}`;
+
+      const kwEl = document.getElementById('spell-preview-keywords');
+      const kws = Array.isArray(s.keywords) && s.keywords.length ? s.keywords.join(", ") : "Standard";
+      kwEl.textContent = kws;
+
+      document.getElementById('spell-preview-tn').textContent = `ND ${tn}`;
+      document.getElementById('spell-preview-cast-Access').textContent = `Jet : ${castPool}`;
+      document.getElementById('spell-preview-range').textContent = s.range || "Personnelle";
+      document.getElementById('spell-preview-area').textContent = s.area || "Spéciale";
+      document.getElementById('spell-preview-duration').textContent = s.duration || "Instantanée";
+      document.getElementById('spell-preview-raises').textContent = s.raises || "Aucune";
+      document.getElementById('spell-preview-desc').textContent = s.desc || "";
+
+      card.classList.remove('hidden');
+    }
+
+    function addSpellFromCatalog() {
+      const sel = document.getElementById('sel-catalog-spell');
+      if (!sel || !sel.value) return;
+      const allSpells = window.SORTS_DATA || [];
+      const found = allSpells.find(s => s.id === sel.value);
+      if (!found) return;
+      if (charSpellsList.some(s => s.id === found.id)) {
+        alert("Ce sort ou kiho figure déjà dans votre grimoire personnel.");
+        return;
+      }
+      const defaultXp = found.isKiho ? (Number(found.mastery) || 3) : 0;
+      charSpellsList.push({
+        id: found.id,
+        name: found.name || found.nom,
+        element: found.isKiho ? "kiho" : (found.isMaho ? "maho" : (found.element || "Universel")),
+        ring: found.ring || found.element || "Vide",
+        mastery: Number(found.mastery) || 0,
+        range: found.range || "Personnelle",
+        area: found.area || "Spéciale",
+        duration: found.duration || "Instantanée",
+        raises: found.raises || "Aucune",
+        desc: found.desc || "",
+        isKiho: !!found.isKiho,
+        isMaho: !!found.isMaho,
+        xpCost: defaultXp
+      });
+      renderCharacterSpells();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function addUniversalSpells() {
+      const allSpells = window.SORTS_DATA || [];
+      const univs = allSpells.filter(s => (s.element || "").toLowerCase() === "universel" || s.mastery === 0);
+      univs.forEach(u => {
+        if (!charSpellsList.some(existing => existing.id === u.id)) {
+          charSpellsList.push({
+            id: u.id,
+            name: u.name || u.nom,
+            element: "Universel",
+            ring: "Vide",
+            mastery: 0,
+            range: u.range || "Personnelle",
+            area: u.area || "Spéciale",
+            duration: u.duration || "Instantanée",
+            raises: u.raises || "Aucune",
+            desc: u.desc || "",
+            isKiho: false,
+            isMaho: false,
+            xpCost: 0
+          });
+        }
+      });
+      renderCharacterSpells();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function removeCharacterSpell(id) {
+      charSpellsList = charSpellsList.filter(s => s.id !== id);
+      renderCharacterSpells();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function updateSpellXpCost(id, newVal) {
+      const item = charSpellsList.find(s => s.id === id);
+      if (item) {
+        item.xpCost = Math.max(0, parseInt(newVal, 10) || 0);
+        renderCharacterSpells();
+        if (typeof updateAll === "function") updateAll();
+      }
+    }
+
+    function rollSpellCasting(spellId) {
+      const s = charSpellsList.find(item => item.id === spellId);
+      if (!s) return;
+      const ringToUse = s.isKiho ? (s.ring || "Terre") : (s.element || "Vide");
+      const ringVal = getRingValueForElement(ringToUse);
+      const schoolRank = getCurrentSchoolRank();
+
+      const affinity = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const deficiency = document.getElementById('shugenja-deficiency')?.value || "aucune";
+      let effRank = schoolRank;
+      if (affinity !== "aucune" && ringToUse.toLowerCase().includes(affinity)) effRank += 1;
+      if (deficiency !== "aucune" && ringToUse.toLowerCase().includes(deficiency)) effRank -= 1;
+
+      const rollX = ringVal + Math.max(1, effRank);
+      const keepY = ringVal;
+      const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
+      const shortName = (s.name || "Sort").split('(')[0].trim();
+
+      rollL5RDicePool(rollX, keepY, 0, `${shortName} [ND ${tn}]`, true, false);
+    }
+
+    function renderCharacterSpells() {
+      const container = document.getElementById('char-spells-container');
+      const countBadge = document.getElementById('spells-count-badge');
+      const xpBadge = document.getElementById('spells-xp-total');
+      if (!container) return;
+
+      const totalXp = charSpellsList.reduce((acc, s) => acc + (Number(s.xpCost) || 0), 0);
+      if (countBadge) countBadge.textContent = charSpellsList.length;
+      if (xpBadge) xpBadge.textContent = totalXp;
+
+      if (charSpellsList.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 rounded-lg bg-black/40 border border-stone-800/80 text-stone-500 italic text-center text-[11px]">
+            Aucun sort ou kiho inscrit. Sélectionnez un sort ci-dessus ou cliquez sur « ⚡ Dotation Sorts / Katas Auto ».
+          </div>
+        `;
+        return;
+      }
+
+      const schoolRank = getCurrentSchoolRank();
+      const affinity = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const deficiency = document.getElementById('shugenja-deficiency')?.value || "aucune";
+
+      container.innerHTML = charSpellsList.map(s => {
+        const ringToUse = s.isKiho ? (s.ring || "Terre") : (s.element || "Vide");
+        const ringVal = getRingValueForElement(ringToUse);
+        let effRank = schoolRank;
+        if (affinity !== "aucune" && ringToUse.toLowerCase().includes(affinity)) effRank += 1;
+        if (deficiency !== "aucune" && ringToUse.toLowerCase().includes(deficiency)) effRank -= 1;
+
+        const rollX = ringVal + Math.max(1, effRank);
+        const keepY = ringVal;
+        const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
+        const badgeCls = getElementBadgeClass(s.isKiho ? 'kiho' : (s.isMaho ? 'maho' : s.element));
+        const elemLabel = s.isKiho ? `Kiho ${s.ring || ''}` : (s.isMaho ? 'Mahō' : s.element);
+
+        return `
+          <div class="p-2.5 rounded-lg bg-stone-950/90 border border-stone-800 hover:border-amber-500/40 transition space-y-1.5">
+            <div class="flex justify-between items-start gap-2">
+              <div class="truncate">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">
+                    ${elemLabel} • M${s.mastery}
+                  </span>
+                  <a href="grimoire.html#sort-${s.id}" target="_blank" class="font-bold font-imperial text-amber-200 hover:text-amber-300 text-xs truncate" title="Voir dans le Grimoire">
+                    ${s.name} ↗
+                  </a>
+                </div>
+                <div class="text-[10px] text-stone-400 mt-0.5">
+                  Portée : ${s.range} • Durée : ${s.duration} • <b class="text-amber-300">ND ${tn}</b>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="rollSpellCasting('${s.id}')" class="px-2 py-1 rounded bg-amber-950/80 hover:bg-amber-600 text-amber-300 hover:text-black border border-amber-500/40 font-bold font-imperial text-[10px] transition cursor-pointer" title="Lancer le jet d'incantation dans le plateau de dés">
+                  🎲 ${rollX}g${keepY}
+                </button>
+                <div class="flex items-center bg-black/60 border border-stone-800 rounded px-1 py-0.5" title="Coût en XP (0 pour un parchemin de Shugenja, Maîtrise pour un Kiho)">
+                  <input type="number" value="${s.xpCost || 0}" min="0" max="20" onchange="updateSpellXpCost('${s.id}', this.value)" class="w-7 text-center text-[10px] font-bold bg-transparent">
+                  <span class="text-[8px] text-stone-500">XP</span>
+                </div>
+                <button type="button" onclick="removeCharacterSpell('${s.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Retirer">✕</button>
+              </div>
+            </div>
+            <p class="text-[10px] text-stone-400 line-clamp-2 leading-snug">${s.desc}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // GESTION DES KATAS MARTIAUX (CATALOGUE + LISTE DU PERSONNAGE)
+    // =========================================================================
+    function populateKataCatalogSelect() {
+      const sel = document.getElementById('sel-catalog-kata');
+      if (!sel) return;
+      const elemFilter = document.getElementById('filter-kata-elem')?.value || "tous";
+      const allKatas = window.KATAS_DATA || [];
+
+      const filtered = allKatas.filter(k => elemFilter === "tous" || k.element === elemFilter);
+      sel.innerHTML = `<option value="">-- Choisir un Kata martial (${filtered.length} disponible(s)) --</option>`;
+      filtered.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k.id;
+        opt.textContent = `[${k.element} ${k.mastery} • ${k.cost} XP] ${k.name}`;
+        sel.appendChild(opt);
+      });
+      updateKataPreview();
+    }
+
+    function updateKataPreview() {
+      const sel = document.getElementById('sel-catalog-kata');
+      const card = document.getElementById('kata-preview-card');
+      if (!sel || !card) return;
+      const id = sel.value;
+      if (!id) { card.classList.add('hidden'); return; }
+
+      const k = (window.KATAS_DATA || []).find(item => item.id === id);
+      if (!k) { card.classList.add('hidden'); return; }
+
+      const charRingVal = getRingValueForElement(k.element);
+      const meetsReq = charRingVal >= k.mastery;
+
+      document.getElementById('kata-preview-name').textContent = k.name;
+      const ringBadge = document.getElementById('kata-preview-ring');
+      ringBadge.textContent = `Anneau requis : ${k.element} ${k.mastery}`;
+      ringBadge.className = `text-[9px] font-bold font-imperial px-2 py-0.5 rounded inline-block mt-1 ${getElementBadgeClass(k.element)}`;
+
+      document.getElementById('kata-preview-cost').textContent = `Coût : ${k.cost} XP`;
+      const reqStatus = document.getElementById('kata-preview-req-status');
+      reqStatus.textContent = meetsReq ? `✓ Anneau ${k.element} (${charRingVal}) suffisant` : `⚠️ Anneau ${k.element} actuel : ${charRingVal}/${k.mastery}`;
+      reqStatus.className = `text-[10px] font-bold block mt-1 ${meetsReq ? 'text-emerald-400' : 'text-amber-400'}`;
+
+      document.getElementById('kata-preview-schools').textContent = k.schools;
+      document.getElementById('kata-preview-effect').textContent = k.desc;
+
+      card.classList.remove('hidden');
+    }
+
+    function addKataFromCatalog() {
+      const sel = document.getElementById('sel-catalog-kata');
+      if (!sel || !sel.value) return;
+      const found = (window.KATAS_DATA || []).find(k => k.id === sel.value);
+      if (!found) return;
+      if (charKatasList.some(k => k.id === found.id)) {
+        alert("Ce Kata figure déjà sur votre fiche.");
+        return;
+      }
+      charKatasList.push({
+        id: found.id,
+        name: found.name,
+        element: found.element,
+        mastery: found.mastery,
+        xpCost: found.cost,
+        schools: found.schools,
+        desc: found.desc,
+        active: charKatasList.length === 0 // Le premier kata ajouté est actif par défaut
+      });
+      renderCharacterKatas();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function toggleActiveKata(id) {
+      charKatasList.forEach(k => {
+        k.active = (k.id === id) ? !k.active : false;
+      });
+      renderCharacterKatas();
+    }
+
+    function removeCharacterKata(id) {
+      charKatasList = charKatasList.filter(k => k.id !== id);
+      renderCharacterKatas();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    function renderCharacterKatas() {
+      const container = document.getElementById('char-katas-container');
+      const countBadge = document.getElementById('katas-count-badge');
+      const xpBadge = document.getElementById('katas-xp-total');
+      if (!container) return;
+
+      const totalXp = charKatasList.reduce((acc, k) => acc + (Number(k.xpCost) || 0), 0);
+      if (countBadge) countBadge.textContent = charKatasList.length;
+      if (xpBadge) xpBadge.textContent = totalXp;
+
+      if (charKatasList.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 rounded-lg bg-black/40 border border-stone-800/80 text-stone-500 italic text-center text-[11px]">
+            Aucun Kata appris. Sélectionnez un Kata ci-dessus pour renforcer votre style martial.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = charKatasList.map(k => {
+        const badgeCls = getElementBadgeClass(k.element);
+        return `
+          <div class="p-2.5 rounded-lg ${k.active ? 'bg-amber-950/30 border-amber-500/60' : 'bg-stone-950/90 border-stone-800'} border transition space-y-1.5">
+            <div class="flex justify-between items-start gap-2">
+              <div class="truncate">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">
+                    ${k.element} ${k.mastery}
+                  </span>
+                  <span class="font-bold font-imperial text-amber-200 text-xs truncate">${k.name}</span>
+                </div>
+                <div class="text-[10px] text-stone-400 mt-0.5">${k.schools} • <b>${k.xpCost} XP</b></div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="toggleActiveKata('${k.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial transition cursor-pointer ${k.active ? 'bg-emerald-600 text-black' : 'bg-stone-900 text-stone-400 border border-stone-700'}">
+                  ${k.active ? '✓ Kata Actif' : 'Activer'}
+                </button>
+                <button type="button" onclick="removeCharacterKata('${k.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Retirer">✕</button>
+              </div>
+            </div>
+            <p class="text-[10px] text-stone-300 leading-snug">${k.desc}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Dotation automatique intelligente selon l'école (Shugenja vs Bushi)
+    function autoPopulateMysticAndMartial(forceAdd = false) {
+      const schoolBadge = (document.getElementById('sticky-school-badge')?.textContent || "").toLowerCase();
+      const schoolSelText = (document.getElementById('sel-school')?.options[document.getElementById('sel-school')?.selectedIndex]?.text || "").toLowerCase();
+      const isShugenja = schoolBadge.includes("shugenja") || schoolSelText.includes("shugenja") || schoolSelText.includes("prêtre") || schoolSelText.includes("isawa") || schoolSelText.includes("kuni") || schoolSelText.includes("tamori") || schoolSelText.includes("agasha") || schoolSelText.includes("soshi") || schoolSelText.includes("yogo") || schoolSelText.includes("iuchi") || schoolSelText.includes("asahina") || schoolSelText.includes("moshi");
+
+      if (isShugenja) {
+        addUniversalSpells();
+        const allSpells = window.SORTS_DATA || [];
+        const r1Spells = allSpells.filter(s => s.mastery === 1 && !s.isKiho && !s.isMaho);
+        // Ajouter 4 sorts de Rang 1 variés si la liste ne contient que les universels
+        if (charSpellsList.length <= 3 && r1Spells.length > 0) {
+          const picks = ["earth-1-jade-strike", "eau-1-path-inner-peace", "feu-1-katana-fire", "air-1-blessed-wind"];
+          picks.forEach(pid => {
+            const sp = r1Spells.find(x => x.id === pid) || r1Spells[Math.floor(Math.random() * r1Spells.length)];
+            if (sp && !charSpellsList.some(e => e.id === sp.id)) {
+              charSpellsList.push({
+                id: sp.id, name: sp.name || sp.nom, element: sp.element, ring: sp.element,
+                mastery: 1, range: sp.range, area: sp.area, duration: sp.duration, raises: sp.raises, desc: sp.desc, xpCost: 0
+              });
+            }
+          });
+        }
+      } else if (forceAdd && charKatasList.length === 0) {
+        // Ajouter un Kata de départ pour un Bushi si demandé
+        const firstKata = (window.KATAS_DATA || [])[0];
+        if (firstKata) {
+          charKatasList.push({
+            id: firstKata.id, name: firstKata.name, element: firstKata.element,
+            mastery: firstKata.mastery, xpCost: firstKata.cost, schools: firstKata.schools, desc: firstKata.desc, active: true
+          });
+        }
+      }
+      renderCharacterSpells();
+      renderCharacterKatas();
+      if (typeof updateAll === "function") updateAll();
+    }
+
+    // Synchronisation des emplacements de sorts et du coût XP avec updateAll()
+    function syncSpellsAndKatasWithSheet() {
+      const e = document.getElementById('ring-earth')?.textContent || "2";
+      const w = document.getElementById('ring-water')?.textContent || "2";
+      const a = document.getElementById('ring-air')?.textContent || "2";
+      const f = document.getElementById('ring-fire')?.textContent || "2";
+      const v = document.getElementById('ring-void')?.textContent || "2";
+
+      if (document.getElementById('slots-earth')) document.getElementById('slots-earth').textContent = `${e} slots`;
+      if (document.getElementById('slots-water')) document.getElementById('slots-water').textContent = `${w} slots`;
+      if (document.getElementById('slots-air')) document.getElementById('slots-air').textContent = `${a} slots`;
+      if (document.getElementById('slots-fire')) document.getElementById('slots-fire').textContent = `${f} slots`;
+      if (document.getElementById('slots-void')) document.getElementById('slots-void').textContent = `${v} slots`;
+
+      const spellsXp = charSpellsList.reduce((acc, s) => acc + (Number(s.xpCost) || 0), 0);
+      const katasXp = charKatasList.reduce((acc, k) => acc + (Number(k.xpCost) || 0), 0);
+      const extraXp = spellsXp + katasXp;
+
+      const xpRemEl = document.getElementById('xp-remaining');
+      if (xpRemEl && extraXp > 0) {
+        const currentRem = parseInt(xpRemEl.textContent, 10) || 0;
+        const updatedRem = currentRem - extraXp;
+        xpRemEl.textContent = updatedRem;
+        xpRemEl.className = updatedRem < 0 ? "text-red-400 font-extrabold" : "text-emerald-400";
+      }
+
+      renderCharacterSpells();
+      renderCharacterKatas();
+      updateSpellPreview();
+      updateKataPreview();
+    }
+  </script>
+
+  <!-- SCRIPTS D'APERÇU DES AVANTAGES & MULTI-SÉLECTION COMPÉTENCES -->
   <script>
     function updateAdvPreview() {
       const sel = document.getElementById('sel-catalog-adv');
@@ -1075,7 +1996,7 @@
   <script>
     const DOJO_STORAGE_KEY = "l5r_dojo_roster_v1";
 
-    // 1. COLLECTE COMPLÈTE DE L'ÉTAT DU PERSONNAGE (INCLUANT BACKGROUND)
+    // 1. COLLECTE COMPLÈTE DE L'ÉTAT DU PERSONNAGE (INCLUANT SORTS, KIHOS, KATAS & BACKGROUND)
     function captureFullCharacterState() {
       const clanSel = document.getElementById('sel-clan');
       const schoolSel = document.getElementById('sel-school');
@@ -1108,6 +2029,10 @@
         skills: typeof currentSkills !== "undefined" ? JSON.parse(JSON.stringify(currentSkills)) : [],
         advantages: typeof advantagesList !== "undefined" ? JSON.parse(JSON.stringify(advantagesList)) : [],
         disadvantages: typeof disadvantagesList !== "undefined" ? JSON.parse(JSON.stringify(disadvantagesList)) : [],
+        affinity: document.getElementById('shugenja-affinity')?.value || "aucune",
+        deficiency: document.getElementById('shugenja-deficiency')?.value || "aucune",
+        spells: JSON.parse(JSON.stringify(charSpellsList)),
+        katas: JSON.parse(JSON.stringify(charKatasList)),
         armor: document.getElementById('pc-armor').value,
         weapon1: document.getElementById('pc-weapon-1').value,
         weapon2: document.getElementById('pc-weapon-2').value,
@@ -1122,7 +2047,7 @@
       };
     }
 
-// 2. CHARGEMENT D'UN ÉTAT COMPLET DANS LA FORGE (COMPATIBLE AUTRE ÉCOLE)
+    // 2. CHARGEMENT D'UN ÉTAT COMPLET DANS LA FORGE
     function applyFullCharacterState(d) {
       if (!d) return;
       if (d.baseXP !== undefined && document.getElementById('base-xp-input')) {
@@ -1161,6 +2086,11 @@
       if (Array.isArray(d.advantages)) advantagesList = d.advantages;
       if (Array.isArray(d.disadvantages)) disadvantagesList = d.disadvantages;
 
+      if (document.getElementById('shugenja-affinity')) document.getElementById('shugenja-affinity').value = d.affinity || "aucune";
+      if (document.getElementById('shugenja-deficiency')) document.getElementById('shugenja-deficiency').value = d.deficiency || "aucune";
+      charSpellsList = Array.isArray(d.spells) ? d.spells : [];
+      charKatasList = Array.isArray(d.katas) ? d.katas : [];
+
       if (d.armor) document.getElementById('pc-armor').value = d.armor;
       if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
       if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
@@ -1179,6 +2109,45 @@
       renderSkills();
       renderAdvDisadv();
       initCatalogSelectors();
+      renderCharacterSpells();
+      renderCharacterKatas();
+      updateAll();
+    }
+
+    // Export / Import JSON enrichis avec Sorts, Kihos et Katas
+    function exportJSONWithMystic() {
+      updateAll();
+      const data = captureFullCharacterState();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${(data.name || "samurai").replace(/\s+/g, "_")}_L5R4e.json`;
+      a.click();
+    }
+
+    function importJSONWithMystic(event) {
+      const file = event.target?.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          applyFullCharacterState(parsed);
+        } catch (err) {
+          if (typeof importJSON === "function") importJSON(event);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetCharacterWithMystic() {
+      charSpellsList = [];
+      charKatasList = [];
+      if (document.getElementById('shugenja-affinity')) document.getElementById('shugenja-affinity').value = "aucune";
+      if (document.getElementById('shugenja-deficiency')) document.getElementById('shugenja-deficiency').value = "aucune";
+      if (typeof resetCharacter === "function") resetCharacter();
+      renderCharacterSpells();
+      renderCharacterKatas();
       updateAll();
     }
 
@@ -1250,12 +2219,13 @@
 
       container.innerHTML = roster.map(c => {
         const color = clanColors[c.clan] || "#d4af37";
+        const mysticCount = (c.spells?.length || 0) + (c.katas?.length || 0);
         return `
           <div onclick="loadFromDojo('${c.id}')" class="p-2.5 rounded-lg bg-black/70 border border-stone-800 hover:border-amber-500/60 transition cursor-pointer flex justify-between items-center gap-2 group">
             <div class="truncate">
               <div class="font-bold font-imperial text-amber-200 group-hover:text-amber-300 truncate">${c.name}</div>
               <div class="text-[10px] text-stone-400 truncate">
-                <span style="color:${color}" class="font-bold">${c.schoolLabel}</span> • ${c.insightText}
+                <span style="color:${color}" class="font-bold">${c.schoolLabel}</span> • ${c.insightText}${mysticCount ? ` • ${mysticCount} Sort/Kata` : ''}
               </div>
             </div>
             <div class="flex items-center gap-1 shrink-0">
@@ -1358,7 +2328,6 @@
       }
     };
 
-// 5. GÉNÉRATEUR DE LÉGENDE TENANT COMPTE D'ÉTUDES DANS UNE AUTRE ÉCOLE
     function generateCharacterBackground() {
       updateAll();
       const name = document.getElementById('pc-name').value || "Okado Hiruma";
@@ -1401,9 +2370,13 @@
         ? `Cependant, son parcours est marqué par un fardeau personnel (${disadvNames.join(", ")}) qui met régulièrement sa résolution à l'épreuve.`
         : `La responsabilité de représenter dignement la famille ${famName} pèse sur chacun de ses pas.`;
 
+      const mysticSentence = (charSpellsList.length > 0 || charKatasList.length > 0)
+        ? ` Maîtrisant ${charSpellsList.length ? `${charSpellsList.length} prières/kihos` : ''}${charSpellsList.length && charKatasList.length ? ' et ' : ''}${charKatasList.length ? `le kata « ${charKatasList[0].name.split('(')[0].trim()} »` : ''}, son art force le respect.`
+        : "";
+
       const story = [
         `Né(e) au sein de la famille ${famName} (${clanName}), ${name} a grandi ${lore.lands}. ${schoolingOrigin}`,
-        `Guidé(e) par une affinité naturelle avec l'élément de ${topRing.name} (${topRing.desc}), ${name} s'est forgé une réputation prometteuse. ${advSentence}`,
+        `Guidé(e) par une affinité naturelle avec l'élément de ${topRing.name} (${topRing.desc}), ${name} s'est forgé une réputation prometteuse. ${advSentence}${mysticSentence}`,
         `${disadvSentence} Aujourd'hui, avec un Honneur de ${honor} et son ${weapon1.toLowerCase()} à la ceinture, ${name} parcourt les routes de l'Empire d'Émeraude pour accomplir son devoir.`
       ].join("\n\n");
 
@@ -1431,11 +2404,40 @@
       window.speechSynthesis.speak(u);
     }
 
-    // Impression PDF enrichie avec le Background et les 20 Questions
+    // Remplissage du bloc Sorts/Kihos/Katas pour le dossier PDF A4
+    function populatePrintableMysticBox() {
+      const box = document.getElementById('p-spells-katas-box');
+      const sum = document.getElementById('p-mystic-summary');
+      if (!box) return;
+
+      const aff = document.getElementById('shugenja-affinity')?.value || "aucune";
+      const def = document.getElementById('shugenja-deficiency')?.value || "aucune";
+      if (sum) {
+        sum.textContent = `${charSpellsList.length} Sort(s)/Kiho(s) • ${charKatasList.length} Kata(s)${aff !== 'aucune' ? ` • Affinité: ${aff.toUpperCase()}` : ''}${def !== 'aucune' ? ` / Déficience: ${def.toUpperCase()}` : ''}`;
+      }
+
+      if (charSpellsList.length === 0 && charKatasList.length === 0) {
+        box.innerHTML = `<div class="text-stone-500 italic">Aucun sort, kiho ou kata inscrit sur cette fiche.</div>`;
+        return;
+      }
+
+      const spellsHtml = charSpellsList.map(s => {
+        const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
+        return `<div><b>[${s.isKiho ? 'Kiho ' + s.ring : s.element} M${s.mastery} • ND ${tn}] ${s.name}</b> (${s.range}, ${s.duration}) : ${s.desc}</div>`;
+      }).join('');
+
+      const katasHtml = charKatasList.map(k => {
+        return `<div><b>[Kata ${k.element} ${k.mastery} • ${k.xpCost} XP${k.active ? ' • ACTIF' : ''}] ${k.name}</b> : ${k.desc}</div>`;
+      }).join('');
+
+      box.innerHTML = spellsHtml + katasHtml;
+    }
+
     function prepareAndPrintPDF() {
       if (!document.getElementById('pc-background-story')?.value.trim()) {
         generateCharacterBackground();
       }
+      populatePrintableMysticBox();
       document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
       const qBox = document.getElementById('p-20questions-box');
       if (qBox) {
@@ -1464,7 +2466,6 @@
 
     function rollL5RDicePool(rollCount, keepCount, bonusStatic = 0, label = "Jet Roll & Keep", explode = true, rerollOnes = false) {
       toggleDiceTray(true);
-      // Règle des 10 dés maximum de L5R 4e Édition
       let r = Math.max(1, parseInt(rollCount) || 1);
       let k = Math.max(1, parseInt(keepCount) || 1);
       let extraStatic = parseInt(bonusStatic) || 0;
@@ -1498,7 +2499,6 @@
         diceResults.push({ total: totalDie, exploded: explosions > 0, rerolledOne });
       }
 
-      // Trier du plus grand au plus petit pour garder les k meilleurs
       diceResults.sort((a, b) => b.total - a.total);
       diceResults.forEach((d, idx) => d.kept = idx < k);
 
@@ -1526,7 +2526,6 @@
 
     function rollFromSticky(elementId, label) {
       const raw = document.getElementById(elementId)?.textContent || "3g2";
-      // Parse "4g2 + 3"
       const match = raw.match(/(\d+)g(\d+)(?:\s*\+\s*(\d+))?/i);
       if (!match) return;
       const r = parseInt(match[1], 10);
@@ -1550,8 +2549,8 @@
       rollL5RDicePool(r, k, 0, "Jet Manuel", explode, spec);
     }
     
-    // Synchronisation automatique en cas d'utilisation directe de Ctrl+P / Cmd+P
     window.addEventListener('beforeprint', () => {
+      populatePrintableMysticBox();
       if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
         document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
       }
@@ -1566,9 +2565,23 @@
       }
     });
     
-    // Initialisation au chargement (URL ?clan=, ?char=, ou Dojo)
+    // Initialisation au chargement (URL ?clan=, ?char=, ?load=, et hook sur updateAll)
     window.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
+        // Connecter updateAll() pour synchroniser l'XP des Katas/Kihos et les jets de Sorts
+        if (typeof window.updateAll === "function" && !window._mysticUpdateWrapped) {
+          const _origUpdateAll = window.updateAll;
+          window.updateAll = function() {
+            _origUpdateAll.apply(this, arguments);
+            syncSpellsAndKatasWithSheet();
+          };
+          window._mysticUpdateWrapped = true;
+        }
+
+        populateSpellCatalogSelect();
+        populateKataCatalogSelect();
+        renderCharacterSpells();
+        renderCharacterKatas();
         initSkillsMultiSelect();
         renderDojoRoster();
 
@@ -1595,11 +2608,12 @@
           onClanChange();
         }
 
+        autoPopulateMysticAndMartial();
         generateCharacterBackground();
       }, 250);
 
-      document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(() => { initSkillsMultiSelect(); generateCharacterBackground(); }, 200));
-      document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(() => { initSkillsMultiSelect(); generateCharacterBackground(); }, 200));
+      document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(() => { initSkillsMultiSelect(); autoPopulateMysticAndMartial(); generateCharacterBackground(); }, 200));
+      document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(() => { initSkillsMultiSelect(); autoPopulateMysticAndMartial(); generateCharacterBackground(); }, 200));
     });
   </script>
 </body>
