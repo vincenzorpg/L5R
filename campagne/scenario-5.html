@@ -99,10 +99,10 @@
         <span class="px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-[10px] text-amber-300 font-bold font-mono">
           ACTE 5 • TERRES DU CRABE & FORGES DE LA FAMILLE KAIU
         </span>
-        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Samui, Ryumitaka et Okado)</span>
+        <span class="text-xs text-stone-400">Récit de : <b>Akira Tsuruchi</b> (avec Samui, Ryumitaka, Okado)</span>
       </div>
       <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
-        Scénario 5 : Entre le ciel et l'enfer
+        Scénario 5 : Entre le ciel et l’enfer
       </h1>
       <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
         « Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »
@@ -151,6 +151,14 @@
 
     <!-- CORPS DU TEXTE INTÉGRAL DU WORDPRESS -->
     <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+
+      <p>
+        Par <b>Akira Tsuruchi</b>
+      </p>
+
+      <p>
+        Avec la participation de <b>Samui</b>, <b>Ryumitaka</b>, <b>Okado</b>
+      </p>
 
       <p>
         Après 6 mois de repos et de méditation dans la forteresse Tsuruchi, mon daimyo me demande d’aller sur le territoire Crabe pour la cérémonie annuelle des forgerons de la famille Kaiu. J’ai pour mission de lui ramener une arme sacrée et pour cela je n’ai aucune limite de budget. J’accède volontiers à sa requête, heureux de pouvoir sortir de mon quotidien.
@@ -208,6 +216,14 @@
         Pendant l’entracte, Kamako vient nous parler et nous prenons plaisir à échanger avec elle sur sa passion pour la forge. Au beau milieu d’une phrase, elle se fait interrompre par un tumulte dans un coin de la cour. Ce sont des rônins qui se battent avec des gardes. Mes trois compagnons vont voir ce qui se passent mais je préfère rester en retrait près de la fontaine. J’avais raison tout ce remue-ménage n’était qu’un leurre, deux rônins surgissent de derrière la fontaine. J’appelle Ryu pour qu’il rapplique et pendant que je cloue d’une flèche un des assaillants, Ryu immobilise l’autre avec un de ses sorts. Puis Ryu semble avoir repéré quelque chose et se met à courir. Je me lance à sa poursuite et j’aperçois trois rônins un peu plus loin entrain de s’enfuir. L’un d’eux tient dans sa main un des Katanas du concours. Nous avons le temps de les tuer à distance avant qu’ils ne sortent du temple et nous récupérons la précieuse arme.
       </p>
 
+      <p>
+        Le concours reprend avec une épreuve pour tester le tranchant de l’arme sur un bambou. Les deux armes obtiennent un score identique. Puis vient l’épreuve de la beauté statique, l’preuve de la beauté en mouvement et l’épreuve de la souplesse de l’arme. A la fin de la journée Kamako à une légère avance sur son adversaire.
+      </p>
+
+      <p>
+        Le lendemain matin a lieu l’épreuve du katana dans l’eau. La lame est posée verticalement dans un bassin sous un arbre et nous devons observer le comportement des feuilles qui tombent. Alors que toutes les feuilles glissent le long de la lame de Kamako comme si ce dernier leur faisait une ultime caresse avant qu’elles ne retournent à la terre. En revanche, le comportement est totalement différent pour le katana de Tokutei. Ce dernier semble attirer les feuilles qui tombent pours les trancher net.
+      </p>
+
       <!-- ILLUSTRATION 3 : LE CONCOURS DES FORGERONS KAIU -->
       <figure class="scene-figure">
         <img src="../assets/images/scenarios/CielEnfer-3.jpg" alt="Le concours annuel de forge Kaiu" />
@@ -217,7 +233,7 @@
       </figure>
 
       <p>
-        Le concours reprend avec une épreuve pour tester le tranchant de l’arme sur un bambou. Les deux armes obtiennent un score identique. Puis vient l’épreuve de la beauté statique, l’épreuve de la beauté en mouvement et l’épreuve de la souplesse de l’arme....
+        Le vote du jury est unanime devant la spiritualité offerte par le katana de Kamako et c’est donc elle qui remporte le concours. En remerciement pour nos nombreux services, nous recevons chacun une arme de grande qualité pour notre daimyo.
       </p>
 
     </article>
@@ -304,7 +320,6 @@
     }
 
     function updateProgressUI() {
-      const statusEl = document.getElementById('audio-status');
       const progText = document.getElementById('audio-progress');
       const bar = document.getElementById('narrator-progress-bar');
       const visualizer = document.getElementById('narrator-visualizer');
