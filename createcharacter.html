@@ -13,7 +13,7 @@
   <!-- FAVICON DES 5 ANNEAUX -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
 
-  <!-- BASES DE DONNÉES DÉPORTÉES (CLANS, COMPÉTENCES, ÉQUIPEMENT, AVANTAGES) -->
+  <!-- BASES DE DONNÉES DÉPORTÉES -->
   <script src="data/clans-data.js" defer></script>
   <script src="data/competences-data.js" defer></script>
   <script src="data/equipement-data.js" defer></script>
@@ -33,7 +33,7 @@
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/navbar.js" defer></script>
-  <script src="js/character-generator.js?v=9" defer></script>
+  <script src="js/character-generator.js?v=10" defer></script>
 
   <style>
     :root {
@@ -88,7 +88,6 @@
       border: 1px solid #e11d48;
     }
 
-    /* BADGES ÉLÉMENTAIRES */
     .badge-elem-terre { background: rgba(120, 53, 15, 0.4); color: #fde68a; border: 1px solid #b45309; }
     .badge-elem-eau { background: rgba(30, 58, 138, 0.4); color: #93c5fd; border: 1px solid #2563eb; }
     .badge-elem-feu { background: rgba(153, 27, 27, 0.4); color: #fca5a5; border: 1px solid #dc2626; }
@@ -194,7 +193,7 @@
           </div>
         </div>
 
-        <!-- Bloc Actions & Sauvegarde Dojo -->
+        <!-- Bloc Actions & Sauvegarde Dojo (SANS le bouton Auto aléatoire) -->
         <div class="flex flex-wrap items-center gap-1.5">
           <button onclick="saveToDojo()" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition flex items-center gap-1 shadow cursor-pointer" title="Sauvegarder dans le Dojo local">
             <span>📌</span> <span>Sauvegarder</span>
@@ -202,7 +201,6 @@
           <button onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct">
             🔗 Lien
           </button>
-          <button onclick="randomizeAll(); autoPopulateMysticAndMartial(); generateCharacterBackground();" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold transition cursor-pointer">⚡ Auto</button>
           <button onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer">💾 JSON</button>
           <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
             📂 Charger
@@ -216,7 +214,7 @@
         </div>
       </div>
 
-      <!-- Ligne 2 : Les 4 Métriques Clés (Jets cliquables) -->
+      <!-- Ligne 2 : Les 4 Métriques Clés -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
         <button type="button" onclick="rollFromSticky('sticky-atk', 'Jet pour Toucher')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-amber-950/40 border border-stone-800 hover:border-amber-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer le jet d'attaque !">
           <div class="flex justify-between items-baseline w-full">
@@ -257,9 +255,7 @@
   <!-- CONTENU PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <!-- ===================================================================
-         0. MON DOJO PERSONNEL (CASERNE DES PERSONNAGES SAUVEGARDÉS)
-         =================================================================== -->
+    <!-- 0. MON DOJO PERSONNEL -->
     <section class="card-clean rounded-xl p-4 border-amber-500/40 bg-gradient-to-r from-[#16100c] via-[#120e0e] to-[#16100c] space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
@@ -269,7 +265,7 @@
               Mon Dojo Personnel — Samouraïs Enregistrés
             </h2>
             <p class="text-[11px] text-stone-400">
-              Vos personnages sont conservés dans votre navigateur et accessibles depuis la page d'accueil[cite: 10].
+              Vos personnages sont conservés dans votre navigateur et accessibles directement depuis l'accueil du site.
             </p>
           </div>
         </div>
@@ -280,8 +276,6 @@
           </button>
         </div>
       </div>
-
-      <!-- Liste des personnages sauvegardés -->
       <div id="dojo-roster-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 text-xs"></div>
     </section>
 
@@ -510,7 +504,7 @@
 
     <!-- 4. AVANTAGES & DÉSAVANTAGES -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- BLOC AVANTAGES -->
+      <!-- 4A. AVANTAGES -->
       <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
           <h3 class="font-bold text-emerald-400 font-imperial text-sm flex items-center gap-1.5">
@@ -552,7 +546,7 @@
         <div id="adv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
       </div>
 
-      <!-- BLOC DÉSAVANTAGES -->
+      <!-- 4B. DÉSAVANTAGES -->
       <div class="card-clean rounded-xl p-5 space-y-4">
         <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
           <h3 class="font-bold text-red-400 font-imperial text-sm flex items-center gap-1.5">
@@ -596,8 +590,7 @@
     </section>
 
     <!-- ===================================================================
-         5. VOIES MARTIALES & MYSTIQUES (KATAS, SORTS & KIHOS)
-         Section à affichage conditionnel automatique selon l'École
+         5. VOIES MARTIALES & MYSTIQUES (AFFICHAGE CONDITIONNEL SELON L'ÉCOLE)
          =================================================================== -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40" id="section-mystic-martial">
       <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
@@ -606,11 +599,10 @@
             <span>⚔️</span> 5. Voies Martiales & Mystiques (Katas, Sorts & Kihos)
           </h2>
           <p class="text-xs text-stone-400">
-            Cette section s'ajuste dynamiquement à votre école (Katas pour les Bushis, Sorts pour les Shugenjas, Kihos pour les Moines)[cite: 9].
+            Cette section s'ajuste dynamiquement à votre école (Katas pour les Bushis, Sorts pour les Shugenjas, Kihos pour les Moines).
           </p>
         </div>
         
-        <!-- Badges d'archétype & Commutateur manuel d'onglets -->
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <div id="archetype-active-badge"></div>
           <div class="flex rounded-lg bg-black/60 border border-stone-800 p-0.5">
@@ -624,7 +616,7 @@
         </div>
       </div>
 
-      <!-- Note zen pour les Courtisans / Magistrats / Artisans -->
+      <!-- Note zen pour les Courtisans / Magistrats -->
       <div id="panel-courtier-note" class="hidden p-6 rounded-xl bg-black/50 border border-stone-800 text-center space-y-2">
         <div class="text-2xl">📜</div>
         <div class="font-bold font-imperial text-amber-200 text-sm">Voie de la Cour & de l'Éloquence</div>
@@ -692,22 +684,21 @@
         </div>
       </div>
 
-      <!-- Grille à 2 colonnes : 5A. Sorts/Kihos | 5B. Katas -->
+      <!-- Grille des Panneaux Sorts / Katas -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="mystic-panels-grid">
         
-        <!-- 5A. PANNEAU SORTS & KIHOS (SANS MAHŌ) -->
+        <!-- PANNEAU SORTS & KIHOS -->
         <div id="panel-spells-container" class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
           <div class="space-y-3">
             <div class="flex justify-between items-center border-b border-stone-800 pb-2">
               <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
-                <span>📜</span> 5A. Parchemins de Sorts & Kihos
+                <span>📜</span> Parchemins de Sorts & Kihos
               </h3>
               <span class="text-xs text-stone-400">
                 <b id="spells-count-badge" class="text-amber-300">0</b> sort(s) • Coût : <b id="spells-xp-total" class="text-amber-300">0</b> XP
               </span>
             </div>
 
-            <!-- Filtres Élément & Rang pour le sélecteur de sorts -->
             <div class="grid grid-cols-2 gap-2 text-xs">
               <select id="filter-spell-elem" onchange="populateSpellCatalogSelect()" class="p-2 rounded text-xs">
                 <option value="tous">Tous les Éléments & Kihos</option>
@@ -718,7 +709,6 @@
                 <option value="air">風 Air</option>
                 <option value="vide">空 Vide (Ishiken)</option>
                 <option value="kiho">🥋 Kihos (Moines)</option>
-                <!-- Le Mahō est totalement exclu -->
               </select>
               <select id="filter-spell-rank" onchange="populateSpellCatalogSelect()" class="p-2 rounded text-xs">
                 <option value="tous">Tous les Rangs (0 à 8)</option>
@@ -732,7 +722,6 @@
               </select>
             </div>
 
-            <!-- Sélecteur de sort + bouton Ajouter -->
             <div class="flex gap-2 text-xs items-center">
               <select id="sel-catalog-spell" onchange="updateSpellPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
               <button 
@@ -743,7 +732,6 @@
               >+</button>
             </div>
 
-            <!-- Carte d'aperçu du Sort / Kiho sélectionné -->
             <div id="spell-preview-card" class="hidden rounded-xl p-3.5 bg-black/90 border border-amber-500/35 space-y-2 text-xs shadow-lg">
               <div class="flex justify-between items-start gap-2 border-b border-stone-800 pb-2">
                 <div>
@@ -769,7 +757,6 @@
               <p id="spell-preview-desc" class="text-stone-300 text-[11px] leading-relaxed max-h-32 overflow-y-auto pr-1"></p>
             </div>
 
-            <!-- Liste des Sorts & Kihos du personnage -->
             <div id="char-spells-container" class="space-y-2 text-xs max-h-72 overflow-y-auto pr-1 pt-1"></div>
           </div>
 
@@ -779,12 +766,12 @@
           </div>
         </div>
 
-        <!-- 5B. PANNEAU KATAS MARTIAUX -->
+        <!-- PANNEAU KATAS MARTIAUX -->
         <div id="panel-katas-container" class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
           <div class="space-y-3">
             <div class="flex justify-between items-center border-b border-stone-800 pb-2">
               <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
-                <span>⚔️</span> 5B. Katas & Postures Martiales
+                <span>⚔️</span> Katas & Postures Martiales
               </h3>
               <span class="text-xs text-stone-400">
                 <b id="katas-count-badge" class="text-amber-300">0</b> kata(s) • Coût : <b id="katas-xp-total" class="text-emerald-300">0</b> XP
@@ -917,60 +904,154 @@
       </div>
     </section>
 
-    <!-- 8. LÉGENDE & 20 QUESTIONS -->
-    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#16100e] to-[#0d0a0a]">
-      <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
+    <!-- ===================================================================
+         8. CHRONIQUE BIOGRAPHIQUE (EXEMPLE ÉDITABLE)
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/30">
+      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">
+          8. Chronique Biographique du Samouraï
+        </h2>
+        <span class="text-xs text-stone-400 italic">Exemple inspirant personnalisable</span>
+      </div>
+      <p class="text-xs text-stone-400 leading-relaxed">
+        Vous pouvez modifier librement ce texte pour raconter la jeunesse de votre personnage, ses exploits passés ou la raison de son départ sur les routes de l'Empire.
+      </p>
+      <textarea id="pc-background-story" rows="5" class="w-full p-3 rounded-lg text-xs leading-relaxed font-serif">Né sous les cieux d'encre des terres ancestrales du Clan du Crabe, Okado a grandi au rythme sourd des tambours de garde de la Grande Muraille Kaiu. Élevé dans le culte de l'endurance et de la vigilance, il a été initié dès son plus jeune âge aux secrets des éclaireurs Hiruma : pister les aberrations de Jigoku à travers les marais calcinés, survivre sans eau potable et ne faire confiance qu'à son instinct et à la pureté du jade.
+
+Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son sang-froid face au danger, il parcourt désormais les provinces de Rokugan escorté par son loup fidèle, Shiro. Malgré la rudesse de son éducation et le mépris courtois des courtisans de la capitale, il porte le regard franc d'un défenseur de l'Empire prêt à verser son sang pour que le Mur tienne un jour de plus.</textarea>
+    </section>
+
+    <!-- ===================================================================
+         9. LES VINGT QUESTIONS DE ROKUGAN (TOUT EN BAS)
+         Le questionnaire officiel du Livre de Base 4e Édition (p. 88-92)
+         =================================================================== -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
+      <div class="border-b border-amber-500/20 pb-3 flex flex-wrap justify-between items-center gap-2">
         <div>
           <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
-            <span>📜</span> 8. Légende Personnelle, Background & Les 20 Questions
+            <span>📜</span> 9. Le Jeu des Vingt Questions de Rokugan
           </h2>
           <p class="text-xs text-stone-400">
-            Génère un récit sur-mesure à partir de votre Clan, votre École, vos Anneaux et vos Avantages/Désavantages (imprimé sur la Page 2 du PDF)[cite: 10].
+            Guide officiel de création psychologique et sociale du samouraï (Livre de Base 4e Édition, p. 88 à 92).
           </p>
         </div>
-        <div class="flex flex-wrap gap-2">
-          <button type="button" onclick="generateCharacterBackground()" class="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black font-extrabold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-1.5 transition transform hover:scale-105 cursor-pointer">
-            <span>✨</span> Forger mon Histoire & les 20 Questions
-          </button>
+        <span class="text-[10px] text-amber-300 font-mono">ENREGISTRÉ AVEC LE PERSONNAGE</span>
+      </div>
+
+      <!-- VOLET 1 : IDENTITÉ & FAMILLE (Questions 1 à 5) -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          I. Identité, Lignée & Apparence (Questions 1 à 5)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">1. À quel clan appartenez-vous et qu'en pensez-vous ?</label>
+            <input type="text" id="q20-1" value="Au fier Clan du Crabe. C'est le seul clan qui comprend le vrai coût de la survie de Rokugan." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">2. À quelle famille appartenez-vous et quel est votre héritage ?</label>
+            <input type="text" id="q20-2" value="Famille Hiruma. Nous avons perdu nos terres ancestrales mais jamais notre détermination." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">3. Quelle école avez-vous suivie et quel rôle y tenez-vous ?</label>
+            <input type="text" id="q20-3" value="École d'éclaireur Hiruma. Je suis les yeux et les oreilles de mes frères d'armes." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">4. Comment vous décririez-vous physiquement ?</label>
+            <input type="text" id="q20-4" value="Carrure athlétique taillée par la marche, regard félin jaune perçant, cheveux gris coupés court." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">5. Quels sont vos plus grands traits de personnalité (forces & faiblesses) ?</label>
+            <input type="text" id="q20-5" value="Inflexible et loyal au-delà de la mort, mais peu enclin à la patience et aux flatteries de cour." class="w-full p-2 rounded text-xs">
+          </div>
         </div>
       </div>
 
-      <div class="space-y-1.5 text-xs">
-        <div class="flex justify-between items-center">
-          <label for="pc-background-story" class="text-amber-300 font-bold font-imperial uppercase tracking-wider text-[11px]">
-            Chronique biographique du Samouraï (Éditable)
-          </label>
-          <button type="button" onclick="readBackgroundAloud()" class="text-[11px] text-amber-400 hover:text-amber-200 flex items-center gap-1 cursor-pointer">
-            <span>🔊</span> Écouter la biographie
-          </button>
+      <!-- VOLET 2 : CŒUR & BUSHIDO (Questions 6 à 10) -->
+      <div class="space-y-3 pt-2">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          II. Passion, Devoir & Bushido (Questions 6 à 10)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">6. Qu'est-ce qui vous passionne ou vous fait vibrer ?</label>
+            <input type="text" id="q20-6" value="Le silence sauvage des grands espaces et le dressage de mon loup Shiro." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">7. Quelle est votre vision personnelle du Bushido ?</label>
+            <input type="text" id="q20-7" value="Le Courage (Yū) et le Devoir (Chūgo) avant l'apparence. Sauver des vies vaut mieux que parader." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">8. Quelle est votre relation aux Fortunes et aux Kami ?</label>
+            <input type="text" id="q20-8" value="Je respecte les esprits de la Terre et prie Bishamon, mais j'agis par mes propres mains." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">9. Comment s'est déroulé votre Gempukku ?</label>
+            <input type="text" id="q20-9" value="Une patrouille de trois nuits au-delà de la rivière des Doigts de Jade avec mon sensei." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">10. Qui est la personne que vous respectez le plus ?</label>
+            <input type="text" id="q20-10" value="Mon vieux sensei Hiruma et le champion de clan Hida Kisada." class="w-full p-2 rounded text-xs">
+          </div>
         </div>
-        <textarea id="pc-background-story" rows="6" placeholder="Cliquez sur « Forger mon Histoire » ci-dessus pour générer un récit unique..." class="w-full p-3 rounded-lg text-xs leading-relaxed font-serif"></textarea>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
-        <div class="space-y-1">
-          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
-            1. Comment s'est déroulé votre Gempukku et qui est votre Sensei ?
-          </label>
-          <textarea id="q20-gempukku" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+      <!-- VOLET 3 : HISTOIRE, LIENS & SECRETS (Questions 11 à 15) -->
+      <div class="space-y-3 pt-2">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          III. Liens Sociaux & Secrets (Questions 11 à 15)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">11. Avez-vous des amis précieux ou des rivaux acharnés ?</label>
+            <input type="text" id="q20-11" value="Compagnon fidèle de Samui Hida et d'Akira Tsuruchi ; rivalité froide avec la Grue." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">12. Êtes-vous fiancé(e), marié(e) ou avez-vous des obligations ?</label>
+            <input type="text" id="q20-12" value="Mariage arrangé avec Kamako Kaiu pour consolider l'alliance des familles." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">13. Quel est votre plus lourd secret ou fardeau ?</label>
+            <input type="text" id="q20-13" value="Avoir vu la silhouette corrompue de mon père parmi les monstres de l'Outremonde." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">14. Que pensez-vous sincèrement des autres clans ?</label>
+            <input type="text" id="q20-14" value="La plupart gaspillent leur énergie en courbettes tandis que nous saignons pour eux." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">15. Quelle est votre plus grande peur ou doute intérieur ?</label>
+            <input type="text" id="q20-15" value="Succomber à la Souillure et trahir mes frères sans même m'en rendre compte." class="w-full p-2 rounded text-xs">
+          </div>
         </div>
-        <div class="space-y-1">
-          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
-            2. Quelle est votre vision personnelle du Bushido et du Devoir ?
-          </label>
-          <textarea id="q20-bushido" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
-        </div>
-        <div class="space-y-1">
-          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
-            3. Quel est votre plus lourd fardeau, secret ou rivalité ?
-          </label>
-          <textarea id="q20-secret" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
-        </div>
-        <div class="space-y-1">
-          <label class="text-amber-200 font-bold font-imperial text-[11px] block">
-            4. De quelle manière honorable envisagez-vous votre mort ?
-          </label>
-          <textarea id="q20-death" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
+      </div>
+
+      <!-- VOLET 4 : AMBITIONS & TRÉPAS (Questions 16 à 20) -->
+      <div class="space-y-3 pt-2">
+        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
+          IV. Ambitions & Destin (Questions 16 à 20)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">16. Quelle est votre plus haute ambition dans l'Empire ?</label>
+            <input type="text" id="q20-16" value="Reconquérir Shiro Hiruma et réhabiliter la mémoire de ma lignée." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">17. Quel est votre rapport avec les heimin et les petites gens ?</label>
+            <input type="text" id="q20-17" value="Pragmatique : ce sont eux qui forgent nos armes et cultivent notre riz. Je les protège." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">18. Quel est votre bien ou équipement le plus cher ?</label>
+            <input type="text" id="q20-18" value="Mon doigt de jade gravé et l'arc composite hérité de mon aïeul." class="w-full p-2 rounded text-xs">
+          </div>
+          <div>
+            <label class="block text-stone-300 font-bold mb-1">19. De quelle manière honorable envisagez-vous votre mort ?</label>
+            <input type="text" id="q20-19" value="Debout sur le Mur, l'arme brisée au milieu d'une pile de gobelins pour protéger ma patrouille." class="w-full p-2 rounded text-xs">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-stone-300 font-bold mb-1">20. Comment vos ancêtres et votre seigneur vous jugeront-ils ?</label>
+            <input type="text" id="q20-20" value="Comme un guerrier silencieux qui n'a jamais reculé d'un pas devant l'ennemi." class="w-full p-2 rounded text-xs">
+          </div>
         </div>
       </div>
     </section>
@@ -978,7 +1059,7 @@
   </main>
 
   <!-- =====================================================================
-       PLATEAU DE DÉS INTERACTIF FLOTTANT ROLL & KEEP (XkY)
+       PLATEAU DE DÉS ROLL & KEEP
        ===================================================================== -->
   <div id="dice-roller-drawer" class="fixed bottom-4 right-4 z-50 no-print">
     <button type="button" id="dice-fab" onclick="toggleDiceTray()" class="px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-extrabold font-imperial text-xs shadow-2xl border border-amber-300/60 flex items-center gap-2 cursor-pointer transition transform hover:scale-105">
@@ -1026,225 +1107,13 @@
   </div>
 
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
-    Campagne L5R – MJ David • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Générateur de Légende
+    Campagne L5R – MJ David • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions
   </footer>
 
   <!-- =====================================================================
-       DOSSIER OFFICIEL IMPRIMABLE (PAGE 1 ET PAGE 2 VECTORIELLES)
-       ===================================================================== -->
-  <div id="official-print-dossier" class="text-black text-[9px] leading-tight">
-    <!-- PAGE 1 : CARACTÉRISTIQUES, COMPÉTENCES & COMBAT -->
-    <div class="print-page flex flex-col justify-between py-1">
-      <div class="sheet-box mb-2 p-2">
-        <div class="flex justify-between items-center border-b border-black pb-1 mb-1">
-          <div class="font-imperial text-base font-black tracking-widest">LEGEND OF THE FIVE RINGS</div>
-          <div class="font-imperial text-xs font-bold text-stone-700">4TH EDITION CHARACTER SHEET</div>
-        </div>
-        <div class="grid grid-cols-6 gap-2 text-[10px]">
-          <div class="col-span-2 border-b border-dashed border-stone-400">
-            <span class="text-[8px] text-stone-500 uppercase font-bold block">Nom du Samouraï</span>
-            <span id="p-name" class="font-bold text-xs font-imperial"></span>
-          </div>
-          <div class="border-b border-dashed border-stone-400">
-            <span class="text-[8px] text-stone-500 uppercase font-bold block">Clan</span>
-            <span id="p-clan" class="font-bold"></span>
-          </div>
-          <div class="col-span-2 border-b border-dashed border-stone-400">
-            <span class="text-[8px] text-stone-500 uppercase font-bold block">École</span>
-            <span id="p-school" class="font-bold"></span>
-          </div>
-          <div class="border-b border-dashed border-stone-400 text-center">
-            <span class="text-[8px] text-stone-500 uppercase font-bold block">Rang d'École</span>
-            <span id="p-rank" class="font-bold font-imperial text-xs">1</span>
-          </div>
-        </div>
-        <div class="grid grid-cols-4 gap-2 text-[10px] mt-1 pt-1">
-          <div><span class="text-[8px] text-stone-500 uppercase font-bold">XP Restante / Total :</span> <b id="p-xp"></b></div>
-          <div><span class="text-[8px] text-stone-500 uppercase font-bold">Réputation (Insight) :</span> <b id="p-insight"></b></div>
-          <div><span class="text-[8px] text-stone-500 uppercase font-bold">Honneur :</span> <b id="p-honor"></b></div>
-          <div><span class="text-[8px] text-stone-500 uppercase font-bold">Gloire / Statut :</span> <b>1.0 / 1.0</b></div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-5 gap-1.5 mb-2 text-center">
-        <div class="sheet-box">
-          <div class="sheet-title flex justify-between"><span>土 TERRE</span><span id="p-r-earth" class="font-bold">2</span></div>
-          <div class="p-1 space-y-1">
-            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Constitution</span><b id="p-t-sta" class="text-xs">2</b></div>
-            <div><span class="text-[8px] text-stone-500 block">Volonté</span><b id="p-t-wil" class="text-xs">2</b></div>
-          </div>
-        </div>
-        <div class="sheet-box">
-          <div class="sheet-title flex justify-between"><span>水 EAU</span><span id="p-r-water" class="font-bold">2</span></div>
-          <div class="p-1 space-y-1">
-            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Force</span><b id="p-t-str" class="text-xs">2</b></div>
-            <div><span class="text-[8px] text-stone-500 block">Perception</span><b id="p-t-per" class="text-xs">2</b></div>
-          </div>
-        </div>
-        <div class="sheet-box">
-          <div class="sheet-title flex justify-between"><span>風 AIR</span><span id="p-r-air" class="font-bold">2</span></div>
-          <div class="p-1 space-y-1">
-            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Réflexes</span><b id="p-t-ref" class="text-xs">2</b></div>
-            <div><span class="text-[8px] text-stone-500 block">Intuition</span><b id="p-t-awa" class="text-xs">2</b></div>
-          </div>
-        </div>
-        <div class="sheet-box">
-          <div class="sheet-title flex justify-between"><span>火 FEU</span><span id="p-r-fire" class="font-bold">2</span></div>
-          <div class="p-1 space-y-1">
-            <div class="border-b border-stone-200 pb-0.5"><span class="text-[8px] text-stone-500 block">Agilité</span><b id="p-t-agi" class="text-xs">2</b></div>
-            <div><span class="text-[8px] text-stone-500 block">Intelligence</span><b id="p-t-int" class="text-xs">2</b></div>
-          </div>
-        </div>
-        <div class="sheet-box flex flex-col justify-between">
-          <div class="sheet-title flex justify-between"><span>空 VIDE</span><span id="p-r-void" class="font-bold">2</span></div>
-          <div class="p-1">
-            <span class="text-[8px] text-stone-500 block">Points de Vide</span>
-            <b id="p-t-voi" class="text-xs">2</b>
-            <div class="text-[7px] text-stone-400 mt-1">○○○○○○○○</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-4 gap-1.5 mb-2 text-[9px]">
-        <div class="sheet-box p-1.5 text-center">
-          <div class="text-[8px] font-bold uppercase text-stone-500">Initiative (4e Éd.)</div>
-          <div id="p-init" class="text-sm font-bold font-imperial mt-0.5">3g2</div>
-          <div id="p-init-note" class="text-[7px] text-stone-600 truncate"></div>
-        </div>
-        <div class="sheet-box p-1.5 text-center">
-          <div class="text-[8px] font-bold uppercase text-stone-500">ND d'Armure</div>
-          <div id="p-armor-tn" class="text-sm font-bold font-imperial mt-0.5">20</div>
-          <div id="p-armor-note" class="text-[7px] text-stone-600 truncate"></div>
-        </div>
-        <div class="sheet-box p-1.5 text-center">
-          <div class="text-[8px] font-bold uppercase text-stone-500">Armure Portée</div>
-          <div id="p-armor-name" class="font-bold truncate mt-0.5">Armure</div>
-          <div id="p-armor-reduc" class="text-[7px] text-stone-600">Réduction : 0</div>
-        </div>
-        <div class="sheet-box p-1.5 text-center">
-          <div class="text-[8px] font-bold uppercase text-stone-500">Guérison Nocturne</div>
-          <div id="p-heal" class="text-sm font-bold font-imperial mt-0.5">5 PV</div>
-          <div class="text-[7px] text-stone-600">Const. × 2 + Rang</div>
-        </div>
-      </div>
-
-      <div class="sheet-box mb-2">
-        <div class="sheet-title">Compétences & Spécialisations</div>
-        <table class="w-full text-left border-collapse text-[8.5px]">
-          <thead>
-            <tr class="border-b border-stone-300 bg-stone-100 text-[7.5px] uppercase text-stone-600">
-              <th class="p-1">Nom de la compétence</th>
-              <th class="p-1 text-center w-12">École ?</th>
-              <th class="p-1 text-center w-12">Rang</th>
-              <th class="p-1 text-center w-20">Jet (XkY)</th>
-              <th class="p-1">Spécialisations & Notes</th>
-            </tr>
-          </thead>
-          <tbody id="p-skills-body"></tbody>
-        </table>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 mb-1">
-        <div class="sheet-box">
-          <div class="sheet-title">Armes & Attaques</div>
-          <div class="p-1.5 space-y-1 text-[8px]" id="p-weapons-box"></div>
-        </div>
-        <div class="sheet-box">
-          <div class="sheet-title">Paliers de Vitalité (4e Édition)</div>
-          <table class="w-full text-center border-collapse text-[7.5px] mt-0.5">
-            <thead>
-              <tr class="bg-stone-100 border-b border-stone-300 font-bold">
-                <th>Palier</th><th>Malus</th><th>Total</th><th>Actuel</th>
-              </tr>
-            </thead>
-            <tbody id="p-wounds-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE 2 : IDENTITÉ, AVANTAGES, SORTS/KATAS & BACKGROUND -->
-    <div class="print-page flex flex-col justify-between py-1">
-      <div class="sheet-box mb-2 p-1.5 flex justify-between items-center text-[9px]">
-        <div><b>Samouraï :</b> <span id="p-name-2" class="font-imperial font-bold text-xs"></span></div>
-        <div><b>Clan :</b> <span id="p-clan-2"></span></div>
-        <div><b>École :</b> <span id="p-school-2"></span></div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 mb-2">
-        <div class="sheet-box">
-          <div class="sheet-title flex justify-between"><span>Avantages</span><span id="p-adv-total">0 XP</span></div>
-          <div class="p-1.5 space-y-1 text-[8px]" id="p-adv-list"></div>
-        </div>
-        <div class="sheet-box">
-          <div class="sheet-title flex justify-between"><span>Désavantages (Max 15 XP)</span><span id="p-disadv-total">0 XP</span></div>
-          <div class="p-1.5 space-y-1 text-[8px]" id="p-disadv-list"></div>
-        </div>
-      </div>
-
-      <div class="sheet-box mb-2">
-        <div class="sheet-title">Techniques d'École</div>
-        <div class="p-2 space-y-1 text-[8.5px]">
-          <div class="font-bold font-imperial text-xs" id="p-tech-name"></div>
-          <div class="text-stone-700 leading-relaxed text-[8px]" id="p-tech-desc"></div>
-        </div>
-      </div>
-
-      <!-- BLOC IMPRIMÉ : SORTS, KIHOS & KATAS -->
-      <div class="sheet-box mb-2">
-        <div class="sheet-title flex justify-between">
-          <span>Grimoire des Sorts, Kihos & Katas Martiaux</span>
-          <span id="p-mystic-summary"></span>
-        </div>
-        <div class="p-1.5 space-y-1 text-[7.5px] leading-snug" id="p-spells-katas-box"></div>
-      </div>
-
-      <div class="sheet-box mb-2">
-        <div class="sheet-title">Équipement, Dotation (*Outfit*) & Richesse</div>
-        <div class="p-1.5 text-[8px] leading-relaxed" id="p-outfit-desc"></div>
-      </div>
-
-      <div class="sheet-box mb-1 flex-1">
-        <div class="sheet-title">Chronique Biographique & Les 20 Questions de Rokugan</div>
-        <div class="p-2 space-y-2 text-[8px] leading-relaxed">
-          <div id="p-background-story" class="whitespace-pre-line text-stone-800"></div>
-          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-stone-300" id="p-20questions-box"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =====================================================================
-       SCRIPTS INTÉGRÉS : CATALOGUE DES KATAS, SORTS, ARCHÉTYPES & LOGIQUE
+       SCRIPTS DE SYNCHRONISATION AVEC CHARACTER-GENERATOR.JS
        ===================================================================== -->
   <script>
-    // Catalogue officiel des Katas L5R 4e Édition
-    window.KATAS_DATA = window.KATAS_DATA || [
-      { id: "kata-terre-frapper-terre", name: "Frapper comme la Terre (Striking as Earth)", element: "Terre", mastery: 3, cost: 3, schools: "Toute école de Bushi", desc: "En Posture d'Attaque ou d'Attaque Totale, vous gagnez une Réduction de dégâts égale à votre Anneau de Terre." },
-      { id: "kata-terre-force-crabe", name: "La Force du Crabe (Strength of the Crab)", element: "Terre", mastery: 3, cost: 3, schools: "Bushi du Clan du Crabe (Hida, Hiruma)", desc: "Avec une Arme Lourde ou un Bâton, vous êtes immunisé au Désarmement et gagnez +1g0 aux jets de dégâts." },
-      { id: "kata-terre-fer-montagnes", name: "Le Fer dans les Montagnes (Iron in the Mountains)", element: "Terre", mastery: 4, cost: 4, schools: "Toute école de Bushi", desc: "Les pénalités de Blessures subies sont réduites d'une valeur égale à votre Rang d'École × 2." },
-      { id: "kata-terre-posture-rocher", name: "L'Inébranlable Posture du Rocher (Immovable Stone Posture)", element: "Terre", mastery: 4, cost: 4, schools: "Toute école de Bushi", desc: "Gain de +3g0 contre le Renversement et l'Intimidation, et +3 au ND d'Armure si vous bougez de moins de 1,5 m par round." },
-
-      { id: "kata-eau-frapper-eau", name: "Frapper comme l'Eau (Striking as Water)", element: "Eau", mastery: 3, cost: 3, schools: "Toute école de Bushi", desc: "Une fois par round après une attaque de mêlée réussie, vous pouvez effectuer un déplacement de 1,5 mètre en Action Gratuite." },
-      { id: "kata-eau-vague-licorne", name: "La Force de la Licorne (Strength of the Unicorn)", element: "Eau", mastery: 3, cost: 3, schools: "Bushi du Clan de la Licorne (Shinjo, Moto, Utaku)", desc: "En selle, votre monture et vous gagnez +3 m à vos Actions de Mouvement et +1g0 aux attaques de mêlée." },
-      { id: "kata-eau-assaut-mante", name: "La Force de la Mante (Strength of the Mantis)", element: "Eau", mastery: 3, cost: 3, schools: "Bushi du Clan de la Mante (Yoritomo, Tsuruchi)", desc: "Ignore les malus de terrain difficile ou instable et confère +1g0 aux attaques avec armes paysannes, arcs ou petites armes." },
-      { id: "kata-eau-maree-incessante", name: "La Marée Incessante (Relentless Tide)", element: "Eau", mastery: 4, cost: 4, schools: "Toute école de Bushi", desc: "À l'Étape des Réactions, vous pouvez échanger votre score d'Initiative avec celui d'un allié volontaire à 6 m ou moins." },
-
-      { id: "kata-air-frapper-vent", name: "Frapper comme le Vent (Striking as Wind)", element: "Air", mastery: 3, cost: 3, schools: "Toute école de Bushi", desc: "En Posture de Défense ou Défense Totale, vous ajoutez votre Anneau d'Air en bonus supplémentaire à votre ND d'Armure." },
-      { id: "kata-air-grace-grue", name: "La Force de la Grue (Strength of the Crane)", element: "Air", mastery: 3, cost: 3, schools: "Bushi du Clan de la Grue (Kakita, Daidoji)", desc: "Au katana, vous gagnez +2 au Score d'Initiative et +2 au ND d'Armure contre les attaques de mêlée." },
-      { id: "kata-air-ruse-scorpion", name: "La Force du Scorpion (Strength of the Scorpion)", element: "Air", mastery: 3, cost: 3, schools: "Bushi du Clan du Scorpion (Bayushi, Shosuro)", desc: "Lors d'une manœuvre Feinte en combat, vous bénéficiez d'une Augmentation Gratuite." },
-      { id: "kata-air-oeil-tempete", name: "Dans l'Œil de la Tempête (Eye of the Storm)", element: "Air", mastery: 4, cost: 4, schools: "Toute école de Bushi (Archers inclus)", desc: "Vos attaques à distance ou de mêlée réduisent de 5 les bonus de couverture ou de Posture de Défense de la cible." },
-
-      { id: "kata-feu-frapper-feu", name: "Frapper comme le Feu (Striking as Fire)", element: "Feu", mastery: 3, cost: 3, schools: "Toute école de Bushi", desc: "En Posture d'Attaque Totale, vous ajoutez votre Anneau de Feu au total de tous vos jets de dégâts de mêlée." },
-      { id: "kata-feu-fureur-lion", name: "La Force du Lion (Strength of the Lion)", element: "Feu", mastery: 3, cost: 3, schools: "Bushi du Clan du Lion (Akodo, Matsu, Ikoma)", desc: "Immunité aux effets de Peur de Rang inférieur ou égal à votre Rang d'École, et +1g0 à l'attaque lors d'une charge." },
-      { id: "kata-feu-equilibre-dragon", name: "La Force du Dragon (Strength of the Dragon)", element: "Feu", mastery: 3, cost: 3, schools: "Bushi du Clan du Dragon (Mirumoto)", desc: "Au style Niten (daisho), le bonus accordé à votre ND d'Armure augmente de +2 et vous ignorez le malus de main gauche." },
-      { id: "kata-feu-danse-lames", name: "La Danse des Lames Ardentes (Blazing Blade Dance)", element: "Feu", mastery: 4, cost: 4, schools: "Toute école de Bushi", desc: "Une fois par escarmouche, vous pouvez déclarer une Augmentation Gratuite pour la manœuvre Dégâts Accrus (+1g0)." },
-
-      { id: "kata-vide-frapper-vide", name: "Frapper comme le Vide (Striking as Void)", element: "Vide", mastery: 3, cost: 3, schools: "Toute école de Bushi", desc: "En Posture du Centre, le bonus accordé à votre prochain jet passe de +1g1 à +2g1 (et +3 d'Initiative en sortant du Centre)." },
-      { id: "kata-vide-harmonie-phenix", name: "La Force du Phénix (Strength of the Phoenix)", element: "Vide", mastery: 3, cost: 3, schools: "Bushi du Clan du Phénix (Shiba)", desc: "En manœuvre Garde (Guard) sur un allié, le bonus conféré au ND d'Armure de votre protégé augmente de +3 supplémentaires." },
-      { id: "kata-vide-souffle-absolu", name: "Harmonie des Cinq Anneaux (Harmony of the Five Rings)", element: "Vide", mastery: 4, cost: 4, schools: "Toute école de Bushi", desc: "Chaque dépense de point de Vide pour augmenter un jet d'attaque ou de défense ajoute aussi votre Rang d'Anneau du Vide." }
-    ];
-
     window.charSpellsList = window.charSpellsList || [];
     window.charKatasList = window.charKatasList || [];
 
@@ -1275,9 +1144,6 @@
       return m ? parseInt(m[1], 10) : 1;
     }
 
-    // =========================================================================
-    // AFFICHAGE CONDITIONNEL SELON L'ÉCOLE (BUSHI, SHUGENJA, MOINE, COURTIER)
-    // =========================================================================
     function updateArchetypePanels() {
       const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
       const schoolType = (schObj?.school?.type || "").toLowerCase();
@@ -1347,9 +1213,6 @@
       }
     }
 
-    // =========================================================================
-    // CATALOGUE & GESTION DES SORTS (MAHŌ TOTALEMENT PURGÉ)
-    // =========================================================================
     function populateSpellCatalogSelect() {
       const sel = document.getElementById('sel-catalog-spell');
       if (!sel) return;
@@ -1357,7 +1220,6 @@
       const elemFilter = document.getElementById('filter-spell-elem')?.value || "tous";
       const rankFilter = document.getElementById('filter-spell-rank')?.value || "tous";
 
-      // Filtre : AUCUN sort Mahō n'apparaît
       const filtered = allSpells.filter(s => {
         if (s.isMaho || (s.element && s.element.toLowerCase() === "maho")) return false;
 
@@ -1432,7 +1294,7 @@
       const found = allSpells.find(s => s.id === sel.value);
       if (!found) return;
       if (window.charSpellsList.some(s => s.id === found.id)) {
-        alert("Ce sort ou kiho figure déjà dans votre grimoire personnel.");
+        alert("Ce sort ou kiho figure déjà dans votre grimoire.");
         return;
       }
       const defaultXp = found.isKiho ? (Number(found.mastery) || 3) : 0;
@@ -1575,7 +1437,7 @@
                   <input type="number" value="${s.xpCost || 0}" min="0" max="20" onchange="updateSpellXpCost('${s.id}', this.value)" class="w-7 text-center text-[10px] font-bold bg-transparent">
                   <span class="text-[8px] text-stone-500">XP</span>
                 </div>
-                <button type="button" onclick="removeCharacterSpell('${s.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
+                <button type="button" onclick="removeCharacterSpell('${s.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Retirer">✕</button>
               </div>
             </div>
             <p class="text-[10px] text-stone-400 line-clamp-2 leading-snug">${s.desc}</p>
@@ -1706,7 +1568,7 @@
                 <button type="button" onclick="toggleActiveKata('${k.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial transition cursor-pointer ${k.active ? 'bg-emerald-600 text-black' : 'bg-stone-900 text-stone-400 border border-stone-700'}">
                   ${k.active ? '✓ Actif' : 'Activer'}
                 </button>
-                <button type="button" onclick="removeCharacterKata('${k.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
+                <button type="button" onclick="removeCharacterKata('${k.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Retirer">✕</button>
               </div>
             </div>
             <p class="text-[10px] text-stone-300 leading-snug">${k.desc}</p>
@@ -1718,24 +1580,11 @@
     function autoPopulateMysticAndMartial(forceAdd = false) {
       const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
       const schoolType = (schObj?.school?.type || "").toLowerCase();
-      const isShugenja = schoolType.includes("shugenja") || (schObj?.school?.name || "").toLowerCase().includes("shugenja");
+      const schoolName = (schObj?.school?.name || "").toLowerCase();
+      const isShugenja = schoolType.includes("shugenja") || schoolName.includes("shugenja");
 
       if (isShugenja) {
         addUniversalSpells();
-        const allSpells = window.SORTS_DATA || [];
-        const r1Spells = allSpells.filter(s => s.mastery === 1 && !s.isKiho && !s.isMaho);
-        if (window.charSpellsList.length <= 3 && r1Spells.length > 0) {
-          const picks = ["earth-1-jade-strike", "eau-1-path-inner-peace", "feu-1-katana-fire", "air-1-blessed-wind"];
-          picks.forEach(pid => {
-            const sp = r1Spells.find(x => x.id === pid) || r1Spells[Math.floor(Math.random() * r1Spells.length)];
-            if (sp && !window.charSpellsList.some(e => e.id === sp.id)) {
-              window.charSpellsList.push({
-                id: sp.id, name: sp.name || sp.nom, element: sp.element, ring: sp.element,
-                mastery: 1, range: sp.range, area: sp.area, duration: sp.duration, raises: sp.raises, desc: sp.desc, xpCost: 0
-              });
-            }
-          });
-        }
       } else if (forceAdd && window.charKatasList.length === 0) {
         const firstKata = (window.KATAS_DATA || [])[0];
         if (firstKata) {
@@ -1798,6 +1647,52 @@
       updateArchetypePanels();
     }
 
+    // Gestion du recueil des 20 questions
+    function get20QuestionsObject() {
+      const q = {};
+      for (let i = 1; i <= 20; i++) {
+        q[`q${i}`] = document.getElementById(`q20-${i}`)?.value || "";
+      }
+      return q;
+    }
+
+    function set20QuestionsObject(q) {
+      if (!q) return;
+      for (let i = 1; i <= 20; i++) {
+        const el = document.getElementById(`q20-${i}`);
+        if (el && q[`q${i}`] !== undefined) el.value = q[`q${i}`];
+      }
+    }
+
+    function populatePrintable20Questions() {
+      const qBox = document.getElementById('p-20questions-box');
+      if (!qBox) return;
+      let html = "";
+      for (let i = 1; i <= 20; i++) {
+        const val = document.getElementById(`q20-${i}`)?.value || "";
+        if (val) html += `<div><b>Q${i}.</b> ${val}</div>`;
+      }
+      qBox.innerHTML = html;
+    }
+
+    // Préparation pour impression PDF
+    function prepareAndPrintPDF() {
+      populatePrintableMysticBox();
+      populatePrintable20Questions();
+      if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
+        document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+      }
+      exportOfficialPDF();
+    }
+
+    window.addEventListener('beforeprint', () => {
+      populatePrintableMysticBox();
+      populatePrintable20Questions();
+      if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
+        document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+      }
+    });
+
     // Initialisation
     window.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
@@ -1805,7 +1700,32 @@
         populateKataCatalogSelect();
         renderCharacterSpells();
         renderCharacterKatas();
+        initSkillsMultiSelect();
+        renderDojoRoster();
         updateArchetypePanels();
+
+        const params = new URLSearchParams(window.location.search);
+        const charParam = params.get("char");
+        const loadIdParam = params.get("load");
+        const clanParam = params.get("clan");
+
+        if (charParam) {
+          try {
+            const decoded = JSON.parse(decodeURIComponent(atob(charParam)));
+            applyFullCharacterState(decoded);
+            return;
+          } catch (e) {}
+        }
+
+        if (loadIdParam) {
+          loadFromDojo(loadIdParam);
+          return;
+        }
+
+        if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
+          document.getElementById("sel-clan").value = clanParam;
+          onClanChange();
+        }
       }, 200);
 
       document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(updateArchetypePanels, 150));
