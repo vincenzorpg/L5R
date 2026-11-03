@@ -19,7 +19,7 @@
   <script src="data/equipement-data.js" defer></script>
   <script src="data/avantages-desavantages-data.js" defer></script>
 
-  <!-- BASES DE DONNÉES DES SORTS & KIHOS (MAHŌ EXCLU) -->
+  <!-- BASES DE DONNÉES DES SORTS & KIHOS -->
   <script src="data/sorts/sorts-universels.js" defer></script>
   <script src="data/sorts/sorts-air.js" defer></script>
   <script src="data/sorts/sorts-terre.js" defer></script>
@@ -28,6 +28,9 @@
   <script src="data/sorts/sorts-vide.js" defer></script>
   <script src="data/sorts/sorts-kiho.js" defer></script>
   <script src="data/sorts-data.js" defer></script>
+
+  <!-- NOUVELLE BASE DE DONNÉES DES KATAS OFFICIELS -->
+  <script src="js/katas-data.js" defer></script>
 
   <script src="js/export-carnet.js" defer></script>
 
@@ -193,7 +196,7 @@
           </div>
         </div>
 
-        <!-- Bloc Actions & Sauvegarde Dojo (SANS le bouton Auto aléatoire) -->
+        <!-- Bloc Actions & Sauvegarde Dojo (SANS bouton Auto) -->
         <div class="flex flex-wrap items-center gap-1.5">
           <button onclick="saveToDojo()" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition flex items-center gap-1 shadow cursor-pointer" title="Sauvegarder dans le Dojo local">
             <span>📌</span> <span>Sauvegarder</span>
@@ -692,7 +695,7 @@
           <div class="space-y-3">
             <div class="flex justify-between items-center border-b border-stone-800 pb-2">
               <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
-                <span>📜</span> Parchemins de Sorts & Kihos
+                <span>📜</span> 5A. Parchemins de Sorts & Kihos
               </h3>
               <span class="text-xs text-stone-400">
                 <b id="spells-count-badge" class="text-amber-300">0</b> sort(s) • Coût : <b id="spells-xp-total" class="text-amber-300">0</b> XP
@@ -771,7 +774,7 @@
           <div class="space-y-3">
             <div class="flex justify-between items-center border-b border-stone-800 pb-2">
               <h3 class="font-bold text-amber-300 font-imperial text-sm flex items-center gap-1.5">
-                <span>⚔️</span> Katas & Postures Martiales
+                <span>⚔️</span> 5B. Katas & Postures Martiales
               </h3>
               <span class="text-xs text-stone-400">
                 <b id="katas-count-badge" class="text-amber-300">0</b> kata(s) • Coût : <b id="katas-xp-total" class="text-emerald-300">0</b> XP
@@ -924,7 +927,6 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
 
     <!-- ===================================================================
          9. LES VINGT QUESTIONS DE ROKUGAN (TOUT EN BAS)
-         Le questionnaire officiel du Livre de Base 4e Édition (p. 88-92)
          =================================================================== -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
       <div class="border-b border-amber-500/20 pb-3 flex flex-wrap justify-between items-center gap-2">
@@ -1111,7 +1113,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   </footer>
 
   <!-- =====================================================================
-       SCRIPTS DE SYNCHRONISATION AVEC CHARACTER-GENERATOR.JS
+       SCRIPTS DE SYNCHRONISATION
        ===================================================================== -->
   <script>
     window.charSpellsList = window.charSpellsList || [];
@@ -1294,7 +1296,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       const found = allSpells.find(s => s.id === sel.value);
       if (!found) return;
       if (window.charSpellsList.some(s => s.id === found.id)) {
-        alert("Ce sort ou kiho figure déjà dans votre grimoire.");
+        alert("Ce sort ou kiho figure déjà dans votre grimoire personnel.");
         return;
       }
       const defaultXp = found.isKiho ? (Number(found.mastery) || 3) : 0;
@@ -1437,7 +1439,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
                   <input type="number" value="${s.xpCost || 0}" min="0" max="20" onchange="updateSpellXpCost('${s.id}', this.value)" class="w-7 text-center text-[10px] font-bold bg-transparent">
                   <span class="text-[8px] text-stone-500">XP</span>
                 </div>
-                <button type="button" onclick="removeCharacterSpell('${s.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Retirer">✕</button>
+                <button type="button" onclick="removeCharacterSpell('${s.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
               </div>
             </div>
             <p class="text-[10px] text-stone-400 line-clamp-2 leading-snug">${s.desc}</p>
@@ -1447,15 +1449,20 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
     }
 
     // =========================================================================
-    // CATALOGUE & GESTION DES KATAS
+    // CATALOGUE & GESTION DES KATAS (CORRECTION FILTRE CASSE)
     // =========================================================================
     function populateKataCatalogSelect() {
       const sel = document.getElementById('sel-catalog-kata');
       if (!sel) return;
-      const elemFilter = document.getElementById('filter-kata-elem')?.value || "tous";
+      const rawFilter = (document.getElementById('filter-kata-elem')?.value || "tous").toLowerCase();
       const allKatas = window.KATAS_DATA || [];
 
-      const filtered = allKatas.filter(k => elemFilter === "tous" || k.element === elemFilter);
+      // Filtre insensible à la casse
+      const filtered = allKatas.filter(k => {
+        if (rawFilter === "tous") return true;
+        return (k.element || "").toLowerCase() === rawFilter;
+      });
+
       sel.innerHTML = `<option value="">-- Choisir un Kata martial (${filtered.length} disponible(s)) --</option>`;
       filtered.forEach(k => {
         const opt = document.createElement('option');
@@ -1568,7 +1575,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
                 <button type="button" onclick="toggleActiveKata('${k.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold font-imperial transition cursor-pointer ${k.active ? 'bg-emerald-600 text-black' : 'bg-stone-900 text-stone-400 border border-stone-700'}">
                   ${k.active ? '✓ Actif' : 'Activer'}
                 </button>
-                <button type="button" onclick="removeCharacterKata('${k.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer" title="Retirer">✕</button>
+                <button type="button" onclick="removeCharacterKata('${k.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
               </div>
             </div>
             <p class="text-[10px] text-stone-300 leading-snug">${k.desc}</p>
@@ -1647,23 +1654,6 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       updateArchetypePanels();
     }
 
-    // Gestion du recueil des 20 questions
-    function get20QuestionsObject() {
-      const q = {};
-      for (let i = 1; i <= 20; i++) {
-        q[`q${i}`] = document.getElementById(`q20-${i}`)?.value || "";
-      }
-      return q;
-    }
-
-    function set20QuestionsObject(q) {
-      if (!q) return;
-      for (let i = 1; i <= 20; i++) {
-        const el = document.getElementById(`q20-${i}`);
-        if (el && q[`q${i}`] !== undefined) el.value = q[`q${i}`];
-      }
-    }
-
     function populatePrintable20Questions() {
       const qBox = document.getElementById('p-20questions-box');
       if (!qBox) return;
@@ -1675,7 +1665,6 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       qBox.innerHTML = html;
     }
 
-    // Préparation pour impression PDF
     function prepareAndPrintPDF() {
       populatePrintableMysticBox();
       populatePrintable20Questions();
