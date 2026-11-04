@@ -1,12 +1,12 @@
 /**
  * data/avantages-desavantages-data.js — L5R 4e Édition
- * Système complet incluant le Livre de Base (p. 146-163) et suppléments officiels.
+ * Système complet et vérifié selon le Livre de Base (p. 146-163) et suppléments officiels.
  * Conforme aux structures attendues par character-generator.js.
  */
 
 (function () {
   // =========================================================================
-  // 1. TABLEAU DES AVANTAGES
+  // 1. TABLEAU DES AVANTAGES (Livre de Base p. 146-155 + Suppléments)
   // =========================================================================
   const AVANTAGES_LIST = [
     // --- AVANTAGES PHYSIQUES ---
@@ -18,7 +18,7 @@
       impact: "ambidextrous",
       prerequisite: "Agilité 3",
       desc: "Vous maniez vos armes et vos outils avec une égale dextérité de la main gauche comme de la main droite.",
-      rule: "Vous ignorez la pénalité habituelle de +5 au ND (ou de -1g0 aux dés) avec votre main non dominante."
+      rule: "Vous ignorez la pénalité habituelle de +5 au ND lorsque vous agissez avec votre main non dominante (ou que vous combattez avec deux armes sans école dédiée)."
     },
     {
       id: "adv-grand",
@@ -28,7 +28,7 @@
       impact: "large",
       prerequisite: "Incompatible avec Petit (3 pts pour le Clan du Crabe)",
       desc: "Votre taille et votre masse musculaire imposante dépassent nettement la moyenne impériale.",
-      rule: "Vous ajoutez +1g0 à tous vos jets de dégâts avec les armes de corps à corps imposantes (Large)."
+      rule: "Chacun de vos Paliers de Blessures contient 1 point de vie supplémentaire (+8 PV au total). De plus, vous ajoutez +1g0 à tous vos jets de dégâts avec les armes de corps à corps imposantes (Large) ou maniées à deux mains."
     },
     {
       id: "adv-force-terre",
@@ -38,7 +38,7 @@
       impact: "strength_earth",
       prerequisite: "2 pts pour les Bushi",
       desc: "L'endurance du roc coule dans vos os : la souffrance physique glisse sur vous sans briser votre garde.",
-      rule: "Les pénalités de ND infligées par tous vos Paliers de Blessures sont réduites de 3 points."
+      rule: "Les pénalités de ND infligées par tous vos Paliers de Blessures sont réduites de 3 points (ex. Égratigné passe de +3 à +0, Blessé Léger de +5 à +2, etc.)."
     },
     {
       id: "adv-mains-pierre",
@@ -48,7 +48,7 @@
       impact: "hands_of_stone",
       prerequisite: "Aucun",
       desc: "Vos poings nus sont aussi durs et meurtriers que des masses d'armes forgées.",
-      rule: "Vos attaques à mains nues infligent 0g2 dégâts de base (au lieu de 0g1) en plus de votre Force."
+      rule: "Vous ajoutez +0g1 à tous vos jets de dégâts d'attaques à mains nues (Unarmed Damage Rolls). Ce bonus s'additionne aux dégâts de base ou aux augmentations de votre école (un moine Togashi passe ainsi à 0g3 + Force)."
     },
     {
       id: "adv-mains-crabe",
@@ -58,7 +58,7 @@
       impact: "crab_hands",
       prerequisite: "2 pts pour le Clan du Crabe",
       desc: "Vous possédez une habileté innée pour improviser des armes de fortune avec n'importe quel objet lourd.",
-      rule: "Vous ne subissez aucune pénalité au maniement d'armes improvisées ou non conventionnelles."
+      rule: "Vous ne subissez aucune pénalité de maniement avec les armes improvisées ou non conventionnelles. Tout objet improvisé inflige au minimum 1g2 dégâts."
     },
     {
       id: "adv-beaute-dangereuse",
@@ -66,9 +66,9 @@
       type: "Physique",
       cost: 3,
       impact: "dangerous_beauty",
-      prerequisite: "2 pts pour le Clan du Scorpion",
+      prerequisite: "2 pts pour le Clan du Scorpion. Incompatible avec Insipide",
       desc: "Vos traits captivants et votre magnétisme charnel troublent le jugement d'autrui.",
-      rule: "Bonus de +1g0 sur tous les jets de Séduction (Tentation) effectués contre des membres du sexe opposé."
+      rule: "Vous gagnez un bonus de +1g0 à tous vos jets de Séduction (Tentation) effectués contre des interlocuteurs attirés par votre genre."
     },
     {
       id: "adv-guerisseur-rapide",
@@ -78,7 +78,7 @@
       impact: "quick_healer",
       prerequisite: "Constitution 3",
       desc: "Votre métabolisme referme plaies et fractures à une vitesse prodigieuse lors du repos.",
-      rule: "Lors des phases de guérison naturelle par nuit de sommeil, vous récupérez 2 PV supplémentaires par rang de Constitution."
+      rule: "Lors de chaque phase de guérison naturelle nocturne, vous récupérez un montant supplémentaire de Blessures égal à votre Rang de Constitution + votre Rang d'École."
     },
     {
       id: "adv-vif",
@@ -88,7 +88,7 @@
       impact: "quick",
       prerequisite: "Réflexes 3",
       desc: "Vos réflexes fulgurants vous permettent d'anticiper la trajectoire des lames ennemies.",
-      rule: "Vous ajoutez votre Anneau d'Air en bonus direct à vos jets d'Initiative au début de chaque combat."
+      rule: "Vous ajoutez votre Trait Réflexes en bonus direct à votre total d'Initiative au début de chaque combat."
     },
     {
       id: "adv-reflexes-eclair",
@@ -98,7 +98,7 @@
       impact: "lightning_reflexes",
       prerequisite: "Aucun",
       desc: "Votre corps réagit par pur réflexe sans attendre l'ordre conscient de votre esprit.",
-      rule: "Lors de chaque jet d'Initiative, vous lancez 1 dé supplémentaire (+1g0). En cas d'égalité d'Initiative, vous agissez toujours en premier."
+      rule: "Lors de vos jets d'Initiative, vous lancez 1 dé supplémentaire (+1g0). En cas d'égalité sur l'Initiative, vous agissez toujours avant vos rivaux qui ne possèdent pas cet avantage."
     },
     {
       id: "adv-sens-aigus",
@@ -108,7 +108,7 @@
       impact: "keen_senses",
       prerequisite: "Aucun",
       desc: "Votre vue perçante, votre ouïe fine ou votre flair d'animal traqueur déjouent les pièges de l'ombre.",
-      rule: "Bonus de +1g0 sur tous les jets de Compétences basés sur le Trait Perception."
+      rule: "Bonus de +1g0 sur tous les jets de Compétences basés sur le Trait Perception (Investigation, Vigilance, Chasse)."
     },
     {
       id: "adv-silencieux",
@@ -128,7 +128,7 @@
       impact: "bland",
       prerequisite: "Incompatible avec Beauté Dangereuse",
       desc: "Vos traits ordinaires se fondent instantanément dans la foule et défient la mémoire des témoins.",
-      rule: "Le ND de toute tentative d'Investigation ou de Vigilance pour vous identifier ou se souvenir de votre visage augmente de +10."
+      rule: "Le ND de toute tentative d'Investigation ou de Vigilance cherchant à vous identifier, à tracer votre passage ou à se souvenir de vos traits augmente de +10."
     },
     {
       id: "adv-sang-osano-wo",
@@ -138,7 +138,7 @@
       impact: "blood_osano_wo",
       prerequisite: "Prisé par le Clan du Crabe",
       desc: "La foudre et les tempêtes du Seigneur du Tonnerre coulent dans vos veines.",
-      rule: "Bonus de +1g1 sur tous vos jets de Constitution contre les éléments naturels, le froid extrême ou les privations. Réduction de 5 contre les dégâts d'électricité."
+      rule: "Bonus de +1g1 sur tous vos jets de Constitution contre les éléments naturels, le froid extrême, la faim, la soif ou les privations. Vous bénéficiez d'une Réduction de 5 contre les dégâts d'électricité ou de tonnerre."
     },
     {
       id: "adv-duelliste-ne",
@@ -148,7 +148,7 @@
       impact: "way_duelist",
       prerequisite: "Iaijutsu 3",
       desc: "Vous percevez le souffle exact précédant l'extraction de la lame adverse lors d'un duel formel.",
-      rule: "En duel d'Iaijutsu, vous gagnez +1g0 lors de la phase de Concentration pour tenter d'obtenir des Augmentations Gratuites."
+      rule: "Lors de la phase de Concentration d'un duel d'Iaijutsu, vous gagnez un bonus de +1g0 à votre jet opposé d'Iaijutsu (Concentration) pour obtenir des Augmentations Gratuites."
     },
 
     // --- AVANTAGES MENTAUX ---
@@ -160,7 +160,7 @@
       impact: "balance",
       prerequisite: "Aucun",
       desc: "Une sérénité inébranlable habite votre âme lorsque votre droiture est mise à l'épreuve.",
-      rule: "Lorsque vous ajoutez votre Rang d'Honneur pour résister à l'Intimidation ou la Tentation, ajoutez +1g0 supplémentaire au jet."
+      rule: "Lorsque vous ajoutez votre Rang d'Honneur pour résister à une tentative d'Intimidation ou de Tentation, vous gagnez +1g0 supplémentaire à votre jet."
     },
     {
       id: "adv-pensee-claire",
@@ -170,7 +170,7 @@
       impact: "clear_thinker",
       prerequisite: "2 pts pour le Clan du Dragon. Incompatible avec Naïf",
       desc: "Votre logique d'acier et votre lucidité vous préservent des mensonges et illusions.",
-      rule: "Bonus de +1g0 sur tous vos jets opposés pour résister aux tromperies, illusions et manipulations mentales."
+      rule: "Vous gagnez un bonus de +2g0 sur tous vos jets opposés pour résister aux tromperies (Sincérité/Tromperie), aux illusions magiques et aux manipulations mentales."
     },
     {
       id: "adv-casse-cou",
@@ -180,7 +180,7 @@
       impact: "daredevil",
       prerequisite: "2 pts pour le Clan de la Mante",
       desc: "Le danger physique exalte votre agilité au lieu de paralyser vos mouvements.",
-      rule: "Lorsque vous dépensez 1 point de Vide sur un jet d'Athlétisme, vous gagnez +3g1 au lieu du traditionnel +1g1."
+      rule: "Lorsque vous dépensez 1 point de Vide sur un jet d'Athlétisme lors d'une cascade ou d'une situation de péril mortel, vous gagnez +3g1 au lieu du bonus habituel de +1g1."
     },
     {
       id: "adv-irreprochable",
@@ -190,7 +190,7 @@
       impact: "irreproachable",
       prerequisite: "1 pt pour les Familles Impériales",
       desc: "Votre vertu morale rend vaines les tentatives viles de séduction ou de compromission.",
-      rule: "Bonus de +1g0 lors de tout jet opposé face à un adversaire employant la compétence Tentation."
+      rule: "Bonus de +1g0 à tous vos jets opposés face à un adversaire employant contre vous la compétence Tentation (Séduction ou Pots-de-vin)."
     },
     {
       id: "adv-memoire-precise",
@@ -200,7 +200,7 @@
       impact: "precise_memory",
       prerequisite: "Aucun",
       desc: "Vous retenez visages, lois, poèmes et cartes géographiques avec une fidélité parfaite.",
-      rule: "Bonus de +1g0 sur vos jets d'Intelligence pour vous remémorer un détail vu, lu ou entendu."
+      rule: "Bonus de +1g0 sur tous vos jets d'Intelligence pour vous remémorer un détail vu, lu ou entendu, réciter un texte officiel ou reconstituer un plan."
     },
     {
       id: "adv-prodigieux",
@@ -210,7 +210,7 @@
       impact: "prodigy",
       prerequisite: "À la création du personnage uniquement",
       desc: "Votre génie inné assimile les techniques et compétences avec une fulgurance stupéfiante.",
-      rule: "Le coût en points d'expérience (XP) pour monter n'importe quelle Compétence est réduit de 1 point (minimum 1 XP)."
+      rule: "Le coût en points d'expérience (XP) pour augmenter le rang de n'importe quelle Compétence est réduit de 1 point (coût minimum : 1 XP par rang)."
     },
     {
       id: "adv-grand-potentiel",
@@ -220,7 +220,7 @@
       impact: "great_potential",
       prerequisite: "Choisir une compétence",
       desc: "Vous possédez une vocation sans limite pour l'apprentissage d'un art précis.",
-      rule: "La compétence choisie peut dépasser la limite de Rang 5 pour atteindre le Rang 6. Ses Augmentations coûtent 1 point de moins."
+      rule: "Choisissez une compétence : vous pouvez annoncer des Augmentations avec un coût réduit de 1 pour une manœuvre spécifique de cette compétence, ou monter la compétence jusqu'au rang 6."
     },
     {
       id: "adv-erudit",
@@ -230,7 +230,7 @@
       impact: "sage",
       prerequisite: "3 pts pour le Phénix et les Shugenja",
       desc: "Votre insatiable soif de lecture a fait de vous une encyclopédie vivante de Rokugan.",
-      rule: "Chaque fois que vous devez faire un jet sans compétence (Unskilled) sous une Connaissance (Lore), vous êtes considéré comme ayant le Rang 1."
+      rule: "Chaque fois que vous devez faire un jet sans compétence (Unskilled) sous n'importe quelle sous-compétence de Connaissance (Lore), vous êtes considéré comme possédant le Rang 1."
     },
     {
       id: "adv-sens-danger",
@@ -240,7 +240,7 @@
       impact: "danger_sense",
       prerequisite: "Perception 3",
       desc: "Une alarme instinctive résonne en vous une fraction de seconde avant l'embuscade.",
-      rule: "Le MJ doit vous prévenir d'une attaque surprise imminente. Vous ne pouvez jamais être affecté par l'état Surpris."
+      rule: "Le MJ doit vous avertir dès qu'une attaque surprise ou une embuscade est tentée contre vous. Vous ne pouvez jamais être affecté par l'état Surpris."
     },
     {
       id: "adv-astucieux",
@@ -250,7 +250,7 @@
       impact: "crafty",
       prerequisite: "2 pts pour le Clan du Scorpion",
       desc: "Votre esprit vif repère immédiatement les failles dans la surveillance et les règles établies.",
-      rule: "Bonus de +1g0 sur tous vos jets de compétences frauduleuses (Discrétion, Falsification, Pièges, Passe-partout)."
+      rule: "Bonus de +1g0 sur tous vos jets de compétences déshonorantes (Discrétion, Falsification, Crochetage, Poison)."
     },
     {
       id: "adv-tactique",
@@ -259,8 +259,8 @@
       cost: 4,
       impact: "tactician",
       prerequisite: "3 pts pour le Clan du Lion et les Bushi",
-      desc: "Vous lisez le flux et le reflux de l'armée sur le champ de bataille comme les pièces d'un jeu de Go.",
-      rule: "Lors d'une Grande Bataille, vous pouvez ajuster votre résultat sur le Tableau de Bataille de +5 ou -5 après le lancer."
+      desc: "Vous lisez le flux et le reflux des troupes sur le champ de bataille comme les pièces d'un jeu de Go.",
+      rule: "Lors de la résolution d'une Grande Bataille, vous pouvez modifier votre résultat sur le Tableau des Batailles de +5 ou -5 après le lancer."
     },
     {
       id: "adv-ame-artiste",
@@ -270,7 +270,7 @@
       impact: "soul_artistry",
       prerequisite: "3 pts pour la Grue et les Courtisans",
       desc: "L'harmonie esthétique guide vos mains, qu'il s'agisse de peindre, sculpter ou composer.",
-      rule: "Choisissez Artisanat ou Métier : vous êtes considéré comme ayant le Rang 1 lorsque vous devez faire un jet sans entraînement."
+      rule: "Choisissez Artisanat ou Métier : vous êtes considéré comme ayant le Rang 1 lorsque vous devez faire un jet sans entraînement préalable."
     },
     {
       id: "adv-sens-orientation",
@@ -279,8 +279,8 @@
       cost: 2,
       impact: "way_of_the_land",
       prerequisite: "Choisir une province ou région",
-      desc: "Vous connaissez les sentiers, abris, cours d'eau et ressources d'une province comme votre propre cour.",
-      rule: "Vous ne vous perdez jamais dans cette région et obtenez +1g0 sur les jets de Survie, Chasse et Vigilance dans cette zone."
+      desc: "Vous connaissez les sentiers, abris, cours d'eau et ressources d'une région comme votre propre cour.",
+      rule: "Vous ne pouvez jamais vous perdre dans cette région et obtenez +1g0 sur les jets de Survie, Chasse et Vigilance effectués dans cette zone."
     },
     {
       id: "adv-sans-coeur",
@@ -290,7 +290,7 @@
       impact: "heartless",
       prerequisite: "Livre de l'Eau / Lion",
       desc: "Votre cœur insensible est sourd aux larmes, suppliques et déclarations enflammées.",
-      rule: "Bonus de +1g0 à tous vos jets pour résister aux tentatives de persuasion ou de séduction (Courtisan, Sincérité, Tentation)."
+      rule: "Bonus de +1g0 à tous vos jets pour résister aux tentatives de persuasion ou de manipulation émotionnelle (Courtisan, Sincérité, Tentation)."
     },
 
     // --- AVANTAGES SOCIAUX ---
@@ -300,9 +300,9 @@
       type: "Social",
       cost: 3,
       impact: "ally",
-      prerequisite: "Variable (1 pt de moins pour le Clan de la Grue)",
+      prerequisite: "Coût variable (1 pt de moins pour la Grue)",
       desc: "Un magistrat, seigneur provincial ou fonctionnaire loyal vous doit une fière chandelle.",
-      rule: "Vous bénéficiez d'un allié PNJ doté d'une influence politique et d'un dévouement proportionnels aux points investis."
+      rule: "Vous bénéficiez d'un allié PNJ doté d'une influence politique et d'un dévouement proportionnels aux points investis (Statut et Disponibilité)."
     },
     {
       id: "adv-voix",
@@ -322,7 +322,7 @@
       impact: "social_position",
       prerequisite: "Aucun",
       desc: "Vous avez été promu à une charge impériale ou clanique d'importance majeure.",
-      rule: "Vous débutez la partie avec +1 Rang de Statut plein."
+      rule: "Vous débutez la partie avec +1.0 Rang de Statut plein."
     },
     {
       id: "adv-renommee",
@@ -332,7 +332,7 @@
       impact: "fame",
       prerequisite: "Aucun",
       desc: "Vos exploits passés sont déjà célébrés par les récits des conteurs à travers l'Empire.",
-      rule: "Vous commencez avec +1 Rang de Gloire plein."
+      rule: "Vous commencez la partie avec +1.0 Rang de Gloire plein."
     },
     {
       id: "adv-heros-peuple",
@@ -342,7 +342,7 @@
       impact: "hero_of_the_people",
       prerequisite: "Aucun",
       desc: "Les heimin et hinin voient en vous un protecteur juste et vénèrent votre silhouette.",
-      rule: "Le ND pour que des citoyens non-samouraïs vous reconnaissent et vous prêtent assistance est abaissé de 10."
+      rule: "Le ND pour que des citoyens non-samouraïs vous reconnaissent, vous cachent ou vous prêtent assistance est abaissé de 10."
     },
     {
       id: "adv-favori-cour",
@@ -352,7 +352,7 @@
       impact: "darling_of_the_court",
       prerequisite: "1 pt pour les Courtisans (Choisir un palais précis)",
       desc: "Vous êtes la coqueluche des salons et du daimyō d'une cour officielle spécifique.",
-      rule: "Tant que vous résidez à cette cour précise, votre Statut est considéré comme supérieur de 1 Rang."
+      rule: "Tant que vous résidez à cette cour précise, votre Statut est considéré comme supérieur de 1.0 Rang."
     },
     {
       id: "adv-commandement",
@@ -362,7 +362,7 @@
       impact: "leadership",
       prerequisite: "5 pts pour le Clan du Lion",
       desc: "Votre prestance guerrière galvanise le courage de vos camarades sous le feu ennemi.",
-      rule: "Une fois par round, lors de la phase des Réactions, vous pouvez ajouter votre Rang d'École + 1g1 à l'Initiative d'un allié."
+      rule: "Une fois par round, lors de la phase des Réactions, vous pouvez ajouter votre Rang d'École + 1g1 à l'Initiative d'un allié situé à portée de voix."
     },
     {
       id: "adv-coeur-vengeance",
@@ -370,7 +370,7 @@
       type: "Social",
       cost: 5,
       impact: "heart_of_vengeance",
-      prerequisite: "4 pts pour l'Araignée (Choisir un Clan rival)",
+      prerequisite: "4 pts pour l'Araignée (Choisir un Clan ou groupe rival)",
       desc: "Une haine inexpiable consume vos nuits contre une faction ou un clan adverse.",
       rule: "Vous bénéficiez d'un bonus de +1g1 sur tous vos jets opposés contre les membres de la faction ciblée."
     },
@@ -380,9 +380,9 @@
       type: "Social",
       cost: 5,
       impact: "different_school",
-      prerequisite: "Création de personnage",
-      desc: "Votre maison a échangé d'immenses faveurs politiques pour vous faire admettre dans le dojo d'un autre clan.",
-      rule: "Vous suivez le cursus d'une École appartenant à un autre Clan tout en conservant l'allégeance de votre propre Clan d'origine."
+      prerequisite: "Création de personnage uniquement",
+      desc: "Votre maison a échangé de grandes faveurs pour vous faire admettre dans le dojo d'un autre clan.",
+      rule: "Vous suivez le cursus d'une École appartenant à un autre Clan tout en conservant l'allégeance et le bonus de famille de votre propre Clan d'origine."
     },
     {
       id: "adv-modele-bushido",
@@ -392,17 +392,7 @@
       impact: "paragon_bushido",
       prerequisite: "Honneur 4.0 minimum (Choisir une des 7 Vertus)",
       desc: "Vous êtes l'incarnation vivante d'une vertu cardinale du code des guerriers.",
-      rule: "Chaque gain d'Honneur lié directement à l'accomplissement de cette vertu est doublé. Vous bénéficiez d'une Augmentation Gratuite liée aux jets incarnant cette vertu."
-    },
-    {
-      id: "adv-parangon-sombre",
-      name: "Parangon Sombre (Dark Paragon)",
-      type: "Mental",
-      cost: 5,
-      impact: "dark_paragon",
-      prerequisite: "4 pts pour l'Araignée (Choisir un précepte de Shourido)",
-      desc: "Vous maîtrisez l'une des voies corrompues du code de l'Ombre opposé au Bushidō.",
-      rule: "Une fois par session, en sacrifiant 5 points d'Honneur (ou 1 point de Vide), ajoutez un bonus direct de +5 à un type de jet spécifique."
+      rule: "Chaque gain d'Honneur lié directement à l'accomplissement héroïque de cette vertu est doublé. Vous bénéficiez d'une Augmentation Gratuite sur les jets incarnant directement cette vertu."
     },
     {
       id: "adv-sensation",
@@ -420,29 +410,9 @@
       type: "Social",
       cost: 10,
       impact: "multiple_schools",
-      prerequisite: "En cours de partie uniquement. Accord du MJ. Rang 1 dans toutes les Compétences d'École de la nouvelle école. Incompatible Bushi/Shugenja.",
-      desc: "Vous avez reçu l'insigne honneur d'être libéré de vos serments envers votre premier sensei pour être admis dans le dojo d'une autre École majeure de l'Empire.",
-      rule: "Ne peut s'acheter qu'en cours de jeu. Dès l'acquisition, votre progression dans votre École d'origine s'arrête définitivement. Lorsque vous atteignez votre prochain Rang de Maîtrise (Insight Rank), vous débutez la nouvelle École au Rang 1 et apprenez sa première Technique. Vous devez posséder au moins le Rang 1 dans toutes les Compétences d'École de la nouvelle formation avant d'en acquérir les Techniques. Il est formellement interdit de cumuler une École de Bushi et une École de Shugenja."
-    },
-    {
-      id: "adv-ami-confrerie",
-      name: "Ami de la Confrérie (Friend of the Brotherhood)",
-      type: "Spirituel",
-      cost: 5,
-      impact: "friend_of_the_brotherhood",
-      prerequisite: "Shugenja ou Moine (4 pts pour le Clan du Dragon)",
-      desc: "Vos séjours prolongés au sein des monastères de Shinsei vous ont ouvert les portes des mystères du corps et de l'âme.",
-      rule: "Vous pouvez acheter et apprendre des Kiho comme si vous étiez un Moine de la Confrérie de Shinsei, sans payer de surcoût d'XP, en respectant les prérequis d'Anneaux normaux."
-    },
-    {
-      id: "adv-sacro-saint",
-      name: "Sacro-Saint (Sacrosanct)",
-      type: "Social",
-      cost: 4,
-      impact: "sacrosanct",
-      prerequisite: "Familles Impériales ou Shugenja / Moines déclarés pacifiques",
-      desc: "Votre fonction sacrée ou votre rang au sein de l'Ordre Céleste rend toute violence physique directe à votre égard impensable pour un esprit traditionnel.",
-      rule: "Quiconque tente de vous porter une attaque directe doit réussir un jet de Volonté ND (votre Honneur × 5). En cas d'échec, son action est perdue et il perd immédiatement de l'Honneur."
+      prerequisite: "En cours de partie uniquement. Accord du MJ. Rang 1 dans toutes les Compétences de la nouvelle école. Incompatible Bushi/Shugenja.",
+      desc: "Vous avez été officiellement autorisé à poursuivre l'enseignement d'une nouvelle École majeure de Rokugan.",
+      rule: "Votre progression dans votre École d'origine s'arrête. Lorsque vous atteignez votre prochain Rang de Maîtrise, vous débutez la nouvelle École au Rang 1 et apprenez sa première Technique."
     },
 
     // --- AVANTAGES SPIRITUELS ---
@@ -452,9 +422,9 @@
       type: "Spirituel",
       cost: 3,
       impact: "luck",
-      prerequisite: "3, 6 ou 9 pts (1 relance par rang acheté)",
+      prerequisite: "3, 6 ou 9 pts (1 relance par tranche de 3 pts)",
       desc: "Les Fortunes veillent sur votre pas et détournent la lame fatale au dernier instant.",
-      rule: "Une fois par session de jeu et par tranche de 3 points investis, vous pouvez relancer immédiatement n'importe quel jet et conserver le meilleur des deux totaux."
+      rule: "Une fois par session de jeu et par tranche de 3 points investis, vous pouvez relancer immédiatement n'importe quel jet de dés. Vous conservez obligatoirement le meilleur des deux résultats."
     },
     {
       id: "adv-resistance-magie",
@@ -464,7 +434,7 @@
       impact: "magic_resistance",
       prerequisite: "2, 4 ou 6 pts (cumulable jusqu'à 3 rangs)",
       desc: "Les esprits élémentaires hésitent à vous toucher ou glissent sur votre enveloppe sans vous affecter.",
-      rule: "Le ND de lancement de tout sort élémentaire vous prenant pour cible augmente de +3 par niveau acheté (sans effet contre la Mahō)."
+      rule: "Le ND de lancement de tout sort élémentaire vous prenant pour cible augmente de +3 par niveau acheté (sans effet contre la Mahō corrompue)."
     },
     {
       id: "adv-illumine",
@@ -474,7 +444,7 @@
       impact: "enlightened",
       prerequisite: "5 pts pour le Dragon et les Moines",
       desc: "Votre quête spirituelle vers l'harmonie universelle a ouvert les portes du Vide.",
-      rule: "Le coût en points d'expérience (XP) pour augmenter votre Anneau de Vide est réduit de 2 points à chaque montée."
+      rule: "Le coût en points d'expérience (XP) pour augmenter votre Anneau de Vide est réduit de 2 points à chaque rang."
     },
     {
       id: "adv-ishiken-do",
@@ -484,7 +454,7 @@
       impact: "ishiken_do",
       prerequisite: "Shugenja uniquement (6 pts pour le Clan du Phénix)",
       desc: "Vous possédez le don rarissime de communier directement avec le tissu du Vide cosmique.",
-      rule: "Vous pouvez apprendre, mémoriser et lancer les rituels et sorts de l'Élément du Vide."
+      rule: "Vous pouvez apprendre, mémoriser et lancer les sorts de l'Élément du Vide (Ishiken)."
     },
     {
       id: "adv-benediction-elementaire",
@@ -494,7 +464,7 @@
       impact: "elemental_blessing",
       prerequisite: "3 pts pour le Phénix (Choisir un Élément non-Vide)",
       desc: "Les kami d'un élément précis éprouvent une affection inexplicable pour votre âme.",
-      rule: "Le coût en XP pour augmenter les deux Traits rattachés à cet Élément est réduit de 1 point à chaque rang."
+      rule: "Le coût en XP pour augmenter les deux Traits rattachés à cet Élément est réduit de 1 point à chaque montée."
     },
     {
       id: "adv-ami-elements",
@@ -504,7 +474,7 @@
       impact: "friend_of_the_elements",
       prerequisite: "3 pts pour les Shugenja (Choisir un Anneau)",
       desc: "Les esprits de la nature tourbillonnent joyeusement autour de votre pas et prêtent main-forte à vos actes.",
-      rule: "Vous gagnez 1 Augmentation Gratuite sur tous les jets utilisant les Traits de l'Anneau choisi."
+      rule: "Vous gagnez 1 Augmentation Gratuite sur tous les jets utilisant les Traits rattachés à l'Anneau choisi."
     },
     {
       id: "adv-destin-grandiose",
@@ -513,7 +483,7 @@
       cost: 5,
       impact: "great_destiny",
       prerequisite: "Accord du MJ",
-      desc: "Les cieux vous réservent un rôle capital dans l'histoire de Rokugan : la mort ne peut vous cueillir prématurément.",
+      desc: "Les cieux vous réservent un rôle capital dans l'histoire : la mort ne peut vous cueillir prématurément.",
       rule: "Une fois par session, si vous deviez subir un coup mortel vous envoyant au trépas, vous survivez miraculeusement avec 1 PV au palier Mortel."
     },
     {
@@ -524,7 +494,7 @@
       impact: "inner_gift",
       prerequisite: "Choisir un don surnaturel (empathie animale, prémonition, vision astrale...)",
       desc: "Votre âme abrite une manifestation magique innée indépendante des voies de la prêtrise des kami.",
-      rule: "Vous disposez d'un pouvoir surnaturel mineur permanent validé avec le meneur de jeu."
+      rule: "Vous disposez d'une faculté surnaturelle mineure permanente définie et validée avec le meneur de jeu."
     },
     {
       id: "adv-choisi-oracles",
@@ -544,7 +514,7 @@
       impact: "bentens_blessing",
       prerequisite: "3 pts pour la Grue. Incompatible avec Odieux",
       desc: "La Fortune de l'Amour et des Arts a déposé un charme irrésistible sur vos lèvres.",
-      rule: "Bonus de +0g1 sur tous vos jets de compétences sociales visant à persuader un interlocuteur."
+      rule: "Bonus de +0g1 sur tous vos jets de compétences sociales visant à persuader, charmer ou apaiser un interlocuteur."
     },
     {
       id: "adv-benediction-bishamon",
@@ -554,7 +524,7 @@
       impact: "bishamons_blessing",
       prerequisite: "4 pts pour le Crabe et le Lion",
       desc: "La Fortune de la Guerre approuve la force colossale de vos assauts.",
-      rule: "Lorsque vous annoncez et réussissez 3 Augmentations pour Dégâts Accrus, vous gagnez 1 Augmentation gratuite supplémentaire (+1g0). Bonus de +1g0 sur les jets de Force brute."
+      rule: "Lorsque vous annoncez et réussissez des Augmentations pour Dégâts Accrus, vous gagnez 1 dé de dégâts supplémentaire (+1g0). Bonus de +1g0 sur les tests d'effort physique de Force brute."
     },
     {
       id: "adv-benediction-fukurokujin",
@@ -574,7 +544,7 @@
       impact: "hoteis_blessing",
       prerequisite: "Aucun",
       desc: "La Fortune du Contentement préserve votre paix d'esprit contre les assauts mystiques.",
-      rule: "Quiconque tente de vous faire perdre des points de Vide par un pouvoir adverse doit d'abord remporter un jet opposé de Vide contre vous."
+      rule: "Quiconque tente de drainer ou manipuler vos points de Vide par un pouvoir adverse doit d'abord remporter un jet opposé de Vide contre vous."
     },
     {
       id: "adv-benediction-jurojin",
@@ -584,7 +554,7 @@
       impact: "jurojins_blessing",
       prerequisite: "3 pts pour le Clan du Scorpion",
       desc: "La Fortune de la Longévité éloigne les fièvres et les sucs vénéneux de votre métabolisme.",
-      rule: "Bonus de +2g0 à tous vos jets pour résister aux poisons et maladies."
+      rule: "Bonus de +2g0 à tous vos jets pour résister aux poisons, toxines et maladies naturelles."
     },
     {
       id: "adv-benediction-inari",
@@ -594,17 +564,7 @@
       impact: "inaris_blessing",
       prerequisite: "Aucun",
       desc: "La Fortune du Riz et des Récoltes vous soutient même aux heures les plus noires de la famine.",
-      rule: "Même en situation de jeûne forcé ou de privation de nourriture, vous récupérez normalement vos points de Vide lors du repos."
-    },
-    {
-      id: "adv-toucher-royaumes",
-      name: "Touché par les Royaumes Spirituels (Touch of the Spirit Realms)",
-      type: "Spirituel",
-      cost: 5,
-      impact: "touch_spirit_realms",
-      prerequisite: "4 pts pour les Shugenja (Choisir un Royaume)",
-      desc: "Une étincelle primordiale d'un autre plan d'existence est tissée dans la trame de votre âme.",
-      rule: "Confère un bonus thématique permanent (ex. Chikushudō accorde +1g1 en Dressage d'animaux ; Tengoku immunise contre la terreur surnaturelle)."
+      rule: "Même en situation de famine, de jeûne forcé ou de privation complète d'eau/nourriture, vous récupérez normalement vos points de Vide lors du repos."
     },
 
     // --- AVANTAGES MATÉRIELS ---
@@ -616,7 +576,7 @@
       impact: "inheritance",
       prerequisite: "Définir l'objet de famille",
       desc: "Lors de votre gempukku, votre famille vous a confié une relique précieuse d'un ancêtre héroïque.",
-      rule: "Vous commencez avec un nemuranai ou équipement d'exception qui confère +1g0 ou une Augmentation Gratuite lors de son utilisation rituelle."
+      rule: "Vous commencez la partie avec un objet d'artisanat exceptionnel ou un Nemuranai conférant +1g0 ou 1 Augmentation Gratuite lors de son utilisation rituelle."
     },
     {
       id: "adv-fortune-financiere",
@@ -626,7 +586,7 @@
       impact: "wealthy",
       prerequisite: "3, 5 ou 8 pts",
       desc: "Votre maison contrôle des ateliers prospères, des rizières fertiles ou des comptoirs marchands.",
-      rule: "Vous commencez avec une bourse supplémentaire de 20 koku (3 pts), 50 koku (5 pts) ou 100 koku (8 pts) au-delà de l'équipement d'école."
+      rule: "Vous commencez avec une dotation financière additionnelle de 20 koku (3 pts), 50 koku (5 pts) ou 100 koku (8 pts) en surplus de votre équipement d'école."
     },
     {
       id: "adv-equipement-gaijin",
@@ -636,12 +596,12 @@
       impact: "gaijin_gear",
       prerequisite: "4 pts pour la Mante et la Licorne",
       desc: "Vous possédez une merveille technique ou une arme exotique rapportée d'au-delà des frontières de l'Empire.",
-      rule: "Vous démarrez avec un objet hors normes (longue-vue, montre à gousset, boussole, cimeterre yabanjin ou pistolet à rouet selon la campagne)."
+      rule: "Vous démarrez la partie avec un objet étranger (longue-vue, sablier/montre mécanique, boussole, cimeterre yabanjin ou arme à poudre selon l'époque de la campagne)."
     }
   ];
 
   // =========================================================================
-  // 2. TABLEAU DES DÉSAVANTAGES
+  // 2. TABLEAU DES DÉSAVANTAGES (Livre de Base p. 156-163 + Suppléments)
   // =========================================================================
   const DESAVANTAGES_LIST = [
     // --- DÉSAVANTAGES PHYSIQUES ---
@@ -665,18 +625,18 @@
       impact: "blind",
       prerequisite: "Aucun",
       desc: "Vous êtes plongé dans une obscurité totale et perpétuelle.",
-      rule: "Le ND de toutes vos actions physiques nécessitant la vue augmente de +15 à +30. Vous devez compenser par l'ouïe ou le toucher."
+      rule: "Le ND de toutes vos actions physiques nécessitant la vue augmente de +15 à +30. Vous devez compenser vos actions par l'ouïe ou le toucher."
     },
     {
       id: "dis-boiteux",
       name: "Boiteux (Lame)",
       type: "Physique",
-      cost: 4,
-      gain: 4,
+      cost: 3,
+      gain: 3,
       impact: "lame",
       prerequisite: "Aucun",
       desc: "Un coup d'épieu mal consolidé ou une malformation vous fait traîner lourdement la jambe.",
-      rule: "Votre Anneau d'Eau est considéré comme étant de 1 pour vos Actions de Mouvement. Le ND de tout jet d'Agilité impliquant les jambes augmente de +10."
+      rule: "Votre Anneau d'Eau est considéré comme étant de 1 pour le calcul de vos Actions de Mouvement. Vos jets d'Athlétisme impliquant les jambes subissent -1g1."
     },
     {
       id: "dis-petit",
@@ -687,7 +647,7 @@
       impact: "small",
       prerequisite: "Incompatible avec Grand",
       desc: "Votre gabarit est nettement plus modeste que la moyenne des combattants rokuganis.",
-      rule: "Votre Anneau d'Eau est réduit de 1 pour calculer la distance de vos mouvements. Pénalité de -1g0 sur tous vos dégâts de mêlée."
+      rule: "Chacun de vos Paliers de Blessures contient 1 point de vie en moins (Terre × 2 - 1 PV par niveau). Vous subissez une pénalité de -1g0 sur tous vos jets de dégâts au corps à corps."
     },
     {
       id: "dis-sante-fragile",
@@ -698,7 +658,7 @@
       impact: "bad_health",
       prerequisite: "Aucun",
       desc: "Votre constitution physique est chancelante et sujette aux rechutes infectieuses.",
-      rule: "Le ND de tous vos jets pour résister aux maladies, toxines ou aux rigueurs du climat augmente de +10."
+      rule: "Le ND de tous vos jets pour résister aux maladies, toxines, drogues ou aux rigueurs climatiques augmente de +10."
     },
     {
       id: "dis-seuil-douleur-bas",
@@ -709,7 +669,7 @@
       impact: "low_pain_threshold",
       prerequisite: "Incompatible avec Force de la Terre",
       desc: "La douleur des entailles vous fait perdre votre concentration plus vite que vos camarades.",
-      rule: "Les pénalités de ND infligées par chacun de vos Paliers de Blessures sont augmentées de +5."
+      rule: "Les pénalités de ND infligées par chacun de vos Paliers de Blessures sont augmentées de +5 (ex. Égratigné passe à +8, Blessé Léger à +10, etc.)."
     },
     {
       id: "dis-membre-manquant",
@@ -731,7 +691,7 @@
       impact: "permanent_wound",
       prerequisite: "Vaut 5 pts pour les Bushi",
       desc: "Une vieille blessure gangrenée ou maudite ne s'est jamais totalement refermée.",
-      rule: "Votre tout premier Palier de Blessures (Indemne / +0) est considéré comme toujours plein : vous commencez les combats directement au palier suivant."
+      rule: "Votre tout premier Palier de Blessures (Indemne / +0) est considéré comme toujours plein : vous débutez tout combat directement au palier Égratigné (+3)."
     },
     {
       id: "dis-maladroit",
@@ -742,7 +702,7 @@
       impact: "clumsy",
       prerequisite: "Aucun",
       desc: "Vos mains tremblent ou vos appuis manquent de fluidité sous le coup du stress.",
-      rule: "Tous vos jets d'Agilité ou basés sur l'Agilité subissent une pénalité de -1g0."
+      rule: "Tous vos jets d'Agilité ou basés sur le Trait Agilité subissent une pénalité de -1g0."
     },
     {
       id: "dis-mauvaise-vue",
@@ -764,7 +724,7 @@
       impact: "weakness",
       prerequisite: "Choisir un Trait physique ou mental",
       desc: "Vous souffrez d'une carence congénitale profonde dans l'une de vos facultés d'action.",
-      rule: "Le Trait sélectionné est traité comme s'il était réduit de 1 Rang pour tous les jets et calculs mécaniques."
+      rule: "Le Trait sélectionné est traité comme s'il était réduit de 1 Rang pour tous les jets de dés et calculs dérivés (sans modifier le rang de l'Anneau)."
     },
 
     // --- DÉSAVANTAGES MENTAUX ---
@@ -777,7 +737,7 @@
       impact: "brash",
       prerequisite: "Vaut 4 pts pour le Clan du Lion",
       desc: "Votre sang bout au moindre affront perçu : vous préférez tirer l'acier que reculer d'un pas.",
-      rule: "Face à une insulte ou une provocation, vous devez réussir un jet de Volonté (en ajoutant votre Rang d'Honneur) ND 25, sous peine d'attaquer sur-le-champ."
+      rule: "Face à une insulte ou une provocation, vous devez réussir un jet de Volonté (en ajoutant votre Rang d'Honneur) ND 20, sous peine d'attaquer ou de défier votre offenseur sur-le-champ."
     },
     {
       id: "dis-incapable-mentir",
@@ -799,7 +759,7 @@
       impact: "greedy",
       prerequisite: "Vaut 4 pts pour le Clan de la Mante",
       desc: "Vous accordez une importance honteuse à l'or et aux marchandises, au mépris de la bienséance du bushi.",
-      rule: "Tout adversaire cherchant à vous corrompre par Tentation (Pot-de-vin) bénéficie d'un bonus de +1k1 à son jet."
+      rule: "Tout adversaire cherchant à vous corrompre par Tentation (Pot-de-vin) bénéficie d'un bonus de +1g1 à son jet. Vous perdez le double d'Honneur pour tout acte vénal."
     },
     {
       id: "dis-naif",
@@ -810,7 +770,7 @@
       impact: "gullible",
       prerequisite: "Incompatible avec Pensée Claire",
       desc: "Vous accordez trop facilement votre confiance et prenez la parole d'autrui pour argent comptant.",
-      rule: "Tout adversaire tentant de vous duper avec la compétence Sincérité (Tromperie) reçoit un bonus de +1k1 à son jet opposé."
+      rule: "Tout adversaire tentant de vous duper avec la compétence Sincérité (Tromperie) reçoit un bonus de +1g1 à son jet opposé."
     },
     {
       id: "dis-obsession",
@@ -819,9 +779,9 @@
       cost: 2,
       gain: 2,
       impact: "compulsion",
-      prerequisite: "Définir le vice (saké, jeu, armes rares...)",
+      prerequisite: "Définir le vice (saké, jeu de dés, armes rares...)",
       desc: "Un besoin irrépressible d'assouvir une passion dévorante perturbe régulièrement vos devoirs.",
-      rule: "Dès qu'une opportunité se présente, vous devez réussir un jet de Volonté ND 15 (ou 20 pour 4 pts) sous peine de céder à votre vice."
+      rule: "Dès qu'une opportunité d'assouvir votre vice se présente, vous devez réussir un jet de Volonté ND 15 (ou ND 20 pour la version à 4 pts) sous peine d'y succomber sur l'heure."
     },
     {
       id: "dis-esprit-faible",
@@ -843,7 +803,7 @@
       impact: "idealistic",
       prerequisite: "Vaut 3 pts pour le Clan du Lion",
       desc: "Vous placez la barre morale du Bushidō si haut que la réalité politique brise vos illusions.",
-      rule: "Chaque fois que vous perdez de l'Honneur, la pénalité subie augmente de 1 point supplémentaire."
+      rule: "Chaque fois que vous subissez une perte de points d'Honneur, la perte réelle est augmentée de 1 point supplémentaire."
     },
     {
       id: "dis-obtus",
@@ -865,7 +825,7 @@
       impact: "overconfident",
       prerequisite: "Vaut 4 pts pour le Lion et la Mante",
       desc: "Votre haute estime de votre valeur martiale vous empêche d'admettre la supériorité ennemie.",
-      rule: "Face à des ennemis nettement supérieurs en nombre ou en puissance, vous devez réussir un jet de Perception ND 20 pour accepter de battre en retraite."
+      rule: "Face à des ennemis nettement supérieurs en nombre ou en puissance, vous devez réussir un jet de Perception ND 20 pour accepter de battre en retraite ou de rompre le combat."
     },
     {
       id: "dis-phobie",
@@ -874,9 +834,9 @@
       cost: 3,
       gain: 3,
       impact: "phobia",
-      prerequisite: "1, 2 ou 3 pts (Définir la phobie)",
+      prerequisite: "1, 2 ou 3 pts (Définir la source)",
       desc: "Une frayeur panique et irrationnelle vous paralyse à la vue de l'élément redouté.",
-      rule: "Face à l'objet de votre phobie, tous les ND de vos actions augmentent de +5 par rang possédé dans ce désavantage."
+      rule: "En présence de l'objet de votre phobie, tous les ND de vos actions augmentent de +5 par tranche de 1 pt investi dans ce désavantage."
     },
     {
       id: "dis-amour-veritable",
@@ -887,7 +847,7 @@
       impact: "true_love",
       prerequisite: "Définir l'être aimé",
       desc: "Votre cœur s'est lié pour toujours à un être que la raison et le devoir vous interdisent d'épouser.",
-      rule: "Lorsque vous êtes contraint de choisir entre votre devoir de samouraï et la sauvegarde de votre amour, vous devez dépenser un point de Vide pour pouvoir obéir à vos ordres."
+      rule: "Lorsque vous êtes contraint de choisir entre votre devoir de samouraï et la sauvegarde de votre amour, vous devez dépenser 1 point de Vide pour pouvoir obéir à vos ordres."
     },
     {
       id: "dis-obsede-but",
@@ -898,29 +858,7 @@
       impact: "driven",
       prerequisite: "Définir l'objectif avec le MJ",
       desc: "Une quête personnelle ou un serment secret prime sur le devoir, la santé et l'honneur.",
-      rule: "Le refus de poursuivre cet objectif lorsque l'occasion s'en présente vous inflige un malus temporaire de -1g1 sur tous vos jets jusqu'à ce que vous repreniez la traque."
-    },
-    {
-      id: "dis-esprit-contrariant",
-      name: "Esprit Contrariant (Contrary)",
-      type: "Mental",
-      cost: 3,
-      gain: 3,
-      impact: "contrary",
-      prerequisite: "Aucun",
-      desc: "Vous ressentez le besoin impulsif de contredire les opinions des autres, même quand ils ont raison.",
-      rule: "Vous devez dépenser 1 point de Vide ou réussir un jet de Volonté ND 20 pour acquiescer publiquement à une proposition qui n'est pas la vôtre."
-    },
-    {
-      id: "dis-coeur-tendre",
-      name: "Cœur Tendre (Soft-Hearted)",
-      type: "Mental",
-      cost: 2,
-      gain: 2,
-      impact: "soft_hearted",
-      prerequisite: "Aucun",
-      desc: "La cruauté inhérente au devoir des guerriers et l'exécution des peines vous répugnent profondément.",
-      rule: "Vous subissez une pénalité de -1g1 sur toutes vos actions visant à achever un adversaire désarmé, sans défense ou suppliant."
+      rule: "Refuser de poursuivre cet objectif lorsque l'occasion s'en présente vous inflige un malus temporaire de -1g1 sur tous vos jets jusqu'à ce que vous repreniez la traque."
     },
 
     // --- DÉSAVANTAGES SOCIAUX ---
@@ -942,9 +880,9 @@
       cost: 3,
       gain: 3,
       impact: "obligation",
-      prerequisite: "De 1 à 5 pts (Définir le seigneur bienfaiteur)",
+      prerequisite: "De 1 à 5 pts (Définir le seigneur créancier)",
       desc: "Un autre samouraï ou une famille influente a sauvé votre lignée et détient une créance morale totale sur vous.",
-      rule: "Refuser un ordre émanant de votre bienfaiteur entraîne une perte d'Honneur immédiate égale à deux fois la valeur du trait."
+      rule: "Refuser un ordre émanant de votre bienfaiteur entraîne une perte d'Honneur immédiate égale au double de la valeur de ce désavantage."
     },
     {
       id: "dis-ennemi-jure",
@@ -954,8 +892,8 @@
       gain: 3,
       impact: "sworn_enemy",
       prerequisite: "De 2 à 5 pts (Définir l'ennemi)",
-      desc: "Un noble d'un clan rival ou un duelliste déshonoré s'est juré d'orchestrer votre chute politique et physique.",
-      rule: "Le meneur introduit périodiquement cet ennemi acharné qui use de son influence et de ses lames pour saboter vos succès."
+      desc: "Un noble d'un clan rival ou un duelliste déshonoré s'est juré d'orchestrer votre chute.",
+      rule: "Le meneur de jeu introduit régulièrement cet ennemi qui mobilise ressources et partisans pour entraver vos missions."
     },
     {
       id: "dis-secret-sombre",
@@ -965,19 +903,8 @@
       gain: 4,
       impact: "dark_secret",
       prerequisite: "Définir l'infamie cachée",
-      desc: "Un acte impardonnable de votre passé (crime, hérésie, sang corrompu) pèse sur votre existence.",
+      desc: "Un acte impardonnable de votre passé pèse comme une épée de Damoclès sur votre existence.",
       rule: "Si ce secret est révélé publiquement, vous serez banni de votre clan, déclaré ronin ou contraint d'accomplir le seppuku."
-    },
-    {
-      id: "dis-nom-gaijin",
-      name: "Nom Gaijin (Gaijin Name)",
-      type: "Social",
-      cost: 1,
-      gain: 1,
-      impact: "gaijin_name",
-      prerequisite: "Vaut 2 pts pour la Licorne",
-      desc: "Votre nom de famille trahit une origine bâtarde issue des terres barbares hors de l'Empire.",
-      rule: "Vos dés ne peuvent exploser (relancer les 10) qu'une seule fois au maximum sur vos jets de Compétences Sociales face aux traditionalistes."
     },
     {
       id: "dis-libidineux",
@@ -988,40 +915,7 @@
       impact: "lechery",
       prerequisite: "Aucun",
       desc: "Vous cédez avec trop d'empressement aux plaisirs de la chair et aux charmes des maisons de thé.",
-      rule: "Tout jet de Tentation (Séduction) opéré à votre encontre bénéficie d'un bonus de +1k1."
-    },
-    {
-      id: "dis-otage-politique",
-      name: "Otage Politique (Hostage)",
-      type: "Social",
-      cost: 3,
-      gain: 3,
-      impact: "hostage",
-      prerequisite: "Accord narratif",
-      desc: "Vous résidez à la cour d'un autre clan afin de garantir un traité de non-agression entre vos provinces.",
-      rule: "Vous ne pouvez quitter le château sans escorte armée, et votre vie sera ôtée si votre propre clan brise la trêve."
-    },
-    {
-      id: "dis-colporteur-rumeurs",
-      name: "Colporteur de Rumeurs (Rumormonger)",
-      type: "Social",
-      cost: 4,
-      gain: 4,
-      impact: "rumormonger",
-      prerequisite: "Vaut 5 pts pour les Courtisans",
-      desc: "Vous ne pouvez vous empêcher d'ébruiter les indiscrétions et médisances de cour.",
-      rule: "Pour réprimer l'envie de propager un ragot croustillant, vous devez réussir un jet de Volonté ND (5 × Rang de Gloire de la personne concernée)."
-    },
-    {
-      id: "dis-statut-social-dechu",
-      name: "Statut Social Déchu (Social Disadvantage)",
-      type: "Social",
-      cost: 3,
-      gain: 3,
-      impact: "social_disadvantage",
-      prerequisite: "Aucun",
-      desc: "Vous avez chu de l'Ordre Céleste suite à un scandale familial ou une naissance illégitime.",
-      rule: "Vous commencez la campagne avec un Rang de Statut de 0.0."
+      rule: "Tout jet de Tentation (Séduction) dirigé contre vous bénéficie d'un bonus de +1g1."
     },
     {
       id: "dis-infame",
@@ -1032,18 +926,7 @@
       impact: "infamous",
       prerequisite: "Aucun",
       desc: "Votre nom est tristement associé à une défaite cuisante, une trahison suspectée ou un scandale retentissant.",
-      rule: "Vous commencez la partie avec 1 Rang d'Infamie (Infamy) complet au lieu de la Gloire."
-    },
-    {
-      id: "dis-retraite-forcee",
-      name: "Retraite Forcée au Monastère (Forced Retirement)",
-      type: "Social",
-      cost: 4,
-      gain: 4,
-      impact: "forced_retirement",
-      prerequisite: "Vaut 5 pts pour les Moines",
-      desc: "Un scandale politique a obligé vos supérieurs à raser vos cheveux et à vous envoyer méditer dans un monastère.",
-      rule: "Vous perdez votre statut de membre de clan et vous ne pouvez plus progresser dans votre École d'origine."
+      rule: "Vous commencez la partie avec 1.0 Rang d'Infamie (Infamy) complet au lieu de la Gloire."
     },
 
     // --- DÉSAVANTAGES SPIRITUELS ---
@@ -1055,19 +938,8 @@
       gain: 4,
       impact: "shadowlands_taint",
       prerequisite: "Incompatible avec Âme Pure",
-      desc: "L'ombre de Jigoku a déposé son venin spirituel dans votre flux de sang.",
-      rule: "Vous débutez la partie avec 0,5 Rang de Souillure de l'Outremonde (non détectable sans magie à ce niveau)."
-    },
-    {
-      id: "dis-sensible-souillure",
-      name: "Vulnérabilité à la Souillure (Taint Vulnerability)",
-      type: "Spirituel",
-      cost: 4,
-      gain: 4,
-      impact: "taint_vulnerability",
-      prerequisite: "Livre des Terres d'Ombre",
-      desc: "Votre chair et votre esprit manquent de défenses naturelles face aux miasmes de Jigoku.",
-      rule: "+10 au ND de tous les jets effectués pour résister à la Souillure. Interdiction totale de dépenser du Vide sur ces jets."
+      desc: "L'ombre de Jigoku a déposé son venin spirituel dans votre flux vital.",
+      rule: "Vous débutez la partie avec 0,5 Rang de Souillure de l'Outremonde (non détectable sans magie purificatrice à ce niveau)."
     },
     {
       id: "dis-malchanceux",
@@ -1078,7 +950,7 @@
       impact: "unlucky",
       prerequisite: "2 pts par rang acheté",
       desc: "Les Fortunes détournent leur bénédiction au moment précis où votre sort bascule.",
-      rule: "Par niveau acheté dans ce désavantage, le MJ peut vous obliger une fois par session à relancer un jet réussi et à conserver le second score."
+      rule: "Par tranche de 2 points investis, le MJ peut vous contraindre une fois par session à relancer un jet réussi. Vous devez obligatoirement accepter et garder le résultat du nouveau jet, même s'il est inférieur."
     },
     {
       id: "dis-destin-sombre",
@@ -1089,18 +961,7 @@
       impact: "dark_fate",
       prerequisite: "Accord du MJ",
       desc: "Votre destinée conduira un désastre majeur sur l'Empire avant que votre souffle ne s'éteigne.",
-      rule: "Le destin vous garde en vie pour votre sombre dessein : une fois par session, un coup mortel vous réduit miraculeusement à 1 PV au lieu de vous tuer."
-    },
-    {
-      id: "dis-malediction-fortune",
-      name: "Malédiction des Sept Fortunes (Seven Fortunes' Curse)",
-      type: "Spirituel",
-      cost: 3,
-      gain: 3,
-      impact: "seven_fortunes_curse",
-      prerequisite: "De 3 à 6 pts (Choisir la Fortune vengeresse)",
-      desc: "Une offense sacrilège commise par vous ou vos aïeux a éveillé le courroux d'une Fortune majeure.",
-      rule: "Confère un malus direct (ex. Jurojin : -2g0 pour résister aux poisons ; Hotei (6 pts) : tout effet requérant 1 point de Vide en coûte 2)."
+      rule: "Le destin vous garde en vie pour sceller cette tragédie : une fois par session, si vous deviez être tué sur le coup, vous êtes miraculeusement réduit à 1 PV au palier Mortel."
     },
     {
       id: "dis-courroux-kami",
@@ -1125,28 +986,6 @@
       rule: "Pénalité de -1g0 à tous vos jets d'Initiative et jets de Vigilance lors de situations de stress ou de combat."
     },
     {
-      id: "dis-maudit-par-royaume",
-      name: "Maudit par un Royaume Spirituel (Cursed by the Realm)",
-      type: "Spirituel",
-      cost: 4,
-      gain: 4,
-      impact: "cursed_by_realm",
-      prerequisite: "Vaut 5 pts pour les Shugenja (Choisir un Royaume)",
-      desc: "L'essence de l'un des mondes spirituels a marqué votre âme comme son ennemi juré.",
-      rule: "Confère une malédiction selon le plan (ex. Gaki-dō : les morts affamés vous ciblent en priorité absolue ; Yume-dō : vous devez dormir 10 heures au lieu de 8 pour régénérer le Vide)."
-    },
-    {
-      id: "dis-desequilibre-elementaire",
-      name: "Déséquilibre Élémentaire (Elemental Imbalance)",
-      type: "Spirituel",
-      cost: 2,
-      gain: 2,
-      impact: "elemental_imbalance",
-      prerequisite: "Shugenja uniquement (2 pts par rang)",
-      desc: "Les esprits d'un élément parlent si fort dans votre esprit que vos incantations dérapent facilement.",
-      rule: "Lorsque vous lancez un sort de cet élément, vous devez réussir un jet de Volonté ND (15 + 5 × rang) ou subir un effet chaotique imprévu."
-    },
-    {
       id: "dis-momoku",
       name: "Âme Aveugle au Vide (Momoku)",
       type: "Spirituel",
@@ -1155,271 +994,7 @@
       impact: "momoku",
       prerequisite: "Incompatible avec Shugenja ou Moines",
       desc: "Votre âme est imperméable à l'harmonie du Vide cosmique : vous êtes coupé de l'étincelle divine.",
-      rule: "Vous ne disposez d'aucun point de Vide et vous ne pouvez jamais en acquérir ni en dépenser pour améliorer vos actions."
-    },
-    {
-      id: "dis-ascete",
-      name: "Ascète (Ascetic)",
-      type: "Mental",
-      cost: 2,
-      gain: 2,
-      impact: "ascetic",
-      prerequisite: "Vaut 3 pts pour le Clan du Dragon et les Moines",
-      desc: "Vous n'avez aucun goût ni intérêt pour les biens matériels, et ce minimalisme affecte la façon dont autrui vous perçoit.",
-      rule: "Votre équipement de départ ne comprend que vos armes, armure, vêtements et outils indispensables (aucun koku ni superflu). Tous vos gains de Gloire sont divisés par deux (et réduits au quart pour un Moine)."
-    },
-    {
-      id: "dis-fiancailles-ameres",
-      name: "Fiançailles Amères (Bitter Betrothal)",
-      type: "Social",
-      cost: 2,
-      gain: 2,
-      impact: "bitter_betrothal",
-      prerequisite: "Vaut 3 pts pour les Familles Impériales",
-      desc: "Vous êtes promis ou marié à un conjoint qui vous méprise autant que vous le détestez.",
-      rule: "Bien que votre époux(se) gère votre domaine avec le décorum minimal, votre hostilité mutuelle complique grandement toutes vos démarches domestiques, politiques ou bureaucratiques."
-    },
-    {
-      id: "dis-mouton-noir",
-      name: "Mouton Noir (Black Sheep)",
-      type: "Social",
-      cost: 3,
-      gain: 3,
-      impact: "black_sheep",
-      prerequisite: "Aucun",
-      desc: "Votre famille est profondément dégoûtée par votre conduite : sans être rōnin, vous n'êtes plus le bienvenu sous votre propre toit.",
-      rule: "Vous ne pouvez entretenir de relations normales avec un membre de votre famille que via l'Avantage Allié, et il vous est très difficile de trouver un sensei acceptant de vous faire progresser en Rang d'École."
-    },
-    {
-      id: "dis-banni-temple",
-      name: "Dénoncé par les Moines (Cast Out)",
-      type: "Social",
-      cost: 1,
-      gain: 1,
-      impact: "cast_out",
-      prerequisite: "1 pt (un temple) ou 3 pts (une secte majeure de la Confrérie de Shinsei)",
-      desc: "Vous ou votre lignée avez été publiquement dénoncés par un ordre monastique.",
-      rule: "Les moines du temple ou de la secte concernée traitent votre Rang de Gloire comme s'il s'agissait d'Infamie."
-    },
-    {
-      id: "dis-consume-controle",
-      name: "Consumé : Contrôle (Consumed by Control)",
-      type: "Mental",
-      cost: 4,
-      gain: 4,
-      impact: "consumed_control",
-      prerequisite: "Vaut 5 pts pour l'Araignée. Incompatible avec Échec du Bushidō",
-      desc: "Vous avez emprunté la voie du Shourido : vous voulez dominer autrui à tout prix et n'admettez jamais vos erreurs.",
-      rule: "Vous subissez une pénalité de -1g1 sur tous vos jets d'Étiquette et de Sincérité."
-    },
-    {
-      id: "dis-consume-determination",
-      name: "Consumé : Détermination (Consumed by Determination)",
-      type: "Mental",
-      cost: 6,
-      gain: 6,
-      impact: "consumed_determination",
-      prerequisite: "Vaut 7 pts pour l'Araignée. Incompatible avec Échec du Bushidō",
-      desc: "Vous êtes convaincu de n'avoir besoin d'aucune aide extérieure ni d'aucune harmonie intérieure pour triompher.",
-      rule: "Vous ne pouvez jamais dépenser de points de Vide pour augmenter un jet de dés (+1g1)."
-    },
-    {
-      id: "dis-consume-perfection",
-      name: "Consumé : Perfection (Consumed by Perfection)",
-      type: "Mental",
-      cost: 5,
-      gain: 5,
-      impact: "consumed_perfection",
-      prerequisite: "Vaut 6 pts pour la Grue et l'Araignée. Incompatible avec Échec du Bushidō",
-      desc: "Vous exigez de vous-même une exécution absolue en toute circonstance, même lorsque cela est inutile.",
-      rule: "À chaque jet de Compétence ou de Lancement de Sort, vous devez déclarer 1 Augmentation supplémentaire sans aucun effet bénéfique, sans quoi le jet échoue automatiquement."
-    },
-    {
-      id: "dis-consume-force",
-      name: "Consumé : Force Brute (Consumed by Strength)",
-      type: "Mental",
-      cost: 5,
-      gain: 5,
-      impact: "consumed_strength",
-      prerequisite: "Vaut 6 pts pour l'Araignée. Incompatible avec Échec du Bushidō",
-      desc: "Seule la puissance physique écrase vos ennemis ; la finesse et la diplomatie sont pour les faibles.",
-      rule: "Vous devez déclarer 1 Augmentation supplémentaire sans effet pour utiliser les manœuvres Coup Ciblé, Feinte ou Désarmement, et subissez -1g0 à tous vos jets d'Étiquette."
-    },
-    {
-      id: "dis-maudit-royaume",
-      name: "Maudit par le Royaume (Cursed by the Realm)",
-      type: "Spirituel",
-      cost: 4,
-      gain: 4,
-      impact: "cursed_by_the_realm",
-      prerequisite: "Vaut 5 pts pour les Shugenja (Choisir un Royaume Spirituel)",
-      desc: "L'essence d'un Royaume Spirituel vous a marqué comme un ennemi.",
-      rule: "Selon le royaume choisi : Chikushudo (-1g1 Dressage), Gaki-do (cible prioritaire des morts affamés), Jigoku (-1g1 pour résister à la Souillure), Maigo no Musha (-1g1 contre les esprits), Meido (-1g0 Perception hors action), Sakkaku (farces cruelles mensuelles), Tengoku (+10 au ND dans les temples), Toshigoku (Volonté ND 15 ou attaquer tout ennemi blessé), Yomi (aucun avantage d'Ancêtre/Héritage), Yume-do (10h de sommeil requises pour récupérer le Vide)."
-    },
-    {
-      id: "dis-sombre-destin",
-      name: "Sombre Destin (Dark Fate)",
-      type: "Spirituel",
-      cost: 3,
-      gain: 3,
-      impact: "dark_fate",
-      prerequisite: "Aucun",
-      desc: "Une destinée funeste vous attend : avant votre mort, vous plongerez le monde dans de terribles ténèbres.",
-      rule: "Le destin vous préserve pour accomplir cette tragédie : une fois par session, lorsqu'une attaque devrait vous tuer, vous êtes réduit à 1 point de vie avant la mort."
-    },
-    {
-      id: "dis-deshonore",
-      name: "Déshonoré / Cherche-Mort (Dishonored)",
-      type: "Social",
-      cost: 5,
-      gain: 5,
-      impact: "dishonored",
-      prerequisite: "Aucun",
-      desc: "Votre nom a été rayé des registres familiaux ; seule une mort glorieuse au combat lavera votre affront.",
-      rule: "Vous possédez un Rang de Statut bloqué à 1.0 et ne pouvez gagner aucun point de Statut tant que ce désavantage persiste."
-    },
-    {
-      id: "dis-incroyant",
-      name: "Incroyant / Sceptique (Disbeliever)",
-      type: "Mental",
-      cost: 3,
-      gain: 3,
-      impact: "disbeliever",
-      prerequisite: "Inaccessible aux Shugenja et Moines",
-      desc: "Vous remettez secrètement en question le Tao de Shinsei, les Fortunes ou la divinité de l'Ordre Céleste.",
-      rule: "Si votre impiété est découverte, la perte d'Honneur et de Gloire est catastrophique, et les bénédictions spirituelles peuvent vous être refusées."
-    },
-    {
-      id: "dis-desequilibre-elementaire",
-      name: "Déséquilibre Élémentaire (Elemental Imbalance)",
-      type: "Spirituel",
-      cost: 2,
-      gain: 2,
-      impact: "elemental_imbalance",
-      prerequisite: "Shugenja uniquement (2 pts par rang, sur un élément sans Déficience)",
-      desc: "Les kami d'un élément vous favorisent avec une telle violence que leur voix submerge parfois votre volonté.",
-      rule: "Chaque fois que vous lancez un sort de cet élément, réussissez un jet de Volonté ND (15 + 5 par rang du désavantage) sous peine de voir le sort échouer ou frapper une mauvaise cible."
-    },
-    {
-      id: "dis-echec-bushido",
-      name: "Échec du Bushidō (Failure of Bushido)",
-      type: "Mental",
-      cost: 3,
-      gain: 3,
-      impact: "failure_of_bushido",
-      prerequisite: "3 à 6 pts selon la vertu. Incompatible avec Consumé",
-      desc: "Votre âme faillit gravement à l'un des sept préceptes cardinaux du code du Bushidō.",
-      rule: "Compassion (3 pts : dépenser 1 Vide pour aider un inférieur), Courage (4 pts : +5 au ND face à un ennemi de Gloire/Statut supérieur ou de l'Outremonde), Courtoisie (4 pts : 1 Augmentation forcée sans effet pour s'excuser), Devoir (6 pts : impossible de dépenser du Vide pour réduire les Blessures), Honnêteté (3 pts : aucun Vide sur Sincérité [Honnêteté]), Honneur (3 pts : impossible d'ajouter le Rang d'Honneur contre Intimidation/Tentation), Sincérité (4 pts : 1 Augmentation forcée sans effet pour convaincre)."
-    },
-    {
-      id: "dis-malediction-fortunes",
-      name: "Malédiction des Sept Fortunes (Seven Fortunes' Curse)",
-      type: "Spirituel",
-      cost: 3,
-      gain: 3,
-      impact: "seven_fortunes_curse",
-      prerequisite: "3 pts (ou 6 pts pour la Malédiction de Hotei)",
-      desc: "L'une des Sept Fortunes a jugé votre conduite offensante et a abattu son courroux sur vous.",
-      rule: "Benten (+10 au ND d'Étiquette), Bishamon (Force -1 pour les dégâts d'arme), Daikoku (-1g1 en Commerce et -1 koku de départ), Ebisu (-1g1 aux jets sociaux avec les non-samouraïs), Fukurokujin (+5 au ND des jets de Connaissance/Lore), Hotei (6 pts : toute Technique ou Avantage coûtant 1 Vide en exige 2), Jurojin (-2g0 pour résister aux poisons et maladies)."
-    },
-    {
-      id: "dis-touche-vide",
-      name: "Touché par le Vide (Touch of the Void)",
-      type: "Spirituel",
-      cost: 3,
-      gain: 3,
-      impact: "touch_of_the_void",
-      prerequisite: "Vaut 4 pts pour le Clan du Phénix",
-      desc: "Le contact brut de l'essence du Vide a fissuré votre esprit : son appel est puissant mais dévastateur.",
-      rule: "Lorsque vous dépensez 1 point de Vide pour augmenter un jet, vous gagnez +2g1 au lieu de +1g1, mais vous devez réussir un jet de Volonté ND 30 ou être Étourdi (Dazed) pendant 1 round."
-    },
-    {
-      id: "dis-faiblesse",
-      name: "Faiblesse (Weakness)",
-      type: "Physique",
-      cost: 6,
-      gain: 6,
-      impact: "weakness",
-      prerequisite: "Choisir un Trait physique ou mental",
-      desc: "Vous souffrez d'une déficience physique ou mentale marquée qu'aucun entraînement ne parvient à combler.",
-      rule: "Le Trait sélectionné est considéré comme inférieur de 1 rang pour tous vos jets de dés et effets mécaniques dérivés."
-    },
-    {
-      id: "dis-courroux-kami",
-      name: "Courroux des Kami (Wrath of the Kami)",
-      type: "Spirituel",
-      cost: 3,
-      gain: 3,
-      impact: "wrath_of_the_kami",
-      prerequisite: "Vaut 4 pts pour les Shugenja (Choisir un Élément)",
-      desc: "Les esprits d'un élément particulier vous vouent une rancune tenace et jubilent lorsqu'on les invoque contre vous.",
-      rule: "Tout sort de l'élément choisi lancé contre vous confère 1 Augmentation Gratuite à son lanceur."
-    },
-    {
-      id: "dis-malediction-lignee",
-      name: "Malédiction de Lignée : Moto ou Yogo (Bloodline Curse)",
-      type: "Spirituel",
-      cost: 4,
-      gain: 4,
-      impact: "bloodline_curse",
-      prerequisite: "4 pts (Clan de la Licorne pour Moto, Clan du Scorpion pour Yogo)",
-      desc: "Le sang de votre famille porte le poids d'une antique malédiction liée à Fu Leng et à l'Outremonde.",
-      rule: "Malédiction des Moto : pénalité de -1g0 à tous les jets pour résister à la Souillure. Malédiction de Yogo : vous êtes condamné par le destin à trahir la personne que vous aimez le plus."
-    },
-    {
-      id: "dis-folie-illuminee",
-      name: "Folie Illuminée (Enlightened Madness)",
-      type: "Spirituel",
-      cost: 4,
-      gain: 4,
-      impact: "enlightened_madness",
-      prerequisite: "4 pts (ND 20) ou 6 pts (ND 30)",
-      desc: "L'illumination mystique ou le sang des Kami a tordu votre esprit, vous poussant à des actes violents ou incohérents.",
-      rule: "Choisissez un Anneau, une Compétence ou un Tatouage Togashi : à chaque utilisation, vous devez réussir un jet de Volonté (ND 20 ou ND 30) ou sombrer dans la démence sous le contrôle du MJ pendant 8 heures."
-    },
-    {
-      id: "dis-momoku",
-      name: "Momoku — Aveugle au Vide (Momoku)",
-      type: "Spirituel",
-      cost: 8,
-      gain: 8,
-      impact: "momoku",
-      prerequisite: "Aucun",
-      desc: "Votre âme est spirituellement coupée de l'harmonie cosmique du Vide.",
-      rule: "Vous conservez votre Anneau de Vide, mais vous ne pouvez dépenser aucun point de Vide."
-    },
-    {
-      id: "dis-aspect-troublant",
-      name: "Aspect Troublant (Disturbing Countenance)",
-      type: "Physique",
-      cost: 2,
-      gain: 2,
-      impact: "disturbing_countenance",
-      prerequisite: "Aucun",
-      desc: "Vos traits déformés, vos cicatrices rituelles ou votre regard inquiétant mettent vos interlocuteurs mal à l'aise.",
-      rule: "Le ND de tous vos jets de Compétences Sociales (hors Intimidation) est augmenté de +5."
-    },
-    {
-      id: "dis-amour-perdu",
-      name: "Amour Perdu (Lost Love)",
-      type: "Mental",
-      cost: 3,
-      gain: 3,
-      impact: "lost_love",
-      prerequisite: "Aucun",
-      desc: "Le deuil d'un être cher disparu hante vos pensées à chaque instant.",
-      rule: "Tout événement ou lieu ravivant le souvenir de cet amour perdu exige un jet de Volonté ND 20 pour ne pas subir -1g1 à toutes vos actions pendant la scène."
-    },
-    {
-      id: "dis-insensible",
-      name: "Insensible (Insensitive)",
-      type: "Mental",
-      cost: 2,
-      gain: 2,
-      impact: "insensitive",
-      prerequisite: "Aucun",
-      desc: "Vous prêtez peu d'attention aux sentiments ou à la souffrance morale de ceux qui vous entourent.",
-      rule: "Vous subissez un malus sur vos jets d'Étiquette et de Courtisan visant à faire preuve d'empathie ou de condoléances."
+      rule: "Vous possédez un Anneau de Vide de 2, mais vous ne disposez d'aucun point de Vide et ne pouvez jamais en acquérir ni en dépenser pour augmenter vos jets ou activer des facultés."
     }
   ];
 
