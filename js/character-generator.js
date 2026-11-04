@@ -2343,24 +2343,41 @@ function applyCharacterDataToSheet(d) {
   }
 }
 
-function saveCharacterToDojo() {
+// Permet de forcer la création d'une nouvelle entrée ou de mettre à jour l'existante
+function saveCharacterToDojo(forceNew = false) {
   try {
     const data = collectCharacterData();
-    window.currentCharacterId = data.id;
+
+    // Si on force un nouveau personnage, on génère un identifiant unique tout neuf
+    if (forceNew || !window.currentCharacterId) {
+      data.id = 'samurai_' + Date.now();
+      window.currentCharacterId = data.id;
+    } else {
+      data.id = window.currentCharacterId;
+    }
 
     const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
     let dojoList = rawDojo ? JSON.parse(rawDojo) : [];
     if (!Array.isArray(dojoList)) dojoList = [];
 
-    const existingIndex = dojoList.findIndex(
-      c => c.id === data.id || ((c.name || "").toLowerCase() === data.name.toLowerCase())
-    );
+    // Noms par défaut à ne jamais considérer comme des doublons
+    const isGenericName = !data.name || ["samouraï", "samourai", "samouraï sans nom"].includes(data.name.toLowerCase().trim());
 
-    if (existingIndex !== -1) {
+    // Recherche par ID en priorité ; le nom ne sert de doublon que s'il est personnalisé et qu'on ne force pas un nouveau perso
+    const existingIndex = dojoList.findIndex(c => {
+      if (c.id === data.id) return true;
+      if (!forceNew && !isGenericName && (c.name || "").toLowerCase().trim() === data.name.toLowerCase().trim()) {
+        return true;
+      }
+      return false;
+    });
+
+    if (existingIndex !== -1 && !forceNew) {
       data.id = dojoList[existingIndex].id;
+      window.currentCharacterId = data.id;
       dojoList[existingIndex] = data;
     } else {
-      dojoList.push(data);
+      dojoList.unshift(data); // Ajoute en tête de liste
     }
 
     const serialized = JSON.stringify(dojoList);
@@ -2368,11 +2385,31 @@ function saveCharacterToDojo() {
     localStorage.setItem('l5r_saved_characters', serialized);
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
 
-    renderDojoList();
-    alert(`✅ « ${data.name} » a bien été enregistré dans votre Dojo local !`);
+    if (typeof renderDojoList === 'function') renderDojoList();
+    if (typeof renderDojoRoster === 'function') renderDojoRoster();
+
+    alert(`✅ « ${data.name} » a bien été enregistré dans votre Dojo !`);
   } catch (err) {
     console.error(err);
-    alert("Erreur lors de l'enregistrement dans le navigateur. Utilisez l'export JSON par sécurité.");
+    alert("Erreur lors de l'enregistrement dans le navigateur.");
+  }
+}
+
+// Fonction pour démarrer un nouveau personnage vierge sans écraser le précédent
+function startNewCharacter() {
+  if (confirm("Commencer un nouveau personnage ? La fiche sera réinitialisée.")) {
+    window.currentCharacterId = null;
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    const nameInput = document.getElementById('pc-name');
+    if (nameInput) nameInput.value = "";
+    
+    // Réinitialise avec les valeurs par défaut
+    if (typeof resetCharacter === 'function') {
+      resetCharacter();
+    } else if (typeof onClanChange === 'function') {
+      onClanChange();
+    }
+    window.currentCharacterId = 'samurai_' + Date.now();
   }
 }
 
