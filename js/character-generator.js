@@ -605,12 +605,37 @@ function initClans() {
   onClanChange();
 }
 
+/**
+ * Initialise l'ensemble des catalogues déroulants (Compétences, Équipements, Avantages & Désavantages).
+ * Présentation harmonisée en optgroups thématiques avec pictogrammes, indentation et tri alphabétique.
+ */
 function initCatalogSelectors() {
   const skills = getSkills();
   const eq = getEquipment();
   const adv = getAdvantages();
 
-  // 1. Compétences
+  // Dictionnaires visuels pour les catégories
+  const SKILL_TYPE_SYMBOLS = {
+    "bugei": "⚔️ Bugei (Martial)",
+    "noble": "📜 Haute & Noble",
+    "haute": "📜 Haute & Noble",
+    "marchande": "⚖️ Marchande",
+    "degradante": "🌑 Dégradante",
+    "dégradante": "🌑 Dégradante"
+  };
+
+  const ADV_TYPE_SYMBOLS = {
+    "physique": "⚔️ Physique",
+    "mental": "🧠 Mental",
+    "spirituel": "⛩️ Spirituel",
+    "social": "🌸 Social",
+    "materiel": "🌿 Matériel",
+    "matériel": "🌿 Matériel"
+  };
+
+  // =========================================================================
+  // 1. COMPÉTENCES (Filtrage des acquises + Groupement Bugei / Noble / etc.)
+  // =========================================================================
   const skSel = document.getElementById('sel-add-skill');
   if (skSel) {
     const normalizeSkill = (str) => (str || "").split('(')[0].trim().toLowerCase();
@@ -630,32 +655,60 @@ function initCatalogSelectors() {
     });
 
     if (availableSkills.length === 0) {
-      let opt = document.createElement('option');
+      const opt = document.createElement('option');
       opt.value = "";
       opt.textContent = "— Toutes les compétences acquises —";
       skSel.appendChild(opt);
       skSel.disabled = true;
     } else {
       skSel.disabled = false;
+
+      // Regroupement par type de compétence
+      const groupedSkills = {};
       availableSkills.forEach(s => {
-        let opt = document.createElement('option');
-        opt.value = s.name;
-        opt.textContent = `${s.name} (${s.type} - ${s.trait})`;
-        skSel.appendChild(opt);
+        const typeKey = (s.type || "Général").toLowerCase();
+        if (!groupedSkills[typeKey]) groupedSkills[typeKey] = [];
+        groupedSkills[typeKey].push(s);
       });
+
+      // Ordre d'affichage des groupes de compétences
+      const priorityTypes = ["bugei", "noble", "haute", "marchande", "degradante", "dégradante"];
+      const allTypes = Array.from(new Set([...priorityTypes, ...Object.keys(groupedSkills)]));
+
+      allTypes.forEach(tKey => {
+        if (!groupedSkills[tKey] || groupedSkills[tKey].length === 0) return;
+
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = SKILL_TYPE_SYMBOLS[tKey] || `📁 ${tKey.toUpperCase()}`;
+
+        // Tri alphabétique dans le groupe
+        groupedSkills[tKey].sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+
+        groupedSkills[tKey].forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.name;
+          opt.textContent = `  ◆ ${s.name} (${s.trait || 'Trait'})`;
+          optgroup.appendChild(opt);
+        });
+
+        skSel.appendChild(optgroup);
+      });
+
       if (previousVal && availableSkills.some(s => s.name === previousVal)) {
         skSel.value = previousVal;
       }
     }
   }
 
-  // 2. Armures
+  // =========================================================================
+  // 2. ARMURES
+  // =========================================================================
   const armSel = document.getElementById('pc-armor');
   if (armSel) {
     const prevArmVal = armSel.value;
     armSel.innerHTML = "";
     (eq.armures || []).forEach(a => {
-      let opt = document.createElement('option');
+      const opt = document.createElement('option');
       opt.value = a.tn;
       opt.textContent = a.name;
       armSel.appendChild(opt);
@@ -665,7 +718,9 @@ function initCatalogSelectors() {
     }
   }
 
-  // 3. Armes
+  // =========================================================================
+  // 3. ARMES (Principale & Secondaire)
+  // =========================================================================
   const w1Sel = document.getElementById('pc-weapon-1');
   const w2Sel = document.getElementById('pc-weapon-2');
   if (w1Sel && w2Sel) {
@@ -676,12 +731,12 @@ function initCatalogSelectors() {
     w2Sel.innerHTML = "<option value='Aucune'>Aucune arme secondaire</option>";
 
     (eq.armes || []).forEach(w => {
-      let opt1 = document.createElement('option');
+      const opt1 = document.createElement('option');
       opt1.value = w.name;
       opt1.textContent = `${w.name} (VD ${w.vd}, ${w.type})`;
       w1Sel.appendChild(opt1);
 
-      let opt2 = document.createElement('option');
+      const opt2 = document.createElement('option');
       opt2.value = w.name;
       opt2.textContent = `${w.name} (VD ${w.vd})`;
       w2Sel.appendChild(opt2);
@@ -695,7 +750,9 @@ function initCatalogSelectors() {
     }
   }
 
-  // 4. Avantages (avec coût dynamique selon Clan/École — Ticket #18)
+  // =========================================================================
+  // 4. AVANTAGES (Optgroups par Type + Tri alphabétique + Réductions Clan/École)
+  // =========================================================================
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
     const prevAdvVal = advSel.value;
@@ -707,30 +764,57 @@ function initCatalogSelectors() {
       .filter(({ item }) => !ownedAdvNames.has(item.name.toLowerCase().trim()));
 
     if (availableAdv.length === 0) {
-      let opt = document.createElement('option');
+      const opt = document.createElement('option');
       opt.value = "";
       opt.textContent = "— Aucun autre avantage disponible —";
       advSel.appendChild(opt);
       advSel.disabled = true;
     } else {
       advSel.disabled = false;
-      availableAdv.forEach(({ item, originalIdx }) => {
-        const effCost = getEffectiveAdvCost(item);
-        const discountTag = effCost < item.cost ? ` ★ -${item.cost - effCost} XP Clan/École` : "";
-        let opt = document.createElement('option');
-        opt.value = originalIdx;
-        opt.textContent = `${item.name} (${effCost} XP${discountTag}) — [${item.type}]`;
-        advSel.appendChild(opt);
+
+      // Groupement par type
+      const groupedAdv = {};
+      availableAdv.forEach(entry => {
+        const typeKey = (entry.item.type || "Général").toLowerCase().trim();
+        if (!groupedAdv[typeKey]) groupedAdv[typeKey] = [];
+        groupedAdv[typeKey].push(entry);
       });
+
+      const sortedTypes = Object.keys(groupedAdv).sort((a, b) => a.localeCompare(b, 'fr'));
+
+      sortedTypes.forEach(tKey => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = ADV_TYPE_SYMBOLS[tKey] || `📁 ${tKey.toUpperCase()}`;
+
+        // Tri alphabétique des noms
+        groupedAdv[tKey].sort((a, b) => a.item.name.localeCompare(b.item.name, 'fr'));
+
+        groupedAdv[tKey].forEach(({ item, originalIdx }) => {
+          const effCost = (typeof getEffectiveAdvCost === 'function')
+            ? getEffectiveAdvCost(item)
+            : item.cost;
+          const discountTag = effCost < item.cost ? ` ★ -${item.cost - effCost} XP` : "";
+
+          const opt = document.createElement('option');
+          opt.value = originalIdx;
+          opt.textContent = `  ◆ ${item.name} (${effCost} XP${discountTag})`;
+          optgroup.appendChild(opt);
+        });
+
+        advSel.appendChild(optgroup);
+      });
+
       if (prevAdvVal && advSel.querySelector(`option[value="${prevAdvVal}"]`)) {
         advSel.value = prevAdvVal;
       }
     }
 
-    updateAdvPreview();
+    if (typeof updateAdvPreview === 'function') updateAdvPreview();
   }
 
-  // 5. Désavantages (avec gain dynamique selon Clan/École — Ticket #18)
+  // =========================================================================
+  // 5. DÉSAVANTAGES (Optgroups par Type + Tri alphabétique + Bonus Clan/École)
+  // =========================================================================
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
     const prevDisVal = disadvSel.value;
@@ -742,31 +826,58 @@ function initCatalogSelectors() {
       .filter(({ item }) => !ownedDisNames.has(item.name.toLowerCase().trim()));
 
     if (availableDis.length === 0) {
-      let opt = document.createElement('option');
+      const opt = document.createElement('option');
       opt.value = "";
       opt.textContent = "— Aucun autre désavantage disponible —";
       disadvSel.appendChild(opt);
       disadvSel.disabled = true;
     } else {
       disadvSel.disabled = false;
-      availableDis.forEach(({ item, originalIdx }) => {
-        const baseG = item.gain ?? item.cost;
-        const effGain = getEffectiveDisadvGain(item);
-        const bonusTag = effGain > baseG ? ` ★ +${effGain - baseG} XP Clan/École` : "";
-        let opt = document.createElement('option');
-        opt.value = originalIdx;
-        opt.textContent = `${item.name} (+${effGain} XP${bonusTag}) — [${item.type}]`;
-        disadvSel.appendChild(opt);
+
+      // Groupement par type
+      const groupedDis = {};
+      availableDis.forEach(entry => {
+        const typeKey = (entry.item.type || "Général").toLowerCase().trim();
+        if (!groupedDis[typeKey]) groupedDis[typeKey] = [];
+        groupedDis[typeKey].push(entry);
       });
+
+      const sortedTypes = Object.keys(groupedDis).sort((a, b) => a.localeCompare(b, 'fr'));
+
+      sortedTypes.forEach(tKey => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = ADV_TYPE_SYMBOLS[tKey] || `📁 ${tKey.toUpperCase()}`;
+
+        // Tri alphabétique des noms
+        groupedDis[tKey].sort((a, b) => a.item.name.localeCompare(b.item.name, 'fr'));
+
+        groupedDis[tKey].forEach(({ item, originalIdx }) => {
+          const baseG = item.gain ?? item.cost;
+          const effGain = (typeof getEffectiveDisadvGain === 'function')
+            ? getEffectiveDisadvGain(item)
+            : baseG;
+          const bonusTag = effGain > baseG ? ` ★ +${effGain - baseG} XP` : "";
+
+          const opt = document.createElement('option');
+          opt.value = originalIdx;
+          opt.textContent = `  ◆ ${item.name} (+${effGain} XP${bonusTag})`;
+          optgroup.appendChild(opt);
+        });
+
+        disadvSel.appendChild(optgroup);
+      });
+
       if (prevDisVal && disadvSel.querySelector(`option[value="${prevDisVal}"]`)) {
         disadvSel.value = prevDisVal;
       }
     }
 
-    updateDisadvPreview();
+    if (typeof updateDisadvPreview === 'function') updateDisadvPreview();
   }
 
-  updateDisadvButtonState();
+  if (typeof updateDisadvButtonState === 'function') {
+    updateDisadvButtonState();
+  }
 }
 
 function updateSchoolOptions(preferredSchoolId) {
