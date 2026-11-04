@@ -786,7 +786,67 @@
             <button type="button" onclick="addUniversalSpells()" class="text-amber-400 hover:text-amber-200 underline cursor-pointer">+ 3 Universels</button>
           </div>
         </div>
-
+        
+        <!-- PANNEAU TATOUAGES TOGASHI (ISE ZUMI) -->
+        <div id="panel-tattoos-container" class="hidden col-span-full p-4 rounded-xl bg-black/50 border border-emerald-500/35 space-y-4">
+          <div class="flex flex-wrap justify-between items-center border-b border-stone-800 pb-2 gap-2">
+            <div>
+              <h3 class="font-bold text-emerald-300 font-imperial text-sm flex items-center gap-1.5">
+                <span>🐉</span> 5C. Tatouages Mystiques de Togashi (Ise Zumi)
+              </h3>
+              <p class="text-[11px] text-stone-400">
+                Vous débutez avec <b>2 Tatouages</b> au Rang 1, puis gagnez <b>+1 Tatouage</b> par Rang d'École supplémentaire.
+              </p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-bold font-imperial text-emerald-400">
+                Quota : <span id="tattoos-count-badge">0</span> / <span id="tattoos-quota-badge">2</span>
+              </span>
+            </div>
+          </div>
+        
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div class="sm:col-span-2 flex gap-2">
+              <select id="sel-catalog-tattoo" onchange="updateTattooPreview()" class="flex-1 p-2 rounded text-xs font-medium"></select>
+              <button 
+                type="button" 
+                onclick="addTattooFromCatalog()" 
+                title="Graver ce tatouage sur votre chair" 
+                class="w-9 h-9 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-black font-extrabold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+              >+</button>
+            </div>
+            <div class="flex items-center justify-end">
+              <a href="tatouages.html" target="_blank" class="text-[11px] text-emerald-400 hover:underline">
+                Consulter le Livre des Tatouages ↗
+              </a>
+            </div>
+          </div>
+        
+          <!-- Carte d'Aperçu du Tatouage -->
+          <div id="tattoo-preview-card" class="hidden rounded-xl p-3.5 bg-black/90 border border-emerald-500/40 space-y-2 text-xs shadow-lg">
+            <div class="flex justify-between items-start gap-2 border-b border-stone-800 pb-2">
+              <div>
+                <h4 id="tattoo-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+                <span id="tattoo-preview-elem" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded inline-block mt-1"></span>
+              </div>
+              <div class="text-right text-[10px] text-stone-400">
+                <span id="tattoo-preview-act" class="font-bold text-emerald-300 block"></span>
+                <span id="tattoo-preview-dur" class="block"></span>
+              </div>
+            </div>
+            <p id="tattoo-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+            <div class="p-2.5 rounded bg-stone-950 border border-stone-800 space-y-1">
+              <span class="text-emerald-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+                ⚡ Effet Mécanique :
+              </span>
+              <p id="tattoo-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+            </div>
+          </div>
+        
+          <!-- Liste des Tatouages choisis -->
+          <div id="char-tattoos-container" class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1"></div>
+        </div>
+        
         <!-- PANNEAU KATAS MARTIAUX -->
         <div id="panel-katas-container" class="p-4 rounded-xl bg-black/50 border border-amber-500/25 space-y-4 flex flex-col justify-between">
           <div class="space-y-3">
@@ -855,6 +915,8 @@
 
       </div>
     </section>
+
+    
 
     <!-- 6. COMBAT & BLESSURES -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
