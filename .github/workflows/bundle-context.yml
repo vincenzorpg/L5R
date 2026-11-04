@@ -23,7 +23,7 @@ jobs:
           # Parcourt automatiquement TOUS les fichiers textuels du projet
           # en excluant les dossiers cachés (.git, .github) et les fichiers binaires/images
           find . -type f \
-            ! -path '*/.*/*' \
+            ! -path '/.github/' \
             ! -name 'L5R_FULL_CONTEXT.md' \
             ! -name '*.png' \
             ! -name '*.jpg' \
@@ -31,8 +31,6 @@ jobs:
             ! -name '*.gif' \
             ! -name '*.ico' \
             ! -name '*.zip' | sort | while read -r file; do
-              # Nettoie le préfixe ./ du chemin
-              clean_file="${file#./}"
               echo "Traitement de : $clean_file"
               echo "## Fichier : $clean_file" >> $OUTPUT
               echo '```' >> $OUTPUT
