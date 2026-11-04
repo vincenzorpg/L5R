@@ -1156,7 +1156,7 @@
       prerequisite: "Incompatible avec Shugenja ou Moines",
       desc: "Votre âme est imperméable à l'harmonie du Vide cosmique : vous êtes coupé de l'étincelle divine.",
       rule: "Vous ne disposez d'aucun point de Vide et vous ne pouvez jamais en acquérir ni en dépenser pour améliorer vos actions."
-    }
+    },
     {
       id: "dis-ascete",
       name: "Ascète (Ascetic)",
