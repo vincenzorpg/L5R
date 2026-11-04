@@ -29,7 +29,7 @@ jobs:
 
           # 2. Parcourir récursivement tous les sous-dossiers (data, js, campagne, clans, aides, sorts)
           while IFS= read -r -d '' file; do
-            clean_file="${file#./}"
+            #clean_file="${file#./}"
             echo "Ajout de : $clean_file"
             echo "## Fichier : $clean_file" >> "$OUTPUT"
             echo '```' >> "$OUTPUT"
