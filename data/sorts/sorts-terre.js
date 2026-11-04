@@ -1,5 +1,12 @@
+/**
+ * data/sorts-terre-data.js — L5R 4e Édition
+ * Recueil exhaustif et conforme au Livre de Base (pages 173 à 180).
+ */
+
 const SORTS_TERRE = [
-  // --- NIVEAU DE MAÎTRISE 1 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 1 (7 sorts officiels)
+  // =========================================================================
   {
     id: "earth-1-armor-earth",
     name: "Armure de Terre (Armor of Earth)",
@@ -18,8 +25,8 @@ const SORTS_TERRE = [
     element: "Terre",
     mastery: 1,
     keywords: ["Bataille"],
-    range: "9 mètres (30')",
-    area: "Nombre de cibles égal au Rang d'École du shugenja",
+    range: "Personnelle",
+    area: "Nombre de cibles à 9 m (30') égal au Rang d'École du shugenja",
     duration: "10 Minutes",
     raises: "Durée (+1 minute), Cibles (+1)",
     desc: "Insuffle le courage inébranlable des Sept Tonnerres aux sujets (qui peuvent inclure le lanceur). Les cibles gagnent un bonus de +5g0 à tous leurs jets pour résister aux effets de Peur (naturels ou magiques). Les samouraïs n'appartenant pas aux sept Clans Majeurs originels ne reçoivent qu'un bonus de +3g0. Quiconque possède au moins un plein Rang de Souillure ne peut bénéficier du sort. Deux shugenja ou plus connaissant ce sort peuvent s'unir en rituel pour additionner leur plus haut Rang de Terre à la somme de leurs Rangs d'École pour le nombre de cibles."
@@ -47,18 +54,6 @@ const SORTS_TERRE = [
     duration: "1 Heure",
     raises: "Durée (+30 minutes), Cibles (+1 par 2 Augmentations, max 3 cibles au total)",
     desc: "Invoque les kami de Terre pour fortifier la santé physique ou l'endurance mentale de la cible (qui peut être le lanceur). L'un des deux Traits de Terre de la cible (au choix de l'incantateur : Constitution ou Volonté) augmente de +1 pour la durée du sort. Cela n'augmente pas la valeur de l'Anneau de Terre en lui-même."
-  },
-  {
-    id: "earth-1-elemental-ward",
-    name: "Garde Élémentaire (Elemental Ward)",
-    element: "Terre",
-    mastery: 1,
-    keywords: ["Sceau"],
-    range: "Contact",
-    area: "Une cible",
-    duration: "1 Heure",
-    raises: "Durée (+30 minutes), Cibles (+1 par 2 Augmentations)",
-    desc: "Les esprits de Terre créent un rempart autour de l'âme et du corps de la cible, repoussant les intrusions élémentaires hostiles. Lors du lancement, vous choisissez un élément spécifique (hors Vide et Mahō). Tous les sorts de cet élément ciblant la personne protégée voient leur ND d'incantation pénalisé de +(Rang d'École × 5). Cette pénalité s'applique également aux sorts bénéfiques alliés (comme la guérison d'Eau)."
   },
   {
     id: "earth-1-jade-strike",
@@ -97,7 +92,9 @@ const SORTS_TERRE = [
     desc: "Matérialise un tetsubō de terre dense constellé de blocs de pierre (VD 2g2). Une Augmentation permet de lui donner la forme de n'importe quelle autre arme lourde. Vous pouvez utiliser votre Rang d'École à la place de la compétence Armes Lourdes pour la manier. Si vous possédez la compétence Armes Lourdes, l'arme confère une Augmentation Gratuite pour la manœuvre Renversement (Knockdown). Disparaît si elle quitte vos mains. Vous pouvez la faire apparaître dans les mains d'un allié à 6 m (il n'obtient pas l'Augmentation Gratuite)."
   },
 
-  // --- NIVEAU DE MAÎTRISE 2 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 2 (8 sorts officiels)
+  // =========================================================================
   {
     id: "earth-2-be-mountain",
     name: "Être la Montagne (Be the Mountain)",
@@ -178,9 +175,9 @@ const SORTS_TERRE = [
     keywords: ["Sceau"],
     range: "9 mètres (30')",
     area: "Une créature spirituelle ciblée",
-    duration: "10 Minutes",
-    raises: "Durée (+5 minutes), Portée (+3 m / +10')",
-    desc: "Ancre un esprit mineur ou un fantôme dans les énergies de la Terre. Vous devez remporter un jet opposé de votre Terre contre l'Air ou la Volonté de l'entité spirituelle. En cas de victoire, l'esprit est immobilisé sur place et incapable d'entreprendre la moindre action physique ou surnaturelle hostile pour la durée du sort."
+    duration: "Concentration",
+    raises: "Portée (+3 m / +10')",
+    desc: "Ancre un esprit mineur ou un fantôme dans les énergies de la Terre. Vous devez remporter un jet opposé de votre Terre contre l'Air ou la Volonté de l'entité spirituelle. En cas de victoire, l'esprit est immobilisé sur place et incapable d'entreprendre la moindre action physique ou surnaturelle hostile tant que vous maintenez votre concentration."
   },
   {
     id: "earth-2-mountains-feet",
@@ -207,7 +204,9 @@ const SORTS_TERRE = [
     desc: "Rend les Anneaux et Traits de la cible immuables face aux altérations extérieures. Tout effet physique ou magique (sorts, poisons, capacités surnaturelles) tentant d'augmenter ou de diminuer ses Traits ou ses Anneaux élémentaires échoue automatiquement tant que le sort demeure actif."
   },
 
-  // --- NIVEAU DE MAÎTRISE 3 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 3 (6 sorts officiels)
+  // =========================================================================
   {
     id: "earth-3-bonds-ningendo",
     name: "Les Liens de Ningen-dō (Bonds of Ningen-Do)",
@@ -281,7 +280,9 @@ const SORTS_TERRE = [
     desc: "Sort célèbre employé par Toturi Sezaru. Alourdit les membres et la vitalité tellurique de la cible : son Anneau de Terre est réduit de 1 Rang et ses Rangs de Blessures diminuent en conséquence (pouvant entraîner une mort immédiate si elle est déjà gravement touchée). De plus, son Trait de Force est également diminué de 1. Si la victime possède au moins 1 plein Rang de Souillure, la punition des esprits est plus sévère : son Anneau de Terre est réduit de 2 Rangs (minimum 1)."
   },
 
-  // --- NIVEAU DE MAÎTRISE 4 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 4 (6 sorts officiels)
+  // =========================================================================
   {
     id: "earth-4-armor-emperor",
     name: "L'Armure de l'Empereur (Armor of the Emperor)",
@@ -355,7 +356,21 @@ const SORTS_TERRE = [
     desc: "Fait jaillir du sol un puissant rempart de roche et d'humus compacté dont vous choisissez la configuration (linéaire, incurvée ou circulaire). Le mur est capable de retenir une inondation, de la lave ou des vents de tempête. Pour y percer une brèche physique, un assaillant doit réussir un test de Force brute contre un ND égal à [(Anneau de Terre + Rang d'École) × 5]. Le mur s'effondre en poussière dès expiration du sort."
   },
 
-  // --- NIVEAU DE MAÎTRISE 5 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 5 (3 sorts officiels)
+  // =========================================================================
+  {
+    id: "earth-5-earthquake",
+    name: "Tremblement de Terre (Earthquake)",
+    element: "Terre",
+    mastery: 5,
+    keywords: [],
+    range: "Personnelle",
+    area: "Rayon d'1,5 km (1 mile) centré sur le lanceur",
+    duration: "1 Minute",
+    raises: "Zone (+450 m / +500 yards de rayon), Durée (+1 minute par 2 Augmentations)",
+    desc: "Déchaîne un séisme terrifiant dont le lanceur est le seul épargné. Le séisme détruit totalement tous les édifices en bois de la zone et inflige d'immenses dégâts aux structures en pierre. Toutes les personnes dans l'aire d'effet sont projetées à terre, restent Renversées (Prone) et Assommées (Stunned) pour toute la durée, et subissent 2g1 Blessures. Les individus se trouvant à l'intérieur de bâtiments subissent 6g6 Blessures dues aux chutes de gravats et effondrements. Lancer ce sort près d'une zone habitée est considéré comme un acte de guerre."
+  },
   {
     id: "earth-5-kamis-strength",
     name: "La Force des Kami (The Kami's Strength)",
@@ -367,18 +382,6 @@ const SORTS_TERRE = [
     duration: "5 Rounds",
     raises: "Durée (+1 round), Portée (+3 m / +10')",
     desc: "Renforce considérablement la résistance physique d'un individu. Le sujet gagne une Réduction de dégâts fixe de 20. De plus, son Trait de Force ainsi qu'un autre Trait physique au choix du lanceur sont augmentés d'une valeur égale à l'Anneau de Terre du shugenja. En contrepartie, le sujet est si lourdement ancré qu'il ne peut entreprendre aucune Action de Mouvement Simple (les Actions Gratuites de mouvement restent permises)."
-  },
-  {
-    id: "earth-5-kamis-will",
-    name: "La Volonté des Kami (The Kami's Will)",
-    element: "Terre",
-    mastery: 5,
-    keywords: ["Défense"],
-    range: "9 mètres (30')",
-    area: "Une créature ciblée",
-    duration: "10 Rounds",
-    raises: "Durée (+1 round), Portée (+3 m / +10')",
-    desc: "Miroir spirituel de La Force des Kami : le sujet est imprégné de l'obstination absolue de la Terre. Son Trait de Volonté augmente d'une valeur égale à l'Anneau de Terre du lanceur. Tout sort élémentaire (ami ou hostile, à l'exception des sorts de Mahō) le ciblant subit un malus de -XgX à son jet d'incantation (où X est l'Anneau de Terre du lanceur). En contrepartie, son intransigeance lui inflige une pénalité de -Xg0 à tous ses jets de Compétences Sociales."
   },
   {
     id: "earth-5-strike-roots",
@@ -393,7 +396,9 @@ const SORTS_TERRE = [
     desc: "Forme suprême de La Miséricorde du Loup qui siphonne l'essence vitale de la cible. Après l'incantation, vous effectuez un jet opposé de Terre contre chaque cible. Si la cible échoue, son Anneau de Terre est immédiatement réduit à 1 pour toute la durée du sort. Ses Rangs de Blessures s'effondrent immédiatement au prorata de cette nouvelle valeur, ce qui peut provoquer sa mort instantanée si elle a déjà essuyé des blessures."
   },
 
-  // --- NIVEAU DE MAÎTRISE 6 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 6 (4 sorts officiels)
+  // =========================================================================
   {
     id: "earth-6-essence-jade",
     name: "Essence de Jade (Essence of Jade)",
