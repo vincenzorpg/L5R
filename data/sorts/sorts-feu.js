@@ -1,11 +1,12 @@
 /**
  * data/sorts-feu-data.js — L5R 4e Édition
- * Recueil exhaustif et conforme au Livre de Base (pages 180 à 187).
+ * Recueil exhaustif officiel de la Magie du Feu (Shugenja & Ishiken).
+ * Sources : Livre des Règles L5R 4e (p. 180-187), The Book of Fire & The Great Clans.
  */
 
 const SORTS_FEU = [
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 1 (10 sorts officiels)
+  // NIVEAU DE MAÎTRISE 1 (12 sorts)
   // =========================================================================
   {
     id: "feu-1-biting-steel",
@@ -13,6 +14,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 180",
     range: "Contact",
     area: "1 arme à lame en acier",
     duration: "1 Minute",
@@ -25,6 +27,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 180",
     range: "Contact",
     area: "Une arme de mêlée tenue en main par le lanceur",
     duration: "5 Minutes",
@@ -37,6 +40,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 181",
     range: "9 mètres (30')",
     area: "Une cible",
     duration: "Instantanée",
@@ -49,6 +53,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 181",
     range: "Personnelle",
     area: "Rayon de 30 mètres (100')",
     duration: "Instantanée",
@@ -61,6 +66,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 181",
     range: "7,5 mètres (25')",
     area: "Une cible",
     duration: "1 Minute",
@@ -73,6 +79,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 181",
     range: "Personnelle",
     area: "Rayon de 9 mètres (30')",
     duration: "Instantanée",
@@ -85,6 +92,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: ["Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 181",
     range: "90 mètres (300')",
     area: "Une cible",
     duration: "Instantanée",
@@ -97,6 +105,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: ["Bataille", "Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 181",
     range: "Personnelle ou 6 mètres (20')",
     area: "Une arme créée",
     duration: "5 Minutes",
@@ -109,6 +118,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 182",
     range: "Contact",
     area: "Une cible",
     duration: "5 Rounds (Spéciale)",
@@ -121,15 +131,42 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 182",
     range: "Contact",
     area: "Une arme ou une armure",
     duration: "Instantanée",
     raises: "Aucune",
     desc: "Invoque la puissance de la forge pour réparer et restaurer un objet matériel de qualité ordinaire (arme ou armure). L'objet perd tous ses défauts, encoches, fentes ou fissures et retrouve sa forme parfaite. Ne peut pas réparer un objet brisé en morceaux ou totalement détruit."
   },
+  {
+    id: "feu-1-spark-insight",
+    name: "Étincelle d'Inspiration (Spark of Insight)",
+    element: "Feu",
+    mastery: 1,
+    keywords: [],
+    source: "The Book of Fire",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "1 Heure",
+    raises: "Durée (+30 minutes)",
+    desc: "L'agilité mentale des kami de Feu embrase l'esprit du shugenja d'une étincelle de vivacité créative. Pour toute la durée du sort, le lanceur gagne un bonus de +1g1 sur tous ses jets de Compétences Savantes ou d'Artisanat."
+  },
+  {
+    id: "feu-1-touch-osano-wo",
+    name: "La Poigne d'Osano-Wo (Touch of Osano-Wo)",
+    element: "Feu",
+    mastery: 1,
+    keywords: ["Tonnerre"],
+    source: "The Great Clans",
+    range: "Contact",
+    area: "Une créature ciblée",
+    duration: "Instantanée",
+    raises: "Dégâts (+1g0 par tranche de 2 Augmentations)",
+    desc: "Une décharge fulgurante de foudre crépitante frappe la cible au contact, lui infligeant 2g2 Blessures. De plus, la cible doit immédiatement réussir un jet de Vigueur (ND 15) sous peine d'être Étourdie (Dazed) pour 1 round sous la violence du choc."
+  },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 2 (8 sorts officiels)
+  // NIVEAU DE MAÎTRISE 2 (10 sorts)
   // =========================================================================
   {
     id: "feu-2-disrupt-aura",
@@ -137,6 +174,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 182",
     range: "15 mètres (50')",
     area: "Une créature ou individu ciblé",
     duration: "24 Heures",
@@ -149,6 +187,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 182",
     range: "15 mètres (50')",
     area: "Rayon de 6 mètres (20')",
     duration: "2 Rounds",
@@ -161,6 +200,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 182",
     range: "30 mètres (100')",
     area: "Une cible",
     duration: "Instantanée",
@@ -168,11 +208,25 @@ const SORTS_FEU = [
     desc: "Le trait d'attaque classique de l'élément Feu : forme une sphère de flammes dans la paume du lanceur qui grossit en filant vers sa cible. Inflige des dégâts dont la VD est égale à votre Anneau de Feu (ex. : 4g4 avec Feu 4)."
   },
   {
+    id: "feu-2-flame-arrow",
+    name: "Flèche de Flammes (Flame-Lanced Arrow)",
+    element: "Feu",
+    mastery: 2,
+    keywords: ["Artisanat", "Bataille"],
+    source: "The Book of Fire",
+    range: "Contact",
+    area: "Jusqu'à 10 flèches ou munitions",
+    duration: "10 Minutes",
+    raises: "Munitions (+5 par Augmentation), Durée (+5 minutes)",
+    desc: "Enchante un carquois de flèches qui s'enflamment vivement dès qu'elles sont encochées. Toute flèche tirée inflige +1g1 Blessures supplémentaires de feu et embrase automatiquement les matières et structures inflammables touchées."
+  },
+  {
     id: "feu-2-hurried-steps",
     name: "Pas Pressés (Hurried Steps)",
     element: "Feu",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 182",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "2 Rounds (Spéciale)",
@@ -185,6 +239,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 183",
     range: "Contact",
     area: "Un objet",
     duration: "10 Minutes",
@@ -197,6 +252,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 183",
     range: "Contact",
     area: "Une armure",
     duration: "10 Rounds",
@@ -204,11 +260,25 @@ const SORTS_FEU = [
     desc: "L'armure ciblée rougeoie d'une chaleur de désert implacable. Tout adversaire tentant de frapper le porteur en mêlée (que le coup touche ou rate) acquiert immédiatement l'état Fatigué jusqu'au début de son prochain tour (la pénalité s'appliquant dès le jet d'attaque déclencheur). Un assaillant en Posture d'Attaque Totale repasse immédiatement en Posture d'Attaque. Sans effet sur les attaques à distance ou les sorts."
   },
   {
+    id: "feu-2-stride-fire",
+    name: "La Marche du Feu (Stride of Fire)",
+    element: "Feu",
+    mastery: 2,
+    keywords: ["Voyage"],
+    source: "The Book of Fire",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes)",
+    desc: "Rend vos pieds et vos vêtements immunisés contre les braises, les incendies au sol et la roche en fusion. Vous traversez les zones de feu sans subir le moindre dommage et votre distance de déplacement terrestre est augmentée de +1,5 m (+5') par round."
+  },
+  {
     id: "feu-2-tail-fire-dragon",
     name: "Queue du Dragon de Feu (Tail of the Fire Dragon)",
     element: "Feu",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 183",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "4 Rounds",
@@ -221,6 +291,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: ["Sceau"],
+    source: "Livre des Règles L5R 4e, p. 183",
     range: "Contact",
     area: "Rayon de 4,5 mètres (15') autour de l'objet touché",
     duration: "1 Jour",
@@ -229,14 +300,28 @@ const SORTS_FEU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 3 (7 sorts officiels)
+  // NIVEAU DE MAÎTRISE 3 (9 sorts)
   // =========================================================================
+  {
+    id: "feu-3-brand-fire-kami",
+    name: "La Marque du Kami de Feu (Brand of the Fire Kami)",
+    element: "Feu",
+    mastery: 3,
+    keywords: ["Sceau"],
+    source: "The Book of Fire",
+    range: "Contact",
+    area: "Une cible vivante",
+    duration: "1 Mois",
+    raises: "Durée (+1 mois)",
+    desc: "Imprime un sceau ardent indélébile sur la chair d'une créature. Le lanceur perçoit à tout moment la direction générale de la marque, et la cible ne peut dissimuler sa présence aux kami de Feu (malus de -3g0 à tous ses jets de Discrétion)."
+  },
   {
     id: "feu-3-breath-fire-dragon",
     name: "Souffle du Dragon de Feu (Breath of the Fire Dragon)",
     element: "Feu",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 183",
     range: "Personnelle",
     area: "Souffle de 4,5 m de long sur 1,5 m de large (15' × 5')",
     duration: "4 Rounds",
@@ -249,6 +334,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 183",
     range: "30 mètres (100')",
     area: "Une structure isolée ou une zone de 15 m × 15 m (50' × 50')",
     duration: "Instantanée",
@@ -261,6 +347,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: ["Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "15 mètres (50')",
     area: "Rayon de 6 mètres (20')",
     duration: "1 Round",
@@ -273,6 +360,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "3 mètres (10')",
     area: "Une cible",
     duration: "5 Rounds (ou 1 heure hors combat)",
@@ -285,6 +373,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "15 mètres (50')",
     area: "Une arme",
     duration: "5 Rounds",
@@ -297,6 +386,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "9 mètres (30')",
     area: "Une cible",
     duration: "5 Rounds",
@@ -309,22 +399,50 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "9 mètres (30')",
     area: "Une armure",
     duration: "10 Rounds",
     raises: "Dégâts (+1g0 par tranche de 2 Augmentations), Durée (+2 rounds)",
     desc: "Lie un esprit ardent dans une pièce d'armure. Chaque fois que le porteur est attaqué au corps à corps, l'armure émet un flash aveuglant immédiat : l'assaillant subit 2k2 Blessures et se retrouve Aveuglé jusqu'à l'Étape des Réactions du même round. Sans effet sur les attaques à distance."
   },
+  {
+    id: "feu-3-strike-osano-wo",
+    name: "Le Coup d'Osano-Wo (Strike of Osano-Wo)",
+    element: "Feu",
+    mastery: 3,
+    keywords: ["Tonnerre", "Bataille"],
+    source: "The Great Clans",
+    range: "30 mètres (100')",
+    area: "Une créature ciblée",
+    duration: "Instantanée",
+    raises: "Dégâts (+1g1 par tranche de 2 Augmentations), Portée (+6 m / +20')",
+    desc: "Un trait de foudre horizontal et dévastateur jaillit des mains tendues de l'incantateur pour percuter la cible. Inflige 4g3 Blessures ignorant totalement la Réduction conférée par les armures profanes."
+  },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 4 (5 sorts officiels)
+  // NIVEAU DE MAÎTRISE 4 (7 sorts)
   // =========================================================================
+  {
+    id: "feu-4-boiling-blood",
+    name: "Sang Bouillonnant (Boiling Blood)",
+    element: "Feu",
+    mastery: 4,
+    keywords: ["Bataille"],
+    source: "The Great Clans",
+    range: "15 mètres (50')",
+    area: "Une créature ciblée",
+    duration: "3 Rounds",
+    raises: "Portée (+3 m / +10'), Durée (+1 round)",
+    desc: "Fait monter brutalement la température du flux sanguin dans les veines de la victime. La cible subit 3g2 Blessures au début de chacun de ses tours et subit un malus de -2g2 sur tous ses jets d'action pour la durée du sort en raison de l'atroce souffrance."
+  },
   {
     id: "feu-4-death-flame",
     name: "Mort de la Flamme (Death of Flame)",
     element: "Feu",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "30 mètres (100')",
     area: "Une cible",
     duration: "5 Rounds",
@@ -337,6 +455,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 4,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "Contact",
     area: "Une armure",
     duration: "5 Rounds",
@@ -349,6 +468,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 4,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "Contact",
     area: "Un objet ciblé",
     duration: "Instantanée",
@@ -356,11 +476,25 @@ const SORTS_FEU = [
     desc: "Met à profit le versant créateur du Feu pour réparer un objet brisé ou détruit, à condition d'avoir réuni tous ses morceaux devant vous (le sort nécessite 1 minute d'incantation et de concentration). L'objet retrouve son intégrité d'origine. Pour réparer un nemuranai ou un objet de qualité Supérieure ou mieux, un sacrifice équivalent doit être offert aux kami de Feu (un objet de valeur égale à brûler)."
   },
   {
+    id: "feu-4-rain-fire",
+    name: "Pluie de Feu (Rain of Fire)",
+    element: "Feu",
+    mastery: 4,
+    keywords: ["Bataille"],
+    source: "The Book of Fire",
+    range: "90 mètres (300')",
+    area: "Rayon de 15 mètres (50')",
+    duration: "3 Rounds",
+    raises: "Portée (+15 m / +50'), Durée (+1 round)",
+    desc: "Fait tomber du ciel une averse drue de météores incandescents et de braises ardentes. Toute créature commençant son tour dans la zone subit 4g2 Blessures de feu. En Bataille de Masse, ce sort confère un bonus de +3g1 au camp du shugenja sur le Tableau de Bataille."
+  },
+  {
     id: "feu-4-symbol-fire",
     name: "Symbole de Feu (Symbol of Fire)",
     element: "Feu",
     mastery: 4,
     keywords: ["Sceau"],
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "30 mètres (100')",
     area: "Rayon de 3 mètres (10')",
     duration: "Permanente",
@@ -373,6 +507,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "30 mètres (100')",
     area: "Mur de 3 m de haut, 30 cm d'épaisseur et 7,5 m de long (10' × 1' × 25')",
     duration: "1 Heure",
@@ -381,7 +516,7 @@ const SORTS_FEU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 5 (5 sorts officiels)
+  // NIVEAU DE MAÎTRISE 5 (6 sorts)
   // =========================================================================
   {
     id: "feu-5-destructive-wave",
@@ -389,6 +524,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "Personnelle",
     area: "Rayon de 7,5 mètres (25')",
     duration: "Instantanée",
@@ -401,6 +537,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "7,5 mètres (25')",
     area: "Une cible",
     duration: "1 Round",
@@ -413,6 +550,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 5,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "5 Rounds",
@@ -420,11 +558,25 @@ const SORTS_FEU = [
     desc: "Permet de fusionner avec l'énergie des flammes pour vous téléporter instantanément d'un foyer de feu à un autre en Action Gratuite, jusqu'à une distance maximale de (Anneau de Feu × 30 mètres), tant que les deux feux font au moins la taille d'une torche et vous sont visibles."
   },
   {
+    id: "feu-5-heart-inferno",
+    name: "Cœur de l'Inferno (Heart of the Inferno)",
+    element: "Feu",
+    mastery: 5,
+    keywords: ["Bataille"],
+    source: "The Book of Fire",
+    range: "30 mètres (100')",
+    area: "Rayon de 9 mètres (30')",
+    duration: "5 Rounds",
+    raises: "Zone (+1,5 m / +5' de rayon), Durée (+1 round)",
+    desc: "Fait converger les feux primordiaux en une tempête thermique grondante. Quiconque commence son tour dans la zone subit 5g5 Blessures au round initial, puis 3g3 Blessures à chacun de ses tours. Les flèches et tirs profanes traversant la fournaise sont désintégrés en vol."
+  },
+  {
     id: "feu-5-light-sun",
     name: "Lumière du Soleil (Light of the Sun)",
     element: "Feu",
     mastery: 5,
     keywords: ["Jade"],
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "30 mètres (100')",
     area: "Rayon de 9 mètres (30')",
     duration: "10 Rounds",
@@ -437,6 +589,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 5,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "10 Rounds",
@@ -445,7 +598,7 @@ const SORTS_FEU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 6 (3 sorts officiels)
+  // NIVEAU DE MAÎTRISE 6 (4 sorts)
   // =========================================================================
   {
     id: "feu-6-beam-inferno",
@@ -453,6 +606,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 6,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "60 mètres (200')",
     area: "Une cible",
     duration: "Instantanée",
@@ -465,6 +619,7 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 6,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "150 mètres (500')",
     area: "Rayon de 1,5 kilomètre (1 mile)",
     duration: "1 Jour",
@@ -472,11 +627,25 @@ const SORTS_FEU = [
     desc: "Apaise la colère de tous les kami de Feu dans la région (traditionnellement utilisé lors des couronnements impériaux). Tous les bâtiments de la zone deviennent totalement insensibles au feu magique, et le ND de lancement de tout sort de Feu dans la zone augmente de +15. Les flammes profanes continuent de brûler mais deviennent léthargiques et ne se propagent plus."
   },
   {
+    id: "feu-6-rise-flame",
+    name: "Éveil de la Flamme (Rise, Flame)",
+    element: "Feu",
+    mastery: 6,
+    keywords: [],
+    source: "The Book of Fire",
+    range: "9 mètres (30')",
+    area: "Un esprit invoqué",
+    duration: "Concentration",
+    raises: "Aucune",
+    desc: "Invoque un colosse de flammes pures et rugissantes haut de 3 mètres qui obéit à vos ordres mentaux. Ses Traits physiques sont égaux à votre Anneau de Feu, il attaque en Jiujutsu avec un score égal à votre Anneau de Feu et inflige des dégâts d'une VD égale à (Feu)g(Feu) ignorant la Réduction d'armure. Il possède une Réduction de 15, est Invulnérable et toute créature au contact ou au corps à corps avec lui subit 3g3 Blessures de feu au début de chaque round."
+  },
+  {
     id: "feu-6-souls-blade",
     name: "La Lame de l'Âme (The Soul's Blade)",
     element: "Feu",
     mastery: 6,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "Contact",
     area: "Une arme",
     duration: "5 Rounds",
