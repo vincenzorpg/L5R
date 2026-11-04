@@ -16,20 +16,19 @@
   <!-- TAILWIND CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- NAVBAR DU SITE & DONNÉES DÉPORTÉES -->
-  <script src="js/navbar.js" defer></script>
+  <!-- FICHIER DE DONNÉES DES TATOUAGES & NAVBAR -->
   <script src="data/tatouages-data.js"></script>
+  <script src="js/navbar.js" defer></script>
 
   <style>
     :root {
       --dark-lacquer: #0a0808;
       --gold: #d4af37;
       --gold-light: #f3e5ab;
-      --dragon-green: #0d9488;
     }
     body {
       background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 0%, #1c0a0a 0%, #0a0808 75%);
+      background-image: radial-gradient(circle at 50% 0%, #1c0a0a 0%, #0a0808 80%);
       color: #e5dec9;
       font-family: 'Noto Serif JP', serif;
     }
@@ -37,14 +36,14 @@
       font-family: 'Cinzel', serif;
     }
     .card-clean {
-      background: rgba(18, 14, 14, 0.92);
-      border: 1px solid rgba(212, 175, 55, 0.25);
+      background: rgba(18, 14, 14, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.22);
       transition: all 0.2s ease-in-out;
     }
     .card-clean:hover {
       border-color: rgba(212, 175, 55, 0.55);
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.12);
     }
     .gold-text { color: var(--gold); }
     .badge-dragon {
@@ -58,12 +57,12 @@
       border: 1px solid #d97706;
     }
     .badge-shadow {
-      background: rgba(136, 19, 55, 0.25);
+      background: rgba(136, 19, 55, 0.3);
       color: #fecdd3;
       border: 1px solid #e11d48;
     }
     .badge-legend {
-      background: rgba(147, 51, 234, 0.2);
+      background: rgba(147, 51, 234, 0.25);
       color: #d8b4fe;
       border: 1px solid #a855f7;
     }
@@ -75,7 +74,7 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
 
-  <!-- 1. HEADER DU SITE (INJECTÉ PAR JS/NAVBAR.JS AVEC SECOURS) -->
+  <!-- 1. HEADER DU SITE (INJECTÉ PAR JS/NAVBAR.JS AVEC SECOURS STATIQUE) -->
   <header id="site-header">
     <nav class="bg-[#0e0a0a]/90 backdrop-blur-md border-b border-amber-500/20 px-4 py-3">
       <div class="max-w-7xl mx-auto flex items-center justify-between">
@@ -168,19 +167,19 @@
   </main>
 
   <!-- MODAL DE ZOOM DÉTAILLÉ -->
-  <div id="tattoo-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="tattoo-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="card-clean rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative border-amber-500/50">
       <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-amber-300 font-bold text-lg cursor-pointer">✕</button>
       <div class="border-b border-amber-500/20 pb-3">
         <span id="modal-category-badge" class="text-[10px] uppercase font-bold font-imperial px-2.5 py-0.5 rounded inline-block mb-1.5"></span>
         <h3 id="modal-name" class="text-xl font-bold font-imperial text-amber-200"></h3>
-        <span id="modal-source" class="text-stone-400 text-[11px] italic"></span>
+        <span id="modal-source" class="text-stone-400 text-[11px] italic block mt-1"></span>
       </div>
       <div class="space-y-3 text-xs leading-relaxed">
         <p id="modal-lore" class="text-stone-300 italic"></p>
-        <div class="p-3 rounded-lg bg-black/70 border border-stone-800 space-y-1.5">
+        <div class="p-3.5 rounded-lg bg-black/70 border border-stone-800 space-y-1.5">
           <span class="text-amber-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">Effet & Règles (4e Édition) :</span>
-          <p id="modal-rule" class="text-stone-200"></p>
+          <p id="modal-rule" class="text-stone-200 leading-relaxed"></p>
         </div>
       </div>
     </div>
@@ -191,23 +190,28 @@
     Légende des Cinq Anneaux (4e Édition) — Codex Interactif des Tatouages • Ordre Togashi & Traditions Rokuganies
   </footer>
 
-  <!-- SCRIPT LOGIQUE ALIMENTÉ PAR WINDOW.TATOUAGES_DATA -->
+  <!-- SCRIPT LOGIQUE AUTO-ADAPTATIF -->
   <script>
     let currentCategory = 'all';
 
-    // Normalise l'objet pour fonctionner qu'il vienne du fichier externe ou du script
-    function getTattooMeta(t) {
-      const isIseZumi = (t.category === 'ise-zumi' || t.type === 'Togashi' || !t.category);
+    // Normalisation universelle quel que soit le format de l'objet dans data/tatouages-data.js
+    function normalizeTattoo(t) {
+      const isIseZumi = (t.category === 'ise-zumi' || t.type === 'Togashi' || (!t.category && !t.type));
       let cat = t.category || (isIseZumi ? 'ise-zumi' : 'clans');
       let badgeClass = t.badgeClass || (isIseZumi ? 'badge-dragon' : 'badge-clan');
       let catLabel = t.categoryLabel || (isIseZumi ? 'Ise Zumi Togashi' : 'Tradition');
 
-      if (t.category === 'shadow') badgeClass = 'badge-shadow';
-      if (t.category === 'legend') badgeClass = 'badge-legend';
+      if (cat === 'shadow') {
+        badgeClass = 'badge-shadow';
+        catLabel = t.categoryLabel || 'Ombre & Corruption';
+      } else if (cat === 'legend') {
+        badgeClass = 'badge-legend';
+        catLabel = t.categoryLabel || 'Figure Historique';
+      }
 
       return {
-        id: t.id,
-        name: t.name,
+        id: t.id || 'tat-' + Math.random().toString(36).substr(2, 9),
+        name: t.name || 'Tatouage sans nom',
         kanji: t.kanji ? `(${t.kanji})` : '',
         category: cat,
         badgeClass: badgeClass,
@@ -220,20 +224,24 @@
       };
     }
 
+    // Récupération des données depuis le fichier JS déporté
     function getDataset() {
-      return (window.TATOUAGES_DATA || []).map(getTattooMeta);
+      const data = window.TATOUAGES_DATA || [];
+      return data.map(normalizeTattoo);
     }
 
     function renderTattoos(list) {
       const grid = document.getElementById('tattoo-grid');
       const countEl = document.getElementById('tattoo-count');
+      if (!grid || !countEl) return;
+
       grid.innerHTML = '';
       countEl.textContent = list.length;
 
       if (list.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full py-12 text-center text-stone-500 italic">
-            Aucun tatouage ne correspond à votre recherche.
+            Aucun tatouage ne correspond à votre recherche ou catégorie sélectionnée.
           </div>
         `;
         return;
@@ -286,10 +294,10 @@
     }
 
     function applyFilter() {
-      const q = (document.getElementById('tattoo-search').value || '').toLowerCase().trim();
+      const q = (document.getElementById('tattoo-search')?.value || '').toLowerCase().trim();
       const all = getDataset();
       const filtered = all.filter(t => {
-        const matchCat = currentCategory === 'all' || t.category === currentCategory;
+        const matchCat = (currentCategory === 'all') || (t.category === currentCategory);
         const matchQuery = !q ||
           t.name.toLowerCase().includes(q) ||
           t.kanji.toLowerCase().includes(q) ||
@@ -338,9 +346,18 @@
       if (e.target === document.getElementById('tattoo-modal')) closeModal();
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderTattoos(getDataset());
-    });
+    // Chargement garanti même si data/tatouages-data.js a un temps de latence
+    function initPage(attempts = 0) {
+      if (window.TATOUAGES_DATA && window.TATOUAGES_DATA.length > 0) {
+        applyFilter();
+      } else if (attempts < 20) {
+        setTimeout(() => initPage(attempts + 1), 50);
+      } else {
+        renderTattoos([]);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => initPage());
   </script>
 </body>
 </html>
