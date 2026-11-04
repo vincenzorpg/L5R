@@ -256,10 +256,20 @@
             </p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <span id="dojo-save-toast" class="hidden text-[11px] text-emerald-400 font-bold font-imperial">✓ Samouraï enregistré !</span>
-          <button type="button" onclick="saveToDojo()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs transition shadow cursor-pointer">
-            📌 Enregistrer le personnage actuel
+        <div class="flex flex-wrap gap-2 items-center">
+          <!-- Enregistre ou met à jour le personnage en cours -->
+          <button type="button" onclick="saveCharacterToDojo(false)" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs cursor-pointer shadow">
+            💾 Enregistrer les modifications
+          </button>
+        
+          <!-- Enregistre une copie distincte dans le Dojo -->
+          <button type="button" onclick="saveCharacterToDojo(true)" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/40 font-bold text-xs cursor-pointer">
+            📑 Enregistrer comme nouveau samouraï
+          </button>
+        
+          <!-- Réinitialise la fiche pour un tout nouveau personnage -->
+          <button type="button" onclick="startNewCharacter()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold text-xs cursor-pointer">
+            ➕ Nouveau personnage
           </button>
         </div>
       </div>
