@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tatouages de Rokugan — L5R 4e Édition</title>
+
+  <!-- FAVICON DES 5 ANNEAUX -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
+
+  <!-- POLICES IMPÉRIALES & JAPONAISES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- TAILWIND CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- NAVBAR DU SITE -->
+  <script src="js/navbar.js" defer></script>
+
+  <style>
+    :root {
+      --dark-lacquer: #0a0808;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --dragon-green: #0d9488;
+    }
+    body {
+      background-color: var(--dark-lacquer);
+      background-image: radial-gradient(circle at 50% 0%, #1c0a0a 0%, #0a0808 75%);
+      color: #e5dec9;
+      font-family: 'Noto Serif JP', serif;
+    }
+    h1, h2, h3, h4, .font-imperial {
+      font-family: 'Cinzel', serif;
+    }
+    .card-clean {
+      background: rgba(18, 14, 14, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      transition: all 0.2s ease-in-out;
+    }
+    .card-clean:hover {
+      border-color: rgba(212, 175, 55, 0.55);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+    .gold-text { color: var(--gold); }
+    .badge-dragon {
+      background: rgba(13, 148, 136, 0.2);
+      color: #5eead4;
+      border: 1px solid #14b8a6;
+    }
+    .badge-clan {
+      background: rgba(217, 119, 6, 0.2);
+      color: #fde68a;
+      border: 1px solid #d97706;
+    }
+    .badge-shadow {
+      background: rgba(136, 19, 55, 0.25);
+      color: #fecdd3;
+      border: 1px solid #e11d48;
+    }
+    .badge-legend {
+      background: rgba(147, 51, 234, 0.2);
+      color: #d8b4fe;
+      border: 1px solid #a855f7;
+    }
+    /* Défilement fluide des barres */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0808; }
+    ::-webkit-scrollbar-thumb { background: #2d261e; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
+
+  <!-- 1. HEADER DU SITE (INJECTÉ PAR JS/NAVBAR.JS AVEC SECOURS) -->
+  <header id="site-header">
+    <nav class="bg-[#0e0a0a]/90 backdrop-blur-md border-b border-amber-500/20 px-4 py-3">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2 text-amber-300 font-imperial font-bold tracking-widest text-sm hover:text-amber-200 transition">
+          <span class="text-lg">🐉</span> L5R 4E • ARCHIVES DE L'EMPIRE
+        </a>
+        <div class="flex items-center gap-4 text-xs font-imperial">
+          <a href="index.html" class="text-stone-300 hover:text-amber-300 transition">Accueil</a>
+          <a href="grimoire.html" class="text-stone-300 hover:text-amber-300 transition">Grimoire</a>
+          <a href="tatouages.html" class="text-amber-400 border-b border-amber-400 pb-0.5">Tatouages</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 2. TITRE & BANNIÈRE THÉMATIQUE -->
+  <div class="relative border-b border-amber-500/20 bg-gradient-to-b from-[#190909] via-[#0d0909] to-[#0a0808] py-8 px-4">
+    <div class="max-w-7xl mx-auto text-center space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-teal-500/30 text-teal-300 text-xs tracking-widest uppercase font-imperial">
+        <span>竜</span> Ordre Togashi & Traditions Secrètes
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold gold-text font-imperial tracking-wider">
+        Les Tatouages Sacrés de Rokugan
+      </h1>
+      <p class="text-xs md:text-sm text-stone-300 max-w-3xl mx-auto leading-relaxed">
+        Des encres sacrées des moines <i>ise zumi</i> chargées du sang du Kami Dragon, aux sombres stigmates de l’Ombre Rampante et aux serments de chair des clans majeurs.
+      </p>
+    </div>
+  </div>
+
+  <!-- 3. CONTENU PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- CADRE DE RÈGLES OFFICIELLES (LIVRE DE BASE V4) -->
+    <section class="card-clean rounded-xl p-4 md:p-5 text-xs space-y-3 bg-[#110d0d]/95">
+      <div class="flex items-center gap-2 text-amber-300 font-imperial font-bold text-sm border-b border-amber-500/20 pb-2">
+        <span>📜</span> Règles Officielles des Tatouages Togashi (Ise Zumi)
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-stone-300">
+        <div class="p-2.5 rounded bg-black/50 border border-stone-800 space-y-1">
+          <span class="text-amber-400 font-bold font-imperial block text-[11px]">Progression</span>
+          <p class="text-[11px] leading-snug">Deux tatouages reçus aux Rangs d'École 1, 3 et 5 en remplacement des techniques classiques.</p>
+        </div>
+        <div class="p-2.5 rounded bg-black/50 border border-stone-800 space-y-1">
+          <span class="text-amber-400 font-bold font-imperial block text-[11px]">Activation</span>
+          <p class="text-[11px] leading-snug"><b>Action Gratuite</b>. Le tatouage doit être à l'air libre (inopérant s'il est recouvert par un tissu ou une armure).</p>
+        </div>
+        <div class="p-2.5 rounded bg-black/50 border border-stone-800 space-y-1">
+          <span class="text-amber-400 font-bold font-imperial block text-[11px]">Durée & Limite</span>
+          <p class="text-[11px] leading-snug">Persiste pendant <b>2 × Rang d'École</b> rounds. Un seul tatouage actif simultanément (sauf mention contraire).</p>
+        </div>
+        <div class="p-2.5 rounded bg-black/50 border border-stone-800 space-y-1">
+          <span class="text-amber-400 font-bold font-imperial block text-[11px]">Tatouages Fusionnés</span>
+          <p class="text-[11px] leading-snug">Fusion de deux motifs existants : confère les deux effets en 1 Action Gratuite pour <b>1 Point de Vide</b>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRE DE RECHERCHE ET FILTRES RAPIDES -->
+    <section class="card-clean rounded-xl p-4 space-y-3">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <!-- Champ de recherche -->
+        <div class="relative flex-1">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-stone-500 text-xs">🔍</span>
+          <input
+            type="text"
+            id="tattoo-search"
+            placeholder="Rechercher par nom, mot-clé, effet ou clan..."
+            oninput="applyFilter()"
+            class="w-full pl-9 pr-3 py-2 rounded-lg bg-[#0d0b0b] border border-[#3a3028] text-amber-200 placeholder-stone-600 text-xs focus:outline-none focus:border-amber-500"
+          >
+        </div>
+
+        <!-- Compteur d'éléments -->
+        <div class="text-stone-400 text-xs font-imperial text-right">
+          Affichage : <b id="tattoo-count" class="text-amber-300">0</b> tatouages
+        </div>
+      </div>
+
+      <!-- Boutons de filtre par catégorie -->
+      <div class="flex flex-wrap gap-2 pt-1 border-t border-stone-800/80 text-xs">
+        <button onclick="setFilterCategory('all')" class="cat-btn px-3 py-1.5 rounded-md font-imperial font-bold transition text-black bg-amber-500 shadow" data-cat="all">Tous</button>
+        <button onclick="setFilterCategory('ise-zumi')" class="cat-btn px-3 py-1.5 rounded-md font-imperial text-stone-300 bg-stone-900 border border-stone-800 hover:border-teal-500 hover:text-teal-300 transition" data-cat="ise-zumi">Moines Togashi (Ise Zumi)</button>
+        <button onclick="setFilterCategory('clans')" class="cat-btn px-3 py-1.5 rounded-md font-imperial text-stone-300 bg-stone-900 border border-stone-800 hover:border-amber-500 hover:text-amber-300 transition" data-cat="clans">Traditions des Clans</button>
+        <button onclick="setFilterCategory('shadow')" class="cat-btn px-3 py-1.5 rounded-md font-imperial text-stone-300 bg-stone-900 border border-stone-800 hover:border-rose-500 hover:text-rose-300 transition" data-cat="shadow">Ombre & Stigmates</button>
+        <button onclick="setFilterCategory('legend')" class="cat-btn px-3 py-1.5 rounded-md font-imperial text-stone-300 bg-stone-900 border border-stone-800 hover:border-purple-500 hover:text-purple-300 transition" data-cat="legend">Tatouages Historiques</button>
+      </div>
+    </section>
+
+    <!-- GRILLE D'AFFICHAGE DES TATOUAGES -->
+    <section id="tattoo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs"></section>
+
+  </main>
+
+  <!-- MODAL DE ZOOM DÉTAILLÉ -->
+  <div id="tattoo-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="card-clean rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative border-amber-500/50">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-amber-300 font-bold text-lg cursor-pointer">✕</button>
+      <div class="border-b border-amber-500/20 pb-3">
+        <span id="modal-category-badge" class="text-[10px] uppercase font-bold font-imperial px-2.5 py-0.5 rounded inline-block mb-1.5"></span>
+        <h3 id="modal-name" class="text-xl font-bold font-imperial text-amber-200"></h3>
+        <span id="modal-source" class="text-stone-400 text-[11px] italic"></span>
+      </div>
+      <div class="space-y-3 text-xs leading-relaxed">
+        <p id="modal-lore" class="text-stone-300 italic"></p>
+        <div class="p-3 rounded-lg bg-black/70 border border-stone-800 space-y-1.5">
+          <span class="text-amber-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">Effet & Règles (4e Édition) :</span>
+          <p id="modal-rule" class="text-stone-200"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-10">
+    Légende des Cinq Anneaux (4e Édition) — Codex Interactif des Tatouages • Ordre Togashi & Traditions Rokuganies
+  </footer>
+
+  <!-- SCRIPT LOGIQUE ET BASE DE DONNÉES DES TATOUAGES -->
+  <script>
+    const TATTOOS_DATA = [
+      // ==========================================
+      // MOINES TOGASHI (ISE ZUMI)
+      // ==========================================
+      {
+        id: "tat-balance",
+        name: "Balance (Balance)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Le motif d'une balance à deux plateaux orne la peau, harmonisant le porteur avec le flux universel des éléments.",
+        rule: "Modifie (à la hausse ou à la baisse, au choix du moine lors de l'activation) le ND de lancement de tout sort le prenant pour cible d'une valeur égale à (2 × Rang d'École) + 5."
+      },
+      {
+        id: "tat-bambou",
+        name: "Bambou (Bamboo)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Une tige souple et flexible de bambou vert peinte le long de la colonne vertébrale.",
+        rule: "Augmente le ND d'Armure du moine d'une valeur égale à (2 × Rang d'École) + 5."
+      },
+      {
+        id: "tat-brasier",
+        name: "Brasier (Blaze)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Des flammes rougeoyantes stylisées semblent ondoyer sur les avant-bras et les paumes du moine.",
+        rule: "Enflamme les frappes à mains nues du moine. Il inflige des dégâts de feu supplémentaires égaux à son Anneau de Feu + son Rang d'École."
+      },
+      {
+        id: "tat-cent-pieds",
+        name: "Cent-Pieds (Centipede)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Complexe de Mouvement",
+        duration: "1 jour entier (ou arrêt)",
+        source: "Livre de Base (p. 260)",
+        lore: "Un long mille-pattes sinueux qui court tout autour d'un membre inférieur.",
+        rule: "Permet de courir à une allure surhumaine : distance égale à l'Anneau d'Eau × 100 par action de mouvement. En cas d'arrêt de plus d'une minute, l'effet cesse et le porteur est épuisé (aucune action physique pendant 12 heures)."
+      },
+      {
+        id: "tat-chuchotement",
+        name: "Chuchotement (Whisper)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Complexe",
+        duration: "Instantané",
+        source: "Book of Air",
+        lore: "Une volute d'air soufflant près du cou ou de l'oreille du moine.",
+        rule: "Permet d'envoyer un message murmuré à n'importe quelle personne située à une distance de (10 × Rang d'École) miles. Ne permet pas à la cible de répondre sans moyen mystique analogue."
+      },
+      {
+        id: "tat-crabe",
+        name: "Crabe (Crab)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "La carapace épaisse d'un crabe géant peinte sur le torse ou les épaules.",
+        rule: "Confère une valeur de Réduction des dégâts égale à l'Anneau de Terre du moine."
+      },
+      {
+        id: "tat-grue",
+        name: "Grue (Crane)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "1 heure",
+        source: "Livre de Base (p. 260)",
+        lore: "Une grue élancée aux ailes immaculées déployées sur l'omoplate.",
+        rule: "Accorde un réservoir de dés bonus égal à (Rang d'École + Anneau d'Air). Chaque dé confère +1g0 sur un jet de compétence sociale (limité à l'Anneau de Vide par jet). Les dés expirent après 1 heure."
+      },
+      {
+        id: "tat-ki-rin",
+        name: "Ki-Rin (Ki-Rin)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "La créature mythique céleste annonciatrice de grâce et de bonne fortune.",
+        rule: "Permet au moine de relancer un dé ou un jet par round et de conserver le meilleur des deux résultats."
+      },
+      {
+        id: "tat-lion",
+        name: "Lion (Lion)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "La silhouette fière et musculeuse du félin sacré, symbole de bravoure martiale.",
+        rule: "Confère temporairement un nombre de rangs égal au Rang d'École dans n'importe quelle Compétence Bugei choisie au moment de l'activation."
+      },
+      {
+        id: "tat-loup",
+        name: "Loup (Wolf)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "Rang d'École en heures",
+        source: "Livre de Base (p. 260)",
+        lore: "Un loup aux aguets humant le vent sur l'avant-bras.",
+        rule: "Accorde un nombre de Relances Gratuites égal au Rang d'École sur tous les jets de Chasse (Pistage)."
+      },
+      {
+        id: "tat-mante",
+        name: "Mante (Mantis)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Permanent (Passif)",
+        duration: "Toujours actif",
+        source: "Livre de Base (p. 260)",
+        lore: "Une mante religieuse prête à frapper les démons sans ciller.",
+        rule: "Immunise totalement et de façon permanente le porteur aux effets de Peur. Reste actif en permanence et ne bloque pas l'activation d'un autre tatouage."
+      },
+      {
+        id: "tat-montagne",
+        name: "Montagne (Mountain)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Les pics imposants des montagnes du Dragon, ancrés dans les racines de la Terre.",
+        rule: "Réduit toutes les pénalités de blessures subies d'un montant égal à (Rang d'École + 2)."
+      },
+      {
+        id: "tat-nuage",
+        name: "Nuage (Cloud)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Book of Air",
+        lore: "Des brumes nébuleuses qui semblent estomper les contours physiques du moine.",
+        rule: "Toute attaque de mêlée réussie contre le porteur doit réussir un second jet d'attaque ou échouer. En contrepartie, le moine ne peut porter aucune attaque tant que ce tatouage est actif."
+      },
+      {
+        id: "tat-ocean",
+        name: "Océan (Ocean)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite / Passif",
+        duration: "Permanent + Éveil",
+        source: "Livre de Base (p. 260)",
+        lore: "Le dessin de vagues immenses et inépuisables se brisant contre le flanc du corps.",
+        rule: "Le moine n'a plus besoin de boire ni de manger. De plus, une fois tous les 3 jours, il peut l'activer pour être instantanément restauré comme après 8 heures de repos et récupérer tous ses Points de Vide."
+      },
+      {
+        id: "tat-ours",
+        name: "Ours (Bear)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Book of Earth",
+        lore: "L'ours colossal des forêts septentrionales au pelage dense.",
+        rule: "Augmente la Vigueur du moine d'une valeur égale à son Rang d'École, ou sa Force de la moitié de son Rang d'École (arrondi au supérieur)."
+      },
+      {
+        id: "tat-phenix",
+        name: "Phénix (Phoenix)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Réaction Automatique",
+        duration: "Instantané",
+        source: "Livre de Base (p. 260)",
+        lore: "L'oiseau légendaire de feu et de cendre embrasant la poitrine.",
+        rule: "Si le moine possède au moins 1 Point de Vide non dépensé et chute au palier Hors de Combat ou pire, le tatouage s'active automatiquement : il vide tous les Points de Vide restants et guérit (Rang d'École × 10) PV. Utilisable une fois par semaine."
+      },
+      {
+        id: "tat-scorpion",
+        name: "Scorpion (Scorpion)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Un scorpion noir aux pinces menaçantes prêt à injecter son venin paralysant.",
+        rule: "Ajoute un nombre de dés non gardés égal au Rang d'École sur les jets de Discrétion. De plus, les attaques à mains nues hébètent automatiquement la cible si un dé explose aux dégâts."
+      },
+      {
+        id: "tat-tempete",
+        name: "Tempête (Storm)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Des éclairs et nuages d'orage tourbillonnants peints sur les poignets et les chevilles.",
+        rule: "Réduit le coût de la manœuvre de Renversement à mains nues à une seule Relance (au lieu de deux)."
+      },
+      {
+        id: "tat-vide",
+        name: "Vide (Void)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Un cercle énigmatique et sans fin (Ensō) tracé à l'encre sombre au plexus solaire.",
+        rule: "Révèle la présence, l'aura et la position approximative de tout être vivant dans un rayon de (Rang d'École × 10) pieds."
+      },
+      {
+        id: "tat-vent",
+        name: "Vent (Wind)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Livre de Base (p. 260)",
+        lore: "Des bourrasques et spirales aériennes enveloppant les cuisses et les mollets.",
+        rule: "Confère une Action Simple supplémentaire par tour (ne pouvant servir à attaquer) et lève la restriction de distance de mouvement maximale liée à l'Anneau d'Eau."
+      },
+      {
+        id: "tat-volcan",
+        name: "Volcan (Volcano)",
+        category: "ise-zumi",
+        badgeClass: "badge-dragon",
+        categoryLabel: "Ise Zumi Togashi",
+        action: "Action Gratuite",
+        duration: "2 × Rang rounds",
+        source: "Book of Fire",
+        lore: "Le mont fumant aux veines de lave incandescente.",
+        rule: "La peau prend l'aspect de magma. Confère Réduction 5 contre les armes inflammables ou en bois. Les assaillants attaquant avec une arme en métal doivent réussir un jet opposé de Feu ou lâcher leur arme brûlante."
+      },
+
+      // ==========================================
+      // TRADITIONS DES CLANS SÉCULIERS
+      // ==========================================
+      {
+        id: "tat-mirumoto-secret",
+        name: "Marques Secrètes Mirumoto",
+        category: "clans",
+        badgeClass: "badge-clan",
+        categoryLabel: "Clan du Dragon",
+        action: "Non magique (Caché)",
+        duration: "Permanent",
+        source: "Way of the Dragon",
+        lore: "Les bushi Mirumoto tatouent des motifs narratifs sous leurs vêtements pour marquer une épreuve surmontée ou une dette personnelle.",
+        rule: "Non magique. Utilisé pour l'affirmation de la volonté et la méditation intime. Confère un repère d'honneur et de loyauté lors des serments."
+      },
+      {
+        id: "tat-gempukku-agasha",
+        name: "Tatouage de Gempukku Agasha / Tamori",
+        category: "clans",
+        badgeClass: "badge-clan",
+        categoryLabel: "Clan du Dragon",
+        action: "Non magique (Rituel)",
+        duration: "Permanent",
+        source: "Way of the Dragon",
+        lore: "Lors du passage à l'âge adulte, les shugenja de ces familles reçoivent un motif d'endurance gravé dans leur chair.",
+        rule: "Symbole d'individualité et de résistance aux rigueurs de la montagne. Marque sociale respectée parmi les clans du Nord."
+      },
+      {
+        id: "tat-daidoji-mon",
+        name: "Mon du Sacrifice Daidoji",
+        category: "clans",
+        badgeClass: "badge-clan",
+        categoryLabel: "Clan de la Grue",
+        action: "Non magique (Militaire)",
+        duration: "Permanent",
+        source: "Way of the Crane",
+        lore: "Le mon familial de la Grue de Fer gravé à l'encre sombre sur l'intérieur des poignets des guerriers Daidoji.",
+        rule: "Témoignage du serment d'abnégation absolue : mourir pour la Grue sans chercher la gloire personnelle."
+      },
+      {
+        id: "tat-hida-yoritomo",
+        name: "Marques d'Exploits du Crabe & de la Mante",
+        category: "clans",
+        badgeClass: "badge-clan",
+        categoryLabel: "Crabe & Mante",
+        action: "Non magique (Guerrier / Marin)",
+        duration: "Permanent",
+        source: "Way of the Crab / Mantis",
+        lore: "Crabes de guerre, monstres marins tués, tempêtes bravées ou nombre de gobelins abattus stylisés sur les bras.",
+        rule: "Marqueurs de réputation entre marins et vétérans du Mur des Bâtisseurs. Facilite l'ascendant moral et les récits de taverne (+1g0 en Intimidation ou Gloire informelle)."
+      },
+      {
+        id: "tat-asako-eye",
+        name: "L'Œil de Focalisation Asako",
+        category: "clans",
+        badgeClass: "badge-clan",
+        categoryLabel: "Clan du Phénix",
+        action: "Concentration Mentale",
+        duration: "Permanent",
+        source: "Book of Air",
+        lore: "Un œil unique stylisé gravé dans la paume ou sur le dos de la main des inquisiteurs Asako.",
+        rule: "Sert de focalisateur de concentration méditative lors des interrogatoires et de la traque de la sorcellerie Mahō."
+      },
+
+      // ==========================================
+      // OMBRE & STIGMATES CORRUPTEURS
+      // ==========================================
+      {
+        id: "tat-kage-yakiin",
+        name: "Marques de l'Ombre (Kage Yakiin)",
+        category: "shadow",
+        badgeClass: "badge-shadow",
+        categoryLabel: "Scorpion & Ombre",
+        action: "Action Gratuite",
+        duration: "Variable",
+        source: "Secrets of the Scorpion",
+        lore: "Des marques d'encre vivante issues de la magie de Tejina et imbibées du fluide de l'Ombre Rampante (Lying Darkness).",
+        rule: "Confère des facultés surnaturelles de déplacement dans l'ombre et de dissimulation totale, mais corrompt lentement l'âme du porteur, effaçant son identité et son visage."
+      },
+      {
+        id: "tat-kokujin",
+        name: "Tatouages Déchus de Kokujin",
+        category: "shadow",
+        badgeClass: "badge-shadow",
+        categoryLabel: "Outremonde & Renégats",
+        action: "Magie Corrompue",
+        duration: "Permanent",
+        source: "Way of the Shadowlands",
+        lore: "Motifs impurs marqués du sang corrompu par la Souillure du renégat Togashi Kokujin.",
+        rule: "Confère des pouvoirs pervertis de l'Outremonde, mais asservit psychiquement le porteur à la volonté et aux ordres de Kokujin."
+      },
+      {
+        id: "tat-gangs-bonge",
+        name: "Tatouages de la Pègre (Bonge & Otteku)",
+        category: "shadow",
+        badgeClass: "badge-shadow",
+        categoryLabel: "Monde Criminel",
+        action: "Reconnaissance",
+        duration: "Permanent",
+        source: "City of Lies",
+        lore: "Symboles arborés par les contrebandiers, bandits et coupe-jarrets des bas-fonds de Ryoko Owari.",
+        rule: "Désigne le rang et l'allégeance au sein d'un gang urbain. Attire le châtiment impitoyable des magistrats d'Émeraude en cas de découverte."
+      },
+
+      // ==========================================
+      // TATOUAGES HISTORIQUES ET SINGULIERS
+      // ==========================================
+      {
+        id: "tat-inro-yamatsu",
+        name: "L'Inro Sacré (Togashi Yamatsu)",
+        category: "legend",
+        badgeClass: "badge-legend",
+        categoryLabel: "Figure Historique",
+        action: "Dépense de 1 Vide",
+        duration: "24 heures (renouvelable)",
+        source: "Way of the Dragon",
+        lore: "Une boîte à sceau finement ciselée tatouée près de l'obi de Togashi Yamatsu.",
+        rule: "Permet de tenter d'emprisonner un esprit désincarné ou possesseur à moins de 50 m via un jet opposé de Volonté (+ Rang d'École en dés gardés). Requiert un jet quotidien pour maintenir la captivité."
+      },
+      {
+        id: "tat-lezard-okkio",
+        name: "Le Lézard du Vide (Togashi Okkio)",
+        category: "legend",
+        badgeClass: "badge-legend",
+        categoryLabel: "Figure Historique",
+        action: "Régénération & Vol de chair",
+        duration: "Permanent",
+        source: "Way of the Dragon",
+        lore: "Le tatouage monstrueux d'Okkio, né d'une illumination déviante ayant sombré dans la folie.",
+        rule: "Permettait d'écorcher la peau des ennemis abattus et de boire leur sang pour intégrer leurs compétences et invoquer leurs tatouages à volonté."
+      }
+    ];
+
+    let currentCategory = 'all';
+
+    function renderTattoos(list) {
+      const grid = document.getElementById('tattoo-grid');
+      const countEl = document.getElementById('tattoo-count');
+      grid.innerHTML = '';
+      countEl.textContent = list.length;
+
+      if (list.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-stone-500 italic">
+            Aucun tatouage ne correspond à votre recherche.
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach(t => {
+        const card = document.createElement('div');
+        card.className = "card-clean rounded-xl p-4 flex flex-col justify-between cursor-pointer space-y-3";
+        card.onclick = () => openModal(t);
+
+        card.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-start justify-between gap-2 border-b border-stone-800 pb-2">
+              <div>
+                <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${t.badgeClass}">
+                  ${t.categoryLabel}
+                </span>
+                <h3 class="text-sm font-bold font-imperial text-amber-200 mt-1">${t.name}</h3>
+              </div>
+              <span class="text-[9px] text-stone-400 bg-stone-900 border border-stone-800 px-1.5 py-0.5 rounded text-right whitespace-nowrap">
+                ${t.source}
+              </span>
+            </div>
+
+            <p class="text-stone-400 text-[11px] italic line-clamp-2">
+              « ${t.lore} »
+            </p>
+
+            <div class="p-2.5 rounded bg-black/60 border border-stone-800/80 space-y-1">
+              <span class="text-amber-300 font-bold font-imperial block text-[9px] uppercase tracking-wider">
+                ⚙️ Effet Mécanique :
+              </span>
+              <p class="text-stone-300 text-[11px] leading-relaxed line-clamp-3">
+                ${t.rule}
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-stone-800/60 flex items-center justify-between text-[10px] text-stone-500">
+            <span>⏱️ <b>${t.action}</b></span>
+            <span class="text-amber-400/80 group-hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+              Détails ➔
+            </span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function applyFilter() {
+      const q = (document.getElementById('tattoo-search').value || '').toLowerCase().trim();
+      const filtered = TATTOOS_DATA.filter(t => {
+        const matchCat = currentCategory === 'all' || t.category === currentCategory;
+        const matchQuery = !q ||
+          t.name.toLowerCase().includes(q) ||
+          t.lore.toLowerCase().includes(q) ||
+          t.rule.toLowerCase().includes(q) ||
+          t.categoryLabel.toLowerCase().includes(q) ||
+          t.source.toLowerCase().includes(q);
+        return matchCat && matchQuery;
+      });
+      renderTattoos(filtered);
+    }
+
+    function setFilterCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.className = 'cat-btn px-3 py-1.5 rounded-md font-imperial font-bold transition text-black bg-amber-500 shadow';
+        } else {
+          btn.className = 'cat-btn px-3 py-1.5 rounded-md font-imperial text-stone-300 bg-stone-900 border border-stone-800 hover:border-amber-500 hover:text-amber-300 transition';
+        }
+      });
+      applyFilter();
+    }
+
+    function openModal(t) {
+      document.getElementById('modal-name').textContent = t.name;
+      document.getElementById('modal-source').textContent = `Source : ${t.source} • Activation : ${t.action} • Durée : ${t.duration}`;
+      document.getElementById('modal-lore').textContent = `« ${t.lore} »`;
+      document.getElementById('modal-rule').textContent = t.rule;
+
+      const badge = document.getElementById('modal-category-badge');
+      badge.textContent = t.categoryLabel;
+      badge.className = `text-[10px] uppercase font-bold font-imperial px-2.5 py-0.5 rounded inline-block mb-1.5 ${t.badgeClass}`;
+
+      document.getElementById('tattoo-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('tattoo-modal').classList.add('hidden');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.getElementById('tattoo-modal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('tattoo-modal')) closeModal();
+    });
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTattoos(TATTOOS_DATA);
+    });
+  </script>
+</body>
+</html>
