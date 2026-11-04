@@ -1324,140 +1324,6 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <script>
     window.charSpellsList = window.charSpellsList || [];
     window.charKatasList = window.charKatasList || [];
-    window.charTattoosList = window.charTattoosList || [];
-
-    // Détecte si le personnage est un moine tatoué ou appartient à l'Ordre Togashi
-    function isCharacterTogashiTattooed() {
-      const famSel = document.getElementById('sel-family');
-      const schSel = document.getElementById('sel-school');
-      const famName = (famSel?.options[famSel.selectedIndex]?.text || "").toLowerCase();
-      const schName = (schSel?.options[schSel.selectedIndex]?.text || "").toLowerCase();
-      const clanVal = (document.getElementById('sel-clan')?.value || "").toLowerCase();
-    
-      return famName.includes("togashi") || schName.includes("togashi") || schName.includes("zumi") || (clanVal.includes("dragon") && famName.includes("togashi"));
-    }
-    
-    function getTattooAllowedQuota() {
-      const rank = typeof getCurrentSchoolRank === 'function' ? getCurrentSchoolRank() : 1;
-      // Livre de Base : 2 au rang 1, puis +1 par rang d'école (R2: 3, R3: 4, R4: 5, R5: 6)
-      return 1 + rank;
-    }
-    
-    function updateArchetypePanelsWithTattoos() {
-      const isTattooed = isCharacterTogashiTattooed();
-      const tattoosPanel = document.getElementById('panel-tattoos-container');
-      const tabBtn = document.getElementById('tab-btn-tattoos');
-      const archetypeBadge = document.getElementById('archetype-active-badge');
-    
-      if (isTattooed) {
-        if (tabBtn) tabBtn.classList.remove('hidden');
-        if (tattoosPanel) tattoosPanel.classList.remove('hidden');
-        if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold font-imperial">Chair Tatouée (Ise Zumi)</span>`;
-        
-        // Pour un Ise Zumi, masquer les sorts ordinaires et les katas pour épurer l'écran
-        document.getElementById('panel-spells-container')?.classList.add('hidden');
-        document.getElementById('panel-katas-container')?.classList.add('hidden');
-        document.getElementById('shugenja-slots-bar')?.classList.add('hidden');
-    
-        populateTattooCatalogSelect();
-        renderCharacterTattoos();
-      } else {
-        if (tattoosPanel) tattoosPanel.classList.add('hidden');
-        if (typeof updateArchetypePanels === 'function') updateArchetypePanels();
-      }
-    }
-    
-    function populateTattooCatalogSelect() {
-      const sel = document.getElementById('sel-catalog-tattoo');
-      if (!sel) return;
-      const list = window.TATOUAGES_DATA || [];
-      const owned = new Set((window.charTattoosList || []).map(t => t.id));
-    
-      sel.innerHTML = `<option value="">-- Choisir un Tatouage de Togashi --</option>`;
-      list.forEach(t => {
-        if (!owned.has(t.id)) {
-          const opt = document.createElement('option');
-          opt.value = t.id;
-          opt.textContent = `[${t.element} ${t.ringReq}] ${t.name} (${t.kanji})`;
-          sel.appendChild(opt);
-        }
-      });
-      updateTattooPreview();
-    }
-    
-    function updateTattooPreview() {
-      const sel = document.getElementById('sel-catalog-tattoo');
-      const card = document.getElementById('tattoo-preview-card');
-      if (!sel || !card) return;
-      const t = (window.TATOUAGES_DATA || []).find(item => item.id === sel.value);
-      if (!t) { card.classList.add('hidden'); return; }
-    
-      document.getElementById('tattoo-preview-name').textContent = `${t.name} (${t.kanji})`;
-      const elemBadge = document.getElementById('tattoo-preview-elem');
-      elemBadge.textContent = `Anneau de ${t.element} ${t.ringReq}`;
-      elemBadge.className = `text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${getElementBadgeClass(t.element)}`;
-      document.getElementById('tattoo-preview-act').textContent = t.activation;
-      document.getElementById('tattoo-preview-dur').textContent = t.duration;
-      document.getElementById('tattoo-preview-desc').textContent = `« ${t.desc} »`;
-      document.getElementById('tattoo-preview-rule').textContent = t.rule;
-      card.classList.remove('hidden');
-    }
-    
-    function addTattooFromCatalog() {
-      const sel = document.getElementById('sel-catalog-tattoo');
-      if (!sel || !sel.value) return;
-      const found = (window.TATOUAGES_DATA || []).find(t => t.id === sel.value);
-      if (!found) return;
-    
-      const quota = getTattooAllowedQuota();
-      if (window.charTattoosList.length >= quota) {
-        alert(`Limite atteinte ! Votre Rang d'École vous permet de porter un maximum de ${quota} Tatouages magiques.`);
-        return;
-      }
-    
-      window.charTattoosList.push(found);
-      renderCharacterTattoos();
-      populateTattooCatalogSelect();
-    }
-    
-    function removeCharacterTattoo(id) {
-      window.charTattoosList = window.charTattoosList.filter(t => t.id !== id);
-      renderCharacterTattoos();
-      populateTattooCatalogSelect();
-    }
-    
-    function renderCharacterTattoos() {
-      const container = document.getElementById('char-tattoos-container');
-      const countBadge = document.getElementById('tattoos-count-badge');
-      const quotaBadge = document.getElementById('tattoos-quota-badge');
-      if (!container) return;
-    
-      const quota = getTattooAllowedQuota();
-      if (countBadge) countBadge.textContent = window.charTattoosList.length;
-      if (quotaBadge) quotaBadge.textContent = quota;
-    
-      if (window.charTattoosList.length === 0) {
-        container.innerHTML = `<div class="col-span-full p-3 rounded bg-black/40 border border-stone-800 text-stone-500 italic text-center text-[11px]">Aucun tatouage gravé. Choisissez vos 2 tatouages initiaux ci-dessus.</div>`;
-        return;
-      }
-    
-      container.innerHTML = window.charTattoosList.map(t => {
-        const badgeCls = getElementBadgeClass(t.element);
-        return `
-          <div class="p-2.5 rounded-lg bg-stone-950/90 border border-emerald-900/50 space-y-1.5">
-            <div class="flex justify-between items-start gap-2">
-              <div>
-                <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">${t.element} ${t.ringReq}</span>
-                <b class="text-amber-200 font-imperial text-xs ml-1">${t.name}</b>
-                <span class="text-emerald-400 font-serif font-bold text-xs ml-1">${t.kanji}</span>
-              </div>
-              <button type="button" onclick="removeCharacterTattoo('${t.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
-            </div>
-            <p class="text-[10px] text-stone-300 leading-snug">${t.rule}</p>
-          </div>
-        `;
-      }).join('');
-    }
 
     function getElementBadgeClass(elem) {
       const e = (elem || "").toString().toLowerCase();
@@ -2259,6 +2125,256 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       document.getElementById("sel-clan")?.addEventListener("change", () => setTimeout(updateArchetypePanels, 150));
       document.getElementById("sel-school")?.addEventListener("change", () => setTimeout(updateArchetypePanels, 150));
     });
+    // =============================================================================
+// GESTION DYNAMIQUE DES TATOUAGES TOGASHI (ISE ZUMI)
+// =============================================================================
+window.charTattoosList = window.charTattoosList || [];
+
+// 1. Détection universelle (Famille, École, ou Clan du Dragon)
+function isCharacterTogashiTattooed() {
+  const famSel = document.getElementById('sel-family');
+  const schSel = document.getElementById('sel-school');
+  const clanSel = document.getElementById('sel-clan');
+
+  const famText = (famSel?.options[famSel.selectedIndex]?.text || "").toLowerCase();
+  const famVal  = (famSel?.value || "").toLowerCase();
+  const schText = (schSel?.options[schSel.selectedIndex]?.text || "").toLowerCase();
+  const schVal  = (schSel?.value || "").toLowerCase();
+  const clanVal = (clanSel?.value || "").toLowerCase();
+  const clanText = (clanSel?.options[clanSel.selectedIndex]?.text || "").toLowerCase();
+
+  return famText.includes("togashi") || famVal.includes("togashi") ||
+         schText.includes("togashi") || schVal.includes("togashi") ||
+         schText.includes("zumi")    || schVal.includes("zumi") ||
+         schText.includes("tatou")   ||
+         ((clanVal.includes("dragon") || clanText.includes("dragon")) && (famText.includes("togashi") || famVal.includes("togashi")));
+}
+
+// 2. Calcul du Quota : 2 tatouages au Rang 1, +1 par rang d'école supplémentaire
+function getTattooAllowedQuota() {
+  const rank = typeof getCurrentSchoolRank === 'function' ? getCurrentSchoolRank() : 1;
+  return 1 + rank;
+}
+
+// 3. Classe CSS sécurisée pour les badges d'anneaux
+function getSafeElementBadgeClass(elem) {
+  switch ((elem || '').toLowerCase()) {
+    case 'air':   return 'bg-sky-950 text-sky-300 border border-sky-600/40';
+    case 'terre': return 'bg-amber-950 text-amber-300 border border-amber-600/40';
+    case 'feu':   return 'bg-red-950 text-red-300 border border-red-600/40';
+    case 'eau':   return 'bg-blue-950 text-blue-300 border border-blue-600/40';
+    case 'vide':  return 'bg-purple-950 text-purple-300 border border-purple-600/40';
+    default:      return 'bg-emerald-950 text-emerald-300 border border-emerald-600/40';
+  }
+}
+
+// 4. Mise à jour de l'affichage des panneaux d'archétypes
+function updateArchetypePanelsWithTattoos() {
+  const isTattooed = isCharacterTogashiTattooed();
+  const tattoosPanel = document.getElementById('panel-tattoos-container');
+  const tabBtn = document.getElementById('tab-btn-tattoos');
+  const archetypeBadge = document.getElementById('archetype-active-badge');
+
+  if (isTattooed) {
+    if (tabBtn) tabBtn.classList.remove('hidden');
+    if (tattoosPanel) tattoosPanel.classList.remove('hidden');
+    if (archetypeBadge) {
+      archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold font-imperial">Chair Tatouée (Ise Zumi)</span>`;
+    }
+    
+    // Masquer sorts et katas pour un Ise Zumi
+    document.getElementById('panel-spells-container')?.classList.add('hidden');
+    document.getElementById('panel-katas-container')?.classList.add('hidden');
+    document.getElementById('shugenja-slots-bar')?.classList.add('hidden');
+
+    populateTattooCatalogSelect();
+    renderCharacterTattoos();
+  } else {
+    if (tattoosPanel) tattoosPanel.classList.add('hidden');
+    if (tabBtn) tabBtn.classList.add('hidden');
+    if (typeof updateArchetypePanels === 'function') updateArchetypePanels();
+  }
+}
+
+// 5. Remplissage du catalogue déroulant des tatouages
+function populateTattooCatalogSelect() {
+  const sel = document.getElementById('sel-catalog-tattoo');
+  if (!sel) return;
+  const list = window.TATOUAGES_DATA || [];
+  const owned = new Set((window.charTattoosList || []).map(t => t.id));
+
+  sel.innerHTML = `<option value="">-- Choisir un Tatouage de Togashi --</option>`;
+  list.forEach(t => {
+    if (!owned.has(t.id)) {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      const tag = t.element ? `[${t.element} ${t.ringReq || ''}]` : `[${t.source || 'Livre de Base'}]`;
+      opt.textContent = `${tag} ${t.name} ${t.kanji ? '(' + t.kanji + ')' : ''}`;
+      sel.appendChild(opt);
+    }
+  });
+  updateTattooPreview();
+}
+
+// 6. Carte d'aperçu du tatouage sélectionné
+function updateTattooPreview() {
+  const sel = document.getElementById('sel-catalog-tattoo');
+  const card = document.getElementById('tattoo-preview-card');
+  if (!sel || !card) return;
+  
+  const t = (window.TATOUAGES_DATA || []).find(item => item.id === sel.value);
+  if (!t) { card.classList.add('hidden'); return; }
+
+  const nameEl = document.getElementById('tattoo-preview-name');
+  if (nameEl) nameEl.textContent = `${t.name} ${t.kanji ? '(' + t.kanji + ')' : ''}`;
+
+  const elemBadge = document.getElementById('tattoo-preview-elem');
+  if (elemBadge) {
+    elemBadge.textContent = t.element ? `Anneau de ${t.element} ${t.ringReq || ''}` : (t.type || 'Togashi');
+    elemBadge.className = `text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${getSafeElementBadgeClass(t.element)}`;
+  }
+
+  const actEl = document.getElementById('tattoo-preview-act');
+  if (actEl) actEl.textContent = t.activation || t.action || 'Action Libre';
+
+  const durEl = document.getElementById('tattoo-preview-dur');
+  if (durEl) durEl.textContent = t.duration || '2 × Rang rounds';
+
+  const descEl = document.getElementById('tattoo-preview-desc');
+  if (descEl) descEl.textContent = t.desc || t.lore ? `« ${t.desc || t.lore} »` : '';
+
+  const ruleEl = document.getElementById('tattoo-preview-rule');
+  if (ruleEl) ruleEl.textContent = t.rule || '';
+
+  card.classList.remove('hidden');
+}
+
+// 7. Ajout et retrait d'un tatouage
+function addTattooFromCatalog() {
+  const sel = document.getElementById('sel-catalog-tattoo');
+  if (!sel || !sel.value) return;
+  const found = (window.TATOUAGES_DATA || []).find(t => t.id === sel.value);
+  if (!found) return;
+
+  const quota = getTattooAllowedQuota();
+  if (window.charTattoosList.length >= quota) {
+    alert(`Limite atteinte ! Votre Rang d'École vous permet de porter un maximum de ${quota} Tatouages.`);
+    return;
+  }
+
+  window.charTattoosList.push(found);
+  renderCharacterTattoos();
+  populateTattooCatalogSelect();
+}
+
+function removeCharacterTattoo(id) {
+  window.charTattoosList = window.charTattoosList.filter(t => t.id !== id);
+  renderCharacterTattoos();
+  populateTattooCatalogSelect();
+}
+
+function renderCharacterTattoos() {
+  const container = document.getElementById('char-tattoos-container');
+  const countBadge = document.getElementById('tattoos-count-badge');
+  const quotaBadge = document.getElementById('tattoos-quota-badge');
+  if (!container) return;
+
+  const quota = getTattooAllowedQuota();
+  if (countBadge) countBadge.textContent = window.charTattoosList.length;
+  if (quotaBadge) quotaBadge.textContent = quota;
+
+  if (window.charTattoosList.length === 0) {
+    container.innerHTML = `<div class="col-span-full p-3 rounded bg-black/40 border border-stone-800 text-stone-500 italic text-center text-[11px]">Aucun tatouage gravé. Choisissez vos 2 tatouages initiaux ci-dessus.</div>`;
+    return;
+  }
+
+  container.innerHTML = window.charTattoosList.map(t => {
+    const badgeCls = getSafeElementBadgeClass(t.element);
+    const label = t.element ? `${t.element} ${t.ringReq || ''}` : (t.type || 'Togashi');
+    return `
+      <div class="p-2.5 rounded-lg bg-stone-950/90 border border-emerald-900/50 space-y-1.5">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">${label}</span>
+            <b class="text-amber-200 font-imperial text-xs ml-1">${t.name}</b>
+            ${t.kanji ? `<span class="text-emerald-400 font-serif font-bold text-xs ml-1">${t.kanji}</span>` : ''}
+          </div>
+          <button type="button" onclick="removeCharacterTattoo('${t.id}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
+        </div>
+        <p class="text-[10px] text-stone-300 leading-snug">${t.rule}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+// 8. Gestion de l'onglet Tatouages
+function setMysticTab(tab) {
+  const pSpells = document.getElementById('panel-spells-container');
+  const pKatas = document.getElementById('panel-katas-container');
+  const pTattoos = document.getElementById('panel-tattoos-container');
+
+  if (tab === 'tattoos') {
+    pTattoos?.classList.remove('hidden');
+    pSpells?.classList.add('hidden');
+    pKatas?.classList.add('hidden');
+  } else if (tab === 'spells') {
+    pSpells?.classList.remove('hidden');
+    pKatas?.classList.add('hidden');
+    pTattoos?.classList.add('hidden');
+  } else if (tab === 'katas') {
+    pKatas?.classList.remove('hidden');
+    pSpells?.classList.add('hidden');
+    pTattoos?.classList.add('hidden');
+  } else {
+    updateArchetypePanelsWithTattoos();
+  }
+}
+
+// =============================================================================
+// BRANCHEMENT AUTOMATIQUE AUX CHANGEMENTS DE FAMILLE ET D'ÉCOLE
+// =============================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const selFam = document.getElementById('sel-family');
+  const selSch = document.getElementById('sel-school');
+  const selClan = document.getElementById('sel-clan');
+
+  function handleFamilyOrSchoolChange() {
+    // Si la famille Togashi est choisie, aligner automatiquement l'école sur l'Ordre Togashi
+    const famText = (selFam?.options[selFam.selectedIndex]?.text || "").toLowerCase();
+    if (famText.includes("togashi") && selSch) {
+      const togashiSchOpt = Array.from(selSch.options).find(opt => 
+        opt.text.toLowerCase().includes("togashi") || opt.text.toLowerCase().includes("zumi") || opt.value.toLowerCase().includes("togashi")
+      );
+      if (togashiSchOpt && selSch.value !== togashiSchOpt.value) {
+        selSch.value = togashiSchOpt.value;
+        if (typeof onSchoolChange === 'function') onSchoolChange();
+      }
+    }
+
+    updateArchetypePanelsWithTattoos();
+  }
+
+  selFam?.addEventListener('change', handleFamilyOrSchoolChange);
+  selSch?.addEventListener('change', updateArchetypePanelsWithTattoos);
+  selClan?.addEventListener('change', () => {
+    setTimeout(handleFamilyOrSchoolChange, 60);
+  });
+
+  // Interception de updateAll pour préserver le panneau Tatouages
+  if (typeof window.updateAll === 'function') {
+    const originalUpdateAll = window.updateAll;
+    window.updateAll = function () {
+      originalUpdateAll.apply(this, arguments);
+      if (isCharacterTogashiTattooed()) {
+        updateArchetypePanelsWithTattoos();
+      }
+    };
+  }
+
+  // Vérification initiale après chargement des scripts déportés
+  setTimeout(updateArchetypePanelsWithTattoos, 150);
+});
   </script>
+
 </body>
 </html>
