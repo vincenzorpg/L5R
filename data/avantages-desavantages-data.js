@@ -1157,6 +1157,270 @@
       desc: "Votre âme est imperméable à l'harmonie du Vide cosmique : vous êtes coupé de l'étincelle divine.",
       rule: "Vous ne disposez d'aucun point de Vide et vous ne pouvez jamais en acquérir ni en dépenser pour améliorer vos actions."
     }
+    {
+      id: "dis-ascete",
+      name: "Ascète (Ascetic)",
+      type: "Mental",
+      cost: 2,
+      gain: 2,
+      impact: "ascetic",
+      prerequisite: "Vaut 3 pts pour le Clan du Dragon et les Moines",
+      desc: "Vous n'avez aucun goût ni intérêt pour les biens matériels, et ce minimalisme affecte la façon dont autrui vous perçoit.",
+      rule: "Votre équipement de départ ne comprend que vos armes, armure, vêtements et outils indispensables (aucun koku ni superflu). Tous vos gains de Gloire sont divisés par deux (et réduits au quart pour un Moine)."
+    },
+    {
+      id: "dis-fiancailles-ameres",
+      name: "Fiançailles Amères (Bitter Betrothal)",
+      type: "Social",
+      cost: 2,
+      gain: 2,
+      impact: "bitter_betrothal",
+      prerequisite: "Vaut 3 pts pour les Familles Impériales",
+      desc: "Vous êtes promis ou marié à un conjoint qui vous méprise autant que vous le détestez.",
+      rule: "Bien que votre époux(se) gère votre domaine avec le décorum minimal, votre hostilité mutuelle complique grandement toutes vos démarches domestiques, politiques ou bureaucratiques."
+    },
+    {
+      id: "dis-mouton-noir",
+      name: "Mouton Noir (Black Sheep)",
+      type: "Social",
+      cost: 3,
+      gain: 3,
+      impact: "black_sheep",
+      prerequisite: "Aucun",
+      desc: "Votre famille est profondément dégoûtée par votre conduite : sans être rōnin, vous n'êtes plus le bienvenu sous votre propre toit.",
+      rule: "Vous ne pouvez entretenir de relations normales avec un membre de votre famille que via l'Avantage Allié, et il vous est très difficile de trouver un sensei acceptant de vous faire progresser en Rang d'École."
+    },
+    {
+      id: "dis-banni-temple",
+      name: "Dénoncé par les Moines (Cast Out)",
+      type: "Social",
+      cost: 1,
+      gain: 1,
+      impact: "cast_out",
+      prerequisite: "1 pt (un temple) ou 3 pts (une secte majeure de la Confrérie de Shinsei)",
+      desc: "Vous ou votre lignée avez été publiquement dénoncés par un ordre monastique.",
+      rule: "Les moines du temple ou de la secte concernée traitent votre Rang de Gloire comme s'il s'agissait d'Infamie."
+    },
+    {
+      id: "dis-consume-controle",
+      name: "Consumé : Contrôle (Consumed by Control)",
+      type: "Mental",
+      cost: 4,
+      gain: 4,
+      impact: "consumed_control",
+      prerequisite: "Vaut 5 pts pour l'Araignée. Incompatible avec Échec du Bushidō",
+      desc: "Vous avez emprunté la voie du Shourido : vous voulez dominer autrui à tout prix et n'admettez jamais vos erreurs.",
+      rule: "Vous subissez une pénalité de -1g1 sur tous vos jets d'Étiquette et de Sincérité."
+    },
+    {
+      id: "dis-consume-determination",
+      name: "Consumé : Détermination (Consumed by Determination)",
+      type: "Mental",
+      cost: 6,
+      gain: 6,
+      impact: "consumed_determination",
+      prerequisite: "Vaut 7 pts pour l'Araignée. Incompatible avec Échec du Bushidō",
+      desc: "Vous êtes convaincu de n'avoir besoin d'aucune aide extérieure ni d'aucune harmonie intérieure pour triompher.",
+      rule: "Vous ne pouvez jamais dépenser de points de Vide pour augmenter un jet de dés (+1g1)."
+    },
+    {
+      id: "dis-consume-perfection",
+      name: "Consumé : Perfection (Consumed by Perfection)",
+      type: "Mental",
+      cost: 5,
+      gain: 5,
+      impact: "consumed_perfection",
+      prerequisite: "Vaut 6 pts pour la Grue et l'Araignée. Incompatible avec Échec du Bushidō",
+      desc: "Vous exigez de vous-même une exécution absolue en toute circonstance, même lorsque cela est inutile.",
+      rule: "À chaque jet de Compétence ou de Lancement de Sort, vous devez déclarer 1 Augmentation supplémentaire sans aucun effet bénéfique, sans quoi le jet échoue automatiquement."
+    },
+    {
+      id: "dis-consume-force",
+      name: "Consumé : Force Brute (Consumed by Strength)",
+      type: "Mental",
+      cost: 5,
+      gain: 5,
+      impact: "consumed_strength",
+      prerequisite: "Vaut 6 pts pour l'Araignée. Incompatible avec Échec du Bushidō",
+      desc: "Seule la puissance physique écrase vos ennemis ; la finesse et la diplomatie sont pour les faibles.",
+      rule: "Vous devez déclarer 1 Augmentation supplémentaire sans effet pour utiliser les manœuvres Coup Ciblé, Feinte ou Désarmement, et subissez -1g0 à tous vos jets d'Étiquette."
+    },
+    {
+      id: "dis-maudit-royaume",
+      name: "Maudit par le Royaume (Cursed by the Realm)",
+      type: "Spirituel",
+      cost: 4,
+      gain: 4,
+      impact: "cursed_by_the_realm",
+      prerequisite: "Vaut 5 pts pour les Shugenja (Choisir un Royaume Spirituel)",
+      desc: "L'essence d'un Royaume Spirituel vous a marqué comme un ennemi.",
+      rule: "Selon le royaume choisi : Chikushudo (-1g1 Dressage), Gaki-do (cible prioritaire des morts affamés), Jigoku (-1g1 pour résister à la Souillure), Maigo no Musha (-1g1 contre les esprits), Meido (-1g0 Perception hors action), Sakkaku (farces cruelles mensuelles), Tengoku (+10 au ND dans les temples), Toshigoku (Volonté ND 15 ou attaquer tout ennemi blessé), Yomi (aucun avantage d'Ancêtre/Héritage), Yume-do (10h de sommeil requises pour récupérer le Vide)."
+    },
+    {
+      id: "dis-sombre-destin",
+      name: "Sombre Destin (Dark Fate)",
+      type: "Spirituel",
+      cost: 3,
+      gain: 3,
+      impact: "dark_fate",
+      prerequisite: "Aucun",
+      desc: "Une destinée funeste vous attend : avant votre mort, vous plongerez le monde dans de terribles ténèbres.",
+      rule: "Le destin vous préserve pour accomplir cette tragédie : une fois par session, lorsqu'une attaque devrait vous tuer, vous êtes réduit à 1 point de vie avant la mort."
+    },
+    {
+      id: "dis-deshonore",
+      name: "Déshonoré / Cherche-Mort (Dishonored)",
+      type: "Social",
+      cost: 5,
+      gain: 5,
+      impact: "dishonored",
+      prerequisite: "Aucun",
+      desc: "Votre nom a été rayé des registres familiaux ; seule une mort glorieuse au combat lavera votre affront.",
+      rule: "Vous possédez un Rang de Statut bloqué à 1.0 et ne pouvez gagner aucun point de Statut tant que ce désavantage persiste."
+    },
+    {
+      id: "dis-incroyant",
+      name: "Incroyant / Sceptique (Disbeliever)",
+      type: "Mental",
+      cost: 3,
+      gain: 3,
+      impact: "disbeliever",
+      prerequisite: "Inaccessible aux Shugenja et Moines",
+      desc: "Vous remettez secrètement en question le Tao de Shinsei, les Fortunes ou la divinité de l'Ordre Céleste.",
+      rule: "Si votre impiété est découverte, la perte d'Honneur et de Gloire est catastrophique, et les bénédictions spirituelles peuvent vous être refusées."
+    },
+    {
+      id: "dis-desequilibre-elementaire",
+      name: "Déséquilibre Élémentaire (Elemental Imbalance)",
+      type: "Spirituel",
+      cost: 2,
+      gain: 2,
+      impact: "elemental_imbalance",
+      prerequisite: "Shugenja uniquement (2 pts par rang, sur un élément sans Déficience)",
+      desc: "Les kami d'un élément vous favorisent avec une telle violence que leur voix submerge parfois votre volonté.",
+      rule: "Chaque fois que vous lancez un sort de cet élément, réussissez un jet de Volonté ND (15 + 5 par rang du désavantage) sous peine de voir le sort échouer ou frapper une mauvaise cible."
+    },
+    {
+      id: "dis-echec-bushido",
+      name: "Échec du Bushidō (Failure of Bushido)",
+      type: "Mental",
+      cost: 3,
+      gain: 3,
+      impact: "failure_of_bushido",
+      prerequisite: "3 à 6 pts selon la vertu. Incompatible avec Consumé",
+      desc: "Votre âme faillit gravement à l'un des sept préceptes cardinaux du code du Bushidō.",
+      rule: "Compassion (3 pts : dépenser 1 Vide pour aider un inférieur), Courage (4 pts : +5 au ND face à un ennemi de Gloire/Statut supérieur ou de l'Outremonde), Courtoisie (4 pts : 1 Augmentation forcée sans effet pour s'excuser), Devoir (6 pts : impossible de dépenser du Vide pour réduire les Blessures), Honnêteté (3 pts : aucun Vide sur Sincérité [Honnêteté]), Honneur (3 pts : impossible d'ajouter le Rang d'Honneur contre Intimidation/Tentation), Sincérité (4 pts : 1 Augmentation forcée sans effet pour convaincre)."
+    },
+    {
+      id: "dis-malediction-fortunes",
+      name: "Malédiction des Sept Fortunes (Seven Fortunes' Curse)",
+      type: "Spirituel",
+      cost: 3,
+      gain: 3,
+      impact: "seven_fortunes_curse",
+      prerequisite: "3 pts (ou 6 pts pour la Malédiction de Hotei)",
+      desc: "L'une des Sept Fortunes a jugé votre conduite offensante et a abattu son courroux sur vous.",
+      rule: "Benten (+10 au ND d'Étiquette), Bishamon (Force -1 pour les dégâts d'arme), Daikoku (-1g1 en Commerce et -1 koku de départ), Ebisu (-1g1 aux jets sociaux avec les non-samouraïs), Fukurokujin (+5 au ND des jets de Connaissance/Lore), Hotei (6 pts : toute Technique ou Avantage coûtant 1 Vide en exige 2), Jurojin (-2g0 pour résister aux poisons et maladies)."
+    },
+    {
+      id: "dis-touche-vide",
+      name: "Touché par le Vide (Touch of the Void)",
+      type: "Spirituel",
+      cost: 3,
+      gain: 3,
+      impact: "touch_of_the_void",
+      prerequisite: "Vaut 4 pts pour le Clan du Phénix",
+      desc: "Le contact brut de l'essence du Vide a fissuré votre esprit : son appel est puissant mais dévastateur.",
+      rule: "Lorsque vous dépensez 1 point de Vide pour augmenter un jet, vous gagnez +2g1 au lieu de +1g1, mais vous devez réussir un jet de Volonté ND 30 ou être Étourdi (Dazed) pendant 1 round."
+    },
+    {
+      id: "dis-faiblesse",
+      name: "Faiblesse (Weakness)",
+      type: "Physique",
+      cost: 6,
+      gain: 6,
+      impact: "weakness",
+      prerequisite: "Choisir un Trait physique ou mental",
+      desc: "Vous souffrez d'une déficience physique ou mentale marquée qu'aucun entraînement ne parvient à combler.",
+      rule: "Le Trait sélectionné est considéré comme inférieur de 1 rang pour tous vos jets de dés et effets mécaniques dérivés."
+    },
+    {
+      id: "dis-courroux-kami",
+      name: "Courroux des Kami (Wrath of the Kami)",
+      type: "Spirituel",
+      cost: 3,
+      gain: 3,
+      impact: "wrath_of_the_kami",
+      prerequisite: "Vaut 4 pts pour les Shugenja (Choisir un Élément)",
+      desc: "Les esprits d'un élément particulier vous vouent une rancune tenace et jubilent lorsqu'on les invoque contre vous.",
+      rule: "Tout sort de l'élément choisi lancé contre vous confère 1 Augmentation Gratuite à son lanceur."
+    },
+    {
+      id: "dis-malediction-lignee",
+      name: "Malédiction de Lignée : Moto ou Yogo (Bloodline Curse)",
+      type: "Spirituel",
+      cost: 4,
+      gain: 4,
+      impact: "bloodline_curse",
+      prerequisite: "4 pts (Clan de la Licorne pour Moto, Clan du Scorpion pour Yogo)",
+      desc: "Le sang de votre famille porte le poids d'une antique malédiction liée à Fu Leng et à l'Outremonde.",
+      rule: "Malédiction des Moto : pénalité de -1g0 à tous les jets pour résister à la Souillure. Malédiction de Yogo : vous êtes condamné par le destin à trahir la personne que vous aimez le plus."
+    },
+    {
+      id: "dis-folie-illuminee",
+      name: "Folie Illuminée (Enlightened Madness)",
+      type: "Spirituel",
+      cost: 4,
+      gain: 4,
+      impact: "enlightened_madness",
+      prerequisite: "4 pts (ND 20) ou 6 pts (ND 30)",
+      desc: "L'illumination mystique ou le sang des Kami a tordu votre esprit, vous poussant à des actes violents ou incohérents.",
+      rule: "Choisissez un Anneau, une Compétence ou un Tatouage Togashi : à chaque utilisation, vous devez réussir un jet de Volonté (ND 20 ou ND 30) ou sombrer dans la démence sous le contrôle du MJ pendant 8 heures."
+    },
+    {
+      id: "dis-momoku",
+      name: "Momoku — Aveugle au Vide (Momoku)",
+      type: "Spirituel",
+      cost: 8,
+      gain: 8,
+      impact: "momoku",
+      prerequisite: "Aucun",
+      desc: "Votre âme est spirituellement coupée de l'harmonie cosmique du Vide.",
+      rule: "Vous conservez votre Anneau de Vide, mais vous ne pouvez dépenser aucun point de Vide."
+    },
+    {
+      id: "dis-aspect-troublant",
+      name: "Aspect Troublant (Disturbing Countenance)",
+      type: "Physique",
+      cost: 2,
+      gain: 2,
+      impact: "disturbing_countenance",
+      prerequisite: "Aucun",
+      desc: "Vos traits déformés, vos cicatrices rituelles ou votre regard inquiétant mettent vos interlocuteurs mal à l'aise.",
+      rule: "Le ND de tous vos jets de Compétences Sociales (hors Intimidation) est augmenté de +5."
+    },
+    {
+      id: "dis-amour-perdu",
+      name: "Amour Perdu (Lost Love)",
+      type: "Mental",
+      cost: 3,
+      gain: 3,
+      impact: "lost_love",
+      prerequisite: "Aucun",
+      desc: "Le deuil d'un être cher disparu hante vos pensées à chaque instant.",
+      rule: "Tout événement ou lieu ravivant le souvenir de cet amour perdu exige un jet de Volonté ND 20 pour ne pas subir -1g1 à toutes vos actions pendant la scène."
+    },
+    {
+      id: "dis-insensible",
+      name: "Insensible (Insensitive)",
+      type: "Mental",
+      cost: 2,
+      gain: 2,
+      impact: "insensitive",
+      prerequisite: "Aucun",
+      desc: "Vous prêtez peu d'attention aux sentiments ou à la souffrance morale de ceux qui vous entourent.",
+      rule: "Vous subissez un malus sur vos jets d'Étiquette et de Courtisan visant à faire preuve d'empathie ou de condoléances."
+    }
   ];
 
   // =========================================================================
