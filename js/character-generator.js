@@ -1363,7 +1363,155 @@ function toggleNameOrder() {
   }
   updateStickyName();
 }
+const DOJO_STORAGE_KEY = 'l5r_dojo_characters_v4';
+const DRAFT_STORAGE_KEY = 'l5r_current_character_draft_v4';
 
+// Collecte l'état complet de la fiche (incluant Sorts, Kihos et Katas)
+function collectCharacterData() {
+  return {
+    id: window.currentCharacterId || ('samurai_' + Date.now()),
+    updatedAt: new Date().toISOString(),
+    name: document.getElementById('pc-name')?.value?.trim() || "Samouraï sans nom",
+    baseXP: document.getElementById('base-xp-input')?.value || "40",
+    clan: document.getElementById('sel-clan')?.value || "",
+    family: document.getElementById('sel-family')?.value || "",
+    school: document.getElementById('sel-school')?.value || "",
+    traits: {
+      sta: document.getElementById('trait-stamina')?.value || 2,
+      wil: document.getElementById('trait-willpower')?.value || 2,
+      str: document.getElementById('trait-strength')?.value || 2,
+      per: document.getElementById('trait-perception')?.value || 2,
+      ref: document.getElementById('trait-reflexes')?.value || 2,
+      awa: document.getElementById('trait-awareness')?.value || 2,
+      agi: document.getElementById('trait-agility')?.value || 2,
+      int: document.getElementById('trait-intelligence')?.value || 2,
+      voi: document.getElementById('trait-void')?.value || 2
+    },
+    skills: currentSkills || [],
+    advantages: advantagesList || [],
+    disadvantages: disadvantagesList || [],
+    spells: (typeof characterSpells !== 'undefined') ? characterSpells : [],
+    katas: (typeof characterKatas !== 'undefined') ? characterKatas : [],
+    affinity: document.getElementById('shugenja-affinity')?.value || "aucune",
+    deficiency: document.getElementById('shugenja-deficiency')?.value || "aucune",
+    armor: document.getElementById('pc-armor')?.value || "",
+    weapon1: document.getElementById('pc-weapon-1')?.value || "",
+    weapon2: document.getElementById('pc-weapon-2')?.value || "",
+    outfit: document.getElementById('pc-outfit')?.value || ""
+  };
+}
+
+// 1. Sauvegarde automatique du brouillon (à appeler à la fin de updateAll())
+function autoSaveCharacterDraft() {
+  if (window.isRestoringCharacter) return;
+  try {
+    const data = collectCharacterData();
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("Impossible d'auto-sauvegarder le brouillon :", e);
+  }
+}
+
+// 2. Enregistrement explicite dans "Mon Dojo Personnel"
+function saveCharacterToDojo() {
+  try {
+    const data = collectCharacterData();
+    window.currentCharacterId = data.id;
+
+    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY);
+    let dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    if (!Array.isArray(dojoList)) dojoList = [];
+
+    // Remplace le personnage s'il porte le même ID ou le même nom, sinon l'ajoute
+    const existingIndex = dojoList.findIndex(
+      c => c.id === data.id || (c.name.toLowerCase() === data.name.toLowerCase())
+    );
+
+    if (existingIndex !== -1) {
+      data.id = dojoList[existingIndex].id;
+      dojoList[existingIndex] = data;
+    } else {
+      dojoList.push(data);
+    }
+
+    localStorage.setItem(DOJO_STORAGE_KEY, JSON.stringify(dojoList));
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
+
+    if (typeof renderDojoList === 'function') renderDojoList();
+    alert(`✅ "${data.name}" a bien été enregistré dans votre Dojo local !`);
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de l'enregistrement dans le navigateur. Utilisez l'export JSON par sécurité.");
+  }
+}
+
+// 3. Restauration d'un personnage (depuis le Dojo, le brouillon ou un JSON)
+function applyCharacterDataToSheet(d) {
+  if (!d) return;
+  window.isRestoringCharacter = true;
+  try {
+    window.currentCharacterId = d.id || ('samurai_' + Date.now());
+    if (d.baseXP !== undefined) {
+      const baseInput = document.getElementById('base-xp-input');
+      if (baseInput) baseInput.value = d.baseXP;
+    }
+
+    advantagesList = d.advantages || [];
+    disadvantagesList = d.disadvantages || [];
+
+    document.getElementById('sel-clan').value = d.clan;
+    onClanChange();
+    document.getElementById('sel-family').value = d.family;
+
+    const resolved = (typeof resolveSchoolByRef === 'function') ? resolveSchoolByRef(d.school, d.clan) : null;
+    const targetSchoolId = resolved?.school?.id || d.school;
+    updateSchoolOptions(targetSchoolId);
+    document.getElementById('sel-school').value = targetSchoolId;
+    resetSheetToNewSelection(true);
+
+    document.getElementById('pc-name').value = d.name || "";
+    if (typeof updateStickyName === 'function') updateStickyName();
+
+    if (d.traits) {
+      document.getElementById('trait-stamina').value = d.traits.sta ?? 2;
+      document.getElementById('trait-willpower').value = d.traits.wil ?? 2;
+      document.getElementById('trait-strength').value = d.traits.str ?? 2;
+      document.getElementById('trait-perception').value = d.traits.per ?? 2;
+      document.getElementById('trait-reflexes').value = d.traits.ref ?? 2;
+      document.getElementById('trait-awareness').value = d.traits.awa ?? 2;
+      document.getElementById('trait-agility').value = d.traits.agi ?? 2;
+      document.getElementById('trait-intelligence').value = d.traits.int ?? 2;
+      document.getElementById('trait-void').value = d.traits.voi ?? 2;
+    }
+
+    currentSkills = d.skills || [];
+    advantagesList = d.advantages || [];
+    disadvantagesList = d.disadvantages || [];
+
+    if (typeof characterSpells !== 'undefined') characterSpells = d.spells || [];
+    if (typeof characterKatas !== 'undefined') characterKatas = d.katas || [];
+    if (d.affinity && document.getElementById('shugenja-affinity')) {
+      document.getElementById('shugenja-affinity').value = d.affinity;
+    }
+    if (d.deficiency && document.getElementById('shugenja-deficiency')) {
+      document.getElementById('shugenja-deficiency').value = d.deficiency;
+    }
+
+    if (d.armor) document.getElementById('pc-armor').value = d.armor;
+    if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
+    if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
+    if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
+
+    renderSkills();
+    renderAdvDisadv();
+    if (typeof renderCharacterSpells === 'function') renderCharacterSpells();
+    if (typeof renderCharacterKatas === 'function') renderCharacterKatas();
+    initCatalogSelectors();
+  } finally {
+    window.isRestoringCharacter = false;
+    updateAll();
+  }
+}
 // =============================================================================
 // CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
 // =============================================================================
