@@ -3,7 +3,7 @@ name: Génération du Contexte Projet
 on:
   push:
     branches:
-      - main # ou master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -13,32 +13,40 @@ jobs:
       - name: Récupérer le dépôt
         uses: actions/checkout@v4
 
-      - name: Compiler TOUS les fichiers du projet en un seul Markdown
+      - name: Parcourir tous les répertoires et compiler
         run: |
           OUTPUT="L5R_FULL_CONTEXT.md"
-          echo "# État Complet du Projet L5R" > $OUTPUT
-          echo "Date de génération : $(date)" >> $OUTPUT
-          echo "" >> $OUTPUT
+          echo "# État Complet du Projet L5R" > "$OUTPUT"
+          echo "Date de génération : $(date)" >> "$OUTPUT"
+          echo "" >> "$OUTPUT"
 
-          # Parcourt automatiquement TOUS les fichiers textuels du projet
-          # en excluant les dossiers cachés (.git, .github) et les fichiers binaires/images
-          find . -type f \
-            ! -path '/.github/' \
-            ! -name 'L5R_FULL_CONTEXT.md' \
-            ! -name '*.png' \
-            ! -name '*.jpg' \
-            ! -name '*.jpeg' \
-            ! -name '*.gif' \
-            ! -name '*.ico' \
-            ! -name '*.zip' | sort | while read -r file; do
-              echo "Traitement de : $clean_file"
-              echo "## Fichier : $clean_file" >> $OUTPUT
-              echo '```' >> $OUTPUT
-              cat "$file" >> $OUTPUT
-              echo "" >> $OUTPUT
-              echo '```' >> $OUTPUT
-              echo "" >> $OUTPUT
-          done
+          # 1. Lister l'arborescence complète en tête de fichier
+          echo "## Arborescence du Dépôt" >> "$OUTPUT"
+          echo '```text' >> "$OUTPUT"
+          find . -maxdepth 3 -not -path '*/.*' | sort >> "$OUTPUT"
+          echo '```' >> "$OUTPUT"
+          echo "" >> "$OUTPUT"
+
+          # 2. Parcourir récursivement tous les sous-dossiers (data, js, campagne, clans, aides, sorts)
+          while IFS= read -r -d '' file; do
+            clean_file="${file#./}"
+            echo "Ajout de : $clean_file"
+            echo "## Fichier : $clean_file" >> "$OUTPUT"
+            echo '```' >> "$OUTPUT"
+            cat "$file" >> "$OUTPUT"
+            echo "" >> "$OUTPUT"
+            echo '```' >> "$OUTPUT"
+            echo "" >> "$OUTPUT"
+          done < <(find . -type f \
+            -not -path '*/.*' \
+            -not -name 'L5R_FULL_CONTEXT.md' \
+            -not -name '*.png' \
+            -not -name '*.jpg' \
+            -not -name '*.jpeg' \
+            -not -name '*.gif' \
+            -not -name '*.ico' \
+            -not -name '*.zip' \
+            -print0 | sort -z)
 
       - name: Publier le fichier en artefact
         uses: actions/upload-artifact@v4
