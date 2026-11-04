@@ -114,6 +114,140 @@
       </p>
     </div>
 
+    <!-- ===================================================================
+     AIDE DE JEU TACTIQUE : SORTS & KIHOS (L5R 4E ÉDITION) — TICKET #19
+     =================================================================== -->
+<section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border border-amber-500/40 bg-black/70 text-xs">
+  <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
+    <div>
+      <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
+        <span>⛩️</span> Aide de Jeu : Invocations des Kami (Sorts) & Mystères du Chi (Kihos)
+      </h2>
+      <p class="text-stone-400 text-[11px]">
+        Mémento officiel des règles de magie élémentaire et d'arts mystiques de La Légende des Cinq Anneaux (4e Édition).
+      </p>
+    </div>
+    <button
+      type="button"
+      onclick="document.getElementById('aide-kiho-sorts-body').classList.toggle('hidden')"
+      class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 font-bold font-imperial text-[11px] transition cursor-pointer"
+    >
+      Afficher / Masquer le Mémento ▾
+    </button>
+  </div>
+
+  <div id="aide-kiho-sorts-body" class="space-y-6">
+    <!-- 1. VOIE DES SHUGENJA (SORTS) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div class="p-4 rounded-xl bg-stone-950/90 border border-amber-500/25 space-y-3">
+        <h3 class="font-bold font-imperial text-amber-300 text-sm border-b border-stone-800 pb-1.5">
+          📜 1. Lancement des Sorts (Shugenja)
+        </h3>
+        <ul class="space-y-2 text-stone-300 leading-relaxed">
+          <li>
+            <b class="text-amber-200">Jet d'Invocation :</b>
+            <span class="font-mono text-amber-300">(Anneau de l'Élément + Rang d'École de Shugenja) g (Anneau de l'Élément)</span>.
+          </li>
+          <li>
+            <b class="text-amber-200">Niveau de Difficulté (ND) :</b>
+            <span class="font-mono text-amber-300">ND = 5 + (5 × Niveau de Maîtrise du sort)</span>
+            (Ex : Maîtrise 1 → ND 10 ; Maîtrise 3 → ND 20).
+          </li>
+          <li>
+            <b class="text-amber-200">Emplacements Quotidiens (Slots) :</b>
+            Un shugenja dispose chaque jour d'un nombre de sorts par Élément égal à son <b>Rang dans l'Anneau correspondant</b>.
+            Les emplacements du <b>Vide</b> peuvent être dépensés pour lancer un sort de <i>n'importe quel élément</i> (ou un sort du Vide si le shugenja possède l'avantage <b>Ishiken-dō</b>).
+          </li>
+          <li>
+            <b class="text-amber-200">Affinité & Déficience :</b>
+            Avec une <b>Affinité</b>, votre Rang d'École est considéré comme supérieur de <b>+1</b> (pour le jet de lancement et le Niveau de Maîtrise accessible). Avec une <b>Déficience</b>, votre Rang d'École est réduit de <b>-1</b> (si ce rang tombe à 0, vous ne pouvez lancer aucun sort de cet élément).
+          </li>
+          <li>
+            <b class="text-amber-200">Progression :</b>
+            À chaque nouveau Rang d'École, un shugenja apprend gratuitement <b>3 nouveaux sorts</b> d'un Niveau de Maîtrise qu'il est capable de lancer.
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2. VOIE DES MOINES (KIHOS) -->
+      <div class="p-4 rounded-xl bg-stone-950/90 border border-emerald-500/25 space-y-3">
+        <h3 class="font-bold font-imperial text-emerald-300 text-sm border-b border-stone-800 pb-1.5">
+          🥋 2. Activation & Types de Kihos
+        </h3>
+        <ul class="space-y-2 text-stone-300 leading-relaxed">
+          <li>
+            <b class="text-emerald-200">Prérequis de Maîtrise (Moines) :</b>
+            Pour apprendre un Kihō, la somme <span class="font-mono text-emerald-300">(Anneau de l'Élément + Rang d'École de Moine)</span> doit être supérieure ou égale au <b>Niveau de Maîtrise</b> du Kihō.
+          </li>
+          <li>
+            <b class="text-emerald-200">Les 4 Catégories de Kihos :</b>
+            <ul class="list-disc list-inside pl-2 mt-1 space-y-1 text-[11px] text-stone-400">
+              <li><b class="text-stone-200">Interne :</b> Harmonise le chi interne du moine (un seul Kihō Interne actif à la fois).</li>
+              <li><b class="text-stone-200">Martial :</b> Sublime le combat à mains nues (Jiujutsu) et les postures offensives.</li>
+              <li><b class="text-stone-200">Mystique :</b> Produit des manifestations surnaturelles visibles par canalisation élémentaire.</li>
+              <li><b class="text-stone-200">Karmique :</b> Modifie l'équilibre du destin, du Vide ou du flux vital des alliés et ennemis.</li>
+            </ul>
+          </li>
+          <li>
+            <b class="text-emerald-200">Mot-clé « Atemi » :</b>
+            Les Kihos dotés de la mention <b>(Atemi)</b> nécessitent de réussir une attaque à mains nues (Jiujutsu) ciblant les points de pression vitaux pour libérer leur effet sur l'adversaire.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. TABLEAU DES RÈGLES : KIHOS HORS-CONFRÉRIE (LIVRE DE L'EAU p. 266) -->
+    <div class="p-4 rounded-xl bg-stone-950/90 border border-stone-800 space-y-2.5">
+      <div class="flex flex-wrap justify-between items-center gap-2">
+        <h3 class="font-bold font-imperial text-amber-200 text-sm">
+          ⚖️ 3. Acquisition des Kihos selon la Voie du Personnage (Livre de l'Eau)
+        </h3>
+        <span class="text-[10px] text-amber-400">
+          💡 L'Avantage « Ami de la Confrérie » (5 XP / 4 XP Dragon) permet d'acheter les Kihos au tarif normal de la Confrérie.
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-[11px]">
+          <thead>
+            <tr class="border-b border-stone-800 text-amber-300 font-imperial">
+              <th class="py-2 pr-3">Archétype / Ordre</th>
+              <th class="py-2 px-3">Condition de Maîtrise</th>
+              <th class="py-2 px-3">Coût en XP</th>
+              <th class="py-2 pl-3">Limite maximale de Kihos</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-800/70 text-stone-300">
+            <tr>
+              <td class="py-2 pr-3 font-bold text-emerald-300">Moine de la Confrérie de Shinsei</td>
+              <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
+              <td class="py-2 px-3">Coût normal (1 XP × Maîtrise)</td>
+              <td class="py-2 pl-3">Aucune limite fixe (+ Kihos gratuits par Rang)</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 font-bold text-amber-200">Autre École de Moine (ex : Togashi, Henshin)</td>
+              <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
+              <td class="py-2 px-3">1,5 × le coût normal (arrondi au supérieur)</td>
+              <td class="py-2 pl-3">Maximum égal au Rang d'École de Moine</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 font-bold text-blue-300">Shugenja (sans Ami de la Confrérie)</td>
+              <td class="py-2 px-3 font-mono">Anneau seul ≥ Maîtrise</td>
+              <td class="py-2 px-3">2 × le coût normal</td>
+              <td class="py-2 pl-3">Maximum égal au Rang d'École de Shugenja</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 font-bold text-purple-300">Ninja (campagne mystique optionnelle)</td>
+              <td class="py-2 px-3 font-mono">Rang d'École seul ≥ Maîtrise</td>
+              <td class="py-2 px-3">2 × le coût normal</td>
+              <td class="py-2 pl-3">Maximum égal au Rang d'École de Ninja</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
     <!-- BANDEAU DE RECHERCHE ET FILTRES -->
     <section class="card-spell rounded-xl p-4 md:p-5 space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-3 text-xs items-end">
