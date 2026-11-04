@@ -1,5 +1,12 @@
+/**
+ * data/sorts-feu-data.js — L5R 4e Édition
+ * Recueil exhaustif et conforme au Livre de Base (pages 180 à 187).
+ */
+
 const SORTS_FEU = [
-  // --- NIVEAU DE MAÎTRISE 1 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 1 (10 sorts officiels)
+  // =========================================================================
   {
     id: "feu-1-biting-steel",
     name: "Morsure de l'Acier (Biting Steel)",
@@ -94,7 +101,7 @@ const SORTS_FEU = [
     area: "Une arme créée",
     duration: "5 Minutes",
     raises: "Dégâts (+1g0), Durée (+5 min), Portée (+1,5 m / +5')",
-    desc: "Matérialise une lame de flammes pures (forme par défaut : katana, modifiable en n'importe quelle autre épée avec 1 Augmentation). L'arme a une VD de 2g2. Vous pouvez utiliser votre Rang d'École à la place de la compétence Kenjutsu pour la manier. Si vous possédez la compétence Kenjutsu, vous ajoutez votre Rang d'Honneur à tous les jets de dégâts. Elle disparaît si vous la lâchez. Vous pouvez aussi la faire apparaître entre les mains d'un allié à 6 m (il ne bénéficie pas du bonus d'Honneur aux dégâts)."
+    desc: "Matérialise une lame de flammes pures (forme par défaut : katana de VD 2g2, modifiable en n'importe quelle autre épée avec 1 Augmentation). Vous pouvez utiliser votre Rang d'École à la place de la compétence Kenjutsu pour la manier. Si vous possédez la compétence Kenjutsu, vous ajoutez votre Rang d'Honneur à tous les jets de dégâts. Elle disparaît si vous la lâchez. Vous pouvez aussi la faire apparaître entre les mains d'un allié à 6 m (il ne bénéficie pas du bonus d'Honneur aux dégâts)."
   },
   {
     id: "feu-1-never-alone",
@@ -121,7 +128,9 @@ const SORTS_FEU = [
     desc: "Invoque la puissance de la forge pour réparer et restaurer un objet matériel de qualité ordinaire (arme ou armure). L'objet perd tous ses défauts, encoches, fentes ou fissures et retrouve sa forme parfaite. Ne peut pas réparer un objet brisé en morceaux ou totalement détruit."
   },
 
-  // --- NIVEAU DE MAÎTRISE 2 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 2 (8 sorts officiels)
+  // =========================================================================
   {
     id: "feu-2-disrupt-aura",
     name: "Perturber l'Aura (Disrupt the Aura)",
@@ -206,8 +215,22 @@ const SORTS_FEU = [
     raises: "Durée (+1 round)",
     desc: "Crée un fouet ardent qui jaillit de votre main pour frapper vos ennemis jusqu'à 9 m (30'). Vos jets d'attaque avec ce fouet utilisent [Agilité + (2 × Rang d'École)] g [Agilité]. Les dégâts ont une VD égale à votre Anneau de Feu."
   },
+  {
+    id: "feu-2-ward-purity",
+    name: "Garde de Pureté (Ward of Purity)",
+    element: "Feu",
+    mastery: 2,
+    keywords: ["Sceau"],
+    range: "Contact",
+    area: "Rayon de 4,5 mètres (15') autour de l'objet touché",
+    duration: "1 Jour",
+    raises: "Aucune",
+    desc: "Trace des kanjis sacrés pendant 1 minute sur une surface fixe. La zone repousse l'influence de l'Outremonde et de l'Ombre Trompeuse : les créatures Souillées ou corrompues par l'Ombre ne peuvent pas pénétrer dans le cercle à moins de réussir un jet de Volonté opposé contre votre Anneau de Feu."
+  },
 
-  // --- NIVEAU DE MAÎTRISE 3 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 3 (7 sorts officiels)
+  // =========================================================================
   {
     id: "feu-3-breath-fire-dragon",
     name: "Souffle du Dragon de Feu (Breath of the Fire Dragon)",
@@ -242,7 +265,7 @@ const SORTS_FEU = [
     area: "Rayon de 6 mètres (20')",
     duration: "1 Round",
     raises: "Zone (+3 m / +10' de rayon)",
-    desc: "Appelle la foudre et le tonnerre destructeur d'Osano-Wo pour écraser une zone précise. Inflige 6k3 Blessures à toutes les cibles et détruit les structures fragiles en bois ou en papier. Quiconque se trouve dans l'onde de choc doit réussir un jet de Terre (ND 20) ou être Renversé (Knockdown) et Assommé (Stunned) pour 1 round."
+    desc: "Invoque la fureur céleste d'Osano-Wo : de multiples éclairs et globes de flammes s'abattent sur la zone. Les structures fragiles en bois ou en papier sont détruites ou s'embrasent. Le sort inflige des dégâts avec une VD égale à votre Anneau de Feu à toute créature présente dans la zone. Utiliser ce sort en zone habitée est considéré comme un acte criminel sauf péril de guerre majeur."
   },
   {
     id: "feu-3-haze-battle",
@@ -293,7 +316,9 @@ const SORTS_FEU = [
     desc: "Lie un esprit ardent dans une pièce d'armure. Chaque fois que le porteur est attaqué au corps à corps, l'armure émet un flash aveuglant immédiat : l'assaillant subit 2k2 Blessures et se retrouve Aveuglé jusqu'à l'Étape des Réactions du même round. Sans effet sur les attaques à distance."
   },
 
-  // --- NIVEAU DE MAÎTRISE 4 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 4 (5 sorts officiels)
+  // =========================================================================
   {
     id: "feu-4-death-flame",
     name: "Mort de la Flamme (Death of Flame)",
@@ -355,7 +380,9 @@ const SORTS_FEU = [
     desc: "Érige un rideau vertical de flammes vengeresses infranchissable. Toute créature touchant le mur subit 6k6 Blessures. Si le mur est créé directement sur l'emplacement occupé par des personnes, celles-ci doivent réussir un jet de Réflexes (ND 20) pour éviter de subir ces Blessures."
   },
 
-  // --- NIVEAU DE MAÎTRISE 5 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 5 (5 sorts officiels)
+  // =========================================================================
   {
     id: "feu-5-destructive-wave",
     name: "Vague Destructrice (Destructive Wave)",
@@ -385,12 +412,24 @@ const SORTS_FEU = [
     name: "Poursuite de la Flamme (Follow the Flame)",
     element: "Feu",
     mastery: 5,
-    keywords: [],
+    keywords: ["Voyage"],
     range: "Personnelle",
-    area: "Spéciale",
+    area: "Le lanceur",
     duration: "5 Rounds",
-    raises: "Dégâts (+1k0 par Augmentation)",
-    desc: "Permet de projeter une traînée de feu qui serpente au sol vers une cible en ligne de vue jusqu'à 90 m (300') à raison de 22,5 m (75') par round en contournant les obstacles incombustibles. Dès qu'elle atteint la cible, celle-ci s'enflamme pour 6k5 Blessures, puis continue de brûler en subissant la moitié de ces dégâts (arrondie à l'inférieur) à chaque round ultérieur jusqu'à extinction ou fin du sort. Désigner une nouvelle cible est une Action Simple."
+    raises: "Aucune",
+    desc: "Permet de fusionner avec l'énergie des flammes pour vous téléporter instantanément d'un foyer de feu à un autre en Action Gratuite, jusqu'à une distance maximale de (Anneau de Feu × 30 mètres), tant que les deux feux font au moins la taille d'une torche et vous sont visibles."
+  },
+  {
+    id: "feu-5-light-sun",
+    name: "Lumière du Soleil (Light of the Sun)",
+    element: "Feu",
+    mastery: 5,
+    keywords: ["Jade"],
+    range: "30 mètres (100')",
+    area: "Rayon de 9 mètres (30')",
+    duration: "10 Rounds",
+    raises: "Aucune",
+    desc: "Fait descendre un rayon concentré de lumière solaire pure. Toute créature dans la zone subit 2g2 Blessures par round dues à la chaleur cuisante. Les cibles humaines subissent de surcroît +2g1 Blessures supplémentaires par Rang d'Honneur en dessous de 4, et +2g2 Blessures si elles possèdent au moins 1 Rang de Souillure ou sont corrompues par l'Ombre. Tout humain d'Honneur 0 est Aveuglé pendant un nombre de rounds égal à votre Anneau de Feu."
   },
   {
     id: "feu-5-wings-phoenix",
@@ -405,7 +444,9 @@ const SORTS_FEU = [
     desc: "Deux gigantesques ailes de flammes pures se déploient dans votre dos. Vous gagnez la faculté de voler à une vitesse égale à (Eau × 3 m) par Action Gratuite ou (Eau × 6 m) par Action Simple. Si vous êtes encore dans les airs à l'expiration du sort, les kami de Feu vous descendent doucement au sol avant de se dissiper."
   },
 
-  // --- NIVEAU DE MAÎTRISE 6 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 6 (3 sorts officiels)
+  // =========================================================================
   {
     id: "feu-6-beam-inferno",
     name: "Rayon du Brasier (Beam of the Inferno)",
