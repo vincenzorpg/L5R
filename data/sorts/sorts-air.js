@@ -1,11 +1,12 @@
 /**
  * data/sorts-air-data.js — L5R 4e Édition
- * Recueil exhaustif et conforme au Livre de Base (pages 167 à 173).
+ * Recueil exhaustif officiel de la Magie de l'Air (Shugenja & Ishiken).
+ * Sources : Livre des Règles L5R 4e (p. 167-173), The Book of Air & The Great Clans.
  */
 
 const SORTS_AIR = [
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 1 (10 sorts officiels)
+  // NIVEAU DE MAÎTRISE 1 (12 sorts)
   // =========================================================================
   {
     id: "air-1-blessed-wind",
@@ -13,6 +14,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 167",
     range: "Personnelle",
     area: "Rayon de 3 m (10') autour du lanceur",
     duration: "Concentration",
@@ -24,7 +26,8 @@ const SORTS_AIR = [
     name: "À la Lumière de la Lune (By the Light of the Moon)",
     element: "Air",
     mastery: 1,
-    keywords: [],
+    keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 167",
     range: "Personnelle",
     area: "Rayon de 6 m (20') autour du lanceur",
     duration: "1 Minute",
@@ -37,6 +40,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 167",
     range: "Contact",
     area: "Un objet inanimé",
     duration: "1 Heure",
@@ -44,11 +48,38 @@ const SORTS_AIR = [
     desc: "Enveloppe un objet inanimé de taille inférieure à la vôtre pour le rendre totalement invisible à l'œil nu. Les sorts de détection magique de Niveau de Maîtrise supérieur le perçoivent automatiquement ; les sorts de Maîtrise égale nécessitent un jet opposé d'Air. L'objet reste physiquement tangible, audible et odorant."
   },
   {
+    id: "air-1-dance-leaves",
+    name: "Danse des Feuilles (Dance of the Leaves)",
+    element: "Air",
+    mastery: 1,
+    keywords: ["Voyage"],
+    source: "The Book of Air",
+    range: "Contact",
+    area: "Un individu ciblé",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes)",
+    desc: "Les kami de l'Air allègent la foulée du sujet au point qu'il effleure le sol sans y exercer de pression. La cible ne laisse aucune trace de pas (même dans la boue, le sable ou la neige fraîche), ne plie pas les brins d'herbe et ses déplacements ne génèrent aucun bruit, lui conférant un bonus de +2g2 à tous ses jets de Discrétion."
+  },
+  {
+    id: "air-1-feathers-breath",
+    name: "Souffle de Plume (Feather's Breath)",
+    element: "Air",
+    mastery: 1,
+    keywords: ["Défense"],
+    source: "The Book of Air",
+    range: "Personnelle ou Contact",
+    area: "Un individu ciblé",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes), Portée (passe à 6 m avec 2 Augmentations)",
+    desc: "Des courants d'air ascendants épousent le corps du sujet pour amortir toute chute. Quelle que soit la hauteur depuis laquelle la cible tombe ou est précipitée, elle descend doucement comme une plume et touche le sol sans subir le moindre dégât."
+  },
+  {
     id: "air-1-legacy-kaze",
     name: "L'Héritage de Kaze-no-Kami (Legacy of Kaze-no-Kami)",
     element: "Air",
     mastery: 1,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 168",
     range: "Rang d'École × 15 km (10 miles)",
     area: "Un individu connu à portée",
     duration: "Spéciale",
@@ -61,6 +92,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 168",
     range: "3 mètres (10')",
     area: "Une créature",
     duration: "Spéciale",
@@ -73,6 +105,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: ["Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 168",
     range: "Personnelle",
     area: "Cône de 22,5 m (75') de long sur 4,5 m (15') de large à son extrémité",
     duration: "Instantanée",
@@ -85,6 +118,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: ["Artisanat", "Illusion"],
+    source: "Livre des Règles L5R 4e, p. 168",
     range: "3 mètres (10')",
     area: "Un petit objet illusoire (0,03 m³ ou moins)",
     duration: "1 Heure",
@@ -97,6 +131,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 168",
     range: "Personnelle / Contact",
     area: "Un individu touché (peut être le lanceur)",
     duration: "5 Minutes",
@@ -109,6 +144,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 169",
     range: "6 mètres (20')",
     area: "Un double illusoire du lanceur",
     duration: "Concentration + 5 minutes",
@@ -121,6 +157,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 1,
     keywords: ["Artisanat", "Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 169",
     range: "Personnelle ou 6 mètres (20')",
     area: "Une arme créée",
     duration: "5 Minutes",
@@ -129,7 +166,7 @@ const SORTS_AIR = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 2 (8 sorts officiels)
+  // NIVEAU DE MAÎTRISE 2 (10 sorts)
   // =========================================================================
   {
     id: "air-2-bentens-touch",
@@ -137,6 +174,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 169",
     range: "Personnelle / Contact",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "1 Heure",
@@ -149,6 +187,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 2,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 169",
     range: "Personnelle ou 6 mètres (20')",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "1 Minute",
@@ -156,11 +195,25 @@ const SORTS_AIR = [
     desc: "Confère une forme restreinte de vol. La cible peut effectuer des Actions de Mouvement Gratuites, mais pas d'Actions de Mouvement Simples, et ne peut jamais se déplacer de plus de 3 mètres (10') par round. À l'expiration du sort, la cible flotte doucement jusqu'au sol sans subir de blessure, quelle que soit la hauteur."
   },
   {
+    id: "air-2-eyes-falcon",
+    name: "Les Yeux du Faucon (Eyes of the Falcon)",
+    element: "Air",
+    mastery: 2,
+    keywords: ["Divination"],
+    source: "The Book of Air",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes)",
+    desc: "Les kami de l'Air affinent la vue du shugenja pour lui donner l'acuité visuelle perçante d'un faucon en vol. Vous discernez parfaitement les détails minuscules jusqu'à plusieurs kilomètres de distance, et vous ignorez totalement les pénalités liées à l'obscurité partielle, aux brumes légères ou à la longue portée."
+  },
+  {
     id: "air-2-hidden-visage",
     name: "Visage Dissimulé (Hidden Visage)",
     element: "Air",
     mastery: 2,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 169",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "5 Minutes",
@@ -173,6 +226,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 2,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 169",
     range: "15 mètres (50')",
     area: "Rayon de 3 mètres (10')",
     duration: "1 Round",
@@ -185,6 +239,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 2,
     keywords: ["Artisanat", "Illusion"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "6 mètres (20')",
     area: "Rayon de 3 mètres (10')",
     duration: "1 Minute",
@@ -197,6 +252,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "15 km (10 miles)",
     area: "Rayon de 6 mètres (20')",
     duration: "Concentration",
@@ -209,6 +265,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 2,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "6 mètres (20')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -216,11 +273,25 @@ const SORTS_AIR = [
     desc: "En comparant la parole et la pensée de la cible, les kami révèlent si la dernière phrase prononcée était sincère ou mensongère. Les esprits ne discernent pas l'opinion : si la cible croit fermement que ce qu'elle avance est vrai, les kami l'estimeront vrai."
   },
   {
+    id: "air-2-whispers-past",
+    name: "Chuchotements du Passé (Whispers of the Past)",
+    element: "Air",
+    mastery: 2,
+    keywords: ["Divination"],
+    source: "The Book of Air",
+    range: "Contact",
+    area: "Une pièce ou un espace clos (jusqu'à 9 m × 9 m)",
+    duration: "Concentration",
+    raises: "Zone (+3 m de côté), Durée (remonter 48 heures en arrière avec 2 Augmentations)",
+    desc: "En communion avec les courants d'air captifs d'un lieu clos, le shugenja écoute les échos sonores des paroles prononcées dans cette pièce au cours des dernières 24 heures. Vous pouvez faire défiler le temps pour vous concentrer sur une conversation précise."
+  },
+  {
     id: "air-2-wolfs-proposal",
     name: "La Proposition du Loup (Wolf's Proposal)",
     element: "Air",
     mastery: 2,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "10 Minutes",
@@ -229,7 +300,7 @@ const SORTS_AIR = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 3 (7 sorts officiels)
+  // NIVEAU DE MAÎTRISE 3 (9 sorts)
   // =========================================================================
   {
     id: "air-3-essence-air",
@@ -237,6 +308,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 3,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "5 Rounds",
@@ -249,6 +321,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 3,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "Personnelle ou Contact",
     area: "Le lanceur ou un individu ciblé",
     duration: "Concentration",
@@ -261,6 +334,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 3,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Heure",
@@ -273,6 +347,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 3,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "3 Rounds",
@@ -285,6 +360,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 170",
     range: "30 mètres (100')",
     area: "Rayon de 15 mètres (50')",
     duration: "1 Minute",
@@ -297,6 +373,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 3,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 171",
     range: "15 mètres (50')",
     area: "Un individu ciblé (rayon de 9 m / 30' autour de lui)",
     duration: "Concentration",
@@ -304,11 +381,38 @@ const SORTS_AIR = [
     desc: "Des vents circulaires violents entourent la cible sur 9 m de rayon dans toutes les directions. Toute créature dans la zone gagne +15 à son ND d'Armure contre les attaques à distance, mais subit également un malus de -3g3 à ses propres jets d'attaque à distance."
   },
   {
+    id: "air-3-veil-asahina",
+    name: "Le Voile d'Asahina (Veil of the Asahina)",
+    element: "Air",
+    mastery: 3,
+    keywords: ["Illusion", "Défense"],
+    source: "The Great Clans",
+    range: "Personnelle",
+    area: "Rayon de 4,5 mètres (15') autour du lanceur",
+    duration: "5 Rounds",
+    raises: "Zone (+1,5 m de rayon), Durée (+1 round)",
+    desc: "Tisse un champ de réfraction visuelle autour du shugenja et de ses alliés. Toute créature alliée demeurant dans la zone bénéficie d'une distorsion de camouflage optique conférant un bonus de +15 à son ND d'Armure contre toutes les attaques à distance et un bonus de +2g2 à tous ses tests de Discrétion."
+  },
+  {
+    id: "air-3-ward-air",
+    name: "Garde d'Air (Ward of Air)",
+    element: "Air",
+    mastery: 3,
+    keywords: ["Sceau", "Défense"],
+    source: "The Book of Air",
+    range: "15 mètres (50')",
+    area: "Rayon de 6 mètres (20')",
+    duration: "5 Rounds",
+    raises: "Durée (+1 round), Zone (+1,5 m de rayon)",
+    desc: "Perturbe les esprits du vent adverses dans la zone : augmente de +10 le ND de lancement de tous les sorts d'Air et d'Illusion incantés par des créatures hostiles situées dans la zone ou ciblant des individus protégés à l'intérieur."
+  },
+  {
     id: "air-3-hearts-enemy",
     name: "L'Ennemi de ton Cœur (Your Heart's Enemy)",
     element: "Air",
     mastery: 3,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 171",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "5 Rounds",
@@ -317,7 +421,7 @@ const SORTS_AIR = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 4 (6 sorts officiels)
+  // NIVEAU DE MAÎTRISE 4 (8 sorts)
   // =========================================================================
   {
     id: "air-4-call-spirit",
@@ -325,6 +429,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 171",
     range: "Spéciale",
     area: "Un esprit ciblé",
     duration: "5 Minutes",
@@ -332,11 +437,25 @@ const SORTS_AIR = [
     desc: "Forme puissante d'Invoquer permettant d'appeler un esprit spécifique depuis n'importe quel Royaume des Esprits afin de converser (les habitants qui ne sont pas des esprits, comme les Fortunes, sont immunisés). L'esprit ne peut pas vous attaquer à moins que vous n'attaquiez le premier, mais il n'est pas forcément amical. Disparaît dès l'expiration du sort."
   },
   {
+    id: "air-4-deafening-whispers",
+    name: "Murmures Assourdissants (Deafening Whispers)",
+    element: "Air",
+    mastery: 4,
+    keywords: ["Bataille", "Tonnerre"],
+    source: "The Book of Air",
+    range: "15 mètres (50')",
+    area: "Une créature ciblée",
+    duration: "3 Rounds",
+    raises: "Portée (+3 m / +10'), Durée (+1 round)",
+    desc: "Sature brutalement l'esprit et les canaux auditifs de la victime d'un maelström de milliers de voix hurlant à l'unisson. La cible subit l'état Sourd (Deafened), un malus de -2g2 sur tous ses jets d'action et d'incantation, et encaisse 2g2 Blessures au début de chacun de ses tours sous la violence de la pression acoustique."
+  },
+  {
     id: "air-4-false-realm",
     name: "Royaume Illusoire (False Realm)",
     element: "Air",
     mastery: 4,
     keywords: ["Bataille", "Illusion"],
+    source: "Livre des Règles L5R 4e, p. 171",
     range: "75 mètres (250')",
     area: "Rayon de 30 mètres (100')",
     duration: "1 Heure",
@@ -344,11 +463,25 @@ const SORTS_AIR = [
     desc: "Modifie entièrement l'apparence visuelle, sonore et olfactive du terrain (transforme un marais fétide en somptueux jardin, ou inversement). L'illusion est impalpable et n'a aucune consistance physique."
   },
   {
+    id: "air-4-flight-falcon",
+    name: "L'Envol du Faucon (Flight of the Falcon)",
+    element: "Air",
+    mastery: 4,
+    keywords: ["Voyage"],
+    source: "The Book of Air",
+    range: "Personnelle ou Contact",
+    area: "Un individu ciblé",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes), Portée (passe à 6 m avec 2 Augmentations)",
+    desc: "Les kami de l'Air soulèvent le sujet et lui accordent la pleine capacité de voler avec la vitesse et l'agilité d'un rapace. La cible se déplace dans les airs à une vitesse de (Anneau d'Air × 6 mètres / 20') par Action de Mouvement Simple et peut manœuvrer librement en trois dimensions."
+  },
+  {
     id: "air-4-gift-wind",
     name: "Le Don du Vent (Gift of Wind)",
     element: "Air",
     mastery: 4,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 171",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "5 Minutes",
@@ -361,6 +494,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "3 mètres (10')",
     area: "Un individu ciblé",
     duration: "3 Rounds",
@@ -373,6 +507,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 4,
     keywords: ["Artisanat", "Illusion"],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "Contact",
     area: "Un objet tenu en main",
     duration: "1 Heure",
@@ -385,6 +520,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 4,
     keywords: ["Sceau"],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "Contact",
     area: "Spéciale (un passage, porte ou fenêtre)",
     duration: "Permanente",
@@ -393,7 +529,7 @@ const SORTS_AIR = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 5 (5 sorts officiels)
+  // NIVEAU DE MAÎTRISE 5 (6 sorts)
   // =========================================================================
   {
     id: "air-5-cloud-mind",
@@ -401,6 +537,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Permanente",
@@ -413,6 +550,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "30 mètres (100')",
     area: "Rayon de 9 mètres (30')",
     duration: "Instantanée",
@@ -425,6 +563,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "Personnelle",
     area: "Un individu ciblé",
     duration: "Concentration",
@@ -437,6 +576,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 5,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 172",
     range: "Personnelle",
     area: "Rayon de 3 mètres (10') autour du lanceur",
     duration: "5 Minutes",
@@ -449,27 +589,42 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 5,
     keywords: ["Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 173",
     range: "9 mètres (30')",
     area: "Couloir d'air de 3 m (10') de large",
     duration: "Instantanée",
     raises: "Zone (+1 m de largeur), Dégâts (+1g0 pour 3 Augmentations)",
     desc: "Un vent tranchant déchire un couloir de 3 m de large devant vous, infligeant des dégâts de VD (Air + 2)g(Air) (ex: 6g4 avec Air 4). Le papier et les tissus légers sont détruits. Quiconque subit des dégâts doit réussir un jet de l'Anneau de Terre (ND 20) ou être Renversé (Knocked Down)."
   },
+  {
+    id: "air-5-veil-shosuro",
+    name: "Le Voile de Shosuro (Veil of Shosuro)",
+    element: "Air",
+    mastery: 5,
+    keywords: ["Illusion"],
+    source: "The Great Clans",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "1 Heure",
+    raises: "Durée (+30 minutes)",
+    desc: "Le chef-d'œuvre des tisseurs d'illusion du Clan du Scorpion. Vous devenez absolument indétectable aux sens profanes (invisible, inodore, silencieux et intangible aux bruits de pas) et totalement imperméable aux sorts de détection magique de Niveau 4 ou moins. Si vous portez une attaque, le voile ne se dissipe pas : un observateur doit réussir un jet de Perception/Enquête opposé à votre Air pour vous localiser."
+  },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 6 (3 sorts officiels)
+  // NIVEAU DE MAÎTRISE 6 (4 sorts)
   // =========================================================================
   {
-    id: "air-6-rise-air",
-    name: "Éveil de l'Air (Rise, Air)",
+    id: "air-6-celestial-symphony",
+    name: "La Symphonie Céleste (Celestial Symphony)",
     element: "Air",
     mastery: 6,
-    keywords: [],
-    range: "9 mètres (30')",
-    area: "Un esprit invoqué",
-    duration: "Concentration",
-    raises: "Aucune",
-    desc: "Invoque un colosse d'Air de 3 m de haut pour vous défendre. Il se déplace de (Air × 3 m) par round et génère des bourrasques sur 6 m autour de lui empêchant toute Action de Mouvement Simple. Traits Physiques = votre Anneau d'Air, compétence Jiujutsu = moitié de votre Air, VD = Air g Air. Ses Blessures sont calculées avec une Terre égale à votre Air (sans pénalités de blessures) et il est Invulnérable. Disparaît à 0 Blessure."
+    keywords: ["Bataille", "Tonnerre"],
+    source: "The Book of Air",
+    range: "150 mètres (500')",
+    area: "Rayon de 30 mètres (100')",
+    duration: "Instantanée",
+    raises: "Dégâts (+1g1 par tranche de 2 Augmentations)",
+    desc: "Libère une tornade acoustique d'une violence inouïe où les vents célestes hurlent avec une intensité destructrice. Toutes les créatures ennemies dans la zone subissent 8g4 Blessures ignorant l'armure non magique, et doivent réussir un jet de Terre contre un ND égal à votre jet d'incantation sous peine d'être Définitivement Sourdes et Assommées (Stunned) pendant 3 rounds."
   },
   {
     id: "air-6-false-legion",
@@ -477,6 +632,7 @@ const SORTS_AIR = [
     element: "Air",
     mastery: 6,
     keywords: ["Bataille", "Illusion"],
+    source: "Livre des Règles L5R 4e, p. 173",
     range: "Personnelle",
     area: "À moins de 30 m (100') du lanceur",
     duration: "Concentration",
@@ -484,11 +640,25 @@ const SORTS_AIR = [
     desc: "Crée jusqu'à (Anneau d'Air × 10) silhouettes illusoires mobiles dans la zone. Elles possèdent des composantes visuelles, sonores et olfactives, et obéissent à vos ordres, mais ne peuvent interagir physiquement avec rien."
   },
   {
+    id: "air-6-rise-air",
+    name: "Éveil de l'Air (Rise, Air)",
+    element: "Air",
+    mastery: 6,
+    keywords: [],
+    source: "Livre des Règles L5R 4e, p. 173",
+    range: "9 mètres (30')",
+    area: "Un esprit invoqué",
+    duration: "Concentration",
+    raises: "Aucune",
+    desc: "Invoque un colosse d'Air de 3 m de haut pour vous défendre. Il se déplace de (Air × 3 m) par round et génère des bourrasques sur 6 m autour de lui empêchant toute Action de Mouvement Simple. Traits Physiques = votre Anneau d'Air, compétence Jiujutsu = moitié de votre Air, VD = Air g Air. Ses Blessures sont calculées avec une Terre égale à votre Air (sans pénalités de blessures) et il est Invulnérable. Disparaît à 0 Blessure."
+  },
+  {
     id: "air-6-wrath-kaze",
     name: "La Colère de Kaze-no-Kami (Wrath of Kaze-no-Kami / Hurricane)",
     element: "Air",
     mastery: 6,
     keywords: ["Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 173",
     range: "Personnelle",
     area: "Rayon de 1,5 km (1 mile) centré sur le lanceur",
     duration: "Concentration (max 1 heure)",
