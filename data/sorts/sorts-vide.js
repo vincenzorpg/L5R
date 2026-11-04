@@ -1,11 +1,20 @@
+/**
+ * data/sorts-vide-data.js — L5R 4e Édition
+ * Recueil officiel des sorts de Vide (Ishiken-dō).
+ * Sources : Livre de Base L5R 4e (Livre du Feu, p. 193-197) & Le Livre du Vide (The Book of the Void).
+ */
+
 const SORTS_VIDE = [
-  // --- NIVEAU DE MAÎTRISE 1 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 1
+  // =========================================================================
   {
     id: "void-1-boundless-sight",
     name: "Vue Sans Frontières (Boundless Sight)",
     element: "Vide",
     mastery: 1,
-    keywords: [],
+    keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "80 kilomètres (50 miles)",
     area: "Le lanceur",
     duration: "4 Rounds",
@@ -18,6 +27,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "Instantanée",
@@ -30,6 +40,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "Contact",
     area: "Jusqu'à 0,03 m³ (1 pied cube) de matière élémentaire pure",
     duration: "Permanente",
@@ -41,7 +52,8 @@ const SORTS_VIDE = [
     name: "Percer les Mensonges (See Through Lies)",
     element: "Vide",
     mastery: 1,
-    keywords: [],
+    keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -53,11 +65,12 @@ const SORTS_VIDE = [
     name: "Sentir le Vide (Sense Void)",
     element: "Vide",
     mastery: 1,
-    keywords: [],
+    keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "Personnelle",
     area: "Rayon de 7,5 mètres (25') autour du lanceur",
     duration: "Concentration",
-    raises: "Aucune",
+    raises: "Portée (+1,5 m / +5' au rayon)",
     desc: "Tant que vous maintenez votre concentration, vous percevez le flux du Vide autour de vous. Vous apprenez instantanément le nombre exact de points de Vide actuellement en possession de chaque individu situé dans la zone d'effet."
   },
   {
@@ -66,6 +79,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "9 mètres (30')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -78,20 +92,37 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "1 Minute",
     raises: "Durée (+1 minute)",
     desc: "Réagence brièvement le motif spirituel de la cible. Vous suspendez et neutralisez un Désavantage Mental ou Spirituel possédé par le sujet, d'une valeur maximale de 5 points. Ce sort ne peut en aucun cas supprimer la Souillure des Terres d'Ombre, mais il peut en suspendre temporairement les troubles mentaux dérivés."
   },
+  {
+    id: "void-1-witness-untold",
+    name: "Témoin de l'Inexprimé (Witness the Untold)",
+    element: "Vide",
+    mastery: 1,
+    keywords: ["Divination"],
+    source: "Le Livre du Vide (The Book of the Void)",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "1 Round",
+    raises: "Durée (+1 round)",
+    desc: "Les courants de causalité murmurent à l'Ishiken les actions avant qu'elles ne s'accomplissent. Vous pouvez conserver votre action pour agir en interruption immédiate dès qu'un adversaire déclare ou commence son action, gagnant la préséance sur celle-ci."
+  },
 
-  // --- NIVEAU DE MAÎTRISE 2 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 2
+  // =========================================================================
   {
     id: "void-2-altering-course",
     name: "Modifier le Cours (Altering the Course)",
     element: "Vide",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Minute",
@@ -103,7 +134,8 @@ const SORTS_VIDE = [
     name: "Boire à ton Essence (Drink of Your Essence)",
     element: "Vide",
     mastery: 2,
-    keywords: [],
+    keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "9 mètres (30')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -116,6 +148,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "5 Minutes",
@@ -127,7 +160,8 @@ const SORTS_VIDE = [
     name: "Faux Murmures (False Whispers)",
     element: "Vide",
     mastery: 2,
-    keywords: [],
+    keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 194",
     range: "9 mètres (30')",
     area: "Un individu ciblé",
     duration: "1 Minute",
@@ -140,6 +174,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 195",
     range: "15 mètres (50')",
     area: "Un objet pesant jusqu'à 2,5 kg (5 livres)",
     duration: "Instantanée",
@@ -152,6 +187,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 195",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "5 Rounds",
@@ -159,13 +195,16 @@ const SORTS_VIDE = [
     desc: "Isole la cible du courant universel. Pour pouvoir dépenser le moindre point de Vide pendant la durée du sort, la victime doit remporter un jet opposé de Vide contre vous. Ce jet ne consomme pas d'action pour la cible, et elle n'a besoin de réussir qu'un seul jet opposé par tour, même si elle dispose de techniques lui permettant de dépenser plusieurs points de Vide."
   },
 
-  // --- NIVEAU DE MAÎTRISE 3 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 3
+  // =========================================================================
   {
     id: "void-3-echoes-void",
     name: "Échos dans le Vide (Echoes in the Void)",
     element: "Vide",
     mastery: 3,
-    keywords: [],
+    keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 195",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "Concentration",
@@ -178,6 +217,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 195",
     range: "6 mètres (20')",
     area: "Un individu consentant",
     duration: "10 Minutes",
@@ -190,6 +230,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 195",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "2 Rounds",
@@ -202,6 +243,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 3,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 195",
     range: "Personnelle",
     area: "Un objet ciblé",
     duration: "Instantanée (Spéciale)",
@@ -214,6 +256,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 196",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -221,13 +264,16 @@ const SORTS_VIDE = [
     desc: "Effectue un jet opposé de Vide contre la cible. En cas de succès, la cible perd 1 point de Vide et vous en gagnez 1. Vous transférez 1 point de Vide supplémentaire par tranche complète de 5 points par laquelle votre jet dépasse celui de la victime. Ces points temporaires peuvent dépasser votre total maximal mais disparaissent au bout d'une heure s'ils ne sont pas dépensés. Sans effet sur les créatures dépourvues de points de Vide."
   },
 
-  // --- NIVEAU DE MAÎTRISE 4 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 4
+  // =========================================================================
   {
     id: "void-4-balance-elements",
     name: "Équilibre des Éléments (Balance of Elements)",
     element: "Vide",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 196",
     range: "Contact",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "5 Rounds en combat / 5 Minutes hors combat",
@@ -240,6 +286,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 196",
     range: "15 mètres (50')",
     area: "Un esprit ciblé",
     duration: "Instantanée",
@@ -252,6 +299,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 196",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -264,6 +312,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 196",
     range: "15 mètres (50')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -271,13 +320,16 @@ const SORTS_VIDE = [
     desc: "L'enveloppe mortelle ne peut supporter qu'un contact direct limité avec le Vide pur. Ce sort foudroie la chair de la cible en lui infligeant des dégâts dont la VD est égale à votre Anneau de Vide (ex. : 4g4 avec Vide 4)."
   },
 
-  // --- NIVEAU DE MAÎTRISE 5 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 5
+  // =========================================================================
   {
     id: "void-5-divide-soul",
     name: "Diviser l'Âme (Divide the Soul)",
     element: "Vide",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 196",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Minute",
@@ -290,6 +342,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 197",
     range: "Contact",
     area: "Un objet ciblé",
     duration: "Permanente",
@@ -302,6 +355,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 5,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 197",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "1 Heure",
@@ -309,13 +363,16 @@ const SORTS_VIDE = [
     desc: "Bouleverse la structure fondamentale des cinq éléments de la cible : ses quatre Anneaux élémentaires sont réassignés aléatoirement entre eux pour toute la durée du sort (par exemple, son Air devient son Feu, et son Eau devient sa Terre). Les Traits physiques et mentaux qui étaient supérieurs à la valeur de base de l'Anneau sont échangés en miroir pour correspondre aux nouveaux Anneaux réattribués."
   },
 
-  // --- NIVEAU DE MAÎTRISE 6 ---
+  // =========================================================================
+  // NIVEAU DE MAÎTRISE 6
+  // =========================================================================
   {
     id: "void-6-ring-void",
     name: "L'Anneau du Vide (Ring of the Void)",
     element: "Vide",
     mastery: 6,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 197",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "Concentration (Rituel d'une heure d'incantation)",
@@ -323,11 +380,25 @@ const SORTS_VIDE = [
     desc: "Ce rituel transcendant ne s'apprend sur aucun parchemin mais s'éveille par illumination chez les maîtres de l'Ishiken-dō. Il permet d'entrer en communion directe avec le Dragon Céleste du Vide. Vous pouvez lui poser les questions de votre choix. Le Dragon du Vide sait tout ce qui peut être su, mais n'a aucune obligation de répondre directement. Un respect sacré absolu est exigé : ceux qui ont offensé le Dragon lors de cette transe ont tout bonnement cessé d'exister. Ne permet pas de ramener un mort à la vie."
   },
   {
+    id: "void-6-rise-from-ashes",
+    name: "Renaître de ses Cendres (Rise from the Ashes)",
+    element: "Vide",
+    mastery: 6,
+    keywords: [],
+    source: "Le Livre du Vide (The Book of the Void)",
+    range: "Contact",
+    area: "Une créature vivante ciblée",
+    duration: "Instantanée",
+    raises: "Aucune",
+    desc: "Le summum de la réharmonisation temporelle et spirituelle issue du Livre du Vide. En puisant au plus profond du Vide cosmique, l'Ishiken réinitialise l'état physique, mental et spirituel de la cible à ce qu'il était exactement 8 heures auparavant. Toutes les Blessures, poisons, maladies, états préjudiciables et points de Souillure accumulés durant ces 8 dernières heures sont instantanément effacés. L'incantation de ce sort draine immédiatement la totalité des points de Vide du lanceur, qui tombe inconscient pour une durée de 24 heures."
+  },
+  {
     id: "void-6-unmake-world",
     name: "Défaire le Monde (Unmake the World)",
     element: "Vide",
     mastery: 6,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 197",
     range: "15 mètres (50')",
     area: "Une créature, individu ou objet ciblé",
     duration: "Instantanée",
