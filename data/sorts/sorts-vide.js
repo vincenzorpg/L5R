@@ -1,7 +1,7 @@
 /**
  * data/sorts-vide-data.js — L5R 4e Édition
- * Recueil officiel des sorts de Vide (Ishiken-dō).
- * Sources : Livre de Base L5R 4e (Livre du Feu, p. 193-197) & Le Livre du Vide (The Book of the Void).
+ * Recueil exhaustif officiel des sorts de Vide (Ishiken-dō).
+ * Sources : Livre des Règles L5R 4e (p. 193-197), The Book of the Void & The Great Clans.
  */
 
 const SORTS_VIDE = [
@@ -105,7 +105,7 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 1,
     keywords: ["Divination"],
-    source: "Le Livre du Vide (The Book of the Void)",
+    source: "The Book of the Void",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Round",
@@ -194,6 +194,19 @@ const SORTS_VIDE = [
     raises: "Durée (+1 round), Portée (+1,5 m / +5')",
     desc: "Isole la cible du courant universel. Pour pouvoir dépenser le moindre point de Vide pendant la durée du sort, la victime doit remporter un jet opposé de Vide contre vous. Ce jet ne consomme pas d'action pour la cible, et elle n'a besoin de réussir qu'un seul jet opposé par tour, même si elle dispose de techniques lui permettant de dépenser plusieurs points de Vide."
   },
+  {
+    id: "void-2-unmake-mind",
+    name: "Défaire l'Esprit (Unmake the Mind)",
+    element: "Vide",
+    mastery: 2,
+    keywords: [],
+    source: "The Book of the Void",
+    range: "9 mètres (30')",
+    area: "Un individu ciblé",
+    duration: "3 Rounds",
+    raises: "Durée (+1 round), Portée (+1,5 m / +5')",
+    desc: "Déconstruit temporairement la clarté cognitive de la cible en retirant un pan de son être du flux universel. La cible perd immédiatement l'accès à son Trait Mental le plus élevé : celui-ci est réduit à 1 pour toute la durée du sort. Elle peut tenter un jet opposé de Volonté contre votre Vide au début de chacun de ses tours pour mettre fin prématurément à cet effet."
+  },
 
   // =========================================================================
   // NIVEAU DE MAÎTRISE 3
@@ -249,6 +262,32 @@ const SORTS_VIDE = [
     duration: "Instantanée (Spéciale)",
     raises: "Aucune",
     desc: "En entrant en communion avec l'empreinte laissée par un objet dans le Vide, vous apprenez son histoire complète : son créateur d'origine, les événements majeurs auxquels il a été associé, ses propriétaires successifs et la présence éventuelle de pouvoirs éveillés ou de malédictions (nemuranai)."
+  },
+  {
+    id: "void-3-severing-flow",
+    name: "Trancher le Flux (Severing the Flow)",
+    element: "Vide",
+    mastery: 3,
+    keywords: ["Bataille"],
+    source: "The Book of the Void",
+    range: "15 mètres (50')",
+    area: "Un individu ciblé",
+    duration: "3 Rounds",
+    raises: "Portée (+3 m / +10'), Durée (+1 round)",
+    desc: "Coupe brutalement les liaisons entre l'esprit d'un shugenja et les kami élémentaires. Pendant toute la durée du sort, la cible ne peut plus dépenser d'emplacements de sorts ni canaliser de prières élémentaires, à moins de remporter un jet opposé de Vide contre le shugenja au début de son tour."
+  },
+  {
+    id: "void-3-touch-of-void",
+    name: "Le Toucher du Vide (Touch of the Void)",
+    element: "Vide",
+    mastery: 3,
+    keywords: [],
+    source: "The Great Clans",
+    range: "Contact",
+    area: "Une créature ciblée",
+    duration: "Instantanée",
+    raises: "Spéciale (+1g0 dégâts par Augmentation)",
+    desc: "Applique la vacuité absolue à la chair d'un adversaire par contact direct. La cible subit des dégâts ignorant totalement la Réduction avec une VD égale à (votre Anneau de Vide)g(votre Anneau de Vide). De plus, la victime perd immédiatement 1 point de Vide si elle en possède."
   },
   {
     id: "void-3-void-release",
@@ -307,6 +346,32 @@ const SORTS_VIDE = [
     desc: "Purifie et revigore la réserve spirituelle interne d'un allié. La cible regagne immédiatement la totalité de ses points de Vide dépensés, jusqu'à concurrence de son maximum normal."
   },
   {
+    id: "void-4-rend-soul",
+    name: "Déchirer l'Âme (Rend the Soul)",
+    element: "Vide",
+    mastery: 4,
+    keywords: ["Bataille"],
+    source: "The Great Clans",
+    range: "9 mètres (30')",
+    area: "Une créature vivante ciblée",
+    duration: "Instantanée",
+    raises: "Portée (+3 m / +10'), Dégâts (+1g1 par 2 Augmentations)",
+    desc: "Déchire directement le lien karmique qui retient l'âme au corps mortel. Vous effectuez un jet opposé de votre Anneau de Vide contre la Terre de la cible. Si vous l'emportez, la cible subit 5g3 Blessures ignorant l'armure et la Réduction, et perd l'usage de son Anneau de Vide pendant un nombre de rounds égal à votre Rang d'École."
+  },
+  {
+    id: "void-4-tether-void",
+    name: "Le Lien du Vide (Tether to the Void)",
+    element: "Vide",
+    mastery: 4,
+    keywords: ["Voyage"],
+    source: "The Book of the Void",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "24 Heures",
+    raises: "Durée (+12 heures)",
+    desc: "Ancre l'essence du lanceur à un point précis dans le monde mortel. À n'importe quel moment durant la durée du sort, par une simple Action Simple, le shugenja peut se dissoudre dans le néant et réapparaître instantanément à l'endroit exact où le sort a été scellé, quelle que soit la distance qui l'en sépare."
+  },
+  {
     id: "void-4-void-strike",
     name: "Frappe du Vide (Void Strike)",
     element: "Vide",
@@ -318,6 +383,19 @@ const SORTS_VIDE = [
     duration: "Instantanée",
     raises: "Portée (+1,5 m / +5'), Dégâts (+1g0 par tranche de 2 Augmentations)",
     desc: "L'enveloppe mortelle ne peut supporter qu'un contact direct limité avec le Vide pur. Ce sort foudroie la chair de la cible en lui infligeant des dégâts dont la VD est égale à votre Anneau de Vide (ex. : 4g4 avec Vide 4)."
+  },
+  {
+    id: "void-4-ward-of-void",
+    name: "Garde du Vide (Ward of the Void)",
+    element: "Vide",
+    mastery: 4,
+    keywords: ["Défense", "Sceau"],
+    source: "The Book of the Void",
+    range: "Personnelle",
+    area: "Rayon de 4,5 mètres (15') autour du lanceur",
+    duration: "5 Rounds",
+    raises: "Zone (+1,5 m de rayon), Durée (+1 round)",
+    desc: "Établit un champ d'annulation cosmique. Tout sort lancé à l'intérieur de la zone ou traversant son périmètre (quel que soit son élément d'origine) voit son ND d'incantation augmenter de +(votre Anneau de Vide × 5)."
   },
 
   // =========================================================================
@@ -337,6 +415,19 @@ const SORTS_VIDE = [
     desc: "L'Ishiken sépare son âme à travers le Vide pour exister en deux endroits distincts simultanément dans le monde mortel. Votre double apparaît à n'importe quel endroit situé dans votre champ de vision lors du lancement. Vous avez pleine conscience des deux corps et pouvez agir simultanément avec chacun comme deux individus distincts (un seul jet d'incantation de sort est toutefois permis par round au total). Les Blessures subies par les deux corps s'additionnent à la fin du sort ; si l'un des deux corps périt, vous mourez sur le coup."
   },
   {
+    id: "void-5-purge-soul",
+    name: "Purge de l'Âme (Purge the Soul)",
+    element: "Vide",
+    mastery: 5,
+    keywords: ["Jade"],
+    source: "The Great Clans",
+    range: "Contact",
+    area: "Une cible vivante",
+    duration: "Instantanée",
+    raises: "Aucune",
+    desc: "En exposant directement la trame karmique de la cible à l'énergie primordiale du Vide, vous brûlez les impuretés spirituelles. Efface définitivement 1 Rang complet de Souillure des Terres d'Ombre (ou un nombre de points de Souillure équivalent). Ce processus est extrêmement violent : la cible subit immédiatement 6g6 Blessures qui ignorent toute Réduction."
+  },
+  {
     id: "void-5-reforge",
     name: "Reforger (Reforge)",
     element: "Vide",
@@ -348,6 +439,19 @@ const SORTS_VIDE = [
     duration: "Permanente",
     raises: "Aucune",
     desc: "Prend un objet matériel unique et le métamorphose en un autre objet de taille comparable. Ne fonctionne que sur un objet de composition homogène (et non constitué de multiples pièces complexes assemblées). Sans effet sur la matière vivante. Cet effet permanent peut être inversé par une seconde incantation de Reforger sur le même objet, même par un autre Ishiken."
+  },
+  {
+    id: "void-5-touch-void-dragon",
+    name: "Le Toucher du Dragon du Vide (Touch of the Void Dragon)",
+    element: "Vide",
+    mastery: 5,
+    keywords: ["Défense"],
+    source: "The Book of the Void",
+    range: "Contact",
+    area: "Un individu ciblé (peut être le lanceur)",
+    duration: "3 Rounds",
+    raises: "Durée (+1 round)",
+    desc: "Fait passer partiellement le sujet dans l'intangibilité du Vide. Le bénéficiaire devient totalement immunisé aux armes profanes, aux chutes et aux dégâts environnementaux. Seules les armes éveillées (nemuranai) et les attaques magiques directes peuvent lui porter préjudice pour la durée du sort."
   },
   {
     id: "void-5-unbound-essence",
@@ -362,10 +466,36 @@ const SORTS_VIDE = [
     raises: "Durée (+1 heure), Portée (+1,5 m / +5')",
     desc: "Bouleverse la structure fondamentale des cinq éléments de la cible : ses quatre Anneaux élémentaires sont réassignés aléatoirement entre eux pour toute la durée du sort (par exemple, son Air devient son Feu, et son Eau devient sa Terre). Les Traits physiques et mentaux qui étaient supérieurs à la valeur de base de l'Anneau sont échangés en miroir pour correspondre aux nouveaux Anneaux réattribués."
   },
+  {
+    id: "void-5-void-dragons-breath",
+    name: "Le Souffle du Dragon du Vide (Void Dragon's Breath)",
+    element: "Vide",
+    mastery: 5,
+    keywords: ["Bataille"],
+    source: "The Book of the Void",
+    range: "Personnelle",
+    area: "Cône de 9 mètres (30') de long sur 6 mètres (20') de large",
+    duration: "Instantanée",
+    raises: "Dégâts (+1g1 par 2 Augmentations), Zone (+3 m en longueur)",
+    desc: "Projette une onde de déconstruction pure issue des mâchoires du Dragon céleste. Toutes les créatures prises dans le cône subissent 6g4 Blessures ignorant la Réduction d'armure et doivent réussir un jet d'Agilité ND 25 sous peine d'être Renversées (Prone) et Assommées (Stunned) pendant 1 round."
+  },
 
   // =========================================================================
   // NIVEAU DE MAÎTRISE 6
   // =========================================================================
+  {
+    id: "void-6-alter-destiny",
+    name: "Altérer le Destin (Alter Destiny)",
+    element: "Vide",
+    mastery: 6,
+    keywords: [],
+    source: "The Great Clans",
+    range: "Contact",
+    area: "Une cible vivante",
+    duration: "Instantanée (Rituel)",
+    raises: "Aucune",
+    desc: "Rituel solennel d'une journée qui réécrit la trame cosmique de la cible. Permet d'échanger de manière définitive un Avantage ou un Désavantage majeur possédé par le sujet contre un autre Avantage ou Désavantage de valeur équivalente en points d'expérience, sans perturber son équilibre karmique global."
+  },
   {
     id: "void-6-ring-void",
     name: "L'Anneau du Vide (Ring of the Void)",
@@ -385,12 +515,25 @@ const SORTS_VIDE = [
     element: "Vide",
     mastery: 6,
     keywords: [],
-    source: "Le Livre du Vide (The Book of the Void)",
+    source: "The Book of the Void",
     range: "Contact",
     area: "Une créature vivante ciblée",
     duration: "Instantanée",
     raises: "Aucune",
     desc: "Le summum de la réharmonisation temporelle et spirituelle issue du Livre du Vide. En puisant au plus profond du Vide cosmique, l'Ishiken réinitialise l'état physique, mental et spirituel de la cible à ce qu'il était exactement 8 heures auparavant. Toutes les Blessures, poisons, maladies, états préjudiciables et points de Souillure accumulés durant ces 8 dernières heures sont instantanément effacés. L'incantation de ce sort draine immédiatement la totalité des points de Vide du lanceur, qui tombe inconscient pour une durée de 24 heures."
+  },
+  {
+    id: "void-6-rise-void",
+    name: "Éveil du Vide (Rise, Void)",
+    element: "Vide",
+    mastery: 6,
+    keywords: [],
+    source: "The Book of the Void",
+    range: "9 mètres (30')",
+    area: "Un esprit majeur invoqué",
+    duration: "Concentration",
+    raises: "Aucune",
+    desc: "Le pendant pour le Vide des sorts d'invoquation d'élémentaire colossal (Éveil de la Terre, de l'Air, du Feu ou de l'Eau). Invoque une entité titanesque faite d'énergie de Vide pure. Ses Traits Physiques et Mentaux sont tous égaux à votre Anneau de Vide. Elle attaque en Jiujutsu avec un score égal à votre Anneau de Vide, infligeant des dégâts de Vide g Vide ignorant la Réduction. Elle possède la capacité Invulnérable et encaisse les Blessures comme un être de Terre équivalente à votre Vide. Sa présence draine passivement 1 point de Vide par round à toute créature hostile à 6 mètres d'elle."
   },
   {
     id: "void-6-unmake-world",
