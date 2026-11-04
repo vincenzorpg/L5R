@@ -1,321 +1,249 @@
 /**
  * data/tatouages-data.js — L5R 4e Édition
- * Règles officielles de l'Ordre Tatoué Togashi (Ise Zumi) — Livre de Base, pages 263 à 266.
+ * Ordre Tatoué Togashi (Ise Zumi) — Livre de Base, pages 263 à 266.
+ *
+ * RÈGLES GÉNÉRALES DE L'ÉCOLE :
+ * - Attribution : 2 Tatouages aux Rangs d'École 1, 3 et 5.
+ * - Activation : Action Libre (Free Action), le tatouage devant être exposé à l'air libre.
+ * - Limite : 1 seul tatouage actif à la fois (sauf mention contraire).
+ * - Durée : Nombre de rounds égal au double du Rang d'École (2 × Rang d'École).
  */
 
 (function () {
   const TATOUAGES_DATA = [
     {
-      id: "tatouage-araignee",
-      name: "Araignée (Spider)",
-      kanji: "蜘蛛",
-      element: "Terre",
-      ringReq: 2,
-      activation: "Action Simple",
-      duration: "Nombre de rounds égal au Rang de Terre",
-      desc: "Une mygale aux pattes velues tissant une toile invisible sur vos épaules.",
-      rule: "Vous pouvez escalader n'importe quelle surface verticale ou vous déplacer au plafond à votre vitesse de course normale sans jet d'escalade. De plus, vous gagnez +2g0 à tous vos jets pour résister aux poisons."
+      id: "tatouage-balance",
+      name: "Balance (Balance)",
+      kanji: "天秤",
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 263)",
+      desc: "Le symbole spirituel de l'harmonie et du yin-yang gravé à l'encre sacrée, apaisant le corps et l'esprit.",
+      rule: "Tant que ce tatouage est actif, le ND de tout jet d'incantation de sort (Spell Casting Roll) ciblant le moine est augmenté ou diminué d'une valeur égale à (2 × Rang d'École) + 5. Le joueur détermine s'il s'agit d'une augmentation ou d'une diminution au moment de l'activation."
     },
     {
       id: "tatouage-bambou",
       name: "Bambou (Bamboo)",
       kanji: "竹",
-      element: "Eau",
-      ringReq: 2,
+      type: "Togashi",
       activation: "Action Libre",
-      duration: "Nombre de rounds égal au Rang d'Eau",
-      desc: "Une tige de bambou verte s'étirant le long de la colonne vertébrale, souple et indomptable.",
-      rule: "Votre corps devient élastique et absorbe les chocs : vous ignorez les dégâts de chute jusqu'à 15 mètres. Vous gagnez un bonus de +2g1 sur tous vos jets de Lutte (Grapple) et d'Évasion."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 263)",
+      desc: "Une tige de bambou vert peinte le long d'un membre ou du dos, réputée pour sa souplesse et sa résistance proverbiale.",
+      rule: "Tant que ce tatouage est actif, le ND d'Armure (Armor TN) du moine augmente d'une valeur égale à (2 × Rang d'École) + 5."
     },
     {
-      id: "tatouage-cameleon",
-      name: "Caméléon (Chameleon)",
-      kanji: "カメレオン",
-      element: "Air",
-      ringReq: 2,
-      activation: "Action Simple",
-      duration: "Nombre de minutes égal au Rang d'Air × 5",
-      desc: "Un reptile enroulé sur vos côtes dont les écailles chatoient selon la lumière.",
-      rule: "Votre peau et vos vêtements s'accordent parfaitement à l'environnement. Vous bénéficiez d'un bonus de +3g2 à tous vos jets de Discrétion (Stealth). Si vous restez immobile, le ND pour vous repérer augmente de +15."
+      id: "tatouage-brasier",
+      name: "Brasier (Blaze)",
+      kanji: "火炎",
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 263)",
+      desc: "Des gerbes de flammes ardentes stylisées qui semblent s'animer le long des avant-bras et des mains.",
+      rule: "Les frappes à mains nues du moine sont imprégnées de flammes pures. Toutes ses attaques à mains nues infligent un montant supplémentaire de dégâts de feu égal à (Anneau de Feu + Rang d'École)."
     },
     {
       id: "tatouage-centipede",
       name: "Mille-pattes (Centipede)",
       kanji: "百足",
-      element: "Feu",
-      ringReq: 3,
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au Rang de Feu",
-      desc: "Un scolopendre géant aux mandibules rougeoyantes courant le long d'un bras.",
-      rule: "Vos attaques à mains nues deviennent incandescentes et rapides comme l'éclair. Vous pouvez déclarer l'Augmentation pour Attaque Supplémentaire avec 1 Augmentation de moins que d'ordinaire."
-    },
-    {
-      id: "tatouage-chauve-souris",
-      name: "Chauve-souris (Bat)",
-      kanji: "蝙蝠",
-      element: "Air",
-      ringReq: 2,
-      activation: "Action Simple",
-      duration: "Nombre de rounds égal au Rang d'Air × 2",
-      desc: "Une chauve-souris aux ailes déployées sur le torse, oreilles dressées vers l'écho.",
-      rule: "Vous percevez le monde par écholocalisation. Vous ignorez totalement les pénalités d'obscurité, de brume ou de cécité, et vous bénéficiez de +2g0 sur tous vos jets de Vigilance (Perception)."
-    },
-    {
-      id: "tatouage-chrysantheme",
-      name: "Chrysanthème (Chrysanthemum)",
-      kanji: "菊",
-      element: "Air",
-      ringReq: 3,
-      activation: "Action Simple (Dépense 1 point de Vide)",
-      duration: "Une scène",
-      desc: "L'emblème impérial aux pétales d'or pur gravé sur le sternum.",
-      rule: "Une aura de majesté inviolable émane de votre silhouette. Les adversaires dont le Statut ou l'Honneur est inférieur au vôtre doivent réussir un jet de Volonté ND 20 pour pouvoir vous porter une attaque délibérée."
-    },
-    {
-      id: "tatouage-corbeau",
-      name: "Corbeau (Crow)",
-      kanji: "烏",
-      element: "Vide",
-      ringReq: 2,
-      activation: "Action Simple",
-      duration: "Nombre d'heures égal au Rang de Vide",
-      desc: "Un corbeau au plumage d'encre juché sur l'épaule, observant les secrets d'autrui.",
-      rule: "Vous pouvez comprendre et parler n'importe quelle langue humaine ou dialecte étranger (gaijin). Vous gagnez également +1g1 sur tous vos jets d'Intuition (Awareness) pour sonder les intentions cachées."
+      type: "Togashi",
+      activation: "Action Complexe de Mouvement",
+      duration: "Jusqu'à 1 jour complet (ou arrêt de plus d'1 min)",
+      source: "Livre de Base (p. 263)",
+      desc: "Un scolopendre aux innombrables pattes courant le long du torse ou d'une jambe.",
+      rule: "Le moine peut entreprendre une Action Complexe de Mouvement spéciale lui permettant de courir à une allure surhumaine : il parcourt une distance égale à son Anneau d'Eau × 100 par action de mouvement. L'effet persiste jusqu'à un jour complet. S'il s'arrête de courir pendant plus d'une minute consécutive, l'effet cesse net et le moine subit l'état Épuisé (aucune action physique possible pendant 12 heures)."
     },
     {
       id: "tatouage-crabe",
       name: "Crabe (Crab)",
       kanji: "蟹",
-      element: "Terre",
-      ringReq: 3,
-      activation: "Action Libre (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au Rang de Terre",
-      desc: "Un crabe cuirassé aux pinces d'acier barrant l'avant-bras ou le dos.",
-      rule: "Votre peau prend la dureté de la chitine la plus épaisse : vous gagnez une Réduction de dégâts égale à votre Anneau de Terre (cumulable avec l'armure)."
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 263)",
+      desc: "Une carapace de crabe massive barrant les épaules ou la poitrine du moine.",
+      rule: "Le moine gagne une valeur de Réduction des dégâts égale à son Anneau de Terre. Cette protection se cumule normalement avec toute armure ou technique."
     },
     {
       id: "tatouage-dragon",
       name: "Dragon (Dragon)",
       kanji: "龍",
-      element: "Vide",
-      ringReq: 4,
-      activation: "Action Complexe (Dépense 1 point de Vide)",
-      duration: "Instantanée",
-      desc: "Le grand dragon céleste lové autour du torse, les yeux brûlant de la flamme de Togashi.",
-      rule: "Vous projetez un souffle d'énergie élémentaire pure (Feu ou Électricité) dans un cône de 6 mètres. Toutes les cibles subissent un jet de dégâts de (Anneau de Vide + Rang d'École)g(Anneau de Vide). Les victimes peuvent réussir un jet de Réflexes ND 20 pour diviser les dégâts par deux."
-    },
-    {
-      id: "tatouage-eclair",
-      name: "Éclair (Lightning)",
-      kanji: "雷",
-      element: "Feu",
-      ringReq: 3,
+      type: "Togashi",
       activation: "Action Libre (Dépense 1 point de Vide)",
-      duration: "1 round",
-      desc: "Un éclair zébrant le deltoïde et crépitant d'arcs électriques bleutés.",
-      rule: "Votre vitesse devient fulgurante : vous bénéficiez d'une Action Simple supplémentaire durant ce tour, utilisable pour une attaque à mains nues ou un déplacement."
-    },
-    {
-      id: "tatouage-faucon",
-      name: "Faucon (Falcon)",
-      kanji: "鷹",
-      element: "Air",
-      ringReq: 2,
-      activation: "Action Libre",
-      duration: "Nombre d'heures égal au Rang d'Air",
-      desc: "Un faucon aux serres acérées prêt à fondre sur sa proie depuis la clavicule.",
-      rule: "Votre vue perçoit les moindres détails jusqu'à 3 kilomètres de distance. Vous ignorez toutes les pénalités de portée ou de faible luminosité pour vos jets de perception visuelle."
-    },
-    {
-      id: "tatouage-feu",
-      name: "Feu (Fire)",
-      kanji: "火",
-      element: "Feu",
-      ringReq: 2,
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au Rang de Feu",
-      desc: "Des flammes vives s'enroulant autour des poings et des avant-bras.",
-      rule: "Vos frappes de Jiujutsu s'embrasent : vous ajoutez +1g1 aux dégâts de toutes vos attaques à mains nues. Ces dégâts sont de nature magique et élémentaire (Feu)."
-    },
-    {
-      id: "tatouage-fleche",
-      name: "Flèche (Arrow)",
-      kanji: "矢",
-      element: "Air",
-      ringReq: 2,
-      activation: "Action Simple",
-      duration: "Instantanée",
-      desc: "Une flèche d'or empennée de plumes de grue s'alignant sur l'avant-bras.",
-      rule: "Vous pouvez projeter une flèche de chi pur à mains nues avec une portée de 30 mètres. Le jet d'attaque s'effectue sous (Réflexes + Jiujutsu) et inflige des dégâts égaux à 2g2 + Rang de Vide."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 264)",
+      desc: "L'effigie majestueuse et terrifiante du grand dragon céleste enroulé autour du torse.",
+      rule: "Requiert la dépense d'un point de Vide lors de l'activation. Le moine s'entoure d'une aura d'autorité divine et de terreur sacrée : il acquiert la capacité Peur (Fear) à un rang égal à son Rang d'École face à tous ses adversaires."
     },
     {
       id: "tatouage-grue",
       name: "Grue (Crane)",
       kanji: "鶴",
-      element: "Air",
-      ringReq: 3,
-      activation: "Action Libre (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au Rang d'Air",
-      desc: "Une grue d'argent prenant son envol depuis votre omoplate.",
-      rule: "Votre démarche gagne une élégance aérienne surnaturelle : vous ajoutez votre Anneau d'Air directement à votre ND d'Armure et à votre total d'Initiative."
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "1 heure",
+      source: "Livre de Base (p. 264)",
+      desc: "Une grue aux ailes d'argent déployées avec grâce sur l'omoplate.",
+      rule: "À l'activation, le moine reçoit un réservoir de dés bonus égal à (Rang d'École + Anneau d'Air). Pendant l'heure qui suit, il peut dépenser ces dés pour obtenir un bonus de +1g0 par dé sur n'importe quel jet de compétence sociale (avec un maximum de dés dépensés par jet égal à son Anneau de Vide). Les dés non utilisés expirent au bout d'une heure."
     },
     {
-      id: "tatouage-lame",
-      name: "Lame (Blade)",
-      kanji: "刀",
-      element: "Terre",
-      ringReq: 2,
+      id: "tatouage-ki-rin",
+      name: "Ki-Rin (Ki-Rin)",
+      kanji: "麒麟",
+      type: "Togashi",
       activation: "Action Libre",
-      duration: "Nombre de rounds égal au Rang de Terre",
-      desc: "Un katana nu et tranchant comme un rasoir dessiné sur le tranchant de la main.",
-      rule: "Vos mains nues portent le tranchant de l'acier forgé : vos frappes infligent des dégâts tranchants, et vos dés de dégâts à mains nues explosent sur 9 et 10."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 264)",
+      desc: "L'animal céleste annonciateur de bénédiction, de prescience et de chance insolente.",
+      rule: "Tant que le tatouage est actif, le moine peut relancer un dé ou un jet quelconque par round, en conservant le résultat le plus favorable des deux."
     },
     {
-      id: "tatouage-licorne",
-      name: "Licorne (Unicorn)",
-      kanji: "一角獣",
-      element: "Eau",
-      ringReq: 2,
+      id: "tatouage-lion",
+      name: "Lion (Lion)",
+      kanji: "獅子",
+      type: "Togashi",
       activation: "Action Libre",
-      duration: "Nombre de minutes égal au Rang d'Eau × 10",
-      desc: "Un étalon sauvage blanc aux sabots d'argent galopant sur la cuisse.",
-      rule: "Votre vitesse de déplacement terrestre est multipliée par deux. Vous pouvez courir sans vous essouffler pendant des heures sans test d'endurance."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 264)",
+      desc: "Un fier lion impérial à la crinière d'encre sombre, symbole de dévouement martial absolu.",
+      rule: "Lors de l'activation, le moine choisit une Compétence Bugei : il gagne immédiatement un nombre de rangs dans cette compétence égal à son Rang d'École pour la durée de l'effet."
     },
     {
       id: "tatouage-loup",
       name: "Loup (Wolf)",
       kanji: "狼",
-      element: "Eau",
-      ringReq: 2,
-      activation: "Action Simple",
-      duration: "Nombre d'heures égal au Rang d'Eau",
-      desc: "Une gueule de loup gris aux crocs dénudés sur le pectoral.",
-      rule: "Vous développez le flair d'un loup traqueur : vous pouvez suivre n'importe quelle piste olfactive fraîche sans jet de dés et détectez les ennemis cachés à moins de 15 mètres."
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre d'heures égal au Rang d'École",
+      source: "Livre de Base (p. 264)",
+      desc: "Une tête de loup sauvage aux oreilles pointées et aux sens en éveil sur le flanc.",
+      rule: "Le moine bénéficie d'un nombre d'Augmentations Gratuites égal à son Rang d'École sur tous ses jets de Chasse (notamment pour la traque et le pistage). Dure un nombre d'heures égal à son Rang d'École."
+    },
+    {
+      id: "tatouage-mante",
+      name: "Mante (Mantis)",
+      kanji: "蟷螂",
+      type: "Togashi",
+      activation: "Passif (Permanent)",
+      duration: "Permanent",
+      source: "Livre de Base (p. 264)",
+      desc: "Une mante religieuse miniature aux pinces dressées sans crainte face aux géants.",
+      rule: "Le moine est totalement immunisé de façon permanente contre tous les effets de Peur (naturels comme magiques). Ce tatouage reste actif en permanence et ne compte pas dans la limite d'un seul tatouage actif à la fois."
     },
     {
       id: "tatouage-montagne",
       name: "Montagne (Mountain)",
       kanji: "山",
-      element: "Terre",
-      ringReq: 3,
-      activation: "Action Libre (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au Rang de Terre",
-      desc: "Les pics acérés des montagnes du Dragon dessinés en aplat d'encre sombre sur le dos.",
-      rule: "Vous vous enracinez dans la terre : vous êtes totalement immunisé aux manœuvres de Renversement (Knockdown) et de Désarmement. Les pénalités de blessures que vous subissez sont réduites de 5."
-    },
-    {
-      id: "tatouage-nuage",
-      name: "Nuage (Cloud)",
-      kanji: "雲",
-      element: "Air",
-      ringReq: 3,
-      activation: "Action Simple (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au Rang d'Air",
-      desc: "Des volutes de brume nébuleuse encerclant la gorge et le torse.",
-      rule: "Votre silhouette devient vaporeuse : toutes les attaques physiques dirigées contre vous subissent une pénalité de -2g0 au toucher, et vous pouvez franchir des interstices étroits (grilles, fentes)."
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 265)",
+      desc: "Les sommets acérés des monts septentrionaux du Clan du Dragon gravés dans le haut du dos.",
+      rule: "La résilience de la pierre s'empare du corps : le moine réduit toutes les pénalités au ND infligées par ses différents Rangs de Blessures d'un montant égal à (Rang d'École + 2)."
     },
     {
       id: "tatouage-ocean",
       name: "Océan (Ocean)",
       kanji: "海",
-      element: "Eau",
-      ringReq: 3,
-      activation: "Action Simple",
-      duration: "Nombre de jours égal au Rang d'Eau",
-      desc: "Une grande vague stylisée aux écumes blanches sur les flancs.",
-      rule: "Votre corps n'a plus besoin de nourriture solide ni de boisson pour subsister durant la durée de l'effet. Vous pouvez également respirer sous l'eau sans aucune difficulté."
-    },
-    {
-      id: "tatouage-papillon",
-      name: "Papillon (Butterfly)",
-      kanji: "蝶",
-      element: "Air",
-      ringReq: 2,
-      activation: "Action Libre",
-      duration: "Nombre de minutes égal au Rang d'Air × 2",
-      desc: "Un papillon aux ailes diaphanes posé sur la cheville.",
-      rule: "Votre corps ne pèse plus rien : vous pouvez courir sur l'eau, sur la neige fraîche ou sur des branchages fragiles sans laisser d'empreinte ni briser la surface."
+      type: "Togashi",
+      activation: "Action Libre / Passif",
+      duration: "Permanent + Rétablissement instantané",
+      source: "Livre de Base (p. 265)",
+      desc: "Le flux éternel des vagues marines déferlant en spirales sur les côtes du corps.",
+      rule: "Tant qu'il porte ce tatouage, le moine n'a plus besoin de boire ni de manger pour subsister. De plus, une fois tous les 3 jours, il peut l'activer pour être instantanément revigoré comme après 8 heures de repos complet et regagner l'intégralité de ses points de Vide dépensés."
     },
     {
       id: "tatouage-phenix",
       name: "Phénix (Phoenix)",
       kanji: "鳳凰",
-      element: "Vide",
-      ringReq: 4,
-      activation: "Automatique en cas de trépas (Dépense 1 point de Vide)",
+      type: "Togashi",
+      activation: "Automatique (Réaction)",
       duration: "Instantanée",
-      desc: "L'oiseau immortel aux ailes de braise couvrant l'intégralité du dos.",
-      rule: "Une fois par campagne ou avec l'accord du MJ : si un coup fatal devait vous tuer, le phénix s'embrase. Vos blessures sont instantanément soignées jusqu'au palier Indemne (+0) et toutes les créatures hostiles autour de vous subissent 3g3 dégâts de Feu."
-    },
-    {
-      id: "tatouage-pin",
-      name: "Pin (Pine)",
-      kanji: "松",
-      element: "Terre",
-      ringReq: 2,
-      activation: "Passif (Permanent)",
-      duration: "Permanent",
-      desc: "Une branche de pin noueuse défiant le givre sur l'avant-bras.",
-      rule: "Vous êtes naturellement immunisé contre les effets du froid polaire ordinaire et bénéficiez d'un bonus permanent de +2g0 pour résister aux maladies non-surnaturelles."
+      source: "Livre de Base (p. 265)",
+      desc: "L'oiseau de braise mythique étendant ses ailes protectrices sur le cœur du moine.",
+      rule: "Si le moine dispose d'au moins 1 point de Vide non dépensé et chute au Rang de Blessure Hors de Combat ou en dessous, le tatouage se déclenche automatiquement : tous ses points de Vide restants sont consommés et il guérit immédiatement un nombre de Blessures égal à (Rang d'École × 10). Cet effet ne peut se produire qu'une fois par semaine."
     },
     {
       id: "tatouage-scorpion",
       name: "Scorpion (Scorpion)",
       kanji: "蠍",
-      element: "Feu",
-      ringReq: 3,
+      type: "Togashi",
       activation: "Action Libre",
-      duration: "1 round",
-      desc: "Un scorpion noir aux dards écarlates prêt à piquer sur le poignet.",
-      rule: "Votre prochaine frappe à mains nues réussie injecte un venin paralysant : la cible doit réussir un jet de Constitution ND (10 + 5 × Rang de Feu) ou devenir Étourdie (Dazed) pendant 1 round."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 265)",
+      desc: "Un scorpion d'encre noire armé d'un dard venimeux sur le poignet.",
+      rule: "Le moine ajoute un nombre de dés non gardés égal à son Rang d'École (+Rang g 0) sur tous ses jets de Discrétion (Stealth). De plus, ses attaques à mains nues rendent la cible Étourdie (Dazed) pour 1 round dès lors qu'au moins un dé explose sur son jet de dégâts."
     },
     {
       id: "tatouage-singe",
       name: "Singe (Monkey)",
       kanji: "猿",
-      element: "Eau",
-      ringReq: 2,
+      type: "Togashi",
       activation: "Action Libre",
-      duration: "Nombre de rounds égal au Rang d'Eau × 2",
-      desc: "Un macaque facétieux bondissant sur le mollet.",
-      rule: "Bonus de +2g2 sur tous vos jets d'Athlétisme. Vous pouvez vous relever de terre (Prone) comme une Action Gratuite sans dépenser de dé de mouvement."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 265)",
+      desc: "Un macaque agile et bondissant peint le long du mollet et de la cheville.",
+      rule: "Le moine gagne un bonus égal à (2 × Rang d'École) à tous ses jets d'Athlétisme. De plus, se relever lorsqu'il est À Terre (Prone) devient pour lui une Action Libre ne nécessitant aucun dé de mouvement."
     },
     {
       id: "tatouage-soleil",
       name: "Soleil (Sun)",
       kanji: "日",
-      element: "Feu",
-      ringReq: 4,
-      activation: "Action Simple (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au Rang de Feu",
-      desc: "Un disque solaire doré éblouissant tatoué au centre de la paume.",
-      rule: "Une lumière aveuglante jaillit de votre main. Les créatures de l'Outremonde (Souillées) à moins de 9 mètres subissent 2g2 points de dégâts par round et subissent une pénalité de -2g0 à tous leurs jets d'attaque en raison de l'éblouissement sacré."
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 265)",
+      desc: "Un disque solaire étincelant aux rayons dorés gravé dans le creux de la main ou sur la gorge.",
+      rule: "Le moine irradie d'une lumière solaire pure dans un rayon de 9 mètres (30 pieds). Les créatures possédant au moins 1 Rang de Souillure de l'Outremonde situées dans ce rayonnement subissent un malus de -2g0 à tous leurs jets d'attaque et encaissent (Rang d'École)g(Rang d'École) blessures directes au début de chaque round passé dans la zone."
     },
     {
-      id: "tatouage-tigre",
-      name: "Tigre (Tiger)",
-      kanji: "虎",
-      element: "Feu",
-      ringReq: 3,
-      activation: "Action Libre (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au Rang de Feu",
-      desc: "Un tigre rugissant aux griffes acérées prêt à bondir sur le flanc.",
-      rule: "Vous combattez avec une férocité décuplée : vos frappes à mains nues infligent +2g0 dégâts supplémentaires et vous bénéficiez de l'Avantage Peur (Fear) au Rang 2 face à vos adversaires."
+      id: "tatouage-tempete",
+      name: "Tempête (Storm)",
+      kanji: "嵐",
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 265)",
+      desc: "Des nuées orageuses tourbillonnantes et des bourrasques peintes autour des jambes.",
+      rule: "Le coût de la manœuvre Renversement (Knockdown) à mains nues est réduit à 1 seule Augmentation (au lieu de 2)."
     },
     {
       id: "tatouage-tortue",
       name: "Tortue (Turtle)",
       kanji: "亀",
-      element: "Terre",
-      ringReq: 2,
+      type: "Togashi",
       activation: "Action Libre",
-      duration: "Nombre de rounds égal au Rang de Terre",
-      desc: "Une tortue millénaire sacrée entourée de caractères shinto sur la poitrine.",
-      rule: "Vous gagnez un bonus de +5 à votre ND d'Armure lorsque vous adoptez la Posture Défense ou Défense Totale. De plus, vous gagnez +1g1 sur tous vos jets de Volonté pour résister à la peur ou à l'intimidation."
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 266)",
+      desc: "La tortue sacrée aux motifs géométriques parant le plastron pectoral.",
+      rule: "Le moine bénéficie d'un bonus fixe de +(Rang d'École × 2) à son ND d'Armure lorsqu'il adopte la Posture Défense ou la Posture Défense Totale. Il gagne également +1g1 sur tous ses jets de Volonté pour contrer les tentatives de manipulation sociale ou d'intimidation."
+    },
+    {
+      id: "tatouage-vide",
+      name: "Vide (Void)",
+      kanji: "空",
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 266)",
+      desc: "Le cercle parfait (Ensō) sans commencement ni fin tracé à l'encre obscure sur le plexus.",
+      rule: "Le moine perçoit directement le flux vital cosmique : il détecte avec précision l'emplacement et la présence de tout être vivant situé dans un rayon égal à (Rang d'École × 10) pieds (soit environ Rang × 3 mètres)."
+    },
+    {
+      id: "tatouage-vent",
+      name: "Vent (Wind)",
+      kanji: "風",
+      type: "Togashi",
+      activation: "Action Libre",
+      duration: "Nombre de rounds égal au double du Rang d'École",
+      source: "Livre de Base (p. 266)",
+      desc: "Des volutes éthérées et tourbillons aériens enveloppant les jambes et les cuisses.",
+      rule: "Le moine bénéficie d'une Action Simple de mouvement supplémentaire à chaque round. De plus, il n'est plus bridé par la limite normale de déplacement maximale par tour imposée par l'Anneau d'Eau."
     }
   ];
 
-  // Indexation globale
   if (typeof window !== "undefined") {
     window.TATOUAGES_DATA = TATOUAGES_DATA;
   }
