@@ -1,16 +1,19 @@
 /**
  * js/character-generator.js — Moteur logique complet L5R 4e Édition
  * Règles officielles du Livre de Base (Book of Earth & Book of Fire) :
- * - Gestion de l'avantage « Études dans une Autre École » (inclut toutes les écoles)
- * - Gestion de l'avantage « Écoles Multiples »
- * - Gestion conditionnelle des archétypes : Bushi (Katas), Shugenja (Sorts), Moine (Kihos)
- * - Intégration du coût XP des Katas et Kihos dans le budget
+ * - Sauvegarde automatique du brouillon (localStorage) & Enregistrement Dojo (Ticket 1)
+ * - Calcul XP dynamique : Illuminé, Bénédiction Élémentaire, Prodige, Esprit Obtus (Ticket #17)
+ * - Réductions de coût / Bonus de gain selon le Clan et le Type d'École : Moine, Shugenja, Bushi, Courtisan (Ticket #18)
+ * - Affichage complet des descriptions et règles des Avantages & Désavantages + Sorts/Kihos/Katas (Ticket #21)
+ * - Gestion complète des avantages « Études dans une Autre École » & « Écoles Multiples »
  * - Paliers de Maîtrise des compétences (Rangs 3, 5 et 7)
  * - Plafond de 15 XP maximum pour les Désavantages
  * - Exportation vers fiche officielle A4 vectorielle & Carnet de Rokugan
  */
 
 const MAX_DISADVANTAGE_XP = 15;
+const DOJO_STORAGE_KEY = 'l5r_dojo_characters_v4';
+const DRAFT_STORAGE_KEY = 'l5r_current_character_draft_v4';
 
 // =============================================================================
 // 1. PALIERS DE MAÎTRISE OFFICIELS (LIVRE DE BASE 4E ÉDITION)
@@ -116,7 +119,7 @@ function getMasteriesSummary(skillName, rank) {
 }
 
 // =============================================================================
-// 2. GESTION DES AVANTAGES « ÉTUDES DANS UNE AUTRE ÉCOLE » & « ÉCOLES MULTIPLES »
+// 2. GESTION DES AVANTAGES SPÉCIAUX (AUTRE ÉCOLE, ÉCOLES MULTIPLES, BÉNÉDICTION)
 // =============================================================================
 function isMultipleSchoolsAdv(advName) {
   const n = (advName || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -126,6 +129,16 @@ function isMultipleSchoolsAdv(advName) {
 function isDifferentSchoolAdv(advName) {
   const n = (advName || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   return n.includes("autre ecole") || n.includes("different school");
+}
+
+function isElementalBlessingAdv(advObjOrName) {
+  if (!advObjOrName) return false;
+  if (typeof advObjOrName === "object") {
+    if (advObjOrName.impact === "elemental_blessing" || (advObjOrName.impact || "").startsWith("elemental_blessing_")) return true;
+    advObjOrName = advObjOrName.name || "";
+  }
+  const n = String(advObjOrName).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return n.includes("benediction elementaire") || n.includes("elemental blessing");
 }
 
 function getAllSchoolsCatalog() {
@@ -243,24 +256,210 @@ function updateDifferentSchoolSelection(advIdx, newSchoolId) {
 
 function updateSecondarySchoolSelection(advIdx, schoolId, rankVal) {
   if (!advantagesList[advIdx]) return;
-  
+
   if (schoolId !== undefined) {
     advantagesList[advIdx].secondarySchoolId = schoolId;
     const all = getAllSchoolsCatalog();
     const found = all.find(s => s.id === schoolId);
     advantagesList[advIdx].secondarySchoolName = found ? `${found.name} (${found.clanName})` : "";
   }
-  
+
   if (rankVal !== undefined) {
     advantagesList[advIdx].secondarySchoolRank = Math.max(1, Math.min(5, parseInt(rankVal, 10) || 1));
   }
-  
+
+  renderAdvDisadv();
+  updateAll();
+}
+
+function updateElementalBlessingSelection(advIdx, ringKey) {
+  if (!advantagesList[advIdx]) return;
+  advantagesList[advIdx].chosenElement = ringKey || "earth";
   renderAdvDisadv();
   updateAll();
 }
 
 // =============================================================================
-// 3. PRÉNOMS ROKUGANI & CONFIGURATION DE BASE
+// 3. CONTEXTE DU PERSONNAGE & COÛTS DYNAMIQUES PAR CLAN / ÉCOLE (TICKET #18)
+// =============================================================================
+function getCharacterContext() {
+  const clanVal = (document.getElementById('sel-clan')?.value || "").toLowerCase();
+  const clans = getClans();
+  const famIdx = parseInt(document.getElementById('sel-family')?.value) || 0;
+  const famName = (clans[clanVal]?.families?.[famIdx]?.name || "").toLowerCase();
+
+  const schObj = getSelectedSchoolObject();
+  const sch = schObj?.school;
+  const schName = (sch?.name || sch?.id || "").toLowerCase();
+  const schType = (sch?.type || sch?.tag || "").toLowerCase();
+
+  return {
+    clan: clanVal,
+    isCrab: clanVal.includes("crabe") || clanVal.includes("crab"),
+    isCrane: clanVal.includes("grue") || clanVal.includes("crane"),
+    isDragon: clanVal.includes("dragon"),
+    isLion: clanVal.includes("lion"),
+    isMantis: clanVal.includes("mante") || clanVal.includes("mantis"),
+    isPhoenix: clanVal.includes("phenix") || clanVal.includes("phénix") || clanVal.includes("phoenix"),
+    isScorpion: clanVal.includes("scorpion"),
+    isUnicorn: clanVal.includes("licorne") || clanVal.includes("unicorn"),
+    isSpider: clanVal.includes("araignee") || clanVal.includes("araignée") || clanVal.includes("spider"),
+    isImperial: clanVal.includes("imperial") || clanVal.includes("impérial") || famName.includes("miya") || famName.includes("otomo") || famName.includes("seppun"),
+    isBushi: schType.includes("bushi") || schName.includes("bushi") || schName.includes("guerrier") || schName.includes("éclaireur") || schName.includes("archer") || schName.includes("duelliste"),
+    isShugenja: schType.includes("shugenja") || schName.includes("shugenja"),
+    isCourtier: schType.includes("courtisan") || schType.includes("courtier") || schName.includes("courtisan") || schName.includes("magistrat") || schName.includes("diplomate"),
+    isMonk: schType.includes("moine") || schType.includes("monk") || schName.includes("moine") || schName.includes("togashi") || schName.includes("confrérie") || schName.includes("confrerie") || schName.includes("henshin") || schName.includes("tatoué")
+  };
+}
+
+function getEffectiveAdvCost(adv) {
+  if (!adv) return 0;
+  const baseCost = parseInt(adv.baseCost ?? adv.cost) || 0;
+  const ctx = getCharacterContext();
+  const imp = (adv.impact || adv.id || "").toLowerCase();
+  const nameNorm = (adv.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  let discount = 0;
+
+  if ((imp === "clear_thinker" || nameNorm.includes("esprit clair")) && ctx.isDragon) discount += 1;
+  if ((imp === "dark_paragon" || nameNorm.includes("sombre parangon")) && ctx.isSpider) discount += 1;
+  if ((imp === "elemental_blessing" || imp.startsWith("elemental_blessing_") || nameNorm.includes("benediction elementaire")) && ctx.isPhoenix) discount += 1;
+  if (imp === "enlightened" || nameNorm.includes("illumine")) {
+    if (ctx.isDragon || ctx.isMonk) discount += 1;
+  }
+  if ((imp === "friend_of_the_elements" || nameNorm.includes("ami des elements")) && ctx.isShugenja) discount += 1;
+  if ((imp === "friend_of_the_brotherhood" || nameNorm.includes("ami de la confrerie")) && ctx.isDragon) discount += 1;
+  if ((imp === "gaijin_gear" || nameNorm.includes("equipement gaijin")) && (ctx.isMantis || ctx.isUnicorn)) discount += 1;
+  if ((imp === "hands_of_stone" || nameNorm.includes("mains de pierre")) && ctx.isMonk) discount += 1;
+  if ((imp === "irreproachable" || nameNorm.includes("irreprochable")) && ctx.isImperial) discount += 1;
+  if ((imp === "ishiken_do" || nameNorm.includes("ishiken")) && ctx.isPhoenix) discount += 2;
+  if ((imp === "large" || nameNorm.includes("grand (large)")) && ctx.isCrab) discount += 1;
+  if ((imp === "crab_hands" || nameNorm.includes("mains du crabe")) && ctx.isCrab) discount += 1;
+  if ((imp === "strength_earth" || nameNorm.includes("force de la terre")) && ctx.isBushi) discount += 1;
+  if ((imp === "dangerous_beauty" || nameNorm.includes("beaute dangereuse")) && ctx.isScorpion) discount += 1;
+  if ((imp === "leadership" || nameNorm.includes("commandement")) && ctx.isLion) discount += 1;
+  if ((imp === "paragon_bushido" || nameNorm.includes("parangon")) && ctx.isLion) discount += 1;
+  if ((imp === "tactician" || nameNorm.includes("tacticien")) && (ctx.isLion || ctx.isBushi)) discount += 1;
+  if ((imp === "soul_artistry" || nameNorm.includes("ame d'artiste")) && (ctx.isCrane || ctx.isCourtier)) discount += 1;
+  if ((imp === "ally" || nameNorm.includes("allies")) && ctx.isCrane) discount += 1;
+  if ((imp === "darling_of_the_court" || nameNorm.includes("favori de la cour")) && ctx.isCourtier) discount += 1;
+  if ((imp === "wealthy" || nameNorm.includes("riche")) && (ctx.isCrane || ctx.isUnicorn || ctx.isImperial)) discount += 1;
+  if ((imp === "sage" || nameNorm.includes("erudit")) && (ctx.isPhoenix || ctx.isMonk)) discount += 1;
+
+  return Math.max(1, baseCost - discount);
+}
+
+function getEffectiveDisadvGain(dis) {
+  if (!dis) return 0;
+  const baseGain = parseInt(dis.baseGain ?? dis.gain ?? dis.cost) || 0;
+  const ctx = getCharacterContext();
+  const imp = (dis.impact || dis.id || "").toLowerCase();
+  const nameNorm = (dis.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  let bonus = 0;
+
+  if ((imp === "antisocial" || nameNorm.includes("antisocial")) && ctx.isCrab) bonus += 1;
+  if ((imp === "ascetic" || nameNorm.includes("ascete")) && (ctx.isDragon || ctx.isMonk)) bonus += 1;
+  if ((imp === "bitter_betrothal" || nameNorm.includes("fiancailles ameres")) && ctx.isImperial) bonus += 1;
+  if ((imp.startsWith("consumed") || nameNorm.includes("consume")) && ctx.isSpider) bonus += 1;
+  if ((imp === "consumed_perfection" || nameNorm.includes("consume : perfection")) && ctx.isCrane && !ctx.isSpider) bonus += 1;
+  if ((imp === "cursed_by_the_realm" || nameNorm.includes("maudit par le royaume")) && ctx.isShugenja) bonus += 1;
+  if ((imp === "forced_retirement" || nameNorm.includes("retraite forcee")) && ctx.isMonk) bonus += 1;
+  if ((imp === "gaijin_name" || nameNorm.includes("nom gaijin")) && ctx.isUnicorn) bonus += 1;
+  if ((imp === "obtuse" || nameNorm.includes("esprit obtus")) && (ctx.isCrab || ctx.isBushi)) bonus += 1;
+  if ((imp === "overconfident" || nameNorm.includes("trop confiant") || nameNorm.includes("presomptueux")) && (ctx.isLion || ctx.isMantis)) bonus += 1;
+  if ((imp === "rumormonger" || nameNorm.includes("colporteur") || nameNorm.includes("commere")) && ctx.isCourtier) bonus += 1;
+  if ((imp === "touch_of_the_void" || nameNorm.includes("touche par le vide")) && ctx.isPhoenix) bonus += 1;
+  if ((imp === "wrath_of_the_kami" || nameNorm.includes("courroux des kami")) && ctx.isShugenja) bonus += 1;
+  if ((imp === "permanent_wound" || nameNorm.includes("blessure permanente")) && ctx.isBushi) bonus += 1;
+  if ((imp === "brash" || nameNorm.includes("impulsif") || nameNorm.includes("temeraire")) && ctx.isLion) bonus += 1;
+  if ((imp === "greedy" || nameNorm.includes("cupide")) && ctx.isMantis) bonus += 1;
+  if ((imp === "idealistic" || nameNorm.includes("idealiste")) && ctx.isLion) bonus += 1;
+
+  return baseGain + bonus;
+}
+
+function resolveCatalogAdvantage(val) {
+  if (val === "" || val === null || val === undefined) return null;
+  const container = getAdvantages();
+  const list = container.avantages || window.AVANTAGES_LIST || [];
+  return list[val] || list.find(a => a.id === val || a.name === val) || null;
+}
+
+function resolveCatalogDisadvantage(val) {
+  if (val === "" || val === null || val === undefined) return null;
+  const container = getAdvantages();
+  const list = container.desavantages || window.DESAVANTAGES_LIST || [];
+  return list[val] || list.find(d => d.id === val || d.name === val) || null;
+}
+
+// Aperçu dynamique des Avantages & Désavantages (Ticket #21)
+function updateAdvPreview() {
+  const sel = document.getElementById('sel-catalog-adv');
+  const card = document.getElementById('adv-preview-card');
+  if (!sel || !card) return;
+  const adv = resolveCatalogAdvantage(sel.value);
+  if (!adv) {
+    card.classList.add('hidden');
+    return;
+  }
+  const baseCost = parseInt(adv.baseCost ?? adv.cost) || 0;
+  const effectiveCost = getEffectiveAdvCost(adv);
+
+  const nameEl = document.getElementById('adv-preview-name');
+  const typeEl = document.getElementById('adv-preview-type');
+  const costEl = document.getElementById('adv-preview-cost');
+  const prereqEl = document.getElementById('adv-preview-prereq');
+  const descEl = document.getElementById('adv-preview-desc');
+  const ruleEl = document.getElementById('adv-preview-rule');
+
+  if (nameEl) nameEl.textContent = adv.name;
+  if (typeEl) typeEl.textContent = `Catégorie : ${adv.type || 'Avantage'}`;
+  if (costEl) {
+    costEl.textContent = (effectiveCost !== baseCost)
+      ? `Coût : ${effectiveCost} XP (au lieu de ${baseCost} XP — Réduction Clan/École)`
+      : `Coût : ${effectiveCost} XP`;
+  }
+  if (prereqEl) prereqEl.textContent = adv.prerequisite ? `Prérequis : ${adv.prerequisite}` : '';
+  if (descEl) descEl.textContent = adv.desc ? `« ${adv.desc} »` : '';
+  if (ruleEl) ruleEl.textContent = adv.rule || '';
+  card.classList.remove('hidden');
+}
+
+function updateDisadvPreview() {
+  const sel = document.getElementById('sel-catalog-disadv');
+  const card = document.getElementById('disadv-preview-card');
+  if (!sel || !card) return;
+  const dis = resolveCatalogDisadvantage(sel.value);
+  if (!dis) {
+    card.classList.add('hidden');
+    return;
+  }
+  const baseGain = parseInt(dis.baseGain ?? dis.gain ?? dis.cost) || 0;
+  const effectiveGain = getEffectiveDisadvGain(dis);
+
+  const nameEl = document.getElementById('disadv-preview-name');
+  const typeEl = document.getElementById('disadv-preview-type');
+  const costEl = document.getElementById('disadv-preview-cost');
+  const prereqEl = document.getElementById('disadv-preview-prereq');
+  const descEl = document.getElementById('disadv-preview-desc');
+  const ruleEl = document.getElementById('disadv-preview-rule');
+
+  if (nameEl) nameEl.textContent = dis.name;
+  if (typeEl) typeEl.textContent = `Catégorie : ${dis.type || 'Désavantage'}`;
+  if (costEl) {
+    costEl.textContent = (effectiveGain !== baseGain)
+      ? `Gain : +${effectiveGain} XP (au lieu de +${baseGain} XP — Bonus Clan/École)`
+      : `Gain : +${effectiveGain} XP`;
+  }
+  if (prereqEl) prereqEl.textContent = dis.prerequisite ? `Prérequis : ${dis.prerequisite}` : '';
+  if (descEl) descEl.textContent = dis.desc ? `« ${dis.desc} »` : '';
+  if (ruleEl) ruleEl.textContent = dis.rule || '';
+  card.classList.remove('hidden');
+}
+
+// =============================================================================
+// 4. PRÉNOMS ROKUGANI & CONFIGURATION DE BASE
 // =============================================================================
 const ROKUGANI_NAMES = {
   m: [
@@ -325,18 +524,44 @@ let nameOrderWestern = true;
 let currentSkills = [];
 let advantagesList = [];
 let disadvantagesList = [];
+let isBootstrapping = true;
 
 const getClans = () => window.CLANS_DATA || window.CLANS_CORE || {};
 const getSkills = () => window.COMPETENCES_DATA || [];
 const getEquipment = () => window.EQUIPEMENT_DATA || { armures: [], armes: [] };
-const getAdvantages = () => window.AVANTAGES_DATA || { avantages: [], desavantages: [] };
+const getAdvantages = () => window.AVANTAGES_DATA || {
+  avantages: window.AVANTAGES_LIST || [],
+  desavantages: window.DESAVANTAGES_LIST || []
+};
 
 function bootstrap() {
   if (!window.CLANS_DATA && !window.CLANS_CORE) {
     setTimeout(bootstrap, 50);
     return;
   }
+
+  isBootstrapping = true;
   initClans();
+
+  // Pré-sélection du clan par l'URL (?clan=...) ou restauration automatique du brouillon (Ticket 1)
+  const urlParams = new URLSearchParams(window.location.search);
+  const clanParam = urlParams.get('clan');
+  const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+
+  if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
+    document.getElementById('sel-clan').value = clanParam;
+    onClanChange();
+  } else if (savedDraft) {
+    try {
+      const parsedDraft = JSON.parse(savedDraft);
+      if (parsedDraft && parsedDraft.clan) {
+        applyCharacterDataToSheet(parsedDraft);
+      }
+    } catch (e) {
+      console.warn("Erreur lors de la restauration du brouillon :", e);
+    }
+  }
+
   initCatalogSelectors();
 
   const armSel = document.getElementById('pc-armor');
@@ -348,9 +573,21 @@ function bootstrap() {
 
   const nameInput = document.getElementById('pc-name');
   if (nameInput) {
-    nameInput.addEventListener('input', updateStickyName);
+    nameInput.addEventListener('input', () => {
+      updateStickyName();
+      autoSaveCharacterDraft();
+    });
   }
+
+  // Branchement automatique des aperçus d'Avantages/Désavantages
+  const advSel = document.getElementById('sel-catalog-adv');
+  if (advSel) advSel.addEventListener('change', updateAdvPreview);
+  const disadvSel = document.getElementById('sel-catalog-disadv');
+  if (disadvSel) disadvSel.addEventListener('change', updateDisadvPreview);
+
+  isBootstrapping = false;
   updateStickyName();
+  renderDojoList();
   updateAll();
 }
 
@@ -458,9 +695,10 @@ function initCatalogSelectors() {
     }
   }
 
-  // 4. Avantages
+  // 4. Avantages (avec coût dynamique selon Clan/École — Ticket #18)
   const advSel = document.getElementById('sel-catalog-adv');
   if (advSel) {
+    const prevAdvVal = advSel.value;
     const ownedAdvNames = new Set((advantagesList || []).map(a => a.name.toLowerCase().trim()));
     advSel.innerHTML = "";
 
@@ -477,19 +715,25 @@ function initCatalogSelectors() {
     } else {
       advSel.disabled = false;
       availableAdv.forEach(({ item, originalIdx }) => {
+        const effCost = getEffectiveAdvCost(item);
+        const discountTag = effCost < item.cost ? ` ★ -${item.cost - effCost} XP Clan/École` : "";
         let opt = document.createElement('option');
         opt.value = originalIdx;
-        opt.textContent = `${item.name} (${item.cost} XP) — [${item.type}]`;
+        opt.textContent = `${item.name} (${effCost} XP${discountTag}) — [${item.type}]`;
         advSel.appendChild(opt);
       });
+      if (prevAdvVal && advSel.querySelector(`option[value="${prevAdvVal}"]`)) {
+        advSel.value = prevAdvVal;
+      }
     }
 
-    if (typeof updateAdvPreview === 'function') updateAdvPreview();
+    updateAdvPreview();
   }
 
-  // 5. Désavantages
+  // 5. Désavantages (avec gain dynamique selon Clan/École — Ticket #18)
   const disadvSel = document.getElementById('sel-catalog-disadv');
   if (disadvSel) {
+    const prevDisVal = disadvSel.value;
     const ownedDisNames = new Set((disadvantagesList || []).map(d => d.name.toLowerCase().trim()));
     disadvSel.innerHTML = "";
 
@@ -506,23 +750,25 @@ function initCatalogSelectors() {
     } else {
       disadvSel.disabled = false;
       availableDis.forEach(({ item, originalIdx }) => {
+        const baseG = item.gain ?? item.cost;
+        const effGain = getEffectiveDisadvGain(item);
+        const bonusTag = effGain > baseG ? ` ★ +${effGain - baseG} XP Clan/École` : "";
         let opt = document.createElement('option');
         opt.value = originalIdx;
-        opt.textContent = `${item.name} (+${item.gain || item.cost} XP) — [${item.type}]`;
+        opt.textContent = `${item.name} (+${effGain} XP${bonusTag}) — [${item.type}]`;
         disadvSel.appendChild(opt);
       });
+      if (prevDisVal && disadvSel.querySelector(`option[value="${prevDisVal}"]`)) {
+        disadvSel.value = prevDisVal;
+      }
     }
 
-    if (typeof updateDisadvPreview === 'function') updateDisadvPreview();
+    updateDisadvPreview();
   }
 
   updateDisadvButtonState();
 }
 
-/**
- * Construit et verrouille l'école selon la famille choisie.
- * Déverrouille l'accès aux autres clans UNIQUEMENT si l'avantage est acheté (5 XP).
- */
 function updateSchoolOptions(preferredSchoolId) {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value || "crabe";
@@ -895,7 +1141,7 @@ function renderSchoolTechniques(currentRank) {
 }
 
 function updateDisadvButtonState() {
-  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
+  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + (parseInt(d.gain) || 0), 0);
   const btnAddDisadv = document.querySelector("button[onclick='addDisadvFromCatalog()']");
   const selectDisadv = document.getElementById('sel-catalog-disadv');
 
@@ -915,39 +1161,57 @@ function updateDisadvButtonState() {
 }
 
 function addAdvFromCatalog() {
-  const adv = getAdvantages();
-  const idx = document.getElementById('sel-catalog-adv').value;
-  if (idx === "" || !adv.avantages[idx]) return;
-
-  const item = adv.avantages[idx];
+  const sel = document.getElementById('sel-catalog-adv');
+  if (!sel || sel.value === "") return;
+  const item = resolveCatalogAdvantage(sel.value);
+  if (!item) return;
 
   if (advantagesList.some(a => a.name === item.name)) {
     alert(`L'avantage « ${item.name} » est déjà sélectionné.`);
     return;
   }
 
+  const effectiveCost = getEffectiveAdvCost(item);
   const currentRemainingXP = parseInt(document.getElementById('xp-remaining')?.textContent) || 0;
-  if (currentRemainingXP - item.cost < 0) {
-    alert(`Impossible d'ajouter « ${item.name} » (${item.cost} XP) : solde insuffisant (${currentRemainingXP} XP disponible).`);
+  if (currentRemainingXP - effectiveCost < 0) {
+    alert(`Impossible d'ajouter « ${item.name} » (${effectiveCost} XP) : solde insuffisant (${currentRemainingXP} XP disponible).`);
     return;
   }
 
-  const newAdv = { name: item.name, cost: item.cost };
+  const newAdv = {
+    id: item.id || "",
+    name: item.name,
+    baseCost: item.cost,
+    cost: effectiveCost,
+    impact: item.impact || "",
+    type: item.type || "",
+    desc: item.desc || "",
+    rule: item.rule || ""
+  };
+
+  if (isElementalBlessingAdv(item)) {
+    newAdv.chosenElement = "earth";
+  }
+
+  const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
   const allSchools = getAllSchoolsCatalog();
 
   if (isDifferentSchoolAdv(item.name)) {
     const currentSchObj = getSelectedSchoolObject();
-    const defaultSchool = (currentSchObj && currentSchObj.school) ? currentSchObj.school : allSchools[0];
+    const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
+    const defaultExt = (currentSchObj && currentSchObj.isExternalClan)
+      ? allSchools.find(s => s.id === currentSchObj.school.id)
+      : (externalSchools[0] || allSchools[0]);
 
-    if (defaultSchool) {
-      newAdv.differentSchoolId = defaultSchool.id;
-      newAdv.differentSchoolName = `${defaultSchool.name} (${defaultSchool.clanName || ''})`;
+    if (defaultExt) {
+      newAdv.differentSchoolId = defaultExt.id;
+      newAdv.differentSchoolName = `${defaultExt.name} (${defaultExt.clanName})`;
       advantagesList.push(newAdv);
 
       const schSel = document.getElementById('sel-school');
       if (schSel) {
-        updateSchoolOptions(defaultSchool.id);
-        schSel.value = defaultSchool.id;
+        updateSchoolOptions(defaultExt.id);
+        schSel.value = defaultExt.id;
       }
       resetSheetToNewSelection(true);
       return;
@@ -968,24 +1232,33 @@ function addAdvFromCatalog() {
 }
 
 function addDisadvFromCatalog() {
-  const adv = getAdvantages();
-  const idx = document.getElementById('sel-catalog-disadv').value;
-  if (idx === "" || !adv.desavantages[idx]) return;
-
-  const item = adv.desavantages[idx];
+  const sel = document.getElementById('sel-catalog-disadv');
+  if (!sel || sel.value === "") return;
+  const item = resolveCatalogDisadvantage(sel.value);
+  if (!item) return;
 
   if (disadvantagesList.some(d => d.name === item.name)) {
     alert(`Le désavantage « ${item.name} » est déjà sélectionné.`);
     return;
   }
 
-  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
-  if (currentTotalGain + item.gain > MAX_DISADVANTAGE_XP) {
-    alert(`Seuil dépassé ! Vous avez déjà ${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP de désavantages. L'ajout de « ${item.name} » (+${item.gain} XP) atteindrait ${currentTotalGain + item.gain} XP.`);
+  const effectiveGain = getEffectiveDisadvGain(item);
+  const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + (parseInt(d.gain) || 0), 0);
+  if (currentTotalGain + effectiveGain > MAX_DISADVANTAGE_XP) {
+    alert(`Seuil dépassé ! Vous avez déjà ${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP de désavantages. L'ajout de « ${item.name} » (+${effectiveGain} XP) atteindrait ${currentTotalGain + effectiveGain} XP.`);
     return;
   }
 
-  disadvantagesList.push({ name: item.name, gain: item.gain });
+  disadvantagesList.push({
+    id: item.id || "",
+    name: item.name,
+    baseGain: item.gain ?? item.cost,
+    gain: effectiveGain,
+    impact: item.impact || "",
+    type: item.type || "",
+    desc: item.desc || "",
+    rule: item.rule || ""
+  });
   renderAdvDisadv();
   initCatalogSelectors();
   updateAll();
@@ -1005,6 +1278,7 @@ function removeAdv(idx) {
   initCatalogSelectors();
   updateAll();
 }
+const removeAdvantage = removeAdv;
 
 function removeDisadv(idx) {
   disadvantagesList.splice(idx, 1);
@@ -1012,46 +1286,63 @@ function removeDisadv(idx) {
   initCatalogSelectors();
   updateAll();
 }
+const removeDisadvantage = removeDisadv;
 
 function renderAdvDisadv() {
   const advContainer = document.getElementById('adv-container');
   if (advContainer) {
     const allSchools = getAllSchoolsCatalog();
+    const currentClanKey = document.getElementById('sel-clan')?.value || "crabe";
 
     advContainer.innerHTML = advantagesList.map((a, i) => {
+      const ref = resolveCatalogAdvantage(a.id || a.name) || a;
+      const effCost = getEffectiveAdvCost(ref);
+      a.cost = effCost;
+      const desc = a.desc || ref.desc || "";
+      const rule = a.rule || ref.rule || "";
+
       const isDiff = isDifferentSchoolAdv(a.name);
       const isMulti = isMultipleSchoolsAdv(a.name);
+      const isBlessing = isElementalBlessingAdv(ref) || isElementalBlessingAdv(a);
       let extraHtml = "";
 
-      // CORRECTION : Affiche TOUTES les écoles (y compris celles de son clan/famille)
+      if (isBlessing) {
+        const curElem = a.chosenElement || "earth";
+        extraHtml += `
+          <div class="mt-2 p-2 rounded bg-stone-950 border border-amber-500/40 space-y-1">
+            <label class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block font-imperial">
+              ✨ Élément béni (-1 XP par rang sur les 2 Traits liés) :
+            </label>
+            <select onchange="updateElementalBlessingSelection(${i}, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 font-bold">
+              <option value="earth" ${curElem === "earth" ? "selected" : ""}>Terre (Constitution & Volonté)</option>
+              <option value="water" ${curElem === "water" ? "selected" : ""}>Eau (Force & Perception)</option>
+              <option value="air" ${curElem === "air" ? "selected" : ""}>Air (Réflexes & Intuition)</option>
+              <option value="fire" ${curElem === "fire" ? "selected" : ""}>Feu (Agilité & Intelligence)</option>
+            </select>
+          </div>
+        `;
+      }
+
       if (isDiff) {
-        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (allSchools[0]?.id || "");
+        const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
+        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (externalSchools[0]?.id || "");
 
-        const clans = getClans();
-        let diffOptions = "";
-        for (const cKey in clans) {
-          const c = clans[cKey];
-          diffOptions += `<optgroup label="🏯 Clan ${c.name}">`;
-          (c.schools || []).forEach(sch => {
-            diffOptions += `
-              <option value="${sch.id}" ${sch.id === currentDiffId ? 'selected' : ''}>
-                ${sch.name} (${sch.bonus})
-              </option>
-            `;
-          });
-          diffOptions += `</optgroup>`;
-        }
+        const diffOptions = externalSchools.map(sch => `
+          <option value="${sch.id}" ${sch.id === currentDiffId ? 'selected' : ''}>
+            ${sch.clanName} — ${sch.name} (${sch.bonus})
+          </option>
+        `).join('');
 
-        extraHtml = `
+        extraHtml += `
           <div class="mt-2 p-2.5 rounded bg-stone-950 border border-emerald-500/40 space-y-1.5">
             <span class="text-[10px] text-emerald-300 font-bold uppercase tracking-wider block font-imperial">
-              🎓 École suivie (remplace l'école de famille initiale) :
+              🎓 École d'un autre Clan suivie (remplace l'école initiale) :
             </span>
             <select onchange="updateDifferentSchoolSelection(${i}, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 font-bold">
               ${diffOptions}
             </select>
             <div class="text-[10px] text-stone-400 italic">
-              Vous pouvez choisir n'importe quelle école de votre Clan ou d'un Clan étranger. Vos compétences, votre honneur et vos techniques s'adapteront à cette école.
+              Applique le bonus de trait, l'honneur, les 7 compétences et les techniques de cette école tout en gardant votre Clan et votre Famille.
             </div>
           </div>
         `;
@@ -1067,7 +1358,7 @@ function renderAdvDisadv() {
           </option>
         `).join('');
 
-        extraHtml = `
+        extraHtml += `
           <div class="mt-2 p-2.5 rounded bg-stone-950 border border-amber-500/40 space-y-2">
             <span class="text-[10px] text-amber-300 font-bold uppercase tracking-wider block font-imperial">
               Configuration de la Seconde École :
@@ -1095,11 +1386,16 @@ function renderAdvDisadv() {
       }
 
       return `
-        <div class="p-2 rounded bg-black/40 border border-stone-800 flex flex-col gap-1">
-          <div class="flex justify-between items-center">
-            <span class="text-stone-300 font-bold">${a.name} (${a.cost} XP)</span>
-            <button onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
+        <div class="p-2.5 rounded-lg bg-black/50 border border-emerald-900/40 flex flex-col gap-1">
+          <div class="flex justify-between items-center gap-2">
+            <span class="text-emerald-300 font-bold">${a.name}</span>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold text-[10px]">${effCost} XP</span>
+              <button type="button" onclick="removeAdv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
+            </div>
           </div>
+          ${desc ? `<p class="text-[11px] text-stone-400 italic leading-snug">« ${desc} »</p>` : ''}
+          ${rule ? `<p class="text-[11px] text-amber-200/90 leading-snug">⚖️ ${rule}</p>` : ''}
           ${extraHtml}
         </div>
       `;
@@ -1108,12 +1404,27 @@ function renderAdvDisadv() {
 
   const disadvContainer = document.getElementById('disadv-container');
   if (disadvContainer) {
-    disadvContainer.innerHTML = disadvantagesList.map((d, i) => `
-      <div class="flex justify-between items-center p-1.5 rounded bg-black/40 border border-stone-800">
-        <span class="text-stone-300">${d.name} (+${d.gain} XP)</span>
-        <button onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
-      </div>
-    `).join('');
+    disadvContainer.innerHTML = disadvantagesList.map((d, i) => {
+      const ref = resolveCatalogDisadvantage(d.id || d.name) || d;
+      const effGain = getEffectiveDisadvGain(ref);
+      d.gain = effGain;
+      const desc = d.desc || ref.desc || "";
+      const rule = d.rule || ref.rule || "";
+
+      return `
+        <div class="p-2.5 rounded-lg bg-black/50 border border-rose-900/40 flex flex-col gap-1">
+          <div class="flex justify-between items-center gap-2">
+            <span class="text-rose-300 font-bold">${d.name}</span>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="px-2 py-0.5 rounded bg-rose-950 text-rose-300 font-bold text-[10px]">+${effGain} XP</span>
+              <button type="button" onclick="removeDisadv(${i})" class="text-red-400 font-bold hover:text-red-300 px-1 cursor-pointer">✕</button>
+            </div>
+          </div>
+          ${desc ? `<p class="text-[11px] text-stone-400 italic leading-snug">« ${desc} »</p>` : ''}
+          ${rule ? `<p class="text-[11px] text-rose-200/90 leading-snug">⚖️ ${rule}</p>` : ''}
+        </div>
+      `;
+    }).join('');
   }
 
   updateDisadvButtonState();
@@ -1140,7 +1451,7 @@ function renderSkills() {
       }
       filtered = filtered.filter(s => !currentSkills.some(cs => (cs.chosen || !cs.isChoice) && cs.name === s.name));
 
-      const optionsHtml = filtered.map(s => 
+      const optionsHtml = filtered.map(s =>
         `<option value="${s.name}">${s.name} (${s.type} - ${s.trait})</option>`
       ).join('');
 
@@ -1175,7 +1486,7 @@ function renderSkills() {
             <label class="text-[10px] text-stone-400 flex items-center gap-1">
               <input type="checkbox" ${sk.spec ? 'checked' : ''} onchange="toggleSkillSpec(${idx})" class="rounded"> Spé (+2 XP)
             </label>
-            
+
             <div class="flex items-center gap-1 ml-1">
               <button type="button" onclick="adjustSkillRank(${idx}, -1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
               <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
@@ -1348,6 +1659,7 @@ function generateRandomName(gender) {
   }
 
   updateStickyName();
+  autoSaveCharacterDraft();
 }
 
 function toggleNameOrder() {
@@ -1362,158 +1674,11 @@ function toggleNameOrder() {
     }
   }
   updateStickyName();
-}
-const DOJO_STORAGE_KEY = 'l5r_dojo_characters_v4';
-const DRAFT_STORAGE_KEY = 'l5r_current_character_draft_v4';
-
-// Collecte l'état complet de la fiche (incluant Sorts, Kihos et Katas)
-function collectCharacterData() {
-  return {
-    id: window.currentCharacterId || ('samurai_' + Date.now()),
-    updatedAt: new Date().toISOString(),
-    name: document.getElementById('pc-name')?.value?.trim() || "Samouraï sans nom",
-    baseXP: document.getElementById('base-xp-input')?.value || "40",
-    clan: document.getElementById('sel-clan')?.value || "",
-    family: document.getElementById('sel-family')?.value || "",
-    school: document.getElementById('sel-school')?.value || "",
-    traits: {
-      sta: document.getElementById('trait-stamina')?.value || 2,
-      wil: document.getElementById('trait-willpower')?.value || 2,
-      str: document.getElementById('trait-strength')?.value || 2,
-      per: document.getElementById('trait-perception')?.value || 2,
-      ref: document.getElementById('trait-reflexes')?.value || 2,
-      awa: document.getElementById('trait-awareness')?.value || 2,
-      agi: document.getElementById('trait-agility')?.value || 2,
-      int: document.getElementById('trait-intelligence')?.value || 2,
-      voi: document.getElementById('trait-void')?.value || 2
-    },
-    skills: currentSkills || [],
-    advantages: advantagesList || [],
-    disadvantages: disadvantagesList || [],
-    spells: (typeof characterSpells !== 'undefined') ? characterSpells : [],
-    katas: (typeof characterKatas !== 'undefined') ? characterKatas : [],
-    affinity: document.getElementById('shugenja-affinity')?.value || "aucune",
-    deficiency: document.getElementById('shugenja-deficiency')?.value || "aucune",
-    armor: document.getElementById('pc-armor')?.value || "",
-    weapon1: document.getElementById('pc-weapon-1')?.value || "",
-    weapon2: document.getElementById('pc-weapon-2')?.value || "",
-    outfit: document.getElementById('pc-outfit')?.value || ""
-  };
+  autoSaveCharacterDraft();
 }
 
-// 1. Sauvegarde automatique du brouillon (à appeler à la fin de updateAll())
-function autoSaveCharacterDraft() {
-  if (window.isRestoringCharacter) return;
-  try {
-    const data = collectCharacterData();
-    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
-  } catch (e) {
-    console.warn("Impossible d'auto-sauvegarder le brouillon :", e);
-  }
-}
-
-// 2. Enregistrement explicite dans "Mon Dojo Personnel"
-function saveCharacterToDojo() {
-  try {
-    const data = collectCharacterData();
-    window.currentCharacterId = data.id;
-
-    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY);
-    let dojoList = rawDojo ? JSON.parse(rawDojo) : [];
-    if (!Array.isArray(dojoList)) dojoList = [];
-
-    // Remplace le personnage s'il porte le même ID ou le même nom, sinon l'ajoute
-    const existingIndex = dojoList.findIndex(
-      c => c.id === data.id || (c.name.toLowerCase() === data.name.toLowerCase())
-    );
-
-    if (existingIndex !== -1) {
-      data.id = dojoList[existingIndex].id;
-      dojoList[existingIndex] = data;
-    } else {
-      dojoList.push(data);
-    }
-
-    localStorage.setItem(DOJO_STORAGE_KEY, JSON.stringify(dojoList));
-    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
-
-    if (typeof renderDojoList === 'function') renderDojoList();
-    alert(`✅ "${data.name}" a bien été enregistré dans votre Dojo local !`);
-  } catch (err) {
-    console.error(err);
-    alert("Erreur lors de l'enregistrement dans le navigateur. Utilisez l'export JSON par sécurité.");
-  }
-}
-
-// 3. Restauration d'un personnage (depuis le Dojo, le brouillon ou un JSON)
-function applyCharacterDataToSheet(d) {
-  if (!d) return;
-  window.isRestoringCharacter = true;
-  try {
-    window.currentCharacterId = d.id || ('samurai_' + Date.now());
-    if (d.baseXP !== undefined) {
-      const baseInput = document.getElementById('base-xp-input');
-      if (baseInput) baseInput.value = d.baseXP;
-    }
-
-    advantagesList = d.advantages || [];
-    disadvantagesList = d.disadvantages || [];
-
-    document.getElementById('sel-clan').value = d.clan;
-    onClanChange();
-    document.getElementById('sel-family').value = d.family;
-
-    const resolved = (typeof resolveSchoolByRef === 'function') ? resolveSchoolByRef(d.school, d.clan) : null;
-    const targetSchoolId = resolved?.school?.id || d.school;
-    updateSchoolOptions(targetSchoolId);
-    document.getElementById('sel-school').value = targetSchoolId;
-    resetSheetToNewSelection(true);
-
-    document.getElementById('pc-name').value = d.name || "";
-    if (typeof updateStickyName === 'function') updateStickyName();
-
-    if (d.traits) {
-      document.getElementById('trait-stamina').value = d.traits.sta ?? 2;
-      document.getElementById('trait-willpower').value = d.traits.wil ?? 2;
-      document.getElementById('trait-strength').value = d.traits.str ?? 2;
-      document.getElementById('trait-perception').value = d.traits.per ?? 2;
-      document.getElementById('trait-reflexes').value = d.traits.ref ?? 2;
-      document.getElementById('trait-awareness').value = d.traits.awa ?? 2;
-      document.getElementById('trait-agility').value = d.traits.agi ?? 2;
-      document.getElementById('trait-intelligence').value = d.traits.int ?? 2;
-      document.getElementById('trait-void').value = d.traits.voi ?? 2;
-    }
-
-    currentSkills = d.skills || [];
-    advantagesList = d.advantages || [];
-    disadvantagesList = d.disadvantages || [];
-
-    if (typeof characterSpells !== 'undefined') characterSpells = d.spells || [];
-    if (typeof characterKatas !== 'undefined') characterKatas = d.katas || [];
-    if (d.affinity && document.getElementById('shugenja-affinity')) {
-      document.getElementById('shugenja-affinity').value = d.affinity;
-    }
-    if (d.deficiency && document.getElementById('shugenja-deficiency')) {
-      document.getElementById('shugenja-deficiency').value = d.deficiency;
-    }
-
-    if (d.armor) document.getElementById('pc-armor').value = d.armor;
-    if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
-    if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
-    if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
-
-    renderSkills();
-    renderAdvDisadv();
-    if (typeof renderCharacterSpells === 'function') renderCharacterSpells();
-    if (typeof renderCharacterKatas === 'function') renderCharacterKatas();
-    initCatalogSelectors();
-  } finally {
-    window.isRestoringCharacter = false;
-    updateAll();
-  }
-}
 // =============================================================================
-// CALCULS DYNAMIQUES 4E ÉDITION (BOOK OF EARTH P. 80-82)
+// 5. CALCULS DYNAMIQUES 4E ÉDITION (TICKETS #17, #18 & #21)
 // =============================================================================
 function updateAll() {
   const clans = getClans();
@@ -1524,15 +1689,15 @@ function updateAll() {
   const schObj = getSelectedSchoolObject();
   const sch = schObj?.school;
 
-  const sta = parseInt(document.getElementById('trait-stamina').value) || 2;
-  const wil = parseInt(document.getElementById('trait-willpower').value) || 2;
-  const str = parseInt(document.getElementById('trait-strength').value) || 2;
-  const per = parseInt(document.getElementById('trait-perception').value) || 2;
-  const ref = parseInt(document.getElementById('trait-reflexes').value) || 2;
-  const awa = parseInt(document.getElementById('trait-awareness').value) || 2;
-  const agi = parseInt(document.getElementById('trait-agility').value) || 2;
-  const int = parseInt(document.getElementById('trait-intelligence').value) || 2;
-  const voi = parseInt(document.getElementById('trait-void').value) || 2;
+  const sta = parseInt(document.getElementById('trait-stamina')?.value) || 2;
+  const wil = parseInt(document.getElementById('trait-willpower')?.value) || 2;
+  const str = parseInt(document.getElementById('trait-strength')?.value) || 2;
+  const per = parseInt(document.getElementById('trait-perception')?.value) || 2;
+  const ref = parseInt(document.getElementById('trait-reflexes')?.value) || 2;
+  const awa = parseInt(document.getElementById('trait-awareness')?.value) || 2;
+  const agi = parseInt(document.getElementById('trait-agility')?.value) || 2;
+  const int = parseInt(document.getElementById('trait-intelligence')?.value) || 2;
+  const voi = parseInt(document.getElementById('trait-void')?.value) || 2;
 
   // 1. Anneaux
   const rEarth = Math.min(sta, wil);
@@ -1547,33 +1712,64 @@ function updateAll() {
   document.getElementById('ring-fire').textContent = rFire;
   document.getElementById('ring-void').textContent = rVoid;
 
+  const catalogAdv = getAdvantages().avantages || [];
+  const catalogDis = getAdvantages().desavantages || [];
+
   const hasAdv = (impactName) => advantagesList.some(a => {
-    const found = getAdvantages().avantages?.find(x => x.name === a.name);
-    return found && found.impact === impactName;
+    if (a.impact === impactName || a.id === impactName) return true;
+    const found = catalogAdv.find(x => x.id === a.id || x.name === a.name);
+    if (found && (found.impact === impactName || found.id === impactName)) return true;
+    const n = (a.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (impactName === "enlightened" && n.includes("illumine")) return true;
+    if (impactName === "prodigy" && n.includes("prodige")) return true;
+    if (impactName === "large" && n.includes("grand")) return true;
+    if (impactName === "lightning_reflexes" && n.includes("vitesse eclair")) return true;
+    if (impactName === "quick" && n.includes("vif (quick)")) return true;
+    if (impactName === "quick_healer" && n.includes("guerison rapide")) return true;
+    return false;
   });
 
   const hasDisadv = (impactName) => disadvantagesList.some(d => {
-    const found = getAdvantages().desavantages?.find(x => x.name === d.name);
-    return found && found.impact === impactName;
+    if (d.impact === impactName || d.id === impactName) return true;
+    const found = catalogDis.find(x => x.id === d.id || x.name === d.name);
+    if (found && (found.impact === impactName || found.id === impactName)) return true;
+    const n = (d.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (impactName === "obtuse" && n.includes("esprit obtus")) return true;
+    if (impactName === "small" && n.includes("petit")) return true;
+    return false;
   });
 
-  // 2. Budget XP
+  // Détection de l'élément choisi pour Bénédiction Élémentaire (Ticket #17)
+  const hasElemBlessing = (ringKey) => {
+    return advantagesList.some(a => {
+      const found = catalogAdv.find(x => x.id === a.id || x.name === a.name);
+      if (!isElementalBlessingAdv(a) && !isElementalBlessingAdv(found)) return false;
+      const chosen = (a.chosenElement || "earth").toLowerCase();
+      return chosen === ringKey;
+    });
+  };
+
+  // 2. Budget XP (Traits, Vide, Compétences, Avantages, Katas & Kihos)
   let xpSpent = 0;
   const traitsBase = [
-    { val: sta, bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
-    { val: wil, bonus: (fam?.trait === "Volonté" ? 1 : 0) + (sch?.trait === "Volonté" ? 1 : 0) },
-    { val: str, bonus: (fam?.trait === "Force" ? 1 : 0) + (sch?.trait === "Force" ? 1 : 0) },
-    { val: per, bonus: (fam?.trait === "Perception" ? 1 : 0) + (sch?.trait === "Perception" ? 1 : 0) },
-    { val: ref, bonus: (fam?.trait === "Réflexes" ? 1 : 0) + (sch?.trait === "Réflexes" ? 1 : 0) },
-    { val: awa, bonus: (fam?.trait === "Intuition" ? 1 : 0) + (sch?.trait === "Intuition" ? 1 : 0) },
-    { val: agi, bonus: (fam?.trait === "Agilité" ? 1 : 0) + (sch?.trait === "Agilité" ? 1 : 0) },
-    { val: int, bonus: (fam?.trait === "Intelligence" ? 1 : 0) + (sch?.trait === "Intelligence" ? 1 : 0) }
+    { val: sta, ring: "earth", bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
+    { val: wil, ring: "earth", bonus: (fam?.trait === "Volonté" ? 1 : 0) + (sch?.trait === "Volonté" ? 1 : 0) },
+    { val: str, ring: "water", bonus: (fam?.trait === "Force" ? 1 : 0) + (sch?.trait === "Force" ? 1 : 0) },
+    { val: per, ring: "water", bonus: (fam?.trait === "Perception" ? 1 : 0) + (sch?.trait === "Perception" ? 1 : 0) },
+    { val: ref, ring: "air",   bonus: (fam?.trait === "Réflexes" ? 1 : 0) + (sch?.trait === "Réflexes" ? 1 : 0) },
+    { val: awa, ring: "air",   bonus: (fam?.trait === "Intuition" ? 1 : 0) + (sch?.trait === "Intuition" ? 1 : 0) },
+    { val: agi, ring: "fire",  bonus: (fam?.trait === "Agilité" ? 1 : 0) + (sch?.trait === "Agilité" ? 1 : 0) },
+    { val: int, ring: "fire",  bonus: (fam?.trait === "Intelligence" ? 1 : 0) + (sch?.trait === "Intelligence" ? 1 : 0) }
   ];
 
   traitsBase.forEach(t => {
     let baseStart = 2 + t.bonus;
+    const blessed = hasElemBlessing(t.ring);
     if (t.val > baseStart) {
-      for (let r = baseStart + 1; r <= t.val; r++) xpSpent += r * 4;
+      for (let r = baseStart + 1; r <= t.val; r++) {
+        const traitStepCost = blessed ? Math.max(1, (r * 4) - 1) : (r * 4);
+        xpSpent += traitStepCost;
+      }
     }
   });
 
@@ -1587,29 +1783,52 @@ function updateAll() {
     }
   }
 
+  const isObtuse = hasDisadv("obtuse");
+  const allCatalogSkills = getSkills();
+
   currentSkills.forEach(sk => {
     if (sk.isChoice && !sk.chosen) return;
 
     let start = sk.isSchool ? 1 : 0;
+    const catSk = allCatalogSkills.find(s => s.name === sk.name);
+    const sName = (sk.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const sType = (sk.type || catSk?.type || "").toLowerCase();
+    const isHighSkill = sType.includes("noble") || sType.includes("haute") || sType.includes("high");
+    const isExemptHigh = sName.includes("enquete") || sName.includes("investigation") || sName.includes("medecine") || sName.includes("medicine");
+
     if (sk.rank > start) {
       for (let r = start + 1; r <= sk.rank; r++) {
-        const skillStepCost = hasAdv("prodigy") ? Math.max(1, r - 1) : r;
+        let skillStepCost = (sk.isSchool && hasAdv("prodigy")) ? Math.max(1, r - 1) : r;
+        if (isObtuse && isHighSkill && !isExemptHigh) {
+          skillStepCost *= 2;
+        }
         xpSpent += skillStepCost;
       }
     }
     if (sk.spec) xpSpent += 2;
   });
 
-  let advCost = advantagesList.reduce((acc, a) => acc + a.cost, 0);
+  // Recalcul dynamique des coûts/gains d'Avantages & Désavantages selon le Clan/École (Ticket #18)
+  advantagesList.forEach(a => {
+    const ref = resolveCatalogAdvantage(a.id || a.name) || a;
+    a.cost = getEffectiveAdvCost(ref);
+  });
+  disadvantagesList.forEach(d => {
+    const ref = resolveCatalogDisadvantage(d.id || d.name) || d;
+    d.gain = getEffectiveDisadvGain(ref);
+  });
+
+  let advCost = advantagesList.reduce((acc, a) => acc + (parseInt(a.cost) || 0), 0);
   document.getElementById('adv-cost-total').textContent = advCost;
   xpSpent += advCost;
 
-  // PRISE EN COMPTE DU COÛT EN XP DES KATAS ET KIHOS (NOUVEAU)
-  const spellsXpCost = (window.charSpellsList || []).reduce((acc, s) => acc + (Number(s.xpCost) || 0), 0);
-  const katasXpCost = (window.charKatasList || []).reduce((acc, k) => acc + (Number(k.xpCost) || 0), 0);
-  xpSpent += (spellsXpCost + katasXpCost);
+  // Prise en compte du coût en XP des Katas & Kihos si la section 5 est utilisée
+  if (typeof window.characterKatas !== "undefined" && Array.isArray(window.characterKatas)) {
+    const kataKihoXP = window.characterKatas.reduce((acc, k) => acc + (parseInt(k.cost ?? k.xpCost ?? k.mastery) || 0), 0);
+    xpSpent += kataKihoXP;
+  }
 
-  let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + d.gain, 0);
+  let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + (parseInt(d.gain) || 0), 0);
   let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
   document.getElementById('disadv-gain-total').textContent = disadvGain;
 
@@ -1837,11 +2056,8 @@ function updateAll() {
   }
 
   updateDisadvButtonState();
-
-  // Mise à jour de l'affichage adaptatif (Bushi / Shugenja / Moine)
-  if (typeof updateArchetypePanels === "function") {
-    updateArchetypePanels();
-  }
+  updateAdvPreview();
+  updateDisadvPreview();
 
   // Synchronisation avec export-carnet.js
   if (typeof window !== "undefined") {
@@ -1882,11 +2098,230 @@ function updateAll() {
       advantages: advantagesList.map(a => a.name).join(", "),
       advantagesList: advantagesList,
       disadvantages: disadvantagesList.map(d => d.name).join(", "),
-      spells: window.charSpellsList || [],
-      katas: window.charKatasList || [],
+      disadvantagesList: disadvantagesList,
+      spells: (typeof window.characterSpells !== 'undefined') ? window.characterSpells : [],
+      katas: (typeof window.characterKatas !== 'undefined') ? window.characterKatas : [],
       notes: document.getElementById('pc-outfit')?.value || ""
     };
     window.character = window.currentChar;
+  }
+
+  // Sauvegarde automatique du brouillon à chaque modification (Ticket 1)
+  autoSaveCharacterDraft();
+}
+
+// =============================================================================
+// 6. PERSISTANCE : BROUILLON AUTO, DOJO LOCAL & EXPORT/IMPORT JSON (TICKET 1)
+// =============================================================================
+function collectCharacterData() {
+  return {
+    id: window.currentCharacterId || ('samurai_' + Date.now()),
+    updatedAt: new Date().toISOString(),
+    name: document.getElementById('pc-name')?.value?.trim() || "Samouraï",
+    baseXP: document.getElementById('base-xp-input')?.value || "40",
+    clan: document.getElementById('sel-clan')?.value || "crabe",
+    family: document.getElementById('sel-family')?.value || "0",
+    school: document.getElementById('sel-school')?.value || "",
+    traits: {
+      sta: document.getElementById('trait-stamina')?.value || 2,
+      wil: document.getElementById('trait-willpower')?.value || 2,
+      str: document.getElementById('trait-strength')?.value || 2,
+      per: document.getElementById('trait-perception')?.value || 2,
+      ref: document.getElementById('trait-reflexes')?.value || 2,
+      awa: document.getElementById('trait-awareness')?.value || 2,
+      agi: document.getElementById('trait-agility')?.value || 2,
+      int: document.getElementById('trait-intelligence')?.value || 2,
+      voi: document.getElementById('trait-void')?.value || 2
+    },
+    skills: currentSkills || [],
+    advantages: advantagesList || [],
+    disadvantages: disadvantagesList || [],
+    spells: (typeof window.characterSpells !== 'undefined') ? window.characterSpells : [],
+    katas: (typeof window.characterKatas !== 'undefined') ? window.characterKatas : [],
+    affinity: document.getElementById('shugenja-affinity')?.value || "aucune",
+    deficiency: document.getElementById('shugenja-deficiency')?.value || "aucune",
+    armor: document.getElementById('pc-armor')?.value || "10",
+    weapon1: document.getElementById('pc-weapon-1')?.value || "Katana",
+    weapon2: document.getElementById('pc-weapon-2')?.value || "Aucune",
+    outfit: document.getElementById('pc-outfit')?.value || ""
+  };
+}
+
+function autoSaveCharacterDraft() {
+  if (isBootstrapping || window.isRestoringCharacter) return;
+  try {
+    const data = collectCharacterData();
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("Impossible d'auto-sauvegarder le brouillon :", e);
+  }
+}
+
+function applyCharacterDataToSheet(d) {
+  if (!d) return;
+  window.isRestoringCharacter = true;
+  try {
+    window.currentCharacterId = d.id || ('samurai_' + Date.now());
+    if (d.baseXP !== undefined) {
+      const baseInput = document.getElementById('base-xp-input');
+      if (baseInput) baseInput.value = d.baseXP;
+    }
+
+    advantagesList = d.advantages || [];
+    disadvantagesList = d.disadvantages || [];
+
+    if (d.clan && document.getElementById('sel-clan')) {
+      document.getElementById('sel-clan').value = d.clan;
+      onClanChange();
+    }
+    if (d.family !== undefined && document.getElementById('sel-family')) {
+      document.getElementById('sel-family').value = d.family;
+    }
+
+    const resolved = resolveSchoolByRef(d.school, d.clan);
+    const targetSchoolId = resolved?.school?.id || d.school;
+    updateSchoolOptions(targetSchoolId);
+    if (targetSchoolId && document.getElementById('sel-school')) {
+      document.getElementById('sel-school').value = targetSchoolId;
+    }
+    resetSheetToNewSelection(true);
+
+    if (d.name && document.getElementById('pc-name')) {
+      document.getElementById('pc-name').value = d.name;
+      updateStickyName();
+    }
+
+    if (d.traits) {
+      document.getElementById('trait-stamina').value = d.traits.sta ?? 2;
+      document.getElementById('trait-willpower').value = d.traits.wil ?? 2;
+      document.getElementById('trait-strength').value = d.traits.str ?? 2;
+      document.getElementById('trait-perception').value = d.traits.per ?? 2;
+      document.getElementById('trait-reflexes').value = d.traits.ref ?? 2;
+      document.getElementById('trait-awareness').value = d.traits.awa ?? 2;
+      document.getElementById('trait-agility').value = d.traits.agi ?? 2;
+      document.getElementById('trait-intelligence').value = d.traits.int ?? 2;
+      document.getElementById('trait-void').value = d.traits.voi ?? 2;
+    }
+
+    currentSkills = d.skills || [];
+    advantagesList = d.advantages || [];
+    disadvantagesList = d.disadvantages || [];
+
+    if (typeof window.characterSpells !== 'undefined') window.characterSpells = d.spells || [];
+    if (typeof window.characterKatas !== 'undefined') window.characterKatas = d.katas || [];
+    if (d.affinity && document.getElementById('shugenja-affinity')) {
+      document.getElementById('shugenja-affinity').value = d.affinity;
+    }
+    if (d.deficiency && document.getElementById('shugenja-deficiency')) {
+      document.getElementById('shugenja-deficiency').value = d.deficiency;
+    }
+
+    if (d.armor && document.getElementById('pc-armor')) document.getElementById('pc-armor').value = d.armor;
+    if (d.weapon1 && document.getElementById('pc-weapon-1')) document.getElementById('pc-weapon-1').value = d.weapon1;
+    if (d.weapon2 && document.getElementById('pc-weapon-2')) document.getElementById('pc-weapon-2').value = d.weapon2;
+    if (d.outfit && document.getElementById('pc-outfit')) document.getElementById('pc-outfit').value = d.outfit;
+
+    renderSkills();
+    renderAdvDisadv();
+    if (typeof window.renderCharacterSpells === 'function') window.renderCharacterSpells();
+    if (typeof window.renderCharacterKatas === 'function') window.renderCharacterKatas();
+    initCatalogSelectors();
+  } finally {
+    window.isRestoringCharacter = false;
+    updateAll();
+  }
+}
+
+function saveCharacterToDojo() {
+  try {
+    const data = collectCharacterData();
+    window.currentCharacterId = data.id;
+
+    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
+    let dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    if (!Array.isArray(dojoList)) dojoList = [];
+
+    const existingIndex = dojoList.findIndex(
+      c => c.id === data.id || ((c.name || "").toLowerCase() === data.name.toLowerCase())
+    );
+
+    if (existingIndex !== -1) {
+      data.id = dojoList[existingIndex].id;
+      dojoList[existingIndex] = data;
+    } else {
+      dojoList.push(data);
+    }
+
+    const serialized = JSON.stringify(dojoList);
+    localStorage.setItem(DOJO_STORAGE_KEY, serialized);
+    localStorage.setItem('l5r_saved_characters', serialized);
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
+
+    renderDojoList();
+    alert(`✅ « ${data.name} » a bien été enregistré dans votre Dojo local !`);
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de l'enregistrement dans le navigateur. Utilisez l'export JSON par sécurité.");
+  }
+}
+
+function loadCharacterFromDojo(idOrIndex) {
+  try {
+    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
+    const dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    const found = dojoList.find(c => c.id === idOrIndex) || dojoList[idOrIndex];
+    if (!found) return;
+    applyCharacterDataToSheet(found);
+  } catch (e) {
+    console.error("Erreur de chargement depuis le Dojo :", e);
+  }
+}
+
+function deleteCharacterFromDojo(idOrIndex) {
+  try {
+    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
+    let dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    dojoList = dojoList.filter((c, idx) => c.id !== idOrIndex && idx !== idOrIndex);
+    const serialized = JSON.stringify(dojoList);
+    localStorage.setItem(DOJO_STORAGE_KEY, serialized);
+    localStorage.setItem('l5r_saved_characters', serialized);
+    renderDojoList();
+  } catch (e) {
+    console.error("Erreur de suppression Dojo :", e);
+  }
+}
+
+function renderDojoList() {
+  const container = document.getElementById('dojo-characters-list') || document.getElementById('saved-characters-list');
+  if (!container) return;
+
+  try {
+    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
+    const dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    if (!Array.isArray(dojoList) || dojoList.length === 0) {
+      container.innerHTML = `<div class="text-stone-500 italic text-xs">Aucun personnage enregistré dans le Dojo local.</div>`;
+      return;
+    }
+
+    const clans = getClans();
+    container.innerHTML = dojoList.map((c, idx) => {
+      const clanLabel = clans[c.clan]?.name || c.clan || "Clan";
+      const safeId = c.id || idx;
+      return `
+        <div class="p-2.5 rounded-lg bg-stone-950/90 border border-amber-500/30 flex items-center justify-between gap-2 text-xs">
+          <div>
+            <div class="font-bold text-amber-200 font-imperial">${c.name || "Samouraï"}</div>
+            <div class="text-[10px] text-stone-400">${clanLabel}</div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="loadCharacterFromDojo('${safeId}')" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] cursor-pointer">Charger</button>
+            <button type="button" onclick="deleteCharacterFromDojo('${safeId}')" class="px-2 py-1 rounded bg-stone-900 hover:bg-red-950 text-red-400 border border-stone-800 font-bold text-[10px] cursor-pointer">✕</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (e) {
+    console.warn("Erreur d'affichage de la liste du Dojo :", e);
   }
 }
 
@@ -1918,8 +2353,30 @@ function randomizeAll() {
   generateRandomName(Math.random() > 0.5 ? 'm' : 'f');
 
   const nonSchoolAdvs = (adv.avantages || []).filter(a => !isDifferentSchoolAdv(a.name) && !isMultipleSchoolsAdv(a.name));
-  advantagesList = nonSchoolAdvs.length ? [{ name: nonSchoolAdvs[0].name, cost: nonSchoolAdvs[0].cost }] : [];
-  disadvantagesList = adv.desavantages?.length ? [{ name: adv.desavantages[0].name, gain: adv.desavantages[0].gain }] : [];
+  if (nonSchoolAdvs.length) {
+    const pickA = nonSchoolAdvs[0];
+    advantagesList = [{
+      id: pickA.id || "",
+      name: pickA.name,
+      baseCost: pickA.cost,
+      cost: getEffectiveAdvCost(pickA),
+      impact: pickA.impact || "",
+      desc: pickA.desc || "",
+      rule: pickA.rule || ""
+    }];
+  }
+  if (adv.desavantages?.length) {
+    const pickD = adv.desavantages[0];
+    disadvantagesList = [{
+      id: pickD.id || "",
+      name: pickD.name,
+      baseGain: pickD.gain ?? pickD.cost,
+      gain: getEffectiveDisadvGain(pickD),
+      impact: pickD.impact || "",
+      desc: pickD.desc || "",
+      rule: pickD.rule || ""
+    }];
+  }
   renderAdvDisadv();
 
   const voidInput = document.getElementById('trait-void');
@@ -1936,38 +2393,11 @@ function randomizeAll() {
 }
 
 function exportJSON() {
-  const data = {
-    name: document.getElementById('pc-name').value,
-    baseXP: document.getElementById('base-xp-input')?.value || "40",
-    clan: document.getElementById('sel-clan').value,
-    family: document.getElementById('sel-family').value,
-    school: document.getElementById('sel-school').value,
-    traits: {
-      sta: document.getElementById('trait-stamina').value,
-      wil: document.getElementById('trait-willpower').value,
-      str: document.getElementById('trait-strength').value,
-      per: document.getElementById('trait-perception').value,
-      ref: document.getElementById('trait-reflexes').value,
-      awa: document.getElementById('trait-awareness').value,
-      agi: document.getElementById('trait-agility').value,
-      int: document.getElementById('trait-intelligence').value,
-      voi: document.getElementById('trait-void').value
-    },
-    skills: currentSkills,
-    advantages: advantagesList,
-    disadvantages: disadvantagesList,
-    spells: window.charSpellsList || [],
-    katas: window.charKatasList || [],
-    armor: document.getElementById('pc-armor').value,
-    weapon1: document.getElementById('pc-weapon-1').value,
-    weapon2: document.getElementById('pc-weapon-2').value,
-    outfit: document.getElementById('pc-outfit').value
-  };
-
+  const data = collectCharacterData();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `${data.name.replace(/\s+/g, '_')}_L5R4e.json`;
+  a.download = `${(data.name || 'Samourai').replace(/\s+/g, '_')}_L5R4e.json`;
   a.click();
 }
 
@@ -1979,61 +2409,8 @@ function importJSON(event) {
   reader.onload = function(e) {
     try {
       const d = JSON.parse(e.target.result);
-
-      if (d.baseXP !== undefined) {
-        const baseInput = document.getElementById('base-xp-input');
-        if (baseInput) baseInput.value = d.baseXP;
-      }
-
-      advantagesList = d.advantages || [];
-      disadvantagesList = d.disadvantages || [];
-
-      document.getElementById('sel-clan').value = d.clan;
-      onClanChange();
-      document.getElementById('sel-family').value = d.family;
-
-      const resolved = resolveSchoolByRef(d.school, d.clan);
-      const targetSchoolId = resolved?.school?.id || d.school;
-      updateSchoolOptions(targetSchoolId);
-      document.getElementById('sel-school').value = targetSchoolId;
-      resetSheetToNewSelection(true);
-
-      document.getElementById('pc-name').value = d.name;
-      updateStickyName();
-
-      document.getElementById('trait-stamina').value = d.traits.sta;
-      document.getElementById('trait-willpower').value = d.traits.wil;
-      document.getElementById('trait-strength').value = d.traits.str;
-      document.getElementById('trait-perception').value = d.traits.per;
-      document.getElementById('trait-reflexes').value = d.traits.ref;
-      document.getElementById('trait-awareness').value = d.traits.awa;
-      document.getElementById('trait-agility').value = d.traits.agi;
-      document.getElementById('trait-intelligence').value = d.traits.int;
-      document.getElementById('trait-void').value = d.traits.voi;
-
-      currentSkills = d.skills || [];
-      advantagesList = d.advantages || [];
-      disadvantagesList = d.disadvantages || [];
-
-      if (Array.isArray(d.spells) && typeof window.charSpellsList !== "undefined") {
-        window.charSpellsList = d.spells;
-        if (typeof renderCharacterSpells === "function") renderCharacterSpells();
-      }
-      if (Array.isArray(d.katas) && typeof window.charKatasList !== "undefined") {
-        window.charKatasList = d.katas;
-        if (typeof renderCharacterKatas === "function") renderCharacterKatas();
-      }
-
-      if (d.armor) document.getElementById('pc-armor').value = d.armor;
-      if (d.weapon1) document.getElementById('pc-weapon-1').value = d.weapon1;
-      if (d.weapon2) document.getElementById('pc-weapon-2').value = d.weapon2;
-      if (d.outfit) document.getElementById('pc-outfit').value = d.outfit;
-
-      renderSkills();
-      renderAdvDisadv();
-      initCatalogSelectors();
-      updateAll();
-    } catch(err) {
+      applyCharacterDataToSheet(d);
+    } catch (err) {
       alert("Erreur de format JSON.");
     }
   };
@@ -2042,12 +2419,14 @@ function importJSON(event) {
 
 function resetCharacter() {
   if (confirm("Réinitialiser entièrement la fiche ?")) {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    window.currentCharacterId = 'samurai_' + Date.now();
     const baseInput = document.getElementById('base-xp-input');
     if (baseInput) baseInput.value = 40;
     advantagesList = [];
     disadvantagesList = [];
-    if (typeof window.charSpellsList !== "undefined") window.charSpellsList = [];
-    if (typeof window.charKatasList !== "undefined") window.charKatasList = [];
+    if (typeof window.characterSpells !== 'undefined') window.characterSpells = [];
+    if (typeof window.characterKatas !== 'undefined') window.characterKatas = [];
     onClanChange();
   }
 }
@@ -2177,20 +2556,20 @@ function exportOfficialPDF() {
   // Avantages & Désavantages
   document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
   document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
-    const full = getAdvantages().avantages?.find(x => x.name === a.name);
+    const full = resolveCatalogAdvantage(a.id || a.name) || a;
     let extraNote = "";
     if (isDifferentSchoolAdv(a.name) && a.differentSchoolName) {
       extraNote = ` — <i>École suivie : ${a.differentSchoolName}</i>`;
     } else if (isMultipleSchoolsAdv(a.name) && a.secondarySchoolName) {
       extraNote = ` — <i>Seconde école : ${a.secondarySchoolName} (Rang ${a.secondarySchoolRank || 1})</i>`;
     }
-    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.desc || ''}${extraNote}</span></div>`;
+    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.rule || full?.desc || ''}${extraNote}</span></div>`;
   }).join('') : '<div class="text-stone-400 italic">Aucun avantage sélectionné.</div>';
 
   document.getElementById('p-disadv-total').textContent = `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`;
   document.getElementById('p-disadv-list').innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
-    const full = getAdvantages().desavantages?.find(x => x.name === d.name);
-    return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.desc || ''}</span></div>`;
+    const full = resolveCatalogDisadvantage(d.id || d.name) || d;
+    return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.rule || full?.desc || ''}</span></div>`;
   }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
 
   // Techniques d'École
@@ -2220,11 +2599,6 @@ function exportOfficialPDF() {
   document.getElementById('p-tech-desc').innerHTML = printTechHtml;
   document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
 
-  // Sorts, Kihos et Katas imprimés
-  if (typeof populatePrintableMysticBox === "function") {
-    populatePrintableMysticBox();
-  }
-
   window.print();
 }
 
@@ -2238,9 +2612,23 @@ if (typeof window !== "undefined") {
   window.adjustTrait = adjustTrait;
   window.updateAll = updateAll;
   window.renderSkills = renderSkills;
+  window.renderAdvDisadv = renderAdvDisadv;
+  window.updateAdvPreview = updateAdvPreview;
+  window.updateDisadvPreview = updateDisadvPreview;
+  window.removeAdv = removeAdv;
+  window.removeAdvantage = removeAdvantage;
+  window.removeDisadv = removeDisadv;
+  window.removeDisadvantage = removeDisadvantage;
   window.getSelectedSchoolObject = getSelectedSchoolObject;
   window.resolveSchoolByRef = resolveSchoolByRef;
   window.updateDifferentSchoolSelection = updateDifferentSchoolSelection;
+  window.updateSecondarySchoolSelection = updateSecondarySchoolSelection;
+  window.updateElementalBlessingSelection = updateElementalBlessingSelection;
+  window.saveCharacterToDojo = saveCharacterToDojo;
+  window.loadCharacterFromDojo = loadCharacterFromDojo;
+  window.deleteCharacterFromDojo = deleteCharacterFromDojo;
+  window.renderDojoList = renderDojoList;
+  window.applyCharacterDataToSheet = applyCharacterDataToSheet;
   window.SKILL_MASTERIES = SKILL_MASTERIES;
 }
 
