@@ -6,7 +6,7 @@
   <title>Forge de Personnage — L5R 4e Édition | Campagne MJ David</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -33,7 +33,7 @@
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/navbar.js" defer></script>
-  <script src="js/character-generator.js?v=10" defer></script>
+  <script src="js/character-generator.js?v=11" defer></script>
 
   <style>
     :root {
@@ -106,7 +106,7 @@
     }
 
     @media screen {
-      #official-print-dossier { display: none !important; }
+      #official-print-dossier, #print-sheet { display: none !important; }
     }
     @media print {
       @page {
@@ -121,7 +121,7 @@
       .no-print, header, aside, main, footer, #dice-roller-drawer {
         display: none !important;
       }
-      #official-print-dossier {
+      #official-print-dossier, #print-sheet {
         display: block !important;
         width: 100% !important;
         background: white !important;
@@ -137,20 +137,6 @@
         page-break-after: auto;
         break-after: auto;
       }
-      .sheet-box {
-        border: 1.5px solid #222;
-        background: #fff;
-      }
-      .sheet-title {
-        font-family: 'Cinzel', serif;
-        font-weight: 700;
-        background: #f0ede6;
-        border-bottom: 1px solid #333;
-        padding: 2px 4px;
-        text-transform: uppercase;
-        font-size: 8px;
-        letter-spacing: 0.05em;
-      }
     }
   </style>
 </head>
@@ -159,7 +145,7 @@
   <!-- 1. MENU DE NAVIGATION GLOBAL -->
   <header id="site-header"></header>
 
-  <!-- 2. BANDEAU DE COMBAT PERSISTANT -->
+  <!-- 2. BANDEAU DE COMBAT ET SAUVEGARDE PERSISTANT (RESTAURÉ) -->
   <aside aria-label="État du personnage" class="sticky top-[54px] z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
     <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
       
@@ -193,7 +179,7 @@
           </div>
         </div>
 
-        <!-- Bloc Actions & Sauvegarde Dojo (SANS bouton Auto) -->
+        <!-- Bloc Actions & Sauvegarde Dojo -->
         <div class="flex flex-wrap items-center gap-1.5">
           <button onclick="saveToDojo()" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition flex items-center gap-1 shadow cursor-pointer" title="Sauvegarder dans le Dojo local">
             <span>📌</span> <span>Sauvegarder</span>
@@ -214,7 +200,7 @@
         </div>
       </div>
 
-      <!-- Ligne 2 : Les 4 Métriques Clés -->
+      <!-- Ligne 2 : Les 4 Métriques Clés Cliquables -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1.5 border-t border-amber-500/15">
         <button type="button" onclick="rollFromSticky('sticky-atk', 'Jet pour Toucher')" class="text-left p-1.5 px-2.5 rounded bg-black/60 hover:bg-amber-950/40 border border-stone-800 hover:border-amber-500/60 flex flex-col justify-between transition group cursor-pointer" title="Cliquer pour lancer le jet d'attaque !">
           <div class="flex justify-between items-baseline w-full">
@@ -255,7 +241,7 @@
   <!-- CONTENU PRINCIPAL -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <!-- 0. MON DOJO PERSONNEL -->
+    <!-- 0. MON DOJO PERSONNEL (CONSERVÉ EN HAUTEUR) -->
     <section class="card-clean rounded-xl p-4 border-amber-500/40 bg-gradient-to-r from-[#16100c] via-[#120e0e] to-[#16100c] space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
@@ -452,7 +438,7 @@
       </div>
     </section>
 
-    <!-- 3. COMPÉTENCES -->
+    <!-- 3. COMPÉTENCES (SÉLECTEUR MULTIPLE DÉROULANT DU DESIGN D'ORIGINE) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
@@ -502,7 +488,7 @@
       <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
     </section>
 
-    <!-- 4. AVANTAGES & DÉSAVANTAGES -->
+    <!-- 4. AVANTAGES & DÉSAVANTAGES (RESTAURATION COMPLETE DE LA CARTE D'APERÇU) -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- 4A. AVANTAGES -->
       <div class="card-clean rounded-xl p-5 space-y-4">
@@ -523,6 +509,7 @@
           >+</button>
         </div>
 
+        <!-- Carte d'Aperçu Dynamique Avantages (Ticket #21) -->
         <div id="adv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-amber-500/30 space-y-2 text-xs shadow-lg">
           <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
             <div>
@@ -565,6 +552,7 @@
           >+</button>
         </div>
 
+        <!-- Carte d'Aperçu Dynamique Désavantages (Ticket #21) -->
         <div id="disadv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-rose-900/40 space-y-2 text-xs shadow-lg">
           <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
             <div>
@@ -589,9 +577,7 @@
       </div>
     </section>
 
-    <!-- ===================================================================
-         5. VOIES MARTIALES & MYSTIQUES (AFFICHAGE CONDITIONNEL SELON L'ÉCOLE)
-         =================================================================== -->
+    <!-- 5. VOIES MARTIALES & MYSTIQUES (AVEC L'AIDE DE JEU TICKET #19 INTÉGRÉE) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40" id="section-mystic-martial">
       <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
         <div>
@@ -616,7 +602,40 @@
         </div>
       </div>
 
-      <!-- Note zen pour les Courtisans / Magistrats -->
+      <!-- ACCORDÉON AIDE DE JEU : SORTS & KIHOS (TICKET #19) -->
+      <div class="rounded-xl border border-amber-500/30 bg-black/60 p-4 space-y-3">
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <h3 class="font-bold font-imperial text-amber-300 text-xs flex items-center gap-1.5">
+            <span>⛩️</span> Mémento Officiel : Formules d'Invocations & Seuils de Chi
+          </h3>
+          <button
+            type="button"
+            onclick="document.getElementById('memento-kihos-sorts-body').classList.toggle('hidden')"
+            class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 text-amber-400 border border-amber-500/20 text-[10px] font-imperial transition cursor-pointer"
+          >
+            Afficher / Masquer ▾
+          </button>
+        </div>
+
+        <div id="memento-kihos-sorts-body" class="space-y-3 text-[11px] pt-1 hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-stone-300">
+            <div class="p-2.5 rounded bg-stone-950/80 border border-stone-800 space-y-1">
+              <b class="text-amber-300 block font-imperial">📜 Magie Élémentaire (Shugenja) :</b>
+              <p>• Jet : <span class="font-mono text-amber-200">(Anneau + Rang Shugenja) g (Anneau)</span>.</p>
+              <p>• Difficulté : <span class="font-mono text-amber-200">ND = 5 + (5 × Maîtrise du Sort)</span>.</p>
+              <p>• Emplacements quotidiens égaux au Rang de chaque Anneau respectif.</p>
+            </div>
+            <div class="p-2.5 rounded bg-stone-950/80 border border-stone-800 space-y-1">
+              <b class="text-emerald-300 block font-imperial">🥋 Voies Mystiques (Kihos) :</b>
+              <p>• Moine Confrérie : <span class="font-mono text-emerald-200">Anneau + Rang ≥ Maîtrise</span> (Coût normal en XP).</p>
+              <p>• Moine Autre Ordre : <span class="font-mono text-emerald-200">Coût 1,5× normal</span> (Max = Rang d'École).</p>
+              <p>• Shugenja : <span class="font-mono text-emerald-200">Anneau seul ≥ Maîtrise</span> (Coût double en XP).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note pour les Courtisans / Magistrats -->
       <div id="panel-courtier-note" class="hidden p-6 rounded-xl bg-black/50 border border-stone-800 text-center space-y-2">
         <div class="text-2xl">📜</div>
         <div class="font-bold font-imperial text-amber-200 text-sm">Voie de la Cour & de l'Éloquence</div>
@@ -904,9 +923,7 @@
       </div>
     </section>
 
-    <!-- ===================================================================
-         8. CHRONIQUE BIOGRAPHIQUE (EXEMPLE ÉDITABLE)
-         =================================================================== -->
+    <!-- 8. CHRONIQUE BIOGRAPHIQUE -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/30">
       <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">
@@ -922,9 +939,7 @@
 Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son sang-froid face au danger, il parcourt désormais les provinces de Rokugan escorté par son loup fidèle, Shiro. Malgré la rudesse de son éducation et le mépris courtois des courtisans de la capitale, il porte le regard franc d'un défenseur de l'Empire prêt à verser son sang pour que le Mur tienne un jour de plus.</textarea>
     </section>
 
-    <!-- ===================================================================
-         9. LES VINGT QUESTIONS DE ROKUGAN (TOUT EN BAS)
-         =================================================================== -->
+    <!-- 9. LES VINGT QUESTIONS DE ROKUGAN -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
       <div class="border-b border-amber-500/20 pb-3 flex flex-wrap justify-between items-center gap-2">
         <div>
@@ -1110,7 +1125,137 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   </footer>
 
   <!-- =====================================================================
-       SCRIPTS DE SYNCHRONISATION
+       DOSSIER D'IMPRESSION OFFICIEL A4
+       ===================================================================== -->
+  <div id="official-print-dossier" class="p-4 font-serif text-black bg-white">
+    <div id="print-sheet">
+      <div class="border-b-2 border-black pb-2 mb-4 flex justify-between items-end">
+        <div>
+          <h1 class="text-2xl font-bold uppercase tracking-wider font-imperial" id="p-name">Samouraï</h1>
+          <div class="text-xs">
+            <b>Clan :</b> <span id="p-clan">Crabe</span> | 
+            <b>École :</b> <span id="p-school">École de bushi Hida</span>
+          </div>
+        </div>
+        <div class="text-right text-xs">
+          <div><b>Insight :</b> <span id="p-insight">120 pts (Rang 1)</span></div>
+          <div><b>Honneur :</b> <span id="p-honor">4.5</span> | <b>XP :</b> <span id="p-xp">40 / 40 XP</span></div>
+        </div>
+      </div>
+
+      <!-- Anneaux et Traits -->
+      <div class="grid grid-cols-5 gap-2 border border-black p-2 mb-4 text-center text-xs">
+        <div>
+          <div class="font-bold border-b border-black pb-1">TERRE : <span id="p-r-earth">2</span></div>
+          <div class="pt-1">Const : <b id="p-t-sta">2</b></div>
+          <div>Vol : <b id="p-t-wil">2</b></div>
+        </div>
+        <div>
+          <div class="font-bold border-b border-black pb-1">EAU : <span id="p-r-water">2</span></div>
+          <div class="pt-1">Force : <b id="p-t-str">2</b></div>
+          <div>Perc : <b id="p-t-per">2</b></div>
+        </div>
+        <div>
+          <div class="font-bold border-b border-black pb-1">AIR : <span id="p-r-air">2</span></div>
+          <div class="pt-1">Réfl : <b id="p-t-ref">2</b></div>
+          <div>Intu : <b id="p-t-awa">2</b></div>
+        </div>
+        <div>
+          <div class="font-bold border-b border-black pb-1">FEU : <span id="p-r-fire">2</span></div>
+          <div class="pt-1">Agil : <b id="p-t-agi">2</b></div>
+          <div>Int : <b id="p-t-int">2</b></div>
+        </div>
+        <div>
+          <div class="font-bold border-b border-black pb-1">VIDE : <span id="p-r-void">2</span></div>
+          <div class="pt-1">Points : <b id="p-t-voi">2</b></div>
+        </div>
+      </div>
+
+      <!-- Combat & Armes -->
+      <div class="grid grid-cols-2 gap-4 mb-4 text-xs">
+        <div class="border border-black p-2 space-y-1">
+          <div class="font-bold uppercase border-b border-black pb-0.5">Statistiques de Combat</div>
+          <div><b>Initiative :</b> <span id="p-init">3g2</span> <span id="p-init-note" class="text-[9px]"></span></div>
+          <div><b>ND Armure :</b> <span id="p-armor-tn">20</span> <span id="p-armor-note" class="text-[9px]"></span></div>
+          <div><b>Armure :</b> <span id="p-armor-name">Aucune</span> (<span id="p-armor-reduc">0</span>)</div>
+          <div><b>Récupération :</b> <span id="p-heal">5 PV / jour</span></div>
+        </div>
+        <div class="border border-black p-2 space-y-1" id="p-weapons-box"></div>
+      </div>
+
+      <!-- Compétences & Blessures -->
+      <div class="grid grid-cols-3 gap-4 mb-4 text-xs">
+        <div class="col-span-2 border border-black p-2">
+          <div class="font-bold uppercase border-b border-black pb-0.5 mb-1">Compétences & Maîtrises</div>
+          <table class="w-full text-left text-[10px]">
+            <thead>
+              <tr class="border-b border-black">
+                <th>Nom</th>
+                <th class="text-center">Éc.</th>
+                <th class="text-center">Rang</th>
+                <th class="text-center">Jet</th>
+                <th>Spécialités & Paliers</th>
+              </tr>
+            </thead>
+            <tbody id="p-skills-body"></tbody>
+          </table>
+        </div>
+
+        <div class="border border-black p-2">
+          <div class="font-bold uppercase border-b border-black pb-0.5 mb-1">Seuils de Blessures</div>
+          <table class="w-full text-[10px] text-center">
+            <tbody id="p-wounds-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Avantages & Désavantages -->
+      <div class="grid grid-cols-2 gap-4 text-xs border border-black p-2 mb-4">
+        <div>
+          <div class="font-bold border-b border-black pb-0.5">Avantages (<span id="p-adv-total">0 XP</span>) :</div>
+          <div id="p-adv-list" class="space-y-1 mt-1 text-[10px]"></div>
+        </div>
+        <div>
+          <div class="font-bold border-b border-black pb-0.5">Désavantages (<span id="p-disadv-total">0 / 15 XP</span>) :</div>
+          <div id="p-disadv-list" class="space-y-1 mt-1 text-[10px]"></div>
+        </div>
+      </div>
+
+      <!-- Voies Mystiques & Martiales imprimables -->
+      <div class="border border-black p-2 text-xs mb-4">
+        <div class="font-bold uppercase border-b border-black pb-0.5 flex justify-between">
+          <span>Sorts, Kihos & Katas</span>
+          <span id="p-mystic-summary" class="text-[9px] font-normal"></span>
+        </div>
+        <div id="p-spells-katas-box" class="text-[9px] space-y-1 mt-1"></div>
+      </div>
+
+      <!-- Techniques d'École -->
+      <div class="border border-black p-2 text-xs">
+        <div class="font-bold uppercase border-b border-black pb-0.5" id="p-tech-name">Techniques d'École</div>
+        <div id="p-tech-desc" class="text-[10px] space-y-1 mt-1 leading-relaxed"></div>
+        <div class="mt-2 pt-1 border-t border-gray-400 text-[9px]">
+          <b>Équipement :</b> <span id="p-outfit-desc"></span>
+        </div>
+      </div>
+
+      <!-- Chronique Biographique & 20 Questions -->
+      <div class="border border-black p-2 text-xs mt-2">
+        <div class="font-bold uppercase border-b border-black pb-0.5">Chronique Biographique & Les 20 Questions</div>
+        <div id="p-background-story" class="whitespace-pre-line text-[9px] mt-1"></div>
+        <div class="grid grid-cols-2 gap-2 pt-1 mt-1 border-t border-gray-300 text-[8px]" id="p-20questions-box"></div>
+      </div>
+
+      <div class="hidden">
+        <span id="p-name-2"></span>
+        <span id="p-clan-2"></span>
+        <span id="p-school-2"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SCRIPTS LOCAUX DE SYNCHRONISATION, DÉS & DOJO
        ===================================================================== -->
   <script>
     window.charSpellsList = window.charSpellsList || [];
@@ -1152,7 +1297,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       const isBushi = schoolType.includes("bushi") || schoolName.includes("bushi") || schoolName.includes("kakita") || schoolName.includes("mirumoto") || schoolName.includes("hida") || schoolName.includes("matsu") || schoolName.includes("akodo") || schoolName.includes("daidoji") || schoolName.includes("hiruma") || schoolName.includes("tsuruchi");
       const isMonk = schoolType.includes("moine") || schoolType.includes("monk") || schoolName.includes("togashi") || schoolName.includes("moine") || schoolName.includes("ise zumi");
 
-      const hasMultiAdv = (advantagesList || []).some(a => isMultipleSchoolsAdv(a.name));
+      const hasMultiAdv = (advantagesList || []).some(a => (typeof isMultipleSchoolsAdv === 'function') && isMultipleSchoolsAdv(a.name));
 
       const spellsPanel = document.getElementById('panel-spells-container');
       const katasPanel = document.getElementById('panel-katas-container');
@@ -1221,7 +1366,6 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
 
       const filtered = allSpells.filter(s => {
         if (s.isMaho || (s.element && s.element.toLowerCase() === "maho")) return false;
-
         const sElem = (s.isKiho ? "kiho" : (s.element || "universel")).toLowerCase();
         const matchElem = elemFilter === "tous" || sElem === elemFilter;
         const sRank = Number(s.mastery) || 0;
@@ -1446,7 +1590,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
     }
 
     // =========================================================================
-    // CATALOGUE & GESTION DES KATAS (CORRECTION FILTRE CASSE)
+    // KATAS MARTIAUX
     // =========================================================================
     function populateKataCatalogSelect() {
       const sel = document.getElementById('sel-catalog-kata');
@@ -1454,7 +1598,6 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       const rawFilter = (document.getElementById('filter-kata-elem')?.value || "tous").toLowerCase();
       const allKatas = window.KATAS_DATA || [];
 
-      // Filtre insensible à la casse
       const filtered = allKatas.filter(k => {
         if (rawFilter === "tous") return true;
         return (k.element || "").toLowerCase() === rawFilter;
@@ -1581,27 +1724,228 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       }).join('');
     }
 
-    function autoPopulateMysticAndMartial(forceAdd = false) {
-      const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
-      const schoolType = (schObj?.school?.type || "").toLowerCase();
-      const schoolName = (schObj?.school?.name || "").toLowerCase();
-      const isShugenja = schoolType.includes("shugenja") || schoolName.includes("shugenja");
+    // =========================================================================
+    // SÉLECTION MULTIPLE DES COMPÉTENCES (MENU DÉROULANT DU DESIGN D'ORIGINE)
+    // =========================================================================
+    let selectedSkillNames = new Set();
 
-      if (isShugenja) {
-        addUniversalSpells();
-      } else if (forceAdd && window.charKatasList.length === 0) {
-        const firstKata = (window.KATAS_DATA || [])[0];
-        if (firstKata) {
-          window.charKatasList.push({
-            id: firstKata.id, name: firstKata.name, element: firstKata.element,
-            mastery: firstKata.mastery, xpCost: firstKata.cost, schools: firstKata.schools, desc: firstKata.desc, active: true
-          });
+    function initSkillsMultiSelect() {
+      const container = document.getElementById('skills-checkboxes-container');
+      if (!container) return;
+      const allSkills = (typeof window.getSkills === 'function') ? window.getSkills() : (window.COMPETENCES_DATA || []);
+      const ownedRoots = new Set((window.currentSkills || []).map(s => (s.name || "").split('(')[0].trim().toLowerCase()));
+
+      container.innerHTML = allSkills.map(s => {
+        const root = s.name.split('(')[0].trim().toLowerCase();
+        if (ownedRoots.has(root)) return "";
+        return `
+          <label class="flex items-center justify-between p-1.5 rounded hover:bg-stone-900 cursor-pointer text-xs">
+            <span class="text-amber-200">${s.name} <span class="text-[10px] text-stone-500">(${s.type} - ${s.trait})</span></span>
+            <input type="checkbox" value="${s.name}" onchange="toggleSkillCheckbox(this)" class="rounded border-stone-700 text-amber-500">
+          </label>
+        `;
+      }).join('');
+      updateSkillsDropdownSummary();
+    }
+
+    function toggleSkillsDropdown() {
+      const panel = document.getElementById('skills-dropdown-panel');
+      const arrow = document.getElementById('skills-dropdown-arrow');
+      if (!panel) return;
+      const isHidden = panel.classList.toggle('hidden');
+      if (arrow) arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    function filterSkillsList() {
+      const term = (document.getElementById('filter-skills-input')?.value || "").toLowerCase();
+      const labels = document.querySelectorAll('#skills-checkboxes-container label');
+      labels.forEach(lbl => {
+        const txt = lbl.textContent.toLowerCase();
+        lbl.style.display = txt.includes(term) ? "flex" : "none";
+      });
+    }
+
+    function toggleSkillCheckbox(cb) {
+      if (cb.checked) selectedSkillNames.add(cb.value);
+      else selectedSkillNames.delete(cb.value);
+      updateSkillsDropdownSummary();
+    }
+
+    function clearAllSkillCheckboxes() {
+      selectedSkillNames.clear();
+      document.querySelectorAll('#skills-checkboxes-container input[type="checkbox"]').forEach(cb => cb.checked = false);
+      updateSkillsDropdownSummary();
+    }
+
+    function updateSkillsDropdownSummary() {
+      const count = selectedSkillNames.size;
+      const summary = document.getElementById('skills-checked-summary');
+      const btnLabel = document.getElementById('skills-selected-count');
+      if (summary) summary.textContent = `${count} sélectionnée(s)`;
+      if (btnLabel) btnLabel.textContent = count > 0 ? `${count} compétence(s) choisie(s)` : "Choisir des compétences...";
+    }
+
+    function addSelectedSkills() {
+      if (selectedSkillNames.size === 0) return;
+      selectedSkillNames.forEach(name => {
+        if (typeof window.addSkillFromCatalog === 'function') {
+          const selAdd = document.getElementById('sel-add-skill');
+          if (selAdd) {
+            selAdd.innerHTML = `<option value="${name}" selected>${name}</option>`;
+            window.addSkillFromCatalog();
+          }
+        }
+      });
+      clearAllSkillCheckboxes();
+      toggleSkillsDropdown();
+      initSkillsMultiSelect();
+    }
+
+    // =========================================================================
+    // PLATEAU DE DÉS ROLL & KEEP
+    // =========================================================================
+    function toggleDiceTray(forceOpen) {
+      const panel = document.getElementById('dice-tray-panel');
+      if (!panel) return;
+      if (typeof forceOpen === 'boolean') {
+        if (forceOpen) panel.classList.remove('hidden');
+        else panel.classList.add('hidden');
+      } else {
+        panel.classList.toggle('hidden');
+      }
+    }
+
+    function rollL5RDicePool(rollX, keepY, bonus, label, explode = true, spec = false) {
+      toggleDiceTray(true);
+      const resBox = document.getElementById('dice-result-box');
+      if (!resBox) return;
+
+      const dice = [];
+      for (let i = 0; i < rollX; i++) {
+        let dieVal = Math.floor(Math.random() * 10) + 1;
+        if (spec && dieVal === 1) {
+          dieVal = Math.floor(Math.random() * 10) + 1; // Relance les 1
+        }
+        let totalDie = dieVal;
+        let explodedTimes = 0;
+        while (explode && dieVal === 10 && explodedTimes < 5) {
+          dieVal = Math.floor(Math.random() * 10) + 1;
+          totalDie += dieVal;
+          explodedTimes++;
+        }
+        dice.push({ value: totalDie, exploded: explodedTimes > 0 });
+      }
+
+      dice.sort((a, b) => b.value - a.value);
+      const kept = dice.slice(0, keepY);
+      const dropped = dice.slice(keepY);
+      const totalScore = kept.reduce((acc, d) => acc + d.value, 0) + (bonus || 0);
+
+      resBox.innerHTML = `
+        <div class="flex justify-between items-center border-b border-stone-800 pb-1 text-xs">
+          <span class="font-bold text-amber-200 font-imperial">${label || 'Lancer de dés'}</span>
+          <span class="font-imperial font-black text-amber-300 text-base">${totalScore}</span>
+        </div>
+        <div class="flex flex-wrap gap-1 items-center pt-1">
+          ${kept.map(d => `<span class="die-anim px-2 py-1 rounded bg-amber-600 text-black font-extrabold text-xs shadow ${d.exploded ? 'ring-2 ring-amber-300' : ''}">${d.value}</span>`).join('')}
+          ${dropped.map(d => `<span class="px-1.5 py-0.5 rounded bg-stone-900 text-stone-500 text-[10px] line-through border border-stone-800">${d.value}</span>`).join('')}
+          ${bonus ? `<span class="text-xs text-amber-400 font-bold">+${bonus}</span>` : ''}
+        </div>
+      `;
+    }
+
+    function rollFromSticky(metricId, label) {
+      const txt = document.getElementById(metricId)?.textContent || "3g2";
+      const parts = txt.match(/(\d+)g(\d+)(?:\s*\+\s*(\d+))?/i);
+      if (parts) {
+        const x = parseInt(parts[1], 10) || 3;
+        const y = parseInt(parts[2], 10) || 2;
+        const b = parseInt(parts[3], 10) || 0;
+        rollL5RDicePool(x, y, b, label, true, false);
+      }
+    }
+
+    function executeManualRoll() {
+      const x = parseInt(document.getElementById('manual-roll-x')?.value, 10) || 5;
+      const y = parseInt(document.getElementById('manual-keep-y')?.value, 10) || 3;
+      const explode = document.getElementById('dice-explode-cb')?.checked ?? true;
+      const spec = document.getElementById('dice-spec-cb')?.checked ?? false;
+      rollL5RDicePool(x, y, 0, `Lancer manuel (${x}g${y})`, explode, spec);
+    }
+
+    // =========================================================================
+    // DOJO PERSONNEL & ACTIONS RESTAURÉES
+    // =========================================================================
+    function saveToDojo() {
+      if (typeof window.saveCharacterToDojo === 'function') {
+        window.saveCharacterToDojo();
+        renderDojoRoster();
+        const toast = document.getElementById('dojo-save-toast');
+        if (toast) {
+          toast.classList.remove('hidden');
+          setTimeout(() => toast.classList.add('hidden'), 2500);
         }
       }
-      renderCharacterSpells();
-      renderCharacterKatas();
-      updateArchetypePanels();
-      if (typeof updateAll === "function") updateAll();
+    }
+
+    function renderDojoRoster() {
+      const roster = document.getElementById('dojo-roster-list');
+      if (!roster) return;
+      const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
+      const list = raw ? JSON.parse(raw) : [];
+
+      if (!Array.isArray(list) || list.length === 0) {
+        roster.innerHTML = `<div class="text-stone-500 italic text-[11px] col-span-full">Aucun samouraï dans le dojo local. Cliquez sur "Enregistrer le personnage actuel".</div>`;
+        return;
+      }
+
+      roster.innerHTML = list.map((c, idx) => {
+        const safeId = c.id || idx;
+        return `
+          <div class="p-2 rounded bg-black/60 border border-stone-800 hover:border-amber-500/40 flex items-center justify-between gap-1 transition">
+            <div class="truncate">
+              <b class="text-amber-200 font-imperial block truncate">${c.name || "Samouraï"}</b>
+              <span class="text-[9px] text-stone-500">${c.clan || "Clan"}</span>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="loadFromDojo('${safeId}')" class="px-2 py-0.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] cursor-pointer">Charger</button>
+              <button type="button" onclick="deleteFromDojo('${safeId}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function loadFromDojo(id) {
+      if (typeof window.loadCharacterFromDojo === 'function') {
+        window.loadCharacterFromDojo(id);
+      }
+    }
+
+    function deleteFromDojo(id) {
+      if (typeof window.deleteCharacterFromDojo === 'function') {
+        window.deleteCharacterFromDojo(id);
+        renderDojoRoster();
+      }
+    }
+
+    function shareCharacterUrl() {
+      if (typeof window.collectCharacterData === 'function') {
+        const data = window.collectCharacterData();
+        const str = btoa(encodeURIComponent(JSON.stringify(data)));
+        const url = `${window.location.origin}${window.location.pathname}?char=${str}`;
+        navigator.clipboard.writeText(url).then(() => {
+          alert("Lien direct copié dans votre presse-papiers !");
+        }).catch(() => {
+          prompt("Voici votre lien direct :", url);
+        });
+      }
+    }
+
+    function applyFullCharacterState(decoded) {
+      if (typeof window.applyCharacterDataToSheet === 'function') {
+        window.applyCharacterDataToSheet(decoded);
+      }
     }
 
     function populatePrintableMysticBox() {
@@ -1668,7 +2012,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
         document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
       }
-      exportOfficialPDF();
+      if (typeof exportOfficialPDF === "function") exportOfficialPDF();
     }
 
     window.addEventListener('beforeprint', () => {
@@ -1710,7 +2054,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
 
         if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
           document.getElementById("sel-clan").value = clanParam;
-          onClanChange();
+          if (typeof onClanChange === 'function') onClanChange();
         }
       }, 200);
 
