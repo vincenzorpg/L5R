@@ -1,11 +1,12 @@
 /**
  * data/sorts-eau-data.js — L5R 4e Édition
- * Recueil exhaustif et conforme au Livre de Base (pages 187 à 193).
+ * Recueil exhaustif officiel de la Magie de l'Eau (Shugenja & Ishiken).
+ * Sources : Livre des Règles L5R 4e (p. 187-193), The Book of Water & The Great Clans.
  */
 
 const SORTS_EAU = [
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 1 (9 sorts officiels)
+  // NIVEAU DE MAÎTRISE 1 (11 sorts)
   // =========================================================================
   {
     id: "eau-1-bo-water",
@@ -13,6 +14,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "Personnelle ou 6 mètres (20')",
     area: "Une arme créée",
     duration: "5 Minutes",
@@ -25,6 +27,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "Personnelle",
     area: "Rayon de 3 mètres (10') autour du lanceur",
     duration: "2 Rounds",
@@ -32,11 +35,25 @@ const SORTS_EAU = [
     desc: "La rapidité est l'une des grandes forces de l'Eau. Tous les alliés situés dans la zone d'effet au moment de l'incantation gagnent un bonus de +5 à leur score d'Initiative pour toute la durée du sort."
   },
   {
+    id: "eau-1-cleansing-body",
+    name: "Purification du Corps (Cleansing the Body)",
+    element: "Eau",
+    mastery: 1,
+    keywords: [],
+    source: "The Book of Water",
+    range: "Contact",
+    area: "Un individu ciblé",
+    duration: "Instantanée",
+    raises: "Cibles (+1 individu supplémentaire par 2 Augmentations)",
+    desc: "Les kami d'Eau chassent les impuretés et toxines du système biologique. La cible peut immédiatement relancer tout jet de Vigueur ou de Constitution en cours pour résister aux effets d'un poison naturel, d'une drogue ou d'une maladie profane, en conservant le meilleur résultat."
+  },
+  {
     id: "eau-1-ebbing-strength",
     name: "Reflux de Force (Ebbing Strength)",
     element: "Eau",
     mastery: 1,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "6 mètres (20')",
     area: "Une créature ciblée",
     duration: "3 Rounds",
@@ -44,11 +61,25 @@ const SORTS_EAU = [
     desc: "Affaiblit le flux d'énergie de la cible comme le reflux d'une marée. La cible subit une pénalité de -1g1 sur tous ses jets de dégâts au corps à corps ou à mains nues pour la durée du sort."
   },
   {
+    id: "eau-1-flow-of-chi",
+    name: "Flux du Chi (Flow of Chi)",
+    element: "Eau",
+    mastery: 1,
+    keywords: ["Défense"],
+    source: "The Great Clans",
+    range: "Contact",
+    area: "Un individu consentant",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes)",
+    desc: "Harmonise la circulation interne du Chi de la cible. Le sujet gagne un bonus de +1g1 à tous ses jets pour résister aux attaques d'Atémis (Atemi), aux techniques de moines basées sur le Kiho et aux effets tentant de paralyser ou d'entraver ses méridiens énergétiques."
+  },
+  {
     id: "eau-1-path-inner-peace",
     name: "La Voie vers la Paix Intérieure (Path to Inner Peace)",
     element: "Eau",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -61,6 +92,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "Contact",
     area: "Un miroir ou une surface d'eau calme",
     duration: "1 Minute",
@@ -73,6 +105,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "3 mètres (10')",
     area: "Un individu ciblé",
     duration: "3 Rounds",
@@ -85,6 +118,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "3 mètres (10')",
     area: "Un individu ciblé",
     duration: "1 Round",
@@ -97,6 +131,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "Contact",
     area: "Un individu ou une créature ciblée",
     duration: "1 Heure",
@@ -109,6 +144,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -117,7 +153,7 @@ const SORTS_EAU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 2 (7 sorts officiels)
+  // NIVEAU DE MAÎTRISE 2 (10 sorts)
   // =========================================================================
   {
     id: "eau-2-cloak-miya",
@@ -125,6 +161,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "5 Rounds",
@@ -132,11 +169,25 @@ const SORTS_EAU = [
     desc: "Vous vous enveloppez dans l'étreinte protectrice de la vague. Votre ND d'Armure est augmenté d'un montant égal à votre Anneau d'Eau + votre Rang d'École pour toute la durée du sort."
   },
   {
+    id: "eau-2-fog-green-net",
+    name: "La Brume du Filet Vert (Fog of the Green Net)",
+    element: "Eau",
+    mastery: 2,
+    keywords: [],
+    source: "The Book of Water",
+    range: "9 mètres (30')",
+    area: "Rayon de 9 mètres (30') autour du point ciblé",
+    duration: "1 Heure",
+    raises: "Zone (+3 m de rayon), Durée (+1 heure), Portée (+3 m)",
+    desc: "Fait monter une brume moite chargée de condensats visqueux. Toute créature vivante pénétrant dans la zone ou y débutant son tour doit réussir un jet de Terre (ND 15) ou voir son Anneau d'Eau considéré comme réduit de 1 pour ses déplacements et ses tests physiques tant qu'elle demeure dans la brume, ses mouvements devenant lourds et empesés."
+  },
+  {
     id: "eau-2-inari-blessing",
     name: "La Bénédiction d'Inari (Inari's Blessing)",
     element: "Eau",
     mastery: 2,
     keywords: ["Artisanat"],
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "Personnelle",
     area: "Nourriture créée",
     duration: "Instantanée",
@@ -149,6 +200,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "15 kilomètres (10 miles)",
     area: "Étendue d'eau / Lieu ciblé",
     duration: "5 Minutes",
@@ -161,6 +213,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -168,11 +221,25 @@ const SORTS_EAU = [
     desc: "L'Eau purifie et revigore tout ce qu'elle effleure. Le sujet est instantanément rafraîchi comme s'il venait de bénéficier d'une nuit complète de sommeil réparateur. Cela n'annule pas la perte de points de Vide, mais dissipe immédiatement toute fatigue ou épuisement. Si la cible est un shugenja, le sort restaure ses emplacements de sorts quotidiens liés à son Anneau de Vide (utilisables pour n'importe quel élément), mais pas ceux des autres Anneaux. Nul ne peut bénéficier de ce sort plus d'une fois par période de 24 heures."
   },
   {
+    id: "eau-2-ride-the-water",
+    name: "Chevaucher les Eaux (Ride the Water)",
+    element: "Eau",
+    mastery: 2,
+    keywords: ["Voyage"],
+    source: "The Book of Water",
+    range: "Contact",
+    area: "Une embarcation de petite ou moyenne taille",
+    duration: "1 Heure",
+    raises: "Durée (+30 minutes)",
+    desc: "Les kami de l'Eau propulsent et guident une embarcation fluviale ou côtière. Sa vitesse de navigation est doublée, et le bateau devient totalement insensible aux écueils mineurs, courants contraires et bancs de sable."
+  },
+  {
     id: "eau-2-stand-against-waves",
     name: "Face aux Vagues (Stand Against the Waves)",
     element: "Eau",
     mastery: 2,
     keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "3 mètres (10')",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -185,6 +252,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "15 kilomètres (10 miles)",
     area: "Le lanceur",
     duration: "Instantanée",
@@ -197,6 +265,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "2 Rounds",
@@ -209,6 +278,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Heure",
@@ -217,14 +287,41 @@ const SORTS_EAU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 3 (5 sorts officiels)
+  // NIVEAU DE MAÎTRISE 3 (8 sorts)
   // =========================================================================
+  {
+    id: "eau-3-castle-water",
+    name: "Château d'Eau (Castle of Water)",
+    element: "Eau",
+    mastery: 3,
+    keywords: ["Défense"],
+    source: "The Book of Water",
+    range: "3 mètres (10')",
+    area: "Dôme protecteur d'un rayon de 3 mètres (10')",
+    duration: "5 Rounds",
+    raises: "Zone (+1,5 m de rayon), Durée (+1 round), Portée (+1,5 m)",
+    desc: "Érige un rideau circulaire d'eau sous pression continue autour de la zone choisie. Aucune flèche ni projectile d'arme à distance ordinaire ne peut traverser la barrière. Les attaques de mêlée portées à travers le dôme subissent une pénalité de -3g0 à l'attaque. Les sorts de Feu ciblant l'intérieur ou traversant la barrière voient leur ND augmenté de +15."
+  },
+  {
+    id: "eau-3-flowing-river",
+    name: "Rivière Fluide (Flowing River)",
+    element: "Eau",
+    mastery: 3,
+    keywords: ["Bataille"],
+    source: "The Book of Water",
+    range: "Contact",
+    area: "Une arme de mêlée",
+    duration: "5 Rounds",
+    raises: "Durée (+1 round)",
+    desc: "L'arme visée prend un aspect liquide et ondoie au fil des coups. Toutes les attaques portées avec cette arme contournent les défenses adverses et ignorent la totalité du bonus conféré au ND d'Armure par l'armure de la cible."
+  },
   {
     id: "eau-3-near-to-ice",
     name: "Proche de la Glace (Near to Ice)",
     element: "Eau",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "5 Rounds",
@@ -237,6 +334,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Concentration",
@@ -249,6 +347,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "Spéciale",
@@ -261,6 +360,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Minute",
@@ -273,6 +373,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: ["Voyage"],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "Contact",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "10 Minutes",
@@ -285,6 +386,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "Contact",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "5 Rounds",
@@ -293,7 +395,7 @@ const SORTS_EAU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 4 (5 sorts officiels)
+  // NIVEAU DE MAÎTRISE 4 (6 sorts)
   // =========================================================================
   {
     id: "eau-4-dominion-suitengu",
@@ -301,6 +403,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "150 kilomètres (100 miles)",
     area: "Deux étendues d'eau",
     duration: "Concentration",
@@ -313,6 +416,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "Personnelle",
     area: "Tous les alliés choisis dans un rayon de 15 mètres (50') autour du lanceur",
     duration: "5 Rounds",
@@ -325,6 +429,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "7,5 mètres (25')",
     area: "Nombre d'individus ciblés égal au Rang d'École du lanceur (peut inclure le lanceur)",
     duration: "Nombre de rounds égal au Rang d'École du lanceur",
@@ -337,6 +442,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Jour",
@@ -349,6 +455,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "3 mètres (10')",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "1 Round",
@@ -361,6 +468,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: ["Sceau"],
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "Contact",
     area: "Spéciale (porte, fenêtre, passage)",
     duration: "Permanente",
@@ -369,7 +477,7 @@ const SORTS_EAU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 5 (4 sorts officiels)
+  // NIVEAU DE MAÎTRISE 5 (7 sorts)
   // =========================================================================
   {
     id: "eau-5-ever-changing-waves",
@@ -377,6 +485,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 5,
     keywords: ["Illusion"],
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "1 Heure",
@@ -389,6 +498,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 5,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "Spéciale",
     area: "Un objet ou un individu ciblé",
     duration: "Instantanée",
@@ -401,6 +511,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 5,
     keywords: ["Bataille", "Voyage"],
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "Rayon de 30 mètres (100') centré sur le lanceur",
     area: "Cibles consentantes jusqu'à concurrence de l'Anneau d'Eau du lanceur",
     duration: "Instantanée",
@@ -408,11 +519,25 @@ const SORTS_EAU = [
     desc: "Permet de permuter instantanément les positions physiques de plusieurs cibles consentantes à portée. À la fin du sort, chaque emplacement initialement occupé doit comporter un des participants, mais vous redistribuez leurs positions respectives selon votre bon vouloir."
   },
   {
+    id: "eau-5-incline-willow",
+    name: "Courber le Saule (Incline the Willow)",
+    element: "Eau",
+    mastery: 5,
+    keywords: ["Défense"],
+    source: "The Book of Water",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "5 Rounds",
+    raises: "Durée (+1 round)",
+    desc: "À l'image du saule qui ploie sans rompre face au courant, vous déviez l'élan de vos agresseurs. Chaque fois qu'une attaque de mêlée réussie ou un sort à cible unique vous inflige des dégâts, vous pouvez effectuer un jet opposé d'Eau contre l'Attaque ou le jet d'incantation de l'assaillant. En cas de victoire, vous redirigez l'intégralité de l'attaque ou du sort contre une autre cible située à portée de l'assaillant (y compris l'attaquant lui-même)."
+  },
+  {
     id: "eau-5-power-ocean",
     name: "La Puissance de l'Océan (Power of the Ocean)",
     element: "Eau",
     mastery: 5,
     keywords: ["Défense"],
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "Contact",
     area: "Un individu consentant",
     duration: "Nombre de jours égal au Rang d'École du lanceur",
@@ -425,15 +550,29 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 5,
     keywords: ["Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "Instantanée",
     raises: "Portée (+1,5 m / +5')",
     desc: "Remplit instantanément les poumons de la cible d'eau de mer glaciale. La cible est réduite à l'état de Blessure À Terre (Down) en termes d'actions et ne peut rien faire d'autre que tenter de résister. À chaque round, elle effectue un jet de Constitution (ND 15). Trois réussites cumulées lui permettent de rejeter l'eau et de récupérer. Deux échecs consécutifs la font sombrer dans l'inconscience (elle se noie et meurt en 1 minute sans secours magique ou médical, ce dernier nécessitant un jet de Médecine/Intelligence ND 50)."
   },
+  {
+    id: "eau-5-surge-water",
+    name: "Poussée des Eaux (Surge of Water)",
+    element: "Eau",
+    mastery: 5,
+    keywords: ["Bataille"],
+    source: "The Book of Water",
+    range: "30 mètres (100')",
+    area: "Cône de 15 mètres (50') de long sur 6 mètres (20') de large à son extrémité",
+    duration: "Instantanée",
+    raises: "Dégâts (+1g0), Portée (+3 m / +10')",
+    desc: "Une lame de fond fracassante jaillit de vos mains. Toutes les personnes situées dans le cône subissent 5g3 Blessures contondantes et doivent réussir un jet de Terre contre un ND égal au résultat de votre jet d'incantation sous peine d'être Renversées (Prone) et projetées à l'extrémité du cône."
+  },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 6 (3 sorts officiels)
+  // NIVEAU DE MAÎTRISE 6 (4 sorts)
   // =========================================================================
   {
     id: "eau-6-peace-kami",
@@ -441,6 +580,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 6,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -453,6 +593,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 6,
     keywords: [],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "9 mètres (30')",
     area: "Un esprit invoqué",
     duration: "Concentration",
@@ -460,11 +601,25 @@ const SORTS_EAU = [
     desc: "Invoque un colosse d'Eau de 3 mètres de haut. Il se déplace d'une distance de (Eau × 4,5 m / 15') par round et sature le sol sur 6 m autour de lui, transformant la zone en Terrain Difficile. Traits Physiques = votre Anneau d'Eau, Jiujutsu = moitié de votre Anneau d'Eau, VD des dégâts = Eau g Eau. Ses Blessures sont calculées avec une Terre égale à votre Eau (sans malus de blessures) et il possède le trait Invulnérable. Disparaît à 0 Blessure."
   },
   {
+    id: "eau-6-tsunami",
+    name: "Le Tsunami (Tsunami)",
+    element: "Eau",
+    mastery: 6,
+    keywords: ["Bataille"],
+    source: "The Book of Water",
+    range: "1,5 kilomètre (1 mile) en présence d'une vaste étendue d'eau",
+    area: "Front de vague de 100 mètres de large",
+    duration: "Instantanée",
+    raises: "Aucune",
+    desc: "Requiert la proximité de la mer ou d'un très grand lac. Lève une onde de marée gigantesque qui s'abat sur le littoral ou la flotte ciblée. Tous les navires touchés chavirent ou sont brisés (dégâts de siège automatiques), les fortifications côtières subissent des dégâts colossaux et toutes les personnes sans abri submergées subissent 8g4 Blessures contondantes avec risque critique de noyade immédiate."
+  },
+  {
     id: "eau-6-waters-sweet-clarity",
     name: "Douce Clarté de l'Eau (Water's Sweet Clarity)",
     element: "Eau",
     mastery: 6,
     keywords: ["Divination"],
+    source: "Livre des Règles L5R 4e, p. 193",
     range: "Personnelle",
     area: "Étendue d'eau ciblée",
     duration: "3 Rounds",
