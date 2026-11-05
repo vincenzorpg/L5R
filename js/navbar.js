@@ -4,6 +4,48 @@
  */
 
 // =============================================================================
+// 0. Favicon
+// =============================================================================
+/**
+ * Injection automatique & universelle du Favicon
+ * Fichier source : assets/images/logo_rokugan.svg
+ */
+(function setupDynamicFavicon() {
+  function getFaviconUrl() {
+    // Si le site tourne sur GitHub Pages (/L5R/) ou en racine locale
+    const isL5RSubpath = window.location.pathname.includes('/L5R/');
+    const basePath = isL5RSubpath ? '/L5R/assets/images/logo_rokugan.svg' : '/assets/images/logo_rokugan.svg';
+    
+    // Si ouvert en protocole file://, on calcule la profondeur relative
+    if (window.location.protocol === 'file:') {
+      const depth = (window.location.pathname.match(/\//g) || []).length;
+      const isSubfolder = window.location.pathname.includes('/aides/') || 
+                          window.location.pathname.includes('/clans/') || 
+                          window.location.pathname.includes('/campagne/');
+      return isSubfolder ? '../assets/images/logo_rokugan.svg' : 'assets/images/logo_rokugan.svg';
+    }
+    return basePath;
+  }
+
+  function applyFavicon() {
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+    link.type = "image/svg+xml";
+    link.href = getFaviconUrl();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyFavicon);
+  } else {
+    applyFavicon();
+  }
+})();
+
+// =============================================================================
 // 1. CONFIGURATION DU MENU & KANJIS TRADITIONNELS
 // =============================================================================
 const NAV_CONFIG = {
