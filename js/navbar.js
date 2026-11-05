@@ -58,12 +58,12 @@ const NAV_CONFIG = {
         { icon: "鍛", label: "Forge de Personnage", url: "createcharacter.html" },
         { icon: "咒", label: "Grimoire des Sorts & Kihos", url: "grimoire.html" },
         { icon: "墨", label: "Tatouages Sacrés (Ise Zumi)", url: "tatouages.html" },
-        { icon: "記", label: "Carnet de Rokugan", url: "https://nelsio.github.io/carnet-l5r/", external: true }
+        { logoImg: "https://nelsio.github.io/carnet-l5r/favicon.ico", label: "Carnet de Rokugan", url: "https://nelsio.github.io/carnet-l5r/", external: true }
       ]
     },
     {
       label: "Carnet de Rokugan",
-      icon: "記",
+      logoImg: "https://nelsio.github.io/carnet-l5r/favicon.ico",
       url: "https://nelsio.github.io/carnet-l5r/",
       external: true,
       isPill: true
@@ -161,12 +161,12 @@ const NAV_CONFIG = {
         `;
       } else if (item.isPill) {
         navHtml += `
-          <a href="${resolveUrl(item.url)}" 
-             ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ""}
-             class="px-3 py-1.5 rounded-lg border border-amber-500/40 bg-[#160d0d] hover:bg-[#241313] text-amber-300 hover:text-amber-200 transition font-bold flex items-center gap-1.5 shadow-sm">
-            <span class="font-serif">${item.icon}</span>
-            <span>${item.label}</span>
-          </a>
+            <a href="${resolveUrl(item.url)}" 
+               ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ""}
+               class="px-3 py-1.5 rounded-lg border border-amber-500/40 bg-[#160d0d] hover:bg-[#241313] text-amber-300 hover:text-amber-200 transition font-bold flex items-center gap-2 shadow-sm">
+              <img src="${item.logoImg || 'https://nelsio.github.io/carnet-l5r/favicon.ico'}" alt="Carnet" class="w-4 h-4 rounded-sm object-contain">
+              <span>${item.label}</span>
+            </a>
         `;
       } else {
         navHtml += `
