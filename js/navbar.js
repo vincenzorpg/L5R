@@ -53,7 +53,7 @@ const NAV_CONFIG = {
   brand: {
     name: "LES CHRONIQUES DE ROKUGAN",
     subtitle: "Samouraïs HAJIME !",
-    icon: "録", // Roku
+    image: "assets/images/cinq_anneaux.jpg", // Emblème des Cinq Anneaux
     url: "index.html"
   },
   menu: [
