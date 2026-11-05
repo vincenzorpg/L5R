@@ -100,12 +100,12 @@ const NAV_CONFIG = {
         { icon: "鍛", label: "Forge de Personnage", url: "createcharacter.html" },
         { icon: "咒", label: "Grimoire des Sorts & Kihos", url: "grimoire.html" },
         { icon: "墨", label: "Tatouages Sacrés (Ise Zumi)", url: "tatouages.html" },
-        { logoImg: "https://nelsio.github.io/carnet-l5r/favicon.ico", label: "Carnet de Rokugan", url: "https://nelsio.github.io/carnet-l5r/", external: true }
+        { logoImg: "assets/images/logo_carnet_rokugan.png", label: "Carnet de Rokugan", url: "https://nelsio.github.io/carnet-l5r/", external: true }
       ]
     },
     {
       label: "Carnet de Rokugan",
-      logoImg: "https://nelsio.github.io/carnet-l5r/favicon.ico",
+      logoImg: "assets/images/logo_carnet_rokugan.png",
       url: "https://nelsio.github.io/carnet-l5r/",
       external: true,
       isPill: true
