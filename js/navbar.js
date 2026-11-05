@@ -15,7 +15,7 @@
   function getFaviconUrl() {
     // Si le site tourne sur GitHub Pages (/L5R/) ou en racine locale
     const isL5RSubpath = window.location.pathname.includes('/L5R/');
-    const basePath = isL5RSubpath ? '/L5R/assets/images/logo_rokugan.svg' : '/asset/images/logo_rokugan.svg';
+    const basePath = isL5RSubpath ? '/L5R/assets/images/logo_rokugan.svg' : '/asset/images/favicon.svg';
     
     // Si ouvert en protocole file://, on calcule la profondeur relative
     if (window.location.protocol === 'file:') {
