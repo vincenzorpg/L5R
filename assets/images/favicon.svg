@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Dégradé or impérial à 3 tons -->
+    <linearGradient id="goldSeal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff3b0" />
+      <stop offset="42%" stop-color="#d4af37" />
+      <stop offset="100%" stop-color="#8c6a12" />
+    </linearGradient>
+
+    <!-- Fond laque sombre à reflets chauds -->
+    <linearGradient id="lacquerBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1412" />
+      <stop offset="100%" stop-color="#080606" />
+    </linearGradient>
+
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#000" flood-opacity="0.9" />
+    </filter>
+  </defs>
+
+  <!-- Cartouche extérieur (forme du tampon) -->
+  <rect x="6" y="6" width="116" height="116" rx="22" ry="22" fill="url(#lacquerBg)" stroke="url(#goldSeal)" stroke-width="4.5" />
+
+  <!-- Filet intérieur traditionnel (double encadrement d'hanko) -->
+  <rect x="16" y="16" width="96" height="96" rx="14" ry="14" fill="none" stroke="url(#goldSeal)" stroke-width="2.5" opacity="0.88" />
+
+  <!-- Kanji central façon calligraphie impériale -->
+  <text x="64" y="86" font-family="&#39;Noto Serif JP&#39;, &#39;Cinzel&#39;, &#39;Yu Mincho&#39;, serif" font-size="62" font-weight="900" fill="url(#goldSeal)" text-anchor="middle" filter="url(#subtleGlow)">
+    録
+  </text>
+</svg>
