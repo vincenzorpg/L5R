@@ -9,13 +9,13 @@
 // =============================================================================
 /**
  * Injection automatique & universelle du Favicon
- * Fichier source : asset/images/logo_rokugan.svg
+ * Fichier source : asset/images/favicon.svg
  */
 (function setupDynamicFavicon() {
   function getFaviconUrl() {
     // Si le site tourne sur GitHub Pages (/L5R/) ou en racine locale
     const isL5RSubpath = window.location.pathname.includes('/L5R/');
-    const basePath = isL5RSubpath ? '/L5R/assets/images/logo_rokugan.svg' : '/asset/images/favicon.svg';
+    const basePath = isL5RSubpath ? '/L5R/assets/images/favicon.svg' : '/asset/images/favicon.svg';
     
     // Si ouvert en protocole file://, on calcule la profondeur relative
     if (window.location.protocol === 'file:') {
@@ -23,7 +23,7 @@
       const isSubfolder = window.location.pathname.includes('/aides/') || 
                           window.location.pathname.includes('/clans/') || 
                           window.location.pathname.includes('/campagne/');
-      return isSubfolder ? '../asset/images/logo_rokugan.svg' : 'asset/images/logo_rokugan.svg';
+      return isSubfolder ? '../asset/images/logo_rokugan.svg' : 'asset/images/favicon.svg';
     }
     return basePath;
   }
