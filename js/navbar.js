@@ -53,7 +53,7 @@ const NAV_CONFIG = {
   brand: {
     name: "LES CHRONIQUES DE ROKUGAN",
     subtitle: "Samouraïs HAJIME !",
-    icon: "竜", // Dragon impérial
+    icon: "録", // Roku
     url: "index.html"
   },
   menu: [
