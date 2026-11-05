@@ -1,50 +1,7 @@
 /**
  * js/navbar.js — Barre de navigation globale et dynamique (Desktop & Mobile)
  * Campagne L5R — MJ David
- * Rangement logique & pictographie traditionnelle japonaise (Kanji)
  */
-
-// =============================================================================
-// 0. FAVICON
-// =============================================================================
-/**
- * Injection automatique & universelle du Favicon
- * Fichier source : asset/images/favicon.svg
- */
-(function setupDynamicFavicon() {
-  function getFaviconUrl() {
-    // Si le site tourne sur GitHub Pages (/L5R/) ou en racine locale
-    const isL5RSubpath = window.location.pathname.includes('/L5R/');
-    const basePath = isL5RSubpath ? '/L5R/assets/images/favicon.svg' : '/asset/images/favicon.svg';
-    
-    // Si ouvert en protocole file://, on calcule la profondeur relative
-    if (window.location.protocol === 'file:') {
-      const depth = (window.location.pathname.match(/\//g) || []).length;
-      const isSubfolder = window.location.pathname.includes('/aides/') || 
-                          window.location.pathname.includes('/clans/') || 
-                          window.location.pathname.includes('/campagne/');
-      return isSubfolder ? '../asset/images/favicon.svg' : 'asset/images/favicon.svg';
-    }
-    return basePath;
-  }
-
-  function applyFavicon() {
-    let link = document.querySelector("link[rel*='icon']");
-    if (!link) {
-      link = document.createElement("link");
-      link.rel = "icon";
-      document.head.appendChild(link);
-    }
-    link.type = "image/svg+xml";
-    link.href = getFaviconUrl();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", applyFavicon);
-  } else {
-    applyFavicon();
-  }
-})();
 
 // =============================================================================
 // 1. CONFIGURATION DU MENU & KANJIS TRADITIONNELS
@@ -53,28 +10,27 @@ const NAV_CONFIG = {
   brand: {
     name: "LES CHRONIQUES DE ROKUGAN",
     subtitle: "Samouraïs HAJIME !",
-    image: "assets/images/cinq_anneaux.jpg", // Emblème des Cinq Anneaux
+    image: "assets/images/cinq_anneaux.jpg",
     url: "index.html"
   },
   menu: [
     {
       label: "Accueil",
-      icon: "門", // Torii / Porte d'entrée
+      icon: "門",
       url: "index.html"
     },
-    // 1. CHRONIQUES & RÉCITS DE CAMPAGNE
     {
       label: "Campagne",
-      icon: "巻", // Rouleau / Makimono
+      icon: "巻",
       children: [
-        { icon: "巻", label: "Les Scénarios Joués", url: "campagne.html" },
+        { icon: "巻", label: "Les 10 Scénarios Joués", url: "campagne.html" },
         { icon: "筆", label: "Déposer un Scénario (Upload)", url: "campagne-ajouter.html" },
+        { icon: "印", label: "Administration CMS", url: "admin/index.html" }
       ]
     },
-    // 2. LES HUIT GRANDES MAISONS
     {
       label: "Les Huit Clans",
-      icon: "氏", // Lignées / Clans majeurs
+      icon: "氏",
       children: [
         { kanji: "蟹", color: "#38bdf8", label: "Clan du Crabe", url: "clans/crabe.html" },
         { kanji: "鶴", color: "#67e8f9", label: "Clan de la Grue", url: "clans/grue.html" },
@@ -86,20 +42,18 @@ const NAV_CONFIG = {
         { kanji: "麒", color: "#c084fc", label: "Clan de la Licorne", url: "clans/licorne.html" }
       ]
     },
-    // 3. LA VOIE MARTIALE & TRADITIONS
     {
       label: "La Voie & Règles",
-      icon: "道", // Dō (La Voie)
+      icon: "道",
       children: [
         { icon: "武", label: "Mémento de Combat (Bugei)", url: "aides/combat-memento.html" },
         { icon: "誉", label: "Bushido & Code d'Honneur", url: "aides/bushido-honneur.html" },
         { icon: "礼", label: "Étiquette, Rangs & Coutumes", url: "aides/etiquette-coutumes.html" }
       ]
     },
-    // 4. ATELIERS, GRIMOIRES & OUTILS
     {
       label: "Outils",
-      icon: "具", // Outils / Instruments
+      icon: "具",
       children: [
         { icon: "鍛", label: "Forge de Personnage", url: "createcharacter.html" },
         { icon: "咒", label: "Grimoire des Sorts & Kihos", url: "grimoire.html" },
@@ -107,7 +61,6 @@ const NAV_CONFIG = {
         { icon: "記", label: "Carnet de Rokugan", url: "https://nelsio.github.io/carnet-l5r/", external: true }
       ]
     },
-    // LIEN COMPAGNON DIRECT
     {
       label: "Carnet de Rokugan",
       icon: "記",
@@ -140,25 +93,26 @@ const NAV_CONFIG = {
     const header = document.getElementById("site-header");
     if (!header) return;
 
-    // Fixation absolue au viewport
     header.style.position = "fixed";
     header.style.top = "0";
     header.style.left = "0";
     header.style.right = "0";
     header.style.zIndex = "1000";
 
-    // Dégagement du body pour éviter le chevauchement du contenu
     document.body.style.paddingTop = "54px";
+
+    // Rendu du logo : Image si renseignée, sinon icône kanji de secours
+    const brandVisual = NAV_CONFIG.brand.image
+      ? `<img src="${resolveUrl(NAV_CONFIG.brand.image)}" alt="Logo" class="w-8 h-8 rounded-full object-cover border border-amber-500/50 shadow group-hover:scale-105 transition-transform" />`
+      : `<span class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 flex items-center justify-center text-black font-extrabold font-serif text-xs shadow">${NAV_CONFIG.brand.icon || "竜"}</span>`;
 
     let navHtml = `
       <nav class="bg-[#0a0808]/95 backdrop-blur-md border-b border-amber-500/40 text-stone-300 text-xs shadow-2xl relative z-50">
         <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
           
-          <!-- LOGO & TITRE -->
+          <!-- MARQUE & LOGO -->
           <a href="${resolveUrl(NAV_CONFIG.brand.url)}" class="flex items-center gap-2.5 group shrink-0">
-            <span class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 flex items-center justify-center text-black font-extrabold font-serif text-xs shadow group-hover:scale-105 transition-transform">
-              ${NAV_CONFIG.brand.icon}
-            </span>
+            ${brandVisual}
             <div class="leading-tight">
               <span class="font-imperial font-bold tracking-widest text-amber-200 text-xs sm:text-sm group-hover:text-amber-300 transition block">
                 ${NAV_CONFIG.brand.name}
@@ -169,7 +123,7 @@ const NAV_CONFIG = {
             </div>
           </a>
 
-          <!-- LIENS DU MENU (DESKTOP) -->
+          <!-- LIENS DESKTOP -->
           <div class="hidden lg:flex items-center gap-1 xl:gap-2">
     `;
 
@@ -183,7 +137,6 @@ const NAV_CONFIG = {
               <span class="text-[8px] text-stone-500 transition-transform duration-200 arrow-icon">▼</span>
             </button>
             
-            <!-- Menu déroulant -->
             <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-1.5 w-64 z-50">
               <div class="rounded-xl bg-[#120d0d] border border-amber-500/40 shadow-2xl py-1.5 overflow-hidden">
                 ${item.children.map(sub => {
@@ -243,7 +196,7 @@ const NAV_CONFIG = {
 
         </div>
 
-        <!-- PANNEAU MOBILE DÉROULANT -->
+        <!-- PANNEAU MOBILE -->
         <div id="mobile-menu-panel" class="hidden lg:hidden border-t border-amber-500/30 bg-[#0e0a0a] px-4 py-3 space-y-3 max-h-[80vh] overflow-y-auto">
           ${NAV_CONFIG.menu.map(item => {
             if (item.children) {
@@ -278,9 +231,6 @@ const NAV_CONFIG = {
     attachMenuEvents();
   }
 
-  // =============================================================================
-  // 3. GESTION DES ÉVÉNEMENTS (SURVOL & CLIC MOBILE)
-  // =============================================================================
   function attachMenuEvents() {
     const dropdownWrappers = document.querySelectorAll(".nav-dropdown-wrapper");
 
