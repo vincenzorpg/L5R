@@ -23,7 +23,7 @@
       const isSubfolder = window.location.pathname.includes('/aides/') || 
                           window.location.pathname.includes('/clans/') || 
                           window.location.pathname.includes('/campagne/');
-      return isSubfolder ? '../asset/images/logo_rokugan.svg' : 'asset/images/favicon.svg';
+      return isSubfolder ? '../asset/images/favicon.svg' : 'asset/images/favicon.svg';
     }
     return basePath;
   }
