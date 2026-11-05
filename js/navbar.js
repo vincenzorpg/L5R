@@ -67,9 +67,8 @@ const NAV_CONFIG = {
       label: "Campagne",
       icon: "巻", // Rouleau / Makimono
       children: [
-        { icon: "巻", label: "Les 10 Scénarios Joués", url: "campagne.html" },
+        { icon: "巻", label: "Les Scénarios Joués", url: "campagne.html" },
         { icon: "筆", label: "Déposer un Scénario (Upload)", url: "campagne-ajouter.html" },
-        { icon: "印", label: "Administration CMS", url: "admin/index.html" }
       ]
     },
     // 2. LES HUIT GRANDES MAISONS
