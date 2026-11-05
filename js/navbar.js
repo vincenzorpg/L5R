@@ -8,13 +8,13 @@
 // =============================================================================
 /**
  * Injection automatique & universelle du Favicon
- * Fichier source : assets/images/logo_rokugan.svg
+ * Fichier source : assets/images/cinq_anneaux.jpg
  */
 (function setupDynamicFavicon() {
   function getFaviconUrl() {
     // Si le site tourne sur GitHub Pages (/L5R/) ou en racine locale
     const isL5RSubpath = window.location.pathname.includes('/L5R/');
-    const basePath = isL5RSubpath ? '/L5R/assets/images/logo_rokugan.svg' : '/assets/images/logo_rokugan.svg';
+    const basePath = isL5RSubpath ? '/L5R/assets/images/cinq_anneaux.jpg' : '/assets/images/cinq_anneaux.jpg';
     
     // Si ouvert en protocole file://, on calcule la profondeur relative
     if (window.location.protocol === 'file:') {
@@ -22,7 +22,7 @@
       const isSubfolder = window.location.pathname.includes('/aides/') || 
                           window.location.pathname.includes('/clans/') || 
                           window.location.pathname.includes('/campagne/');
-      return isSubfolder ? '../assets/images/logo_rokugan.svg' : 'assets/images/logo_rokugan.svg';
+      return isSubfolder ? '../assets/images/cinq_anneaux.jpg' : 'assets/images/cinq_anneaux.jpg';
     }
     return basePath;
   }
