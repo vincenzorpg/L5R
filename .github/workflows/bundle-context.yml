@@ -1,18 +1,3 @@
-name: Génération du Contexte Projet
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  bundle:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Récupérer le dépôt
-        uses: actions/checkout@v4
-
       - name: Parcourir tous les répertoires et compiler
         run: |
           OUTPUT="L5R_FULL_CONTEXT.md"
@@ -23,33 +8,31 @@ jobs:
           # 1. Lister l'arborescence complète en tête de fichier
           echo "## Arborescence du Dépôt" >> "$OUTPUT"
           echo '```text' >> "$OUTPUT"
-          find . -maxdepth 3 -not -path '*/.*' | sort >> "$OUTPUT"
+          find . -maxdepth 3 -not -path '*/.*' -not -path './node_modules*' -not -path './dist*' | sort >> "$OUTPUT"
           echo '```' >> "$OUTPUT"
           echo "" >> "$OUTPUT"
 
-          # 2. Parcourir récursivement tous les sous-dossiers (data, js, campagne, clans, aides, sorts)
+          # 2. Parcourir et ajouter uniquement les fichiers texte
           while IFS= read -r -d '' file; do
             clean_file="${file#./}"
+
+            # Filtrer les fichiers binaires pour ne pas corrompre le fichier avec des caractères nuls
+            if [ -s "$file" ] && ! grep -qI '.' "$file"; then
+              echo "Ignoré (binaire) : $clean_file"
+              continue
+            fi
+
             echo "Ajout de : $clean_file"
             echo "## Fichier : $clean_file" >> "$OUTPUT"
-            echo '```' >> "$OUTPUT"
+            # Utilisation de 4 backticks pour encapsuler du code et des fichiers .md sans collision
+            echo '````' >> "$OUTPUT"
             cat "$file" >> "$OUTPUT"
             echo "" >> "$OUTPUT"
-            echo '```' >> "$OUTPUT"
+            echo '````' >> "$OUTPUT"
             echo "" >> "$OUTPUT"
           done < <(find . -type f \
             -not -path '*/.*' \
+            -not -path './node_modules*' \
+            -not -path './dist*' \
             -not -name 'L5R_FULL_CONTEXT.md' \
-            -not -name '*.png' \
-            -not -name '*.jpg' \
-            -not -name '*.jpeg' \
-            -not -name '*.gif' \
-            -not -name '*.ico' \
-            -not -name '*.zip' \
             -print0 | sort -z)
-
-      - name: Publier le fichier en artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: contexte-l5r
-          path: L5R_FULL_CONTEXT.md
