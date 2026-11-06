@@ -4,51 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Le Code du Bushido & l'Honneur — L5R 4e Édition | Campagne MJ David</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="stylesheet" href="../css/main.css">
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- FAVICON DES 5 ANNEAUX -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f5e096'/%3E%3Cstop offset='50%25' stop-color='%23d4af37'/%3E%3Cstop offset='100%25' stop-color='%23997a15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230a0808' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='46' fill='none' stroke='url(%23g)' stroke-width='1.5' stroke-dasharray='6 3' opacity='0.5'/%3E%3Ctext x='64' y='73' font-family='serif' font-size='28' font-weight='900' fill='url(%23g)' text-anchor='middle'%3E%E7%A9%BA%3C/text%3E%3Ccircle cx='64' cy='110' r='11' fill='%23140f0a' stroke='%238c6239' stroke-width='1.5'/%3E%3Ctext x='64' y='115' font-family='serif' font-size='13' font-weight='bold' fill='%23d2b48c' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3Ccircle cx='18' cy='64' r='11' fill='%2308131a' stroke='%232563eb' stroke-width='1.5'/%3E%3Ctext x='18' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%2360a5fa' text-anchor='middle'%3E%E6%B0%B4%3C/text%3E%3Ccircle cx='110' cy='64' r='11' fill='%231a0a0a' stroke='%23dc2626' stroke-width='1.5'/%3E%3Ctext x='110' y='69' font-family='serif' font-size='13' font-weight='bold' fill='%23f87171' text-anchor='middle'%3E%E7%81%AB%3C/text%3E%3Ccircle cx='64' cy='18' r='11' fill='%23081816' stroke='%230d9488' stroke-width='1.5'/%3E%3Ctext x='64' y='23' font-family='serif' font-size='13' font-weight='bold' fill='%232dd4bf' text-anchor='middle'%3E%E9%A2%A8%3C/text%3E%3C/svg%3E">
-
-  <style>
-    :root {
-      --dark-lacquer: #0a0808;
-      --gold: #d4af37;
-      --gold-light: #f3e5ab;
-    }
-    body {
-      background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #201208 0%, #0a0808 85%);
-      color: #e5dec9;
-      font-family: 'Noto Serif JP', serif;
-    }
-    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
-    .card-clean {
-      background: rgba(18, 14, 14, 0.94);
-      border: 1px solid rgba(212, 175, 55, 0.25);
-    }
-    .gold-text { color: var(--gold); }
-    .gold-gradient {
-      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    @media print {
-      body { background: white !important; color: black !important; }
-      .no-print { display: none !important; }
-      .card-clean { background: white !important; border: 1px solid #777 !important; color: black !important; break-inside: avoid; }
-      .gold-text { color: #8b0000 !important; }
-    }
-  </style>
+  <script src="../js/navbar.js" defer></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
   <!-- NAVIGATION SUPÉRIEURE -->
   <header id="site-header" class="no-print"></header>
-  <script src="../js/navbar.js" defer></script>
 
   <!-- CONTENU PRINCIPAL -->
   <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
@@ -155,10 +123,10 @@
           <div class="text-[10px] text-amber-400/80 italic">Prisé par : Tous les clans (sauf Scorpion dans l'ombre).</div>
         </div>
 
-        <!-- CHUGO -->
+        <!-- CHUGI -->
         <div class="card-clean rounded-xl p-3.5 space-y-1.5 border-amber-500/40 lg:col-span-2">
           <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-            <span class="font-bold text-amber-300 font-imperial text-sm">忠義 Chūgo</span>
+            <span class="font-bold text-amber-300 font-imperial text-sm">忠義 Chūgi</span>
             <span class="text-[10px] text-stone-400">Devoir & Loyauté Inébranlable</span>
           </div>
           <p class="text-stone-300 leading-relaxed">
@@ -176,7 +144,7 @@
         2. La Trinité Sociale : Honneur, Gloire et Statut (Livre de Base, p. 90-93)
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        
+
         <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center">
             <h3 class="font-bold text-amber-200 text-sm font-imperial">Honneur (Meiyo)</h3>
@@ -242,75 +210,75 @@
           <tbody class="divide-y divide-stone-800 text-stone-300 text-[11px]">
             <tr class="hover:bg-amber-950/20">
               <td class="p-2.5 font-bold text-amber-200">Accomplir une promesse malgré un coût personnel immense</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+10</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+4</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+2</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+10</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+4</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+2</td>
               <td class="p-2.5 text-center text-stone-500">0</td>
             </tr>
             <tr class="hover:bg-amber-950/20">
               <td class="p-2.5 font-bold text-amber-200">Protéger les intérêts de son seigneur au péril de sa vie</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+4</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+2</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+4</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+2</td>
             </tr>
             <tr class="hover:bg-amber-950/20">
               <td class="p-2.5 font-bold text-amber-200">Faire preuve d'une courtoisie sincère envers ses rivaux</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+9</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+7</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+5</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+2</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+9</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+7</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+5</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+2</td>
               <td class="p-2.5 text-center text-stone-500">0</td>
               <td class="p-2.5 text-center text-stone-500">0</td>
             </tr>
             <tr class="hover:bg-amber-950/20">
               <td class="p-2.5 font-bold text-amber-200">Secourir un ennemi blessé sur le champ de bataille</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+9</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+8</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+6</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+5</td>
-              <td class="p-2.5 text-center text-emerald-400 font-bold">+3</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+9</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+8</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+6</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+5</td>
+              <td class="p-2.5 text-center text-emerald-500 font-bold">+3</td>
             </tr>
             <tr class="hover:bg-red-950/20 bg-red-950/10">
-              <td class="p-2.5 font-bold text-red-300">Manquement mineur à l'étiquette ou impolitesse publique</td>
+              <td class="p-2.5 font-bold text-red-400">Manquement mineur à l'étiquette ou impolitesse publique</td>
               <td class="p-2.5 text-center text-stone-500">0</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-1</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-2</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-3</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-4</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-5</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-1</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-2</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-3</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-4</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-5</td>
             </tr>
             <tr class="hover:bg-red-950/20 bg-red-950/10">
-              <td class="p-2.5 font-bold text-red-300">Mentir pour protéger ses propres intérêts égoïstes</td>
+              <td class="p-2.5 font-bold text-red-400">Mentir pour protéger ses propres intérêts égoïstes</td>
               <td class="p-2.5 text-center text-stone-500">0</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-3</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-5</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-7</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-9</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-10</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-3</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-5</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-7</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-9</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-10</td>
             </tr>
             <tr class="hover:bg-red-950/20 bg-red-950/10">
-              <td class="p-2.5 font-bold text-red-300">Fuir lâchement le champ de bataille devant l'ennemi</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-5</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-8</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-12</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-15</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-18</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-20</td>
+              <td class="p-2.5 font-bold text-red-400">Fuir lâchement le champ de bataille devant l'ennemi</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-5</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-8</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-12</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-15</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-18</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-20</td>
             </tr>
             <tr class="hover:bg-red-950/20 bg-red-950/10">
-              <td class="p-2.5 font-bold text-red-300">Trahir son seigneur féodal ou commettre un acte félon</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-10</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-15</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-20</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-25</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">-30</td>
-              <td class="p-2.5 text-center text-red-400 font-bold">Perte totale (0.0)</td>
+              <td class="p-2.5 font-bold text-red-400">Trahir son seigneur féodal ou commettre un acte félon</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-10</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-15</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-20</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-25</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">-30</td>
+              <td class="p-2.5 text-center text-red-500 font-bold">Perte totale (0.0)</td>
             </tr>
           </tbody>
         </table>
@@ -319,7 +287,7 @@
 
     <!-- SECTION 4 : LE JET D'HONNEUR & LA SOUILLURE -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-      
+
       <!-- JET D'HONNEUR -->
       <div class="card-clean rounded-xl p-5 space-y-3">
         <h3 class="font-bold text-amber-200 text-sm font-imperial border-b border-amber-500/20 pb-2">
@@ -354,10 +322,17 @@
 
     </section>
 
+    <!-- NAVIGATION ENTRE LES GUIDES -->
+    <nav aria-label="Navigation des aides de jeu" class="pt-6 border-t border-amber-500/20 flex flex-wrap justify-between items-center gap-4 text-xs no-print">
+      <a href="combat-memento.html" class="text-amber-400 hover:text-amber-300 font-imperial">← Mémento Combat & Duels</a>
+      <a href="../index.html" class="text-stone-400 hover:text-stone-200 font-imperial">Accueil</a>
+      <a href="etiquette-coutumes.html" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 font-imperial">Étiquette & Coutumes →</a>
+    </nav>
+
   </main>
 
   <!-- PIED DE PAGE -->
-  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10 no-print">
+  <footer class="py-6 text-center text-xs text-stone-500 border-t border-stone-900 bg-black/60 mt-10 no-print">
     Chronique L5R 4e Édition — MJ David • Guide officiel du Bushido, de l'Honneur et de la Gloire
   </footer>
 
