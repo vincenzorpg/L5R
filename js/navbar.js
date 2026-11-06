@@ -258,19 +258,6 @@
 
           </div>
 
-          <!-- Actions Droite : Bouton Direct Forger + Thème + Burger Mobile -->
-          <div class="flex items-center gap-2">
-            
-            <!-- Joli Bouton Direct : FORGER -->
-            <a
-              href="${rootPrefix}createcharacter.html"
-              title="Accéder directement à La Forge de personnage"
-              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-imperial font-bold text-amber-200 bg-gradient-to-r from-red-950 via-red-900/80 to-amber-950 border border-amber-500/60 hover:border-amber-300 shadow-[0_0_12px_rgba(220,38,38,0.3)] hover:shadow-[0_0_18px_rgba(212,175,55,0.5)] transition-all transform hover:-translate-y-0.5"
-            >
-              <span class="w-5 h-5 rounded bg-black/50 border border-amber-500/50 flex items-center justify-center text-red-400 font-serif font-bold text-xs">鍛</span>
-              <span class="tracking-wider uppercase">Forger</span>
-            </a>
-
             <!-- Bascule Thème Clair/Sombre (Kanjis 月 / 陽) -->
             <button
               type="button"
