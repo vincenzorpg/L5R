@@ -118,7 +118,7 @@
       }
     ];
 
-    // Icône SVG chevron bas (zéro caractère unicode susceptible de muter en emoji)
+    // Icône SVG chevron bas
     const chevronDownSvg = `
       <svg class="w-3 h-3 opacity-70 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -258,6 +258,8 @@
 
           </div>
 
+          <!-- Actions Droite : Thème + Burger Mobile -->
+          <div class="flex items-center gap-2">
             <!-- Bascule Thème Clair/Sombre (Kanjis 月 / 陽) -->
             <button
               type="button"
@@ -283,12 +285,13 @@
               </svg>
             </button>
           </div>
+
         </div>
 
         <!-- Menu Mobile (100% Kanjis & Couleurs) -->
         <div id="mobile-menu-panel" class="hidden lg:hidden mt-3 pt-3 border-t border-amber-500/20 space-y-3 text-xs font-imperial">
           
-          <!-- Accueil, Campagne & Forger -->
+          <!-- Accueil, Campagne & La Forge -->
           <div class="grid grid-cols-3 gap-2">
             <a href="${rootPrefix}index.html" class="p-2 rounded-lg bg-stone-900/80 border border-amber-600/40 text-stone-200 flex items-center justify-center gap-1.5">
               <span class="text-amber-400 font-serif font-bold">本</span>
