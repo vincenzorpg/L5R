@@ -1,5 +1,20 @@
+name: Génération du Contexte Projet
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
       - name: Parcourir tous les répertoires et compiler
-        run: |
+    run: |
           OUTPUT="L5R_FULL_CONTEXT.md"
           echo "# État Complet du Projet L5R" > "$OUTPUT"
           echo "Date de génération : $(date)" >> "$OUTPUT"
@@ -36,3 +51,9 @@
             -not -path './dist*' \
             -not -name 'L5R_FULL_CONTEXT.md' \
             -print0 | sort -z)
+
+      - name: Publier le fichier en artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: contexte-l5r
+          path: L5R_FULL_CONTEXT.md
