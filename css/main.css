@@ -167,6 +167,15 @@ select[data-role="school-selector"] {
   padding: 0.35rem 0.5rem;
 }
 
+/* Contrainte responsive globale sur les listes déroulantes (mobile & flex/grid) */
+select {
+  max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 /* Optimisations de rendu sur les longues listes (Grimoire / Forge) */
 .perf-cv-auto {
   content-visibility: auto;

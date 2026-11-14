@@ -6,6 +6,17 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.0.2] — 2026-11-14
+
+### 🐛 Corrigé
+
+- **Forge du Samouraï (`createcharacter.html`, `css/main.css`) — Adaptation mobile des listes déroulantes** :
+  - Correction du dépassement horizontal sur écran mobile des menus déroulants **Avantages** (`#sel-catalog-adv`), **Désavantages** (`#sel-catalog-disadv`), **Choisir un sort ou kiho** (`#sel-catalog-spell`), **Choisir un tatouage** (`#sel-catalog-tattoo`) et **Choisir un kata** (`#sel-catalog-kata`).
+  - Ajout des contraintes Flexbox/Grid (`flex-1 w-0 min-w-0 max-w-full truncate`, `min-w-0 overflow-hidden` sur les panneaux parents) et d'une règle CSS globale sur `select` (`max-width: 100%; min-width: 0; text-overflow: ellipsis;`) pour empêcher les `<option>` longues d'étirer les conteneurs au-delà de la largeur de l'écran mobile.
+  - Passage des filtres de Sorts/Kihos et Katas en grille responsive (`grid-cols-1 sm:grid-cols-2`).
+
+---
+
 ## [1.0.1] — 2026-11-14
 
 ### 🔄 Modifié
