@@ -852,6 +852,27 @@
         <a href="https://campagnel5rdavid2015.wordpress.com/" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition">Archive WordPress ↗</a>
       </div>
     </div>
+    <div id="site-version-footer" class="max-w-7xl mx-auto mt-3 pt-3 border-t border-stone-900/80 text-[10px] text-stone-500 font-mono flex items-center justify-center sm:justify-end gap-2 no-print">
+      <span id="site-version-label">v1.0.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+    </div>
+    <script>
+      (function () {
+        var prefix = /\/(aides|clans|campagne|admin)\//.test(window.location.pathname) ? '../' : './';
+        fetch(prefix + 'version.json')
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d || !d.version) return;
+            var v = d.version.indexOf('v') === 0 ? d.version : 'v' + d.version;
+            var lbl = document.getElementById('site-version-label');
+            var lnk = document.getElementById('site-version-link');
+            if (lbl) lbl.textContent = v;
+            if (lnk && d.releasesUrl) lnk.href = d.releasesUrl;
+          })
+          .catch(function () {});
+      })();
+    </script>
   </footer>
 
   <!-- SCRIPT D'AFFICHAGE DU DOJO LOCAL SUR L'ACCUEIL -->
