@@ -1,186 +1,259 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
+[![Version](https://img.shields.io/badge/Version-v1.0.1-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
+[![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
 [![Licence](https://img.shields.io/badge/License-Non--commercial%20Fan%20Content-lightgrey?style=flat-square)](#)
-[![Statut](https://img.shields.io/badge/Statut-Actif-emerald?style=flat-square)](#)
 
-Portail numérique interactif et annales de la campagne de jeu de rôle sur table **La Légende des Cinq Anneaux (4ᵉ Édition)**, menée sous la maîtrise du **MJ David**.
+Portail numérique interactif, boîte à outils d'arbitrage et annales officielles de la campagne de jeu de rôle sur table **La Légende des Cinq Anneaux (4ᵉ Édition)**, menée sous la maîtrise du **MJ David**.
 
-Le site propose une suite d'outils d'arbitrage en direct, une forge de samouraïs automatisée, un grimoire complet de sortilèges et le recueil des récits de nos aventures illustrées et narrées vocalement.
+Le site réunit une **Forge de Samouraïs** automatisée, un **Grimoire** complet des prières et Kihos, un **Codex des Tatouages Togashi**, l'**Encyclopédie des Huit Grands Clans**, des **Mémentos d'Arbitrage Tactique** et le recueil intégral de nos **10 Scénarios de Campagne** illustrés et narrés vocalement.
 
-🌐 **Site officiel en ligne :** [https://vincenzorpg.github.io/L5R/](https://vincenzorpg.github.io/L5R/)
+🌐 **Site officiel en ligne :** [https://vincenzorpg.github.io/L5R/](https://vincenzorpg.github.io/L5R/)  
+📦 **Releases & Versions :** [https://github.com/vincenzorpg/L5R/releases](https://github.com/vincenzorpg/L5R/releases)
 
 ---
 
 ## 📑 Table des Matières
 
-- [Fonctionnalités Clés](#-fonctionnalités-clés)
-  - [1. La Forge de Personnage](#1-la-forge-de-personnage-createcharacterhtml)
-  - [2. Le Journal de Campagne & Synthèse Vocale](#2-le-journal-de-campagne--synthèse-vocale-campagnehtml)
-  - [3. Le Grimoire des Éléments & Kihos](#3-le-grimoire-des-éléments--kihos-grimoirehtml)
-  - [4. L'Encyclopédie des Huit Grands Clans](#4-lencyclopédie-des-huit-grands-clans-clans)
-  - [5. Les Mémentos d'Arbitrage Tactique](#5-les-mémentos-darbitrage-tactique-aides)
-- [Arborescence du Dépôt](#-arborescence-du-dépôt)
-- [Architecture Technique](#-architecture-technique)
+- [Présentation & Fonctionnalités Clés](#-présentation--fonctionnalités-clés)
+  - [1. Portail d'Accueil & Dojo Personnel (`index.html`)](#1-portail-daccueil--dojo-personnel-indexhtml)
+  - [2. La Forge de Personnage (`createcharacter.html`)](#2-la-forge-de-personnage-createcharacterhtml)
+  - [3. Le Grimoire des Éléments & Kihos (`grimoire.html`)](#3-le-grimoire-des-éléments--kihos-grimoirehtml)
+  - [4. Le Codex des Tatouages Sacrés (`tatouages.html`)](#4-le-codex-des-tatouages-sacrés-tatouageshtml)
+  - [5. Les Chroniques de Campagne & Narration Vocale (`campagne.html`)](#5-les-chroniques-de-campagne--narration-vocale-campagnehtml)
+  - [6. L'Encyclopédie des Huit Grands Clans (`clans/`)](#6-lencyclopédie-des-huit-grands-clans-clans)
+  - [7. Les Mémentos d'Arbitrage Tactique (`aides/`)](#7-les-mémentos-darbitrage-tactique-aides)
+- [Arborescence Complète du Dépôt](#-arborescence-complète-du-dépôt)
+- [Architecture Technique & Thèmes](#-architecture-technique--thèmes)
+- [Compatibilité « Le Carnet de Rokugan » (`schemaVersion: 2`)](#-compatibilité--le-carnet-de-rokugan-schemaversion-2)
+- [Système de Versioning Centralisé](#-système-de-versioning-centralisé)
 - [Installation & Utilisation Locale](#-installation--utilisation-locale)
-- [Interopérabilité & Carnet de Rokugan](#-interopérabilité--carnet-de-rokugan)
-- [Administration & Rédaction (CMS)](#-administration--rédaction-cms)
+- [Workflow Git & Contribution](#-workflow-git--contribution)
 - [Crédits & Mentions Légales](#-crédits--mentions-légales)
 
 ---
 
-## ✨ Fonctionnalités Clés
+## ✨ Présentation & Fonctionnalités Clés
 
-### 1. La Forge de Personnage (`createcharacter.html`)
-Un atelier complet de création et de gestion de samouraï respectant fidèlement le Livre de Règles 4e Édition :
-- **Calculs Automatisés :** Rangs d'Anneaux, Traits (Terre, Eau, Air, Feu, Vide), Réputation (*Insight*), ND d'Armure, Initiative canonique (`[Insight + Réflexes] g Réflexes`), Paliers de vitalité et budget d'expérience (XP).
-- **Paliers de Maîtrise des Compétences :** Déblocage automatique des capacités d'école et des dons de maîtrise (Rangs 3, 5 et 7) pour le Kenjutsu, Iaijutsu, Kyujutsu, etc.
-- **Générateur Procédural de Légende :** Rédaction d'une biographie en 3 actes et remplissage contextuel du questionnaire des *20 Questions de Rokugan* selon le clan, l'école, l'arme et les avantages/désavantages choisis.
-- **Plateau de Dés « Roll & Keep » ($X\text{k}Y$) :** Lanceur de dés intégré avec explosion automatique des 10, relance des 1 (spécialisations) et tri des dés gardés.
-- **Mon Dojo Personnel :** Sauvegarde locale dans le navigateur (`localStorage`) permettant d'enregistrer toute son escouade et de la retrouver automatiquement sur la page d'accueil.
-- **Partage Instantané :** Génération d'une URL encodée en base64 pour partager sa fiche en un clic.
-- **Export Vectoriel A4 :** Impression prête à l'emploi sur le modèle de la fiche officielle L5R en deux pages.
+### 1. Portail d'Accueil & Dojo Personnel (`index.html`)
+- **Tableau de Bord Impérial :** Accès rapide à la Forge PJ, au Grimoire, aux 10 Scénarios de campagne, aux 8 Grands Clans et aux 3 Aides de Jeu.
+- **Mon Dojo Personnel (`localStorage`) :** Détection et affichage automatiques des fiches de personnages sauvegardées localement par le joueur, avec résumé tactique (Clan, École, Réputation, Honneur, jet d'attaque, ND d'Armure) et réouverture en un clic dans la Forge.
 
-### 2. Le Journal de Campagne & Synthèse Vocale (`campagne.html`)
-- **10 Scénarios Officiels :** Du tournoi d'initiation (*Championnat de Topaze*) jusqu'à l'affrontement final (*La tombe de Iuchiban*).
-- **Multi-Points de Vue PJ :** Récits croisés rédigés par les joueurs de la table (*Tsuruchi Akira*, *Okado Hiruma*, *Hida Samui*, *Isawa Ryumitaka*).
-- **Lecteur Audio Intégré :** Narration vocale française via l'API native `SpeechSynthesis`, avec réglage du débit et contrôle de lecture sans nécessiter de fichiers audio volumineux.
-- **Studio d'Import (`campagne-ajouter.html`) :** Module de glisser-déposer de textes pour forger de nouveaux chapitres HTML formatés.
+### 2. La Forge de Personnage (`createcharacter.html`)
+Un atelier complet de création et d'évolution de samouraï respectant fidèlement les règles officielles du *Livre de Base 4ᵉ Édition* :
+- **Calculs Automatisés en Temps Réel :**
+  - Rangs d'Anneaux (Terre, Eau, Air, Feu, Vide) et des 8 Traits associés, avec application automatique des bonus de Famille et d'École.
+  - Calcul de la **Réputation (*Insight*)** (`(Somme des Anneaux × 10) + Somme des Compétences` + bonus d'équipement) et détermination du **Rang de Réputation** (Rangs 1 à 5+).
+  - Calcul du **ND d'Armure** (`5 + (5 × Réflexes) + Bonus d'Armure`), de l'**Initiative** (`[Rang de Réputation + Réflexes] g Réflexes`), des **8 Paliers de Blessures** et du taux de récupération nocturne (`(Constitution × 2) + Rang de Réputation`).
+- **Moteur de Budget d'Expérience (XP) :**
+  - Base de 40 XP personnalisable et contrôle strict du plafond de **15 XP maximum de Désavantages**.
+  - Prise en compte automatique des réductions de coûts et modificateurs d'avantages/désavantages : *Illuminé*, *Bénédiction Élémentaire*, *Prodige*, *Esprit Obtus*, *Ami de la Confrérie*, *Ami des Éléments*, *Écoles Multiples* et *Études dans une Autre École*.
+- **Paliers de Maîtrise des Compétences :** Déblocage visuel automatique des dons de maîtrise aux **Rangs 3, 5 et 7** (Kenjutsu, Iaijutsu, Kyujutsu, Armes Lourdes, Jiujutsu, Défense, Courtisan, Enquête, Athlétisme, Armes d'Hast, Lances...).
+- **Panneaux d'Archétypes Dynamiques :**
+  - **Voie des Kamis (Shugenja) :** Sélection des sorts, suivi des emplacements quotidiens (*slots*) par élément, gestion des Affinités/Déficiences (+1/-1 au Rang d'École effectif) et bouton de jet d'incantation direct.
+  - **Voie Martiale (Bushi) :** Catalogue des Katas martiaux (`data/katas-data.js`), vérification automatique du prérequis d'Anneau et activation d'un Kata en combat.
+  - **Voie de la Confrérie (Moine) :** Accès aux Kihos mystiques, martiaux, internes et karmiques.
+  - **Chair Tatouée (*Ise Zumi* Togashi) :** Sélection et gestion des Tatouages sacrés selon le quota autorisé par le Rang d'École (`1 + Rang`).
+- **Générateur Procédural de Légende :** Rédaction automatique d'une biographie en 3 actes et remplissage contextuel du questionnaire officiel des **20 Questions de Rokugan** selon le clan, la famille, l'école, l'arme et les avantages/désavantages choisis.
+- **Plateau de Dés « Roll & Keep » ($X\text{g}Y$) :** Lanceur de dés D10 intégré avec explosion automatique des 10, relance des 1 (spécialisations) et historique détaillé des dés gardés.
+- **Sauvegarde, Partage & Impression A4 :**
+  - Sauvegarde automatique du brouillon et enregistrement multi-personnages dans **Mon Dojo**.
+  - Génération d'un lien de partage universel encodé en Base64 (`?char=...`).
+  - **Dossier d'Impression Officiel A4** vectoriel prêt pour l'impression papier ou PDF (`@media print`).
 
 ### 3. Le Grimoire des Éléments & Kihos (`grimoire.html`)
-- **Index Élémentaire :** Consultation des prières universelles, des sorts élémentaires (Terre, Eau, Feu, Air, Vide) et des Kihos de la Confrérie de Shinsei.
-- **Moteur de Recherche :** Filtrage instantané par mot-clé, rang de maîtrise (0 à 6) ou élément avec mise en surbrillance dynamique par ancre URL (`#sort-<id>`).
-- **Sceau de Mahō :** Verrouillage de la magie du sang sous mot de passe afin de préserver l'orthodoxie impériale autour de la table.
+- **Base de Données Modulaire (`data/sorts-data.js` & `data/sorts/`) :** Prières universelles (Communion, Sentir, Invoquer), sorts des 5 Éléments (Terre, Eau, Feu, Air, Vide) de Maîtrise 1 à 6, Kihos de la Confrérie de Shinsei et sortilèges de Mahō.
+- **Filtrage Instantané & Permaliens :** Recherche par nom, mot-clé ou effet, filtrage combiné par Élément/Voie et Rang de Maîtrise, et ciblage direct d'un sort par ancre URL (`grimoire.html#sort-<id>`) avec animation de mise en évidence.
+- **Aide de Jeu Tactique Intégrée :** Mémento complet sur le lancement des sorts (formule, ND, slots, affinités) et sur l'acquisition des Kihos par archétype selon les règles du *Livre de l'Eau* (p. 266).
+- **Sceau Interdit de Mahō :** Verrouillage par mot de passe des parchemins de magie du sang afin de préserver le secret du MJ autour de la table.
 
-### 4. L'Encyclopédie des Huit Grands Clans (`clans/`)
-Fiches détaillées pour chaque faction de l'Empire :
-- **Clan du Crabe** (`crabe.html`) : *Hida, Hiruma, Kaiu, Kuni, Yasuki.*
-- **Clan de la Grue** (`grue.html`) : *Doji, Kakita, Daidoji, Asahina.*
-- **Clan du Dragon** (`dragon.html`) : *Mirumoto, Kitsuki, Tamori, Togashi.*
-- **Clan du Lion** (`lion.html`) : *Akodo, Matsu, Ikoma, Kitsu.*
-- **Clan de la Mante** (`mante.html`) : *Yoritomo, Tsuruchi, Moshi.*
-- **Clan du Phénix** (`phenix.html`) : *Isawa, Shiba, Asako, Agasha.*
-- **Clan du Scorpion** (`scorpion.html`) : *Bayushi, Shosuro, Soshi, Yogo.*
-- **Clan de la Licorne** (`licorne.html`) : *Shinjo, Moto, Utaku, Ide, Iuchi.*
+### 4. Le Codex des Tatouages Sacrés (`tatouages.html`)
+- **Référentiel de l'Ordre Togashi (`data/tatouages-data.js`) :** Règles officielles des moines tatoués *Ise Zumi* (progression aux Rangs 1, 3 et 5, activation en Action Libre, durée `2 × Rang d'École` rounds, tatouages fusionnés).
+- **Explorateur Interactif :** Recherche instantanée par nom, kanji, effet mécanique ou ouvrage source, et fenêtre modale de consultation détaillée.
 
-### 5. Les Mémentos d'Arbitrage Tactique (`aides/`)
-- **Combat & Duels Iaijutsu** (`combat-memento.html`) : Chronologie du round, 5 postures de combat, règles du duel au premier sang ou à mort, manœuvres d'augmentation.
-- **Code du Bushido & Honneur** (`bushido-honneur.html`) : Les 7 vertus, barème officiel des gains/pertes (Table 2.3), jet d'Honneur et protection des Doigts de Jade.
-- **Étiquette & Coutumes** (`etiquette-coutumes.html`) : L'Ordre Céleste (Kuge, Buke, Heimin, Hinin), port du Daisho, règle des cadeaux en trois temps, cérémonie du thé.
+### 5. Les Chroniques de Campagne & Narration Vocale (`campagne.html`)
+- **Les 10 Scénarios Officiels (`campagne/scenario-1.html` à `scenario-10.html`) :**
+  1. *Acte 1 — Championnat de Topaze* (Village de Tsuma)
+  2. *Acte 2 — Meurtre au Château de Kyoteï* (3 versions croisées : Okado Hiruma, Tsuruchi Akira, Hida Samui)
+  3. *Acte 3 — Le dernier voyage* (2 versions croisées : Ryûmitaka Isawa, Tsuruchi Akira)
+  4. *Acte 4 — Aux côtés de mes frères morts* (Lisière de l'Outremonde)
+  5. *Acte 5 — Entre le ciel et l'enfer* (Sanctuaires de Montagne)
+  6. *Acte 6 — Le mariage d'Okado Hiruma* (Terres du Crabe)
+  7. *Acte 7 — Meurtre à Ryoko Owari* (Cité des Histoires Vertes)
+  8. *Acte 8 — Le crépuscule de l'honneur* (Provinces disputées)
+  9. *Acte 9 — « Ce qui ne meurt pas »* (Terres ancestrales)
+  10. *Acte 10 — La tombe de Iuchiban* (Le Tombeau Maudit)
+- **Lecteur Vocal Narrateur (`window.speechSynthesis`) :** Lecture audio française intégrée avec sélection des voix naturelles/HD du système, réglage de la vitesse de narration (`0.8x` à `1.3x`), barre de progression et surlignage automatique du paragraphe en cours de lecture.
+- **Studio d'Import (`campagne-ajouter.html`) :** Outil de glisser-déposer permettant de téléverser un compte-rendu `.txt` ou `.md`, de tester la synthèse vocale et de télécharger une page HTML de scénario formatée prête à être ajoutée au dossier `/campagne/`.
+
+### 6. L'Encyclopédie des Huit Grands Clans (`clans/`)
+Une monographie dédiée à chaque faction majeure de l'Empire d'Émeraude :
+- **Clan du Crabe** (`clans/crabe.html`) : *Familles Hida, Hiruma, Kaiu, Kuni, Yasuki.*
+- **Clan de la Grue** (`clans/grue.html`) : *Familles Doji, Kakita, Daidoji, Asahina.*
+- **Clan du Dragon** (`clans/dragon.html`) : *Familles Mirumoto, Kitsuki, Tamori, Togashi.*
+- **Clan du Lion** (`clans/lion.html`) : *Familles Akodo, Matsu, Ikoma, Kitsu.*
+- **Clan de la Mante** (`clans/mante.html`) : *Familles Yoritomo, Tsuruchi, Moshi.*
+- **Clan du Phénix** (`clans/phenix.html`) : *Familles Isawa, Shiba, Asako, Agasha.*
+- **Clan du Scorpion** (`clans/scorpion.html`) : *Familles Bayushi, Shosuro, Soshi, Yogo.*
+- **Clan de la Licorne** (`clans/licorne.html`) : *Familles Shinjo, Moto, Utaku, Ide, Iuchi.*
+
+Chaque page présente l'histoire, la philosophie, les familles vassales, les **Écoles Fondamentales de Base** (bonus de trait, compétences, technique de Rang 1), ainsi qu'une sélection de **Voies Alternatives et Écoles Avancées** issues des suppléments officiels (*The Great Clans*, *Emerald Empire*...).
+
+### 7. Les Mémentos d'Arbitrage Tactique (`aides/`)
+Trois guides de référence rapide optimisés pour la consultation en séance et l'impression :
+- **Mémento Combat & Duels Iaijutsu** (`aides/combat-memento.html`) : Séquence du round d'escarmouche, effets détaillés des 5 postures (Attaque, Attaque Totale, Défense, Défense Totale, Centre), procédure rituelle du duel d'Iaijutsu en 3 rounds (Évaluation, Concentration, Frappe), formules clés $X\text{g}Y$ et manœuvres d'Augmentations (*Raises*).
+- **Code du Bushido & Honneur** (`aides/bushido-honneur.html`) : Les 7 vertus cardinales du Bushido, la trinité sociale (Honneur, Gloire, Statut), le barème officiel des gains et pertes d'Honneur (Table 2.3 du Livre de Base) et les règles de protection des Doigts de Jade contre la Souillure de l'Outremonde.
+- **Étiquette & Coutumes** (`aides/etiquette-coutumes.html`) : Hiérarchie de l'Ordre Céleste (*Kuge*, *Buke*, *Heimin*, *Hinin*), protocole du port du Daisho, règle des cadeaux en trois refus, cérémonie du thé (*Cha-no-yu*) et gestion de la face en cour.
 
 ---
 
-## 📂 Arborescence du Dépôt
+## 📂 Arborescence Complète du Dépôt
 
 ```text
-├── index.html                  # Portail d'accueil, Dojo des héros et vitrine
-├── campagne.html               # Hub des 10 scénarios de campagne
-├── campagne-ajouter.html       # Studio de téléversement et création de scénarios
-├── createcharacter.html        # Forge de personnage, dés XkY et générateur
-├── grimoire.html               # Grimoire des sorts, prières et kihos
-├── .nojekyll                   # Désactive le moteur Jekyll sur GitHub Pages
-├── README.md                   # Documentation du projet
+L5R/
+├── index.html                          # Portail d'accueil, Dojo local et navigation rapide
+├── createcharacter.html                # Forge de Personnage L5R 4e, lanceur de dés XgY et impression A4
+├── grimoire.html                       # Grimoire interactif des sorts, prières, kihos et mahō
+├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
+├── campagne.html                       # Hub des 10 scénarios de la campagne du MJ David
+├── campagne-ajouter.html               # Studio d'import et générateur de pages de scénarios HTML
+├── version.json                        # Source unique de vérité pour la version du site (v1.0.0)
+├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
+├── GEMINI.md                           # Directives strictes de développement et workflow Git/PR
+├── README.md                           # Documentation générale du projet
+├── .nojekyll                           # Désactivation du traitement Jekyll sur GitHub Pages
 │
-├── admin/                      # Administration CMS Git-based
-│   ├── index.html              # Interface Sveltia / Decap CMS
-│   └── config.yml              # Schémas de données et collections d'articles
+├── aides/                              # Mémentos d'arbitrage rapide pour la table
+│   ├── bushido-honneur.html            # 7 vertus, Honneur/Gloire/Statut, Table 2.3 & Doigts de Jade
+│   ├── combat-memento.html             # Escarmouches, 5 postures, Duels Iaijutsu & Augmentations
+│   └── etiquette-coutumes.html         # Ordre Céleste, protocole du Daisho, cadeaux & cérémonie du thé
 │
-├── aides/                      # Guides de référence rapide pour la table
-│   ├── bushido-honneur.html
-│   ├── combat-memento.html
-│   └── etiquette-coutumes.html
+├── clans/                              # Encyclopédie des 8 Grands Clans Majeurs
+│   ├── crabe.html                      # Monographie, familles et écoles du Clan du Crabe
+│   ├── dragon.html                     # Monographie, familles et écoles du Clan du Dragon
+│   ├── grue.html                       # Monographie, familles et écoles du Clan de la Grue
+│   ├── licorne.html                    # Monographie, familles et écoles du Clan de la Licorne
+│   ├── lion.html                       # Monographie, familles et écoles du Clan du Lion
+│   ├── mante.html                      # Monographie, familles et écoles du Clan de la Mante
+│   ├── phenix.html                     # Monographie, familles et écoles du Clan du Phénix
+│   └── scorpion.html                   # Monographie, familles et écoles du Clan du Scorpion
 │
-├── clans/                      # Monographies des 8 Grands Clans
-│   ├── crabe.html
-│   ├── dragon.html
-│   ├── grue.html
-│   ├── licorne.html
-│   ├── lion.html
-│   ├── mante.html
-│   ├── phenix.html
-│   └── scorpion.html
+├── campagne/                           # Pages dédiées par acte de campagne (texte + lecteur vocal)
+│   ├── scenario-1.html                 # Acte 1 : Championnat de Topaze
+│   ├── scenario-2.html                 # Acte 2 : Meurtre au Château de Kyoteï (3 points de vue PJ)
+│   ├── scenario-3.html                 # Acte 3 : Le dernier voyage (2 points de vue PJ)
+│   ├── scenario-4.html                 # Acte 4 : Aux côtés de mes frères morts
+│   ├── scenario-5.html                 # Acte 5 : Entre le ciel et l'enfer
+│   ├── scenario-6.html                 # Acte 6 : Le mariage d'Okado Hiruma
+│   ├── scenario-7.html                 # Acte 7 : Meurtre à Ryoko Owari
+│   ├── scenario-8.html                 # Acte 8 : Le crépuscule de l'honneur
+│   ├── scenario-9.html                 # Acte 9 : « Ce qui ne meurt pas »
+│   └── scenario-10.html                # Acte 10 : La tombe de Iuchiban
 │
-├── campagne/                   # Pages dédiées par scénario (audio + texte)
-│   ├── scenario-1.html         # Championnat de Topaze (Tsuruchi Akira)
-│   ├── scenario-2.html         # Meurtre au Château de Kyoteï (3 versions PJ)
-│   ├── scenario-3.html         # Le dernier voyage (Xian & le Kolat)
-│   └── ...                     # Scénarios 4 à 10
+├── css/                                # Feuilles de style globales
+│   └── main.css                        # Variables CSS, thème Sombre (Laque) / Clair (Parchemin) & print A4
 │
-├── assets/images/              # Ressources graphiques et illustrations
-│   └── scenarios/              # Visuels cinématiques des récits (Topaze, Kyotei, Voyage...)
+├── js/                                 # Moteurs applicatifs en Vanilla JavaScript (ES6+)
+│   ├── navbar.js                       # Barre de navigation responsive, sélecteur de thème & injection CSS
+│   ├── character-generator.js          # Moteur de règles L5R 4e, calculs d'XP, paliers, dés et Dojo
+│   ├── export-carnet.js                # Moteur d'export JSON conforme au Carnet de Rokugan (schemaVersion: 2)
+│   └── grimoire.js                     # Moteur de recherche, filtrage, ancres URL et Sceau de Mahō
 │
-├── data/                       # Bases de données modulaires en JavaScript
-│   ├── clans-data.js           # Familles, écoles, traits et techniques 1 à 5
-│   ├── competences-data.js     # 45+ compétences (Bugei, Nobles, Marchandes, Basses)
-│   ├── equipement-data.js      # Catalogue d'armes, armures et valeurs de dégâts
-│   ├── avantages-desavantages.js # Catalogue officiel des dons physiques, mentaux, sociaux
-│   ├── sorts-data.js           # Agrégateur universel des sortilèges
-│   └── sorts/                  # Sous-fichiers de sorts par élément (Air, Terre, etc.)
+├── data/                               # Bases de données modulaires en JavaScript
+│   ├── clans-data.js                   # Données des 8 clans, familles, écoles et techniques (Rangs 1 à 5)
+│   ├── competences-data.js             # Catalogue des compétences (Nobles, Bugei, Marchandes, Basses)
+│   ├── equipement-data.js              # Armes, armures, valeurs de dégâts/réduction et équipements
+│   ├── avantages-desavantages-data.js  # Catalogue officiel des avantages et désavantages L5R 4e
+│   ├── katas-data.js                   # Catalogue des Katas martiaux par élément et maîtrise
+│   ├── tatouages-data.js               # Catalogue des Tatouages sacrés de l'Ordre Togashi (Ise Zumi)
+│   ├── sorts-data.js                   # Agrégateur et normalisateur universel des sortilèges et kihos
+│   └── sorts/                          # Sous-modules de sorts par élément et tradition
+│       ├── sorts-universels.js         # Prières universelles (Rang 0 : Communion, Sentir, Invoquer)
+│       ├── sorts-terre.js              # Sorts de l'Anneau de Terre (Rangs 1 à 6)
+│       ├── sorts-eau.js                # Sorts de l'Anneau d'Eau (Rangs 1 à 6)
+│       ├── sorts-feu.js                # Sorts de l'Anneau de Feu (Rangs 1 à 6)
+│       ├── sorts-air.js                # Sorts de l'Anneau d'Air (Rangs 1 à 6)
+│       ├── sorts-vide.js               # Sorts de l'Anneau du Vide (Ishiken-dō)
+│       ├── sorts-kiho.js               # Kihos des moines de la Confrérie de Shinsei
+│       └── sorts-maho.js               # Sortilèges interdits de Mahō (Magie du Sang)
 │
-└── js/                         # Moteurs applicatifs
-    ├── navbar.js               # Barre de navigation responsive avec menu mobile
-    ├── character-generator.js  # Moteur de règles L5R 4e, calculs d'XP et seuils
-    ├── export-carnet.js        # Moteur d'export JSON conforme Carnet de Rokugan (v2)
-    └── grimoire.js             # Moteur de recherche et de filtrage des sorts
+└── assets/images/                      # Illustrations et ressources graphiques
+    ├── cinq_anneaux.jpg                # Emblème calligraphié des Cinq Anneaux
+    ├── favicon.svg                     # Sceau vectoriel impérial
+    ├── favicon_cinq_anneaux.png        # Icône PNG des Cinq Anneaux
+    ├── logo_carnet_rokugan.png         # Logo officiel du Carnet de Rokugan
+    └── scenarios/                      # Illustrations des actes (Topaze, Kyoteï, Voyage, Frères Morts...)
 ```
 
 ---
 
-## 🛠️ Architecture Technique
+## 🛠️ Architecture Technique & Thèmes
 
-- **Framework CSS :** [Tailwind CSS](https://tailwindcss.com/) (chargé via CDN) avec thème sur-mesure (palette *Dark Lacquer*, bordures dorées, accents élémentaires).
-- **Typographie :** *Cinzel* (titrages impériaux) et *Noto Serif JP* (lecture noble du texte).
-- **JavaScript :** Vanilla JS pur (ES6+), sans dépendance lourde, garantissant un temps de chargement immédiat et une compatibilité hors-ligne maximale.
-- **Persistance des données :** `localStorage` pour le Dojo local et encodage d'URL pour le partage de fiches.
-- **Audio :** API native du navigateur `window.speechSynthesis`.
+- **Zéro Dépendance Lourde :** Développé intégralement en **HTML5, CSS3 et Vanilla JavaScript (ES6+)** sans bundler ni étape de compilation, garantissant une exécution immédiate en local comme sur GitHub Pages.
+- **Design System & Double Thème (`css/main.css` & Tailwind CDN) :**
+  - **Mode Sombre (*Laque Noire* / `月`) :** Fond noir laqué (`#0a0808`), dégradés carmins profonds et bordures dorées (`#d4af37`).
+  - **Mode Clair (*Parchemin Washi* / `陽`) :** Fond papier impérial (`#f5efe1`), encre sépia (`#292018`) et accents bronze doré (`#9a6b13`) pour un confort de lecture optimal.
+- **Typographie :** *Cinzel* pour les titrages impériaux et *Noto Serif JP* pour le corps de texte et les idéogrammes japonais.
+- **Audio Natif :** Exploitation de l'API standard `window.speechSynthesis` sans hébergement de fichiers audio lourds.
+
+---
+
+## 🔄 Compatibilité « Le Carnet de Rokugan » (`schemaVersion: 2`)
+
+La Forge de Personnage intègre un moteur d'export dédié (`js/export-carnet.js`) garantissant une compatibilité à **100 %** avec [**Le Carnet de Rokugan**](https://nelsio.github.io/carnet-l5r/) (standard `schemaVersion: 2`, v2.18.0+) :
+
+1. **Structure Canonique v2 :** Génération d'un objet JSON plat à la racine (`schemaVersion: 2`, `name`, `clan`, `family`, `school`, `schoolId`, `rank`, `xp`, `traits`, `voidMax`, `skills`, `advantages`, `disadvantages`, `spells`, `kihos`, `katas`, `tattoos`, `weapons`, `armor`, `notes`...).
+2. **Clés de Traits en Anglais :** Mapping strict vers `stamina`, `willpower`, `strength`, `perception`, `reflexes`, `awareness`, `agility`, `intelligence`, permettant au Carnet de recalculer dynamiquement les Anneaux.
+3. **Catalogue Officiel des Identifiants d'Écoles (`CARNET_SCHOOL_CATALOG`) :** Résolution automatique vers les identifiants canoniques du Carnet (`hida-bushi`, `hiruma-bushi`, `kakita-bushi`, `mirumoto-bushi`, `togashi-moine`, `isawa-shugenja`, `shinjo-bushi`, `bayushi-bushi`, etc.).
+4. **Normalisation des Compétences & Spécialités :** Traduction automatique des dénominations vers le référentiel du Carnet (ex. *Enquête* → *Investigation*, *Connaissance* → *Lore*, *Art de la Guerre* → *Battle*) et préservation des spécialisations (`emphases`) et paliers de maîtrise.
+5. **Mapping Normalisé de l'Équipement :** Export des armes avec leurs mots-clés réglementaires (`samourai`, `grande`, `deux-mains`, `arc`, `paysan`...) et calcul automatique de la force d'arc (`bowStrength`).
+
+---
+
+## 🏷️ Système de Versioning Centralisé
+
+Le projet dispose d'un mécanisme de suivi de version centralisé :
+- **`version.json` :** Fichier JSON à la racine du dépôt contenant le numéro de version courant (`1.0.0`), le tag (`v1.0.0`), la date de publication et l'URL des Releases GitHub.
+- **Affichage Dynamique en Pied de Page :** Toutes les pages HTML du site (racine, `/clans/`, `/aides/`, `/campagne/`) intègrent dans leur `<footer>` un script léger qui interroge `version.json` pour afficher discrètement la version active et un lien direct vers [les Releases GitHub](https://github.com/vincenzorpg/L5R/releases) (avec repli statique immédiat en cas d'ouverture hors-ligne via `file://`).
+- **`CHANGELOG.md` :** Historique détaillé des versions à la racine du projet.
 
 ---
 
 ## 🚀 Installation & Utilisation Locale
 
-Aucun gestionnaire de paquets complexe (`npm` / `yarn`) n'est requis. Le site peut être exécuté directement sur n'importe quelle machine :
+Aucune installation de paquets (`npm` / Node.js) n'est requise.
 
-### Option 1 : Visual Studio Code (Recommandé)
-1. Clonez le dépôt :
-   ```bash
-   git clone https://github.com/vincenzorpg/L5R.git
-   ```
-2. Ouvrez le dossier dans VS Code.
-3. Lancez l'extension **Live Server** sur `index.html`.
-
-### Option 2 : Serveur Python instantané
+### Option 1 : Serveur local Python (Recommandé)
 ```bash
-# Dans le dossier racine du projet
+git clone https://github.com/vincenzorpg/L5R.git
+cd L5R
 python -m http.server 8000
 ```
-Puis ouvrez votre navigateur sur `http://localhost:8000`.
+Ouvrez ensuite votre navigateur sur `http://localhost:8000`.
+
+### Option 2 : Visual Studio Code (Live Server)
+1. Ouvrez le dossier `L5R` dans VS Code.
+2. Cliquez sur **Go Live** (extension *Live Server*) depuis `index.html`.
 
 ---
 
-## 🔄 Interopérabilité & Carnet de Rokugan
+## 🌿 Workflow Git & Contribution
 
-La Forge de Personnage intègre un bouton d'export dédié vers [Le Carnet de Rokugan](https://nelsio.github.io/carnet-l5r/), l'outil compagnon de référence pour L5R 4e Édition :
-- **Format produit :** Objet JSON unique respectant rigoureusement le standard `schemaVersion: 2` (v2.18.0).
-- **Correspondance automatique :**
-  - Clés de traits en anglais (`stamina`, `reflexes`, etc.) et Anneaux déduits dynamiquement.
-  - Normalisation automatique des noms de compétences (ex : conversion d'« Enquête » vers *« Investigation »*).
-  - Résolution des identifiants d'école canoniques (`hida-bushi`, `kakita-bushi`, `mirumoto-bushi`...).
-  - Mapping des armes avec mots-clés normalisés (`samourai`, `grande`, `deux-mains`, `arc`...) et force d'arc (`bowStrength`).
-
----
-
-## ⚙️ Administration & Rédaction (CMS)
-
-Le site intègre une interface d'administration statique accessible sur `/admin/` :
-- **Moteur :** Sveltia CMS / Decap CMS connecté directement au dépôt GitHub via `admin/config.yml`.
-- **Workflow :** Les ajouts ou corrections de scénarios rédigés via l'éditeur visuel génèrent automatiquement des commits et déclenchent le déploiement continu sur GitHub Pages.
+Conformément aux directives du projet ([`GEMINI.md`](GEMINI.md)) :
+1. **Ne jamais modifier `main` directement.**
+2. Créer systématiquement une branche dédiée avant toute intervention :
+   - Nouvelle fonctionnalité / documentation : `git checkout -b feat/<nom-explicite>`
+   - Correction de bug : `git checkout -b fix/<nom-explicite>`
+3. Préserver l'architecture HTML/CSS/JS et la compatibilité de l'export JSON **Carnet de Rokugan**.
+4. Pousser la branche et ouvrir une **Pull Request** vers `main` via GitHub CLI (`gh pr create`).
 
 ---
 
 ## 📜 Crédits & Mentions Légales
 
-- **Campagne :** Scénarisée et arbitrée par le **MJ David** (table active depuis 2015).
-- **Chroniqueurs de table :** *Tsuruchi Akira*, *Okado Hiruma*, *Hida Samui*, *Isawa Ryumitaka*, *Kakita Sutokhu*, *Mirumoto Mansouri*.
-- **Univers & Règles :** *Legend of the Five Rings* (L5R) est une marque déposée d'Alderac Entertainment Group (AEG) et Fantasy Flight Games / Edge Studio. Ce projet est un site amateur à usage récréatif et non commercial.
+- **Maître de Jeu & Direction de Campagne :** **MJ David** (table active depuis 2015 — [Archive WordPress](https://campagnel5rdavid2015.wordpress.com/)).
+- **Chroniqueurs & Personnages de la Table :** *Tsuruchi Akira*, *Okado Hiruma*, *Hida Samui*, *Isawa Ryumitaka*, *Kakita Sutokhu*, *Mirumoto Mansouri*.
+- **Mentions Légales :** *La Légende des Cinq Anneaux* (*Legend of the Five Rings* / L5R) est une marque déposée d'Alderac Entertainment Group (AEG) et Fantasy Flight Games / Edge Studio. Ce dépôt est un projet amateur à but strictement récréatif et non commercial.

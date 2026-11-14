@@ -50,6 +50,18 @@
     }
   }
 
+  function ensureFavicon() {
+    const faviconHref = `${rootPrefix}assets/images/favicon_cinq_anneaux.png`;
+    let iconLink = document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
+    if (!iconLink) {
+      iconLink = document.createElement('link');
+      iconLink.rel = 'icon';
+      document.head.appendChild(iconLink);
+    }
+    iconLink.type = 'image/png';
+    iconLink.href = faviconHref;
+  }
+
   function updateThemeButtons(theme) {
     const isLight = theme === 'light';
     const buttons = document.querySelectorAll('[data-action="toggle-theme"]');
@@ -70,6 +82,7 @@
   }
 
   ensureMainStylesheet();
+  ensureFavicon();
   applyTheme(getInitialTheme());
 
   // 2. Construction de la barre de navigation
