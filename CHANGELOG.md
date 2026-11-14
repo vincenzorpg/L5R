@@ -10,9 +10,9 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ### 🔄 Modifié
 
-- **Favicon officiel du site (`assets/images/favicon_cinq_anneaux.png`)** :
-  - Remplacement de l'ancien favicon SVG inline par l'icône officielle `favicon_cinq_anneaux.png` dans l'en-tête (`<head>`) des **27 pages HTML** du site (racine, `aides/`, `clans/`, `campagne/`), ainsi que dans le générateur de scénarios (`campagne-ajouter.html`).
-  - Ajout d'une fonction `ensureFavicon()` dans `js/navbar.js` garantissant l'application automatique du favicon `favicon_cinq_anneaux.png` quelle que soit la profondeur d'arborescence.
+- **Centralisation du favicon officiel (`assets/images/favicon_cinq_anneaux.png`) dans `js/navbar.js`** :
+  - Ajout de la fonction `ensureFavicon()` dans `js/navbar.js` pour injecter dynamiquement `<link rel="icon" type="image/png" href="...assets/images/favicon_cinq_anneaux.png">` avec détection automatique du chemin relatif (`./` ou `../`).
+  - Suppression des anciennes balises `<link rel="icon">` SVG/inline en dur dans les **27 pages HTML** du site (ainsi que dans le modèle de génération de `campagne-ajouter.html`) afin que le favicon soit désormais géré à 100 % de manière centralisée par `js/navbar.js`.
 
 ---
 
