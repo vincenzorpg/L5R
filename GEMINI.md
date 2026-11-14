@@ -10,21 +10,38 @@ Ce fichier définit les règles strictes et obligatoires à respecter pour toute
 - **Création systématique d'une branche avant toute modification** :
   - Pour une nouvelle fonctionnalité ou amélioration : `git checkout -b feat/<nom-explicite>`
   - Pour une correction de bug : `git checkout -b fix/<nom-explicite>`
+  - Pour la documentation ou les règles du dépôt : `git checkout -b docs/<nom-explicite>`
 - Assurez-vous toujours d'être à jour avec `origin/main` avant de créer une nouvelle branche (`git checkout main && git pull origin main`).
 
-## 2. Pull Request systématique via GitHub CLI (`gh`)
+## 2. Versioning Sémantique (`SemVer`), Documentation & Release Notes (Obligatoire)
+
+**À chaque future évolution du projet (fonctionnalité, correctif, ajout de contenu ou de données) :**
+
+1. **Incrémentation de `version.json` (SemVer `MAJOR.MINOR.PATCH`)** :
+   - **`PATCH` (`x.y.Z`)** : Correction de bug, ajustement visuel, coquille ou micro-optimisation sans nouvelle fonctionnalité.
+   - **`MINOR` (`x.Y.0`)** : Ajout d'une fonctionnalité, d'un scénario, d'une aide de jeu, de sorts/kihos/katas/tatouages ou évolution rétrocompatible.
+   - **`MAJOR` (`X.0.0`)** : Refonte majeure ou changement d'architecture structurant.
+   - Mettre à jour simultanément les champs `"version"` (ex. `"1.1.0"`), `"tag"` (ex. `"v1.1.0"`) et `"date"` (format `YYYY-MM-DD`) dans `version.json`, ainsi que le repli statique `#site-version-label` dans les pieds de page si nécessaire.
+2. **Mise à jour systématique de `CHANGELOG.md`** :
+   - Ajouter en tête du fichier une nouvelle section `## [X.Y.Z] — YYYY-MM-DD` (format *Keep a Changelog* : `### ✨ Ajouté`, `### 🔄 Modifié`, `### 🐛 Corrigé`, etc.) détaillant précisément les changements apportés.
+3. **Mise à jour de `README.md` (si nécessaire)** :
+   - Mettre à jour le badge de version (`Version-vX.Y.Z`), la présentation des fonctionnalités et l'arborescence des fichiers dès qu'un module, un outil ou un fichier est ajouté ou modifié.
+4. **Pull Request avec Release Notes prêtes à publier** :
+   - Le corps (`--body` / `--body-file`) de chaque Pull Request ouverte via `gh pr create` **doit inclure une section dédiée « 📦 Release Notes (`vX.Y.Z`) — Prêtes à publier »** reprenant l'extrait formaté du `CHANGELOG.md` prêt à être utilisé pour la Release GitHub.
+
+## 3. Pull Request systématique via GitHub CLI (`gh`)
 
 - **Après chaque tâche terminée** :
-  1. Vérifier les fichiers modifiés (`git status`, `git diff`).
-  2. Committer les changements sur la branche dédiée (`feat/...` ou `fix/...`) avec un message clair et conventionnel.
+  1. Vérifier les fichiers modifiés (`git status`, `git diff`) et s'assurer que `version.json`, `CHANGELOG.md` et `README.md` (si pertinent) sont à jour.
+  2. Committer les changements sur la branche dédiée (`feat/...`, `fix/...` ou `docs/...`) avec un message clair et conventionnel.
   3. Pousser la branche sur le dépôt distant (`git push -u origin <nom-branche>`).
-  4. Ouvrir une **Pull Request** vers `main` à l'aide de GitHub CLI :
+  4. Ouvrir une **Pull Request** vers `main` à l'aide de GitHub CLI incluant le récapitulatif technique et les **Release Notes prêtes à publier** :
      ```bash
-     gh pr create --base main --head <nom-branche> --title "<Titre clair>" --body "<Résumé des modifications et vérifications>"
+     gh pr create --base main --head <nom-branche> --title "<Titre clair (vX.Y.Z)>" --body "<Résumé des modifications, vérifications et Release Notes prêtes à publier>"
      ```
      *(Sur Windows, si `gh` n'est pas encore dans le `PATH` de la session courante, utiliser `"C:\Program Files\GitHub CLI\gh.exe"`).*
 
-## 3. Préservation de l'Architecture HTML / CSS / JS
+## 4. Préservation de l'Architecture HTML / CSS / JS
 
 - **Stack technique immuable** :
   - **HTML5 / CSS / Vanilla JS (ES6+)** pur, sans bundler ni framework lourd (`npm`, Webpack, React, etc. sont proscrits).
@@ -32,11 +49,11 @@ Ce fichier définit les règles strictes et obligatoires à respecter pour toute
 - **Respect de l'arborescence existante** :
   - Pages principales à la racine (`index.html`, `createcharacter.html`, `campagne.html`, `campagne-ajouter.html`, `grimoire.html`, `tatouages.html`).
   - Sous-dossiers thématiques : `clans/`, `campagne/`, `aides/`, `assets/`.
-  - Bases de données modulaires dans `data/` (`clans-data.js`, `competences-data.js`, `equipement-data.js`, `avantages-desavantages.js`, `sorts-data.js`, `sorts/`).
+  - Bases de données modulaires dans `data/` (`clans-data.js`, `competences-data.js`, `equipement-data.js`, `avantages-desavantages-data.js`, `katas-data.js`, `tatouages-data.js`, `sorts-data.js`, `sorts/`).
   - Moteurs applicatifs dans `js/` (`navbar.js`, `character-generator.js`, `export-carnet.js`, `grimoire.js`).
-- Ne jamais casser les identifiants DOM, la sauvegarde locale (`localStorage` du Dojo), le partage par URL (base64) ou l'impression A4 de la fiche de personnage.
+- Ne jamais casser les identifiants DOM, la sauvegarde locale (`localStorage` du Dojo), le partage par URL (base64), le bandeau de version en pied de page (`#site-version-footer`) ou l'impression A4 de la fiche de personnage.
 
-## 4. Préservation de l'Export JSON « Carnet de Rokugan »
+## 5. Préservation de l'Export JSON « Carnet de Rokugan »
 
 - Toute modification touchant à la création de personnage (`createcharacter.html`), au moteur (`js/character-generator.js`), aux données (`data/`) ou à l'export (`js/export-carnet.js`) **doit préserver à 100 % la compatibilité avec [Le Carnet de Rokugan](https://nelsio.github.io/carnet-l5r/)**.
 - **Exigences du format d'export (`js/export-carnet.js`)** :
