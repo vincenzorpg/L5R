@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.0.1] — 2026-11-14
+
+### 🔄 Modifié
+
+- **Favicon officiel du site (`assets/images/favicon_cinq_anneaux.png`)** :
+  - Remplacement de l'ancien favicon SVG inline par l'icône officielle `favicon_cinq_anneaux.png` dans l'en-tête (`<head>`) des **27 pages HTML** du site (racine, `aides/`, `clans/`, `campagne/`), ainsi que dans le générateur de scénarios (`campagne-ajouter.html`).
+  - Ajout d'une fonction `ensureFavicon()` dans `js/navbar.js` garantissant l'application automatique du favicon `favicon_cinq_anneaux.png` quelle que soit la profondeur d'arborescence.
+
+---
+
 ## [1.0.0] — 2026-11-14
 
 ### 🎉 Version Initiale Complète (`v1.0.0`)
