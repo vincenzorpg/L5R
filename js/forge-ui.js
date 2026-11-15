@@ -228,48 +228,216 @@ function getCurrentSchoolRank() {
   return m ? parseInt(m[1], 10) : 1;
 }
 
-function updateArchetypePanels() {
+function getActiveForgePermissions() {
   const schObj = typeof getSelectedSchoolObject === "function" ? getSelectedSchoolObject() : null;
-  const schoolType = (schObj?.school?.type || "").toLowerCase();
-  const schoolName = (schObj?.school?.name || "").toLowerCase();
+  const primarySchool = schObj?.school || null;
+  const multiAdv = (window.advantagesList || []).find(a => (typeof isMultipleSchoolsAdv === 'function') && isMultipleSchoolsAdv(a.name));
+  let secondarySchool = null;
+  if (multiAdv && multiAdv.secondarySchoolId && typeof window.getAllSchoolsCatalog === 'function') {
+    secondarySchool = window.getAllSchoolsCatalog().find(s => s.id === multiAdv.secondarySchoolId) || null;
+  }
+  const isTattooed = typeof isCharacterTogashiTattooed === 'function' ? isCharacterTogashiTattooed() : false;
 
-  const isShugenja = schoolType.includes("shugenja") || schoolName.includes("shugenja") || schoolName.includes("isawa") || schoolName.includes("kuni") || schoolName.includes("tamori") || schoolName.includes("agasha") || schoolName.includes("soshi") || schoolName.includes("yogo") || schoolName.includes("iuchi") || schoolName.includes("asahina");
-  const isBushi = schoolType.includes("bushi") || schoolName.includes("bushi") || schoolName.includes("kakita") || schoolName.includes("mirumoto") || schoolName.includes("hida") || schoolName.includes("matsu") || schoolName.includes("akodo") || schoolName.includes("daidoji") || schoolName.includes("hiruma") || schoolName.includes("tsuruchi");
-  const isMonk = schoolType.includes("moine") || schoolType.includes("monk") || schoolName.includes("togashi") || schoolName.includes("moine") || schoolName.includes("ise zumi");
-
-  const hasMultiAdv = (window.advantagesList || []).some(a => (typeof isMultipleSchoolsAdv === 'function') && isMultipleSchoolsAdv(a.name));
-
-  const spellsPanel = document.getElementById('panel-spells-container');
-  const katasPanel = document.getElementById('panel-katas-container');
-  const courtierNote = document.getElementById('panel-courtier-note');
-  const slotsBar = document.getElementById('shugenja-slots-bar');
-  const archetypeBadge = document.getElementById('archetype-active-badge');
-
-  if (!spellsPanel || !katasPanel) return;
-
-  spellsPanel.classList.remove('hidden');
-  katasPanel.classList.remove('hidden');
-  if (courtierNote) courtierNote.classList.add('hidden');
-  if (slotsBar) slotsBar.classList.remove('hidden');
-
-  if (isShugenja) {
-    if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-500/40 font-bold">Voie des Kamis (Shugenja)</span>`;
-    katasPanel.classList.add('hidden');
-  } else if (isBushi) {
-    if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/40 font-bold">Voie Martiale (Bushi)</span>`;
-    spellsPanel.classList.add('hidden');
-    if (slotsBar) slotsBar.classList.add('hidden');
-  } else if (isMonk) {
-    if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-orange-950 text-orange-300 border border-orange-500/40 font-bold">Voie de la Confrérie (Moine)</span>`;
-    katasPanel.classList.add('hidden');
+  let perms = null;
+  if (typeof window.getCharacterArchetypePermissions === 'function') {
+    perms = window.getCharacterArchetypePermissions(primarySchool, secondarySchool, isTattooed);
   } else {
-    if (archetypeBadge) archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-700 font-bold">Voie de la Cour & de la Loi</span>`;
-    if (!hasMultiAdv) {
-      spellsPanel.classList.add('hidden');
-      katasPanel.classList.add('hidden');
-      if (slotsBar) slotsBar.classList.add('hidden');
-      if (courtierNote) courtierNote.classList.remove('hidden');
+    const t = String(primarySchool?.type || 'Bushi').toLowerCase();
+    perms = {
+      primaryType: t.includes('shugenja') ? 'shugenja' : t.includes('moine') ? 'moine' : t.includes('courtisan') ? 'courtisan' : t.includes('ninja') ? 'ninja' : 'bushi',
+      secondaryType: null,
+      canCastSpells: t.includes('shugenja'),
+      canUseKatas: t.includes('bushi') || t.includes('ninja'),
+      canUseKihos: t.includes('shugenja') || t.includes('moine'),
+      canUseTattoos: isTattooed
+    };
+  }
+  return { ...perms, primarySchool, secondarySchool, hasMultiAdv: !!multiAdv };
+}
+
+function sanitizeMysticListsForPermissions(perms, notify = false) {
+  if (!perms) return false;
+  const removed = [];
+
+  if (Array.isArray(window.charSpellsList) && window.charSpellsList.length > 0) {
+    const keptSpells = window.charSpellsList.filter(item => {
+      const isKiho = !!item.isKiho || (item.element || '').toLowerCase() === 'kiho';
+      if (isKiho && !perms.canUseKihos) {
+        removed.push(item.name || 'Kiho');
+        return false;
+      }
+      if (!isKiho && !perms.canCastSpells) {
+        removed.push(item.name || 'Sort');
+        return false;
+      }
+      return true;
+    });
+    if (keptSpells.length !== window.charSpellsList.length) {
+      window.charSpellsList = keptSpells;
+      if (typeof renderCharacterSpells === 'function') renderCharacterSpells();
     }
+  }
+
+  if (!perms.canUseKatas && Array.isArray(window.charKatasList) && window.charKatasList.length > 0) {
+    window.charKatasList.forEach(k => removed.push(k.name || 'Kata'));
+    window.charKatasList = [];
+    if (typeof renderCharacterKatas === 'function') renderCharacterKatas();
+  }
+
+  if (!perms.canUseTattoos && Array.isArray(window.charTattoosList) && window.charTattoosList.length > 0) {
+    window.charTattoosList.forEach(t => removed.push(t.name || 'Tatouage'));
+    window.charTattoosList = [];
+    if (typeof renderCharacterTattoos === 'function') renderCharacterTattoos();
+  }
+
+  if (removed.length > 0) {
+    if (typeof updateAll === 'function') updateAll();
+    if (notify && typeof showForgeToast === 'function') {
+      showForgeToast(`Règle L5R 4e : ${removed.length} élément(s) incompatible(s) retiré(s) (${removed.slice(0, 2).join(', ')}${removed.length > 2 ? '…' : ''}).`, 'info');
+    }
+    return true;
+  }
+  return false;
+}
+
+function applySpellsFilterConstraints(perms) {
+  const elemSel = document.getElementById('filter-spell-elem');
+  const univBtn = document.getElementById('btn-add-universal-spells');
+  const titleEl = document.getElementById('spells-panel-title');
+  const hintEl = document.getElementById('spells-panel-footer-hint');
+
+  if (elemSel) {
+    Array.from(elemSel.options).forEach(opt => {
+      if (opt.value === 'kiho') {
+        const allowKihoOpt = perms.canUseKihos;
+        opt.hidden = !allowKihoOpt;
+        opt.disabled = !allowKihoOpt;
+      } else if (opt.value === 'tous') {
+        const allowAll = perms.canCastSpells;
+        opt.hidden = !allowAll;
+        opt.disabled = !allowAll;
+        opt.textContent = (perms.canCastSpells && perms.canUseKihos)
+          ? 'Tous les Éléments & Kihos'
+          : 'Tous les Éléments (Sorts)';
+      } else {
+        const allowElem = perms.canCastSpells;
+        opt.hidden = !allowElem;
+        opt.disabled = !allowElem;
+      }
+    });
+
+    if (!perms.canCastSpells && perms.canUseKihos) {
+      elemSel.value = 'kiho';
+    } else if (perms.canCastSpells && !perms.canUseKihos && elemSel.value === 'kiho') {
+      elemSel.value = 'tous';
+    }
+  }
+
+  if (univBtn) univBtn.classList.toggle('hidden', !perms.canCastSpells);
+
+  if (titleEl) {
+    if (perms.canCastSpells && perms.canUseKihos) {
+      titleEl.innerHTML = '<span>📜</span> 5A. Parchemins de Sorts &amp; Kihos';
+    } else if (perms.canCastSpells) {
+      titleEl.innerHTML = '<span>📜</span> 5A. Parchemins de Sorts';
+    } else {
+      titleEl.innerHTML = '<span>🥋</span> 5A. Voies Mystiques (Kihos)';
+    }
+  }
+
+  if (hintEl) {
+    if (perms.canCastSpells && perms.canUseKihos) {
+      hintEl.textContent = 'Parchemins : 0 XP • Kihos : Maîtrise en XP.';
+    } else if (perms.canCastSpells) {
+      hintEl.textContent = 'Parchemins de sorts : 0 XP (Sorts de départ & parchemins).';
+    } else {
+      hintEl.textContent = 'Kihos (Confrérie de Shinsei) : Maîtrise en XP.';
+    }
+  }
+}
+
+let _isRefreshingArchetypePanels = false;
+let _lastSpellsPermissionKey = '';
+function updateArchetypePanels(notifySanitize = false, forceCatalogRefresh = false) {
+  if (_isRefreshingArchetypePanels) return;
+  _isRefreshingArchetypePanels = true;
+  try {
+    const perms = getActiveForgePermissions();
+    sanitizeMysticListsForPermissions(perms, notifySanitize);
+    applySpellsFilterConstraints(perms);
+
+    const spellsPanel = document.getElementById('panel-spells-container');
+    const katasPanel = document.getElementById('panel-katas-container');
+    const tattoosPanel = document.getElementById('panel-tattoos-container');
+    const courtierNote = document.getElementById('panel-courtier-note');
+    const slotsBar = document.getElementById('shugenja-slots-bar');
+    const archetypeBadge = document.getElementById('archetype-active-badge');
+    const tabGroup = document.getElementById('mystic-tab-group');
+    const tabKatas = document.getElementById('tab-btn-katas');
+    const tabSpells = document.getElementById('tab-btn-spells');
+    const tabTattoos = document.getElementById('tab-btn-tattoos');
+
+    if (!spellsPanel || !katasPanel) return;
+
+    const allowSpellsOrKihos = perms.canCastSpells || perms.canUseKihos;
+    const allowKatas = perms.canUseKatas;
+    const allowTattoos = perms.canUseTattoos;
+    const allowedCount = (allowSpellsOrKihos ? 1 : 0) + (allowKatas ? 1 : 0) + (allowTattoos ? 1 : 0);
+
+    spellsPanel.classList.toggle('hidden', !allowSpellsOrKihos);
+    if (slotsBar) slotsBar.classList.toggle('hidden', !perms.canCastSpells);
+    katasPanel.classList.toggle('hidden', !allowKatas);
+    if (tattoosPanel) tattoosPanel.classList.toggle('hidden', !allowTattoos);
+    if (courtierNote) courtierNote.classList.toggle('hidden', allowedCount > 0);
+
+    if (tabKatas) tabKatas.classList.toggle('hidden', !allowKatas);
+    if (tabSpells) {
+      tabSpells.classList.toggle('hidden', !allowSpellsOrKihos);
+      tabSpells.textContent = (!perms.canCastSpells && perms.canUseKihos) ? 'Kihos' : 'Sorts / Kihos';
+    }
+    if (tabTattoos) tabTattoos.classList.toggle('hidden', !allowTattoos);
+    if (tabGroup) tabGroup.classList.toggle('hidden', allowedCount <= 1);
+
+    document.querySelectorAll('#mystic-tab-group [data-mystic-tab]').forEach(btn => {
+      const isAuto = btn.dataset.mysticTab === 'auto';
+      btn.classList.toggle('active', isAuto);
+      btn.classList.toggle('text-stone-400', !isAuto);
+    });
+
+    if (archetypeBadge) {
+      let badgeHtml = '';
+      if (perms.canUseTattoos && !allowKatas && !allowSpellsOrKihos) {
+        badgeHtml = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold font-imperial">Chair Tatouée (Ise Zumi)</span>`;
+      } else if (perms.primaryType === 'shugenja') {
+        badgeHtml = `<span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-500/40 font-bold">Voie des Kamis (Shugenja)</span>`;
+      } else if (perms.primaryType === 'moine') {
+        badgeHtml = `<span class="px-2 py-0.5 rounded bg-orange-950 text-orange-300 border border-orange-500/40 font-bold">Voie de la Confrérie (Moine)</span>`;
+      } else if (perms.primaryType === 'bushi' || perms.primaryType === 'ninja') {
+        const label = perms.primaryType === 'ninja' ? 'Ombre (Shinobi)' : 'Voie Martiale (Bushi)';
+        badgeHtml = `<span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-500/40 font-bold">${label}</span>`;
+      } else {
+        badgeHtml = `<span class="px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-700 font-bold">Voie de la Cour &amp; de la Loi</span>`;
+      }
+      if (perms.secondarySchool) {
+        badgeHtml += ` <span class="px-2 py-0.5 rounded bg-amber-950/70 text-amber-300 border border-amber-500/40 font-bold">+ ${perms.secondarySchool.type} (${perms.secondarySchool.name})</span>`;
+      }
+      archetypeBadge.innerHTML = badgeHtml;
+    }
+
+    const permKey = `${perms.canCastSpells}|${perms.canUseKihos}`;
+    if (allowSpellsOrKihos && (forceCatalogRefresh || permKey !== _lastSpellsPermissionKey)) {
+      _lastSpellsPermissionKey = permKey;
+      populateSpellCatalogSelect();
+    } else if (!allowSpellsOrKihos) {
+      _lastSpellsPermissionKey = permKey;
+    }
+
+    if (allowTattoos) {
+      if (forceCatalogRefresh) populateTattooCatalogSelect();
+      renderCharacterTattoos();
+    }
+  } finally {
+    _isRefreshingArchetypePanels = false;
   }
 }
 
@@ -281,13 +449,17 @@ function populateSpellCatalogSelect(autoSelectFirst = false) {
   const sel = document.getElementById('sel-catalog-spell');
   if (!sel) return;
   const allSpells = window.SORTS_DATA || [];
+  const perms = getActiveForgePermissions();
   const elemFilter = document.getElementById('filter-spell-elem')?.value || "tous";
   const rankFilter = document.getElementById('filter-spell-rank')?.value || "tous";
   const searchFilter = foldForgeSearch(document.getElementById('filter-spell-search')?.value || "");
 
   const filtered = allSpells.filter(s => {
     if (s.isMaho || (s.element && s.element.toLowerCase() === "maho")) return false;
-    const sElem = (s.isKiho ? "kiho" : (s.element || "universel")).toLowerCase();
+    const isKiho = !!s.isKiho || (s.element || "").toLowerCase() === "kiho";
+    if (!perms.canCastSpells && !isKiho) return false;
+    if (!perms.canUseKihos && isKiho) return false;
+    const sElem = (isKiho ? "kiho" : (s.element || "universel")).toLowerCase();
     const matchElem = elemFilter === "tous" || sElem === elemFilter;
     const sRank = Number(s.mastery) || 0;
     const matchRank = rankFilter === "tous" || (rankFilter === "6" ? sRank >= 6 : sRank === parseInt(rankFilter, 10));
@@ -297,7 +469,12 @@ function populateSpellCatalogSelect(autoSelectFirst = false) {
     return hay.includes(searchFilter);
   });
 
-  sel.innerHTML = `<option value="">-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --</option>`;
+  const emptyPlaceholder = (!perms.canCastSpells && perms.canUseKihos)
+    ? `-- Choisir un kiho (${filtered.length} disponible(s)) --`
+    : (perms.canCastSpells && !perms.canUseKihos)
+      ? `-- Choisir un sort (${filtered.length} disponible(s)) --`
+      : `-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --`;
+  sel.innerHTML = `<option value="">${emptyPlaceholder}</option>`;
   const frag = document.createDocumentFragment();
   filtered.forEach(s => {
     const opt = document.createElement('option');
@@ -365,6 +542,14 @@ function addSpellFromCatalog() {
   const allSpells = window.SORTS_DATA || [];
   const found = allSpells.find(s => s.id === sel.value);
   if (!found) return;
+  const perms = getActiveForgePermissions();
+  const isKiho = !!found.isKiho || (found.element || '').toLowerCase() === 'kiho';
+  if ((isKiho && !perms.canUseKihos) || (!isKiho && !perms.canCastSpells)) {
+    if (typeof showForgeToast === 'function') {
+      showForgeToast("Action bloquée : votre école actuelle n'a pas accès à cette voie (règle L5R 4e).", 'warning');
+    }
+    return;
+  }
   if (window.charSpellsList.some(s => s.id === found.id)) {
     alert("Ce sort ou kiho figure déjà dans votre grimoire personnel.");
     return;
@@ -389,6 +574,13 @@ function addSpellFromCatalog() {
 }
 
 function addUniversalSpells() {
+  const perms = getActiveForgePermissions();
+  if (!perms.canCastSpells) {
+    if (typeof showForgeToast === 'function') {
+      showForgeToast("Seule une école de Shugenja donne accès aux Sorts Universels.", 'warning');
+    }
+    return;
+  }
   const allSpells = window.SORTS_DATA || [];
   const univs = allSpells.filter(s => (s.element || "").toLowerCase() === "universel" || s.mastery === 0);
   univs.forEach(u => {
@@ -581,6 +773,13 @@ function updateKataPreview() {
 }
 
 function addKataFromCatalog() {
+  const perms = getActiveForgePermissions();
+  if (!perms.canUseKatas) {
+    if (typeof showForgeToast === 'function') {
+      showForgeToast("Les Katas sont réservés aux écoles martiales (Bushi / Shinobi).", 'warning');
+    }
+    return;
+  }
   const sel = document.getElementById('sel-catalog-kata');
   if (!sel || !sel.value) return;
   const found = (window.KATAS_DATA || []).find(k => k.id === sel.value);
@@ -1115,35 +1314,9 @@ function getSafeElementBadgeClass(elem) {
   }
 }
 
-let _wasTogashiPanelActive = false;
-
-function updateArchetypePanelsWithTattoos(forceCatalogRefresh = false) {
-  const isTattooed = isCharacterTogashiTattooed();
-  const tattoosPanel = document.getElementById('panel-tattoos-container');
-  const tabBtn = document.getElementById('tab-btn-tattoos');
-  const archetypeBadge = document.getElementById('archetype-active-badge');
-
-  if (isTattooed) {
-    if (tabBtn) tabBtn.classList.remove('hidden');
-    if (tattoosPanel) tattoosPanel.classList.remove('hidden');
-    if (archetypeBadge) {
-      archetypeBadge.innerHTML = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold font-imperial">Chair Tatouée (Ise Zumi)</span>`;
-    }
-
-    document.getElementById('panel-spells-container')?.classList.add('hidden');
-    document.getElementById('panel-katas-container')?.classList.add('hidden');
-    document.getElementById('shugenja-slots-bar')?.classList.add('hidden');
-
-    if (forceCatalogRefresh || !_wasTogashiPanelActive) {
-      populateTattooCatalogSelect();
-    }
-    _wasTogashiPanelActive = true;
-    renderCharacterTattoos();
-  } else {
-    _wasTogashiPanelActive = false;
-    if (tattoosPanel) tattoosPanel.classList.add('hidden');
-    if (tabBtn) tabBtn.classList.add('hidden');
-    if (typeof updateArchetypePanels === 'function') updateArchetypePanels();
+function updateArchetypePanelsWithTattoos(forceCatalogRefresh = false, notifySanitize = false) {
+  if (typeof updateArchetypePanels === 'function') {
+    updateArchetypePanels(notifySanitize, forceCatalogRefresh);
   }
 }
 
@@ -1209,6 +1382,13 @@ function updateTattooPreview() {
 }
 
 function addTattooFromCatalog() {
+  const perms = getActiveForgePermissions();
+  if (!perms.canUseTattoos) {
+    if (typeof showForgeToast === 'function') {
+      showForgeToast("Les Tatouages Togashi sont réservés à l'ordre Ise Zumi.", 'warning');
+    }
+    return;
+  }
   const sel = document.getElementById('sel-catalog-tattoo');
   if (!sel || !sel.value) return;
   const found = (window.TATOUAGES_DATA || []).find(t => t.id === sel.value);
@@ -1266,6 +1446,14 @@ function renderCharacterTattoos() {
 }
 
 function setMysticTab(tab) {
+  const perms = getActiveForgePermissions();
+  const allowSpellsOrKihos = perms.canCastSpells || perms.canUseKihos;
+
+  if (tab === 'tattoos' && !perms.canUseTattoos) tab = 'auto';
+  if (tab === 'spells' && !allowSpellsOrKihos) tab = 'auto';
+  if (tab === 'katas' && !perms.canUseKatas) tab = 'auto';
+  if (tab === 'all') tab = 'auto';
+
   const pSpells = document.getElementById('panel-spells-container');
   const pKatas = document.getElementById('panel-katas-container');
   const pTattoos = document.getElementById('panel-tattoos-container');
@@ -1273,37 +1461,31 @@ function setMysticTab(tab) {
   const slotsBar = document.getElementById('shugenja-slots-bar');
   if (courtierNote) courtierNote.classList.add('hidden');
 
-  document.querySelectorAll('#mystic-tab-group [data-mystic-tab]').forEach(btn => {
-    const isActive = btn.dataset.mysticTab === tab;
-    btn.classList.toggle('active', isActive);
-    if (!isActive) {
-      btn.classList.add('text-stone-400');
-    } else {
-      btn.classList.remove('text-stone-400');
-    }
-  });
-
   if (tab === 'tattoos') {
     pTattoos?.classList.remove('hidden');
     pSpells?.classList.add('hidden');
     pKatas?.classList.add('hidden');
+    slotsBar?.classList.add('hidden');
   } else if (tab === 'spells') {
     pSpells?.classList.remove('hidden');
     pKatas?.classList.add('hidden');
     pTattoos?.classList.add('hidden');
-    slotsBar?.classList.remove('hidden');
+    slotsBar?.classList.toggle('hidden', !perms.canCastSpells);
   } else if (tab === 'katas') {
     pKatas?.classList.remove('hidden');
     pSpells?.classList.add('hidden');
     pTattoos?.classList.add('hidden');
     slotsBar?.classList.add('hidden');
-  } else if (tab === 'all') {
-    pSpells?.classList.remove('hidden');
-    pKatas?.classList.remove('hidden');
-    slotsBar?.classList.remove('hidden');
   } else {
-    updateArchetypePanelsWithTattoos();
+    updateArchetypePanelsWithTattoos(false, false);
+    return;
   }
+
+  document.querySelectorAll('#mystic-tab-group [data-mystic-tab]').forEach(btn => {
+    const isActive = btn.dataset.mysticTab === tab;
+    btn.classList.toggle('active', isActive);
+    btn.classList.toggle('text-stone-400', !isActive);
+  });
 }
 
 // =============================================================================
@@ -1323,8 +1505,7 @@ function handleFamilyOrSchoolChange() {
       return;
     }
   }
-  updateArchetypePanels();
-  updateArchetypePanelsWithTattoos(true);
+  updateArchetypePanelsWithTattoos(true, true);
 }
 
 // =============================================================================
@@ -1757,7 +1938,17 @@ function updateForgeUXDashboard(detail) {
     const ktCount = (window.charKatasList || []).length;
     const ttCount = (window.charTattoosList || []).length;
     const sumArts = spCount + ktCount + ttCount;
-    mysticPill.textContent = sumArts > 0 ? `${sumArts}` : 'Auto';
+    if (sumArts > 0) {
+      mysticPill.textContent = `${sumArts}`;
+    } else {
+      const perms = getActiveForgePermissions();
+      const parts = [];
+      if (perms.canUseKatas) parts.push('Katas');
+      if (perms.canCastSpells) parts.push('Sorts');
+      else if (perms.canUseKihos) parts.push('Kihos');
+      if (perms.canUseTattoos) parts.push('Tatouages');
+      mysticPill.textContent = parts.length > 0 ? parts.join('+') : 'Cour';
+    }
   }
 }
 
@@ -1830,9 +2021,7 @@ window.addEventListener("l5r-forge-catalogs-updated", () => {
 });
 
 window.addEventListener("l5r-forge-updated", (e) => {
-  if (isCharacterTogashiTattooed()) {
-    updateArchetypePanelsWithTattoos(false);
-  }
+  updateArchetypePanelsWithTattoos(false, true);
   updateForgeUXDashboard(e?.detail);
 });
 
