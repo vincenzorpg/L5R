@@ -6,6 +6,13 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.8.1] — 2026-11-15
+
+### ✨ Ajouté
+- **Mémento Officiel de la section 5 de la Forge (`createcharacter.html`)** : Ajout des règles d'utilisation des **Tatouages Togashi (Ise Zumi)** (acquisition, activation en Action Libre à l'air libre, durée `2 × Rang d'École` rounds, limite d'un tatouage actif ou fusion pour 1 point de Vide, lien vers `tatouages.html`) dans le mémento officiel (Ticket #29).
+
+---
+
 ## [1.8.0] — 2026-11-15
 
 ### ✨ Ajouté
