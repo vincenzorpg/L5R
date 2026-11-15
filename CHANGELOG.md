@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.0.3] — 2026-11-15
+
+### 🐛 Corrigé
+
+- **Forge du Samouraï (`js/character-generator.js`) — Avantages « Études dans une Autre École » & « Écoles Multiples »** :
+  - **Harmonisation visuelle complète** : les listes déroulantes d'écoles affichées dans les cartes d'avantages **Études dans une Autre École** et **Écoles Multiples** utilisent désormais exactement la même structure d'`<optgroup>` (`🏯 Écoles du Clan...` puis `🎓 Autres Clans`) et le même style (`p-2.5 rounded font-medium`) que la liste déroulante principale **« École de Clan (Rang 1) »** de la section 1 via la fonction partagée `buildGroupedSchoolOptionsHtml()`.
+  - **Correction de la disparition des écoles du clan d'origine** : suppression du filtre `s.clanKey !== currentClanKey` qui faisait disparaître les écoles des familles du clan actuel (ex. Hida, Hiruma, Kaiu, Kuni, Yasuki pour le Clan du Crabe) lorsqu'un samouraï prenait l'avantage *Études dans une Autre École* pour suivre l'école d'une autre famille de son propre clan.
+
+---
+
 ## [1.0.2] — 2026-11-14
 
 ### 🐛 Corrigé
