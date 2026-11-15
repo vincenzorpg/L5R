@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- NAVIGATION COMMUNE & LOGIQUE D'ACCUEIL -->
+  <script src="data/scenarios-data.js" defer></script>
   <script src="js/navbar.js" defer></script>
   <script src="js/index-ui.js" defer></script>
 </head>
@@ -481,8 +482,8 @@
       <!-- FRISE DES 10 SCÉNARIOS DE LA CAMPAGNE -->
       <div class="pt-2 border-t border-stone-800/80">
         <div class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-2.5 flex justify-between">
-          <span>Tableau des 10 Scénarios de la Campagne :</span>
-          <span class="text-amber-400 font-mono">10 / 10 Récits Complets</span>
+          <span>Tableau des Scénarios de la Campagne :</span>
+          <span id="home-scenarios-count" class="text-amber-400 font-mono">10 / 10 Récits Complets</span>
         </div>
         <div id="home-scenarios-strip" class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2 text-[11px]"></div>
       </div>

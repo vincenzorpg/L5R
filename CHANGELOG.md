@@ -6,6 +6,28 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.3.0] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Studio de Publication de Scénario & Soumission Directe GitHub (`campagne-ajouter.html` & `js/campagne-studio.js`)** :
+  - **Import intelligent en 1 glisser-déposer (`.txt`, `.md`, `.html`)** : détection automatique du titre, du numéro d'acte suivant (`Acte 11`+), du titre court de frise et du résumé d'accroche.
+  - **Barre d'outils d'enrichissement L5R** : insertion rapide de chapitres/jours (`##`), de pensées intérieures (`*...*`), de dialogues encadrés (`>`) et d'illustrations de scène (`[Image: ... | ...]`), avec **Aperçu Visuel en Direct** et test immédiat de synthèse vocale.
+  - **Génération HTML au standard complet des Actes 1 à 10** : inclusion automatique du lecteur vocal HD paragraphe par paragraphe (`js/narrator.js` : sélection de voix française, vitesse, barre de progression), des balises `<meta name="l5r-scenario-*">` d'auto-découverte et des liens inter-scénarios.
+  - **3 modes de publication GitHub intégrés** :
+    1. **Mode Recommandé (Zéro Configuration — Pull Request Pré-remplie)** : ouvre directement l'interface GitHub `/new/main` avec le chemin `campagne/scenario-X.html` et le code HTML pré-remplis (et copiés dans le presse-papiers) prêts à être soumis en Pull Request en un clic.
+    2. **Mode Direct 1-Clic via API GitHub** : création directe en arrière-plan de la branche `feat/scenario-X`, des commits (`campagne/scenario-X.html` + `data/scenarios-data.js`) et de la Pull Request depuis la page via un *Personal Access Token*.
+    3. **Mode Téléchargement `.html` local & test vocal instantané**.
+- **Registre Centralisé & Auto-Découverte des Scénarios (`data/scenarios-data.js`)** :
+  - Source unique de vérité (`window.SCENARIOS_DATA` / `module.exports`) partagée entre `index.html`, `campagne.html` et `campagne-ajouter.html`.
+  - Fonction `discoverNewScenarios()` détectant automatiquement tout nouveau fichier `campagne/scenario-11.html`+ ajouté au dépôt (via ses balises `<meta name="l5r-scenario-*">`) pour l'afficher sans configuration supplémentaire sur le catalogue et la frise d'accueil.
+
+### 🔄 Modifié
+
+- **Catalogue de Campagne (`campagne.html`)** : suppression du tableau `SCENARIOS_DATA` codé en dur (fichier allégé de 228 à 68 lignes) au profit de `data/scenarios-data.js`.
+
+---
+
 ## [1.2.0] — 2026-11-15
 
 ### ✨ Ajouté

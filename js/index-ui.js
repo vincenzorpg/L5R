@@ -129,7 +129,21 @@ function renderHomeSections() {
 
   const strip = document.getElementById("home-scenarios-strip");
   if (strip) {
-    strip.innerHTML = HOME_SCENARIOS_STRIP.map(s => s.finale
+    const sourceScenarios = Array.isArray(window.SCENARIOS_DATA) && window.SCENARIOS_DATA.length
+      ? window.SCENARIOS_DATA.map(s => ({
+          num: s.num || String(s.id).padStart(2, "0"),
+          label: s.shortTitle || s.title,
+          href: s.file,
+          finale: !!s.finale
+        }))
+      : HOME_SCENARIOS_STRIP;
+
+    const countEl = document.getElementById("home-scenarios-count");
+    if (countEl) {
+      countEl.textContent = `${sourceScenarios.length} / ${sourceScenarios.length} Récits Complets`;
+    }
+
+    strip.innerHTML = sourceScenarios.map(s => s.finale
       ? `<a href="${s.href}" class="p-2 rounded bg-red-950/40 border border-red-500/50 hover:border-red-400 transition block truncate">
            <span class="text-red-300 font-mono font-bold block text-[9px]">SCÉNARIO ${s.num}</span>
            <span class="text-amber-200 font-bold font-imperial truncate block">${s.label}</span>
@@ -169,3 +183,4 @@ function renderHomeSections() {
 }
 
 window.addEventListener("DOMContentLoaded", renderHomeSections);
+window.addEventListener("l5r-scenarios-updated", renderHomeSections);
