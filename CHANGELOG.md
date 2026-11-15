@@ -6,6 +6,24 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.5.0] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Onglets complets de scène MJ (`ecran-mj.html` & `js/gm-screen.js`)** :
+  - **Escarmouche — Saisie des Initiatives & Ordre du Combat** : saisie directe du score d'initiative de chaque PJ (ou lancer automatique `🎲`), bouton *Appliquer & Trier l'Ordre*, affichage du rang de passage (`#1`, `#2`, `#3`…) et indication du combattant en cours et du suivant.
+  - **Duel Iaijutsu** : assistant des 4 phases L5R 4e (*Évaluation*, *Focus*, *Frappe*, *Dégâts*) avec sélection d'un PJ, compteurs de Focus et journal de duel.
+  - **Honneur, Gloire, Statut & Souillure** : ajustement direct (`±0.1`, `±0.5`) des jauges de chaque PJ + barème officiel L5R 4e.
+  - **Cour & Rencontre Sociale** : repères rapides d'Étiquette, Courtoisie, Sincérité, Tentation, Intimidation, Statut social et cadeaux.
+  - **Magie, Peur & Souillure** : règles de lancement de sorts, Contre-sort, Peur `X` et Souillure de l'Outremonde.
+- **Tests unitaires (`tests/unit-tests.js`)** : ajout d'un test sur `formatRollResult()` couvrant le formatage des jets `simulateRollAndKeep`.
+
+### 🐛 Corrigé
+
+- **Lanceur de dés de l'Écran du MJ (`js/gm-screen.js`)** : correction du mapping des résultats de `simulateRollAndKeep()` (`kept` et `dropped` au lieu de `keptRolls`/`droppedRolls`) qui empêchait le lancer de dés de s'afficher, avec affichage des dés explosés (`*`) et message d'erreur si la formule est invalide.
+
+---
+
 ## [1.4.0] — 2026-11-15
 
 ### ✨ Ajouté

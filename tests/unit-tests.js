@@ -405,6 +405,14 @@
       assertEqual(sorted[1].name, "Ninja");
       assertEqual(sorted[2].name, "Bandit");
     });
+
+    it("formatRollResult formate correctement la sortie de simulateRollAndKeep", function () {
+      const sim = cg.simulateRollAndKeep(4, 2, 3, { rng: () => 0.99 });
+      const formatted = gm.formatRollResult(sim);
+      assertEqual(formatted.keptRolls.length, 2);
+      assertEqual(formatted.droppedRolls.length, 2);
+      assertTrue(formatted.total > 20);
+    });
   });
 
   // ===========================================================================
