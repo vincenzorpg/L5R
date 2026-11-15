@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tests Unitaires — Les Chroniques de Rokugan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+</head>
+<body class="min-h-screen bg-[#0a0909] text-stone-200 p-4 md:p-8">
+  <main class="max-w-4xl mx-auto space-y-6">
+    <header class="p-6 rounded-xl bg-stone-950/90 border border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-xl md:text-2xl font-extrabold font-imperial text-amber-300 tracking-wide">
+          🧪 Suite de Tests Unitaires — L5R 4e Édition
+        </h1>
+        <p class="text-xs text-stone-400 mt-1">
+          Forge de personnage • Lanceur de dés Roll &amp; Keep • Grimoire • Export Carnet de Rokugan (schemaVersion: 2)
+        </p>
+      </div>
+      <div id="test-summary-badge" class="px-4 py-2 rounded-lg font-imperial font-bold text-sm border">
+        Exécution en cours…
+      </div>
+    </header>
+
+    <section id="test-suites-container" class="space-y-4"></section>
+  </main>
+
+  <script src="../js/character-generator.js"></script>
+  <script src="../js/grimoire.js"></script>
+  <script src="../js/export-carnet.js"></script>
+  <script src="./unit-tests.js"></script>
+  <script>
+    (function () {
+      const summary = window.UNIT_TESTS_SUMMARY;
+      const badge = document.getElementById("test-summary-badge");
+      const container = document.getElementById("test-suites-container");
+      if (!summary || !badge || !container) return;
+
+      if (summary.totalFailed === 0) {
+        badge.className = "px-4 py-2 rounded-lg font-imperial font-bold text-sm bg-emerald-950/80 border border-emerald-500/60 text-emerald-300";
+        badge.textContent = `✅ ${summary.totalPassed} / ${summary.totalTests} tests réussis`;
+      } else {
+        badge.className = "px-4 py-2 rounded-lg font-imperial font-bold text-sm bg-red-950/80 border border-red-500/60 text-red-300";
+        badge.textContent = `❌ ${summary.totalFailed} échec(s) (${summary.totalPassed} / ${summary.totalTests})`;
+      }
+
+      container.innerHTML = summary.suites.map(suite => `
+        <article class="p-4 rounded-xl bg-stone-950/80 border border-stone-800 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <h2 class="font-bold font-imperial text-amber-200 text-sm md:text-base">${suite.name}</h2>
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded ${suite.failed === 0 ? 'bg-emerald-950 text-emerald-300 border border-emerald-700/50' : 'bg-red-950 text-red-300 border border-red-700/50'}">
+              ${suite.passed} / ${suite.tests.length}
+            </span>
+          </div>
+          <ul class="space-y-1.5 text-xs">
+            ${suite.tests.map(t => `
+              <li class="p-2 rounded border ${t.passed ? 'bg-black/40 border-stone-800/80 text-stone-300' : 'bg-red-950/40 border-red-700/60 text-red-200'}">
+                <div class="flex items-start gap-2">
+                  <span>${t.passed ? '✅' : '❌'}</span>
+                  <div>
+                    <div class="font-medium">${t.name}</div>
+                    ${t.error ? `<pre class="mt-1 text-[11px] text-red-300 font-mono whitespace-pre-wrap">${t.error}</pre>` : ''}
+                  </div>
+                </div>
+              </li>
+            `).join('')}
+          </ul>
+        </article>
+      `).join('');
+    })();
+  </script>
+</body>
+</html>

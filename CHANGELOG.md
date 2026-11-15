@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.1.0] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Suite de Tests Unitaires Universelle (`tests/unit-tests.js` & `tests/unit-tests.html`)** :
+  - Ajout d'une suite de tests unitaires autonome en Vanilla JavaScript (sans dépendance `npm`), exécutable à la fois sous **Node.js** (`node tests/unit-tests.js`) et directement dans le **navigateur** (`tests/unit-tests.html`).
+  - Couverture complète des 4 moteurs de calcul du projet :
+    1. **Forge de personnage (`js/character-generator.js`)** : calcul des Anneaux (`calculateRings`), Réputation et Rang d'École (`calculateInsightAndRank`), coûts progressifs d'XP des Traits (`calculateTraitXpCost` avec *Bénédiction Élémentaire*), du Vide (`calculateVoidXpCost` avec *Illuminé*) et des Compétences (`calculateSkillXpCost` avec *Prodige*, *Esprit Obtus* et Spécialisations), réductions et gains d'Avantages/Désavantages par Clan et École (`buildCharacterContextFromInputs`, `getEffectiveAdvCost`, `getEffectiveDisadvGain`), ND d'Armure (`calculateArmorTN`), paliers de blessures (`calculateWoundThresholds` incluant *Guerrier de Fer Daidoji*) et paliers de maîtrise (`getMasteriesSummary`).
+    2. **Lanceur de dés Roll & Keep (`js/character-generator.js` & `createcharacter.html`)** : analyseur de formules `XgY + Z` (`parseRollKeepFormula`), règle officielle des 10 dés (`applyTenDiceRule`) et moteur de simulation déterministe (`simulateRollAndKeep` avec explosion des `10` et relance des `1` en spécialisation).
+    3. **Grimoire (`js/grimoire.js`)** : normalisation et sécurisation XSS (`normalizeText`, `slugify`, `escapeHtml`), qualification des Sorts/Kihos/Mahō (`getRank`, `isSpellKiho`, `getSpellElement`, `isValidMahoPassword`) et moteur de filtrage pur (`filterSpellsList`).
+    4. **Export JSON « Carnet de Rokugan » (`js/export-carnet.js`)** : résolution canonique des Clans (`resolveCanonClan`) et identifiants d'Écoles (`resolveSchoolIdFromText`), normalisation des Compétences et spécialisations (`normalizeSkillEntry`), calcul de l'Insight Carnet (`calculateCarnetRingsAndInsight`) et génération des structures `schemaVersion: 2` (`resolveCarnetArmor`, `resolveCarnetWeapons`, `buildCarnetModifiers`).
+
+---
+
 ## [1.0.3] — 2026-11-15
 
 ### 🐛 Corrigé

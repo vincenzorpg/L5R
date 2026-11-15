@@ -282,7 +282,35 @@ function updateElementalBlessingSelection(advIdx, ringKey) {
 // =============================================================================
 // 3. CONTEXTE DU PERSONNAGE & COÛTS DYNAMIQUES PAR CLAN / ÉCOLE (TICKET #18)
 // =============================================================================
+function buildCharacterContextFromInputs(clanVal = "", famName = "", schName = "", schType = "") {
+  const cVal = String(clanVal || "").toLowerCase();
+  const fName = String(famName || "").toLowerCase();
+  const sName = String(schName || "").toLowerCase();
+  const sType = String(schType || "").toLowerCase();
+
+  return {
+    clan: cVal,
+    isCrab: cVal.includes("crabe") || cVal.includes("crab"),
+    isCrane: cVal.includes("grue") || cVal.includes("crane"),
+    isDragon: cVal.includes("dragon"),
+    isLion: cVal.includes("lion"),
+    isMantis: cVal.includes("mante") || cVal.includes("mantis"),
+    isPhoenix: cVal.includes("phenix") || cVal.includes("phénix") || cVal.includes("phoenix"),
+    isScorpion: cVal.includes("scorpion"),
+    isUnicorn: cVal.includes("licorne") || cVal.includes("unicorn"),
+    isSpider: cVal.includes("araignee") || cVal.includes("araignée") || cVal.includes("spider"),
+    isImperial: cVal.includes("imperial") || cVal.includes("impérial") || fName.includes("miya") || fName.includes("otomo") || fName.includes("seppun"),
+    isBushi: sType.includes("bushi") || sName.includes("bushi") || sName.includes("guerrier") || sName.includes("éclaireur") || sName.includes("archer") || sName.includes("duelliste"),
+    isShugenja: sType.includes("shugenja") || sName.includes("shugenja"),
+    isCourtier: sType.includes("courtisan") || sType.includes("courtier") || sName.includes("courtisan") || sName.includes("magistrat") || sName.includes("diplomate"),
+    isMonk: sType.includes("moine") || sType.includes("monk") || sName.includes("moine") || sName.includes("togashi") || sName.includes("confrérie") || sName.includes("confrerie") || sName.includes("henshin") || sName.includes("tatoué")
+  };
+}
+
 function getCharacterContext() {
+  if (typeof document === "undefined") {
+    return buildCharacterContextFromInputs();
+  }
   const clanVal = (document.getElementById('sel-clan')?.value || "").toLowerCase();
   const clans = getClans();
   const famIdx = parseInt(document.getElementById('sel-family')?.value) || 0;
@@ -293,29 +321,24 @@ function getCharacterContext() {
   const schName = (sch?.name || sch?.id || "").toLowerCase();
   const schType = (sch?.type || sch?.tag || "").toLowerCase();
 
-  return {
-    clan: clanVal,
-    isCrab: clanVal.includes("crabe") || clanVal.includes("crab"),
-    isCrane: clanVal.includes("grue") || clanVal.includes("crane"),
-    isDragon: clanVal.includes("dragon"),
-    isLion: clanVal.includes("lion"),
-    isMantis: clanVal.includes("mante") || clanVal.includes("mantis"),
-    isPhoenix: clanVal.includes("phenix") || clanVal.includes("phénix") || clanVal.includes("phoenix"),
-    isScorpion: clanVal.includes("scorpion"),
-    isUnicorn: clanVal.includes("licorne") || clanVal.includes("unicorn"),
-    isSpider: clanVal.includes("araignee") || clanVal.includes("araignée") || clanVal.includes("spider"),
-    isImperial: clanVal.includes("imperial") || clanVal.includes("impérial") || famName.includes("miya") || famName.includes("otomo") || famName.includes("seppun"),
-    isBushi: schType.includes("bushi") || schName.includes("bushi") || schName.includes("guerrier") || schName.includes("éclaireur") || schName.includes("archer") || schName.includes("duelliste"),
-    isShugenja: schType.includes("shugenja") || schName.includes("shugenja"),
-    isCourtier: schType.includes("courtisan") || schType.includes("courtier") || schName.includes("courtisan") || schName.includes("magistrat") || schName.includes("diplomate"),
-    isMonk: schType.includes("moine") || schType.includes("monk") || schName.includes("moine") || schName.includes("togashi") || schName.includes("confrérie") || schName.includes("confrerie") || schName.includes("henshin") || schName.includes("tatoué")
-  };
+  return buildCharacterContextFromInputs(clanVal, famName, schName, schType);
 }
 
-function getEffectiveAdvCost(adv) {
+function resolveContextArg(contextOverride) {
+  if (!contextOverride) return getCharacterContext();
+  const base = buildCharacterContextFromInputs(
+    contextOverride.clan || "",
+    contextOverride.family || "",
+    contextOverride.schoolName || contextOverride.school || "",
+    contextOverride.schoolType || contextOverride.type || ""
+  );
+  return Object.assign(base, contextOverride);
+}
+
+function getEffectiveAdvCost(adv, contextOverride) {
   if (!adv) return 0;
   const baseCost = parseInt(adv.baseCost ?? adv.cost) || 0;
-  const ctx = getCharacterContext();
+  const ctx = resolveContextArg(contextOverride);
   const imp = (adv.impact || adv.id || "").toLowerCase();
   const nameNorm = (adv.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
@@ -349,10 +372,10 @@ function getEffectiveAdvCost(adv) {
   return Math.max(1, baseCost - discount);
 }
 
-function getEffectiveDisadvGain(dis) {
+function getEffectiveDisadvGain(dis, contextOverride) {
   if (!dis) return 0;
   const baseGain = parseInt(dis.baseGain ?? dis.gain ?? dis.cost) || 0;
-  const ctx = getCharacterContext();
+  const ctx = resolveContextArg(contextOverride);
   const imp = (dis.impact || dis.id || "").toLowerCase();
   const nameNorm = (dis.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
@@ -1784,8 +1807,203 @@ function toggleNameOrder() {
 }
 
 // =============================================================================
-// 5. CALCULS DYNAMIQUES 4E ÉDITION (TICKETS #17, #18 & #21)
+// 5. CALCULS PURS & DYNAMIQUES 4E ÉDITION (TICKETS #17, #18 & #21)
 // =============================================================================
+function calculateRings(traits = {}) {
+  const sta = parseInt(traits.sta ?? traits.stamina, 10) || 2;
+  const wil = parseInt(traits.wil ?? traits.willpower, 10) || 2;
+  const str = parseInt(traits.str ?? traits.strength, 10) || 2;
+  const per = parseInt(traits.per ?? traits.perception, 10) || 2;
+  const ref = parseInt(traits.ref ?? traits.reflexes, 10) || 2;
+  const awa = parseInt(traits.awa ?? traits.awareness, 10) || 2;
+  const agi = parseInt(traits.agi ?? traits.agility, 10) || 2;
+  const int = parseInt(traits.int ?? traits.intelligence, 10) || 2;
+  const voi = parseInt(traits.voi ?? traits.void ?? traits.voidRing, 10) || 2;
+
+  const earth = Math.min(sta, wil);
+  const water = Math.min(str, per);
+  const air = Math.min(ref, awa);
+  const fire = Math.min(agi, int);
+  const voidRing = voi;
+  const sumRings = earth + water + air + fire + voidRing;
+
+  return { earth, water, air, fire, void: voidRing, sumRings };
+}
+
+function calculateTraitXpCost(targetVal, baseStart = 2, isBlessed = false) {
+  const target = parseInt(targetVal, 10) || 2;
+  const start = parseInt(baseStart, 10) || 2;
+  if (target <= start) return 0;
+
+  let xp = 0;
+  for (let r = start + 1; r <= target; r++) {
+    const stepCost = isBlessed ? Math.max(1, (r * 4) - 1) : (r * 4);
+    xp += stepCost;
+  }
+  return xp;
+}
+
+function calculateVoidXpCost(targetVal, baseVoid = 2, isEnlightened = false) {
+  const target = parseInt(targetVal, 10) || 2;
+  const start = parseInt(baseVoid, 10) || 2;
+  if (target <= start) return 0;
+
+  let xp = 0;
+  for (let r = start + 1; r <= target; r++) {
+    const stepCost = isEnlightened ? Math.max(1, (r * 6) - 2) : (r * 6);
+    xp += stepCost;
+  }
+  return xp;
+}
+
+function calculateSkillXpCost(rankVal, options = {}) {
+  const rank = parseInt(rankVal, 10) || 0;
+  const isSchool = Boolean(options.isSchool);
+  const spec = Boolean(options.spec);
+  const isProdigy = Boolean(options.isProdigy);
+  const isObtuse = Boolean(options.isObtuse);
+  const isHighSkill = Boolean(options.isHighSkill);
+  const isExemptHigh = Boolean(options.isExemptHigh);
+
+  const start = isSchool ? 1 : 0;
+  let xp = 0;
+
+  if (rank > start) {
+    for (let r = start + 1; r <= rank; r++) {
+      let stepCost = (isSchool && isProdigy) ? Math.max(1, r - 1) : r;
+      if (isObtuse && isHighSkill && !isExemptHigh) {
+        stepCost *= 2;
+      }
+      xp += stepCost;
+    }
+  }
+  if (spec) xp += 2;
+  return xp;
+}
+
+function calculateInsightAndRank(ringsOrSum, skills = []) {
+  const sumRings = typeof ringsOrSum === "number"
+    ? ringsOrSum
+    : ((ringsOrSum?.sumRings !== undefined)
+      ? ringsOrSum.sumRings
+      : ((ringsOrSum?.earth || 2) + (ringsOrSum?.water || 2) + (ringsOrSum?.air || 2) + (ringsOrSum?.fire || 2) + (ringsOrSum?.void || 2)));
+
+  const sumSkills = Array.isArray(skills)
+    ? skills.reduce((acc, sk) => {
+        if (sk && sk.isChoice && !sk.chosen) return acc;
+        return acc + (parseInt(typeof sk === "object" ? sk.rank : sk, 10) || 0);
+      }, 0)
+    : (parseInt(skills, 10) || 0);
+
+  const insight = (sumRings * 10) + sumSkills;
+  let insightRank = 1;
+  if (insight >= 225) insightRank = 5;
+  else if (insight >= 200) insightRank = 4;
+  else if (insight >= 175) insightRank = 3;
+  else if (insight >= 150) insightRank = 2;
+
+  return { sumRings, sumSkills, insight, insightRank };
+}
+
+function calculateArmorTN(reflexes, armorBonus = 0, modifiersBonus = 0) {
+  const ref = parseInt(reflexes, 10) || 2;
+  const arm = parseInt(armorBonus, 10) || 0;
+  const mod = parseInt(modifiersBonus, 10) || 0;
+  return 5 + (5 * ref) + arm + mod;
+}
+
+function calculateWoundThresholds(earthRing, options = {}) {
+  const earth = parseInt(earthRing, 10) || 2;
+  const isDaidoji = Boolean(options.isDaidoji);
+  const honorScore = parseFloat(options.honorScore ?? 0) || 0;
+
+  let multiplier = earth;
+  if (isDaidoji && Math.floor(honorScore) > earth) {
+    multiplier = Math.floor(honorScore);
+  }
+
+  const healthy = Math.max(1, multiplier * 5);
+  const step = Math.max(1, multiplier * 2);
+
+  return { multiplier, healthy, step };
+}
+
+function parseRollKeepFormula(formulaStr) {
+  const str = String(formulaStr || "").trim();
+  const match = str.match(/(\d+)\s*[gk]\s*(\d+)(?:\s*([+-])\s*(\d+))?/i);
+  if (!match) {
+    return { rolled: 0, kept: 0, bonus: 0 };
+  }
+  const rolled = parseInt(match[1], 10) || 0;
+  const kept = parseInt(match[2], 10) || 0;
+  let bonus = 0;
+  if (match[4] !== undefined) {
+    const sign = match[3] === "-" ? -1 : 1;
+    bonus = sign * (parseInt(match[4], 10) || 0);
+  }
+  return { rolled, kept, bonus };
+}
+
+function applyTenDiceRule(rollX, keepY, bonus = 0) {
+  let r = Math.max(0, parseInt(rollX, 10) || 0);
+  let k = Math.max(0, parseInt(keepY, 10) || 0);
+  let b = parseInt(bonus, 10) || 0;
+
+  if (k > r) k = r;
+
+  if (r > 10) {
+    const excessR = r - 10;
+    r = 10;
+    k += Math.floor(excessR / 2);
+    if (excessR % 2 === 1 && k >= 10) {
+      b += 2;
+    }
+  }
+
+  if (k > 10) {
+    const excessK = k - 10;
+    k = 10;
+    b += excessK * 2;
+  }
+
+  return { rolled: r, kept: k, bonus: b };
+}
+
+function simulateRollAndKeep(rollX, keepY, bonus = 0, options = {}) {
+  const x = Math.max(0, parseInt(rollX, 10) || 0);
+  const y = Math.max(0, parseInt(keepY, 10) || 0);
+  const b = parseInt(bonus, 10) || 0;
+  const explode = options.explode !== undefined ? Boolean(options.explode) : true;
+  const spec = Boolean(options.spec);
+  const maxExplosions = options.maxExplosions !== undefined ? parseInt(options.maxExplosions, 10) : 5;
+  const rng = typeof options.rng === "function" ? options.rng : Math.random;
+
+  const rollD10 = () => Math.floor(rng() * 10) + 1;
+
+  const dice = [];
+  for (let i = 0; i < x; i++) {
+    let dieVal = rollD10();
+    if (spec && dieVal === 1) {
+      dieVal = rollD10();
+    }
+    let totalDie = dieVal;
+    let explodedTimes = 0;
+    while (explode && dieVal === 10 && explodedTimes < maxExplosions) {
+      dieVal = rollD10();
+      totalDie += dieVal;
+      explodedTimes++;
+    }
+    dice.push({ value: totalDie, exploded: explodedTimes > 0 });
+  }
+
+  dice.sort((a, b) => b.value - a.value);
+  const kept = dice.slice(0, y);
+  const dropped = dice.slice(y);
+  const total = kept.reduce((acc, d) => acc + d.value, 0) + b;
+
+  return { dice, kept, dropped, bonus: b, total };
+}
+
 function updateAll() {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
@@ -1806,11 +2024,12 @@ function updateAll() {
   const voi = parseInt(document.getElementById('trait-void')?.value) || 2;
 
   // 1. Anneaux
-  const rEarth = Math.min(sta, wil);
-  const rWater = Math.min(str, per);
-  const rAir = Math.min(ref, awa);
-  const rFire = Math.min(agi, int);
-  const rVoid = voi;
+  const rings = calculateRings({ sta, wil, str, per, ref, awa, agi, int, voi });
+  const rEarth = rings.earth;
+  const rWater = rings.water;
+  const rAir = rings.air;
+  const rFire = rings.fire;
+  const rVoid = rings.void;
 
   document.getElementById('ring-earth').textContent = rEarth;
   document.getElementById('ring-water').textContent = rWater;
@@ -1869,49 +2088,36 @@ function updateAll() {
   ];
 
   traitsBase.forEach(t => {
-    let baseStart = 2 + t.bonus;
+    const baseStart = 2 + t.bonus;
     const blessed = hasElemBlessing(t.ring);
-    if (t.val > baseStart) {
-      for (let r = baseStart + 1; r <= t.val; r++) {
-        const traitStepCost = blessed ? Math.max(1, (r * 4) - 1) : (r * 4);
-        xpSpent += traitStepCost;
-      }
-    }
+    xpSpent += calculateTraitXpCost(t.val, baseStart, blessed);
   });
 
   const voidBonus = (fam?.trait === "Vide" ? 1 : 0) + (sch?.trait === "Vide" ? 1 : 0);
   const baseVoid = 2 + voidBonus;
-
-  if (voi > baseVoid) {
-    for (let r = baseVoid + 1; r <= voi; r++) {
-      const costPerRank = hasAdv("enlightened") ? Math.max(1, (r * 6) - 2) : (r * 6);
-      xpSpent += costPerRank;
-    }
-  }
+  xpSpent += calculateVoidXpCost(voi, baseVoid, hasAdv("enlightened"));
 
   const isObtuse = hasDisadv("obtuse");
+  const isProdigy = hasAdv("prodigy");
   const allCatalogSkills = getSkills();
 
   currentSkills.forEach(sk => {
     if (sk.isChoice && !sk.chosen) return;
 
-    let start = sk.isSchool ? 1 : 0;
     const catSk = allCatalogSkills.find(s => s.name === sk.name);
     const sName = (sk.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const sType = (sk.type || catSk?.type || "").toLowerCase();
     const isHighSkill = sType.includes("noble") || sType.includes("haute") || sType.includes("high");
     const isExemptHigh = sName.includes("enquete") || sName.includes("investigation") || sName.includes("medecine") || sName.includes("medicine");
 
-    if (sk.rank > start) {
-      for (let r = start + 1; r <= sk.rank; r++) {
-        let skillStepCost = (sk.isSchool && hasAdv("prodigy")) ? Math.max(1, r - 1) : r;
-        if (isObtuse && isHighSkill && !isExemptHigh) {
-          skillStepCost *= 2;
-        }
-        xpSpent += skillStepCost;
-      }
-    }
-    if (sk.spec) xpSpent += 2;
+    xpSpent += calculateSkillXpCost(sk.rank, {
+      isSchool: sk.isSchool,
+      spec: sk.spec,
+      isProdigy,
+      isObtuse,
+      isHighSkill,
+      isExemptHigh
+    });
   });
 
   // Recalcul dynamique des coûts/gains d'Avantages & Désavantages selon le Clan/École (Ticket #18)
@@ -1950,18 +2156,7 @@ function updateAll() {
   remEl.className = remainingXP >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold";
 
   // 3. Insight & Rang d'École
-  let sumRings = rEarth + rWater + rAir + rFire + rVoid;
-  let sumSkills = currentSkills.reduce((acc, sk) => {
-    if (sk.isChoice && !sk.chosen) return acc;
-    return acc + (parseInt(sk.rank) || 0);
-  }, 0);
-  let insight = (sumRings * 10) + sumSkills;
-
-  let insightRank = 1;
-  if (insight >= 225) insightRank = 5;
-  else if (insight >= 200) insightRank = 4;
-  else if (insight >= 175) insightRank = 3;
-  else if (insight >= 150) insightRank = 2;
+  const { insight, insightRank } = calculateInsightAndRank(rings, currentSkills);
 
   document.getElementById('insight-display').innerHTML = `${insight} pts <span class="text-xs text-amber-400 font-bold">(Rang ${insightRank})</span>`;
 
@@ -2745,7 +2940,7 @@ function exportOfficialPDF() {
   window.print();
 }
 
-// Exposition globale pour createcharacter.html et export-carnet.js
+// Exposition globale pour createcharacter.html, export-carnet.js et Node.js
 if (typeof window !== "undefined") {
   window.currentSkills = currentSkills;
   window.advantagesList = advantagesList;
@@ -2773,6 +2968,50 @@ if (typeof window !== "undefined") {
   window.renderDojoList = renderDojoList;
   window.applyCharacterDataToSheet = applyCharacterDataToSheet;
   window.SKILL_MASTERIES = SKILL_MASTERIES;
+  window.getMasteriesHtml = getMasteriesHtml;
+  window.getMasteriesSummary = getMasteriesSummary;
+  window.isMultipleSchoolsAdv = isMultipleSchoolsAdv;
+  window.isDifferentSchoolAdv = isDifferentSchoolAdv;
+  window.isElementalBlessingAdv = isElementalBlessingAdv;
+  window.buildCharacterContextFromInputs = buildCharacterContextFromInputs;
+  window.getEffectiveAdvCost = getEffectiveAdvCost;
+  window.getEffectiveDisadvGain = getEffectiveDisadvGain;
+  window.calculateRings = calculateRings;
+  window.calculateTraitXpCost = calculateTraitXpCost;
+  window.calculateVoidXpCost = calculateVoidXpCost;
+  window.calculateSkillXpCost = calculateSkillXpCost;
+  window.calculateInsightAndRank = calculateInsightAndRank;
+  window.calculateArmorTN = calculateArmorTN;
+  window.calculateWoundThresholds = calculateWoundThresholds;
+  window.parseRollKeepFormula = parseRollKeepFormula;
+  window.applyTenDiceRule = applyTenDiceRule;
+  window.simulateRollAndKeep = simulateRollAndKeep;
+
+  window.addEventListener('DOMContentLoaded', bootstrap);
 }
 
-window.addEventListener('DOMContentLoaded', bootstrap);
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    MAX_DISADVANTAGE_XP,
+    SKILL_MASTERIES,
+    getMasteriesHtml,
+    getMasteriesSummary,
+    isMultipleSchoolsAdv,
+    isDifferentSchoolAdv,
+    isElementalBlessingAdv,
+    buildCharacterContextFromInputs,
+    getCharacterContext,
+    getEffectiveAdvCost,
+    getEffectiveDisadvGain,
+    calculateRings,
+    calculateTraitXpCost,
+    calculateVoidXpCost,
+    calculateSkillXpCost,
+    calculateInsightAndRank,
+    calculateArmorTN,
+    calculateWoundThresholds,
+    parseRollKeepFormula,
+    applyTenDiceRule,
+    simulateRollAndKeep
+  };
+}
