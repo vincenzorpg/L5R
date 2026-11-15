@@ -6,6 +6,18 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.8.0] — 2026-11-15
+
+### ✨ Ajouté
+- **Refonte Ergonomique Complète de l'Écran du MJ (`ecran-mj.html`, `js/gm-screen.js`, `data/gm-rules-data.js`)** :
+  - **Cockpit 2 Colonnes & Dock Permanent MJ** : Lanceur Roll & Keep intégré (`XgY` avec explosion des 10, spécialisation, règle des 10 dés auto, presets rapides, malus de blessures et historique des 8 derniers jets), Calculateur Express de ND (+ Augmentations et modificateurs contextuels), Générateur Express de PNJ rokugani et Notes de Scène MJ.
+  - **Paravent Universel des Règles (`📜 Paravent Règles`)** : Base structurée `data/gm-rules-data.js` avec recherche instantanée (raccourci clavier `/`) et filtres par catégorie couvrant toutes les règles L5R 4e (Système Roll & Keep / 10 dés / Vide & Augmentations, Chronologie & Actions Complexe/Simple/Gratuite, 5 Postures, Manœuvres & Modificateurs, 6 États préjudiciables, Batailles de Masse, Guérison / Chutes / Poisons / Périls, Magie, Étiquette & Magistrature).
+  - **Escarmouche Enrichie** : Bouton `+ Renforts PNJ` sans réinitialisation du combat actif, jets de Toucher/Dégâts cliquables (envoyés au Lanceur MJ avec prise en compte du malus de blessure), calcul automatique du ND effectif (Postures + Défense PJ + états `À terre`, `Étourdi`, `Aveuglé`, `Surpris`) et 6 états cochables.
+  - **Arbitre Pas-à-Pas du Duel Iaijutsu & Calculateurs Magie/Peur** : Simulation directe des 3 phases du duel, verdict automatique de Concentration (ordre de frappe, Augmentations gratuites, détection de Frappe Karmique), Table 2.3 complète d'Honneur dans l'onglet Honneur & Gloire, et calculateurs de Sort / Jet de Peur.
+  - **Table des PJs Ergonomique** : Mode Compact basculable en 1 clic, bandeau de repères passifs du groupe (Perception max, Intuition max, Honneur moyen, blessés) et jet d'Initiative PJ cliquable.
+
+---
+
 ## [1.7.1] — 2026-11-15
 
 ### 🔄 Modifié
