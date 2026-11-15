@@ -6,6 +6,17 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.3.1] — 2026-11-15
+
+### 🐛 Corrigé
+
+- **Mode Clair « Parchemin Washi » (`css/main.css` & `grimoire.html`)** :
+  - Correction du contraste et de la visibilité des textes dans le **Grimoire (`grimoire.html`)** : suppression du bloc `<style>` inline qui maintenait les cartes de sorts (`.card-spell`), les champs de recherche (`input`, `select`) et les sous-encadrés (`bg-stone-950/90`, `bg-black/40`) sur un fond noir alors que les textes basculaient en brun foncé.
+  - Adaptation complète des badges élémentaires et thématiques (`.badge-terre`, `.badge-eau`, `.badge-feu`, `.badge-air`, `.badge-vide`, `.badge-universel`, `.badge-kiho`, `.badge-maho`, `.badge-elem-*`, `.badge-dragon`, `.badge-clan`, `.badge-shadow`, `.badge-legend`) avec des couleurs haute lisibilité en Mode Clair.
+  - Conversion automatique en Mode Clair de toutes les variantes d'arrière-plans sombres (`bg-black/*`, `bg-stone-950/*`, `bg-stone-900/*`, `bg-*-950/*`, dégradés de clans et pensées intérieures `.inner-thought`) ainsi que des classes de texte pastel (`text-emerald-*`, `text-teal-*`, `text-sky-*`, `text-blue-*`, `text-purple-*`, `text-red-*`, `text-amber-*`) sur l'ensemble du site.
+
+---
+
 ## [1.3.0] — 2026-11-15
 
 ### ✨ Ajouté
