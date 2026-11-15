@@ -13,6 +13,7 @@
   const cg = isNode ? require("../js/character-generator.js") : window;
   const gr = isNode ? require("../js/grimoire.js") : window;
   const ec = isNode ? require("../js/export-carnet.js") : window;
+  const gm = isNode ? require("../js/gm-screen.js") : window;
 
   const suites = [];
   let currentSuite = null;
@@ -348,6 +349,61 @@
       assertEqual(mods[0].id, "force-de-la-terre");
       assertEqual(mods[1].id, "vitesse-eclair");
       assertEqual(mods[2].id, "petit-degats");
+    });
+  });
+
+  // ===========================================================================
+  // 5. ÉCRAN DU MAÎTRE DU JEU (js/gm-screen.js)
+  // ===========================================================================
+  describe("5. Écran du MJ — Blessures L5R 4e, Import JSON & Initiative", function () {
+    it("computeL5RWoundState calcule les 8 paliers et malus L5R 4e selon l'Anneau de Terre", function () {
+      const healthy = gm.computeL5RWoundState(10, 3);
+      assertEqual(healthy.levelKey, "healthy");
+      assertEqual(healthy.penalty, 0);
+      assertEqual(healthy.maxWounds, 51); // 15 + 6 * 6
+
+      const nicked = gm.computeL5RWoundState(16, 3);
+      assertEqual(nicked.levelKey, "nicked");
+      assertEqual(nicked.penalty, 3);
+
+      const crippled = gm.computeL5RWoundState(42, 3);
+      assertEqual(crippled.levelKey, "crippled");
+      assertEqual(crippled.penalty, 20);
+
+      const dead = gm.computeL5RWoundState(52, 3);
+      assertEqual(dead.levelKey, "dead");
+      assertEqual(dead.penalty, null);
+    });
+
+    it("normalizeImportedCharacter importe un JSON Carnet de Rokugan v2 et détecte Haut Seuil de Douleur", function () {
+      const pc = gm.normalizeImportedCharacter({
+        schemaVersion: 2,
+        name: "Hida Kenji",
+        clan: "crab",
+        school: "Bushi Hida",
+        insightRank: 2,
+        traits: { stamina: 4, willpower: 3, strength: 4, perception: 2, reflexes: 3, awareness: 2, agility: 3, intelligence: 2 },
+        voidRing: 3,
+        armor: { name: "Armure Lourde", tnBonus: 10, reduction: 5 },
+        advantages: "Haut Seuil de Douleur"
+      });
+      assertEqual(pc.name, "Hida Kenji");
+      assertEqual(pc.rings.earth, 3);
+      assertEqual(pc.armorTN, 30); // 3*5 + 5 + 10
+      assertEqual(pc.reduction, 5);
+      assertEqual(pc.woundPenaltyDelta, -3);
+      assertEqual(pc.initFormula, "5g3");
+    });
+
+    it("sortCombatantsByInit trie les combattants par Initiative décroissante", function () {
+      const sorted = gm.sortCombatantsByInit([
+        { name: "Bandit", type: "enemy", initiative: 12 },
+        { name: "Hida Kenji", type: "pc", initiative: 21 },
+        { name: "Ninja", type: "enemy", initiative: 21 }
+      ]);
+      assertEqual(sorted[0].name, "Hida Kenji");
+      assertEqual(sorted[1].name, "Ninja");
+      assertEqual(sorted[2].name, "Bandit");
     });
   });
 

@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.4.0] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Écran du Maître du Jeu (`ecran-mj.html` & `js/gm-screen.js`)** :
+  - **Import JSON multi-fichiers des PJs** (glisser-déposer ou sélecteur de fichiers, compatible avec les exports *Carnet de Rokugan* `schemaVersion: 2` / *La Forge* + jeu de 2 PJs d'exemple) avec sauvegarde automatique dans `localStorage` (`l5r_gm_screen_v1`).
+  - **Fiches synthétiques de table pour le MJ** : Anneaux, ND d'Armure & Réduction, formule d'Initiative, Honneur/Gloire, pastilles interactives de Points de Vide, rappels (armes, compétences, sorts, avantages/désavantages) et bloc-notes MJ privé par PJ.
+  - **Traqueur de Combat & Blessures en direct (PJs + Adversaires)** : calcul automatique des 8 paliers de blessures L5R 4e (`Indemne` → `Mort`) et des malus aux jets (`+3` à `+20`), postures de combat (*Assaut*, *Attaque*, *Défense*, *Esquive*, *Centre*) avec ND effectif en temps réel, états (*À terre*, *Étourdi*, *Aveuglé*, *Enchevêtré*), ordre d'Initiative, gestion des rounds et 8 modèles d'adversaires prédéfinis L5R 4e.
+  - **Lanceur de dés Roll & Keep intégré** (avec règle des 10 dés, explosions et spécialisations) et bloc-notes de scène MJ.
+- **Navigation (`js/navbar.js`)** : ajout du lien **Écran du MJ** dans le menu *Outils* (bureau et mobile).
+- **Tests unitaires (`tests/unit-tests.js`)** : ajout de 3 tests dédiés à `computeL5RWoundState`, `normalizeImportedCharacter` et `sortCombatantsByInit`.
+
+---
+
 ## [1.3.3] — 2026-11-15
 
 ### ✨ Ajouté

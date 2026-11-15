@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Écran du Maître du Jeu — Les Chroniques de Rokugan (L5R 4e)</title>
+
+  <!-- POLICES IMPÉRIALES & JAPONAISES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- TAILWIND CSS CDN & STYLES -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- MOTEURS JS -->
+  <script src="js/character-generator.js" defer></script>
+  <script src="js/navbar.js" defer></script>
+  <script src="js/gm-screen.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
+
+  <!-- 1. HEADER GLOBAL (INJECTÉ PAR JS/NAVBAR.JS) -->
+  <header id="site-header"></header>
+
+  <!-- 2. BANNIÈRE THÉMATIQUE -->
+  <div class="relative border-b border-amber-500/20 bg-gradient-to-b from-[#190909] via-[#0d0909] to-[#0a0808] py-7 px-4">
+    <div class="max-w-7xl mx-auto text-center space-y-2.5">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/40 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase font-imperial">
+        <span>幕</span> Paravent Numérique du Maître du Jeu
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold gold-text font-imperial tracking-wider">
+        Écran du Maître du Jeu
+      </h1>
+      <p class="text-xs md:text-sm text-stone-300 max-w-3xl mx-auto leading-relaxed">
+        Importez les fiches <b>.json</b> de vos PJs (<i>La Forge</i> ou <i>Carnet de Rokugan</i>), gardez leurs traits, désavantages et Points de Vide sous les yeux, et pilotez vos combats avec le suivi automatique des blessures L5R 4e.
+      </p>
+    </div>
+  </div>
+
+  <!-- 3. CONTENU PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- ZONE D'IMPORT DES PJs -->
+    <section class="card-clean rounded-xl p-4 md:p-5 space-y-3">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 class="font-imperial font-bold text-base text-amber-300 flex items-center gap-2">
+            <span>👥</span> Table des Joueurs (<span id="gm-pc-count">0</span> PJ)
+          </h2>
+          <p class="text-[11px] text-stone-400">
+            Sauvegarde automatique dans votre navigateur. Compatible avec les exports JSON <code>schemaVersion: 2</code>.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="gm-json-input" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
+            + Importer PJ (.json)
+          </label>
+          <input id="gm-json-input" type="file" accept=".json,application/json" multiple class="hidden" />
+          <button id="gm-load-sample" type="button" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/30 text-amber-200 font-imperial text-xs cursor-pointer transition">
+            Charger 2 PJs d'exemple
+          </button>
+          <button id="gm-clear-pcs" type="button" class="px-3 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
+            Vider la table
+          </button>
+        </div>
+      </div>
+
+      <div id="gm-drop-zone" class="border border-dashed border-amber-500/30 rounded-xl p-3 text-center text-[11px] text-stone-400 transition">
+        Glissez-déposez ici un ou plusieurs fichiers <b>.json</b> de personnages pour les ajouter instantanément à votre table.
+        <span id="gm-import-status" class="block text-emerald-400 font-bold mt-1"></span>
+      </div>
+
+      <!-- GRILLE DES PJs -->
+      <div id="gm-pcs-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pt-1"></div>
+    </section>
+
+    <!-- POSTE DE COMBAT & OUTILS MJ -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+
+      <!-- TRAQUEUR DE COMBAT (8 COLONNES) -->
+      <section class="xl:col-span-8 card-clean rounded-xl p-4 md:p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/20 pb-3">
+          <div class="flex items-center gap-3">
+            <h2 class="font-imperial font-bold text-base text-amber-300 flex items-center gap-2">
+              <span>⚔️</span> Traqueur de Combat & Blessures
+            </h2>
+            <span class="px-2.5 py-0.5 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-imperial font-bold text-red-200">
+              Round <span id="gm-combat-round">1</span>
+            </span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="gm-next-turn" type="button" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
+              Tour suivant ▶
+            </button>
+            <button id="gm-sort-init" type="button" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 font-imperial text-xs cursor-pointer transition">
+              Trier Init ↓
+            </button>
+            <button id="gm-reset-combat" type="button" class="px-2.5 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
+              Réinitialiser
+            </button>
+          </div>
+        </div>
+
+        <!-- AJOUT RAPIDE D'ADVERSAIRE -->
+        <form id="gm-enemy-form" class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-2.5 text-xs">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span class="font-imperial font-bold text-amber-300 text-xs">Ajouter un Adversaire / PNJ</span>
+            <select id="gm-enemy-preset" class="rounded-lg bg-[#0d0b0b] border border-amber-500/30 px-2.5 py-1 text-xs text-amber-200 focus:outline-none"></select>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+            <input id="gm-enemy-name" type="text" placeholder="Nom (ex: Ronin)" class="col-span-2 rounded-lg bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200 focus:outline-none focus:border-amber-500" required />
+            <input id="gm-enemy-init" type="number" value="15" placeholder="Init" title="Score d'Initiative" class="rounded-lg bg-[#0d0b0b] border border-stone-700 px-2 py-1.5 text-stone-200 focus:outline-none focus:border-amber-500" />
+            <input id="gm-enemy-tn" type="number" value="15" placeholder="ND" title="ND d'Armure" class="rounded-lg bg-[#0d0b0b] border border-stone-700 px-2 py-1.5 text-stone-200 focus:outline-none focus:border-amber-500" />
+            <input id="gm-enemy-red" type="number" value="2" placeholder="Réd." title="Réduction" class="rounded-lg bg-[#0d0b0b] border border-stone-700 px-2 py-1.5 text-stone-200 focus:outline-none focus:border-amber-500" />
+            <input id="gm-enemy-earth" type="number" min="1" max="10" value="2" placeholder="Terre" title="Anneau de Terre (calcul des blessures)" class="rounded-lg bg-[#0d0b0b] border border-stone-700 px-2 py-1.5 text-stone-200 focus:outline-none focus:border-amber-500" />
+            <input id="gm-enemy-attack" type="text" value="5g2" placeholder="Att (5g2)" title="Jet d'attaque" class="rounded-lg bg-[#0d0b0b] border border-stone-700 px-2 py-1.5 text-stone-200 font-mono focus:outline-none focus:border-amber-500" />
+            <input id="gm-enemy-damage" type="text" value="4g2" placeholder="Dég (4g2)" title="Jet de dégâts" class="rounded-lg bg-[#0d0b0b] border border-stone-700 px-2 py-1.5 text-stone-200 font-mono focus:outline-none focus:border-amber-500" />
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input id="gm-enemy-notes" type="text" placeholder="Notes tactiques (ex: Peur 2, Katana, garde le shugenja...)" class="flex-1 rounded-lg bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200 focus:outline-none focus:border-amber-500" />
+            <button type="submit" class="px-4 py-1.5 rounded-lg bg-red-800 hover:bg-red-700 text-white font-imperial font-bold text-xs cursor-pointer transition shrink-0">
+              + Ajouter au combat
+            </button>
+          </div>
+        </form>
+
+        <!-- LISTE DES COMBATTANTS -->
+        <div id="gm-combat-list" class="space-y-2.5"></div>
+      </section>
+
+      <!-- COLONNE DROITE : LANCEUR DE DÉS + MÉMENTO + BLOC-NOTES (4 COLONNES) -->
+      <aside class="xl:col-span-4 space-y-5">
+
+        <!-- LANCEUR ROLL & KEEP -->
+        <section class="card-clean rounded-xl p-4 space-y-3">
+          <h2 class="font-imperial font-bold text-sm text-amber-300 border-b border-amber-500/20 pb-2 flex items-center gap-2">
+            <span>🎲</span> Lanceur Roll & Keep (4e)
+          </h2>
+          <div class="space-y-2 text-xs">
+            <div class="flex gap-2">
+              <input id="gm-dice-formula" type="text" value="6g3" placeholder="Ex: 7g3+4" class="w-28 rounded-lg bg-[#0d0b0b] border border-amber-500/40 px-2.5 py-1.5 font-mono font-bold text-amber-200 focus:outline-none" />
+              <input id="gm-dice-label" type="text" placeholder="Motif (ex: Attaque Ronin)" class="flex-1 rounded-lg bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200 focus:outline-none" />
+            </div>
+            <div class="flex items-center justify-between gap-2">
+              <label class="inline-flex items-center gap-1.5 text-[11px] text-stone-300 cursor-pointer">
+                <input id="gm-dice-spec" type="checkbox" class="rounded border-stone-600 bg-stone-900 text-amber-500" />
+                <span>Spécialisation (relance des 1)</span>
+              </label>
+              <button id="gm-roll-btn" type="button" class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition">
+                Lancer
+              </button>
+            </div>
+          </div>
+          <div id="gm-dice-history" class="space-y-1.5 max-h-56 overflow-y-auto pr-1"></div>
+        </section>
+
+        <!-- MÉMENTO EXPRESS MJ -->
+        <section class="card-clean rounded-xl p-4 space-y-2.5 text-[11px]">
+          <div class="flex items-center justify-between border-b border-amber-500/20 pb-2">
+            <h2 class="font-imperial font-bold text-sm text-amber-300">📖 Repères Rapides L5R 4e</h2>
+            <a href="aides/combat-memento.html" class="text-[10px] text-amber-400 hover:underline">Mémento complet ↗</a>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-stone-300">
+            <div class="p-2 rounded bg-black/35 border border-stone-800">
+              <b class="text-amber-300 block mb-0.5">Seuils de ND</b>
+              Facile : 10 • Moyen : 15<br>Difficile : 20 • Très diff. : 25<br>Héroïque : 30+
+            </div>
+            <div class="p-2 rounded bg-black/35 border border-stone-800">
+              <b class="text-amber-300 block mb-0.5">Augmentations (+5 ND)</b>
+              Dégâts : +1g0 par Aug.<br>Manœuvre : 1 à 3 Aug.<br>Max = Rang de Vide
+            </div>
+          </div>
+          <div class="p-2 rounded bg-black/35 border border-stone-800 text-stone-300">
+            <b class="text-amber-300 block mb-0.5">Postures de Combat</b>
+            <b>Assaut :</b> +2g1 Attaque, -10 ND • <b>Défense :</b> +Air+Défense au ND • <b>Esquive :</b> +10+ ND, pas d'attaque • <b>Centre :</b> +1g1+Vide au tour suivant.
+          </div>
+        </section>
+
+        <!-- BLOC-NOTES DE SCÈNE MJ -->
+        <section class="card-clean rounded-xl p-4 space-y-2">
+          <h2 class="font-imperial font-bold text-sm text-amber-300 border-b border-amber-500/20 pb-2">
+            📝 Notes de Scène (MJ)
+          </h2>
+          <textarea
+            id="gm-scratchpad"
+            rows="5"
+            placeholder="Indices révélés, noms de PNJ improvisés, faveurs et dettes d'honneur..."
+            class="w-full rounded-lg bg-[#0d0b0b] border border-stone-800 focus:border-amber-500/60 p-2.5 text-xs text-stone-200 placeholder-stone-600 focus:outline-none"
+          ></textarea>
+        </section>
+
+      </aside>
+    </div>
+
+  </main>
+
+  <!-- 4. PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-10">
+    <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
+    <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
+      <span id="site-version-label">v1.4.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+    </div>
+  </footer>
+</body>
+</html>
