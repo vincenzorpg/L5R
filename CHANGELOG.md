@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.7.1] — 2026-11-15
+
+### 🔄 Modifié
+- **Réactivité JS de la Forge de Personnage (`js/character-generator.js`, `js/forge-ui.js`)** :
+  - Indexation en cache (`Map`) des catalogues de compétences, avantages et désavantages pour remplacer les recherches linéaires répétées à chaque recalcul (`updateAll`).
+  - Regroupement des insertions DOM de listes (`#sel-add-skill`, `#pc-armor`, `#pc-weapon-1`, `#pc-weapon-2`, `#sel-catalog-adv`, `#sel-catalog-disadv`, sorts, katas, tatouages et sélecteur multi-compétences) via `DocumentFragment`.
+  - Remplacement des `setTimeout` de démarrage et du wrapping de `window.updateAll` par des événements DOM dédiés (`l5r-forge-ready`, `l5r-forge-selection-changed`, `l5r-forge-updated`), et rafraîchissement à la demande du catalogue de tatouages Togashi.
+  - Filtrage des compétences multi-sélection avec debounce (`80 ms`) et attribut `data-search`, et sauvegarde automatique du brouillon différée (`250 ms` + flush `pagehide`).
+- **Grimoire (`js/grimoire.js`) & Tatouages Togashi (`js/tatouages.js`, `tatouages.html`)** :
+  - Mise en cache `WeakMap` des métadonnées et textes normalisés des sorts dans le Grimoire et pré-calcul du texte normalisé dans `tatouages.js` (avec échappement HTML via `escapeHtml` et script `data/tatouages-data.js` en `defer`).
+  - Debounce des champs de recherche (`120 ms`), insertion des cartes via `DocumentFragment` et marquage `.perf-cv-auto` (`content-visibility: auto`).
+
+---
+
 ## [1.7.0] — 2026-11-15
 
 ### 🔄 Modifié

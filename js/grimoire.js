@@ -4,6 +4,18 @@
 
 (function () {
   let isMahoUnlocked = false;
+  const spellMetaCache = typeof WeakMap !== "undefined" ? new WeakMap() : null;
+
+  function debounce(fn, delay = 120) {
+    let timerId = null;
+    return function (...args) {
+      if (timerId !== null) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        timerId = null;
+        fn.apply(this, args);
+      }, delay);
+    };
+  }
 
   function normalizeText(str) {
     return (str || "")
@@ -89,57 +101,79 @@
     return p === "iuchiban" || p === "maho" || p === "jigoku" || p === "outremonde";
   }
 
+  function getSpellMeta(spell) {
+    if (!spell || typeof spell !== "object") {
+      return {
+        el: "universel",
+        kiho: false,
+        rank: 0,
+        normName: "",
+        normDesc: "",
+        normKeywords: "",
+        normRange: "",
+        normRing: ""
+      };
+    }
+    if (spellMetaCache && spellMetaCache.has(spell)) {
+      return spellMetaCache.get(spell);
+    }
+    const kwRaw = spell.keywords || spell.motsCles;
+    const kwStr = Array.isArray(kwRaw) ? kwRaw.join(" ") : (kwRaw || "");
+    const meta = {
+      el: getSpellElement(spell),
+      kiho: isSpellKiho(spell),
+      rank: getRank(spell),
+      normName: normalizeText(spell.name || spell.nom),
+      normDesc: normalizeText(spell.desc || spell.description || spell.effet),
+      normKeywords: normalizeText(kwStr),
+      normRange: normalizeText(spell.range || spell.portee),
+      normRing: normalizeText(spell.ring || spell.anneau || "")
+    };
+    if (spellMetaCache) spellMetaCache.set(spell, meta);
+    return meta;
+  }
+
   function filterSpellsList(spells, options = {}) {
     const allSpells = Array.isArray(spells) ? spells : [];
     const query = normalizeText(options.query || "");
     const selectedElement = normalizeText(options.selectedElement || "tous");
     const selectedRank = options.selectedRank !== undefined ? String(options.selectedRank) : "tous";
     const mahoUnlocked = Boolean(options.isMahoUnlocked);
+    const hasRankFilter = selectedRank !== "tous";
+    const targetRank = hasRankFilter ? parseInt(selectedRank, 10) : 0;
 
-    // 1. Protection Mahō
-    let filtered = allSpells.filter(spell => {
-      const el = getSpellElement(spell);
-      if (el === "maho" && !mahoUnlocked) return false;
-      return true;
-    });
+    const filtered = [];
+    for (let i = 0; i < allSpells.length; i++) {
+      const spell = allSpells[i];
+      const meta = getSpellMeta(spell);
 
-    // 2. Filtre par Élément / Voie
-    if (selectedElement !== "tous") {
-      filtered = filtered.filter(spell => {
-        const el = getSpellElement(spell);
+      // 1. Protection Mahō
+      if (meta.el === "maho" && !mahoUnlocked) continue;
+
+      // 2. Filtre par Élément / Voie
+      if (selectedElement !== "tous") {
         if (selectedElement === "kiho") {
-          return el === "kiho" || isSpellKiho(spell);
+          if (meta.el !== "kiho" && !meta.kiho) continue;
+        } else if (meta.el !== selectedElement) {
+          if (!(meta.kiho && meta.normRing.includes(selectedElement))) continue;
         }
-        // Si filtre classique (terre, eau, feu, air, vide) : match les sorts de cet élément
-        // ou les Kihos rattachés à cet anneau
-        if (el === selectedElement) return true;
-        if (isSpellKiho(spell)) {
-          const kihoRing = normalizeText(spell.ring || spell.anneau || "");
-          return kihoRing.includes(selectedElement);
-        }
-        return false;
-      });
-    }
+      }
 
-    // 3. Filtre par Rang de Maîtrise
-    if (selectedRank !== "tous") {
-      const targetRank = parseInt(selectedRank, 10);
-      filtered = filtered.filter(spell => getRank(spell) === targetRank);
-    }
+      // 3. Filtre par Rang de Maîtrise
+      if (hasRankFilter && meta.rank !== targetRank) continue;
 
-    // 4. Recherche texte
-    if (query !== "") {
-      filtered = filtered.filter(spell => {
-        const nom = normalizeText(spell.name || spell.nom);
-        const desc = normalizeText(spell.desc || spell.description || spell.effet);
-        const mots = normalizeText(Array.isArray(spell.keywords || spell.motsCles)
-          ? (spell.keywords || spell.motsCles).join(" ")
-          : (spell.keywords || spell.motsCles));
-        const portee = normalizeText(spell.range || spell.portee);
-        const kihoRing = normalizeText(spell.ring || "");
+      // 4. Recherche texte
+      if (query !== "") {
+        const matchesQuery =
+          meta.normName.includes(query) ||
+          meta.normDesc.includes(query) ||
+          meta.normKeywords.includes(query) ||
+          meta.normRange.includes(query) ||
+          meta.normRing.includes(query);
+        if (!matchesQuery) continue;
+      }
 
-        return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query) || kihoRing.includes(query);
-      });
+      filtered.push(spell);
     }
 
     return filtered;
@@ -178,6 +212,7 @@
     } else {
       if (noResults) noResults.classList.add("hidden");
 
+      const fragment = document.createDocumentFragment();
       filtered.forEach(spell => {
         const spellName = spell.name || spell.nom || "Sort sans nom";
         const primaryId = spell.id || slugify(spellName);
@@ -200,7 +235,7 @@
         const card = document.createElement("article");
         card.id = cardId;
         card.setAttribute("data-alias", `sort-${nameSlug}`);
-        card.className = "card-spell rounded-xl p-4 flex flex-col justify-between space-y-3 relative";
+        card.className = "card-spell perf-cv-auto rounded-xl p-4 flex flex-col justify-between space-y-3 relative";
 
         card.innerHTML = `
           <div>
@@ -246,8 +281,9 @@
           </div>
         `;
 
-        container.appendChild(card);
+        fragment.appendChild(card);
       });
+      container.appendChild(fragment);
     }
 
     renderActiveFilterBadges();
@@ -431,10 +467,11 @@
     const rankSelect = document.getElementById("rank-select");
 
     if (searchInput) {
-      searchInput.addEventListener("input", () => {
+      const debouncedSearch = debounce(() => {
         applyFilters();
         syncFiltersToURL();
-      });
+      }, 120);
+      searchInput.addEventListener("input", debouncedSearch);
     }
 
     if (elementSelect) {

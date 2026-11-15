@@ -3,6 +3,37 @@
 // =============================================================================
 
 let currentCategory = 'all';
+let cachedRawTattoos = null;
+let cachedTattooDataset = [];
+
+function debounce(fn, delay = 120) {
+  let timerId = null;
+  return function (...args) {
+    if (timerId !== null) clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      timerId = null;
+      fn.apply(this, args);
+    }, delay);
+  };
+}
+
+function normalizeSearchText(str) {
+  return String(str || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+}
 
 function normalizeTattoo(t) {
   const isIseZumi = (t.category === 'ise-zumi' || t.type === 'Togashi' || (!t.category && !t.type));
@@ -18,24 +49,35 @@ function normalizeTattoo(t) {
     catLabel = t.categoryLabel || 'Figure Historique';
   }
 
+  const name = t.name || 'Tatouage sans nom';
+  const kanji = t.kanji ? `(${t.kanji})` : '';
+  const source = t.source || 'Livre de Base (p. 263)';
+  const lore = t.desc || t.lore || '';
+  const rule = t.rule || '';
+
   return {
-    id: t.id || 'tat-' + Math.random().toString(36).substr(2, 9),
-    name: t.name || 'Tatouage sans nom',
-    kanji: t.kanji ? `(${t.kanji})` : '',
+    id: t.id || 'tat-' + Math.random().toString(36).slice(2, 11),
+    name,
+    kanji,
     category: cat,
     badgeClass: badgeClass,
     categoryLabel: catLabel,
     action: t.activation || t.action || 'Action Libre',
     duration: t.duration || '2 × Rang rounds',
-    source: t.source || 'Livre de Base (p. 263)',
-    lore: t.desc || t.lore || '',
-    rule: t.rule || ''
+    source,
+    lore,
+    rule,
+    searchText: normalizeSearchText(`${name} ${kanji} ${lore} ${rule} ${source}`)
   };
 }
 
 function getDataset() {
   const data = window.TATOUAGES_DATA || [];
-  return data.map(normalizeTattoo);
+  if (data !== cachedRawTattoos) {
+    cachedRawTattoos = data;
+    cachedTattooDataset = data.map(normalizeTattoo);
+  }
+  return cachedTattooDataset;
 }
 
 function renderTattoos(list) {
@@ -55,29 +97,30 @@ function renderTattoos(list) {
     return;
   }
 
+  const fragment = document.createDocumentFragment();
   list.forEach(t => {
     const card = document.createElement('div');
-    card.className = "card-clean rounded-xl p-4 flex flex-col justify-between cursor-pointer space-y-3";
+    card.className = "card-clean perf-cv-auto rounded-xl p-4 flex flex-col justify-between cursor-pointer space-y-3";
     card.onclick = () => openModal(t);
 
     card.innerHTML = `
       <div class="space-y-2">
         <div class="flex items-start justify-between gap-2 border-b border-stone-800 pb-2">
           <div>
-            <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${t.badgeClass}">
-              ${t.categoryLabel}
+            <span class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded ${escapeHtml(t.badgeClass)}">
+              ${escapeHtml(t.categoryLabel)}
             </span>
             <h3 class="text-sm font-bold font-imperial text-amber-200 mt-1">
-              ${t.name} <span class="text-amber-500/80 font-normal text-xs">${t.kanji}</span>
+              ${escapeHtml(t.name)} <span class="text-amber-500/80 font-normal text-xs">${escapeHtml(t.kanji)}</span>
             </h3>
           </div>
           <span class="text-[9px] text-stone-400 bg-stone-900 border border-stone-800 px-1.5 py-0.5 rounded text-right whitespace-nowrap">
-            ${t.source}
+            ${escapeHtml(t.source)}
           </span>
         </div>
 
         <p class="text-stone-400 text-[11px] italic line-clamp-2">
-          « ${t.lore} »
+          « ${escapeHtml(t.lore)} »
         </p>
 
         <div class="p-2.5 rounded bg-black/60 border border-stone-800/80 space-y-1">
@@ -85,33 +128,29 @@ function renderTattoos(list) {
             ⚙️ Effet Mécanique :
           </span>
           <p class="text-stone-300 text-[11px] leading-relaxed line-clamp-3">
-            ${t.rule}
+            ${escapeHtml(t.rule)}
           </p>
         </div>
       </div>
 
       <div class="pt-2 border-t border-stone-800/60 flex items-center justify-between text-[10px] text-stone-500">
-        <span>⏱️ <b>${t.action}</b></span>
+        <span>⏱️ <b>${escapeHtml(t.action)}</b></span>
         <span class="text-amber-400/80 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
           Détails ➔
         </span>
       </div>
     `;
-    grid.appendChild(card);
+    fragment.appendChild(card);
   });
+  grid.appendChild(fragment);
 }
 
 function applyFilter() {
-  const q = (document.getElementById('tattoo-search')?.value || '').toLowerCase().trim();
+  const q = normalizeSearchText(document.getElementById('tattoo-search')?.value || '');
   const all = getDataset();
   const filtered = all.filter(t => {
     const matchCat = (currentCategory === 'all') || (t.category === currentCategory);
-    const matchQuery = !q ||
-      t.name.toLowerCase().includes(q) ||
-      t.kanji.toLowerCase().includes(q) ||
-      t.lore.toLowerCase().includes(q) ||
-      t.rule.toLowerCase().includes(q) ||
-      t.source.toLowerCase().includes(q);
+    const matchQuery = !q || t.searchText.includes(q);
     return matchCat && matchQuery;
   });
   renderTattoos(filtered);
@@ -159,10 +198,16 @@ function initTattooPage(attempts = 0) {
     });
   }
 
+  const searchInput = document.getElementById('tattoo-search');
+  if (searchInput && !searchInput.dataset.bound) {
+    searchInput.dataset.bound = 'true';
+    searchInput.addEventListener('input', debounce(applyFilter, 120));
+  }
+
   if (window.TATOUAGES_DATA && window.TATOUAGES_DATA.length > 0) {
     applyFilter();
-  } else if (attempts < 20) {
-    setTimeout(() => initTattooPage(attempts + 1), 50);
+  } else if (attempts < 10) {
+    setTimeout(() => initTattooPage(attempts + 1), 30);
   } else {
     renderTattoos([]);
   }

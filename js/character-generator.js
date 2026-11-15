@@ -15,6 +15,27 @@ const MAX_DISADVANTAGE_XP = 15;
 const DOJO_STORAGE_KEY = 'l5r_dojo_characters_v4';
 const DRAFT_STORAGE_KEY = 'l5r_current_character_draft_v4';
 
+const _normFoldCache = new Map();
+function normalizeFold(str) {
+  const key = String(str || "");
+  let cached = _normFoldCache.get(key);
+  if (cached !== undefined) return cached;
+  cached = key.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (_normFoldCache.size < 2000) _normFoldCache.set(key, cached);
+  return cached;
+}
+
+const _catalogIndexCache = {
+  skillsRef: null,
+  skillsByName: new Map(),
+  advRef: null,
+  advById: new Map(),
+  advByName: new Map(),
+  disRef: null,
+  disById: new Map(),
+  disByName: new Map()
+};
+
 // =============================================================================
 // 1. PALIERS DE MAÎTRISE OFFICIELS (LIVRE DE BASE 4E ÉDITION)
 // =============================================================================
@@ -340,7 +361,7 @@ function getEffectiveAdvCost(adv, contextOverride) {
   const baseCost = parseInt(adv.baseCost ?? adv.cost) || 0;
   const ctx = resolveContextArg(contextOverride);
   const imp = (adv.impact || adv.id || "").toLowerCase();
-  const nameNorm = (adv.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const nameNorm = normalizeFold(adv.name);
 
   let discount = 0;
 
@@ -377,7 +398,7 @@ function getEffectiveDisadvGain(dis, contextOverride) {
   const baseGain = parseInt(dis.baseGain ?? dis.gain ?? dis.cost) || 0;
   const ctx = resolveContextArg(contextOverride);
   const imp = (dis.impact || dis.id || "").toLowerCase();
-  const nameNorm = (dis.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const nameNorm = normalizeFold(dis.name);
 
   let bonus = 0;
 
@@ -402,18 +423,68 @@ function getEffectiveDisadvGain(dis, contextOverride) {
   return baseGain + bonus;
 }
 
+function getIndexedSkillsMap() {
+  const list = getSkills();
+  if (list !== _catalogIndexCache.skillsRef) {
+    _catalogIndexCache.skillsRef = list;
+    const map = new Map();
+    for (let i = 0; i < list.length; i++) {
+      const s = list[i];
+      if (s && s.name) map.set(s.name, s);
+    }
+    _catalogIndexCache.skillsByName = map;
+  }
+  return _catalogIndexCache.skillsByName;
+}
+
+function getIndexedAdvMaps() {
+  const container = getAdvantages();
+  const list = container.avantages || (typeof window !== "undefined" ? window.AVANTAGES_LIST : null) || [];
+  if (list !== _catalogIndexCache.advRef) {
+    _catalogIndexCache.advRef = list;
+    const byId = new Map();
+    const byName = new Map();
+    for (let i = 0; i < list.length; i++) {
+      const a = list[i];
+      if (!a) continue;
+      if (a.id) byId.set(a.id, a);
+      if (a.name) byName.set(a.name, a);
+    }
+    _catalogIndexCache.advById = byId;
+    _catalogIndexCache.advByName = byName;
+  }
+  return { list, byId: _catalogIndexCache.advById, byName: _catalogIndexCache.advByName };
+}
+
+function getIndexedDisadvMaps() {
+  const container = getAdvantages();
+  const list = container.desavantages || (typeof window !== "undefined" ? window.DESAVANTAGES_LIST : null) || [];
+  if (list !== _catalogIndexCache.disRef) {
+    _catalogIndexCache.disRef = list;
+    const byId = new Map();
+    const byName = new Map();
+    for (let i = 0; i < list.length; i++) {
+      const d = list[i];
+      if (!d) continue;
+      if (d.id) byId.set(d.id, d);
+      if (d.name) byName.set(d.name, d);
+    }
+    _catalogIndexCache.disById = byId;
+    _catalogIndexCache.disByName = byName;
+  }
+  return { list, byId: _catalogIndexCache.disById, byName: _catalogIndexCache.disByName };
+}
+
 function resolveCatalogAdvantage(val) {
   if (val === "" || val === null || val === undefined) return null;
-  const container = getAdvantages();
-  const list = container.avantages || window.AVANTAGES_LIST || [];
-  return list[val] || list.find(a => a.id === val || a.name === val) || null;
+  const { list, byId, byName } = getIndexedAdvMaps();
+  return list[val] || byId.get(val) || byName.get(val) || null;
 }
 
 function resolveCatalogDisadvantage(val) {
   if (val === "" || val === null || val === undefined) return null;
-  const container = getAdvantages();
-  const list = container.desavantages || window.DESAVANTAGES_LIST || [];
-  return list[val] || list.find(d => d.id === val || d.name === val) || null;
+  const { list, byId, byName } = getIndexedDisadvMaps();
+  return list[val] || byId.get(val) || byName.get(val) || null;
 }
 
 // Aperçu dynamique des Avantages & Désavantages (Ticket #21)
@@ -598,7 +669,7 @@ function bootstrap() {
   if (nameInput) {
     nameInput.addEventListener('input', () => {
       updateStickyName();
-      autoSaveCharacterDraft();
+      scheduleAutoSaveDraft();
     });
   }
 
@@ -612,6 +683,11 @@ function bootstrap() {
   updateStickyName();
   renderDojoList();
   updateAll();
+
+  if (typeof window !== "undefined") {
+    window.__l5rForgeReady = true;
+    window.dispatchEvent(new CustomEvent('l5r-forge-ready'));
+  }
 }
 
 function initClans() {
@@ -698,6 +774,7 @@ function initCatalogSelectors() {
       const priorityTypes = ["bugei", "noble", "haute", "marchande", "degradante", "dégradante"];
       const allTypes = Array.from(new Set([...priorityTypes, ...Object.keys(groupedSkills)]));
 
+      const skFrag = document.createDocumentFragment();
       allTypes.forEach(tKey => {
         if (!groupedSkills[tKey] || groupedSkills[tKey].length === 0) return;
 
@@ -714,8 +791,9 @@ function initCatalogSelectors() {
           optgroup.appendChild(opt);
         });
 
-        skSel.appendChild(optgroup);
+        skFrag.appendChild(optgroup);
       });
+      skSel.appendChild(skFrag);
 
       if (previousVal && availableSkills.some(s => s.name === previousVal)) {
         skSel.value = previousVal;
@@ -730,12 +808,14 @@ function initCatalogSelectors() {
   if (armSel) {
     const prevArmVal = armSel.value;
     armSel.innerHTML = "";
+    const armFrag = document.createDocumentFragment();
     (eq.armures || []).forEach(a => {
       const opt = document.createElement('option');
       opt.value = a.tn;
       opt.textContent = a.name;
-      armSel.appendChild(opt);
+      armFrag.appendChild(opt);
     });
+    armSel.appendChild(armFrag);
     if (prevArmVal && armSel.querySelector(`option[value="${prevArmVal}"]`)) {
       armSel.value = prevArmVal;
     }
@@ -752,18 +832,23 @@ function initCatalogSelectors() {
 
     w1Sel.innerHTML = "";
     w2Sel.innerHTML = "<option value='Aucune'>Aucune arme secondaire</option>";
+    const w1Frag = document.createDocumentFragment();
+    const w2Frag = document.createDocumentFragment();
 
     (eq.armes || []).forEach(w => {
       const opt1 = document.createElement('option');
       opt1.value = w.name;
       opt1.textContent = `${w.name} (VD ${w.vd}, ${w.type})`;
-      w1Sel.appendChild(opt1);
+      w1Frag.appendChild(opt1);
 
       const opt2 = document.createElement('option');
       opt2.value = w.name;
       opt2.textContent = `${w.name} (VD ${w.vd})`;
-      w2Sel.appendChild(opt2);
+      w2Frag.appendChild(opt2);
     });
+
+    w1Sel.appendChild(w1Frag);
+    w2Sel.appendChild(w2Frag);
 
     if (prevW1 && w1Sel.querySelector(`option[value="${prevW1}"]`)) {
       w1Sel.value = prevW1;
@@ -805,6 +890,7 @@ function initCatalogSelectors() {
 
       const sortedTypes = Object.keys(groupedAdv).sort((a, b) => a.localeCompare(b, 'fr'));
 
+      const advFrag = document.createDocumentFragment();
       sortedTypes.forEach(tKey => {
         const optgroup = document.createElement('optgroup');
         optgroup.label = ADV_TYPE_SYMBOLS[tKey] || `📁 ${tKey.toUpperCase()}`;
@@ -824,8 +910,9 @@ function initCatalogSelectors() {
           optgroup.appendChild(opt);
         });
 
-        advSel.appendChild(optgroup);
+        advFrag.appendChild(optgroup);
       });
+      advSel.appendChild(advFrag);
 
       if (prevAdvVal && advSel.querySelector(`option[value="${prevAdvVal}"]`)) {
         advSel.value = prevAdvVal;
@@ -867,6 +954,7 @@ function initCatalogSelectors() {
 
       const sortedTypes = Object.keys(groupedDis).sort((a, b) => a.localeCompare(b, 'fr'));
 
+      const disFrag = document.createDocumentFragment();
       sortedTypes.forEach(tKey => {
         const optgroup = document.createElement('optgroup');
         optgroup.label = ADV_TYPE_SYMBOLS[tKey] || `📁 ${tKey.toUpperCase()}`;
@@ -887,8 +975,9 @@ function initCatalogSelectors() {
           optgroup.appendChild(opt);
         });
 
-        disadvSel.appendChild(optgroup);
+        disFrag.appendChild(optgroup);
       });
+      disadvSel.appendChild(disFrag);
 
       if (prevDisVal && disadvSel.querySelector(`option[value="${prevDisVal}"]`)) {
         disadvSel.value = prevDisVal;
@@ -1015,12 +1104,18 @@ function onClanChange() {
   const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
   updateSchoolOptions(diffAdv?.differentSchoolId);
   resetSheetToNewSelection(true);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'clan' } }));
+  }
 }
 
 function onFamilyChange() {
   const diffAdv = advantagesList.find(a => isDifferentSchoolAdv(a.name));
   updateSchoolOptions(diffAdv?.differentSchoolId);
   resetSheetToNewSelection(true);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'family' } }));
+  }
 }
 
 function onSchoolChange() {
@@ -1036,6 +1131,9 @@ function onSchoolChange() {
   }
 
   resetSheetToNewSelection(true);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'school' } }));
+  }
 }
 
 function resetSheetToNewSelection(preserveAdvDisadv = true) {
@@ -2041,14 +2139,14 @@ function updateAll() {
   document.getElementById('ring-fire').textContent = rFire;
   document.getElementById('ring-void').textContent = rVoid;
 
-  const catalogAdv = getAdvantages().avantages || [];
-  const catalogDis = getAdvantages().desavantages || [];
+  const { byId: advById, byName: advByName } = getIndexedAdvMaps();
+  const { byId: disById, byName: disByName } = getIndexedDisadvMaps();
 
   const hasAdv = (impactName) => advantagesList.some(a => {
     if (a.impact === impactName || a.id === impactName) return true;
-    const found = catalogAdv.find(x => x.id === a.id || x.name === a.name);
+    const found = (a.id && advById.get(a.id)) || (a.name && advByName.get(a.name));
     if (found && (found.impact === impactName || found.id === impactName)) return true;
-    const n = (a.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const n = normalizeFold(a.name);
     if (impactName === "enlightened" && n.includes("illumine")) return true;
     if (impactName === "prodigy" && n.includes("prodige")) return true;
     if (impactName === "large" && n.includes("grand")) return true;
@@ -2060,9 +2158,9 @@ function updateAll() {
 
   const hasDisadv = (impactName) => disadvantagesList.some(d => {
     if (d.impact === impactName || d.id === impactName) return true;
-    const found = catalogDis.find(x => x.id === d.id || x.name === d.name);
+    const found = (d.id && disById.get(d.id)) || (d.name && disByName.get(d.name));
     if (found && (found.impact === impactName || found.id === impactName)) return true;
-    const n = (d.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const n = normalizeFold(d.name);
     if (impactName === "obtuse" && n.includes("esprit obtus")) return true;
     if (impactName === "small" && n.includes("petit")) return true;
     return false;
@@ -2071,7 +2169,7 @@ function updateAll() {
   // Détection de l'élément choisi pour Bénédiction Élémentaire (Ticket #17)
   const hasElemBlessing = (ringKey) => {
     return advantagesList.some(a => {
-      const found = catalogAdv.find(x => x.id === a.id || x.name === a.name);
+      const found = (a.id && advById.get(a.id)) || (a.name && advByName.get(a.name));
       if (!isElementalBlessingAdv(a) && !isElementalBlessingAdv(found)) return false;
       const chosen = (a.chosenElement || "earth").toLowerCase();
       return chosen === ringKey;
@@ -2103,13 +2201,13 @@ function updateAll() {
 
   const isObtuse = hasDisadv("obtuse");
   const isProdigy = hasAdv("prodigy");
-  const allCatalogSkills = getSkills();
+  const skillsByName = getIndexedSkillsMap();
 
   currentSkills.forEach(sk => {
     if (sk.isChoice && !sk.chosen) return;
 
-    const catSk = allCatalogSkills.find(s => s.name === sk.name);
-    const sName = (sk.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const catSk = skillsByName.get(sk.name);
+    const sName = normalizeFold(sk.name);
     const sType = (sk.type || catSk?.type || "").toLowerCase();
     const isHighSkill = sType.includes("noble") || sType.includes("haute") || sType.includes("high");
     const isExemptHigh = sName.includes("enquete") || sName.includes("investigation") || sName.includes("medecine") || sName.includes("medicine");
@@ -2411,8 +2509,12 @@ function updateAll() {
     window.character = window.currentChar;
   }
 
-  // Sauvegarde automatique du brouillon à chaque modification (Ticket 1)
-  autoSaveCharacterDraft();
+  // Sauvegarde automatique du brouillon (debouncée) et notification UI
+  scheduleAutoSaveDraft();
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-updated'));
+  }
 }
 
 // =============================================================================
@@ -2452,14 +2554,38 @@ function collectCharacterData() {
   };
 }
 
+let _autoSaveDraftTimer = null;
+let _hasPendingDraftSave = false;
+
 function autoSaveCharacterDraft() {
   if (isBootstrapping || window.isRestoringCharacter) return;
+  _hasPendingDraftSave = false;
+  if (_autoSaveDraftTimer !== null) {
+    clearTimeout(_autoSaveDraftTimer);
+    _autoSaveDraftTimer = null;
+  }
   try {
     const data = collectCharacterData();
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
   } catch (e) {
     console.warn("Impossible d'auto-sauvegarder le brouillon :", e);
   }
+}
+
+function scheduleAutoSaveDraft(delay = 250) {
+  if (isBootstrapping || window.isRestoringCharacter) return;
+  _hasPendingDraftSave = true;
+  if (_autoSaveDraftTimer !== null) clearTimeout(_autoSaveDraftTimer);
+  _autoSaveDraftTimer = setTimeout(() => {
+    _autoSaveDraftTimer = null;
+    autoSaveCharacterDraft();
+  }, delay);
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener('pagehide', () => {
+    if (_hasPendingDraftSave) autoSaveCharacterDraft();
+  });
 }
 
 function applyCharacterDataToSheet(d) {
@@ -2534,6 +2660,9 @@ function applyCharacterDataToSheet(d) {
   } finally {
     window.isRestoringCharacter = false;
     updateAll();
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'restore' } }));
+    }
   }
 }
 

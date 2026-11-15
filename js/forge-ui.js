@@ -286,14 +286,16 @@ function populateSpellCatalogSelect() {
   });
 
   sel.innerHTML = `<option value="">-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --</option>`;
+  const frag = document.createDocumentFragment();
   filtered.forEach(s => {
     const opt = document.createElement('option');
     opt.value = s.id;
     const tag = s.isKiho ? `Kiho ${s.ring || s.element}` : (s.element || "Univ.");
     const rk = s.mastery === 0 ? "Univ." : `Rang ${s.mastery}`;
     opt.textContent = `[${tag} • ${rk}] ${s.name || s.nom}`;
-    sel.appendChild(opt);
+    frag.appendChild(opt);
   });
+  sel.appendChild(frag);
   updateSpellPreview();
 }
 
@@ -516,12 +518,14 @@ function populateKataCatalogSelect() {
   });
 
   sel.innerHTML = `<option value="">-- Choisir un Kata martial (${filtered.length} disponible(s)) --</option>`;
+  const frag = document.createDocumentFragment();
   filtered.forEach(k => {
     const opt = document.createElement('option');
     opt.value = k.id;
     opt.textContent = `[${k.element} ${k.mastery} • ${k.cost} XP] ${k.name}`;
-    sel.appendChild(opt);
+    frag.appendChild(opt);
   });
+  sel.appendChild(frag);
   updateKataPreview();
 }
 
@@ -647,16 +651,35 @@ function initSkillsMultiSelect() {
   const allSkills = (typeof window.getSkills === 'function') ? window.getSkills() : (window.COMPETENCES_DATA || []);
   const ownedRoots = new Set((window.currentSkills || []).map(s => (s.name || "").split('(')[0].trim().toLowerCase()));
 
-  container.innerHTML = allSkills.map(s => {
+  container.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  allSkills.forEach(s => {
     const root = s.name.split('(')[0].trim().toLowerCase();
-    if (ownedRoots.has(root)) return "";
-    return `
-      <label class="flex items-center justify-between p-1.5 rounded hover:bg-stone-900 cursor-pointer text-xs">
-        <span class="text-amber-200">${s.name} <span class="text-[10px] text-stone-500">(${s.type} - ${s.trait})</span></span>
-        <input type="checkbox" value="${s.name}" onchange="toggleSkillCheckbox(this)" class="rounded border-stone-700 text-amber-500">
-      </label>
-    `;
-  }).join('');
+    if (ownedRoots.has(root)) return;
+
+    const lbl = document.createElement('label');
+    lbl.className = "flex items-center justify-between p-1.5 rounded hover:bg-stone-900 cursor-pointer text-xs";
+    lbl.dataset.search = `${s.name} ${s.type} ${s.trait}`.toLowerCase();
+
+    const span = document.createElement('span');
+    span.className = "text-amber-200";
+    span.appendChild(document.createTextNode(`${s.name} `));
+    const sub = document.createElement('span');
+    sub.className = "text-[10px] text-stone-500";
+    sub.textContent = `(${s.type} - ${s.trait})`;
+    span.appendChild(sub);
+
+    const cb = document.createElement('input');
+    cb.type = "checkbox";
+    cb.value = s.name;
+    cb.className = "rounded border-stone-700 text-amber-500";
+    cb.addEventListener('change', function () { toggleSkillCheckbox(this); });
+
+    lbl.appendChild(span);
+    lbl.appendChild(cb);
+    frag.appendChild(lbl);
+  });
+  container.appendChild(frag);
   updateSkillsDropdownSummary();
 }
 
@@ -668,13 +691,23 @@ function toggleSkillsDropdown() {
   if (arrow) arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
-function filterSkillsList() {
-  const term = (document.getElementById('filter-skills-input')?.value || "").toLowerCase();
+let _skillsFilterTimer = null;
+function applySkillsFilterNow() {
+  const term = (document.getElementById('filter-skills-input')?.value || "").toLowerCase().trim();
   const labels = document.querySelectorAll('#skills-checkboxes-container label');
-  labels.forEach(lbl => {
-    const txt = lbl.textContent.toLowerCase();
-    lbl.style.display = txt.includes(term) ? "flex" : "none";
-  });
+  for (let i = 0; i < labels.length; i++) {
+    const lbl = labels[i];
+    const txt = lbl.dataset.search || lbl.textContent.toLowerCase();
+    lbl.style.display = (!term || txt.includes(term)) ? "flex" : "none";
+  }
+}
+
+function filterSkillsList() {
+  if (_skillsFilterTimer !== null) clearTimeout(_skillsFilterTimer);
+  _skillsFilterTimer = setTimeout(() => {
+    _skillsFilterTimer = null;
+    applySkillsFilterNow();
+  }, 80);
 }
 
 function toggleSkillCheckbox(cb) {
@@ -984,7 +1017,9 @@ function getSafeElementBadgeClass(elem) {
   }
 }
 
-function updateArchetypePanelsWithTattoos() {
+let _wasTogashiPanelActive = false;
+
+function updateArchetypePanelsWithTattoos(forceCatalogRefresh = false) {
   const isTattooed = isCharacterTogashiTattooed();
   const tattoosPanel = document.getElementById('panel-tattoos-container');
   const tabBtn = document.getElementById('tab-btn-tattoos');
@@ -1001,9 +1036,13 @@ function updateArchetypePanelsWithTattoos() {
     document.getElementById('panel-katas-container')?.classList.add('hidden');
     document.getElementById('shugenja-slots-bar')?.classList.add('hidden');
 
-    populateTattooCatalogSelect();
+    if (forceCatalogRefresh || !_wasTogashiPanelActive) {
+      populateTattooCatalogSelect();
+    }
+    _wasTogashiPanelActive = true;
     renderCharacterTattoos();
   } else {
+    _wasTogashiPanelActive = false;
     if (tattoosPanel) tattoosPanel.classList.add('hidden');
     if (tabBtn) tabBtn.classList.add('hidden');
     if (typeof updateArchetypePanels === 'function') updateArchetypePanels();
@@ -1017,15 +1056,17 @@ function populateTattooCatalogSelect() {
   const owned = new Set((window.charTattoosList || []).map(t => t.id));
 
   sel.innerHTML = `<option value="">-- Choisir un Tatouage de Togashi --</option>`;
+  const frag = document.createDocumentFragment();
   list.forEach(t => {
     if (!owned.has(t.id)) {
       const opt = document.createElement('option');
       opt.value = t.id;
       const tag = t.element ? `[${t.element} ${t.ringReq || ''}]` : `[${t.source || 'Livre de Base'}]`;
       opt.textContent = `${tag} ${t.name} ${t.kanji ? '(' + t.kanji + ')' : ''}`;
-      sel.appendChild(opt);
+      frag.appendChild(opt);
     }
   });
+  sel.appendChild(frag);
   updateTattooPreview();
 }
 
@@ -1150,81 +1191,83 @@ function setMysticTab(tab) {
 }
 
 // =============================================================================
-// INITIALISATION & ÉCOUTEURS D'ÉVÉNEMENTS
+// INITIALISATION & ÉCOUTEURS D'ÉVÉNEMENTS (SANS DÉLAIS ARTIFICIELS)
 // =============================================================================
+function handleFamilyOrSchoolChange() {
+  const selFam = document.getElementById('sel-family');
+  const selSch = document.getElementById('sel-school');
+  const famText = (selFam?.options[selFam.selectedIndex]?.text || "").toLowerCase();
+  if (famText.includes("togashi") && selSch) {
+    const togashiSchOpt = Array.from(selSch.options).find(opt =>
+      opt.text.toLowerCase().includes("togashi") || opt.text.toLowerCase().includes("zumi") || opt.value.toLowerCase().includes("togashi")
+    );
+    if (togashiSchOpt && selSch.value !== togashiSchOpt.value) {
+      selSch.value = togashiSchOpt.value;
+      if (typeof onSchoolChange === 'function') onSchoolChange();
+      return;
+    }
+  }
+  updateArchetypePanels();
+  updateArchetypePanelsWithTattoos(true);
+}
+
+let _forgeUIInitialized = false;
+function initForgeUIWhenReady() {
+  if (_forgeUIInitialized) return;
+  _forgeUIInitialized = true;
+
+  populateSpellCatalogSelect();
+  populateKataCatalogSelect();
+  renderCharacterSpells();
+  renderCharacterKatas();
+  initSkillsMultiSelect();
+  renderDojoRoster();
+  updateArchetypePanels();
+
+  const params = new URLSearchParams(window.location.search);
+  const charParam = params.get("char");
+  const loadIdParam = params.get("load");
+  const clanParam = params.get("clan");
+
+  if (charParam) {
+    try {
+      const decoded = JSON.parse(decodeURIComponent(atob(charParam)));
+      applyFullCharacterState(decoded);
+      updateArchetypePanelsWithTattoos(true);
+      return;
+    } catch (e) {}
+  }
+
+  if (loadIdParam) {
+    loadFromDojo(loadIdParam);
+    updateArchetypePanelsWithTattoos(true);
+    return;
+  }
+
+  if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
+    document.getElementById("sel-clan").value = clanParam;
+    if (typeof onClanChange === 'function') onClanChange();
+  }
+
+  updateArchetypePanelsWithTattoos(true);
+}
+
+window.addEventListener("l5r-forge-ready", initForgeUIWhenReady);
+
+window.addEventListener("l5r-forge-selection-changed", () => {
+  handleFamilyOrSchoolChange();
+});
+
+window.addEventListener("l5r-forge-updated", () => {
+  if (isCharacterTogashiTattooed()) {
+    updateArchetypePanelsWithTattoos(false);
+  }
+});
+
 window.addEventListener("DOMContentLoaded", () => {
   injectForgeTemplates();
 
-  setTimeout(() => {
-    populateSpellCatalogSelect();
-    populateKataCatalogSelect();
-    renderCharacterSpells();
-    renderCharacterKatas();
-    initSkillsMultiSelect();
-    renderDojoRoster();
-    updateArchetypePanels();
-
-    const params = new URLSearchParams(window.location.search);
-    const charParam = params.get("char");
-    const loadIdParam = params.get("load");
-    const clanParam = params.get("clan");
-
-    if (charParam) {
-      try {
-        const decoded = JSON.parse(decodeURIComponent(atob(charParam)));
-        applyFullCharacterState(decoded);
-        return;
-      } catch (e) {}
-    }
-
-    if (loadIdParam) {
-      loadFromDojo(loadIdParam);
-      return;
-    }
-
-    if (clanParam && document.querySelector(`#sel-clan option[value="${clanParam}"]`)) {
-      document.getElementById("sel-clan").value = clanParam;
-      if (typeof onClanChange === 'function') onClanChange();
-    }
-  }, 200);
-
-  const selFam = document.getElementById('sel-family');
-  const selSch = document.getElementById('sel-school');
-  const selClan = document.getElementById('sel-clan');
-
-  function handleFamilyOrSchoolChange() {
-    const famText = (selFam?.options[selFam.selectedIndex]?.text || "").toLowerCase();
-    if (famText.includes("togashi") && selSch) {
-      const togashiSchOpt = Array.from(selSch.options).find(opt =>
-        opt.text.toLowerCase().includes("togashi") || opt.text.toLowerCase().includes("zumi") || opt.value.toLowerCase().includes("togashi")
-      );
-      if (togashiSchOpt && selSch.value !== togashiSchOpt.value) {
-        selSch.value = togashiSchOpt.value;
-        if (typeof onSchoolChange === 'function') onSchoolChange();
-      }
-    }
-    updateArchetypePanelsWithTattoos();
+  if (window.__l5rForgeReady) {
+    initForgeUIWhenReady();
   }
-
-  selFam?.addEventListener('change', handleFamilyOrSchoolChange);
-  selSch?.addEventListener('change', () => {
-    setTimeout(updateArchetypePanels, 150);
-    updateArchetypePanelsWithTattoos();
-  });
-  selClan?.addEventListener('change', () => {
-    setTimeout(updateArchetypePanels, 150);
-    setTimeout(handleFamilyOrSchoolChange, 60);
-  });
-
-  if (typeof window.updateAll === 'function') {
-    const originalUpdateAll = window.updateAll;
-    window.updateAll = function () {
-      originalUpdateAll.apply(this, arguments);
-      if (isCharacterTogashiTattooed()) {
-        updateArchetypePanelsWithTattoos();
-      }
-    };
-  }
-
-  setTimeout(updateArchetypePanelsWithTattoos, 150);
 });
