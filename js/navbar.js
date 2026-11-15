@@ -25,16 +25,16 @@
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
       if (saved === 'light' || saved === 'dark') return saved;
     } catch (e) {}
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches
-      ? 'light'
-      : 'dark';
+    return 'dark';
   }
 
-  function applyTheme(theme) {
+  function applyTheme(theme, persist = true) {
     document.documentElement.setAttribute('data-theme', theme);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (e) {}
+    if (persist) {
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+      } catch (e) {}
+    }
     updateThemeButtons(theme);
   }
 
@@ -83,7 +83,7 @@
 
   ensureMainStylesheet();
   ensureFavicon();
-  applyTheme(getInitialTheme());
+  applyTheme(getInitialTheme(), false);
 
   // 2. Construction de la barre de navigation
   function renderNavbar() {
