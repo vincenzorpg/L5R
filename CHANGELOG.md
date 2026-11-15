@@ -6,6 +6,25 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.3.3] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Intégration Continue (CI) sur GitHub Actions (`.github/workflows/ci.yml` & `.github/scripts/check-site.js`)** :
+  - Exécution automatique des tests unitaires (`node tests/unit-tests.js`) et vérification syntaxique JavaScript (`node --check` sur `js/`, `data/` et `tests/`) à chaque `push` et `pull_request` vers `main`.
+  - Vérification automatisée de la cohérence de version (`version.json`, `CHANGELOG.md`, `README.md` et replis statiques `#site-version-label`) ainsi que de l'intégrité des liens et ressources locales dans toutes les pages HTML.
+
+### 🧹 Nettoyé
+
+- Suppression du fichier résiduel `assets/images/scenarios/tes`.
+- Synchronisation de tous les replis statiques `#site-version-label` des pages HTML et de `js/campagne-studio.js` sur `v1.3.3`.
+
+### 🐛 Corrigé
+
+- **Règle des 10 dés (`js/character-generator.js`)** : correction de `applyTenDiceRule` lorsque `keepY >= 10` et `rollX > 10` (chaque dé lancé excédentaire au-dessus de `10g10` accorde désormais bien `+2`, ex. `12g10` → `10g10+4` au lieu de `10g10+2`).
+
+---
+
 ## [1.3.2] — 2026-11-15
 
 ### 🔄 Modifié
