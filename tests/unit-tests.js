@@ -413,6 +413,25 @@
       assertEqual(formatted.droppedRolls.length, 2);
       assertTrue(formatted.total > 20);
     });
+
+    it("buildSkirmishCombatants génère le tableau trié avec PJs cochés et N PNJs", function () {
+      const pcs = [
+        { id: "p1", name: "Hida Kenji", includedInSkirmish: true, lastInit: 25, armorTN: 25, reduction: 5, rings: { earth: 3 }, traits: { agility: 3 }, wounds: 0, weapons: [{ damage: "6g3" }] },
+        { id: "p2", name: "Isawa Ren", includedInSkirmish: false, lastInit: 10, armorTN: 15, reduction: 0, rings: { earth: 2 }, traits: { agility: 2 }, wounds: 0, weapons: [] }
+      ];
+      const list = gm.buildSkirmishCombatants(pcs, {
+        npcCount: 3,
+        npcTemplate: { name: "Bandit", initFormula: "4g2", armorTN: 15, reduction: 2, earth: 2, attack: "5g2", damage: "4g2" },
+        rng: () => 0.4 // chaque d10 = 5 -> 4g2 = 10
+      });
+      assertEqual(list.length, 4); // 1 PJ coché + 3 PNJs
+      assertEqual(list[0].name, "Hida Kenji");
+      assertEqual(list[0].initiative, 25);
+      assertEqual(list[1].type, "enemy");
+      assertEqual(list[1].initiative, 10);
+      assertEqual(list[1].attack, "5g2");
+      assertEqual(list[1].damage, "4g2");
+    });
   });
 
   // ===========================================================================

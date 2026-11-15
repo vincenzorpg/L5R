@@ -6,6 +6,22 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.7.0] — 2026-11-15
+
+### 🔄 Modifié
+
+- **Ergonomie horizontale pleine largeur de l'Écran du MJ (`ecran-mj.html` & `js/gm-screen.js`)** :
+  - Suppression du lanceur de dés latéral pour libérer toute la largeur d'affichage ; remplacement par l'affichage direct des jets à lancer (**Toucher / Dégâts**) et du **malus de blessure actuel** (`+0` à `+20` / `Hors de combat` / `Mort`) pour chaque combattant.
+  - **Table des PJs horizontale en 4 colonnes** (`lg:grid-cols-4`) adaptée aux groupes de 4 joueurs (avec jeu de 4 PJs d'exemple).
+  - **Tableau horizontal d'Escarmouche (`<table>`)** : colonnes claires (`Ordre`, `Init`, `Combattant`, `Posture & ND`, `Jets Toucher / Dégâts`, `Blessures & Malus aux jets`, `Dégâts rapides`, `États`).
+  - **Duel Iaijutsu** : affichage direct des formules de jets (*Évaluation*, *Focus*, *Frappe*) à lancer pour les deux duellistes.
+
+### 🐛 Corrigé
+
+- **Générateur d'Escarmouche (`js/gm-screen.js`)** : extraction et fiabilisation de `buildSkirmishCombatants()` pour générer immédiatement les PJs cochés + `N` PNJs avec initiatives lancées automatiquement, couvert par un nouveau test unitaire dans `tests/unit-tests.js`.
+
+---
+
 ## [1.6.0] — 2026-11-15
 
 ### ✨ Ajouté
