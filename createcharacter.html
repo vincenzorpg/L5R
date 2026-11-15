@@ -1914,26 +1914,30 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
       const resBox = document.getElementById('dice-result-box');
       if (!resBox) return;
 
-      const dice = [];
-      for (let i = 0; i < rollX; i++) {
-        let dieVal = Math.floor(Math.random() * 10) + 1;
-        if (spec && dieVal === 1) {
-          dieVal = Math.floor(Math.random() * 10) + 1; // Relance les 1
-        }
-        let totalDie = dieVal;
-        let explodedTimes = 0;
-        while (explode && dieVal === 10 && explodedTimes < 5) {
-          dieVal = Math.floor(Math.random() * 10) + 1;
-          totalDie += dieVal;
-          explodedTimes++;
-        }
-        dice.push({ value: totalDie, exploded: explodedTimes > 0 });
-      }
+      const result = (typeof window.simulateRollAndKeep === 'function')
+        ? window.simulateRollAndKeep(rollX, keepY, bonus || 0, { explode, spec })
+        : (function () {
+            const dice = [];
+            for (let i = 0; i < rollX; i++) {
+              let dieVal = Math.floor(Math.random() * 10) + 1;
+              if (spec && dieVal === 1) dieVal = Math.floor(Math.random() * 10) + 1;
+              let totalDie = dieVal;
+              let explodedTimes = 0;
+              while (explode && dieVal === 10 && explodedTimes < 5) {
+                dieVal = Math.floor(Math.random() * 10) + 1;
+                totalDie += dieVal;
+                explodedTimes++;
+              }
+              dice.push({ value: totalDie, exploded: explodedTimes > 0 });
+            }
+            dice.sort((a, b) => b.value - a.value);
+            const kept = dice.slice(0, keepY);
+            const dropped = dice.slice(keepY);
+            const total = kept.reduce((acc, d) => acc + d.value, 0) + (bonus || 0);
+            return { dice, kept, dropped, bonus: bonus || 0, total };
+          })();
 
-      dice.sort((a, b) => b.value - a.value);
-      const kept = dice.slice(0, keepY);
-      const dropped = dice.slice(keepY);
-      const totalScore = kept.reduce((acc, d) => acc + d.value, 0) + (bonus || 0);
+      const { kept, dropped, total: totalScore } = result;
 
       resBox.innerHTML = `
         <div class="flex justify-between items-center border-b border-stone-800 pb-1 text-xs">
@@ -1950,6 +1954,13 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
 
     function rollFromSticky(metricId, label) {
       const txt = document.getElementById(metricId)?.textContent || "3g2";
+      if (typeof window.parseRollKeepFormula === 'function') {
+        const parsed = window.parseRollKeepFormula(txt);
+        if (parsed.rolled > 0 && parsed.kept > 0) {
+          rollL5RDicePool(parsed.rolled, parsed.kept, parsed.bonus, label, true, false);
+          return;
+        }
+      }
       const parts = txt.match(/(\d+)g(\d+)(?:\s*\+\s*(\d+))?/i);
       if (parts) {
         const x = parseInt(parts[1], 10) || 3;

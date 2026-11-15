@@ -360,6 +360,177 @@ function normalizeSkillEntry(rawName, rankVal, isSpec) {
   };
 }
 
+function calculateCarnetRingsAndInsight(traits, voidRing, skills = []) {
+  const t = traits || {};
+  const rEarth = Math.min(t.stamina ?? 2, t.willpower ?? 2);
+  const rWater = Math.min(t.strength ?? 2, t.perception ?? 2);
+  const rFire  = Math.min(t.agility ?? 2, t.intelligence ?? 2);
+  const rAir   = Math.min(t.reflexes ?? 2, t.awareness ?? 2);
+  const vRing  = voidRing ?? 2;
+  const ringsSum = rEarth + rWater + rFire + rAir + vRing;
+
+  const sumSkillsRank = (skills || []).reduce((acc, s) => acc + (parseInt(s.rank, 10) || 0), 0);
+  const insightPoints = (ringsSum * 10) + sumSkillsRank;
+  let insightRank = 1;
+  if (insightPoints >= 150) {
+    insightRank = Math.min(10, 2 + Math.floor((insightPoints - 150) / 25));
+  }
+
+  return {
+    earth: rEarth,
+    water: rWater,
+    fire: rFire,
+    air: rAir,
+    void: vRing,
+    ringsSum,
+    sumSkillsRank,
+    insightPoints,
+    insightRank
+  };
+}
+
+function resolveCarnetArmor(armorBonusVal) {
+  const armorBonus = parseInt(armorBonusVal, 10) || 0;
+  let armorName = "";
+  let armorReduction = 0;
+  let armorCatalogId = "none";
+
+  if (armorBonus === 10) {
+    armorName = "Armure lourde";
+    armorReduction = 5;
+    armorCatalogId = "heavy";
+  } else if (armorBonus === 5) {
+    armorName = "Armure légère";
+    armorReduction = 3;
+    armorCatalogId = "light";
+  } else if (armorBonus === 4 || armorBonus === 7) {
+    armorName = "Armure de cavalerie";
+    armorReduction = 4;
+    armorCatalogId = "riding";
+  } else if (armorBonus === 3) {
+    armorName = "Armure d'ashigaru";
+    armorReduction = 1;
+    armorCatalogId = "ashigaru";
+  }
+
+  return {
+    name: armorName,
+    bonus: armorBonus,
+    reduction: armorReduction,
+    catalogId: armorCatalogId
+  };
+}
+
+function resolveCarnetWeapons(rawWeaponsList = []) {
+  const weaponsMap = new Map();
+  (rawWeaponsList || []).forEach(rawW => {
+    if (!rawW || rawW === "Aucune") return;
+    const normW = sanitizeNorm(rawW);
+    const matchedKey = Object.keys(CARNET_WEAPONS_REF).find(k => normW.includes(k));
+
+    if (matchedKey) {
+      const ref = CARNET_WEAPONS_REF[matchedKey];
+      const wName = rawW.split("(")[0].trim().substring(0, 80);
+      const wObj = {
+        name: wName,
+        skill: ref.skill,
+        dr: ref.dr,
+        keywords: [...ref.keywords]
+      };
+      if (ref.bowStrength !== undefined) {
+        wObj.bowStrength = ref.bowStrength;
+      }
+      weaponsMap.set(wName.toLowerCase(), wObj);
+    } else {
+      const wName = rawW.split("(")[0].trim().substring(0, 80);
+      weaponsMap.set(wName.toLowerCase(), {
+        name: wName || "Katana",
+        skill: "Kenjutsu",
+        dr: "3g2",
+        keywords: ["samourai", "moyenne"]
+      });
+    }
+  });
+
+  return Array.from(weaponsMap.values());
+}
+
+function buildCarnetModifiers(advList = [], disadvList = []) {
+  const modifiers = [];
+
+  (advList || []).forEach(a => {
+    const aNorm = sanitizeNorm(typeof a === "object" ? a.name : a);
+    if (aNorm.includes("force de la terre")) {
+      modifiers.push({
+        id: "force-de-la-terre",
+        name: "Force de la Terre",
+        source: "advantage",
+        appliesTo: "wounds",
+        rolled: 0, kept: 0, flat: 3, tn: 0, freeRaises: 0,
+        mode: "always",
+        note: "Pénalités de blessure réduites de 3."
+      });
+    } else if (aNorm.includes("grand") || aNorm.includes("large")) {
+      modifiers.push({
+        id: "grand-degats",
+        name: "Grand (Large)",
+        source: "advantage",
+        appliesTo: "damage",
+        rolled: 1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
+        mode: "always",
+        note: "+1g0 aux dégâts de mêlée."
+      });
+    } else if (aNorm.includes("vitesse eclair") || aNorm.includes("lightning reflexes")) {
+      modifiers.push({
+        id: "vitesse-eclair",
+        name: "Vitesse Éclair",
+        source: "advantage",
+        appliesTo: "initiative",
+        rolled: 1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
+        mode: "always",
+        note: "+1g0 à l'Initiative."
+      });
+    } else if (aNorm.includes("voix")) {
+      modifiers.push({
+        id: "voix-social",
+        name: "La Voix de Rokugan",
+        source: "advantage",
+        appliesTo: "social",
+        rolled: 1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
+        mode: "always",
+        note: "+1g0 sur les jets sociaux oratoires."
+      });
+    }
+  });
+
+  (disadvList || []).forEach(d => {
+    const dNorm = sanitizeNorm(typeof d === "object" ? d.name : d);
+    if (dNorm.includes("sensible a la douleur") || dNorm.includes("low pain threshold")) {
+      modifiers.push({
+        id: "sensible-douleur",
+        name: "Sensible à la Douleur",
+        source: "disadvantage",
+        appliesTo: "wounds",
+        rolled: 0, kept: 0, flat: -5, tn: 0, freeRaises: 0,
+        mode: "always",
+        note: "Pénalités de blessure aggravées de 5 points."
+      });
+    } else if (dNorm.includes("petit") || dNorm.includes("small")) {
+      modifiers.push({
+        id: "petit-degats",
+        name: "Petit (Small)",
+        source: "disadvantage",
+        appliesTo: "damage",
+        rolled: -1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
+        mode: "always",
+        note: "-1g0 aux dégâts de mêlée."
+      });
+    }
+  });
+
+  return modifiers;
+}
+
 // =============================================================================
 // 6. GÉNÉRATION DU JSON CONFORME CARNET DE ROKUGAN
 // =============================================================================
@@ -420,14 +591,7 @@ function generateCarnetJSON() {
 
   const voidRing = getNum("trait-void");
 
-  // 3. Calcul de l'Insight et du Rang (§2.1)
-  const rEarth = Math.min(traits.stamina, traits.willpower);
-  const rWater = Math.min(traits.strength, traits.perception);
-  const rFire  = Math.min(traits.agility, traits.intelligence);
-  const rAir   = Math.min(traits.reflexes, traits.awareness);
-  const ringsSum = rEarth + rWater + rFire + rAir + voidRing;
-
-  // 4. Compétences (lecture globale directe et replis sécurisés)
+  // 3. Compétences (lecture globale directe et replis sécurisés)
   let rawSkillsList = [];
   try {
     if (typeof currentSkills !== "undefined" && Array.isArray(currentSkills)) {
@@ -463,13 +627,9 @@ function generateCarnetJSON() {
   });
 
   const skills = Array.from(processedSkillsMap.values());
-  const sumSkillsRank = skills.reduce((acc, s) => acc + s.rank, 0);
 
-  const insightPoints = (ringsSum * 10) + sumSkillsRank;
-  let insightRank = 1;
-  if (insightPoints >= 150) {
-    insightRank = Math.min(10, 2 + Math.floor((insightPoints - 150) / 25));
-  }
+  // 4. Calcul de l'Insight et du Rang (§2.1)
+  const { insightRank } = calculateCarnetRingsAndInsight(traits, voidRing, skills);
 
   // 5. Honneur, Gloire, Statut (une décimale max obligatoire)
   const parseDecimal1 = (id, def = 1.0) => {
@@ -489,70 +649,13 @@ function generateCarnetJSON() {
   // 7. Armure
   const armorSel = document.getElementById("pc-armor");
   const armorBonus = parseInt(armorSel?.value, 10) || 0;
-  let armorName = "";
-  let armorReduction = 0;
-  let armorCatalogId = "none";
-
-  if (armorBonus === 10) {
-    armorName = "Armure lourde";
-    armorReduction = 5;
-    armorCatalogId = "heavy";
-  } else if (armorBonus === 5) {
-    armorName = "Armure légère";
-    armorReduction = 3;
-    armorCatalogId = "light";
-  } else if (armorBonus === 4 || armorBonus === 7) {
-    armorName = "Armure de cavalerie";
-    armorReduction = 4;
-    armorCatalogId = "riding";
-  } else if (armorBonus === 3) {
-    armorName = "Armure d'ashigaru";
-    armorReduction = 1;
-    armorCatalogId = "ashigaru";
-  }
-
-  const armorObj = {
-    name: armorName,
-    bonus: armorBonus,
-    reduction: armorReduction,
-    catalogId: armorCatalogId
-  };
+  const armorObj = resolveCarnetArmor(armorBonus);
 
   // 8. Armes
   const w1Name = document.getElementById("pc-weapon-1")?.value || "Katana";
   const w2Name = document.getElementById("pc-weapon-2")?.value || "Aucune";
   const rawWeaponsList = [w1Name, ...(w2Name !== "Aucune" ? [w2Name] : [])];
-
-  const weaponsMap = new Map();
-  rawWeaponsList.forEach(rawW => {
-    const normW = sanitizeNorm(rawW);
-    let matchedKey = Object.keys(CARNET_WEAPONS_REF).find(k => normW.includes(k));
-    
-    if (matchedKey) {
-      const ref = CARNET_WEAPONS_REF[matchedKey];
-      const wName = rawW.split("(")[0].trim().substring(0, 80);
-      const wObj = {
-        name: wName,
-        skill: ref.skill,
-        dr: ref.dr,
-        keywords: [...ref.keywords]
-      };
-      if (ref.bowStrength !== undefined) {
-        wObj.bowStrength = ref.bowStrength;
-      }
-      weaponsMap.set(wName.toLowerCase(), wObj);
-    } else {
-      const wName = rawW.split("(")[0].trim().substring(0, 80);
-      weaponsMap.set(wName.toLowerCase(), {
-        name: wName || "Katana",
-        skill: "Kenjutsu",
-        dr: "3g2",
-        keywords: ["samourai", "moyenne"]
-      });
-    }
-  });
-
-  const weapons = Array.from(weaponsMap.values());
+  const weapons = resolveCarnetWeapons(rawWeaponsList);
 
   // 9. Techniques libres
   const techniques = [];
@@ -588,77 +691,7 @@ function generateCarnetJSON() {
     else if (Array.isArray(window.character?.disadvantagesList)) disadvList = window.character.disadvantagesList;
   }
 
-  const modifiers = [];
-
-  advList.forEach(a => {
-    const aNorm = sanitizeNorm(typeof a === "object" ? a.name : a);
-    if (aNorm.includes("force de la terre")) {
-      modifiers.push({
-        id: "force-de-la-terre",
-        name: "Force de la Terre",
-        source: "advantage",
-        appliesTo: "wounds",
-        rolled: 0, kept: 0, flat: 3, tn: 0, freeRaises: 0,
-        mode: "always",
-        note: "Pénalités de blessure réduites de 3."
-      });
-    } else if (aNorm.includes("grand") || aNorm.includes("large")) {
-      modifiers.push({
-        id: "grand-degats",
-        name: "Grand (Large)",
-        source: "advantage",
-        appliesTo: "damage",
-        rolled: 1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
-        mode: "always",
-        note: "+1g0 aux dégâts de mêlée."
-      });
-    } else if (aNorm.includes("vitesse eclair") || aNorm.includes("lightning reflexes")) {
-      modifiers.push({
-        id: "vitesse-eclair",
-        name: "Vitesse Éclair",
-        source: "advantage",
-        appliesTo: "initiative",
-        rolled: 1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
-        mode: "always",
-        note: "+1g0 à l'Initiative."
-      });
-    } else if (aNorm.includes("voix")) {
-      modifiers.push({
-        id: "voix-social",
-        name: "La Voix de Rokugan",
-        source: "advantage",
-        appliesTo: "social",
-        rolled: 1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
-        mode: "always",
-        note: "+1g0 sur les jets sociaux oratoires."
-      });
-    }
-  });
-
-  disadvList.forEach(d => {
-    const dNorm = sanitizeNorm(typeof d === "object" ? d.name : d);
-    if (dNorm.includes("sensible a la douleur") || dNorm.includes("low pain threshold")) {
-      modifiers.push({
-        id: "sensible-douleur",
-        name: "Sensible à la Douleur",
-        source: "disadvantage",
-        appliesTo: "wounds",
-        rolled: 0, kept: 0, flat: -5, tn: 0, freeRaises: 0,
-        mode: "always",
-        note: "Pénalités de blessure aggravées de 5 points."
-      });
-    } else if (dNorm.includes("petit") || dNorm.includes("small")) {
-      modifiers.push({
-        id: "petit-degats",
-        name: "Petit (Small)",
-        source: "disadvantage",
-        appliesTo: "damage",
-        rolled: -1, kept: 0, flat: 0, tn: 0, freeRaises: 0,
-        mode: "always",
-        note: "-1g0 aux dégâts de mêlée."
-      });
-    }
-  });
+  const modifiers = buildCarnetModifiers(advList, disadvList);
 
   // 11. Sorts pour Shugenja
   const spells = [];
@@ -793,8 +826,39 @@ function exportToCarnetRokugan() {
   }
 }
 
-// Exposition globale
+// Exposition globale (Navigateur & Node.js)
 if (typeof window !== "undefined") {
   window.exportToCarnetRokugan = exportToCarnetRokugan;
   window.generateCarnetJSON = generateCarnetJSON;
+  window.sanitizeNorm = sanitizeNorm;
+  window.resolveCanonClan = resolveCanonClan;
+  window.resolveSchoolIdFromText = resolveSchoolIdFromText;
+  window.normalizeSkillEntry = normalizeSkillEntry;
+  window.calculateCarnetRingsAndInsight = calculateCarnetRingsAndInsight;
+  window.resolveCarnetArmor = resolveCarnetArmor;
+  window.resolveCarnetWeapons = resolveCarnetWeapons;
+  window.buildCarnetModifiers = buildCarnetModifiers;
+  window.CARNET_SCHOOL_CATALOG = CARNET_SCHOOL_CATALOG;
+  window.CARNET_WEAPONS_REF = CARNET_WEAPONS_REF;
+  window.SKILL_TRAIT_MAP = SKILL_TRAIT_MAP;
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    sanitizeNorm,
+    resolveCanonClan,
+    resolveSchoolIdFromText,
+    normalizeSkillEntry,
+    calculateCarnetRingsAndInsight,
+    resolveCarnetArmor,
+    resolveCarnetWeapons,
+    buildCarnetModifiers,
+    generateCarnetJSON,
+    exportToCarnetRokugan,
+    CARNET_SCHOOL_CATALOG,
+    CARNET_WEAPONS_REF,
+    SKILL_TRAIT_MAP,
+    SKILL_TRAIT,
+    CATALOG_TRANSLATIONS
+  };
 }

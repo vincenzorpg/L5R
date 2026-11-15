@@ -48,7 +48,7 @@
   }
 
   function getSpellsData() {
-    const raw = window.SORTS_DATA || window.GRIMOIRE_DATA || [];
+    const raw = (typeof window !== "undefined" && (window.SORTS_DATA || window.GRIMOIRE_DATA)) || [];
     if (Array.isArray(raw)) return raw;
     return Object.values(raw).filter(v => v && typeof v === "object");
   }
@@ -84,29 +84,22 @@
     }
   }
 
-  // =========================================================================
-  // APPLICATION DES FILTRES ET RENDU
-  // =========================================================================
-  function applyFilters() {
-    const searchInput = document.getElementById("search-input");
-    const elementSelect = document.getElementById("element-select");
-    const rankSelect = document.getElementById("rank-select");
-    const container = document.getElementById("spells-container");
-    const noResults = document.getElementById("no-results");
-    const counter = document.getElementById("results-count");
+  function isValidMahoPassword(pwd) {
+    const p = (pwd || "").trim().toLowerCase();
+    return p === "iuchiban" || p === "maho" || p === "jigoku" || p === "outremonde";
+  }
 
-    if (!searchInput || !elementSelect || !rankSelect || !container) return;
-
-    const query = normalizeText(searchInput.value);
-    const selectedElement = normalizeText(elementSelect.value);
-    const selectedRank = rankSelect.value;
-
-    const allSpells = getSpellsData();
+  function filterSpellsList(spells, options = {}) {
+    const allSpells = Array.isArray(spells) ? spells : [];
+    const query = normalizeText(options.query || "");
+    const selectedElement = normalizeText(options.selectedElement || "tous");
+    const selectedRank = options.selectedRank !== undefined ? String(options.selectedRank) : "tous";
+    const mahoUnlocked = Boolean(options.isMahoUnlocked);
 
     // 1. Protection Mahō
     let filtered = allSpells.filter(spell => {
       const el = getSpellElement(spell);
-      if (el === "maho" && !isMahoUnlocked) return false;
+      if (el === "maho" && !mahoUnlocked) return false;
       return true;
     });
 
@@ -139,8 +132,8 @@
       filtered = filtered.filter(spell => {
         const nom = normalizeText(spell.name || spell.nom);
         const desc = normalizeText(spell.desc || spell.description || spell.effet);
-        const mots = normalizeText(Array.isArray(spell.keywords || spell.motsCles) 
-          ? (spell.keywords || spell.motsCles).join(" ") 
+        const mots = normalizeText(Array.isArray(spell.keywords || spell.motsCles)
+          ? (spell.keywords || spell.motsCles).join(" ")
           : (spell.keywords || spell.motsCles));
         const portee = normalizeText(spell.range || spell.portee);
         const kihoRing = normalizeText(spell.ring || "");
@@ -148,6 +141,34 @@
         return nom.includes(query) || desc.includes(query) || mots.includes(query) || portee.includes(query) || kihoRing.includes(query);
       });
     }
+
+    return filtered;
+  }
+
+  // =========================================================================
+  // APPLICATION DES FILTRES ET RENDU
+  // =========================================================================
+  function applyFilters() {
+    const searchInput = document.getElementById("search-input");
+    const elementSelect = document.getElementById("element-select");
+    const rankSelect = document.getElementById("rank-select");
+    const container = document.getElementById("spells-container");
+    const noResults = document.getElementById("no-results");
+    const counter = document.getElementById("results-count");
+
+    if (!searchInput || !elementSelect || !rankSelect || !container) return;
+
+    const query = normalizeText(searchInput.value);
+    const selectedElement = normalizeText(elementSelect.value);
+    const selectedRank = rankSelect.value;
+
+    const allSpells = getSpellsData();
+    const filtered = filterSpellsList(allSpells, {
+      query,
+      selectedElement,
+      selectedRank,
+      isMahoUnlocked
+    });
 
     if (counter) counter.textContent = filtered.length;
 
@@ -392,79 +413,6 @@
     }
   }
 
-  window.toggleMahoSecurityModal = function (forceState) {
-    const modal = document.getElementById("maho-modal");
-    const errorEl = document.getElementById("maho-error");
-    const input = document.getElementById("maho-password-input");
-
-    if (!modal) return;
-
-    if (forceState !== undefined) {
-      modal.classList.toggle("hidden", !forceState);
-    } else {
-      modal.classList.toggle("hidden");
-    }
-
-    if (errorEl) errorEl.classList.add("hidden");
-    if (input) {
-      input.value = "";
-      if (!modal.classList.contains("hidden")) input.focus();
-    }
-  };
-
-  window.unlockMahoWithPassword = function () {
-    const input = document.getElementById("maho-password-input");
-    const errorEl = document.getElementById("maho-error");
-    const btnMaho = document.getElementById("btn-toggle-maho");
-
-    const pwd = (input?.value || "").trim().toLowerCase();
-
-    if (pwd === "iuchiban" || pwd === "maho" || pwd === "jigoku" || pwd === "outremonde") {
-      isMahoUnlocked = true;
-      try {
-        sessionStorage.setItem("l5r_maho_unlocked", "true");
-      } catch (e) {}
-
-      if (btnMaho) {
-        btnMaho.textContent = "🩸";
-        btnMaho.title = "Sceau de Mahō brisé (Actif)";
-        btnMaho.className = "p-2.5 rounded bg-red-950 text-red-300 border border-red-700 text-xs";
-      }
-
-      window.toggleMahoSecurityModal(false);
-      applyFilters();
-      syncFiltersToURL();
-    } else {
-      if (errorEl) errorEl.classList.remove("hidden");
-    }
-  };
-
-  window.resetAllFilters = function () {
-    const searchInput = document.getElementById("search-input");
-    const elementSelect = document.getElementById("element-select");
-    const rankSelect = document.getElementById("rank-select");
-
-    if (searchInput) searchInput.value = "";
-    if (elementSelect) elementSelect.value = "tous";
-    if (rankSelect) rankSelect.value = "tous";
-
-    applyFilters();
-    window.history.replaceState(null, "", window.location.pathname);
-  };
-
-  window.copySpellDirectLink = function (cardId) {
-    const url = `${window.location.origin}${window.location.pathname}#${cardId}`;
-    navigator.clipboard.writeText(url).then(() => {
-      window.location.hash = cardId;
-      handleHashNavigation();
-    }).catch(() => {
-      window.location.hash = cardId;
-    });
-  };
-
-  window.applyFilters = applyFilters;
-  window.syncFiltersToURL = syncFiltersToURL;
-
   function initApp() {
     try {
       if (sessionStorage.getItem("l5r_maho_unlocked") === "true") {
@@ -513,9 +461,107 @@
     initFromURL();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initApp);
-  } else {
-    initApp();
+  if (typeof window !== "undefined") {
+    window.toggleMahoSecurityModal = function (forceState) {
+      const modal = document.getElementById("maho-modal");
+      const errorEl = document.getElementById("maho-error");
+      const input = document.getElementById("maho-password-input");
+
+      if (!modal) return;
+
+      if (forceState !== undefined) {
+        modal.classList.toggle("hidden", !forceState);
+      } else {
+        modal.classList.toggle("hidden");
+      }
+
+      if (errorEl) errorEl.classList.add("hidden");
+      if (input) {
+        input.value = "";
+        if (!modal.classList.contains("hidden")) input.focus();
+      }
+    };
+
+    window.unlockMahoWithPassword = function () {
+      const input = document.getElementById("maho-password-input");
+      const errorEl = document.getElementById("maho-error");
+      const btnMaho = document.getElementById("btn-toggle-maho");
+
+      if (isValidMahoPassword(input?.value)) {
+        isMahoUnlocked = true;
+        try {
+          sessionStorage.setItem("l5r_maho_unlocked", "true");
+        } catch (e) {}
+
+        if (btnMaho) {
+          btnMaho.textContent = "🩸";
+          btnMaho.title = "Sceau de Mahō brisé (Actif)";
+          btnMaho.className = "p-2.5 rounded bg-red-950 text-red-300 border border-red-700 text-xs";
+        }
+
+        window.toggleMahoSecurityModal(false);
+        applyFilters();
+        syncFiltersToURL();
+      } else {
+        if (errorEl) errorEl.classList.remove("hidden");
+      }
+    };
+
+    window.resetAllFilters = function () {
+      const searchInput = document.getElementById("search-input");
+      const elementSelect = document.getElementById("element-select");
+      const rankSelect = document.getElementById("rank-select");
+
+      if (searchInput) searchInput.value = "";
+      if (elementSelect) elementSelect.value = "tous";
+      if (rankSelect) rankSelect.value = "tous";
+
+      applyFilters();
+      window.history.replaceState(null, "", window.location.pathname);
+    };
+
+    window.copySpellDirectLink = function (cardId) {
+      const url = `${window.location.origin}${window.location.pathname}#${cardId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        window.location.hash = cardId;
+        handleHashNavigation();
+      }).catch(() => {
+        window.location.hash = cardId;
+      });
+    };
+
+    window.applyFilters = applyFilters;
+    window.syncFiltersToURL = syncFiltersToURL;
+    window.normalizeText = normalizeText;
+    window.escapeHtml = escapeHtml;
+    window.slugify = slugify;
+    window.isSpellKiho = isSpellKiho;
+    window.getRank = getRank;
+    window.getSpellElement = getSpellElement;
+    window.getElementBadgeClass = getElementBadgeClass;
+    window.filterSpellsList = filterSpellsList;
+    window.isValidMahoPassword = isValidMahoPassword;
+  }
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+      normalizeText,
+      escapeHtml,
+      slugify,
+      isSpellKiho,
+      getRank,
+      getSpellElement,
+      getElementBadgeClass,
+      filterSpellsList,
+      isValidMahoPassword
+    };
+  }
+
+  if (typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
   }
 })();
