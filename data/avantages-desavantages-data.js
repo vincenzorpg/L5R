@@ -58,9 +58,9 @@
       type: "Physique",
       cost: 4,
       impact: "large",
-      prerequisite: "Incompatible avec Petit (3 pts pour le Clan du Crabe)",
-      desc: "Votre taille et votre masse musculaire imposante dépassent nettement la moyenne impériale.",
-      rule: "Chacun de vos Paliers de Blessures contient 1 point de vie supplémentaire (+8 PV au total). Vous ajoutez également +1g0 à tous vos jets de dégâts avec les armes de corps à corps imposantes (Large) ou maniées à deux mains."
+      prerequisite: "3 pts pour le Clan du Crabe. Incompatible avec Petit",
+      desc: "Votre taille (entre 1,83 m et 1,91 m) et votre carrure imposante dépassent nettement la moyenne impériale.",
+      rule: "Vous ajoutez +1g0 au total de tous vos jets de dégâts avec les grandes armes de corps à corps (Large melee weapons)."
     },
     {
       id: "adv-guerisseur-rapide",
@@ -68,9 +68,9 @@
       type: "Physique",
       cost: 3,
       impact: "quick_healer",
-      prerequisite: "Constitution 3",
+      prerequisite: "Aucun",
       desc: "Votre métabolisme referme plaies et fractures à une vitesse prodigieuse lors du repos.",
-      rule: "Lors des phases de guérison naturelle par nuit de sommeil, vous récupérez un montant supplémentaire de PV égal à votre Rang de Constitution + votre Rang d'École."
+      rule: "Pour tous les effets de récupération de Blessures (repos naturel, soins), votre Constitution est considérée comme supérieure de 2 rangs."
     },
     {
       id: "adv-insipide",
@@ -80,7 +80,7 @@
       impact: "bland",
       prerequisite: "Incompatible avec Beauté Dangereuse",
       desc: "Vos traits ordinaires se fondent instantanément dans la foule et défient la mémoire des témoins.",
-      rule: "Le ND de toute tentative de Connaissance : Bushido pour évaluer votre Honneur ou Connaissance : Héraldique pour vous identifier (via la Gloire) augmente de +10 à votre discrétion."
+      rule: "Le ND de toute tentative de Connaissance : Bushido / Intuition pour évaluer votre Honneur ou Connaissance : Héraldique / Intelligence pour vous identifier (via la Gloire) augmente de +10 à votre discrétion."
     },
     {
       id: "adv-mains-crabe",
@@ -89,7 +89,7 @@
       cost: 3,
       impact: "crab_hands",
       prerequisite: "2 pts pour le Crabe et les Bushi",
-      desc: "Vous possédez une habileté innée pour improviser des armes de fortune avec n'importe quel objet lourd.",
+      desc: "Vous possédez une affinité naturelle avec toutes sortes d'armes et savez improviser avec n'importe quelle lame.",
       rule: "Chaque fois que vous devez effectuer un jet sans entraînement (Unskilled) avec une Compétence d'Arme, vous êtes considéré comme possédant le Rang 1 dans cette compétence."
     },
     {
@@ -100,7 +100,7 @@
       impact: "hands_of_stone",
       prerequisite: "5 pts pour les Moines",
       desc: "Vos poings nus sont aussi durs et meurtriers que des masses d'armes forgées.",
-      rule: "Vous ajoutez +0g1 à tous vos jets de dégâts d'attaques à mains nues (ce qui fait passer un moine Togashi à 0g3 + Force)."
+      rule: "Vous ajoutez +0g1 à tous vos jets de dégâts d'attaques à mains nues (cumulable avec les dégâts de base ou de technique ; par exemple, un moine Togashi passe à 0g3 + Force)."
     },
     {
       id: "adv-prodigieux",
@@ -125,12 +125,12 @@
     {
       id: "adv-sang-osano-wo",
       name: "Sang d'Osano-Wo (Blood of Osano-Wo)",
-      type: "Physique",
+      type: "Spirituel",
       cost: 4,
       impact: "blood_osano_wo",
-      prerequisite: "Prisé par le Clan du Crabe",
-      desc: "La foudre et les tempêtes du Seigneur du Tonnerre coulent dans vos veines.",
-      rule: "Bonus de +1g1 sur tous vos jets de Constitution contre les éléments naturels, le froid extrême ou les privations. Vous disposez d'une Réduction de 5 contre les dégâts électriques."
+      prerequisite: "3 pts pour les Clans du Crabe et de la Mante",
+      desc: "La résilience des tempêtes du Seigneur du Tonnerre coule dans vos veines.",
+      rule: "Vous êtes immunisé aux pénalités et dégâts des conditions climatiques naturelles (froid hivernal, chaleur estivale, etc.). Vous réduisez de 1g1 les dégâts infligés par les sorts employant des forces naturelles (ex. Ouragan, Fureur d'Osano-Wo)."
     },
     {
       id: "adv-sens-aigus",
@@ -156,11 +156,11 @@
       id: "adv-vif",
       name: "Vif (Quick)",
       type: "Physique",
-      cost: 5,
+      cost: 6,
       impact: "quick",
-      prerequisite: "Réflexes 3",
-      desc: "Vos réflexes fulgurants vous permettent d'anticiper la trajectoire des lames ennemies.",
-      rule: "Vous ajoutez votre Trait Réflexes en bonus direct à vos totaux d'Initiative au début de chaque combat."
+      prerequisite: "5 pts pour les Ninja",
+      desc: "Vos réflexes vous permettent de saisir l'ouverture et de remonter dans l'ordre d'action après un premier assaut.",
+      rule: "Si vous n'avez pas agi en premier durant un Round de combat, vous pouvez, lors de l'Étape des Réactions, ajouter votre Trait Réflexes à votre total d'Initiative pour tous les rounds suivants de l'escarmouche (cumulable chaque round où vous n'agissez pas en premier)."
     },
     {
       id: "adv-voix",
@@ -357,6 +357,36 @@
       rule: "Vous ne vous perdez jamais dans cette région et connaissez l'emplacement de toutes les ressources et caches qui s'y trouvent."
     },
     {
+      id: "adv-langues",
+      name: "Langues (Languages)",
+      type: "Mental",
+      cost: 1,
+      impact: "languages",
+      prerequisite: "1 pt (langue humaine étrangère) ou 3 pts (langue non-humaine : Nezumi, Naga)",
+      desc: "Vous avez étudié les idiomes rares parlés au-delà des frontières de l'Empire d'Émeraude.",
+      rule: "Pour 1 pt, vous maîtrisez une langue humaine étrangère (Yobanjin, Senpet, Yodotaï, Mekham, Thrane, etc.). Pour 3 pts, vous comprenez une langue non-humaine (Nezumi, Naga) et parvenez à en exprimer les concepts rudimentaires."
+    },
+    {
+      id: "adv-lire-levres",
+      name: "Lire sur les Lèvres (Read Lips)",
+      type: "Mental",
+      cost: 4,
+      impact: "read_lips",
+      prerequisite: "3 pts pour les Courtisans",
+      desc: "Vous déchiffrez les propos chuchotés à travers une salle de cour simplement en observant le mouvement des lèvres.",
+      rule: "Même sans pouvoir entendre vos cibles, vous comprenez ce qu'elles disent en réussissant un jet de Perception ND 15 (+5 par tranche de 6 m / 20' de distance)."
+    },
+    {
+      id: "adv-tactique",
+      name: "Tacticien Émérite (Tactician)",
+      type: "Mental",
+      cost: 4,
+      impact: "tactician",
+      prerequisite: "3 pts pour le Clan du Lion et les Bushi",
+      desc: "Vous lisez le flux et le reflux des armées sur le champ de bataille comme les pièces d'un jeu de Go.",
+      rule: "Lorsqu'un jet est effectué sur la Table de Bataille de Masse, vous pouvez augmenter ou diminuer votre résultat de 5."
+    },
+    {
       id: "adv-vertueux",
       name: "Vertueux (Virtuous)",
       type: "Mental",
@@ -436,8 +466,8 @@
       type: "Social",
       cost: 5,
       impact: "imperial_spouse",
-      prerequisite: "Statut minimum exigé",
-      desc: "Un arrangement politique d'envergure vous a uni par les liens du mariage à un membre d'une Famille Impériale.",
+      prerequisite: "Aucun",
+      desc: "Un arrangement politique d'envergure vous a uni par les liens du mariage à un membre mineur d'une Famille Impériale.",
       rule: "Vous gagnez immédiatement +0.5 Rang de Statut, ainsi qu'un bonus de +1g1 sur tous vos jets de Compétences Sociales face aux membres des Familles Impériales."
     },
     {
@@ -581,8 +611,28 @@
       cost: 5,
       impact: "bishamons_blessing",
       prerequisite: "4 pts pour le Crabe et le Lion",
-      desc: "La Fortune de la Guerre approuve la force colossale de vos assauts.",
-      rule: "Lorsque vous annoncez et réussissez 3 Augmentations pour Dégâts Accrus, vous gagnez 1 Augmentation gratuite supplémentaire (+1g0). Bonus de +1g0 sur les jets de Force brute."
+      desc: "La Fortune de la Force approuve la puissance colossale de vos assauts.",
+      rule: "Lorsque vous déclarez et réussissez 3 Augmentations à l'attaque pour Dégâts Accrus (les Augmentations Gratuites ne comptent pas), vous gagnez 1 Augmentation supplémentaire. Vous gagnez également +1g0 sur vos jets du Trait Force."
+    },
+    {
+      id: "adv-benediction-daikoku",
+      name: "Bénédiction de Daikoku (Daikoku's Blessing)",
+      type: "Spirituel",
+      cost: 4,
+      impact: "daikokus_blessing",
+      prerequisite: "3 pts pour le Clan de la Mante",
+      desc: "La Fortune de la Richesse veille sur vos négociations et entreprises marchandes.",
+      rule: "Vous bénéficiez d'un bonus de +1g1 sur tous vos jets de Compétence Commerce."
+    },
+    {
+      id: "adv-benediction-ebisu",
+      name: "Bénédiction d'Ebisu (Ebisu's Blessing)",
+      type: "Spirituel",
+      cost: 4,
+      impact: "ebisus_blessing",
+      prerequisite: "3 pts pour le Clan de la Licorne",
+      desc: "La Fortune du Labeur Honnête éclaire votre droiture aux yeux des gens du peuple.",
+      rule: "Vous bénéficiez d'un bonus de +1g1 sur tous vos jets de Compétences Sociales effectués avec des citoyens non-samouraïs (heimin, hinin)."
     },
     {
       id: "adv-benediction-fukurokujin",
@@ -660,9 +710,9 @@
       type: "Spirituel",
       cost: 7,
       impact: "inner_gift",
-      prerequisite: "Choisir une faculté (Empathie, Prémonition, Vue des Esprits...)",
+      prerequisite: "Choisir une faculté (Empathie animale, Empathie, Prémonition, Prophétie mineure, Toucher des esprits...)",
       desc: "Votre âme abrite une manifestation magique innée indépendante des voies de la prêtrise des kami.",
-      rule: "Confère un pouvoir surnaturel mineur permanent (ex. Empathie animale, vision du dernier porteur d'un objet touché ND 15, ou bonus de +1g0 à l'Initiative)."
+      rule: "Confère une faculté surnaturelle définie avec le MJ : Empathie animale ; Empathie (+1g1 en Courtisan pour déceler les sentiments/désirs) ; Prémonition (difficile à surprendre et +1g0 à l'Initiative) ; Prophétie mineure (rêves prémonitoires) ; Toucher des esprits (jet d'Intuition ND 15 pour voir la dernière personne ayant touché un objet)."
     },
     {
       id: "adv-illumine",
@@ -720,9 +770,9 @@
       type: "Spirituel",
       cost: 5,
       impact: "touch_spirit_realms",
-      prerequisite: "4 pts pour les Shugenja (Choisir un Royaume)",
+      prerequisite: "4 pts pour les Shugenja (Choisir un Royaume : Toshigoku 8 pts, Yomi 7 pts)",
       desc: "Une étincelle primordiale d'un autre plan d'existence est tissée dans la trame de votre âme.",
-      rule: "Confère un avantage permanent thématique (ex. Chikushudō accorde +1g1 en Dressage d'animaux ; Tengoku immunise contre la terreur surnaturelle)."
+      rule: "Chikushudō (+1g1 en Dressage) ; Gaki-dō (+5 PV soignés en tuant un adversaire) ; Jigoku (ajoute Rang de Souillure aux attaques/traits physiques, réservé aux souillés) ; Maigo no Musha (+1 pt de Gloire bonus dès un gain > 3 pts) ; Meido (+2g0 en opposition sociale) ; Sakkaku (+1g1 en Sincérité [Tromperie]) ; Tengoku (+2g0 en Terre contre la Souillure) ; Toshigoku (8 pts : +1,5 m / +5' de mouvement pour attaquer) ; Yomi (7 pts : +1g0 sur 1 Compétence d'École) ; Yume-dō (4 h de repos suffisent pour récupérer le Vide)."
     },
 
     // -----------------------------------------------------------------------
@@ -765,8 +815,8 @@
       cost: 5,
       impact: "inheritance",
       prerequisite: "Définir l'objet de famille",
-      desc: "Lors de votre gempukku, votre famille vous a confié une relique précieuse d'un ancêtre héroïque.",
-      rule: "Vous commencez avec un nemuranai ou un équipement d'exception conférant +1g0 ou 1 Augmentation Gratuite lors de son utilisation rituelle."
+      desc: "Lors de votre gempukku, votre famille vous a confié un précieux bien d'un ancêtre héroïque.",
+      rule: "Vous débutez avec un objet supplémentaire en plus de votre équipement d'école. Vous gagnez +1g1 à tout jet de Compétence effectué avec cet objet hors situation de combat (ne s'applique ni aux jets d'attaque ni aux dégâts)."
     },
     {
       id: "adv-noblesse-terrienne",
@@ -777,6 +827,16 @@
       prerequisite: "4 à 10 pts (Accord du MJ)",
       desc: "L'Empereur et votre Daimyō vous ont confié l'intendance et les revenus d'un fief territorial important.",
       rule: "Vous administrez un domaine féodal (village, garnison, vallée) générant revenus et troupes locales sous vos ordres, avec la charge de payer l'impôt et de le défendre."
+    },
+    {
+      id: "adv-serviteur",
+      name: "Serviteur (Servant)",
+      type: "Matériel",
+      cost: 5,
+      impact: "servant",
+      prerequisite: "Max : 2 × Rang de Statut (-2 pts selon Clan/métier : Artisan Grue, Bouffon/Intendant Scorpion, Budoka Lion, etc.)",
+      desc: "Un serviteur dévoué a été attaché à votre personne par votre famille ou vos moyens propres.",
+      rule: "Possède tous les Traits à 2 et une Compétence à 3 (+3 pts par rang ou spécialisation ajoutée à l'achat) : Artisan, Assistant (Étiquette), Budoka, Forgeron/Artisan, Eta (Anatomie), Palefrenier, Marchand, Scribe ou Sohei."
     }
   ];
 
@@ -807,7 +867,7 @@
       impact: "blind",
       prerequisite: "Aucun",
       desc: "Vous êtes plongé dans une obscurité totale et perpétuelle.",
-      rule: "Vous subissez une pénalité de -3g3 sur toutes les actions nécessitant la vue (combat, déplacement précipité, observation)."
+      rule: "Vous subissez -3g3 aux attaques à distance et -1g1 en mêlée. Votre ND d'Armure de base vaut Réflexes + 5 (+ armure). Votre Eau est réduite de 2 rangs pour le déplacement et toute Action de Mouvement Simple exige un jet d'Athlétisme/Agilité ND 20 sous peine d'être Renversé (Prone). Aucun jet de Perception autorisé sans sens non visuel."
     },
     {
       id: "dis-blessure-permanente",
@@ -840,7 +900,7 @@
       impact: "blind_one_eye",
       prerequisite: "Aucun",
       desc: "Une estafilade de katana ou une flèche perdue vous a privé d'un œil, réduisant votre vision du relief.",
-      rule: "Pénalité de -1g0 à tous vos jets d'Attaque à distance (Tir à l'arc, Armes de jet) et sur vos jets de Perception visuelle."
+      rule: "Pénalité de -1g0 à tous vos jets d'Attaque à distance et sur vos jets de Perception visuelle (note : en L5R 4e, la perte d'un œil relève officiellement de Mauvaise Vue à 3 pts / -1g1)."
     },
     {
       id: "dis-epilepsie",
@@ -851,7 +911,7 @@
       impact: "epilepsy",
       prerequisite: "Vaut 5 pts pour la Grue",
       desc: "Un déséquilibre de vos flux vitaux déclenche des crises convulsives lors de stress extrême ou de stimuli vifs.",
-      rule: "Sous l'effet d'un stress violent ou de lumières clignotantes (feux d'artifice), réussissez un jet de Volonté ND 15 sous peine de subir une crise tétanisante pendant plusieurs minutes."
+      rule: "Sous l'effet d'un stress violent ou de lumières clignotantes (feux d'artifice), réussissez un jet de Volonté ND 15 sous peine de subir une crise, puis un second jet de Volonté ND 10 chaque minute pour y mettre fin."
     },
     {
       id: "dis-faiblesse-trait",
@@ -935,6 +995,17 @@
     // DÉSAVANTAGES MENTAUX
     // -----------------------------------------------------------------------
     {
+      id: "dis-amour-perdu",
+      name: "Amour Perdu (Lost Love)",
+      type: "Mental",
+      cost: 3,
+      gain: 3,
+      impact: "lost_love",
+      prerequisite: "Aucun",
+      desc: "Le deuil d'un être cher (romantique ou familial) hante vos pensées et brise parfois votre concentration.",
+      rule: "Lorsque vous êtes rappelé à cette perte, tous vos ND augmentent de +5 jusqu'à ce que vous dépensiez 1 point de Vide pour retrouver votre concentration (max 2 fois/jour, à 1 h d'intervalle min.)."
+    },
+    {
       id: "dis-amour-veritable",
       name: "Amour Véritable (True Love)",
       type: "Mental",
@@ -946,7 +1017,6 @@
       rule: "Lorsque vous êtes contraint de choisir entre votre devoir de samouraï et la sauvegarde de votre amour, vous devez dépenser 1 point de Vide pour pouvoir obéir à vos ordres."
     },
     {
-      id: "adv-ascete",
       id: "dis-ascete",
       name: "Ascète (Ascetic)",
       type: "Mental",
@@ -1021,7 +1091,7 @@
       impact: "failure_bushido",
       prerequisite: "3 à 6 pts selon la vertu (Compassion 3, Courage 4, Courtoisie 4, Devoir 6, Honnêteté 3, Honneur 3, Sincérité 4)",
       desc: "Votre âme faillit gravement à l'un des sept préceptes sacrés des guerriers.",
-      rule: "Compassion (3 pts : dépenser 1 Vide pour aider un inférieur) ; Courage (4 pts : ND +5 face à un ennemi supérieur) ; Courtoisie (4 pts : 1 Augmentation forcée pour s'excuser) ; Devoir (6 pts : impossible de dépenser du Vide pour absorber des Blessures) ; Honnêteté (3 pts : aucun Vide sur Sincérité [Honnêteté]) ; Honneur (3 pts : pas de bonus d'Honneur contre Tentation/Intimidation) ; Sincérité (4 pts : 1 Augmentation forcée pour convaincre)."
+      rule: "Compassion (3 pts : dépenser 1 Vide pour aider un inférieur) ; Courage (4 pts : ND +5 face à un ennemi de Gloire/Statut supérieur ou de l'Outremonde) ; Courtoisie (4 pts : 1 Augmentation forcée pour s'excuser/éviter d'offenser) ; Devoir (6 pts : impossible de dépenser du Vide pour absorber des Blessures) ; Honnêteté (3 pts : aucun Vide sur Sincérité [Honnêteté]) ; Honneur (3 pts : pas de bonus d'Honneur contre Tentation/Intimidation) ; Sincérité (4 pts : 1 Augmentation forcée pour convaincre)."
     },
     {
       id: "dis-esprit-contrariant",
@@ -1413,8 +1483,8 @@
       gain: 3,
       impact: "haunted",
       prerequisite: "Aucun",
-      desc: "Le spectre d'un aïeul vous poursuit nuit et jour en vous accablant de reproches discordants.",
-      rule: "Pénalité de -1g0 à tous vos jets d'Initiative et jets de Vigilance lors de situations de combat ou de stress."
+      desc: "Le spectre d'un aïeul vous poursuit pour veiller à l'honneur de votre lignée ou vous confier une tâche.",
+      rule: "Vous devez lui témoigner du respect et suivre ses exigences. Si vous lui désobéissez, tant qu'il demeure courroucé, un de vos jets de dés par session (choisi par le MJ) subit une pénalité de -1g1."
     },
     {
       id: "dis-malchanceux",
@@ -1425,7 +1495,7 @@
       impact: "unlucky",
       prerequisite: "2 pts par rang acheté",
       desc: "Les Fortunes détournent leur bénédiction au moment précis où votre sort bascule.",
-      rule: "Par niveau acheté dans ce désavantage, le MJ peut vous obliger une fois par session à relancer un jet réussi. Vous devez obligatoirement accepter et conserver le second score, même s'il est inférieur."
+      rule: "Par niveau acheté dans ce désavantage, le MJ peut vous obliger une fois par session à relancer un jet de dés. Vous devez obligatoirement conserver le second résultat dans tous les cas."
     },
     {
       id: "dis-malediction-fortune",
@@ -1436,7 +1506,18 @@
       impact: "seven_fortunes_curse",
       prerequisite: "3 pts (ou 6 pts pour la Malédiction de Hotei)",
       desc: "Une offense sacrilège a éveillé le courroux d'une Fortune majeure contre votre lignée.",
-      rule: "Benten (+10 au ND d'Étiquette) ; Bishamon (-1 aux dégâts d'arme) ; Daikoku (-1g1 en Commerce et -1 koku au départ) ; Ebisu (-1g1 aux jets sociaux avec les heimin/hinin) ; Fukurokujin (+5 au ND des Connaissances) ; Hotei (6 pts : tout effet coûtant 1 point de Vide en exige 2) ; Jurojin (-2g0 contre poisons et maladies)."
+      rule: "Benten (+10 au ND d'Étiquette) ; Bishamon (Force réduite de 1 rang pour calculer les dégâts des armes, soit -1g0) ; Daikoku (-1g1 en Commerce et -1 koku au départ) ; Ebisu (-1g1 aux jets sociaux avec les non-samouraïs) ; Fukurokujin (+5 au ND des Connaissances) ; Hotei (6 pts : tout effet coûtant 1 point de Vide en exige 2) ; Jurojin (-2g0 contre poisons et maladies)."
+    },
+    {
+      id: "dis-malediction-lune",
+      name: "Malédiction de Seigneur Lune (Lord Moon's Curse)",
+      type: "Spirituel",
+      cost: 3,
+      gain: 3,
+      impact: "lord_moons_curse",
+      prerequisite: "3, 5 ou 7 pts (ND 15 + 5 par palier après le premier)",
+      desc: "La démence d'Onnotangu habite votre âme et s'éveille à la pleine lune.",
+      rule: "Vous gagnez 1 point de Vide temporaire au crépuscule de chaque pleine lune (perdu à l'aube s'il n'est pas utilisé), mais vous devez réussir un jet de Volonté ND 15 (+5 par palier supplémentaire) au lever de la pleine lune sous peine de perdre le contrôle de votre personnage jusqu'au matin."
     },
     {
       id: "dis-malediction-lignee",
@@ -1458,7 +1539,7 @@
       impact: "cursed_by_realm",
       prerequisite: "Vaut 5 pts pour les Shugenja (Choisir un Royaume)",
       desc: "L'essence d'un monde spirituel a marqué votre âme comme son ennemi juré.",
-      rule: "Chikushudō (-1g1 en Dressage) ; Gaki-dō (cible prioritaire des morts affamés) ; Jigoku (-1g1 pour résister à la Souillure) ; Meido (-1g0 en Perception au repos) ; Toshigoku (jet de Volonté ND 15 sous peine d'attaquer tout ennemi blessé) ; Yume-dō (10 heures de sommeil requises pour régénérer le Vide)."
+      rule: "Chikushudō (-1g1 en Dressage) ; Gaki-dō (cible prioritaire des morts affamés) ; Jigoku (-1g1 pour résister à la Souillure) ; Maigo no Musha (-1g1 contre tout esprit) ; Meido (-1g0 en Perception au repos) ; Sakkaku (victime mensuelle d'un mauvais tour d'esprit) ; Tengoku (+10 aux ND dans un temple dévoué aux Cieux) ; Toshigoku (Volonté ND 15 sous peine d'attaquer tout ennemi blessé) ; Yume-dō (10 h de sommeil requises pour régénérer le Vide)."
     },
     {
       id: "dis-mauvaise-fortune",
@@ -1469,7 +1550,7 @@
       impact: "bad_fortune",
       prerequisite: "Définir la calamité avec le MJ",
       desc: "Le kharma s'acharne contre vous sous la forme d'un mauvais sort récurrent.",
-      rule: "Amour Secret (un PNJ passionné sabote systématiquement vos noces et intrigues) ; Défiguration / Mauvais Œil (réactions sociales effrayées ou méfiantes) ; Allergie sévère à une matière commune ; Infortune Latente (échec critique obligatoire choisi un jour par le MJ)."
+      rule: "Amour Secret (un PNJ passionné sabote vos noces) ; Défiguration / Mauvais Œil (réactions méfiantes) ; Allergie sévère à une substance courante ; Infortune Latente (échec critique garanti sur un jet décisif choisi par le MJ) ; Ennemi Inconnu (un rival anonyme conspire pour votre mort)."
     },
     {
       id: "dis-momoku",
