@@ -1952,11 +1952,15 @@ function applyTenDiceRule(rollX, keepY, bonus = 0) {
   if (k > r) k = r;
 
   if (r > 10) {
-    const excessR = r - 10;
+    let excessR = r - 10;
     r = 10;
-    k += Math.floor(excessR / 2);
-    if (excessR % 2 === 1 && k >= 10) {
-      b += 2;
+    if (k < 10) {
+      const canConvert = Math.min(Math.floor(excessR / 2), 10 - k);
+      k += canConvert;
+      excessR -= canConvert * 2;
+    }
+    if (k >= 10 && excessR > 0) {
+      b += excessR * 2;
     }
   }
 
