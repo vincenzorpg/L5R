@@ -1,10 +1,12 @@
 /**
  * js/gm-screen.js
  * Écran du Maître du Jeu — Les Chroniques de Rokugan (L5R 4e Édition)
- * - Affichage horizontal pleine largeur (4 PJs côte à côte + tableau d'escarmouche)
- * - Générateur d'Escarmouche (PJs impliqués + N PNJs avec initiative auto)
- * - Suivi en direct des jets Toucher/Dégâts et du malus de blessures
- * - Onglets : Escarmouche, Duel Iaijutsu (import JSON PJ), Honneur & Gloire, Cour & Social, Magie/Peur/Souillure
+ * - Table horizontale des PJs (mode détaillé ou compact) + repères de groupe
+ * - Escarmouche live (génération, renforts, jets cliquables, postures, 6 états, blessures)
+ * - Paravent universel des règles L5R 4e avec recherche instantanée & catégories
+ * - Arbitre complet du Duel Iaijutsu (3 phases + Focus auto)
+ * - Onglets Honneur/Gloire (Table 2.3), Cour/Loi, Magie/Peur/Souillure (calculateurs express)
+ * - Dock permanent : Lanceur Roll & Keep + Calculateur ND + Générateur PNJ + Notes de scène
  */
 
 (function (globalScope) {
@@ -25,21 +27,23 @@
 
   const STANCES = {
     attaque: { label: 'Attaque', tnDelta: 0 },
-    assaut: { label: 'Assaut (-10 ND)', tnDelta: -10 },
-    defense: { label: 'Défense (+5+ ND)', tnDelta: 5 },
-    esquive: { label: 'Esquive (+10+ ND)', tnDelta: 10 },
-    centre: { label: 'Centre', tnDelta: 0 }
+    assaut: { label: 'Assaut (-10 ND, +2g1)', tnDelta: -10 },
+    defense: { label: 'Défense (+Air+Déf)', tnDelta: 5 },
+    esquive: { label: 'Défense Totale (+10+)', tnDelta: 10 },
+    centre: { label: 'Centre (Préparation)', tnDelta: 0 }
   };
 
   const STATUS_FLAGS = [
-    { id: 'prone', label: 'À terre', desc: '-10 ND mêlée, -1g0 attaque' },
-    { id: 'stunned', label: 'Étourdi', desc: 'ND = 5 + Armure, pas d\'action' },
-    { id: 'blinded', label: 'Aveuglé', desc: '-3g3 attaque, -10 ND' },
-    { id: 'entangled', label: 'Enchevêtré', desc: 'Mouvement bloqué' }
+    { id: 'prone', label: 'À terre', desc: '-10 ND mêlée (+5 distance), -1g0 attaque, Simple pour se relever' },
+    { id: 'stunned', label: 'Étourdi', desc: 'Pas d\'action, ND = 5 + bonus d\'Armure uniquement' },
+    { id: 'blinded', label: 'Aveuglé', desc: '-3g3 attaque/vue, -10 ND d\'Armure, vitesse ÷ 2' },
+    { id: 'entangled', label: 'Enchevêtré', desc: 'Déplacement nul, -2g1 attaque/défense' },
+    { id: 'surprised', label: 'Surpris', desc: '-5 ND d\'Armure, agit en dernier au Round 1' },
+    { id: 'feared', label: 'Effrayé', desc: '-Xk0 aux jets contre la source de Peur X' }
   ];
 
   const ENEMY_PRESETS = [
-    { name: 'Bandit / Ronin', initFormula: '4g2', armorTN: 15, reduction: 2, earth: 2, attack: '5g2', damage: '4g2', notes: 'Katana ou lance, moral fragile si Grave.' },
+    { name: 'Bandit / Rônin', initFormula: '4g2', armorTN: 15, reduction: 2, earth: 2, attack: '5g2', damage: '4g2', notes: 'Katana ou lance, moral fragile si Grave.' },
     { name: 'Ashigaru', initFormula: '3g2', armorTN: 18, reduction: 3, earth: 2, attack: '4g2', damage: '4g2', notes: 'Yari (lance), combat en formation.' },
     { name: 'Bushi Vétéran', initFormula: '6g3', armorTN: 25, reduction: 5, earth: 3, attack: '7g3', damage: '6g2', notes: '2 attaques/tour (Rang 3), Armure lourde.' },
     { name: 'Shugenja Adversaire', initFormula: '4g2', armorTN: 15, reduction: 0, earth: 3, attack: '5g3', damage: '4g2', notes: 'Sorts Feu/Air, garde ses distances.' },
@@ -65,6 +69,14 @@
       .replace(/'/g, '&#39;');
   }
 
+  function normalizeSearchText(str) {
+    return String(str || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+
   function uid(prefix = 'id') {
     return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
   }
@@ -74,7 +86,7 @@
   }
 
   // ===========================================================================
-  // MOTEUR ROLL & KEEP (POUR INITIATIVE AUTO PNJ)
+  // MOTEUR ROLL & KEEP (POUR INITIATIVE, LANCEUR MJ & DUEL)
   // ===========================================================================
   function parseRollKeepFormula(formulaStr) {
     const str = String(formulaStr || '').trim();
@@ -164,15 +176,17 @@
   function rollFormula(formulaStr, options = {}) {
     const parsed = parseRollKeepFormula(formulaStr);
     if (!parsed || parsed.rolled <= 0 || parsed.kept <= 0) return null;
-    const capped = applyTenDiceRule(parsed.rolled, parsed.kept, parsed.bonus);
+    const penalty = Math.max(0, parseInt(options.penalty, 10) || 0);
+    const capped = applyTenDiceRule(parsed.rolled, parsed.kept, parsed.bonus - penalty);
     const sim = simulateRollAndKeep(capped.rolled, capped.kept, capped.bonus, options);
     const formatted = formatRollResult(sim);
-    const labelFormula = `${capped.rolled}g${capped.kept}${capped.bonus ? (capped.bonus > 0 ? `+${capped.bonus}` : capped.bonus) : ''}`;
-    return { formula: labelFormula, ...formatted };
+    const netBonus = capped.bonus;
+    const labelFormula = `${capped.rolled}g${capped.kept}${netBonus ? (netBonus > 0 ? `+${netBonus}` : netBonus) : ''}`;
+    return { formula: labelFormula, rawFormula: String(formulaStr || '').trim(), penalty, ...formatted };
   }
 
   // ===========================================================================
-  // CALCULS L5R 4e (BLESSURES, IMPORT JSON, ESCARMOUCHE)
+  // CALCULS L5R 4e (BLESSURES, ND EFFECTIF, DUEL, MAGIE, RÈGLES)
   // ===========================================================================
   function computeL5RWoundState(wounds, earthRing = 2, options = {}) {
     const earth = Math.max(1, parseInt(earthRing, 10) || 2);
@@ -220,6 +234,119 @@
       color: current.color,
       percent,
       thresholds
+    };
+  }
+
+  function computeEffectiveCombatantTN(combatant, linkedPc = null) {
+    const baseTN = Math.max(5, Number(combatant && combatant.armorTN) || 15);
+    const statuses = Array.isArray(combatant && combatant.statuses) ? combatant.statuses : [];
+    const armorBonus = linkedPc && linkedPc.armorBonus != null
+      ? Number(linkedPc.armorBonus) || 0
+      : Math.max(0, baseTN - 15);
+
+    if (statuses.includes('stunned')) {
+      return {
+        effectiveTN: 5 + armorBonus,
+        note: `Étourdi (5 + armure ${armorBonus})`
+      };
+    }
+
+    const stanceKey = (combatant && combatant.stance) || 'attaque';
+    let stanceDelta = (STANCES[stanceKey] && STANCES[stanceKey].tnDelta) || 0;
+    if (stanceKey === 'defense' && linkedPc && linkedPc.defenseBonus > 0) {
+      stanceDelta = linkedPc.defenseBonus;
+    }
+
+    let statusDelta = 0;
+    if (statuses.includes('surprised')) statusDelta -= 5;
+    if (statuses.includes('blinded')) statusDelta -= 10;
+    if (statuses.includes('prone')) statusDelta -= 10;
+
+    return {
+      effectiveTN: Math.max(5, baseTN + stanceDelta + statusDelta),
+      note: statuses.includes('prone') ? 'Mêlée (-10 À terre, +5 à distance)' : ''
+    };
+  }
+
+  function computeIaijutsuFocusVerdict(scoreA, scoreB, nameA = 'Duelliste A', nameB = 'Duelliste B') {
+    const a = parseInt(scoreA, 10);
+    const b = parseInt(scoreB, 10);
+    if (isNaN(a) || isNaN(b)) {
+      return { ready: false, simultaneous: false, winner: null, gap: 0, freeRaises: 0, text: 'Entrez les scores A et B.' };
+    }
+    const gap = Math.abs(a - b);
+    if (gap < 5) {
+      return {
+        ready: true,
+        simultaneous: true,
+        winner: null,
+        gap,
+        freeRaises: 0,
+        text: `Écart ${gap} (< 5) : Frappe Karmique simultanée ! Aucune Augmentation gratuite.`
+      };
+    }
+    const winner = a > b ? 'a' : 'b';
+    const winnerName = winner === 'a' ? nameA : nameB;
+    const freeRaises = Math.floor((gap - 5) / 5);
+    return {
+      ready: true,
+      simultaneous: false,
+      winner,
+      gap,
+      freeRaises,
+      text: `${winnerName} frappe en premier (écart ${gap}) avec +${freeRaises} Aug. gratuite(s) !`
+    };
+  }
+
+  function computeMagicCastParams(ring = 3, schoolRank = 2, mastery = 1, raises = 0, affinityMode = 'normal') {
+    const r = Math.max(1, Math.min(10, parseInt(ring, 10) || 1));
+    const sr = Math.max(1, Math.min(10, parseInt(schoolRank, 10) || 1));
+    const m = Math.max(1, Math.min(6, parseInt(mastery, 10) || 1));
+    const aug = Math.max(0, Math.min(10, parseInt(raises, 10) || 0));
+
+    let effectiveRank = sr;
+    let tnMod = 0;
+    if (affinityMode === 'affinity') effectiveRank += 1;
+    if (affinityMode === 'deficiency') {
+      effectiveRank = Math.max(1, effectiveRank - 1);
+      tnMod = 5;
+    }
+    const capped = applyTenDiceRule(r + effectiveRank, r, 0);
+    const tn = 5 + m * 5 + aug * 5 + tnMod;
+    const bonusStr = capped.bonus ? (capped.bonus > 0 ? `+${capped.bonus}` : String(capped.bonus)) : '';
+    return {
+      formula: `${capped.rolled}g${capped.kept}${bonusStr}`,
+      tn,
+      effectiveRank
+    };
+  }
+
+  function filterGmRulesCards(cards, category = 'all', query = '') {
+    const list = Array.isArray(cards) ? cards : [];
+    const cat = String(category || 'all');
+    const q = normalizeSearchText(query);
+    return list.filter((card) => {
+      if (cat !== 'all' && card.category !== cat) return false;
+      if (!q) return true;
+      const haystack = normalizeSearchText(
+        `${card.title} ${card.badge} ${card.summary} ${card.keywords || ''} ${(card.items || []).map((i) => `${i.label} ${i.text}`).join(' ')}`
+      );
+      return haystack.includes(q);
+    });
+  }
+
+  function generateRandomNpcSummary(parts, rng = Math.random) {
+    const data = parts || {};
+    const pick = (arr) => (Array.isArray(arr) && arr.length ? arr[Math.floor(rng() * arr.length)] : '');
+    const clanObj = pick(data.clans) || { clan: 'Rônin', families: ['Rônin'] };
+    const family = pick(clanObj.families);
+    const given = pick(data.givenNames) || 'Kenji';
+    const fullName = family === 'Rônin' ? `${given} (Rônin)` : `${family} ${given}`;
+    return {
+      name: fullName,
+      clan: clanObj.clan || 'Rônin',
+      demeanor: pick(data.demeanors),
+      secret: pick(data.secrets)
     };
   }
 
@@ -275,6 +402,9 @@
           .sort((a, b) => b.rank - a.rank)
       : [];
 
+    const defenseSkill = skills.find((s) => /d[ée]fense|defense/i.test(s.name));
+    const defenseBonus = air + (defenseSkill ? defenseSkill.rank : 0);
+
     const weapons = Array.isArray(raw.weapons)
       ? raw.weapons.map((w) => ({
           name: String(w.name || 'Arme').trim(),
@@ -308,8 +438,10 @@
       includedInSkirmish: true,
       woundPenaltyDelta,
       armorName: String(armorObj.name || 'Aucune / Kimono').trim(),
+      armorBonus,
       armorTN: totalTN,
       reduction,
+      defenseBonus,
       initFormula: `${insightRank + reflexes}g${reflexes}`,
       skills,
       weapons,
@@ -330,9 +462,37 @@
     });
   }
 
-  /**
-   * Fonction pure générant le tableau d'escarmouche trié (PJs sélectionnés + N PNJs).
-   */
+  function createEnemyCombatants(npcCount, npcTemplate, existingCount = 0, rng = undefined) {
+    const count = Math.max(0, Math.min(20, parseInt(npcCount, 10) || 0));
+    const template = npcTemplate || ENEMY_PRESETS[0];
+    const baseName = String(template.name || 'Adversaire').trim();
+    const initFormula = String(template.initFormula || '4g2').trim();
+    const list = [];
+
+    for (let i = 1; i <= count; i++) {
+      const rolledInit = rollFormula(initFormula, { rng });
+      const initScore = rolledInit ? rolledInit.total : 14;
+      const num = existingCount + i;
+      list.push({
+        id: uid('foe'),
+        pcId: null,
+        type: 'enemy',
+        name: count > 1 || existingCount > 0 ? `${baseName} #${num}` : baseName,
+        initiative: initScore,
+        armorTN: Number(template.armorTN) || 15,
+        reduction: Number(template.reduction) || 0,
+        earth: Math.max(1, parseInt(template.earth, 10) || 2),
+        wounds: 0,
+        stance: 'attaque',
+        statuses: [],
+        attack: String(template.attack || '5g2'),
+        damage: String(template.damage || '4g2'),
+        notes: String(template.notes || '')
+      });
+    }
+    return list;
+  }
+
   function buildSkirmishCombatants(pcs, options = {}) {
     const combatants = [];
     const rng = options.rng;
@@ -362,32 +522,8 @@
       });
     });
 
-    const npcCount = Math.max(0, Math.min(20, parseInt(options.npcCount, 10) || 0));
-    const npcTemplate = options.npcTemplate || ENEMY_PRESETS[0];
-    const baseName = String(npcTemplate.name || 'Adversaire').trim();
-    const initFormula = String(npcTemplate.initFormula || '4g2').trim();
-
-    for (let i = 1; i <= npcCount; i++) {
-      const rolledInit = rollFormula(initFormula, { rng });
-      const initScore = rolledInit ? rolledInit.total : 14;
-      combatants.push({
-        id: uid('foe'),
-        pcId: null,
-        type: 'enemy',
-        name: npcCount > 1 ? `${baseName} #${i}` : baseName,
-        initiative: initScore,
-        armorTN: Number(npcTemplate.armorTN) || 15,
-        reduction: Number(npcTemplate.reduction) || 0,
-        earth: Math.max(1, parseInt(npcTemplate.earth, 10) || 2),
-        wounds: 0,
-        stance: 'attaque',
-        statuses: [],
-        attack: String(npcTemplate.attack || '5g2'),
-        damage: String(npcTemplate.damage || '4g2'),
-        notes: String(npcTemplate.notes || '')
-      });
-    }
-
+    const npcs = createEnemyCombatants(options.npcCount, options.npcTemplate, 0, rng);
+    combatants.push(...npcs);
     return sortCombatantsByInit(combatants);
   }
 
@@ -396,6 +532,9 @@
   // ===========================================================================
   let state = {
     activeTab: 'skirmish',
+    compactPcs: false,
+    rulesCategory: 'all',
+    rulesQuery: '',
     pcs: [],
     combat: {
       round: 1,
@@ -420,8 +559,10 @@
       bTN: 18,
       bDamage: '4g2',
       bFocus: 0,
-      log: []
+      scoreA: '',
+      scoreB: ''
     },
+    diceHistory: [],
     gmScratchpad: ''
   };
 
@@ -444,6 +585,9 @@
         state = {
           ...state,
           activeTab: parsed.activeTab || 'skirmish',
+          compactPcs: Boolean(parsed.compactPcs),
+          rulesCategory: parsed.rulesCategory || 'all',
+          rulesQuery: String(parsed.rulesQuery || ''),
           pcs: Array.isArray(parsed.pcs) ? parsed.pcs : [],
           combat: parsed.combat && typeof parsed.combat === 'object'
             ? {
@@ -453,11 +597,90 @@
               }
             : { round: 1, activeIndex: 0, combatants: [] },
           duel: parsed.duel && typeof parsed.duel === 'object' ? { ...state.duel, ...parsed.duel } : state.duel,
+          diceHistory: Array.isArray(parsed.diceHistory) ? parsed.diceHistory.slice(0, 8) : [],
           gmScratchpad: String(parsed.gmScratchpad || '')
         };
       }
     } catch (e) {
       console.warn('Impossible de charger l\'Écran du MJ :', e);
+    }
+  }
+
+  // ===========================================================================
+  // LANCEUR ROLL & KEEP + HISTORIQUE DOCK MJ
+  // ===========================================================================
+  function executeGmDiceRoll(formulaStr, label = '', overridePenalty = null) {
+    const formulaInput = document.getElementById('gm-dice-formula');
+    const explodeEl = document.getElementById('gm-dice-explode');
+    const specEl = document.getElementById('gm-dice-spec');
+    const penaltyEl = document.getElementById('gm-dice-penalty');
+
+    const formula = String(formulaStr || (formulaInput && formulaInput.value) || '').trim();
+    if (!formula) return null;
+
+    if (formulaInput && formulaStr) formulaInput.value = formula;
+    const penalty = overridePenalty !== null
+      ? Math.max(0, parseInt(overridePenalty, 10) || 0)
+      : Math.max(0, parseInt(penaltyEl && penaltyEl.value, 10) || 0);
+    if (penaltyEl && overridePenalty !== null) penaltyEl.value = String(penalty);
+
+    const res = rollFormula(formula, {
+      explode: explodeEl ? explodeEl.checked : true,
+      spec: specEl ? specEl.checked : false,
+      penalty
+    });
+    if (!res) return null;
+
+    const entry = {
+      id: uid('roll'),
+      label: label || `Jet ${res.rawFormula}`,
+      formula: res.formula,
+      total: res.total,
+      keptRolls: res.keptRolls,
+      droppedRolls: res.droppedRolls,
+      penalty
+    };
+    state.diceHistory = [entry, ...state.diceHistory].slice(0, 8);
+    saveState();
+    renderDicePanel(entry);
+    return entry;
+  }
+
+  function renderDicePanel(latestEntry = null) {
+    const resultEl = document.getElementById('gm-dice-result');
+    const historyEl = document.getElementById('gm-dice-history');
+    const current = latestEntry || state.diceHistory[0] || null;
+
+    if (resultEl) {
+      if (!current) {
+        resultEl.innerHTML = '<span class="text-[11px] text-stone-500 italic text-center">Cliquez sur Lancer (ou sur n\'importe quel jet du tableau de combat).</span>';
+      } else {
+        const keptHtml = current.keptRolls.map((r) =>
+          `<span class="px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/50 text-amber-200 font-mono font-bold text-[11px]">${escapeHtml(r)}</span>`
+        ).join('');
+        const droppedHtml = current.droppedRolls.map((r) =>
+          `<span class="px-1.5 py-0.5 rounded bg-stone-900 border border-stone-700 text-stone-500 font-mono text-[10px]">${escapeHtml(r)}</span>`
+        ).join('');
+        resultEl.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div class="text-[10px] text-amber-300/90 font-imperial truncate">${escapeHtml(current.label)}</div>
+              <div class="text-[10px] text-stone-400 font-mono">${escapeHtml(current.formula)}${current.penalty ? ` (malus -${current.penalty})` : ''}</div>
+            </div>
+            <div class="text-2xl font-black font-mono gold-text shrink-0">${current.total}</div>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">${keptHtml}${droppedHtml}</div>
+        `;
+      }
+    }
+
+    if (historyEl) {
+      historyEl.innerHTML = state.diceHistory.slice(1).map((item) => `
+        <div class="flex items-center justify-between gap-2 px-2 py-1 rounded bg-black/30 border border-stone-800/70">
+          <span class="text-stone-400 truncate">${escapeHtml(item.label)} <span class="font-mono text-stone-500">(${escapeHtml(item.formula)})</span></span>
+          <b class="font-mono text-amber-300 shrink-0">${item.total}</b>
+        </div>
+      `).join('');
     }
   }
 
@@ -543,7 +766,6 @@
       npcTemplate
     });
 
-    // Mémoriser l'init attribuée aux PJs
     combatants.forEach((c) => {
       if (c.pcId) {
         const pc = findPc(c.pcId);
@@ -560,21 +782,32 @@
     renderAll();
   }
 
+  function addReinforcementsFromUi() {
+    const npcCountEl = document.getElementById('gm-skirmish-npc-count');
+    const npcCount = Math.max(1, parseInt(npcCountEl && npcCountEl.value, 10) || 1);
+    const npcTemplate = getSelectedNpcTemplate();
+    const existingEnemies = state.combat.combatants.filter((c) => c.type === 'enemy').length;
+    const reinforcements = createEnemyCombatants(npcCount, npcTemplate, existingEnemies);
+    state.combat.combatants = sortCombatantsByInit([...state.combat.combatants, ...reinforcements]);
+    saveState();
+    renderCombat();
+  }
+
   function applyPcToDuelA(pc) {
     if (!pc) return;
     const iaiSkill = pc.skills.find((s) => /iaijutsu/i.test(s.name));
     state.duel.aPcId = pc.id;
     state.duel.aName = pc.name;
     state.duel.aIai = iaiSkill ? iaiSkill.rank : 1;
-    state.duel.aPer = pc.traits.perception;
+    state.duel.aPer = pc.traits.awareness ?? pc.traits.perception;
     state.duel.aVoid = pc.rings.void;
-    state.duel.aAgi = pc.traits.agility;
+    state.duel.aAgi = pc.traits.reflexes ?? pc.traits.agility;
     state.duel.aTN = pc.armorTN;
     state.duel.aDamage = pc.weapons[0] && pc.weapons[0].damage ? pc.weapons[0].damage : '5g2';
   }
 
   // ===========================================================================
-  // RENDU INTERFACE HORIZONTALE
+  // RENDU INTERFACE
   // ===========================================================================
   function woundBadgeClass(color) {
     const map = {
@@ -607,7 +840,7 @@
   function formatPenaltyText(wState) {
     if (wState.penalty === null) return wState.label;
     if (wState.penalty === 0) return 'Indemne (0)';
-    return `${wState.label} (+${wState.penalty} aux jets)`;
+    return `${wState.label} (+${wState.penalty} ND)`;
   }
 
   function renderTabs() {
@@ -616,8 +849,8 @@
       const isActive = tabId === state.activeTab;
       btn.setAttribute('aria-selected', String(isActive));
       btn.className = isActive
-        ? 'px-4 py-2 rounded-lg border border-amber-400 bg-amber-600 text-black font-bold text-xs font-imperial cursor-pointer transition shadow'
-        : 'px-4 py-2 rounded-lg border border-stone-700 bg-stone-900/70 hover:bg-stone-800 text-stone-300 text-xs font-imperial cursor-pointer transition';
+        ? 'px-3.5 py-2 rounded-lg border border-amber-400 bg-amber-600 text-black font-bold text-xs font-imperial cursor-pointer transition shadow'
+        : 'px-3.5 py-2 rounded-lg border border-stone-700 bg-stone-900/70 hover:bg-stone-800 text-stone-300 text-xs font-imperial cursor-pointer transition';
     });
 
     document.querySelectorAll('[data-gm-panel]').forEach((panel) => {
@@ -628,15 +861,35 @@
   function renderPcs() {
     const container = document.getElementById('gm-pcs-grid');
     const countEl = document.getElementById('gm-pc-count');
+    const summaryEl = document.getElementById('gm-party-summary');
+    const compactBtn = document.getElementById('gm-toggle-pcs-compact');
     if (countEl) countEl.textContent = String(state.pcs.length);
+    if (compactBtn) compactBtn.textContent = state.compactPcs ? 'Mode Détaillé PJs' : 'Mode Compact PJs';
+
+    if (summaryEl) {
+      if (state.pcs.length === 0) {
+        summaryEl.innerHTML = '';
+      } else {
+        const maxPer = Math.max(...state.pcs.map((p) => (p.traits && p.traits.perception) || 2));
+        const maxAwr = Math.max(...state.pcs.map((p) => (p.traits && p.traits.awareness) || 2));
+        const avgHonor = (state.pcs.reduce((s, p) => s + (p.honor || 0), 0) / state.pcs.length).toFixed(1);
+        const woundedCount = state.pcs.filter((p) => (p.wounds || 0) > 0).length;
+        summaryEl.innerHTML = `
+          <span class="px-2 py-0.5 rounded bg-black/50 border border-stone-800 text-stone-300" title="Meilleure Perception / Intuition du groupe">Per max <b class="text-sky-300">${maxPer}</b> • Int max <b class="text-teal-300">${maxAwr}</b></span>
+          <span class="px-2 py-0.5 rounded bg-black/50 border border-stone-800 text-stone-300">Honneur moy. <b class="text-amber-300">${avgHonor}</b></span>
+          <span class="px-2 py-0.5 rounded bg-black/50 border border-stone-800 text-stone-300">${woundedCount === 0 ? '<b class="text-emerald-300">Tous indemnes</b>' : `<b class="text-orange-300">${woundedCount}</b> blessé(s)`}</span>
+        `;
+      }
+    }
+
     if (!container) return;
 
     if (state.pcs.length === 0) {
       container.innerHTML = `
-        <div class="col-span-full card-clean rounded-xl p-6 text-center border-dashed border-amber-500/30 space-y-2">
+        <div class="col-span-full card-clean rounded-xl p-5 text-center border-dashed border-amber-500/30 space-y-2">
           <div class="text-2xl">📜</div>
           <p class="text-sm font-imperial text-amber-300">Aucun PJ importé sur la table</p>
-          <p class="text-xs text-stone-400">Importez vos 4 fichiers <b>.json</b> ou cliquez sur <b>« Charger 4 PJs d'exemple »</b> pour tester la table horizontale.</p>
+          <p class="text-xs text-stone-400">Importez vos fichiers <b>.json</b> ou cliquez sur <b>« 4 PJs d'exemple »</b> pour afficher vos fiches en direct.</p>
         </div>
       `;
       return;
@@ -646,15 +899,41 @@
       const wState = computeL5RWoundState(pc.wounds, pc.rings.earth, { woundPenaltyDelta: pc.woundPenaltyDelta });
       const voidDots = Array.from({ length: pc.voidMax }, (_, idx) => {
         const filled = idx < pc.voidCurrent;
-        return `<button type="button" data-action="set-void" data-pc-id="${escapeHtml(pc.id)}" data-void-val="${filled && idx === pc.voidCurrent - 1 ? idx : idx + 1}" class="w-3.5 h-3.5 rounded-full border transition cursor-pointer ${filled ? 'bg-purple-500 border-purple-300' : 'bg-stone-900 border-stone-600 hover:border-purple-400'}"></button>`;
+        return `<button type="button" data-action="set-void" data-pc-id="${escapeHtml(pc.id)}" data-void-val="${filled && idx === pc.voidCurrent - 1 ? idx : idx + 1}" class="w-3 h-3 rounded-full border transition cursor-pointer ${filled ? 'bg-purple-500 border-purple-300' : 'bg-stone-900 border-stone-600 hover:border-purple-400'}"></button>`;
       }).join('');
+
+      if (state.compactPcs) {
+        return `
+          <article class="card-clean rounded-xl p-2.5 space-y-1.5 border border-amber-500/25" data-pc-card="${escapeHtml(pc.id)}">
+            <div class="flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <h3 class="font-imperial font-bold text-xs text-amber-300 truncate">${escapeHtml(pc.name)}</h3>
+                <p class="text-[10px] text-stone-400 truncate">ND <b>${pc.armorTN}</b> (R${pc.reduction}) • Terre ${pc.rings.earth} • Vid ${pc.voidCurrent}/${pc.voidMax}</p>
+              </div>
+              <button type="button" data-action="remove-pc" data-pc-id="${escapeHtml(pc.id)}" class="px-1.5 py-0.5 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 cursor-pointer shrink-0">✕</button>
+            </div>
+            <div class="flex items-center justify-between gap-1 text-[10px]">
+              <span class="px-1.5 py-0.5 rounded border font-bold ${woundBadgeClass(wState.color)}">${escapeHtml(formatPenaltyText(wState))}</span>
+              <span class="font-mono text-stone-300">${wState.wounds}/${wState.maxWounds}</span>
+            </div>
+            <div class="flex items-center justify-between gap-1">
+              <div class="flex items-center gap-1">
+                <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="-5" class="px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-700/50 text-[10px] text-emerald-300 cursor-pointer">-5</button>
+                <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="1" class="px-1.5 py-0.5 rounded bg-red-950/70 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+1</button>
+                <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="5" class="px-1.5 py-0.5 rounded bg-red-950/70 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+5</button>
+              </div>
+              <div class="flex items-center gap-0.5">${voidDots}</div>
+            </div>
+          </article>
+        `;
+      }
 
       const topSkills = pc.skills.slice(0, 6).map((sk) =>
         `<span class="px-1.5 py-0.5 rounded bg-black/40 border border-stone-800 text-[10px] text-stone-300">${escapeHtml(sk.name)} <b class="text-amber-300">${sk.rank}</b></span>`
       ).join('');
 
       return `
-        <article class="card-clean rounded-xl p-3.5 space-y-2.5 border border-amber-500/25 flex flex-col justify-between" data-pc-card="${escapeHtml(pc.id)}">
+        <article class="card-clean rounded-xl p-3 space-y-2 border border-amber-500/25 flex flex-col justify-between" data-pc-card="${escapeHtml(pc.id)}">
           <div class="space-y-2">
             <div class="flex items-start justify-between gap-2 border-b border-amber-500/20 pb-1.5">
               <div class="min-w-0">
@@ -673,8 +952,10 @@
             </div>
 
             <div class="flex items-center justify-between text-[11px] bg-black/30 rounded px-2 py-1 border border-stone-800/80">
-              <span>ND <b class="text-amber-300">${pc.armorTN}</b> <span class="text-stone-500">(Réd ${pc.reduction})</span></span>
-              <span>Init <b class="font-mono text-amber-200">${escapeHtml(pc.initFormula)}</b></span>
+              <span title="ND Assaut : ${Math.max(5, pc.armorTN - 10)} • ND Surpris : ${Math.max(5, pc.armorTN - 5)}">ND <b class="text-amber-300">${pc.armorTN}</b> <span class="text-stone-500">(Réd ${pc.reduction})</span></span>
+              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(pc.initFormula)}" data-roll-label="Initiative ${escapeHtml(pc.name)}" class="hover:underline cursor-pointer" title="Lancer l'initiative de ${escapeHtml(pc.name)}">
+                Init <b class="font-mono text-amber-200">${escapeHtml(pc.initFormula)} 🎲</b>
+              </button>
             </div>
 
             <div class="flex items-center justify-between text-[10px] bg-purple-950/20 border border-purple-800/30 rounded px-2 py-1">
@@ -693,6 +974,7 @@
               <div class="flex items-center justify-between gap-1">
                 <div class="flex items-center gap-1">
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="-5" class="px-1.5 py-0.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-[10px] text-emerald-300 cursor-pointer">-5</button>
+                  <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="-1" class="px-1.5 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[10px] text-emerald-200 cursor-pointer">-1</button>
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="1" class="px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+1</button>
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="5" class="px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+5</button>
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="10" class="px-1.5 py-0.5 rounded bg-red-950/80 hover:bg-red-800 border border-red-600/60 text-[10px] font-bold text-red-200 cursor-pointer">+10</button>
@@ -703,11 +985,12 @@
 
             <details class="group text-[10px] border border-stone-800/80 rounded bg-black/25">
               <summary class="px-2 py-1 cursor-pointer font-imperial text-amber-300/90 hover:text-amber-200 select-none flex items-center justify-between">
-                <span>Rappels (Compétences, Avantages/Désav.)</span>
+                <span>Rappels (Compétences, Armes, Avantages)</span>
                 <span class="text-stone-500 group-open:rotate-180 transition-transform">▾</span>
               </summary>
               <div class="p-2 pt-1 space-y-1 border-t border-stone-800/60">
                 ${topSkills ? `<div class="flex flex-wrap gap-1">${topSkills}</div>` : ''}
+                ${pc.weapons.length > 0 ? `<div class="text-amber-200"><b>Armes :</b> ${pc.weapons.map((w) => `${escapeHtml(w.name)} (${escapeHtml(w.damage || '—')})`).join(', ')}</div>` : ''}
                 ${pc.advantages ? `<div class="text-emerald-300/90"><b>+</b> ${escapeHtml(pc.advantages)}</div>` : ''}
                 ${pc.disadvantages ? `<div class="text-rose-300/90"><b>-</b> ${escapeHtml(pc.disadvantages)}</div>` : ''}
                 ${pc.spells.length > 0 ? `<div class="text-sky-300/90"><b>Sorts :</b> ${escapeHtml(pc.spells.join(', '))}</div>` : ''}
@@ -739,7 +1022,7 @@
     box.innerHTML = state.pcs.map((pc) => {
       const checked = pc.includedInSkirmish !== false;
       return `
-        <div class="flex items-center justify-between gap-2 p-2.5 rounded-lg border text-xs ${checked ? 'bg-amber-950/20 border-amber-500/40' : 'bg-black/30 border-stone-800 opacity-60'}">
+        <div class="flex items-center justify-between gap-2 p-2 rounded-lg border text-xs ${checked ? 'bg-amber-950/20 border-amber-500/40' : 'bg-black/30 border-stone-800 opacity-60'}">
           <label class="flex items-center gap-2 min-w-0 cursor-pointer">
             <input type="checkbox" data-action="pc-skirmish-toggle" data-pc-id="${escapeHtml(pc.id)}" ${checked ? 'checked' : ''} class="rounded border-stone-600 bg-stone-900 text-amber-500" />
             <div class="min-w-0">
@@ -752,9 +1035,9 @@
             data-action="pc-init-input"
             data-pc-id="${escapeHtml(pc.id)}"
             value="${pc.lastInit != null ? pc.lastInit : ''}"
-            placeholder="Init PJ"
+            placeholder="Init"
             title="Score d'initiative obtenu par le joueur"
-            class="w-16 text-center font-mono font-bold rounded bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 text-xs focus:outline-none"
+            class="w-14 text-center font-mono font-bold rounded bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 text-xs focus:outline-none"
           />
         </div>
       `;
@@ -802,10 +1085,9 @@
       const earth = linkedPc ? linkedPc.rings.earth : c.earth;
       const penaltyDelta = linkedPc ? linkedPc.woundPenaltyDelta : 0;
       const wState = computeL5RWoundState(wounds, earth, { woundPenaltyDelta: penaltyDelta });
-
-      const stanceInfo = STANCES[c.stance] || STANCES.attaque;
-      const effectiveTN = Math.max(5, (c.armorTN || 15) + stanceInfo.tnDelta);
+      const tnInfo = computeEffectiveCombatantTN(c, linkedPc);
       const isPC = c.type === 'pc';
+      const woundPenalty = wState.penalty || 0;
 
       const stanceOptions = Object.entries(STANCES).map(([key, st]) =>
         `<option value="${key}" ${c.stance === key ? 'selected' : ''}>${escapeHtml(st.label)}</option>`
@@ -818,13 +1100,13 @@
 
       return `
         <tr class="border-b border-stone-800/80 transition ${isActive ? 'bg-amber-950/25' : 'hover:bg-black/30'}">
-          <td class="px-2.5 py-2.5 text-center">
+          <td class="px-2 py-2 text-center">
             <span class="inline-flex w-7 h-7 rounded-full items-center justify-center font-imperial font-bold text-xs ${isActive ? 'bg-amber-500 text-black' : 'bg-stone-900 border border-stone-700 text-stone-400'}">#${idx + 1}</span>
           </td>
-          <td class="px-2 py-2.5">
+          <td class="px-2 py-2">
             <input type="number" data-action="set-init" data-combat-id="${escapeHtml(c.id)}" value="${c.initiative}" class="w-14 text-center font-mono font-bold text-xs rounded bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 focus:outline-none" />
           </td>
-          <td class="px-2.5 py-2.5">
+          <td class="px-2 py-2">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPC ? 'bg-sky-950/70 text-sky-300 border-sky-700/50' : 'bg-red-950/70 text-red-300 border-red-700/50'}">${isPC ? 'PJ' : 'PNJ'}</span>
               <span class="font-imperial font-bold text-sm text-stone-100">${escapeHtml(c.name)}</span>
@@ -832,28 +1114,36 @@
             </div>
             ${c.notes ? `<div class="text-[10px] text-stone-400 italic mt-0.5">${escapeHtml(c.notes)}</div>` : ''}
           </td>
-          <td class="px-2.5 py-2.5">
-            <div class="flex items-center gap-2">
+          <td class="px-2 py-2">
+            <div class="flex items-center gap-1.5">
               <select data-action="set-stance" data-combat-id="${escapeHtml(c.id)}" class="rounded bg-[#0d0b0b] border border-stone-700 px-1.5 py-1 text-[11px] text-amber-200 focus:outline-none">
                 ${stanceOptions}
               </select>
-              <span class="text-xs font-mono font-bold text-amber-300 whitespace-nowrap" title="ND Effectif (Base ${c.armorTN}, Réd. ${c.reduction})">ND ${effectiveTN} <span class="text-[10px] text-stone-500 font-normal">(R${c.reduction})</span></span>
+              <span class="text-xs font-mono font-bold text-amber-300 whitespace-nowrap" title="${escapeHtml(tnInfo.note || `ND Base ${c.armorTN}, Réd. ${c.reduction}`)}">ND ${tnInfo.effectiveTN} <span class="text-[10px] text-stone-500 font-normal">(R${c.reduction})</span></span>
             </div>
           </td>
-          <td class="px-2.5 py-2.5 font-mono text-xs whitespace-nowrap">
-            <div class="text-stone-200">Toucher : <b class="text-amber-300">${escapeHtml(c.attack || '—')}</b></div>
-            <div class="text-stone-300">Dégâts : <b class="text-rose-300">${escapeHtml(c.damage || '—')}</b></div>
+          <td class="px-2 py-2 font-mono text-xs whitespace-nowrap space-y-1">
+            <div>
+              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(c.attack || '5g2')}" data-penalty="${woundPenalty}" data-roll-label="Toucher ${escapeHtml(c.name)}" class="px-1.5 py-0.5 rounded bg-black/50 hover:bg-amber-950/60 border border-stone-700 text-stone-200 cursor-pointer transition" title="Cliquer pour lancer le jet de toucher (malus blessures ${woundPenalty ? '+' + woundPenalty : '0'} appliqué au score)">
+                ⚔️ <b class="text-amber-300">${escapeHtml(c.attack || '—')}</b> 🎲
+              </button>
+            </div>
+            <div>
+              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(c.damage || '4g2')}" data-penalty="0" data-roll-label="Dégâts ${escapeHtml(c.name)}" class="px-1.5 py-0.5 rounded bg-black/50 hover:bg-red-950/60 border border-stone-700 text-stone-300 cursor-pointer transition" title="Cliquer pour lancer le jet de dégâts">
+                🩸 <b class="text-rose-300">${escapeHtml(c.damage || '—')}</b> 🎲
+              </button>
+            </div>
           </td>
-          <td class="px-2.5 py-2.5 min-w-[175px]">
+          <td class="px-2 py-2 min-w-[165px]">
             <div class="flex items-center justify-between gap-2 text-[11px] mb-1">
-              <span class="px-2 py-0.5 rounded border font-bold ${woundBadgeClass(wState.color)}">${escapeHtml(formatPenaltyText(wState))}</span>
+              <span class="px-1.5 py-0.5 rounded border font-bold ${woundBadgeClass(wState.color)}">${escapeHtml(formatPenaltyText(wState))}</span>
               <span class="font-mono text-stone-300">${wState.wounds}/${wState.maxWounds}</span>
             </div>
             <div class="w-full h-1.5 rounded-full bg-stone-900 overflow-hidden">
               <div class="h-full transition-all duration-200 ${woundBarColor(wState.color)}" style="width: ${wState.percent}%"></div>
             </div>
           </td>
-          <td class="px-2.5 py-2.5 whitespace-nowrap">
+          <td class="px-2 py-2 whitespace-nowrap">
             <div class="flex items-center gap-1">
               <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="-5" class="px-1.5 py-1 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-[10px] text-emerald-300 cursor-pointer">-5</button>
               <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="1" class="px-1.5 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+1</button>
@@ -862,12 +1152,62 @@
               <button type="button" data-action="remove-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1.5 py-1 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 cursor-pointer" title="Retirer">✕</button>
             </div>
           </td>
-          <td class="px-2.5 py-2.5">
-            <div class="flex flex-wrap gap-1 max-w-[140px]">${statusChips}</div>
+          <td class="px-2 py-2">
+            <div class="flex flex-wrap gap-1 max-w-[175px]">${statusChips}</div>
           </td>
         </tr>
       `;
     }).join('');
+  }
+
+  function renderRulesPanel() {
+    const catsEl = document.getElementById('gm-rules-categories');
+    const gridEl = document.getElementById('gm-rules-grid');
+    const countEl = document.getElementById('gm-rules-count');
+    const searchEl = document.getElementById('gm-rules-search');
+    if (searchEl && document.activeElement !== searchEl && searchEl.value !== state.rulesQuery) {
+      searchEl.value = state.rulesQuery;
+    }
+
+    const categories = Array.isArray(globalScope.GM_RULES_CATEGORIES) ? globalScope.GM_RULES_CATEGORIES : [];
+    const cards = Array.isArray(globalScope.GM_RULES_CARDS) ? globalScope.GM_RULES_CARDS : [];
+
+    if (catsEl) {
+      catsEl.innerHTML = categories.map((cat) => {
+        const active = cat.id === state.rulesCategory;
+        return `<button type="button" data-action="set-rule-cat" data-cat-id="${escapeHtml(cat.id)}" class="px-2.5 py-1 rounded-lg border text-[11px] font-imperial cursor-pointer transition ${active ? 'bg-amber-600 border-amber-400 text-black font-bold' : 'bg-black/40 border-stone-800 text-stone-300 hover:border-amber-500/40'}">${escapeHtml(cat.icon)} ${escapeHtml(cat.label)}</button>`;
+      }).join('');
+    }
+
+    const filtered = filterGmRulesCards(cards, state.rulesCategory, state.rulesQuery);
+    if (countEl) countEl.textContent = `${filtered.length} / ${cards.length} fiches`;
+
+    if (!gridEl) return;
+    if (filtered.length === 0) {
+      gridEl.innerHTML = '<div class="col-span-full p-6 text-center text-xs text-stone-400 border border-dashed border-stone-800 rounded-xl">Aucune règle ne correspond à cette recherche.</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    filtered.forEach((card) => {
+      const article = document.createElement('article');
+      article.className = 'p-3.5 rounded-xl bg-black/40 border border-stone-800 hover:border-amber-500/35 space-y-2 transition flex flex-col justify-between';
+      const itemsHtml = (card.items || []).map((item) =>
+        `<li class="leading-relaxed"><b class="text-amber-200">${escapeHtml(item.label)} :</b> <span class="text-stone-300">${escapeHtml(item.text)}</span></li>`
+      ).join('');
+      article.innerHTML = `
+        <div class="space-y-2">
+          <div class="flex items-start justify-between gap-2 border-b border-stone-800 pb-1.5">
+            <h4 class="font-imperial font-bold text-xs text-amber-300">${escapeHtml(card.title)}</h4>
+            <span class="px-1.5 py-0.5 rounded bg-amber-950/60 border border-amber-500/30 text-[9px] font-bold uppercase text-amber-200 shrink-0">${escapeHtml(card.badge)}</span>
+          </div>
+          <p class="text-[11px] text-stone-400 italic">${escapeHtml(card.summary)}</p>
+          <ul class="space-y-1 text-[11px]">${itemsHtml}</ul>
+        </div>
+      `;
+      frag.appendChild(article);
+    });
+    gridEl.replaceChildren(frag);
   }
 
   function renderDuel() {
@@ -895,8 +1235,9 @@
     setVal('duel-b-void', d.bVoid);
     setVal('duel-b-agi', d.bAgi);
     setVal('duel-b-tn', d.bTN);
+    setVal('duel-focus-score-a', d.scoreA ?? '');
+    setVal('duel-focus-score-b', d.scoreB ?? '');
 
-    // Affichage des formules de jets à effectuer pour les deux duellistes
     const aEval = document.getElementById('duel-a-eval-f');
     const aFocusF = document.getElementById('duel-a-focus-f');
     const aStrike = document.getElementById('duel-a-strike-f');
@@ -920,56 +1261,117 @@
     const bTnEffEl = document.getElementById('duel-b-tn-eff');
     if (aTnEffEl) aTnEffEl.textContent = String((Number(d.aTN) || 15) + (Number(d.aFocus) || 0) * 5);
     if (bTnEffEl) bTnEffEl.textContent = String((Number(d.bTN) || 15) + (Number(d.bFocus) || 0) * 5);
+
+    const verdictEl = document.getElementById('duel-focus-verdict');
+    if (verdictEl) {
+      const verdict = computeIaijutsuFocusVerdict(d.scoreA, d.scoreB, d.aName, d.bName);
+      verdictEl.textContent = verdict.text;
+    }
   }
 
   function renderHonorPanel() {
     const container = document.getElementById('gm-honor-list');
-    if (!container) return;
+    if (container) {
+      if (state.pcs.length === 0) {
+        container.innerHTML = '<div class="text-xs text-stone-400 italic p-4 border border-dashed border-stone-800 rounded-xl text-center">Importez vos PJs pour ajuster directement leur Honneur, Gloire, Statut et Souillure.</div>';
+      } else {
+        const renderMeter = (pc, field, label, colorClass) => `
+          <div class="p-2.5 rounded-lg bg-black/35 border border-stone-800 space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-stone-400">${label}</span>
+              <b class="font-mono text-sm ${colorClass}">${(pc[field] || 0).toFixed(1)}</b>
+            </div>
+            <div class="flex items-center gap-1 justify-end">
+              <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="-0.5" class="px-1.5 py-0.5 rounded bg-red-950/60 hover:bg-red-900 border border-red-700/40 text-[10px] text-red-200 cursor-pointer">-0.5</button>
+              <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="-0.1" class="px-1.5 py-0.5 rounded bg-red-950/60 hover:bg-red-900 border border-red-700/40 text-[10px] text-red-200 cursor-pointer">-0.1</button>
+              <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="0.1" class="px-1.5 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[10px] text-emerald-200 cursor-pointer">+0.1</button>
+              <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="0.5" class="px-1.5 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[10px] text-emerald-200 cursor-pointer">+0.5</button>
+            </div>
+          </div>
+        `;
 
-    if (state.pcs.length === 0) {
-      container.innerHTML = '<div class="text-xs text-stone-400 italic p-4 border border-dashed border-stone-800 rounded-xl text-center">Importez vos PJs pour ajuster directement leur Honneur, Gloire, Statut et Souillure.</div>';
-      return;
+        container.innerHTML = state.pcs.map((pc) => `
+          <div class="p-3.5 rounded-xl bg-black/30 border border-amber-500/20 space-y-2.5">
+            <div class="flex items-center justify-between border-b border-stone-800 pb-1.5">
+              <span class="font-imperial font-bold text-sm text-amber-300">${escapeHtml(pc.name)}</span>
+              <span class="text-[11px] text-stone-400">${escapeHtml(pc.clan.toUpperCase())} • Rang ${pc.insightRank}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+              ${renderMeter(pc, 'honor', 'Honneur', 'text-amber-300')}
+              ${renderMeter(pc, 'glory', 'Gloire', 'text-sky-300')}
+              ${renderMeter(pc, 'status', 'Statut', 'text-purple-300')}
+              ${renderMeter(pc, 'taint', 'Souillure', 'text-rose-400')}
+            </div>
+          </div>
+        `).join('');
+      }
     }
 
-    const renderMeter = (pc, field, label, colorClass) => `
-      <div class="p-2.5 rounded-lg bg-black/35 border border-stone-800 space-y-1.5">
-        <div class="flex items-center justify-between text-xs">
-          <span class="text-stone-400">${label}</span>
-          <b class="font-mono text-sm ${colorClass}">${(pc[field] || 0).toFixed(1)}</b>
-        </div>
-        <div class="flex items-center gap-1 justify-end">
-          <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="-0.5" class="px-1.5 py-0.5 rounded bg-red-950/60 hover:bg-red-900 border border-red-700/40 text-[10px] text-red-200 cursor-pointer">-0.5</button>
-          <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="-0.1" class="px-1.5 py-0.5 rounded bg-red-950/60 hover:bg-red-900 border border-red-700/40 text-[10px] text-red-200 cursor-pointer">-0.1</button>
-          <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="0.1" class="px-1.5 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[10px] text-emerald-200 cursor-pointer">+0.1</button>
-          <button type="button" data-action="pc-meter" data-pc-id="${escapeHtml(pc.id)}" data-field="${field}" data-delta="0.5" class="px-1.5 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[10px] text-emerald-200 cursor-pointer">+0.5</button>
-        </div>
-      </div>
-    `;
+    const tableBody = document.getElementById('gm-honor-table-body');
+    const honorRows = Array.isArray(globalScope.GM_HONOR_TABLE) ? globalScope.GM_HONOR_TABLE : [];
+    if (tableBody && honorRows.length > 0 && tableBody.childElementCount === 0) {
+      tableBody.innerHTML = honorRows.map((row) => {
+        const cls = row.positive ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+        return `
+          <tr class="${row.positive ? 'hover:bg-amber-950/15' : 'bg-red-950/10 hover:bg-red-950/20'}">
+            <td class="p-2 font-semibold ${row.positive ? 'text-amber-200' : 'text-red-300'}">${escapeHtml(row.act)}</td>
+            <td class="p-2 text-center font-mono ${cls}">${escapeHtml(row.r0)}</td>
+            <td class="p-2 text-center font-mono ${cls}">${escapeHtml(row.r12)}</td>
+            <td class="p-2 text-center font-mono ${cls}">${escapeHtml(row.r34)}</td>
+            <td class="p-2 text-center font-mono ${cls}">${escapeHtml(row.r56)}</td>
+            <td class="p-2 text-center font-mono ${cls}">${escapeHtml(row.r78)}</td>
+            <td class="p-2 text-center font-mono ${cls}">${escapeHtml(row.r910)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
 
-    container.innerHTML = state.pcs.map((pc) => `
-      <div class="p-3.5 rounded-xl bg-black/30 border border-amber-500/20 space-y-2.5">
-        <div class="flex items-center justify-between border-b border-stone-800 pb-1.5">
-          <span class="font-imperial font-bold text-sm text-amber-300">${escapeHtml(pc.name)}</span>
-          <span class="text-[11px] text-stone-400">${escapeHtml(pc.clan.toUpperCase())} • Rang ${pc.insightRank}</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          ${renderMeter(pc, 'honor', 'Honneur', 'text-amber-300')}
-          ${renderMeter(pc, 'glory', 'Gloire', 'text-sky-300')}
-          ${renderMeter(pc, 'status', 'Statut', 'text-purple-300')}
-          ${renderMeter(pc, 'taint', 'Souillure', 'text-rose-400')}
-        </div>
-      </div>
-    `).join('');
+  function updateMagicAndFearCalculators() {
+    const ring = document.getElementById('magic-calc-ring')?.value || 3;
+    const school = document.getElementById('magic-calc-school')?.value || 2;
+    const mastery = document.getElementById('magic-calc-mastery')?.value || 2;
+    const raises = document.getElementById('magic-calc-raises')?.value || 0;
+    const affinity = document.getElementById('magic-calc-affinity')?.value || 'normal';
+    const mRes = computeMagicCastParams(ring, school, mastery, raises, affinity);
+    const mOut = document.getElementById('magic-calc-result');
+    if (mOut) mOut.textContent = `Jet ${mRes.formula} • ND ${mRes.tn}`;
+
+    const fearLvl = Math.max(1, parseInt(document.getElementById('fear-calc-level')?.value, 10) || 1);
+    const fearWill = Math.max(1, parseInt(document.getElementById('fear-calc-will')?.value, 10) || 2);
+    const fearHonor = Math.max(0, parseInt(document.getElementById('fear-calc-honor')?.value, 10) || 0);
+    const fearTn = 5 + fearLvl * 5;
+    const fearOut = document.getElementById('fear-calc-result');
+    if (fearOut) {
+      fearOut.textContent = `Jet ${fearWill}g${fearWill}${fearHonor ? '+' + fearHonor : ''} vs ND ${fearTn} • Échec : -${fearLvl}k0 pendant la scène`;
+    }
+    return { magic: mRes, fear: { formula: `${fearWill}g${fearWill}${fearHonor ? '+' + fearHonor : ''}`, tn: fearTn, level: fearLvl } };
+  }
+
+  function updateQuickTnCalculator() {
+    const base = parseInt(document.getElementById('gm-tn-base')?.value, 10) || 15;
+    const raises = Math.max(0, parseInt(document.getElementById('gm-tn-raises')?.value, 10) || 0);
+    let mods = 0;
+    document.querySelectorAll('.gm-tn-mod:checked').forEach((cb) => {
+      mods += parseInt(cb.value, 10) || 0;
+    });
+    const total = Math.max(5, base + raises * 5 + mods);
+    const out = document.getElementById('gm-tn-total');
+    if (out) out.textContent = `ND ${total}`;
   }
 
   function renderAll() {
     renderTabs();
     renderPcs();
     renderCombat();
+    renderRulesPanel();
     renderDuel();
     renderHonorPanel();
+    renderDicePanel();
+    updateMagicAndFearCalculators();
+    updateQuickTnCalculator();
     const scratchEl = document.getElementById('gm-scratchpad');
-    if (scratchEl && scratchEl.value !== state.gmScratchpad) {
+    if (scratchEl && document.activeElement !== scratchEl && scratchEl.value !== state.gmScratchpad) {
       scratchEl.value = state.gmScratchpad;
     }
   }
@@ -1092,6 +1494,17 @@
     renderAll();
   }
 
+  function openQuickRulesSearch() {
+    state.activeTab = 'rules';
+    saveState();
+    renderTabs();
+    const input = document.getElementById('gm-rules-search');
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }
+
   function initDom() {
     if (typeof document === 'undefined') return;
     loadState();
@@ -1167,7 +1580,6 @@
       });
     }
 
-    // Import JSON dédié au Duel Iaijutsu
     document.getElementById('duel-a-json')?.addEventListener('change', (e) => {
       handleJsonFiles(e.target.files, (pc) => applyPcToDuelA(pc));
       e.target.value = '';
@@ -1182,8 +1594,37 @@
       }
     });
 
-    // Générateur d'Escarmouche
+    document.getElementById('gm-toggle-pcs-compact')?.addEventListener('click', () => {
+      state.compactPcs = !state.compactPcs;
+      saveState();
+      renderPcs();
+    });
+
+    document.getElementById('gm-quick-rules-btn')?.addEventListener('click', openQuickRulesSearch);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = (document.activeElement && document.activeElement.tagName || '').toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea' && tag !== 'select') {
+          e.preventDefault();
+          openQuickRulesSearch();
+        }
+      }
+    });
+
+    // Recherche dans le Paravent
+    let rulesDebounce = null;
+    document.getElementById('gm-rules-search')?.addEventListener('input', (e) => {
+      state.rulesQuery = e.target.value;
+      clearTimeout(rulesDebounce);
+      rulesDebounce = setTimeout(() => {
+        saveState();
+        renderRulesPanel();
+      }, 80);
+    });
+
+    // Générateur d'Escarmouche & Renforts
     document.getElementById('gm-generate-skirmish')?.addEventListener('click', generateSkirmishFromUi);
+    document.getElementById('gm-add-to-skirmish')?.addEventListener('click', addReinforcementsFromUi);
 
     // Contrôles de combat
     document.getElementById('gm-next-turn')?.addEventListener('click', () => {
@@ -1221,7 +1662,7 @@
       });
     });
 
-    // Sélecteur PJ pour Duel Iaijutsu
+    // Duel Iaijutsu
     document.getElementById('duel-a-pc')?.addEventListener('change', (e) => {
       const pc = findPc(e.target.value);
       state.duel.aPcId = e.target.value;
@@ -1232,22 +1673,92 @@
 
     const duelFieldMap = {
       'duel-a-name': 'aName', 'duel-a-iai': 'aIai', 'duel-a-per': 'aPer', 'duel-a-void': 'aVoid', 'duel-a-agi': 'aAgi', 'duel-a-tn': 'aTN',
-      'duel-b-name': 'bName', 'duel-b-iai': 'bIai', 'duel-b-per': 'bPer', 'duel-b-void': 'bVoid', 'duel-b-agi': 'bAgi', 'duel-b-tn': 'bTN'
+      'duel-b-name': 'bName', 'duel-b-iai': 'bIai', 'duel-b-per': 'bPer', 'duel-b-void': 'bVoid', 'duel-b-agi': 'bAgi', 'duel-b-tn': 'bTN',
+      'duel-focus-score-a': 'scoreA', 'duel-focus-score-b': 'scoreB'
     };
     Object.entries(duelFieldMap).forEach(([elId, key]) => {
       const el = document.getElementById(elId);
       if (el) {
         el.addEventListener('input', () => {
-          state.duel[key] = el.type === 'number' ? (Number(el.value) || 0) : el.value;
+          state.duel[key] = el.type === 'number' ? (el.value === '' ? '' : Number(el.value)) : el.value;
           saveState();
           renderDuel();
         });
       }
     });
 
+    document.getElementById('duel-auto-focus-btn')?.addEventListener('click', () => {
+      const fA = `${(Number(state.duel.aVoid) || 2) + (Number(state.duel.aIai) || 1)}g${Number(state.duel.aVoid) || 2}`;
+      const fB = `${(Number(state.duel.bVoid) || 2) + (Number(state.duel.bIai) || 1)}g${Number(state.duel.bVoid) || 2}`;
+      const rA = executeGmDiceRoll(fA, `Focus ${state.duel.aName}`, 0);
+      const rB = executeGmDiceRoll(fB, `Focus ${state.duel.bName}`, 0);
+      if (rA) state.duel.scoreA = rA.total;
+      if (rB) state.duel.scoreB = rB.total;
+      saveState();
+      renderDuel();
+    });
+
+    // Lanceur de dés dock
+    document.getElementById('gm-dice-roll-btn')?.addEventListener('click', () => executeGmDiceRoll());
+    document.getElementById('gm-dice-formula')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        executeGmDiceRoll();
+      }
+    });
+    document.querySelectorAll('[data-dice-preset]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        executeGmDiceRoll(btn.getAttribute('data-dice-preset'), `Jet rapide ${btn.getAttribute('data-dice-preset')}`);
+      });
+    });
+
+    // Calculateurs Magie, Peur & ND
+    ['magic-calc-ring', 'magic-calc-school', 'magic-calc-mastery', 'magic-calc-raises', 'magic-calc-affinity',
+     'fear-calc-level', 'fear-calc-will', 'fear-calc-honor'].forEach((id) => {
+      document.getElementById(id)?.addEventListener('input', updateMagicAndFearCalculators);
+      document.getElementById(id)?.addEventListener('change', updateMagicAndFearCalculators);
+    });
+    document.getElementById('magic-calc-roll')?.addEventListener('click', () => {
+      const { magic } = updateMagicAndFearCalculators();
+      executeGmDiceRoll(magic.formula, `Incantation (ND ${magic.tn})`, 0);
+    });
+    document.getElementById('fear-calc-roll')?.addEventListener('click', () => {
+      const { fear } = updateMagicAndFearCalculators();
+      executeGmDiceRoll(fear.formula, `Test de Peur ${fear.level} (ND ${fear.tn})`, 0);
+    });
+
+    ['gm-tn-base', 'gm-tn-raises'].forEach((id) => {
+      document.getElementById(id)?.addEventListener('input', updateQuickTnCalculator);
+      document.getElementById(id)?.addEventListener('change', updateQuickTnCalculator);
+    });
+    document.querySelectorAll('.gm-tn-mod').forEach((cb) => cb.addEventListener('change', updateQuickTnCalculator));
+
+    // Générateur PNJ express + Notes MJ
+    document.getElementById('gm-npc-gen-btn')?.addEventListener('click', () => {
+      const npc = generateRandomNpcSummary(globalScope.GM_NPC_NAME_PARTS);
+      const out = document.getElementById('gm-npc-gen-output');
+      if (out) {
+        out.classList.remove('hidden');
+        out.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <b class="text-amber-300 font-imperial">${escapeHtml(npc.name)}</b>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-200 border border-amber-500/30">${escapeHtml(npc.clan)}</span>
+          </div>
+          <div class="text-stone-300">${escapeHtml(npc.demeanor)}</div>
+          <div class="text-stone-400 italic">Secret : ${escapeHtml(npc.secret)}</div>
+        `;
+      }
+    });
+
     document.getElementById('gm-scratchpad')?.addEventListener('input', (e) => {
       state.gmScratchpad = e.target.value;
       saveState();
+    });
+    document.getElementById('gm-copy-notes')?.addEventListener('click', () => {
+      const text = state.gmScratchpad || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
     });
 
     // Délégation des actions dynamiques
@@ -1307,8 +1818,44 @@
       } else if (action === 'duel-reset') {
         state.duel.aFocus = 0;
         state.duel.bFocus = 0;
+        state.duel.scoreA = '';
+        state.duel.scoreB = '';
         saveState();
         renderDuel();
+      } else if (action === 'duel-roll-phase') {
+        const side = btn.getAttribute('data-side');
+        const phase = btn.getAttribute('data-phase');
+        const d = state.duel;
+        const name = side === 'a' ? d.aName : d.bName;
+        const iai = Number(side === 'a' ? d.aIai : d.bIai) || 1;
+        const per = Number(side === 'a' ? d.aPer : d.bPer) || 2;
+        const v = Number(side === 'a' ? d.aVoid : d.bVoid) || 2;
+        const agi = Number(side === 'a' ? d.aAgi : d.bAgi) || 2;
+        let f = `${per + iai}g${per}`;
+        let label = `Évaluation ${name}`;
+        if (phase === 'focus') {
+          f = `${v + iai}g${v}`;
+          label = `Concentration ${name}`;
+        } else if (phase === 'strike') {
+          f = `${agi + iai}g${agi}`;
+          label = `Frappe Iaijutsu ${name}`;
+        }
+        const rolled = executeGmDiceRoll(f, label, 0);
+        if (rolled && phase === 'focus') {
+          if (side === 'a') state.duel.scoreA = rolled.total;
+          if (side === 'b') state.duel.scoreB = rolled.total;
+          saveState();
+          renderDuel();
+        }
+      } else if (action === 'roll-formula') {
+        const f = btn.getAttribute('data-formula');
+        const label = btn.getAttribute('data-roll-label') || `Jet ${f}`;
+        const pen = btn.getAttribute('data-penalty');
+        executeGmDiceRoll(f, label, pen != null ? parseInt(pen, 10) || 0 : null);
+      } else if (action === 'set-rule-cat') {
+        state.rulesCategory = btn.getAttribute('data-cat-id') || 'all';
+        saveState();
+        renderRulesPanel();
       }
     });
 
@@ -1377,6 +1924,11 @@
 
   if (typeof globalScope !== 'undefined') {
     globalScope.computeL5RWoundState = computeL5RWoundState;
+    globalScope.computeEffectiveCombatantTN = computeEffectiveCombatantTN;
+    globalScope.computeIaijutsuFocusVerdict = computeIaijutsuFocusVerdict;
+    globalScope.computeMagicCastParams = computeMagicCastParams;
+    globalScope.filterGmRulesCards = filterGmRulesCards;
+    globalScope.generateRandomNpcSummary = generateRandomNpcSummary;
     globalScope.normalizeImportedCharacter = normalizeImportedCharacter;
     globalScope.sortCombatantsByInit = sortCombatantsByInit;
     globalScope.formatRollResult = formatRollResult;
@@ -1394,6 +1946,11 @@
       applyTenDiceRule,
       simulateRollAndKeep,
       computeL5RWoundState,
+      computeEffectiveCombatantTN,
+      computeIaijutsuFocusVerdict,
+      computeMagicCastParams,
+      filterGmRulesCards,
+      generateRandomNpcSummary,
       normalizeImportedCharacter,
       sortCombatantsByInit,
       formatRollResult,

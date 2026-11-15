@@ -14,6 +14,7 @@
   const gr = isNode ? require("../js/grimoire.js") : window;
   const ec = isNode ? require("../js/export-carnet.js") : window;
   const gm = isNode ? require("../js/gm-screen.js") : window;
+  const gmRules = isNode ? require("../data/gm-rules-data.js") : window;
 
   const suites = [];
   let currentSuite = null;
@@ -436,6 +437,29 @@
       assertEqual(list[1].initiative, 10);
       assertEqual(list[1].attack, "5g2");
       assertEqual(list[1].damage, "4g2");
+    });
+
+    it("computeEffectiveCombatantTN gère Postures, Défense PJ, Étourdi, Aveuglé et À terre", function () {
+      const pcRef = { armorBonus: 10, defenseBonus: 6 };
+      assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "assaut", statuses: [] }, pcRef).effectiveTN, 20);
+      assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "defense", statuses: [] }, pcRef).effectiveTN, 36);
+      assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "defense", statuses: ["stunned"] }, pcRef).effectiveTN, 15); // 5 + armorBonus 10
+      assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 25, stance: "attaque", statuses: ["prone", "blinded"] }, null).effectiveTN, 5);
+    });
+
+    it("computeIaijutsuFocusVerdict, computeMagicCastParams et filterGmRulesCards calculent les règles L5R 4e", function () {
+      const duelGap = gm.computeIaijutsuFocusVerdict(34, 21, "Haruka", "Rônin");
+      assertEqual(duelGap.winner, "a");
+      assertEqual(duelGap.freeRaises, 1); // floor((13 - 5)/5) = 1
+      assertEqual(gm.computeIaijutsuFocusVerdict(22, 20).simultaneous, true);
+
+      const spell = gm.computeMagicCastParams(3, 2, 2, 1, "affinity");
+      // ring=3, effectiveRank=3 => 6g3, mastery 2 (15) + 1 raise (+5) = ND 20
+      assertEqual(spell.formula, "6g3");
+      assertEqual(spell.tn, 20);
+
+      const res = gm.filterGmRulesCards(gmRules.GM_RULES_CARDS, "all", "étourdi");
+      assertTrue(res.length >= 1, "Le paravent doit retrouver la fiche contenant Étourdi");
     });
   });
 
