@@ -272,6 +272,11 @@
       const rank1Search = gr.filterSpellsList(sampleSpells, { selectedRank: "1", query: "Outremonde" });
       assertEqual(rank1Search.length, 1);
       assertEqual(rank1Search[0].name, "Frappe de Jade");
+
+      // Appels successifs sur les mêmes objets (cache WeakMap) avec des filtres distincts
+      const repeatSearch = gr.filterSpellsList(sampleSpells, { selectedRank: "3", query: "celeste" });
+      assertEqual(repeatSearch.length, 1);
+      assertEqual(repeatSearch[0].name, "Fureur d'Osano-Wo");
     });
   });
 

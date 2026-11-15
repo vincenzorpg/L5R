@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- FICHIER DE DONNÉES DES TATOUAGES & MOTEURS JS -->
-  <script src="data/tatouages-data.js"></script>
+  <script src="data/tatouages-data.js" defer></script>
   <script src="js/navbar.js" defer></script>
   <script src="js/tatouages.js" defer></script>
 </head>
@@ -89,7 +89,6 @@
             type="text"
             id="tattoo-search"
             placeholder="Rechercher par nom, kanji, effet, livre..."
-            oninput="applyFilter()"
             class="w-full pl-9 pr-3 py-2 rounded-lg bg-[#0d0b0b] border border-[#3a3028] text-amber-200 placeholder-stone-600 text-xs focus:outline-none focus:border-amber-500"
           >
         </div>
@@ -128,7 +127,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-10">
     <div>Légende des Cinq Anneaux (4e Édition) — Codex Interactif des Tatouages • Ordre Togashi & Traditions Rokuganies</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.7.0</span>
+      <span id="site-version-label">v1.7.1</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
