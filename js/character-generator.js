@@ -1835,7 +1835,7 @@ function renderSkills() {
 
     const isChoiceActive = sk.isChoice && sk.chosen;
     const masteriesHtml = getMasteriesHtml(sk.name, sk.rank);
-    const catMeta = catalogSkills.find(c => c.name === sk.name) || {};
+    const catMeta = resolveCatalogSkillMeta(sk.name, catalogSkills);
     const safeSkillName = (sk.name || "").replace(/'/g, "\\'");
     const traitLabel = catMeta.trait || sk.trait || "Agilité";
     const nextRank = (parseInt(sk.rank, 10) || 0) + 1;
@@ -3157,9 +3157,48 @@ function renderPrintRankPips(score, maxBoxes = 10, isCircle = false) {
   return html;
 }
 
+function resolveCatalogSkillMeta(skillName, catalog) {
+  const list = Array.isArray(catalog) ? catalog : ((typeof getSkills === 'function') ? getSkills() : []);
+  const norm = s => (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const stripParens = s => norm(s.replace(/\([^)]*\)/g, ' ')).replace(/\s+/g, ' ').trim();
+
+  const targetFull = norm(skillName);
+  const targetBase = stripParens(skillName);
+  if (!targetBase) return {};
+
+  // 1. Correspondance exacte puis sans précisions entre parenthèses (ex. "Calligraphie (Chiffre)" -> "Calligraphie", "Enquête" -> "Enquête (Investigation)")
+  let match = list.find(c => norm(c.name) === targetFull)
+    || list.find(c => stripParens(c.name) === targetBase);
+  if (match) return match;
+
+  // 2. Compétences à spécialité avec deux-points (ex. "Connaissance : Clan du Crabe", "Artisanat : Poésie")
+  const colonIdx = targetBase.indexOf(':');
+  if (colonIdx !== -1) {
+    const prefix = targetBase.slice(0, colonIdx).trim();
+    const suffix = targetBase.slice(colonIdx + 1).trim();
+    if (prefix === 'connaissance' || prefix === 'lore') {
+      match = list.find(c => {
+        const cBase = stripParens(c.name);
+        return cBase.startsWith('connaissance') && suffix && cBase.includes(suffix);
+      });
+      if (match) return match;
+      return { name: skillName, trait: 'Intelligence', type: 'Noble' };
+    }
+    match = list.find(c => stripParens(c.name) === prefix);
+    if (match) return match;
+  }
+
+  // 3. Repli par préfixe ou mot-clé entre parenthèses (ex. "Bataille" -> "Art de la Guerre (Bataille)")
+  return list.find(c => {
+    const cBase = stripParens(c.name);
+    const cFull = norm(c.name);
+    return (targetBase.length >= 4 && (cBase.startsWith(targetBase) || targetBase.startsWith(cBase) || cFull.includes(`(${targetBase})`)));
+  }) || {};
+}
+
 function resolvePrintSkillTrait(sk, traitsMap) {
   const catalog = (typeof getSkills === 'function') ? getSkills() : [];
-  const meta = catalog.find(c => c.name === sk.name) || {};
+  const meta = resolveCatalogSkillMeta(sk.name, catalog);
   const label = (meta.trait || sk.trait || 'Agilité').toString();
   const norm = label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   if (norm.includes('const')) return { label: 'Const.', val: traitsMap.sta };

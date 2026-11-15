@@ -86,9 +86,11 @@ function injectForgeTemplates() {
           </label>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <span class="hidden md:inline text-[10px] text-stone-400 italic">Dans la fenêtre PDF, activez « Graphiques d'arrière-plan »</span>
-          <button type="button" onclick="triggerSheetPrint()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">
-            🖨️ Imprimer / Enregistrer PDF
+          <button type="button" id="btn-download-pdf-sheet" onclick="downloadCharacterSheetPDF()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow flex items-center gap-1.5" title="Télécharger directement un fichier PDF identique à cet aperçu couleur">
+            <span>📥 Enregistrer PDF (fidèle)</span>
+          </button>
+          <button type="button" onclick="triggerSheetPrint()" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-200 border border-amber-500/40 font-bold font-imperial cursor-pointer" title="Ouvrir la boîte d'impression du navigateur">
+            🖨️ Imprimer
           </button>
           <button type="button" onclick="closeCharacterSheetPreview()" class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600 font-bold cursor-pointer">
             ✕ Fermer
@@ -381,8 +383,8 @@ function injectForgeTemplates() {
             </div>
             <div class="p-2 space-y-2">
               <div id="p-spell-slots-bar-print" class="hidden rounded border border-[#9c8c6d] bg-[#f0e9d6] p-1.5 space-y-1 text-[8px]"></div>
-              <div id="p-spells-katas-box" class="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-[8.5px]"></div>
-              <div id="p-tattoos-print-box" class="hidden grid grid-cols-1 md:grid-cols-2 gap-1.5 text-[8.5px]"></div>
+              <div id="p-spells-katas-box" class="grid grid-cols-2 gap-1.5 text-[8.5px]"></div>
+              <div id="p-tattoos-print-box" class="hidden grid grid-cols-2 gap-1.5 text-[8.5px]"></div>
             </div>
           </div>
         </section>
@@ -1647,6 +1649,115 @@ function triggerSheetPrint() {
   window.print();
 }
 window.triggerSheetPrint = triggerSheetPrint;
+
+async function downloadCharacterSheetPDF() {
+  syncAllPrintableSheetContent();
+  const btn = document.getElementById('btn-download-pdf-sheet');
+  const origHtml = btn ? btn.innerHTML : '';
+
+  if (typeof window.html2canvas !== 'function' || !window.jspdf?.jsPDF) {
+    if (typeof showForgeToast === 'function') {
+      showForgeToast("Module PDF hors-ligne : ouverture de l'impression navigateur (cochez « Graphiques d'arrière-plan »).", 'warn');
+    }
+    triggerSheetPrint();
+    return;
+  }
+
+  try {
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Génération PDF…</span>';
+    }
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
+    const pages = Array.from(document.querySelectorAll('#print-sheet .l5r-sheet-page'))
+      .filter(el => !el.classList.contains('hidden'));
+    if (pages.length === 0) throw new Error('Aucune page de fiche à exporter');
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+    const pageW = 210;
+    const pageH = 297;
+    const marginMm = 4;
+    const usableW = pageW - (marginMm * 2);
+    const usableH = pageH - (marginMm * 2);
+
+    const dossier = document.getElementById('official-print-dossier');
+    const prevScroll = dossier ? dossier.scrollTop : 0;
+
+    let pdfPageIndex = 0;
+    for (const pageEl of pages) {
+      const prevShadow = pageEl.style.boxShadow;
+      pageEl.style.boxShadow = 'none';
+      const canvas = await window.html2canvas(pageEl, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#f6f1e4',
+        logging: false,
+        windowWidth: 1200,
+        scrollX: 0,
+        scrollY: 0
+      });
+      pageEl.style.boxShadow = prevShadow;
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.96);
+      const naturalHAtUsableW = (canvas.height * usableW) / canvas.width;
+
+      if (pdfPageIndex > 0) pdf.addPage();
+      pdfPageIndex++;
+
+      if (naturalHAtUsableW <= usableH) {
+        pdf.addImage(imgData, 'JPEG', marginMm, marginMm, usableW, naturalHAtUsableW, undefined, 'FAST');
+      } else {
+        // Ajustement proportionnel pour garder la fiche sur une seule page A4 nette si raisonnable, sinon cadrage centré
+        const fitRatio = usableH / naturalHAtUsableW;
+        if (fitRatio >= 0.72) {
+          const scaledW = usableW * fitRatio;
+          const offsetX = (pageW - scaledW) / 2;
+          pdf.addImage(imgData, 'JPEG', offsetX, marginMm, scaledW, usableH, undefined, 'FAST');
+        } else {
+          // Découpage propre multi-pages pour les fiches extrêmement longues
+          let heightLeft = naturalHAtUsableW;
+          let yPos = marginMm;
+          pdf.addImage(imgData, 'JPEG', marginMm, yPos, usableW, naturalHAtUsableW, undefined, 'FAST');
+          heightLeft -= usableH;
+          while (heightLeft > 4) {
+            pdf.addPage();
+            pdfPageIndex++;
+            yPos = marginMm - (naturalHAtUsableW - heightLeft);
+            pdf.addImage(imgData, 'JPEG', marginMm, yPos, usableW, naturalHAtUsableW, undefined, 'FAST');
+            heightLeft -= usableH;
+          }
+        }
+      }
+    }
+
+    if (dossier) dossier.scrollTop = prevScroll;
+
+    const rawName = (document.getElementById('pc-name')?.value || 'Samourai').trim();
+    const safeName = rawName.replace(/[^a-zA-Z0-9À-ÿ _-]+/g, '').replace(/\s+/g, '_') || 'Samourai';
+    const fileName = `${safeName}_Fiche_L5R4e.pdf`;
+    pdf.save(fileName);
+
+    if (typeof showForgeToast === 'function') {
+      showForgeToast(`PDF enregistré à l'identique : ${fileName}`, 'success');
+    }
+  } catch (err) {
+    console.error('Erreur génération PDF :', err);
+    if (typeof showForgeToast === 'function') {
+      showForgeToast("Basculé vers l'impression navigateur suite à une erreur de capture.", 'warn');
+    }
+    window.print();
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origHtml || '<span>📥 Enregistrer PDF (fidèle)</span>';
+    }
+  }
+}
+window.downloadCharacterSheetPDF = downloadCharacterSheetPDF;
 
 function prepareAndPrintPDF() {
   openCharacterSheetPreview();
