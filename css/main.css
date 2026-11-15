@@ -984,21 +984,24 @@ select {
   background: rgba(232, 226, 211, 0.35) !important;
 }
 
-/* Impression A4 propre */
+/* Impression A4 propre — conserve la mise en page exacte 820px de l'aperçu */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 5mm 6mm;
+    margin: 5mm;
   }
   body {
     background: #ffffff !important;
+    background-image: none !important;
     color: #1f1a14 !important;
     overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   .no-print, header, aside, #dice-roller-drawer, #forge-toast-container {
     display: none !important;
   }
-  #official-print-dossier, #print-sheet {
+  #official-print-dossier {
     display: block !important;
     position: static !important;
     width: 100% !important;
@@ -1008,10 +1011,19 @@ select {
     background: transparent !important;
     color: #1f1a14 !important;
   }
+  #print-sheet {
+    display: block !important;
+    width: 820px !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    zoom: 0.88;
+  }
   .l5r-sheet-page {
     box-shadow: none !important;
+    border-radius: 0 !important;
     margin: 0 0 6mm 0 !important;
-    padding: 10px 12px !important;
+    padding: 12px 14px !important;
     break-after: page;
     page-break-after: always;
   }

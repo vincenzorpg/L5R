@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.10.1] — 2026-11-16
+
+### 🐛 Corrigé & Amélioré
+- **Export PDF Couleur Fidèle 1:1 & Correction de l'Impression A4 (`createcharacter.html`, `css/main.css`, `js/forge-ui.js`, `js/character-generator.js`)** :
+  - **Enregistrement PDF direct identique à l'aperçu (`📥 Enregistrer PDF (fidèle)`)** : capture haute résolution page par page (Page 1, Page 2, Page 3) via `html2canvas` + `jsPDF` pour télécharger directement `<Nom>_Fiche_L5R4e.pdf` en conservant **100 % du design Washi, des bandeaux vert-sumi/bordeaux, des anneaux colorés, des grilles et de la mise en page** sans dépendre des options de la boîte d'impression navigateur.
+  - **Correction majeure de `@media print`** : ajout de `no-print` sur `<main>` dans `createcharacter.html` (empêchant le formulaire sombre d'édition de s'imprimer avant la fiche officielle), suppression des bascules `md:grid-cols-2` dans `#print-sheet` au profit de `grid-cols-2` fixe, et cadrage `@media print` sur `#print-sheet` à `width: 820px` avec `zoom: 0.88` et `print-color-adjust: exact` pour une impression papier identique à l'aperçu écran.
+  - **Résolution normalisée des Traits de compétences (`resolveCatalogSkillMeta()`)** : correspondance normalisée ignorant les précisions entre parenthèses et les spécialités `Connaissance : ...` dans la Forge et sur la fiche PDF/Imprimable (ex. `Calligraphie (Chiffre)` et `Connaissance : Outremonde` → `Intell.`, `Enquête` → `Perc.` au lieu de `Agilité` par défaut).
+
+---
+
 ## [1.10.0] — 2026-11-16
 
 ### ✨ Ajouté & Amélioré
