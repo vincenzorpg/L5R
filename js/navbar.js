@@ -404,9 +404,31 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderNavbar);
-  } else {
+  // 3. Synchronisation centralisée de la version en pied de page (#site-version-footer)
+  function syncFooterVersion() {
+    const lbl = document.getElementById('site-version-label');
+    const lnk = document.getElementById('site-version-link');
+    if (!lbl && !lnk) return;
+
+    fetch(`${rootPrefix}version.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d || !d.version) return;
+        const v = d.version.indexOf('v') === 0 ? d.version : `v${d.version}`;
+        if (lbl) lbl.textContent = v;
+        if (lnk && d.releasesUrl) lnk.href = d.releasesUrl;
+      })
+      .catch(() => {});
+  }
+
+  function initGlobalUI() {
     renderNavbar();
+    syncFooterVersion();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGlobalUI);
+  } else {
+    initGlobalUI();
   }
 })();

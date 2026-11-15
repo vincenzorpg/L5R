@@ -50,7 +50,7 @@ Ce fichier définit les règles strictes et obligatoires à respecter pour toute
   - Pages principales à la racine (`index.html`, `createcharacter.html`, `campagne.html`, `campagne-ajouter.html`, `grimoire.html`, `tatouages.html`).
   - Sous-dossiers thématiques : `clans/`, `campagne/`, `aides/`, `assets/`.
   - Bases de données modulaires dans `data/` (`clans-data.js`, `competences-data.js`, `equipement-data.js`, `avantages-desavantages-data.js`, `katas-data.js`, `tatouages-data.js`, `sorts-data.js`, `sorts/`).
-  - Moteurs applicatifs dans `js/` (`navbar.js`, `character-generator.js`, `export-carnet.js`, `grimoire.js`).
+  - Moteurs applicatifs dans `js/` (`navbar.js`, `index-ui.js`, `character-generator.js`, `forge-ui.js`, `export-carnet.js`, `grimoire.js`, `tatouages.js`, `narrator.js`, `campagne-studio.js`).
 - Ne jamais casser les identifiants DOM, la sauvegarde locale (`localStorage` du Dojo), le partage par URL (base64), le bandeau de version en pied de page (`#site-version-footer`) ou l'impression A4 de la fiche de personnage.
 
 ## 5. Préservation de l'Export JSON « Carnet de Rokugan »

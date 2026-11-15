@@ -6,6 +6,31 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.2.0] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Nouveaux Modules JavaScript Dédiés (`js/`)** :
+  - `js/forge-ui.js` : centralisation de l'interface étendue de la Forge de personnage (gestion des Sorts & Kihos, Katas martiaux, Tatouages Togashi *Ise Zumi*, sélection multiple des compétences, plateau de dés *Roll & Keep* `XgY`, Dojo local et génération dynamique à la volée du questionnaire des **20 Questions de Rokugan** `#q20-1`..`#q20-20` ainsi que du **Dossier d'Impression Officiel A4** `#official-print-dossier`).
+  - `js/narrator.js` : moteur vocal narrateur unifié (`window.speechSynthesis`) pour les 10 actes de la campagne (`campagne/scenario-1.html` à `scenario-10.html`), prenant en charge à la fois la lecture paragraphe par paragraphe avec voix HD et surlignage actif (Actes 1 et 4 à 10) et le sélecteur multi-versions à onglets (Actes 2 et 3).
+  - `js/campagne-studio.js` : extraction de la logique de glisser-déposer, de test audio et de génération de page HTML du studio `campagne-ajouter.html`.
+  - `js/tatouages.js` : extraction du moteur de recherche, de filtrage par catégorie et de modale détaillée du codex `tatouages.html`.
+  - `js/index-ui.js` : génération déclarative de la frise des 10 scénarios, des cartes des 8 Grands Clans et de la galerie locale du Dojo sur le portail `index.html`.
+
+### 🔄 Modifié
+
+- **Allègement massif des pages HTML (> 4 500 lignes de code dupliqué ou inline supprimées)** :
+  - `createcharacter.html` réduit de **2 421 lignes à 983 lignes** (-60 %).
+  - `index.html` réduit de **910 lignes à 587 lignes** (-35 %).
+  - `tatouages.html` réduit de **373 lignes à 136 lignes** (-64 %).
+  - `campagne-ajouter.html` réduit de **247 lignes à 94 lignes** (-62 %).
+  - `campagne/scenario-1.html` à `scenario-10.html` allégés d'environ **220 à 260 lignes chacun** grâce à la suppression des blocs `<style>` et `<script>` dupliqués.
+- **Centralisation du Versioning et des Styles Globaux (`js/navbar.js` & `css/main.css`)** :
+  - Ajout de `syncFooterVersion()` dans `js/navbar.js` et suppression des 27 scripts inline `fetch('version.json')` dupliqués dans les pieds de page HTML.
+  - Regroupement dans `css/main.css` de toutes les classes utilitaires partagées (`.badge-adv`, `.badge-dis`, `.badge-elem-*`, `.badge-dragon`, `.badge-clan`, `.badge-shadow`, `.badge-legend`, `.die-anim`, `.inner-thought`, `.scene-figure`, `.scene-caption`, `.reading-active`, `.tab-btn.active` et règles `@media print` A4).
+
+---
+
 ## [1.1.0] — 2026-11-15
 
 ### ✨ Ajouté
