@@ -252,6 +252,15 @@
                   </div>
                 </a>
 
+                <!-- Écran du MJ -->
+                <a href="${rootPrefix}ecran-mj.html" class="px-2.5 py-2 rounded-lg hover:bg-amber-950/40 text-stone-200 hover:text-amber-200 flex items-center gap-3 text-xs transition">
+                  <span class="w-7 h-7 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">幕</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-amber-300">Écran du MJ</span>
+                    <span class="text-[10px] text-stone-400 font-sans">Table PJs, combats & blessures</span>
+                  </div>
+                </a>
+
                 <div class="border-t border-amber-500/20 my-1"></div>
 
                 <!-- Carnet de Rokugan avec son logo officiel -->
@@ -353,6 +362,10 @@
               <a href="${rootPrefix}tatouages.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-teal-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-teal-950/80 text-teal-300 border-teal-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">墨</span>
                 <span>Tatouages</span>
+              </a>
+              <a href="${rootPrefix}ecran-mj.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-2 col-span-2">
+                <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">幕</span>
+                <span>Écran du MJ (Combats & PJs)</span>
               </a>
               <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-amber-200 flex items-center gap-2.5 col-span-2">
                 <img src="${rootPrefix}assets/images/logo_carnet_rokugan.png" alt="Logo Carnet de Rokugan" class="w-6 h-6 rounded border border-amber-500/50 object-contain bg-black p-0.5 shrink-0" />
