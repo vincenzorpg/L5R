@@ -3067,12 +3067,121 @@ function resetCharacter() {
   }
 }
 
-function exportOfficialPDF() {
+function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisadv) {
+  const safeName = weaponName || "Katana";
+  const weaponData = getEquipment().armes?.find(w => w.name === safeName) || {
+    name: safeName,
+    vd: "3g2",
+    trait: "Agilité",
+    skill: "Kenjutsu",
+    type: "Médium"
+  };
+
+  const isRanged = !!(weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu");
+  const atkTraitName = isRanged ? "Réflexes" : (weaponData.trait || "Agilité");
+  const atkTraitVal = (atkTraitName === "Réflexes") ? traits.ref : traits.agi;
+  const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
+
+  const skillObj = currentSkills.find(s => {
+    if (s.isChoice && !s.chosen) return false;
+    const sName = s.name.toLowerCase();
+    const wSkill = atkSkillName.toLowerCase();
+    const wName = weaponData.name.toLowerCase();
+    return sName.includes(wSkill) || wSkill.includes(sName) || sName.includes(wName);
+  });
+
+  const skillRank = skillObj ? skillObj.rank : 0;
+  const hasSpec = skillObj ? skillObj.spec : false;
+  let atkRoll = skillRank > 0 ? (skillRank + atkTraitVal) : atkTraitVal;
+  const atkKeep = atkTraitVal;
+  const atkDetails = skillRank > 0
+    ? [`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`]
+    : [`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`];
+
+  if ((sch?.id === "bushi-hiruma" || sch?.name?.includes("Hiruma")) && !isRanged) {
+    atkRoll += 1;
+    atkDetails.push("Hiruma (+1g0)");
+  }
+  if (hasSpec) atkDetails.push("Spé : relance les 1");
+
+  const vdParts = (weaponData.vd || "3g2").split('g');
+  let dmgRoll = parseInt(vdParts[0], 10) || 3;
+  const dmgKeep = parseInt(vdParts[1], 10) || 2;
+  const dmgDetails = [`Arme (${weaponData.vd || "3g2"})`];
+
+  if (!isRanged) {
+    dmgRoll += traits.str;
+    dmgDetails.push(`Force (+${traits.str}g0)`);
+  } else {
+    dmgRoll += 3;
+    dmgDetails.push("Force d'Arc (+3g0)");
+  }
+
+  if ((sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) && weaponData.type?.includes("Lourde")) {
+    dmgRoll += 1;
+    dmgDetails.push("Voie du Crabe (+1g0)");
+  }
+  if (checkAdv("large") && (weaponData.type?.includes("Grand") || weaponData.type?.includes("Lourd") || weaponData.type?.includes("2 mains"))) {
+    dmgRoll += 1;
+    dmgDetails.push("Grand (+1g0)");
+  }
+  if (checkDisadv("small") && !isRanged) {
+    dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
+    dmgDetails.push("Petit (-1g0)");
+  }
+
+  return {
+    name: weaponData.name,
+    type: weaponData.type || "Médium",
+    skill: atkSkillName,
+    isRanged,
+    attackRoll: `${atkRoll}g${atkKeep}`,
+    attackDetail: `${weaponData.name} : ${atkDetails.join(' + ')}`,
+    damageRoll: `${dmgRoll}g${dmgKeep}`,
+    damageDetail: dmgDetails.join(' + ')
+  };
+}
+
+function renderPrintRankPips(score, maxBoxes = 10, isCircle = false) {
+  const num = Math.max(0, Math.min(maxBoxes, parseFloat(score) || 0));
+  const full = Math.floor(num);
+  const hasHalf = (num - full) >= 0.4;
+  let html = '';
+  for (let i = 1; i <= maxBoxes; i++) {
+    const cls = ['l5r-pip'];
+    if (isCircle) cls.push('l5r-pip-circle');
+    if (i <= full) cls.push('filled');
+    else if (i === full + 1 && hasHalf) cls.push('half');
+    html += `<span class="${cls.join(' ')}"></span>`;
+  }
+  return html;
+}
+
+function resolvePrintSkillTrait(sk, traitsMap) {
+  const catalog = (typeof getSkills === 'function') ? getSkills() : [];
+  const meta = catalog.find(c => c.name === sk.name) || {};
+  const label = (meta.trait || sk.trait || 'Agilité').toString();
+  const norm = label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  if (norm.includes('const')) return { label: 'Const.', val: traitsMap.sta };
+  if (norm.includes('volon')) return { label: 'Volonté', val: traitsMap.wil };
+  if (norm.includes('force')) return { label: 'Force', val: traitsMap.str };
+  if (norm.includes('percep')) return { label: 'Perc.', val: traitsMap.per };
+  if (norm.includes('reflex')) return { label: 'Réfl.', val: traitsMap.ref };
+  if (norm.includes('intuit')) return { label: 'Intuit.', val: traitsMap.awa };
+  if (norm.includes('intel')) return { label: 'Intell.', val: traitsMap.int };
+  if (norm.includes('vide')) return { label: 'Vide', val: traitsMap.voi };
+  return { label: 'Agilité', val: traitsMap.agi };
+}
+
+function populateOfficialPrintSheet() {
   updateAll();
 
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value;
   const clan = clans[clanKey];
+  const famSel = document.getElementById('sel-family');
+  const famIdx = parseInt(famSel?.value, 10) || 0;
+  const famObj = clan?.families?.[famIdx];
   const schObj = getSelectedSchoolObject();
   const sch = schObj?.school;
 
@@ -3081,141 +3190,239 @@ function exportOfficialPDF() {
     ? (schObj.isExternalClan ? `${sch.name} (${schObj.clanName})` : sch.name)
     : "École";
 
+  const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
   // Identité
-  document.getElementById('p-name').textContent = pcName;
-  document.getElementById('p-name-2').textContent = pcName;
-  document.getElementById('p-clan').textContent = clan ? clan.name : "Clan";
-  document.getElementById('p-clan-2').textContent = clan ? clan.name : "Clan";
-  document.getElementById('p-school').textContent = schoolDisplayLabel;
-  document.getElementById('p-school-2').textContent = schoolDisplayLabel;
-  document.getElementById('p-xp').textContent = `${document.getElementById('xp-remaining')?.textContent} / ${document.getElementById('xp-total')?.textContent} XP`;
-  document.getElementById('p-insight').textContent = document.getElementById('insight-display')?.textContent || "120 pts (Rang 1)";
-  document.getElementById('p-honor').textContent = document.getElementById('stat-honor')?.textContent || "4.5";
+  setTxt('p-name', pcName);
+  setTxt('p-name-2', pcName);
+  setTxt('p-clan', clan ? clan.name : "Clan");
+  setTxt('p-clan-2', clan ? clan.name : "Clan");
+  setTxt('p-family', famObj?.name || (famSel?.options[famSel.selectedIndex]?.text || "—").split('(')[0].trim());
+  setTxt('p-school', schoolDisplayLabel);
+  setTxt('p-school-2', schoolDisplayLabel);
+  setTxt('p-xp', `${document.getElementById('xp-remaining')?.textContent || '0'} restants / ${document.getElementById('xp-total')?.textContent || '40'} XP`);
+  setTxt('p-insight', document.getElementById('insight-display')?.textContent?.trim() || "120 pts (Rang 1)");
+
+  const honorVal = document.getElementById('stat-honor')?.textContent?.trim() || "4.5";
+  const gloryVal = String(window.currentChar?.glory ?? "1.0");
+  const statusVal = String(window.currentChar?.status ?? "1.0");
+  const taintVal = "0.0";
+  setTxt('p-honor', honorVal);
+  setTxt('p-glory', gloryVal);
+  setTxt('p-status', statusVal);
+  setTxt('p-taint', taintVal);
+
+  const trackMap = [
+    ['p-honor-track', honorVal],
+    ['p-glory-track', gloryVal],
+    ['p-status-track', statusVal],
+    ['p-taint-track', taintVal]
+  ];
+  trackMap.forEach(([id, v]) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = renderPrintRankPips(v, 10, false);
+  });
 
   // Traits et Anneaux
-  const sta = document.getElementById('trait-stamina').value;
-  const wil = document.getElementById('trait-willpower').value;
-  const str = document.getElementById('trait-strength').value;
-  const per = document.getElementById('trait-perception').value;
-  const ref = document.getElementById('trait-reflexes').value;
-  const awa = document.getElementById('trait-awareness').value;
-  const agi = document.getElementById('trait-agility').value;
-  const int = document.getElementById('trait-intelligence').value;
-  const voi = document.getElementById('trait-void').value;
+  const sta = parseInt(document.getElementById('trait-stamina')?.value, 10) || 2;
+  const wil = parseInt(document.getElementById('trait-willpower')?.value, 10) || 2;
+  const str = parseInt(document.getElementById('trait-strength')?.value, 10) || 2;
+  const per = parseInt(document.getElementById('trait-perception')?.value, 10) || 2;
+  const ref = parseInt(document.getElementById('trait-reflexes')?.value, 10) || 2;
+  const awa = parseInt(document.getElementById('trait-awareness')?.value, 10) || 2;
+  const agi = parseInt(document.getElementById('trait-agility')?.value, 10) || 2;
+  const int = parseInt(document.getElementById('trait-intelligence')?.value, 10) || 2;
+  const voi = parseInt(document.getElementById('trait-void')?.value, 10) || 2;
+  const traitsMap = { sta, wil, str, per, ref, awa, agi, int, voi };
 
-  document.getElementById('p-t-sta').textContent = sta;
-  document.getElementById('p-t-wil').textContent = wil;
-  document.getElementById('p-t-str').textContent = str;
-  document.getElementById('p-t-per').textContent = per;
-  document.getElementById('p-t-ref').textContent = ref;
-  document.getElementById('p-t-awa').textContent = awa;
-  document.getElementById('p-t-agi').textContent = agi;
-  document.getElementById('p-t-int').textContent = int;
-  document.getElementById('p-t-voi').textContent = voi;
+  setTxt('p-t-sta', sta);
+  setTxt('p-t-wil', wil);
+  setTxt('p-t-str', str);
+  setTxt('p-t-per', per);
+  setTxt('p-t-ref', ref);
+  setTxt('p-t-awa', awa);
+  setTxt('p-t-agi', agi);
+  setTxt('p-t-int', int);
+  setTxt('p-t-voi', voi);
 
-  document.getElementById('p-r-earth').textContent = document.getElementById('ring-earth').textContent;
-  document.getElementById('p-r-water').textContent = document.getElementById('ring-water').textContent;
-  document.getElementById('p-r-air').textContent = document.getElementById('ring-air').textContent;
-  document.getElementById('p-r-fire').textContent = document.getElementById('ring-fire').textContent;
-  document.getElementById('p-r-void').textContent = document.getElementById('ring-void').textContent;
+  setTxt('p-r-earth', document.getElementById('ring-earth')?.textContent || Math.min(sta, wil));
+  setTxt('p-r-water', document.getElementById('ring-water')?.textContent || Math.min(str, per));
+  setTxt('p-r-air', document.getElementById('ring-air')?.textContent || Math.min(ref, awa));
+  setTxt('p-r-fire', document.getElementById('ring-fire')?.textContent || Math.min(agi, int));
+  setTxt('p-r-void', document.getElementById('ring-void')?.textContent || voi);
+
+  const voidDotsEl = document.getElementById('p-void-dots');
+  if (voidDotsEl) voidDotsEl.innerHTML = renderPrintRankPips(voi, 10, true);
 
   // Combat
-  document.getElementById('p-init').textContent = document.getElementById('sticky-init')?.textContent || "3g2";
-  document.getElementById('p-init-note').textContent = document.getElementById('sticky-init-detail')?.textContent || "";
-  document.getElementById('p-armor-tn').textContent = document.getElementById('sticky-armor-tn')?.textContent || "20";
-  document.getElementById('p-armor-note').textContent = document.getElementById('sticky-armor-detail')?.textContent || "";
-  document.getElementById('p-heal').textContent = document.getElementById('stat-heal')?.textContent || "5 PV";
+  setTxt('p-init', document.getElementById('sticky-init')?.textContent || "3g2");
+  setTxt('p-init-note', document.getElementById('sticky-init-detail')?.textContent || "");
+  setTxt('p-armor-tn', document.getElementById('sticky-armor-tn')?.textContent || "20");
+  setTxt('p-armor-note', document.getElementById('sticky-armor-detail')?.textContent || "");
+  setTxt('p-heal', document.getElementById('stat-heal')?.textContent || "5 PV");
 
   const armorSel = document.getElementById('pc-armor');
-  document.getElementById('p-armor-name').textContent = armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0] || "Aucune";
-  document.getElementById('p-armor-reduc').textContent = armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0");
+  setTxt('p-armor-name', armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0]?.trim() || "Aucune");
+  setTxt('p-armor-reduc', armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0"));
 
-  // Compétences
+  // Compétences (avec résolution exacte du Trait associé)
   const skillsBody = document.getElementById('p-skills-body');
-  skillsBody.innerHTML = currentSkills.map(sk => {
-    const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
-    const traitVal = parseInt(agi);
-    const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + traitVal}g${traitVal}`;
-    const masteriesSummary = getMasteriesSummary(sk.name, sk.rank);
-    const notesParts = [];
-    if (sk.spec) notesParts.push("Spé (relance les 1)");
-    if (masteriesSummary) notesParts.push(masteriesSummary);
+  if (skillsBody) {
+    const rowsHtml = currentSkills.map(sk => {
+      const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
+      const tMeta = resolvePrintSkillTrait(sk, traitsMap);
+      const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + tMeta.val}g${tMeta.val}`;
+      const masteriesSummary = getMasteriesSummary(sk.name, sk.rank);
+      const notesParts = [];
+      if (sk.spec) notesParts.push("Spé : relance les 1");
+      if (masteriesSummary) notesParts.push(masteriesSummary);
 
-    return `
-      <tr class="border-b border-stone-200">
-        <td class="p-1 font-bold">${displayName}</td>
-        <td class="p-1 text-center">${sk.isSchool ? '✓' : ''}</td>
-        <td class="p-1 text-center font-bold font-imperial">${sk.rank}</td>
-        <td class="p-1 text-center font-bold">${roll}</td>
-        <td class="p-1 text-stone-600 text-[8px]">${notesParts.join(' • ')}</td>
-      </tr>
-    `;
-  }).join('');
+      return `
+        <tr>
+          <td class="text-center font-bold">${sk.isSchool ? '<span class="inline-block w-3 h-3 rounded-full bg-[#2b3627] text-white text-[8px] leading-3">✓</span>' : '<span class="inline-block w-2.5 h-2.5 rounded-full border border-[#8c7b5c]"></span>'}</td>
+          <td class="font-bold text-[#1a1610]">${displayName}</td>
+          <td class="text-center font-bold font-imperial">${sk.rank}</td>
+          <td class="text-center text-[#4a3b26]">${tMeta.label}</td>
+          <td class="text-center font-bold font-imperial text-[#7b2319]">${roll}</td>
+          <td class="text-[#5a4e43] text-[7.5px]">${notesParts.join(' • ')}</td>
+        </tr>
+      `;
+    });
 
-  // Armes
+    const minSkillRows = 13;
+    for (let k = currentSkills.length; k < minSkillRows; k++) {
+      rowsHtml.push(`
+        <tr class="opacity-55">
+          <td class="text-center"><span class="inline-block w-2.5 h-2.5 rounded-full border border-[#b7aa90]"></span></td>
+          <td>&nbsp;</td><td></td><td></td><td></td><td></td>
+        </tr>
+      `);
+    }
+    skillsBody.innerHTML = rowsHtml.join('');
+  }
+
+  // Arsenal (Arme 1, Arme 2, Flèches / Notes)
+  const checkAdv = (key) => advantagesList.some(a =>
+    (a.id && a.id === key) || a.name.toLowerCase().includes(key) || (key === 'large' && a.name.toLowerCase().includes('grand'))
+  );
+  const checkDisadv = (key) => disadvantagesList.some(d =>
+    (d.id && d.id === key) || d.name.toLowerCase().includes(key) || (key === 'small' && d.name.toLowerCase().includes('petit'))
+  );
   const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
   const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  const m1 = computeWeaponCombatMetrics(w1, traitsMap, sch, checkAdv, checkDisadv);
+  const m2 = (w2 && w2 !== "Aucune") ? computeWeaponCombatMetrics(w2, traitsMap, sch, checkAdv, checkDisadv) : null;
+
   const wBox = document.getElementById('p-weapons-box');
-  wBox.innerHTML = `
-    <div class="border-b border-stone-200 pb-1">
-      <div class="font-bold font-imperial">${w1} (Principale)</div>
-      <div><b>Toucher :</b> ${document.getElementById('sticky-atk')?.textContent || '3g2'} | <b>Dégâts :</b> ${document.getElementById('sticky-dmg')?.textContent || '4g2'}</div>
-      <div class="text-stone-500 text-[7px]">${document.getElementById('sticky-atk-detail')?.textContent || ''}</div>
-    </div>
-    ${w2 !== 'Aucune' ? `
-      <div class="pt-1">
-        <div class="font-bold font-imperial">${w2} (Secondaire)</div>
+  if (wBox) {
+    wBox.innerHTML = `
+      <div class="grid grid-cols-12">
+        <div class="col-span-5 border-r border-[#8c7b5c]">
+          <div class="l5r-bar"><span>Arme 1</span><span>${m1.type}</span></div>
+          <div class="p-1.5 text-[8.5px] space-y-0.5">
+            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Arme</span><b class="font-imperial">${m1.name}</b></div>
+            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Toucher</span><b class="font-imperial text-[#7b2319]">${m1.attackRoll}</b></div>
+            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Dégâts</span><b class="font-imperial text-[#b64329]">${m1.damageRoll}</b></div>
+            <div class="text-[7.5px] text-[#5a4e43] truncate" title="${m1.damageDetail}">${m1.damageDetail}</div>
+          </div>
+        </div>
+        <div class="col-span-4 border-r border-[#8c7b5c]">
+          <div class="l5r-bar"><span>Arme 2</span><span>${m2 ? m2.type : 'Secours'}</span></div>
+          <div class="p-1.5 text-[8.5px] space-y-0.5">
+            ${m2 ? `
+              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Arme</span><b class="font-imperial">${m2.name}</b></div>
+              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Toucher</span><b class="font-imperial text-[#7b2319]">${m2.attackRoll}</b></div>
+              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Dégâts</span><b class="font-imperial text-[#b64329]">${m2.damageRoll}</b></div>
+              <div class="text-[7.5px] text-[#5a4e43] truncate" title="${m2.damageDetail}">${m2.damageDetail}</div>
+            ` : `
+              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5 text-[#8b7f69]"><span>Arme :</span><span>________________</span></div>
+              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5 text-[#8b7f69]"><span>Toucher / Dégâts :</span><span>____ / ____</span></div>
+              <div class="text-[7.5px] text-[#8b7f69] pt-0.5">Notes : ____________________</div>
+            `}
+          </div>
+        </div>
+        <div class="col-span-3">
+          <div class="l5r-bar"><span>Flèches &amp; Notes</span><span>Qté</span></div>
+          <div class="p-1.5 text-[8px] space-y-1 text-[#5a4e43]">
+            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span>Tranchantes (2g2)</span><span>___</span></div>
+            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span>Perce-armure (1g1)</span><span>___</span></div>
+            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span>Sifflantes / Feu</span><span>___</span></div>
+          </div>
+        </div>
       </div>
-    ` : ''}
-  `;
+    `;
+  }
 
   // Paliers de blessures
   const woundLevels = [
-    { name: "Indemne (+0)", id: "w-0" },
-    { name: "Égratigné (+3)", id: "w-1" },
-    { name: "Blessé Léger (+5)", id: "w-2" },
-    { name: "Blessé (+10)", id: "w-3" },
-    { name: "Gravement (+15)", id: "w-4" },
-    { name: "Estropié (+20)", id: "w-5" },
-    { name: "Inconscient (+40)", id: "w-6" },
-    { name: "Mortel", id: "w-7" }
+    { name: "Indemne", pen: "+0", id: "w-0", tint: "#2b5986" },
+    { name: "Égratigné", pen: "+3", id: "w-1" },
+    { name: "Blessé Léger", pen: "+5", id: "w-2" },
+    { name: "Blessé", pen: "+10", id: "w-3" },
+    { name: "Gravement", pen: "+15", id: "w-4" },
+    { name: "Estropié", pen: "+20", id: "w-5" },
+    { name: "Inconscient", pen: "+40", id: "w-6" },
+    { name: "Mortel", pen: "—", id: "w-7", tint: "#7b2319" }
   ];
-  document.getElementById('p-wounds-body').innerHTML = woundLevels.map(wl => `
-    <tr class="border-b border-stone-200">
-      <td class="text-left pl-1 font-bold">${wl.name}</td>
-      <td>${wl.name.includes('+') ? wl.name.split('(')[1].replace(')', '') : '—'}</td>
-      <td class="font-bold">${document.getElementById(wl.id)?.textContent || '4 PV'}</td>
-      <td class="border-l border-stone-300"></td>
-    </tr>
-  `).join('');
+  let wTotal = 0;
+  const w0Val = parseInt(document.getElementById('w-0')?.textContent, 10) || 10;
+  const wStepVal = parseInt(document.getElementById('w-1')?.textContent, 10) || 4;
+  wTotal = w0Val + (wStepVal * 7);
+  setTxt('p-wounds-earth2', `${wStepVal} PV`);
+  setTxt('p-wounds-earth5', `${w0Val} PV`);
+  setTxt('p-wounds-total', `${wTotal} PV`);
+
+  const woundsBody = document.getElementById('p-wounds-body');
+  if (woundsBody) {
+    woundsBody.innerHTML = woundLevels.map(wl => `
+      <tr>
+        <td class="text-left pl-1.5 font-bold" style="${wl.tint ? `color:${wl.tint};` : ''}">${wl.name}</td>
+        <td class="text-[#5a4e43] font-mono">${wl.pen}</td>
+        <td class="font-bold font-imperial">${document.getElementById(wl.id)?.textContent || `${wStepVal} PV`}</td>
+        <td class="border-l border-[#b7aa90] bg-[#fffdf7]/80"></td>
+      </tr>
+    `).join('');
+  }
 
   // Avantages & Désavantages
-  document.getElementById('p-adv-total').textContent = `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`;
-  document.getElementById('p-adv-list').innerHTML = advantagesList.length ? advantagesList.map(a => {
-    const full = resolveCatalogAdvantage(a.id || a.name) || a;
-    let extraNote = "";
-    if (isDifferentSchoolAdv(a.name) && a.differentSchoolName) {
-      extraNote = ` — <i>École suivie : ${a.differentSchoolName}</i>`;
-    } else if (isMultipleSchoolsAdv(a.name) && a.secondarySchoolName) {
-      extraNote = ` — <i>Seconde école : ${a.secondarySchoolName} (Rang ${a.secondarySchoolRank || 1})</i>`;
-    }
-    return `<div><b>${a.name}</b> (${a.cost} XP) [${full?.type || 'Don'}] : <span class="text-stone-600">${full?.rule || full?.desc || ''}${extraNote}</span></div>`;
-  }).join('') : '<div class="text-stone-400 italic">Aucun avantage sélectionné.</div>';
+  setTxt('p-adv-total', `${document.getElementById('adv-cost-total')?.textContent || '0'} XP`);
+  const advListEl = document.getElementById('p-adv-list');
+  if (advListEl) {
+    advListEl.innerHTML = advantagesList.length ? advantagesList.map(a => {
+      const full = resolveCatalogAdvantage(a.id || a.name) || a;
+      let extraNote = "";
+      if (isDifferentSchoolAdv(a.name) && a.differentSchoolName) {
+        extraNote = ` — <i>École suivie : ${a.differentSchoolName}</i>`;
+      } else if (isMultipleSchoolsAdv(a.name) && a.secondarySchoolName) {
+        extraNote = ` — <i>Seconde école : ${a.secondarySchoolName} (Rang ${a.secondarySchoolRank || 1})</i>`;
+      } else if (isElementalBlessingAdv(a.name) && a.chosenElement) {
+        extraNote = ` — <i>Anneau : ${a.chosenElement}</i>`;
+      }
+      return `<div class="border-b border-[#e0d8c6] pb-0.5"><b class="text-[#243b1d]">${a.name}</b> (${a.cost} XP) <span class="text-[7.5px] px-1 rounded bg-[#e3ded0] text-[#4a3b26]">${full?.type || 'Don'}</span> : <span class="text-[#4a3e31]">${full?.rule || full?.desc || ''}${extraNote}</span></div>`;
+    }).join('') : '<div class="text-[#6a5d47] italic">Aucun avantage sélectionné.</div>';
+  }
 
-  document.getElementById('p-disadv-total').textContent = `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`;
-  document.getElementById('p-disadv-list').innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
-    const full = resolveCatalogDisadvantage(d.id || d.name) || d;
-    return `<div><b>${d.name}</b> (+${d.gain} XP) [${full?.type || 'Défaut'}] : <span class="text-stone-600">${full?.rule || full?.desc || ''}</span></div>`;
-  }).join('') : '<div class="text-stone-400 italic">Aucun désavantage sélectionné.</div>';
+  setTxt('p-disadv-total', `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`);
+  const disadvListEl = document.getElementById('p-disadv-list');
+  if (disadvListEl) {
+    disadvListEl.innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
+      const full = resolveCatalogDisadvantage(d.id || d.name) || d;
+      return `<div class="border-b border-[#e0d8c6] pb-0.5"><b class="text-[#7b2319]">${d.name}</b> (+${d.gain} XP) <span class="text-[7.5px] px-1 rounded bg-[#f3e3df] text-[#581f1b]">${full?.type || 'Défaut'}</span> : <span class="text-[#4a3e31]">${full?.rule || full?.desc || ''}</span></div>`;
+    }).join('') : '<div class="text-[#6a5d47] italic">Aucun désavantage sélectionné.</div>';
+  }
 
   // Techniques d'École
   const techList = sch?.techniques || (sch?.technique ? [sch.technique] : []);
-  const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1]) || 1;
-  document.getElementById('p-tech-name').textContent = `${schoolDisplayLabel} (Progression)`;
+  const currentRank = parseInt(document.getElementById('insight-display')?.textContent?.match(/Rang (\d)/)?.[1], 10) || 1;
+  setTxt('p-tech-name', `Techniques — ${schoolDisplayLabel}`);
 
   let printTechHtml = techList.map(t => {
-    const tag = t.rank === currentRank ? "<b>[ACTIF]</b> " : (t.rank < currentRank ? "<i>[MAÎTRISÉ]</i> " : "[Verrouillé] ");
-    return `<div class="mb-1">${tag}<b>Rang ${t.rank} - ${t.name} :</b> ${t.effect}</div>`;
+    const badge = t.rank === currentRank
+      ? `<span class="px-1 py-0.5 rounded bg-[#f4d89a] text-[#5e3a04] border border-[#b89242] font-bold text-[7.5px]">ACTIF</span>`
+      : (t.rank < currentRank
+        ? `<span class="px-1 py-0.5 rounded bg-[#ddeadd] text-[#243b1d] border border-[#486a3c] font-bold text-[7.5px]">MAÎTRISÉ</span>`
+        : `<span class="px-1 py-0.5 rounded bg-[#e8e3d6] text-[#6a5d47] text-[7.5px]">R${t.rank}</span>`);
+    return `<div class="border-b border-[#e0d8c6] pb-1">${badge} <b class="font-imperial text-[#1a1610]">Rang ${t.rank} — ${t.name} :</b> <span class="text-[#342c23]">${t.effect}</span></div>`;
   }).join('');
 
   const multiAdv = advantagesList.find(a => isMultipleSchoolsAdv(a.name));
@@ -3224,17 +3431,23 @@ function exportOfficialPDF() {
     const secSchool = allSchools.find(s => s.id === multiAdv.secondarySchoolId);
     if (secSchool) {
       const secRank = multiAdv.secondarySchoolRank || 1;
-      printTechHtml += `<div class="mt-2 pt-1 border-t border-stone-300 font-bold text-stone-800">Seconde École : ${secSchool.name} (${secSchool.clanName}) — Rang ${secRank}</div>`;
+      printTechHtml += `<div class="mt-1 pt-1 border-t border-[#8c7b5c] font-imperial font-bold text-[#7b2319]">Seconde École : ${secSchool.name} (${secSchool.clanName}) — Rang ${secRank}</div>`;
       printTechHtml += (secSchool.techniques || []).map(t => {
-        const tag = t.rank <= secRank ? "<b>[ACQUIS]</b> " : "[Non acquis] ";
-        return `<div class="mb-0.5 text-stone-700">${tag}Rang ${t.rank} - ${t.name} : ${t.effect}</div>`;
+        const tag = t.rank <= secRank ? `<b class="text-[#243b1d]">[ACQUIS]</b>` : `<span class="text-[#8b7f69]">[R${t.rank}]</span>`;
+        return `<div class="text-[#342c23]">${tag} <b>Rang ${t.rank} — ${t.name} :</b> ${t.effect}</div>`;
       }).join('');
     }
   }
 
-  document.getElementById('p-tech-desc').innerHTML = printTechHtml;
-  document.getElementById('p-outfit-desc').textContent = document.getElementById('pc-outfit')?.value || "";
+  const techDescEl = document.getElementById('p-tech-desc');
+  if (techDescEl) techDescEl.innerHTML = printTechHtml;
+  setTxt('p-outfit-desc', document.getElementById('pc-outfit')?.value || "");
+}
 
+function exportOfficialPDF() {
+  populateOfficialPrintSheet();
+  if (typeof window.populatePrintableMysticBox === 'function') window.populatePrintableMysticBox();
+  if (typeof window.populatePrintable20Questions === 'function') window.populatePrintable20Questions();
   window.print();
 }
 
@@ -3276,6 +3489,7 @@ if (typeof window !== "undefined") {
   window.getCompatibleMultipleSchools = getCompatibleMultipleSchools;
   window.getCharacterArchetypePermissions = getCharacterArchetypePermissions;
   window.getAllSchoolsCatalog = getAllSchoolsCatalog;
+  window.populateOfficialPrintSheet = populateOfficialPrintSheet;
   window.buildCharacterContextFromInputs = buildCharacterContextFromInputs;
   window.getEffectiveAdvCost = getEffectiveAdvCost;
   window.getEffectiveDisadvGain = getEffectiveDisadvGain;

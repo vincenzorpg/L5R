@@ -77,122 +77,328 @@ function injectForgeTemplates() {
   const printDossier = document.getElementById('official-print-dossier');
   if (printDossier && !document.getElementById('print-sheet')) {
     printDossier.innerHTML = `
+      <div class="l5r-preview-toolbar no-print flex flex-wrap items-center justify-between gap-2 text-xs text-stone-200">
+        <div class="flex items-center gap-2.5">
+          <span class="font-imperial font-bold text-amber-300 text-sm">📜 Feuille de Personnage Officielle (A4 Couleur)</span>
+          <label class="flex items-center gap-1.5 text-[11px] text-stone-300 bg-black/50 border border-stone-700 rounded-md px-2 py-1 cursor-pointer hover:border-amber-500/50">
+            <input type="checkbox" id="toggle-print-story" checked onchange="togglePrintStorySection(this.checked)" class="accent-amber-500">
+            <span>Inclure Récit &amp; 20 Questions</span>
+          </label>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="hidden md:inline text-[10px] text-stone-400 italic">Dans la fenêtre PDF, activez « Graphiques d'arrière-plan »</span>
+          <button type="button" onclick="triggerSheetPrint()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">
+            🖨️ Imprimer / Enregistrer PDF
+          </button>
+          <button type="button" onclick="closeCharacterSheetPreview()" class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600 font-bold cursor-pointer">
+            ✕ Fermer
+          </button>
+        </div>
+      </div>
+
       <div id="print-sheet">
-        <div class="border-b-2 border-black pb-2 mb-4 flex justify-between items-end">
-          <div>
-            <h1 class="text-2xl font-bold uppercase tracking-wider font-imperial" id="p-name">Samouraï</h1>
-            <div class="text-xs">
-              <b>Clan :</b> <span id="p-clan">Crabe</span> |
-              <b>École :</b> <span id="p-school">École de bushi Hida</span>
+        <!-- ===================== PAGE 1 : COMBAT, ANNEAUX & COMPÉTENCES ===================== -->
+        <section id="print-page-1" class="l5r-sheet-page space-y-2.5">
+          <!-- En-tête Impérial -->
+          <div class="grid grid-cols-12 gap-3 items-center border-b-2 border-[#7c6a4a] pb-2">
+            <div class="col-span-7 space-y-1 text-[10.5px]">
+              <div class="flex items-baseline gap-2 border-b border-[#8c7b5c] pb-0.5">
+                <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[9px] w-14 shrink-0">Nom</span>
+                <span id="p-name" class="font-imperial font-bold text-[17px] tracking-wide text-[#1a1610] leading-tight">Samouraï</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="flex items-baseline gap-1.5 border-b border-[#b7aa90] pb-0.5">
+                  <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] shrink-0">Clan</span>
+                  <span id="p-clan" class="font-semibold text-[#1f1a14] truncate">Crabe</span>
+                </div>
+                <div class="flex items-baseline gap-1.5 border-b border-[#b7aa90] pb-0.5">
+                  <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] shrink-0">Famille</span>
+                  <span id="p-family" class="font-semibold text-[#1f1a14] truncate">—</span>
+                </div>
+              </div>
+              <div class="flex items-baseline gap-2 border-b border-[#b7aa90] pb-0.5">
+                <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] w-14 shrink-0">École</span>
+                <span id="p-school" class="font-semibold text-[#1f1a14]">École de bushi Hida</span>
+              </div>
+            </div>
+
+            <div class="col-span-5 flex items-center justify-between gap-2 bg-[#efe6cf]/90 border border-[#8c7b5c] rounded px-2.5 py-1.5">
+              <div class="space-y-0.5 text-[9.5px] min-w-0 flex-1">
+                <div class="font-imperial font-bold text-[10px] tracking-wider uppercase text-[#7b2319]">La Légende des Cinq Anneaux</div>
+                <div><b class="text-[#4a3b26]">Réputation :</b> <span id="p-insight" class="font-bold">120 pts (Rang 1)</span></div>
+                <div><b class="text-[#4a3b26]">Points d'XP :</b> <span id="p-xp" class="font-bold">40 / 40 XP</span></div>
+                <div class="text-[8px] text-[#6a5d47] italic">Réputation = (Anneaux × 10) + Compétences</div>
+              </div>
+              <svg viewBox="0 0 64 64" class="w-12 h-12 shrink-0" aria-hidden="true">
+                <circle cx="32" cy="14" r="9.5" fill="#e9f1e6" stroke="#486a3c" stroke-width="2"/>
+                <text x="32" y="17.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#243b1d">土</text>
+                <circle cx="49" cy="27" r="9.5" fill="#ececf6" stroke="#494d7a" stroke-width="2"/>
+                <text x="49" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#242648">風</text>
+                <circle cx="42" cy="48" r="9.5" fill="#faeae5" stroke="#b64329" stroke-width="2"/>
+                <text x="42" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#5b1d10">火</text>
+                <circle cx="22" cy="48" r="9.5" fill="#e5eef7" stroke="#2b5986" stroke-width="2"/>
+                <text x="22" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#173452">水</text>
+                <circle cx="15" cy="27" r="9.5" fill="#efece8" stroke="#3c342e" stroke-width="2"/>
+                <text x="15" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e1915">空</text>
+              </svg>
             </div>
           </div>
-          <div class="text-right text-xs">
-            <div><b>Insight :</b> <span id="p-insight">120 pts (Rang 1)</span></div>
-            <div><b>Honneur :</b> <span id="p-honor">4.5</span> | <b>XP :</b> <span id="p-xp">40 / 40 XP</span></div>
-          </div>
-        </div>
 
-        <div class="grid grid-cols-5 gap-2 border border-black p-2 mb-4 text-center text-xs">
-          <div>
-            <div class="font-bold border-b border-black pb-1">TERRE : <span id="p-r-earth">2</span></div>
-            <div class="pt-1">Const : <b id="p-t-sta">2</b></div>
-            <div>Vol : <b id="p-t-wil">2</b></div>
-          </div>
-          <div>
-            <div class="font-bold border-b border-black pb-1">EAU : <span id="p-r-water">2</span></div>
-            <div class="pt-1">Force : <b id="p-t-str">2</b></div>
-            <div>Perc : <b id="p-t-per">2</b></div>
-          </div>
-          <div>
-            <div class="font-bold border-b border-black pb-1">AIR : <span id="p-r-air">2</span></div>
-            <div class="pt-1">Réfl : <b id="p-t-ref">2</b></div>
-            <div>Intu : <b id="p-t-awa">2</b></div>
-          </div>
-          <div>
-            <div class="font-bold border-b border-black pb-1">FEU : <span id="p-r-fire">2</span></div>
-            <div class="pt-1">Agil : <b id="p-t-agi">2</b></div>
-            <div>Int : <b id="p-t-int">2</b></div>
-          </div>
-          <div>
-            <div class="font-bold border-b border-black pb-1">VIDE : <span id="p-r-void">2</span></div>
-            <div class="pt-1">Points : <b id="p-t-voi">2</b></div>
-          </div>
-        </div>
+          <!-- Rangée Supérieure : Les 5 Anneaux & Huit Traits + Honneur / Gloire / Statut / Souillure -->
+          <div class="grid grid-cols-12 gap-2.5 items-stretch">
+            <!-- 5 Anneaux colorés -->
+            <div class="col-span-8 l5r-box p-2 flex flex-col justify-between">
+              <div class="grid grid-cols-5 gap-1.5 text-center">
+                <!-- TERRE -->
+                <div class="l5r-ring-earth rounded p-1.5 flex flex-col justify-between">
+                  <div>
+                    <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">土 Terre</div>
+                    <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-earth">2</div>
+                  </div>
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#486a3c]/30 pt-1">
+                    <div class="flex justify-between px-0.5"><span>Const.</span><b id="p-t-sta" class="font-imperial">2</b></div>
+                    <div class="flex justify-between px-0.5"><span>Volonté</span><b id="p-t-wil" class="font-imperial">2</b></div>
+                  </div>
+                </div>
+                <!-- AIR -->
+                <div class="l5r-ring-air rounded p-1.5 flex flex-col justify-between">
+                  <div>
+                    <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">風 Air</div>
+                    <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-air">2</div>
+                  </div>
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#494d7a]/30 pt-1">
+                    <div class="flex justify-between px-0.5"><span>Réfl.</span><b id="p-t-ref" class="font-imperial">2</b></div>
+                    <div class="flex justify-between px-0.5"><span>Intuit.</span><b id="p-t-awa" class="font-imperial">2</b></div>
+                  </div>
+                </div>
+                <!-- EAU -->
+                <div class="l5r-ring-water rounded p-1.5 flex flex-col justify-between">
+                  <div>
+                    <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">水 Eau</div>
+                    <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-water">2</div>
+                  </div>
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#2b5986]/30 pt-1">
+                    <div class="flex justify-between px-0.5"><span>Force</span><b id="p-t-str" class="font-imperial">2</b></div>
+                    <div class="flex justify-between px-0.5"><span>Perc.</span><b id="p-t-per" class="font-imperial">2</b></div>
+                  </div>
+                </div>
+                <!-- FEU -->
+                <div class="l5r-ring-fire rounded p-1.5 flex flex-col justify-between">
+                  <div>
+                    <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">火 Feu</div>
+                    <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-fire">2</div>
+                  </div>
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#b64329]/30 pt-1">
+                    <div class="flex justify-between px-0.5"><span>Agil.</span><b id="p-t-agi" class="font-imperial">2</b></div>
+                    <div class="flex justify-between px-0.5"><span>Intell.</span><b id="p-t-int" class="font-imperial">2</b></div>
+                  </div>
+                </div>
+                <!-- VIDE -->
+                <div class="l5r-ring-void rounded p-1.5 flex flex-col justify-between">
+                  <div>
+                    <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">空 Vide</div>
+                    <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-void">2</div>
+                  </div>
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#3c342e]/30 pt-1">
+                    <div class="flex justify-between px-0.5"><span>Réserve</span><b id="p-t-voi" class="font-imperial">2</b></div>
+                    <div class="text-[7.5px] text-[#5a4e43]">Points/jour</div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-1.5 pt-1 border-t border-[#c9bea6] flex items-center justify-between text-[8.5px]">
+                <span class="font-imperial font-bold uppercase text-[#3c342e] tracking-wider">Points de Vide dépensés :</span>
+                <div id="p-void-dots" class="flex items-center gap-1"></div>
+              </div>
+            </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-4 text-xs">
-          <div class="border border-black p-2 space-y-1">
-            <div class="font-bold uppercase border-b border-black pb-0.5">Statistiques de Combat</div>
-            <div><b>Initiative :</b> <span id="p-init">3g2</span> <span id="p-init-note" class="text-[9px]"></span></div>
-            <div><b>ND Armure :</b> <span id="p-armor-tn">20</span> <span id="p-armor-note" class="text-[9px]"></span></div>
-            <div><b>Armure :</b> <span id="p-armor-name">Aucune</span> (<span id="p-armor-reduc">0</span>)</div>
-            <div><b>Récupération :</b> <span id="p-heal">5 PV / jour</span></div>
+            <!-- Honneur / Gloire / Statut / Souillure -->
+            <div class="col-span-4 l5r-box overflow-hidden flex flex-col justify-between">
+              <div class="l5r-bar"><span>Vertus &amp; Renommée</span><span>Rang</span></div>
+              <div class="p-2 space-y-1.5 text-[9px] flex-1 flex flex-col justify-around">
+                <div>
+                  <div class="flex justify-between font-bold text-[#2b241d]">
+                    <span class="font-imperial uppercase tracking-wider text-[8.5px]">Honneur</span>
+                    <span id="p-honor" class="font-imperial text-[#7b2319]">4.5</span>
+                  </div>
+                  <div id="p-honor-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                </div>
+                <div>
+                  <div class="flex justify-between font-bold text-[#2b241d]">
+                    <span class="font-imperial uppercase tracking-wider text-[8.5px]">Gloire</span>
+                    <span id="p-glory" class="font-imperial">1.0</span>
+                  </div>
+                  <div id="p-glory-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                </div>
+                <div>
+                  <div class="flex justify-between font-bold text-[#2b241d]">
+                    <span class="font-imperial uppercase tracking-wider text-[8.5px]">Statut</span>
+                    <span id="p-status" class="font-imperial">1.0</span>
+                  </div>
+                  <div id="p-status-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                </div>
+                <div>
+                  <div class="flex justify-between font-bold text-[#2b241d]">
+                    <span class="font-imperial uppercase tracking-wider text-[8.5px]">Souillure Outremonde</span>
+                    <span id="p-taint" class="font-imperial text-[#581f1b]">0.0</span>
+                  </div>
+                  <div id="p-taint-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="border border-black p-2 space-y-1" id="p-weapons-box"></div>
-        </div>
 
-        <div class="grid grid-cols-3 gap-4 mb-4 text-xs">
-          <div class="col-span-2 border border-black p-2">
-            <div class="font-bold uppercase border-b border-black pb-0.5 mb-1">Compétences & Maîtrises</div>
-            <table class="w-full text-left text-[10px]">
-              <thead>
-                <tr class="border-b border-black">
-                  <th>Nom</th>
-                  <th class="text-center">Éc.</th>
-                  <th class="text-center">Rang</th>
-                  <th class="text-center">Jet</th>
-                  <th>Spécialités & Paliers</th>
-                </tr>
-              </thead>
-              <tbody id="p-skills-body"></tbody>
-            </table>
+          <!-- Corps Principal : Compétences (Gauche) & Combat / Blessures (Droite) -->
+          <div class="grid grid-cols-12 gap-2.5 items-stretch">
+            <!-- Compétences -->
+            <div class="col-span-7 l5r-box overflow-hidden flex flex-col">
+              <div class="l5r-bar">
+                <span>Compétences &amp; Maîtrises</span>
+                <span class="text-[8px] font-normal opacity-85">✓ = École • Trait associé exact</span>
+              </div>
+              <table class="w-full text-left text-[9px] l5r-table">
+                <thead>
+                  <tr>
+                    <th class="w-6 text-center">Éc.</th>
+                    <th>Compétence</th>
+                    <th class="w-7 text-center">Rg</th>
+                    <th class="w-14 text-center">Trait</th>
+                    <th class="w-11 text-center">Jet</th>
+                    <th>Spécialités &amp; Maîtrises</th>
+                  </tr>
+                </thead>
+                <tbody id="p-skills-body"></tbody>
+              </table>
+            </div>
+
+            <!-- Combat, Armure, Blessures & Récupération -->
+            <div class="col-span-5 flex flex-col gap-2">
+              <!-- Initiative -->
+              <div class="l5r-box overflow-hidden">
+                <div class="l5r-bar"><span>Initiative</span><span id="p-init" class="text-amber-200 font-bold text-[10.5px]">3g2</span></div>
+                <div class="p-1.5 text-[8.5px] space-y-0.5">
+                  <div class="flex justify-between"><span class="text-[#5a4e43]">Base &amp; Bonus :</span><span id="p-init-note" class="font-medium text-right"></span></div>
+                  <div class="flex justify-between border-t border-[#d7d0c0] pt-0.5"><span class="text-[#5a4e43]">Modif. / Initiative actuelle :</span><span class="text-[#8b7f69]">_______</span></div>
+                </div>
+              </div>
+
+              <!-- ND d'Armure & Armure -->
+              <div class="l5r-box overflow-hidden">
+                <div class="l5r-bar"><span>ND d'Armure &amp; Protection</span><span id="p-armor-tn" class="text-amber-200 font-bold text-[11px]">20</span></div>
+                <div class="p-1.5 text-[8.5px] space-y-0.5">
+                  <div id="p-armor-note" class="text-[8px] text-[#4a3e31]"></div>
+                  <div class="flex justify-between border-t border-[#d7d0c0] pt-0.5">
+                    <span><b>Armure :</b> <span id="p-armor-name">Aucune</span></span>
+                    <span id="p-armor-reduc" class="font-bold text-[#2b5986]">Réduction : 0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Seuils de Blessures -->
+              <div class="l5r-box overflow-hidden flex-1 flex flex-col">
+                <div class="l5r-bar">
+                  <span>Seuils de Blessures</span>
+                  <span class="text-[9px]">Total : <b id="p-wounds-total" class="text-amber-200">38 PV</b></span>
+                </div>
+                <div class="grid grid-cols-2 text-[8px] l5r-cell-lbl border-b border-[#8c7b5c] px-2 py-0.5">
+                  <span>Terre ×2 / palier : <b id="p-wounds-earth2">4 PV</b></span>
+                  <span class="text-right">Terre ×5 Indemne : <b id="p-wounds-earth5">10 PV</b></span>
+                </div>
+                <table class="w-full text-[8.5px] text-center l5r-table flex-1">
+                  <thead>
+                    <tr>
+                      <th class="text-left pl-1.5">Palier</th>
+                      <th class="w-10">Malus</th>
+                      <th class="w-11">Seuil</th>
+                      <th class="w-14">Actuel</th>
+                    </tr>
+                  </thead>
+                  <tbody id="p-wounds-body"></tbody>
+                </table>
+              </div>
+
+              <!-- Récupération -->
+              <div class="l5r-box overflow-hidden">
+                <div class="l5r-bar"><span>Récupération de Blessures</span><span id="p-heal" class="text-emerald-200 font-bold">5 PV / jour</span></div>
+                <div class="px-2 py-1 text-[8px] text-[#5a4e43] flex justify-between">
+                  <span>(Constitution × 2) + Rang de Réputation</span>
+                  <span>Modif. : ____</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="border border-black p-2">
-            <div class="font-bold uppercase border-b border-black pb-0.5 mb-1">Seuils de Blessures</div>
-            <table class="w-full text-[10px] text-center">
-              <tbody id="p-wounds-body"></tbody>
-            </table>
-          </div>
-        </div>
+          <!-- Arsenal en pied de Page 1 -->
+          <div id="p-weapons-box" class="l5r-box overflow-hidden"></div>
+        </section>
 
-        <div class="grid grid-cols-2 gap-4 text-xs border border-black p-2 mb-4">
-          <div>
-            <div class="font-bold border-b border-black pb-0.5">Avantages (<span id="p-adv-total">0 XP</span>) :</div>
-            <div id="p-adv-list" class="space-y-1 mt-1 text-[10px]"></div>
+        <!-- ===================== PAGE 2 : TECHNIQUES, AVANTAGES, ÉQUIPEMENT & ARTS ===================== -->
+        <section id="print-page-2" class="l5r-sheet-page space-y-2.5">
+          <!-- Bandeau Rappel Identité & Bourse -->
+          <div class="flex flex-wrap justify-between items-center gap-2 border-b-2 border-[#7c6a4a] pb-1.5 text-[9.5px]">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="font-imperial font-bold text-sm text-[#1a1610]" id="p-name-2">Samouraï</span>
+              <span class="px-1.5 py-0.5 rounded bg-[#e3ded0] border border-[#8c7b5c] font-semibold" id="p-clan-2">Crabe</span>
+              <span class="text-[#4a3b26] font-medium" id="p-school-2">École de bushi Hida</span>
+            </div>
+            <div class="flex items-center gap-2 text-[8.5px] bg-[#efe6cf] border border-[#8c7b5c] rounded px-2 py-0.5">
+              <b>Bourse :</b>
+              <span>Koku : <b class="inline-block w-6 border-b border-[#7c6a4a] text-center">&nbsp;</b></span>
+              <span>Bu : <b class="inline-block w-6 border-b border-[#7c6a4a] text-center">&nbsp;</b></span>
+              <span>Zeni : <b class="inline-block w-6 border-b border-[#7c6a4a] text-center">&nbsp;</b></span>
+              <span class="text-[7.5px] text-[#6a5d47] italic">(1 Koku = 5 Bu = 50 Zeni)</span>
+            </div>
           </div>
-          <div>
-            <div class="font-bold border-b border-black pb-0.5">Désavantages (<span id="p-disadv-total">0 / 15 XP</span>) :</div>
-            <div id="p-disadv-list" class="space-y-1 mt-1 text-[10px]"></div>
+
+          <!-- Avantages & Désavantages -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <div class="l5r-box overflow-hidden">
+              <div class="l5r-bar"><span>Avantages</span><span id="p-adv-total">0 XP</span></div>
+              <div id="p-adv-list" class="p-2 space-y-1 text-[8.5px] leading-snug"></div>
+            </div>
+            <div class="l5r-box overflow-hidden">
+              <div class="l5r-bar l5r-bar-crimson"><span>Désavantages</span><span id="p-disadv-total">0 / 15 XP</span></div>
+              <div id="p-disadv-list" class="p-2 space-y-1 text-[8.5px] leading-snug"></div>
+            </div>
           </div>
-        </div>
 
-        <div class="border border-black p-2 text-xs mb-4">
-          <div class="font-bold uppercase border-b border-black pb-0.5 flex justify-between">
-            <span>Sorts, Kihos & Katas</span>
-            <span id="p-mystic-summary" class="text-[9px] font-normal"></span>
+          <!-- Techniques d'École & Équipement -->
+          <div class="grid grid-cols-12 gap-2.5 items-stretch">
+            <div class="col-span-8 l5r-box overflow-hidden">
+              <div class="l5r-bar"><span id="p-tech-name">Techniques d'École</span><span>Progression</span></div>
+              <div id="p-tech-desc" class="p-2 text-[8.5px] space-y-1.5 leading-snug"></div>
+            </div>
+            <div class="col-span-4 l5r-box overflow-hidden flex flex-col">
+              <div class="l5r-bar"><span>Équipement &amp; Nécessaire</span></div>
+              <div id="p-outfit-desc" class="p-2 text-[8.5px] leading-relaxed flex-1 whitespace-pre-line"></div>
+            </div>
           </div>
-          <div id="p-spells-katas-box" class="text-[9px] space-y-1 mt-1"></div>
-        </div>
 
-        <div class="border border-black p-2 text-xs">
-          <div class="font-bold uppercase border-b border-black pb-0.5" id="p-tech-name">Techniques d'École</div>
-          <div id="p-tech-desc" class="text-[10px] space-y-1 mt-1 leading-relaxed"></div>
-          <div class="mt-2 pt-1 border-t border-gray-400 text-[9px]">
-            <b>Équipement :</b> <span id="p-outfit-desc"></span>
+          <!-- Arts Martiaux & Mystiques (Sorts / Kihos / Katas / Tatouages) -->
+          <div id="p-mystic-print-section" class="l5r-box overflow-hidden">
+            <div id="p-mystic-bar" class="l5r-bar">
+              <span id="p-mystic-bar-title">Voies Martiales &amp; Mystiques (Sorts, Kihos, Katas &amp; Tatouages)</span>
+              <span id="p-mystic-summary" class="text-[8px] font-normal"></span>
+            </div>
+            <div class="p-2 space-y-2">
+              <div id="p-spell-slots-bar-print" class="hidden rounded border border-[#9c8c6d] bg-[#f0e9d6] p-1.5 space-y-1 text-[8px]"></div>
+              <div id="p-spells-katas-box" class="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-[8.5px]"></div>
+              <div id="p-tattoos-print-box" class="hidden grid grid-cols-1 md:grid-cols-2 gap-1.5 text-[8.5px]"></div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div class="border border-black p-2 text-xs mt-2">
-          <div class="font-bold uppercase border-b border-black pb-0.5">Chronique Biographique & Les 20 Questions</div>
-          <div id="p-background-story" class="whitespace-pre-line text-[9px] mt-1"></div>
-          <div class="grid grid-cols-2 gap-2 pt-1 mt-1 border-t border-gray-300 text-[8px]" id="p-20questions-box"></div>
-        </div>
-
-        <div class="hidden">
-          <span id="p-name-2"></span>
-          <span id="p-clan-2"></span>
-          <span id="p-school-2"></span>
-        </div>
+        <!-- ===================== PAGE 3 : RÉCIT & LES 20 QUESTIONS ===================== -->
+        <section id="print-page-story" class="l5r-sheet-page space-y-2.5">
+          <div class="l5r-bar">
+            <span>Chronique du Samouraï &amp; Les Vingt Questions de Rokugan</span>
+            <span class="text-[8px] font-normal opacity-85">Histoire personnelle &amp; Destin</span>
+          </div>
+          <div id="p-background-story-wrap" class="l5r-box p-2 text-[8.5px] leading-relaxed">
+            <div class="font-imperial font-bold uppercase text-[8px] text-[#4a3b26] border-b border-[#c9bea6] pb-0.5 mb-1">Récit &amp; Faits Marquants</div>
+            <div id="p-background-story" class="whitespace-pre-line"></div>
+          </div>
+          <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[8px] leading-snug" id="p-20questions-box"></div>
+        </section>
       </div>
     `;
   }
@@ -1201,32 +1407,161 @@ function applyFullCharacterState(decoded) {
   }
 }
 
+function getPrintElementStyle(elemOrType) {
+  const k = (elemOrType || '').toString().toLowerCase();
+  if (k.includes('terre') || k.includes('earth')) return 'background:#e9f1e6;border-color:#486a3c;color:#243b1d;';
+  if (k.includes('eau') || k.includes('water')) return 'background:#e5eef7;border-color:#2b5986;color:#173452;';
+  if (k.includes('air')) return 'background:#ececf6;border-color:#494d7a;color:#242648;';
+  if (k.includes('feu') || k.includes('fire')) return 'background:#faeae5;border-color:#b64329;color:#5b1d10;';
+  if (k.includes('vide') || k.includes('void')) return 'background:#efece8;border-color:#3c342e;color:#1e1915;';
+  if (k.includes('kiho')) return 'background:#fdf0df;border-color:#b46414;color:#683306;';
+  return 'background:#f2ece0;border-color:#8c7b5c;color:#3d3223;';
+}
+
 function populatePrintableMysticBox() {
+  const section = document.getElementById('p-mystic-print-section');
+  const bar = document.getElementById('p-mystic-bar');
+  const barTitle = document.getElementById('p-mystic-bar-title');
   const box = document.getElementById('p-spells-katas-box');
   const sum = document.getElementById('p-mystic-summary');
+  const slotsPrint = document.getElementById('p-spell-slots-bar-print');
+  const tattoosPrint = document.getElementById('p-tattoos-print-box');
   if (!box) return;
+
+  const perms = typeof getActiveForgePermissions === 'function'
+    ? getActiveForgePermissions()
+    : { canCastSpells: true, canUseKatas: true, canUseKihos: true, canUseTattoos: false };
 
   const aff = document.getElementById('shugenja-affinity')?.value || "aucune";
   const def = document.getElementById('shugenja-deficiency')?.value || "aucune";
+  const spells = window.charSpellsList || [];
+  const katas = window.charKatasList || [];
+  const tattoos = window.charTattoosList || [];
+
+  if (bar && barTitle) {
+    bar.classList.remove('l5r-bar-crimson', 'l5r-bar-emerald');
+    if (perms.canUseTattoos && !perms.canUseKatas && !perms.canCastSpells && !perms.canUseKihos) {
+      bar.classList.add('l5r-bar-emerald');
+      barTitle.textContent = 'Tatouages Mystiques de Togashi (Ise Zumi)';
+    } else if (perms.canUseKatas && !perms.canCastSpells && !perms.canUseKihos) {
+      barTitle.textContent = 'Katas Martiaux';
+    } else if (!perms.canCastSpells && perms.canUseKihos && !perms.canUseKatas) {
+      barTitle.textContent = 'Voies Mystiques (Kihos)';
+    } else if (perms.canCastSpells && !perms.canUseKatas) {
+      barTitle.textContent = 'Parchemins de Sorts, Emplacements & Kihos';
+    } else {
+      barTitle.textContent = 'Voies Martiales & Mystiques';
+    }
+  }
+
   if (sum) {
-    sum.textContent = `${window.charSpellsList.length} Sort(s)/Kiho(s) • ${window.charKatasList.length} Kata(s)${aff !== 'aucune' ? ` • Affinité: ${aff.toUpperCase()}` : ''}${def !== 'aucune' ? ` / Déficience: ${def.toUpperCase()}` : ''}`;
+    const parts = [];
+    if (perms.canCastSpells || perms.canUseKihos) parts.push(`${spells.length} Sort(s)/Kiho(s)`);
+    if (perms.canUseKatas) parts.push(`${katas.length} Kata(s)`);
+    if (perms.canUseTattoos) parts.push(`${tattoos.length} Tatouage(s)`);
+    if (perms.canCastSpells && aff !== 'aucune') parts.push(`Affinité : ${aff.toUpperCase()}`);
+    if (perms.canCastSpells && def !== 'aucune') parts.push(`Déficience : ${def.toUpperCase()}`);
+    sum.textContent = parts.join(' • ') || 'Courtisan';
   }
 
-  if (window.charSpellsList.length === 0 && window.charKatasList.length === 0) {
-    box.innerHTML = `<div class="text-stone-500 italic">Aucun sort, kiho ou kata inscrit sur cette fiche.</div>`;
-    return;
+  if (slotsPrint) {
+    if (perms.canCastSpells) {
+      const slotDefs = [
+        { label: '風 Air', ringId: 'ring-air', stroke: '#494d7a', fill: '#d9daf0' },
+        { label: '土 Terre', ringId: 'ring-earth', stroke: '#486a3c', fill: '#d6e6d0' },
+        { label: '火 Feu', ringId: 'ring-fire', stroke: '#b64329', fill: '#f4d3ca' },
+        { label: '水 Eau', ringId: 'ring-water', stroke: '#2b5986', fill: '#cfe1f2' },
+        { label: '空 Vide', ringId: 'ring-void', stroke: '#3c342e', fill: '#ddd7d1' }
+      ];
+      slotsPrint.innerHTML = `
+        <div class="flex justify-between items-center font-imperial font-bold text-[#3d3223] border-b border-[#c9bea6] pb-0.5 mb-1">
+          <span>Emplacements de sorts quotidiens (égal à chaque Anneau)</span>
+          <span class="font-mono text-[7.5px]">ND Sort = 5 + (5 × Maîtrise)</span>
+        </div>
+        <div class="grid grid-cols-5 gap-1.5">
+          ${slotDefs.map(sd => {
+            const val = parseInt(document.getElementById(sd.ringId)?.textContent, 10) || 2;
+            let circles = '';
+            for (let i = 1; i <= 6; i++) {
+              const active = i <= val;
+              circles += `<span style="display:inline-block;width:9px;height:9px;border-radius:9999px;border:1.25px solid ${sd.stroke};background:${active ? sd.fill : '#fffdf7'};opacity:${active ? '1' : '0.35'};"></span>`;
+            }
+            return `
+              <div class="text-center rounded border px-1 py-1 bg-[#fbf8f0]" style="border-color:${sd.stroke};">
+                <div class="font-imperial font-bold text-[8px]" style="color:${sd.stroke};">${sd.label} (${val})</div>
+                <div class="flex justify-center gap-0.5 mt-0.5">${circles}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      slotsPrint.classList.remove('hidden');
+    } else {
+      slotsPrint.classList.add('hidden');
+      slotsPrint.innerHTML = '';
+    }
   }
 
-  const spellsHtml = window.charSpellsList.map(s => {
+  const spellsHtml = spells.map(s => {
     const tn = s.mastery === 0 ? 10 : (5 + 5 * s.mastery);
-    return `<div><b>[${s.isKiho ? 'Kiho ' + s.ring : s.element} M${s.mastery} • ND ${tn}] ${s.name}</b> (${s.range}, ${s.duration}) : ${s.desc}</div>`;
+    const elemTag = s.isKiho ? `Kiho ${s.ring || ''}` : (s.element || 'Universel');
+    const styleStr = getPrintElementStyle(s.isKiho ? 'kiho' : elemTag);
+    return `
+      <div class="l5r-box p-1.5 rounded-sm space-y-0.5 l5r-avoid-break">
+        <div class="flex justify-between items-center gap-1 border-b border-[#d7d0c0] pb-0.5">
+          <b class="font-imperial text-[9px] text-[#1a1610]">${s.name}</b>
+          <span class="px-1.5 py-0.5 rounded border text-[7.5px] font-bold shrink-0" style="${styleStr}">${elemTag} • M${s.mastery} (ND ${tn})</span>
+        </div>
+        <div class="text-[7.5px] text-[#5a4e43]"><b>Portée :</b> ${s.range || 'Pers.'} • <b>Zone :</b> ${s.area || 'Spéc.'} • <b>Durée :</b> ${s.duration || 'Inst.'}</div>
+        <div class="text-[8px] text-[#2b241d] leading-snug">${s.desc || ''}</div>
+      </div>
+    `;
   }).join('');
 
-  const katasHtml = window.charKatasList.map(k => {
-    return `<div><b>[Kata ${k.element} ${k.mastery} • ${k.xpCost} XP${k.active ? ' • ACTIF' : ''}] ${k.name}</b> : ${k.desc}</div>`;
+  const katasHtml = katas.map(k => {
+    const styleStr = getPrintElementStyle(k.element);
+    return `
+      <div class="l5r-box p-1.5 rounded-sm space-y-0.5 l5r-avoid-break">
+        <div class="flex justify-between items-center gap-1 border-b border-[#d7d0c0] pb-0.5">
+          <b class="font-imperial text-[9px] text-[#1a1610]">${k.name}${k.active ? ' ★ ACTIF' : ''}</b>
+          <span class="px-1.5 py-0.5 rounded border text-[7.5px] font-bold shrink-0" style="${styleStr}">Kata ${k.element} ${k.mastery} • ${k.xpCost} XP</span>
+        </div>
+        <div class="text-[8px] text-[#2b241d] leading-snug">${k.desc || ''}</div>
+      </div>
+    `;
   }).join('');
 
-  box.innerHTML = spellsHtml + katasHtml;
+  if (spellsHtml || katasHtml) {
+    box.innerHTML = spellsHtml + katasHtml;
+    box.classList.remove('hidden');
+  } else if (!perms.canUseTattoos || tattoos.length === 0) {
+    box.innerHTML = `<div class="col-span-full text-[#6a5d47] italic text-[8.5px]">${perms.canUseKatas || perms.canCastSpells || perms.canUseKihos || perms.canUseTattoos ? 'Aucun art inscrit pour le moment.' : 'Aucun sort, kiho ou kata requis pour cette école de Cour / Magistrature.'}</div>`;
+    box.classList.remove('hidden');
+  } else {
+    box.innerHTML = '';
+    box.classList.add('hidden');
+  }
+
+  if (tattoosPrint) {
+    if (tattoos.length > 0) {
+      tattoosPrint.innerHTML = tattoos.map(t => `
+        <div class="l5r-box p-1.5 rounded-sm space-y-0.5 l5r-avoid-break" style="border-color:#194235;">
+          <div class="flex justify-between items-center gap-1 border-b border-[#c5d7cf] pb-0.5">
+            <b class="font-imperial text-[9px] text-[#102b22]">${t.name} ${t.kanji ? `(${t.kanji})` : ''}</b>
+            <span class="px-1.5 py-0.5 rounded border text-[7.5px] font-bold" style="${getPrintElementStyle(t.element || 'vide')}">${t.element || 'Togashi'} ${t.ringReq || ''}</span>
+          </div>
+          <div class="text-[7.5px] text-[#3a574b]"><b>Activation :</b> ${t.activation || t.action || 'Action Libre'} • <b>Durée :</b> ${t.duration || '2 × Rang rounds'}</div>
+          <div class="text-[8px] text-[#1f1a14] leading-snug">${t.rule || t.desc || ''}</div>
+        </div>
+      `).join('');
+      tattoosPrint.classList.remove('hidden');
+    } else {
+      tattoosPrint.innerHTML = '';
+      tattoosPrint.classList.add('hidden');
+    }
+  }
+
+  if (section) section.classList.remove('hidden');
 }
 
 function exportJSONWithMystic() {
@@ -1250,29 +1585,80 @@ function resetCharacterWithMystic() {
 
 function populatePrintable20Questions() {
   const qBox = document.getElementById('p-20questions-box');
+  const storyWrap = document.getElementById('p-background-story-wrap');
+  const storyEl = document.getElementById('p-background-story');
+  const storySrc = document.getElementById('pc-background-story');
+
+  if (storyEl && storySrc) {
+    const txt = (storySrc.value || '').trim();
+    storyEl.textContent = txt;
+    if (storyWrap) storyWrap.classList.toggle('hidden', !txt);
+  }
+
   if (!qBox) return;
   let html = "";
   for (let i = 1; i <= 20; i++) {
-    const val = document.getElementById(`q20-${i}`)?.value || "";
-    if (val) html += `<div><b>Q${i}.</b> ${val}</div>`;
+    const val = (document.getElementById(`q20-${i}`)?.value || "").trim();
+    if (!val) continue;
+    const lbl = (document.querySelector(`label[for="q20-${i}"]`)?.textContent || `Question ${i}`).replace(/^\d+\.\s*/, '');
+    html += `
+      <div class="border-b border-[#d7d0c0] pb-1 l5r-avoid-break">
+        <div class="font-bold text-[#4a3b26] text-[7.5px]">${i}. ${lbl}</div>
+        <div class="text-[#1f1a14]">${val}</div>
+      </div>
+    `;
   }
-  qBox.innerHTML = html;
+  qBox.innerHTML = html || '<div class="col-span-full text-[#6a5d47] italic">Aucune réponse renseignée dans les Vingt Questions.</div>';
 }
 
-function prepareAndPrintPDF() {
+function syncAllPrintableSheetContent() {
+  if (typeof window.populateOfficialPrintSheet === 'function') {
+    window.populateOfficialPrintSheet();
+  }
   populatePrintableMysticBox();
   populatePrintable20Questions();
-  if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
-    document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
-  }
-  if (typeof exportOfficialPDF === "function") exportOfficialPDF();
+  const toggleCb = document.getElementById('toggle-print-story');
+  togglePrintStorySection(toggleCb ? toggleCb.checked : true);
+}
+
+function togglePrintStorySection(show) {
+  const storyPage = document.getElementById('print-page-story');
+  const page2 = document.getElementById('print-page-2');
+  if (storyPage) storyPage.classList.toggle('hidden', !show);
+  if (page2) page2.classList.toggle('is-last-print-page', !show);
+}
+window.togglePrintStorySection = togglePrintStorySection;
+
+function openCharacterSheetPreview() {
+  syncAllPrintableSheetContent();
+  document.body.classList.add('l5r-preview-active');
+  const dossier = document.getElementById('official-print-dossier');
+  if (dossier) dossier.scrollTop = 0;
+}
+window.openCharacterSheetPreview = openCharacterSheetPreview;
+
+function closeCharacterSheetPreview() {
+  document.body.classList.remove('l5r-preview-active');
+}
+window.closeCharacterSheetPreview = closeCharacterSheetPreview;
+
+function triggerSheetPrint() {
+  syncAllPrintableSheetContent();
+  window.print();
+}
+window.triggerSheetPrint = triggerSheetPrint;
+
+function prepareAndPrintPDF() {
+  openCharacterSheetPreview();
 }
 
 window.addEventListener('beforeprint', () => {
-  populatePrintableMysticBox();
-  populatePrintable20Questions();
-  if (document.getElementById('pc-background-story') && document.getElementById('p-background-story')) {
-    document.getElementById('p-background-story').textContent = document.getElementById('pc-background-story').value;
+  syncAllPrintableSheetContent();
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.body.classList.contains('l5r-preview-active')) {
+    closeCharacterSheetPreview();
   }
 });
 
