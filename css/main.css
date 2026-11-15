@@ -22,18 +22,18 @@
 
 /* MODE CLAIR : PARCHEMIN WASHI IMPÉRIAL */
 [data-theme="light"] {
-  --bg-primary: #f5efe1;
-  --bg-radial-inner: #fbf8f1;
-  --bg-card: rgba(255, 252, 244, 0.96);
-  --bg-subcard: rgba(238, 228, 206, 0.65);
-  --bg-input: #fffdf8;
-  --text-main: #292018;
-  --text-muted: #574c41;
+  --bg-primary: #f4ede0;
+  --bg-radial-inner: #fcf9f2;
+  --bg-card: rgba(255, 252, 245, 0.97);
+  --bg-subcard: rgba(235, 224, 200, 0.72);
+  --bg-input: #fffdf9;
+  --text-main: #231b14;
+  --text-muted: #52463b;
   --text-heading: #78350f;
-  --gold: #9a6b13;
-  --gold-light: #b45309;
-  --border-gold: rgba(154, 107, 19, 0.38);
-  --border-subtle: #d6cbb5;
+  --gold: #8c5e0b;
+  --gold-light: #9a3412;
+  --border-gold: rgba(140, 94, 11, 0.42);
+  --border-subtle: #cfc2a9;
   --shadow-card: 0 8px 24px -4px rgba(68, 51, 25, 0.12);
   color-scheme: light;
 }
@@ -56,12 +56,17 @@ h1, h2, h3, h4, .font-imperial {
   font-family: 'Cinzel', serif;
 }
 
-/* Cartes & Conteneurs */
-.card-clean {
+/* Cartes & Conteneurs (Standard & Grimoire) */
+.card-clean,
+.card-spell {
   background: var(--bg-card) !important;
   border: 1px solid var(--border-gold) !important;
   box-shadow: var(--shadow-card);
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-spell:hover {
+  border-color: var(--gold) !important;
 }
 
 .gold-text {
@@ -75,46 +80,285 @@ h1, h2, h3, h4, .font-imperial {
 }
 
 [data-theme="light"] .gold-gradient {
-  background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #92400e 100%);
+  background: linear-gradient(135deg, #652b0d 0%, #9a3412 50%, #78350f 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Adaptation automatique des utilitaires Tailwind en Mode Clair */
-[data-theme="light"] .text-stone-300,
-[data-theme="light"] .text-stone-200 {
-  color: #292018 !important;
+.tea-gradient {
+  background: linear-gradient(135deg, #f5e096 0%, #a7f3d0 45%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .tea-gradient,
+[data-theme="light"] .dragon-gradient {
+  background: linear-gradient(135deg, #065f46 0%, #047857 50%, #78350f 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="light"] .crane-gradient,
+[data-theme="light"] .mantis-gradient {
+  background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 50%, #0f766e 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="light"] .unicorn-gradient,
+[data-theme="light"] .scorpion-gradient {
+  background: linear-gradient(135deg, #581c87 0%, #7e22ce 50%, #991b1b 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="light"] .lion-gradient,
+[data-theme="light"] .phenix-gradient {
+  background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #991b1b 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Champs de saisie, listes déroulantes et zones de texte (Dark & Light) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+select,
+textarea {
+  background-color: var(--bg-input) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-gold) !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25);
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #786b5e !important;
+}
+
+/* ==========================================================================
+   ADAPTATION COMPLÈTE DU MODE CLAIR (CONTRASTE HAUTE LISIBILITÉ SUR PARCHEMIN)
+   ========================================================================== */
+
+/* 1. Textes neutres & clairs -> Encre sépia foncée */
+[data-theme="light"] .text-stone-100,
+[data-theme="light"] .text-stone-200,
+[data-theme="light"] .text-stone-300 {
+  color: #231b14 !important;
 }
 
 [data-theme="light"] .text-stone-400,
-[data-theme="light"] .text-stone-500 {
-  color: #574c41 !important;
+[data-theme="light"] .text-stone-500,
+[data-theme="light"] .text-stone-600,
+[data-theme="light"] .text-stone-700 {
+  color: #52463b !important;
 }
 
+/* 2. Textes colorés pastel -> Teintes impériales profondes haute lisibilité */
+[data-theme="light"] .text-amber-100,
 [data-theme="light"] .text-amber-200,
+[data-theme="light"] .text-amber-200\/90,
 [data-theme="light"] .text-amber-300,
-[data-theme="light"] .text-amber-400 {
-  color: #92400e !important;
+[data-theme="light"] .text-amber-300\/80,
+[data-theme="light"] .text-amber-400,
+[data-theme="light"] .text-amber-400\/80,
+[data-theme="light"] .text-amber-500,
+[data-theme="light"] .text-amber-500\/80,
+[data-theme="light"] .text-amber-500\/70,
+[data-theme="light"] .text-yellow-200,
+[data-theme="light"] .text-yellow-300,
+[data-theme="light"] .text-yellow-400,
+[data-theme="light"] .text-orange-200,
+[data-theme="light"] .text-orange-300,
+[data-theme="light"] .text-orange-400 {
+  color: #853a0e !important;
 }
 
+[data-theme="light"] .text-emerald-200,
+[data-theme="light"] .text-emerald-300,
+[data-theme="light"] .text-emerald-400,
+[data-theme="light"] .text-green-200,
+[data-theme="light"] .text-green-300,
+[data-theme="light"] .text-green-400 {
+  color: #065f46 !important;
+}
+
+[data-theme="light"] .text-teal-200,
+[data-theme="light"] .text-teal-300,
+[data-theme="light"] .text-teal-400,
+[data-theme="light"] .text-cyan-200,
+[data-theme="light"] .text-cyan-300 {
+  color: #0f766e !important;
+}
+
+[data-theme="light"] .text-sky-200,
+[data-theme="light"] .text-sky-300,
+[data-theme="light"] .text-sky-400,
+[data-theme="light"] .text-blue-200,
+[data-theme="light"] .text-blue-300,
+[data-theme="light"] .text-blue-400,
+[data-theme="light"] .text-indigo-200,
+[data-theme="light"] .text-indigo-300 {
+  color: #1e3a8a !important;
+}
+
+[data-theme="light"] .text-purple-200,
+[data-theme="light"] .text-purple-300,
+[data-theme="light"] .text-purple-400,
+[data-theme="light"] .text-violet-200,
+[data-theme="light"] .text-violet-300 {
+  color: #581c87 !important;
+}
+
+[data-theme="light"] .text-red-100,
+[data-theme="light"] .text-red-200,
+[data-theme="light"] .text-red-300,
+[data-theme="light"] .text-red-400,
+[data-theme="light"] .text-rose-200,
+[data-theme="light"] .text-rose-200\/90,
+[data-theme="light"] .text-rose-300,
+[data-theme="light"] .text-rose-400 {
+  color: #991b1b !important;
+}
+
+[data-theme="light"] .hover\:text-white:hover {
+  color: #78350f !important;
+}
+
+[data-theme="light"] .hover\:bg-stone-800:hover,
+[data-theme="light"] .hover\:bg-stone-800\/80:hover,
+[data-theme="light"] .hover\:bg-stone-700:hover {
+  background-color: rgba(212, 175, 55, 0.22) !important;
+}
+
+[data-theme="light"] .via-stone-900 {
+  background-image: linear-gradient(to right, rgba(254, 243, 199, 0.92), rgba(255, 251, 235, 0.96), rgba(254, 243, 199, 0.8)) !important;
+}
+
+/* Maintien du texte blanc dans les boutons pleins d'action */
+[data-theme="light"] .bg-emerald-700,
+[data-theme="light"] .bg-red-900,
+[data-theme="light"] .bg-red-800 {
+  color: #ffffff !important;
+}
+
+/* 3. Arrière-plans sombres (Black / Stone / Hex) -> Parchemin secondaire */
+[data-theme="light"] .bg-black:not(.fixed),
+[data-theme="light"] .bg-black\/20,
+[data-theme="light"] .bg-black\/30,
+[data-theme="light"] .bg-black\/40,
+[data-theme="light"] .bg-black\/45,
+[data-theme="light"] .bg-black\/50,
 [data-theme="light"] .bg-black\/60,
-[data-theme="light"] .bg-black\/80,
+[data-theme="light"] .bg-black\/70,
+[data-theme="light"] .bg-black\/80:not(.fixed),
+[data-theme="light"] .bg-black\/90:not(.fixed),
+[data-theme="light"] .bg-black\/95:not(.fixed),
+[data-theme="light"] .bg-stone-950,
+[data-theme="light"] .bg-stone-950\/40,
+[data-theme="light"] .bg-stone-950\/50,
+[data-theme="light"] .bg-stone-950\/60,
+[data-theme="light"] .bg-stone-950\/70,
+[data-theme="light"] .bg-stone-950\/80,
+[data-theme="light"] .bg-stone-950\/90,
+[data-theme="light"] .bg-stone-950\/95,
 [data-theme="light"] .bg-stone-900,
-[data-theme="light"] .bg-stone-950 {
+[data-theme="light"] .bg-stone-900\/40,
+[data-theme="light"] .bg-stone-900\/50,
+[data-theme="light"] .bg-stone-900\/60,
+[data-theme="light"] .bg-stone-900\/70,
+[data-theme="light"] .bg-stone-900\/80,
+[data-theme="light"] .bg-stone-900\/90,
+[data-theme="light"] .bg-stone-800,
+[data-theme="light"] .bg-stone-800\/50,
+[data-theme="light"] .bg-stone-800\/60,
+[data-theme="light"] .bg-stone-800\/70,
+[data-theme="light"] .bg-stone-800\/80 {
   background-color: var(--bg-subcard) !important;
 }
 
-[data-theme="light"] .border-stone-800,
-[data-theme="light"] .border-stone-900,
-[data-theme="light"] .divide-stone-800 > :not([hidden]) ~ :not([hidden]) {
-  border-color: var(--border-subtle) !important;
+/* Bandeaux collants, modales et bannières avec couleurs hexadécimales sombres */
+[data-theme="light"] [class*="bg-[#0"],
+[data-theme="light"] [class*="bg-[#1"] {
+  background-color: var(--bg-card) !important;
 }
 
+[data-theme="light"] [class*="from-[#0"],
+[data-theme="light"] [class*="from-[#1"] {
+  background-image: linear-gradient(to bottom, #efe5cf, #f7f1e3) !important;
+}
+
+/* 4. Arrière-plans teintés -950 (Clans, Aides, Badges) -> Lavis clairs assortis */
 [data-theme="light"] .bg-amber-950,
+[data-theme="light"] .bg-amber-950\/90,
+[data-theme="light"] .bg-amber-950\/80,
+[data-theme="light"] .bg-amber-950\/70,
 [data-theme="light"] .bg-amber-950\/60,
+[data-theme="light"] .bg-amber-950\/50,
 [data-theme="light"] .bg-amber-950\/40,
-[data-theme="light"] .bg-amber-950\/30 {
-  background-color: rgba(254, 243, 199, 0.85) !important;
+[data-theme="light"] .bg-amber-950\/30,
+[data-theme="light"] .bg-orange-950,
+[data-theme="light"] .bg-orange-950\/80,
+[data-theme="light"] .bg-orange-950\/60 {
+  background-color: rgba(254, 243, 199, 0.9) !important;
+}
+
+[data-theme="light"] .bg-emerald-950,
+[data-theme="light"] .bg-emerald-950\/90,
+[data-theme="light"] .bg-emerald-950\/80,
+[data-theme="light"] .bg-emerald-950\/60,
+[data-theme="light"] .bg-emerald-950\/40 {
+  background-color: rgba(209, 250, 229, 0.85) !important;
+}
+
+[data-theme="light"] .bg-teal-950,
+[data-theme="light"] .bg-teal-950\/80,
+[data-theme="light"] .bg-teal-950\/60,
+[data-theme="light"] .bg-teal-950\/40 {
+  background-color: rgba(204, 251, 241, 0.85) !important;
+}
+
+[data-theme="light"] .bg-blue-950,
+[data-theme="light"] .bg-blue-950\/80,
+[data-theme="light"] .bg-blue-950\/60,
+[data-theme="light"] .bg-sky-950,
+[data-theme="light"] .bg-sky-950\/80,
+[data-theme="light"] .bg-sky-950\/60,
+[data-theme="light"] .bg-sky-950\/40,
+[data-theme="light"] .bg-\[\#1b263b\] {
+  background-color: rgba(219, 234, 254, 0.88) !important;
+}
+
+[data-theme="light"] .bg-purple-950,
+[data-theme="light"] .bg-purple-950\/80,
+[data-theme="light"] .bg-purple-950\/60,
+[data-theme="light"] .bg-purple-950\/40 {
+  background-color: rgba(243, 232, 255, 0.88) !important;
+}
+
+[data-theme="light"] .bg-red-950,
+[data-theme="light"] .bg-red-950\/80,
+[data-theme="light"] .bg-red-950\/60,
+[data-theme="light"] .bg-red-950\/40,
+[data-theme="light"] .bg-rose-950,
+[data-theme="light"] .bg-rose-950\/80 {
+  background-color: rgba(254, 226, 226, 0.88) !important;
+}
+
+/* 5. Bordures subtiles en Mode Clair */
+[data-theme="light"] .border-stone-700,
+[data-theme="light"] .border-stone-800,
+[data-theme="light"] .border-stone-800\/80,
+[data-theme="light"] .border-stone-800\/60,
+[data-theme="light"] .border-stone-900,
+[data-theme="light"] .divide-stone-800 > :not([hidden]) ~ :not([hidden]),
+[data-theme="light"] .divide-stone-800\/70 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--border-subtle) !important;
 }
 
 /* ==========================================================================
@@ -183,7 +427,7 @@ select {
 }
 
 /* ==========================================================================
-   COMPOSANTS PARTAGÉS (ACCUEIL, FORGE, TATOUAGES & SCÉNARIOS DE CAMPAGNE)
+   COMPOSANTS PARTAGÉS (ACCUEIL, FORGE, GRIMOIRE, TATOUAGES & SCÉNARIOS)
    ========================================================================== */
 .card-hover {
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -193,22 +437,150 @@ select {
   border-color: rgba(212, 175, 55, 0.55) !important;
 }
 
-/* Badges Forge & Éléments */
-.badge-adv { background: rgba(120, 53, 15, 0.4); color: #fde68a; border: 1px solid #d97706; }
-.badge-dis { background: rgba(136, 19, 55, 0.4); color: #fecdd3; border: 1px solid #e11d48; }
-.badge-elem-terre { background: rgba(120, 53, 15, 0.4); color: #fde68a; border: 1px solid #b45309; }
-.badge-elem-eau { background: rgba(30, 58, 138, 0.4); color: #93c5fd; border: 1px solid #2563eb; }
-.badge-elem-feu { background: rgba(153, 27, 27, 0.4); color: #fca5a5; border: 1px solid #dc2626; }
-.badge-elem-air { background: rgba(19, 78, 74, 0.4); color: #99f6e4; border: 1px solid #0d9488; }
-.badge-elem-vide { background: rgba(88, 28, 135, 0.4); color: #e9d5ff; border: 1px solid #9333ea; }
-.badge-elem-universel { background: rgba(68, 64, 60, 0.45); color: #f5f5f4; border: 1px solid #78716c; }
-.badge-elem-kiho { background: rgba(180, 83, 9, 0.4); color: #fed7aa; border: 1px solid #ea580c; }
+/* Badges Forge, Grimoire & Éléments (Mode Sombre par défaut) */
+.badge-adv,
+.badge-terre,
+.badge-elem-terre,
+.badge-clan {
+  background: rgba(120, 53, 15, 0.4);
+  color: #fde68a;
+  border: 1px solid #d97706;
+}
 
-/* Badges Tatouages */
-.badge-dragon { background: rgba(13, 148, 136, 0.2); color: #5eead4; border: 1px solid #14b8a6; }
-.badge-clan { background: rgba(217, 119, 6, 0.2); color: #fde68a; border: 1px solid #d97706; }
-.badge-shadow { background: rgba(136, 19, 55, 0.3); color: #fecdd3; border: 1px solid #e11d48; }
-.badge-legend { background: rgba(147, 51, 234, 0.25); color: #d8b4fe; border: 1px solid #a855f7; }
+.badge-dis,
+.badge-maho,
+.badge-shadow {
+  background: rgba(136, 19, 55, 0.45);
+  color: #fecdd3;
+  border: 1px solid #e11d48;
+}
+
+.badge-eau,
+.badge-elem-eau {
+  background: rgba(30, 58, 138, 0.4);
+  color: #93c5fd;
+  border: 1px solid #2563eb;
+}
+
+.badge-feu,
+.badge-elem-feu {
+  background: rgba(153, 27, 27, 0.4);
+  color: #fca5a5;
+  border: 1px solid #dc2626;
+}
+
+.badge-air,
+.badge-elem-air,
+.badge-dragon {
+  background: rgba(19, 78, 74, 0.4);
+  color: #99f6e4;
+  border: 1px solid #0d9488;
+}
+
+.badge-vide,
+.badge-elem-vide,
+.badge-legend {
+  background: rgba(88, 28, 135, 0.4);
+  color: #e9d5ff;
+  border: 1px solid #9333ea;
+}
+
+.badge-universel,
+.badge-elem-universel {
+  background: rgba(68, 64, 60, 0.45);
+  color: #f5f5f4;
+  border: 1px solid #78716c;
+}
+
+.badge-kiho,
+.badge-elem-kiho {
+  background: rgba(180, 83, 9, 0.4);
+  color: #fed7aa;
+  border: 1px solid #ea580c;
+}
+
+/* Badges Forge, Grimoire & Tatouages en Mode Clair (Contraste Renforcé) */
+[data-theme="light"] .badge-adv,
+[data-theme="light"] .badge-terre,
+[data-theme="light"] .badge-elem-terre,
+[data-theme="light"] .badge-clan {
+  background: #fef3c7 !important;
+  color: #78350f !important;
+  border: 1px solid #d97706 !important;
+}
+
+[data-theme="light"] .badge-dis,
+[data-theme="light"] .badge-maho,
+[data-theme="light"] .badge-shadow {
+  background: #ffe4e6 !important;
+  color: #881337 !important;
+  border: 1px solid #e11d48 !important;
+}
+
+[data-theme="light"] .badge-eau,
+[data-theme="light"] .badge-elem-eau {
+  background: #dbeafe !important;
+  color: #1e3a8a !important;
+  border: 1px solid #2563eb !important;
+}
+
+[data-theme="light"] .badge-feu,
+[data-theme="light"] .badge-elem-feu {
+  background: #fee2e2 !important;
+  color: #7f1d1d !important;
+  border: 1px solid #dc2626 !important;
+}
+
+[data-theme="light"] .badge-air,
+[data-theme="light"] .badge-elem-air,
+[data-theme="light"] .badge-dragon {
+  background: #ccfbf1 !important;
+  color: #115e59 !important;
+  border: 1px solid #0d9488 !important;
+}
+
+[data-theme="light"] .badge-vide,
+[data-theme="light"] .badge-elem-vide,
+[data-theme="light"] .badge-legend {
+  background: #f3e8ff !important;
+  color: #581c87 !important;
+  border: 1px solid #9333ea !important;
+}
+
+[data-theme="light"] .badge-universel,
+[data-theme="light"] .badge-elem-universel {
+  background: #e7e5e4 !important;
+  color: #292524 !important;
+  border: 1px solid #78716c !important;
+}
+
+[data-theme="light"] .badge-kiho,
+[data-theme="light"] .badge-elem-kiho {
+  background: #ffedd5 !important;
+  color: #7c2d12 !important;
+  border: 1px solid #ea580c !important;
+}
+
+/* Animation de mise en évidence d'un sort ciblé par ancre (#sort-<id>) */
+@keyframes pulseGlow {
+  0% {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.9), 0 0 25px rgba(245, 158, 11, 0.7);
+    transform: scale(1.015);
+  }
+  60% {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.6), 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+  100% {
+    border-color: rgba(212, 175, 55, 0.45);
+    box-shadow: none;
+    transform: scale(1);
+  }
+}
+.sort-highlight {
+  animation: pulseGlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
 
 /* Animation Dés Roll & Keep */
 @keyframes dicePop {
@@ -225,6 +597,11 @@ select {
   color: #d1b87a;
   font-style: italic;
 }
+
+[data-theme="light"] .inner-thought {
+  color: #78350f !important;
+}
+
 .scene-figure {
   margin: 1.75rem 0;
   border-radius: 0.75rem;
@@ -254,6 +631,13 @@ select {
   font-family: 'Cinzel', serif;
   letter-spacing: 0.05em;
 }
+
+[data-theme="light"] .scene-caption {
+  background: #efe6d2 !important;
+  color: #78350f !important;
+  border-top-color: var(--border-gold) !important;
+}
+
 .reading-active {
   background: rgba(212, 175, 55, 0.08) !important;
   border-left: 3px solid #d4af37 !important;
@@ -261,6 +645,12 @@ select {
   transition: all 0.25s ease !important;
   box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.05);
 }
+
+[data-theme="light"] .reading-active {
+  background: rgba(140, 94, 11, 0.14) !important;
+  border-left: 3px solid #8c5e0b !important;
+}
+
 .tab-btn.active {
   background: linear-gradient(135deg, #d4af37 0%, #b48608 100%) !important;
   color: #000 !important;
@@ -292,7 +682,7 @@ select {
     background: white !important;
     color: black !important;
   }
-  .card-clean {
+  .card-clean, .card-spell {
     background: white !important;
     border: 1px solid #777 !important;
     color: black !important;

@@ -22,76 +22,10 @@
   <script src="data/sorts/sorts-maho.js" defer></script>
 
   <!-- AGRÉGATEUR PRINCIPAL PUIS MOTEUR -->
+  <link rel="stylesheet" href="css/main.css">
   <script src="js/navbar.js" defer></script>
   <script src="data/sorts-data.js" defer></script>
   <script src="js/grimoire.js" defer></script>
-
-  <style>
-    :root {
-      --dark-lacquer: #0a0808;
-      --gold: #d4af37;
-      --gold-light: #f3e5ab;
-    }
-    body {
-      background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 5%, #1f0b0b 0%, #0a0808 85%);
-      color: #e5dec9;
-      font-family: 'Noto Serif JP', serif;
-    }
-    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
-    
-    .card-spell {
-      background: rgba(18, 14, 14, 0.92);
-      border: 1px solid rgba(212, 175, 55, 0.22);
-      transition: all 0.25s ease;
-    }
-    .card-spell:hover {
-      border-color: rgba(212, 175, 55, 0.55);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-    }
-    
-    input, select {
-      background-color: #0e0b0b !important;
-      border: 1px solid #3d3126 !important;
-      color: #f3e5ab !important;
-    }
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--gold) !important;
-      box-shadow: 0 0 8px rgba(212, 175, 55, 0.35);
-    }
-
-    /* BADGES ÉLÉMENTAIRES */
-    .badge-terre { background: rgba(120, 53, 15, 0.35); color: #fde68a; border: 1px solid #b45309; }
-    .badge-eau { background: rgba(30, 58, 138, 0.35); color: #93c5fd; border: 1px solid #2563eb; }
-    .badge-feu { background: rgba(153, 27, 27, 0.35); color: #fca5a5; border: 1px solid #dc2626; }
-    .badge-air { background: rgba(19, 78, 74, 0.35); color: #99f6e4; border: 1px solid #0d9488; }
-    .badge-vide { background: rgba(88, 28, 135, 0.35); color: #e9d5ff; border: 1px solid #9333ea; }
-    .badge-universel { background: rgba(68, 64, 60, 0.4); color: #f5f5f4; border: 1px solid #78716c; }
-    .badge-kiho { background: rgba(180, 83, 9, 0.35); color: #fed7aa; border: 1px solid #ea580c; }
-    .badge-maho { background: rgba(136, 19, 55, 0.5); color: #fecdd3; border: 1px solid #e11d48; }
-
-    /* ANIMATION DE MISE EN ÉVIDENCE D'UN SORT CIBLÉ PAR ANCRE (#sort-<id>) */
-    @keyframes pulseGlow {
-      0% {
-        border-color: #f59e0b;
-        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.9), 0 0 25px rgba(245, 158, 11, 0.7);
-        transform: scale(1.015);
-      }
-      60% {
-        border-color: #d4af37;
-        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.6), 0 0 15px rgba(212, 175, 55, 0.4);
-      }
-      100% {
-        border-color: rgba(212, 175, 55, 0.45);
-        box-shadow: none;
-        transform: scale(1);
-      }
-    }
-    .sort-highlight {
-      animation: pulseGlow 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-  </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
