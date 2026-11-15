@@ -35,386 +35,334 @@
         </h1>
       </div>
       <div class="flex flex-wrap items-center gap-2">
-        <label for="gm-json-input" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
+        <label for="gm-json-input" class="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
           + Importer PJ (.json)
         </label>
         <input id="gm-json-input" type="file" accept=".json,application/json" multiple class="hidden" />
-        <button id="gm-load-sample" type="button" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/30 text-amber-200 font-imperial text-xs cursor-pointer transition">
-          Charger 2 PJs d'exemple
+        <button id="gm-load-sample" type="button" class="px-3 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/30 text-amber-200 font-imperial text-xs cursor-pointer transition">
+          Charger 4 PJs d'exemple
         </button>
-        <button id="gm-clear-pcs" type="button" class="px-3 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
+        <button id="gm-clear-pcs" type="button" class="px-3 py-2 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
           Vider
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 3. CONTENU PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-5 space-y-5">
+  <!-- 3. CONTENU PRINCIPAL PLEINE LARGEUR -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
 
-    <!-- TABLE DES JOUEURS -->
-    <section class="card-clean rounded-xl p-4 space-y-3">
+    <!-- TABLE HORIZONTALE DES PJs (4 COLONNES) -->
+    <section class="card-clean rounded-xl p-4 md:p-5 space-y-3">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <h2 class="font-imperial font-bold text-sm text-amber-300 flex items-center gap-2">
-          <span>👥</span> Table des PJs (<span id="gm-pc-count">0</span>)
+        <h2 class="font-imperial font-bold text-base text-amber-300 flex items-center gap-2">
+          <span>👥</span> Table des Joueurs (<span id="gm-pc-count">0</span> PJ)
         </h2>
         <div id="gm-drop-zone" class="px-3 py-1.5 border border-dashed border-amber-500/30 rounded-lg text-[11px] text-stone-400 transition">
           Glissez-déposez ici vos fichiers <b>.json</b> (<i>La Forge</i> / <i>Carnet de Rokugan</i>)
           <span id="gm-import-status" class="text-emerald-400 font-bold ml-2"></span>
         </div>
       </div>
-      <div id="gm-pcs-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5"></div>
+      <div id="gm-pcs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5"></div>
     </section>
 
-    <!-- POSTE DE COMMANDEMENT : ONGLETS SCÈNES (8 COL) + PLATEAU DE DÉS & NOTES (4 COL) -->
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+    <!-- POSTE DE COMMANDEMENT PLEINE LARGEUR À 5 ONGLETS -->
+    <section class="card-clean rounded-xl p-4 md:p-5 space-y-5">
+      <div class="flex flex-wrap gap-2 border-b border-amber-500/20 pb-3" role="tablist">
+        <button type="button" data-gm-tab="skirmish" class="px-4 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+          ⚔️ Escarmouche
+        </button>
+        <button type="button" data-gm-tab="duel" class="px-4 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+          🎋 Duel Iaijutsu
+        </button>
+        <button type="button" data-gm-tab="honor" class="px-4 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+          ⚖️ Honneur &amp; Gloire
+        </button>
+        <button type="button" data-gm-tab="court" class="px-4 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+          🏯 Cour &amp; Social
+        </button>
+        <button type="button" data-gm-tab="magic" class="px-4 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+          🌀 Magie, Peur &amp; Souillure
+        </button>
+      </div>
 
-      <!-- ZONE ONGLETS (8 COLONNES) -->
-      <section class="xl:col-span-8 card-clean rounded-xl p-4 md:p-5 space-y-4">
-        <div class="flex flex-wrap gap-2 border-b border-amber-500/20 pb-3" role="tablist">
-          <button type="button" data-gm-tab="skirmish" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            ⚔️ Escarmouche
-          </button>
-          <button type="button" data-gm-tab="duel" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🎋 Duel Iaijutsu
-          </button>
-          <button type="button" data-gm-tab="honor" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            ⚖️ Honneur &amp; Gloire
-          </button>
-          <button type="button" data-gm-tab="court" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🏯 Cour &amp; Social
-          </button>
-          <button type="button" data-gm-tab="magic" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🌀 Magie, Peur &amp; Souillure
-          </button>
-        </div>
-
-        <!-- ONGLET 1 : ESCARMOUCHE -->
-        <div data-gm-panel="skirmish" class="space-y-4">
-          <!-- ASSISTANT DE MISE EN PLACE D'ESCARMOUCHE -->
-          <div class="p-3.5 rounded-xl bg-amber-950/15 border border-amber-500/30 space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h3 class="font-imperial font-bold text-sm text-amber-300">⚔️ Préparer une Escarmouche</h3>
-                <p class="text-[11px] text-stone-400">1. Cochez les PJs impliqués (et saisissez leur score d'Init) • 2. Choisissez le nombre de PNJs • 3. Générez le tableau (les initiatives PNJ sont lancées automatiquement).</p>
-              </div>
-              <button id="gm-generate-skirmish" type="button" class="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow shrink-0">
-                ⚔️ Générer l'Escarmouche
-              </button>
-            </div>
-
-            <div id="gm-skirmish-pcs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
-
-            <div class="p-2.5 rounded-lg bg-black/35 border border-stone-800 space-y-2 text-xs">
-              <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
-                <label class="sm:col-span-3 flex items-center gap-2">
-                  <span class="text-stone-300 font-bold shrink-0">Nb PNJs :</span>
-                  <input id="gm-skirmish-npc-count" type="number" min="0" max="20" value="3" class="w-full rounded bg-[#0d0b0b] border border-amber-500/40 px-2 py-1 text-center font-mono font-bold text-amber-300 focus:outline-none" />
-                </label>
-                <label class="sm:col-span-9 flex items-center gap-2">
-                  <span class="text-stone-300 font-bold shrink-0">Type :</span>
-                  <select id="gm-skirmish-npc-preset" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1 text-amber-200 focus:outline-none"></select>
-                </label>
-              </div>
-
-              <details class="text-[11px]">
-                <summary class="cursor-pointer text-stone-400 hover:text-amber-300 select-none">Personnaliser les stats des PNJs générés ▾</summary>
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2">
-                  <input id="gm-enemy-name" type="text" placeholder="Nom" class="col-span-2 rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-init-formula" type="text" placeholder="Init (4g2)" title="Formule d'initiative PNJ" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-amber-200 font-mono" />
-                  <input id="gm-enemy-tn" type="number" placeholder="ND" title="ND d'Armure" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-red" type="number" placeholder="Réd." title="Réduction" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-earth" type="number" min="1" max="10" placeholder="Terre" title="Terre" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-attack" type="text" placeholder="Att" title="Jet d'attaque" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
-                  <input id="gm-enemy-damage" type="text" placeholder="Dég" title="Jet de dégâts" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
-                  <input id="gm-enemy-notes" type="text" placeholder="Notes PNJ..." class="col-span-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                </div>
-              </details>
-            </div>
-          </div>
-
-          <!-- BARRE DE CONTRÔLE DU TOUR -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-2.5">
-            <div class="flex items-center gap-3 flex-wrap">
-              <span class="px-2.5 py-0.5 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-imperial font-bold text-red-200">
-                Round <span id="gm-combat-round">1</span>
-              </span>
-              <span id="gm-combat-next-up" class="text-xs text-stone-300"></span>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
-              <button id="gm-next-turn" type="button" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
-                Tour suivant ▶
-              </button>
-              <button id="gm-sort-init" type="button" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 font-imperial text-xs cursor-pointer transition">
-                Trier Init ↓
-              </button>
-              <button id="gm-reset-combat" type="button" class="px-2.5 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
-                Réinitialiser
-              </button>
-            </div>
-          </div>
-
-          <!-- ORDRE DU COMBAT & BLESSURES -->
-          <div id="gm-combat-list" class="space-y-2.5"></div>
-        </div>
-
-        <!-- ONGLET 2 : DUEL IAIJUTSU -->
-        <div data-gm-panel="duel" class="hidden space-y-4 text-xs">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <!-- ONGLET 1 : ESCARMOUCHE -->
+      <div data-gm-panel="skirmish" class="space-y-5">
+        <!-- ASSISTANT DE PRÉPARATION D'ESCARMOUCHE -->
+        <div class="p-4 rounded-xl bg-amber-950/15 border border-amber-500/30 space-y-3">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
-              <h3 class="font-imperial font-bold text-sm text-amber-300">🎋 Duel Iaijutsu (L5R 4e Édition)</h3>
-              <p class="text-[11px] text-stone-400">Importez le JSON du PJ duelliste, choisissez ou configurez son adversaire, puis résolvez les 4 phases.</p>
+              <h3 class="font-imperial font-bold text-sm text-amber-300">⚔️ Préparer l'Escarmouche</h3>
+              <p class="text-[11px] text-stone-400">Cochez les PJs impliqués et renseignez leur initiative, choisissez le nombre de PNJs, puis générez le tableau (les initiatives PNJ sont lancées automatiquement).</p>
             </div>
-            <button type="button" data-action="duel-reset" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] text-stone-300 cursor-pointer shrink-0">
-              Réinitialiser le Duel
+            <button id="gm-generate-skirmish" type="button" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow shrink-0">
+              ⚔️ Générer l'Escarmouche
             </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- DUELLISTE A (PJ) -->
-            <div class="p-3.5 rounded-xl bg-black/35 border border-sky-700/40 space-y-2.5">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <span class="font-imperial font-bold text-sky-300">Duelliste A (PJ)</span>
-                <label for="duel-a-json" class="px-2.5 py-1 rounded bg-sky-900/70 hover:bg-sky-800 border border-sky-500/50 text-[11px] font-bold text-sky-100 cursor-pointer transition">
-                  + Importer JSON PJ
-                </label>
-                <input id="duel-a-json" type="file" accept=".json,application/json" class="hidden" />
-              </div>
-              <select id="duel-a-pc" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-[11px] text-stone-200"></select>
-              <input id="duel-a-name" type="text" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1 text-stone-200" placeholder="Nom du PJ" />
-              <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
-                <label class="block"><span class="text-stone-400">Iaijutsu</span><input id="duel-a-iai" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-200" /></label>
-                <label class="block"><span class="text-stone-400">Per</span><input id="duel-a-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
-                <label class="block"><span class="text-stone-400">Vide</span><input id="duel-a-void" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-purple-300" /></label>
-                <label class="block"><span class="text-stone-400">Agi</span><input id="duel-a-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
-                <label class="block"><span class="text-stone-400">ND</span><input id="duel-a-tn" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-300" /></label>
-              </div>
-              <div class="flex items-center justify-between bg-black/40 p-2 rounded border border-stone-800">
-                <span>Focus : <b id="duel-a-focus" class="text-amber-300">0</b> (ND Frappe : <b id="duel-a-tn-eff" class="text-sky-300">20</b>)</span>
-                <div class="flex gap-1">
-                  <button type="button" data-action="duel-focus" data-side="a" data-delta="-1" class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 cursor-pointer">-1</button>
-                  <button type="button" data-action="duel-focus" data-side="a" data-delta="1" class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-600/50 text-amber-200 cursor-pointer">+1</button>
-                </div>
-              </div>
-              <div class="grid grid-cols-4 gap-1">
-                <button type="button" data-action="duel-roll" data-side="a" data-phase="eval" class="py-1.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] cursor-pointer">1. Éval</button>
-                <button type="button" data-action="duel-roll" data-side="a" data-phase="focus" class="py-1.5 rounded bg-purple-950/60 hover:bg-purple-900 border border-purple-700/50 text-[10px] text-purple-200 cursor-pointer">2. Focus</button>
-                <button type="button" data-action="duel-roll" data-side="a" data-phase="strike" class="py-1.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-600/50 text-[10px] text-red-200 font-bold cursor-pointer">3. Frappe</button>
-                <button type="button" data-action="duel-roll" data-side="a" data-phase="damage" class="py-1.5 rounded bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 text-[10px] text-amber-200 cursor-pointer">4. Dégâts</button>
-              </div>
-            </div>
+          <div id="gm-skirmish-pcs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5"></div>
 
-            <!-- DUELLISTE B (ADVERSAIRE) -->
-            <div class="p-3.5 rounded-xl bg-black/35 border border-red-700/40 space-y-2.5">
-              <div class="flex items-center justify-between gap-2">
-                <span class="font-imperial font-bold text-red-300">Duelliste B (Adversaire)</span>
-              </div>
-              <select id="duel-b-preset" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-[11px] text-amber-200"></select>
-              <input id="duel-b-name" type="text" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1 text-stone-200" placeholder="Nom de l'adversaire" />
-              <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
-                <label class="block"><span class="text-stone-400">Iaijutsu</span><input id="duel-b-iai" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-200" /></label>
-                <label class="block"><span class="text-stone-400">Per</span><input id="duel-b-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
-                <label class="block"><span class="text-stone-400">Vide</span><input id="duel-b-void" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-purple-300" /></label>
-                <label class="block"><span class="text-stone-400">Agi</span><input id="duel-b-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
-                <label class="block"><span class="text-stone-400">ND</span><input id="duel-b-tn" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-300" /></label>
-              </div>
-              <div class="flex items-center justify-between bg-black/40 p-2 rounded border border-stone-800">
-                <span>Focus : <b id="duel-b-focus" class="text-amber-300">0</b> (ND Frappe : <b id="duel-b-tn-eff" class="text-red-300">18</b>)</span>
-                <div class="flex gap-1">
-                  <button type="button" data-action="duel-focus" data-side="b" data-delta="-1" class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 cursor-pointer">-1</button>
-                  <button type="button" data-action="duel-focus" data-side="b" data-delta="1" class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-600/50 text-amber-200 cursor-pointer">+1</button>
-                </div>
-              </div>
-              <div class="grid grid-cols-4 gap-1">
-                <button type="button" data-action="duel-roll" data-side="b" data-phase="eval" class="py-1.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] cursor-pointer">1. Éval</button>
-                <button type="button" data-action="duel-roll" data-side="b" data-phase="focus" class="py-1.5 rounded bg-purple-950/60 hover:bg-purple-900 border border-purple-700/50 text-[10px] text-purple-200 cursor-pointer">2. Focus</button>
-                <button type="button" data-action="duel-roll" data-side="b" data-phase="strike" class="py-1.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-600/50 text-[10px] text-red-200 font-bold cursor-pointer">3. Frappe</button>
-                <button type="button" data-action="duel-roll" data-side="b" data-phase="damage" class="py-1.5 rounded bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 text-[10px] text-amber-200 cursor-pointer">4. Dégâts</button>
-              </div>
-            </div>
-          </div>
-
-          <div id="duel-log" class="space-y-1.5 max-h-48 overflow-y-auto"></div>
-        </div>
-
-        <!-- ONGLET 3 : HONNEUR, GLOIRE, STATUT & SOUILLURE -->
-        <div data-gm-panel="honor" class="hidden space-y-4 text-xs">
-          <div class="flex items-center justify-between gap-2">
-            <div>
-              <h3 class="font-imperial font-bold text-sm text-amber-300">⚖️ Gestion de l'Honneur, Gloire, Statut &amp; Souillure</h3>
-              <p class="text-[11px] text-stone-400">Ajustez les jauges sociales de vos PJs en direct et consultez le barème officiel L5R 4e.</p>
-            </div>
-            <a href="aides/bushido-honneur.html" class="text-[11px] text-amber-400 hover:underline shrink-0">Guide Bushido ↗</a>
-          </div>
-
-          <div id="gm-honor-list" class="space-y-2.5"></div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1.5">
-              <b class="text-amber-300 font-imperial block">Barème des Gains &amp; Pertes d'Honneur</b>
-              <p class="text-stone-300"><b>Mineur (±0.1 à ±0.3) :</b> Politesse exemplaire, petit mensonge blanc, manque de tenue.</p>
-              <p class="text-stone-300"><b>Majeur (±0.4 à ±0.8) :</b> Tenir sa parole au péril de sa vie, trahir un allié, fuir un combat honorable.</p>
-              <p class="text-stone-300"><b>Héroïque / Infâme (±1.0 à ±3.0) :</b> Sacrifice noble, meurtre lâche, utilisation de Mahō.</p>
-            </div>
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1.5">
-              <b class="text-sky-300 font-imperial block">Gloire, Infamie &amp; Statut</b>
-              <p class="text-stone-300"><b>Gloire (+0.1 à +1.0) :</b> Victoire en duel public, exploit militaire, éloge à la Cour d'Hiver.</p>
-              <p class="text-stone-300"><b>Perte de Gloire / Infamie :</b> Défaite humiliante, rumeur fondée, condamnation par un Magistrat.</p>
-              <p class="text-stone-300"><b>Statut :</b> Échelle sociale (1.0 Ji-Samouraï, 3.0 Magistrat, 5.0+ Daimyo).</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ONGLET 4 : COUR & RENCONTRE SOCIALE -->
-        <div data-gm-panel="court" class="hidden space-y-3 text-xs">
-          <div class="flex items-center justify-between gap-2">
-            <h3 class="font-imperial font-bold text-sm text-amber-300">🏯 Scènes de Cour, Étiquette &amp; Intrigues</h3>
-            <a href="aides/etiquette-coutumes.html" class="text-[11px] text-amber-400 hover:underline">Guide Étiquette ↗</a>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-stone-300">
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
-              <b class="text-amber-300 font-imperial block">Compétences Sociales Clés</b>
-              <p><b>Étiquette (Intuition) :</b> Protocole, cadeaux, ne pas offenser un supérieur.</p>
-              <p><b>Courtoisie (Intuition) :</b> Persuader, flatter, manipuler poliment en public.</p>
-              <p><b>Sincérité (Intuition) :</b> Convaincre (ou mentir avec Honnêteté) sans perdre la face.</p>
-              <p><b>Tentation (Intuition) :</b> Exploiter un Vice / Désavantage, corrompre.</p>
-              <p><b>Intimidation (Volonté/Intuition) :</b> Imposer sa volonté par la peur ou l'autorité.</p>
-            </div>
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
-              <b class="text-amber-300 font-imperial block">Seuils de ND &amp; Statut Social</b>
-              <p><b>ND de base :</b> 15 + (5 × Rang de Statut de la cible si supérieur).</p>
-              <p><b>Opposition Sociale :</b> Jet du PJ vs Intuition + Étiquette/Courtoisie du PNJ.</p>
-              <p><b>Règle des 2 Refus :</b> Un samouraï poli refuse deux fois un cadeau avant d'accepter au troisième (sinon perte d'Honneur/Gloire).</p>
-              <p><b>Faveurs :</b> 1 Augmentation = faveur mineure ; 2+ Aug. = dette politique durable.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ONGLET 5 : MAGIE, PEUR & SOUILLURE -->
-        <div data-gm-panel="magic" class="hidden space-y-3 text-xs">
-          <div class="flex items-center justify-between gap-2">
-            <h3 class="font-imperial font-bold text-sm text-amber-300">🌀 Magie des Shugenja, Peur &amp; Souillure</h3>
-            <a href="grimoire.html" class="text-[11px] text-amber-400 hover:underline">Ouvrir le Grimoire ↗</a>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-stone-300">
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
-              <b class="text-sky-300 font-imperial block">Lancement de Sorts</b>
-              <p><b>Jet :</b> (Anneau + Rang d'École) g Anneau.</p>
-              <p><b>ND :</b> 5 + (5 × Maîtrise du sort).</p>
-              <p><b>Affinité :</b> +1 Rang effectif. <b>Déficience :</b> -1 Rang effectif.</p>
-              <p><b>Contre-sort :</b> Art de la Magie + Anneau vs jet du lanceur (coûte 1 emplacement).</p>
-            </div>
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
-              <b class="text-amber-300 font-imperial block">Jets de Peur (Peur X)</b>
-              <p><b>Jet :</b> Volonté g Volonté + Rang d'Honneur en bonus.</p>
-              <p><b>ND :</b> 5 + (5 × Niveau de Peur X).</p>
-              <p><b>Échec :</b> -Xk0 à tous les jets contre la source de Peur pendant la rencontre.</p>
-            </div>
-            <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
-              <b class="text-rose-400 font-imperial block">Souillure de l'Outremonde</b>
-              <p><b>Résister :</b> Terre g Terre vs ND 10 (contact bref) à 25 (blessure d'Oni / Outremonde).</p>
-              <p><b>Thé aux Pétales de Jade :</b> Ralentit la progression sans guérir les rangs acquis.</p>
-              <p><b>Rang ≥ Terre :</b> Risque de perte de contrôle / corruption mentale.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- COLONNE DROITE : PLATEAU DE DÉS STYLE FORGE + MÉMENTO + NOTES (4 COLONNES) -->
-      <aside class="xl:col-span-4 space-y-4">
-
-        <!-- PLATEAU ROLL & KEEP (INSPIRÉ DE LA FORGE) -->
-        <section class="card-clean rounded-xl p-4 space-y-3 border border-amber-500/35">
-          <h2 class="font-imperial font-bold text-sm text-amber-300 border-b border-amber-500/20 pb-2 flex items-center gap-2">
-            <span>🎲</span> Plateau de Dés Roll &amp; Keep
-          </h2>
-          <div class="space-y-2.5 text-xs">
-            <div class="grid grid-cols-5 gap-1.5 items-center text-center">
-              <label class="col-span-1">
-                <span class="block text-[10px] text-stone-400">Lancés</span>
-                <input id="gm-dice-x" type="number" min="1" max="20" value="6" class="w-full mt-0.5 rounded-lg bg-[#0d0b0b] border border-amber-500/40 py-1.5 text-center font-mono font-bold text-amber-200 focus:outline-none" />
+          <div class="p-3 rounded-lg bg-black/35 border border-stone-800 space-y-2.5 text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+              <label class="md:col-span-3 flex items-center gap-2">
+                <span class="text-stone-300 font-bold shrink-0">Nombre de PNJs :</span>
+                <input id="gm-skirmish-npc-count" type="number" min="0" max="20" value="3" class="w-20 rounded bg-[#0d0b0b] border border-amber-500/40 px-2 py-1 text-center font-mono font-bold text-amber-300 focus:outline-none" />
               </label>
-              <span class="text-amber-400 font-imperial font-bold text-base pt-4">g</span>
-              <label class="col-span-1">
-                <span class="block text-[10px] text-stone-400">Gardés</span>
-                <input id="gm-dice-y" type="number" min="1" max="15" value="3" class="w-full mt-0.5 rounded-lg bg-[#0d0b0b] border border-amber-500/40 py-1.5 text-center font-mono font-bold text-amber-200 focus:outline-none" />
-              </label>
-              <label class="col-span-2">
-                <span class="block text-[10px] text-stone-400">Bonus (+/-)</span>
-                <input id="gm-dice-bonus" type="number" value="0" class="w-full mt-0.5 rounded-lg bg-[#0d0b0b] border border-stone-700 py-1.5 text-center font-mono text-stone-200 focus:outline-none" />
+              <label class="md:col-span-9 flex items-center gap-2">
+                <span class="text-stone-300 font-bold shrink-0">Type de PNJ :</span>
+                <select id="gm-skirmish-npc-preset" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1 text-amber-200 focus:outline-none"></select>
               </label>
             </div>
 
-            <input id="gm-dice-label" type="text" placeholder="Motif du jet (ex: Attaque Bushi, Discrétion...)" class="w-full rounded-lg bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200 focus:outline-none" />
-
-            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px]">
-              <div class="flex items-center gap-3">
-                <label class="inline-flex items-center gap-1 text-stone-300 cursor-pointer">
-                  <input id="gm-dice-explode" type="checkbox" checked class="rounded border-stone-600 bg-stone-900 text-amber-500" />
-                  <span>Explosifs (10)</span>
-                </label>
-                <label class="inline-flex items-center gap-1 text-stone-300 cursor-pointer">
-                  <input id="gm-dice-spec" type="checkbox" class="rounded border-stone-600 bg-stone-900 text-amber-500" />
-                  <span>Spé (1)</span>
-                </label>
+            <details class="text-[11px]">
+              <summary class="cursor-pointer text-stone-400 hover:text-amber-300 select-none">Personnaliser les jets &amp; stats des PNJs générés ▾</summary>
+              <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2">
+                <input id="gm-enemy-name" type="text" placeholder="Nom" class="col-span-2 rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                <input id="gm-enemy-init-formula" type="text" placeholder="Init (4g2)" title="Formule d'initiative PNJ" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-amber-200 font-mono" />
+                <input id="gm-enemy-tn" type="number" placeholder="ND" title="ND d'Armure" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                <input id="gm-enemy-red" type="number" placeholder="Réd." title="Réduction" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                <input id="gm-enemy-earth" type="number" min="1" max="10" placeholder="Terre" title="Terre" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                <input id="gm-enemy-attack" type="text" placeholder="Toucher" title="Jet de toucher" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
+                <input id="gm-enemy-damage" type="text" placeholder="Dégâts" title="Jet de dégâts" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
+                <input id="gm-enemy-notes" type="text" placeholder="Notes PNJ..." class="col-span-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
               </div>
-              <button id="gm-roll-btn" type="button" class="px-4 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
-                Lancer 🎲
-              </button>
-            </div>
+            </details>
+          </div>
+        </div>
 
-            <!-- Raccourcis 1 clic -->
-            <div class="flex flex-wrap gap-1 pt-0.5">
-              <button type="button" data-quick-roll="3g2" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-mono text-[10px] text-amber-200 cursor-pointer">3g2</button>
-              <button type="button" data-quick-roll="4g2" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-mono text-[10px] text-amber-200 cursor-pointer">4g2</button>
-              <button type="button" data-quick-roll="5g3" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-mono text-[10px] text-amber-200 cursor-pointer">5g3</button>
-              <button type="button" data-quick-roll="6g3" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-mono text-[10px] text-amber-200 cursor-pointer">6g3</button>
-              <button type="button" data-quick-roll="7g3" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-mono text-[10px] text-amber-200 cursor-pointer">7g3</button>
-              <button type="button" data-quick-roll="8g4" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-mono text-[10px] text-amber-200 cursor-pointer">8g4</button>
+        <!-- BARRE DE CONTRÔLE DU TOUR -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-3">
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-imperial font-bold text-red-200">
+              Round <span id="gm-combat-round">1</span>
+            </span>
+            <span id="gm-combat-next-up" class="text-xs text-stone-300"></span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="gm-next-turn" type="button" class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
+              Tour suivant ▶
+            </button>
+            <button id="gm-sort-init" type="button" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 font-imperial text-xs cursor-pointer transition">
+              Trier Init ↓
+            </button>
+            <button id="gm-reset-combat" type="button" class="px-2.5 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
+              Réinitialiser
+            </button>
+          </div>
+        </div>
+
+        <!-- TABLEAU HORIZONTAL DU COMBAT -->
+        <div id="gm-combat-empty" class="p-6 text-center text-xs text-stone-400 border border-dashed border-stone-800 rounded-xl">
+          Aucun combat actif. Cochez les PJs impliqués, choisissez le nombre de PNJs et cliquez sur <b>« ⚔️ Générer l'Escarmouche »</b>.
+        </div>
+
+        <div id="gm-combat-table-wrap" class="hidden overflow-x-auto rounded-xl border border-stone-800 bg-black/25">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-amber-500/20 bg-black/50 text-[10px] uppercase tracking-wider font-imperial text-amber-300">
+                <th class="px-2.5 py-2.5 text-center">Ordre</th>
+                <th class="px-2 py-2.5 text-center">Init</th>
+                <th class="px-2.5 py-2.5">Combattant</th>
+                <th class="px-2.5 py-2.5">Posture &amp; ND</th>
+                <th class="px-2.5 py-2.5">Jets (Toucher / Dégâts)</th>
+                <th class="px-2.5 py-2.5">Blessures &amp; Malus aux jets</th>
+                <th class="px-2.5 py-2.5">Dégâts rapides</th>
+                <th class="px-2.5 py-2.5">États</th>
+              </tr>
+            </thead>
+            <tbody id="gm-combat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ONGLET 2 : DUEL IAIJUTSU -->
+      <div data-gm-panel="duel" class="hidden space-y-4 text-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="font-imperial font-bold text-sm text-amber-300">🎋 Duel Iaijutsu (L5R 4e Édition)</h3>
+            <p class="text-[11px] text-stone-400">Importez le JSON du PJ duelliste, choisissez ou configurez son adversaire, et voyez directement les jets à lancer pour chaque phase.</p>
+          </div>
+          <button type="button" data-action="duel-reset" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] text-stone-300 cursor-pointer shrink-0">
+            Réinitialiser le Focus
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- DUELLISTE A (PJ) -->
+          <div class="p-4 rounded-xl bg-black/35 border border-sky-700/40 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-imperial font-bold text-sm text-sky-300">Duelliste A (PJ)</span>
+              <label for="duel-a-json" class="px-3 py-1 rounded bg-sky-900/70 hover:bg-sky-800 border border-sky-500/50 text-[11px] font-bold text-sky-100 cursor-pointer transition">
+                + Importer JSON PJ
+              </label>
+              <input id="duel-a-json" type="file" accept=".json,application/json" class="hidden" />
             </div>
-            <div id="gm-dice-error" class="text-[11px] text-rose-400"></div>
+            <select id="duel-a-pc" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-xs text-stone-200"></select>
+            <input id="duel-a-name" type="text" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200" placeholder="Nom du PJ" />
+            <div class="grid grid-cols-5 gap-2 text-center text-[10px]">
+              <label class="block"><span class="text-stone-400">Iaijutsu</span><input id="duel-a-iai" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-200" /></label>
+              <label class="block"><span class="text-stone-400">Per</span><input id="duel-a-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+              <label class="block"><span class="text-stone-400">Vide</span><input id="duel-a-void" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-purple-300" /></label>
+              <label class="block"><span class="text-stone-400">Agi</span><input id="duel-a-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+              <label class="block"><span class="text-stone-400">ND</span><input id="duel-a-tn" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-300" /></label>
+            </div>
+            <div class="flex items-center justify-between bg-black/40 p-2.5 rounded border border-stone-800">
+              <span>Focus : <b id="duel-a-focus" class="text-amber-300">0</b> • ND Frappe : <b id="duel-a-tn-eff" class="text-sky-300">20</b></span>
+              <div class="flex gap-1">
+                <button type="button" data-action="duel-focus" data-side="a" data-delta="-1" class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 cursor-pointer">-1</button>
+                <button type="button" data-action="duel-focus" data-side="a" data-delta="1" class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-600/50 text-amber-200 cursor-pointer">+1</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center bg-black/40 p-2 rounded border border-stone-800">
+              <div><span class="block text-[10px] text-stone-400">1. Évaluation</span><b id="duel-a-eval-f" class="font-mono text-amber-200">6g3</b></div>
+              <div><span class="block text-[10px] text-stone-400">2. Focus</span><b id="duel-a-focus-f" class="font-mono text-purple-300">6g3</b></div>
+              <div><span class="block text-[10px] text-stone-400">3. Frappe</span><b id="duel-a-strike-f" class="font-mono text-red-300">6g3</b></div>
+            </div>
           </div>
 
-          <!-- RÉSULTAT VISUEL DES DÉS -->
-          <div id="gm-dice-result-box" class="p-3 rounded-xl bg-black/45 border border-stone-800"></div>
-
-          <!-- HISTORIQUE COMPACT -->
-          <div id="gm-dice-history" class="space-y-1 max-h-40 overflow-y-auto pr-1"></div>
-        </section>
-
-        <!-- MÉMENTO EXPRESS MJ -->
-        <section class="card-clean rounded-xl p-4 space-y-2 text-[11px]">
-          <div class="flex items-center justify-between border-b border-amber-500/20 pb-1.5">
-            <h2 class="font-imperial font-bold text-sm text-amber-300">📖 Repères Rapides L5R 4e</h2>
-            <a href="aides/combat-memento.html" class="text-[10px] text-amber-400 hover:underline">Mémento complet ↗</a>
-          </div>
-          <div class="grid grid-cols-2 gap-2 text-stone-300">
-            <div class="p-2 rounded bg-black/35 border border-stone-800">
-              <b class="text-amber-300 block mb-0.5">Seuils de ND</b>
-              Facile : 10 • Moyen : 15<br>Difficile : 20 • Très diff. : 25<br>Héroïque : 30+
+          <!-- DUELLISTE B (ADVERSAIRE) -->
+          <div class="p-4 rounded-xl bg-black/35 border border-red-700/40 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-imperial font-bold text-sm text-red-300">Duelliste B (Adversaire)</span>
             </div>
-            <div class="p-2 rounded bg-black/35 border border-stone-800">
-              <b class="text-amber-300 block mb-0.5">Augmentations (+5 ND)</b>
-              Dégâts : +1g0 par Aug.<br>Manœuvre : 1 à 3 Aug.<br>Max = Rang de Vide
+            <select id="duel-b-preset" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-xs text-amber-200"></select>
+            <input id="duel-b-name" type="text" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200" placeholder="Nom de l'adversaire" />
+            <div class="grid grid-cols-5 gap-2 text-center text-[10px]">
+              <label class="block"><span class="text-stone-400">Iaijutsu</span><input id="duel-b-iai" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-200" /></label>
+              <label class="block"><span class="text-stone-400">Per</span><input id="duel-b-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+              <label class="block"><span class="text-stone-400">Vide</span><input id="duel-b-void" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-purple-300" /></label>
+              <label class="block"><span class="text-stone-400">Agi</span><input id="duel-b-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+              <label class="block"><span class="text-stone-400">ND</span><input id="duel-b-tn" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-300" /></label>
+            </div>
+            <div class="flex items-center justify-between bg-black/40 p-2.5 rounded border border-stone-800">
+              <span>Focus : <b id="duel-b-focus" class="text-amber-300">0</b> • ND Frappe : <b id="duel-b-tn-eff" class="text-red-300">18</b></span>
+              <div class="flex gap-1">
+                <button type="button" data-action="duel-focus" data-side="b" data-delta="-1" class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 cursor-pointer">-1</button>
+                <button type="button" data-action="duel-focus" data-side="b" data-delta="1" class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-600/50 text-amber-200 cursor-pointer">+1</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center bg-black/40 p-2 rounded border border-stone-800">
+              <div><span class="block text-[10px] text-stone-400">1. Évaluation</span><b id="duel-b-eval-f" class="font-mono text-amber-200">6g3</b></div>
+              <div><span class="block text-[10px] text-stone-400">2. Focus</span><b id="duel-b-focus-f" class="font-mono text-purple-300">5g2</b></div>
+              <div><span class="block text-[10px] text-stone-400">3. Frappe</span><b id="duel-b-strike-f" class="font-mono text-red-300">6g3</b></div>
             </div>
           </div>
-        </section>
+        </div>
+      </div>
 
-        <!-- BLOC-NOTES DE SCÈNE MJ -->
-        <section class="card-clean rounded-xl p-4 space-y-2">
-          <h2 class="font-imperial font-bold text-sm text-amber-300 border-b border-amber-500/20 pb-1.5">
-            📝 Notes de Scène (MJ)
-          </h2>
-          <textarea
-            id="gm-scratchpad"
-            rows="4"
-            placeholder="Indices révélés, noms de PNJ improvisés, faveurs et dettes d'honneur..."
-            class="w-full rounded-lg bg-[#0d0b0b] border border-stone-800 focus:border-amber-500/60 p-2.5 text-xs text-stone-200 placeholder-stone-600 focus:outline-none"
-          ></textarea>
-        </section>
+      <!-- ONGLET 3 : HONNEUR, GLOIRE, STATUT & SOUILLURE -->
+      <div data-gm-panel="honor" class="hidden space-y-4 text-xs">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <h3 class="font-imperial font-bold text-sm text-amber-300">⚖️ Gestion de l'Honneur, Gloire, Statut &amp; Souillure</h3>
+            <p class="text-[11px] text-stone-400">Ajustez les jauges sociales de vos PJs en direct et consultez le barème officiel L5R 4e.</p>
+          </div>
+          <a href="aides/bushido-honneur.html" class="text-[11px] text-amber-400 hover:underline shrink-0">Guide Bushido ↗</a>
+        </div>
 
-      </aside>
-    </div>
+        <div id="gm-honor-list" class="space-y-2.5"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1.5">
+            <b class="text-amber-300 font-imperial block">Barème des Gains &amp; Pertes d'Honneur</b>
+            <p class="text-stone-300"><b>Mineur (±0.1 à ±0.3) :</b> Politesse exemplaire, petit mensonge blanc, manque de tenue.</p>
+            <p class="text-stone-300"><b>Majeur (±0.4 à ±0.8) :</b> Tenir sa parole au péril de sa vie, trahir un allié, fuir un combat honorable.</p>
+            <p class="text-stone-300"><b>Héroïque / Infâme (±1.0 à ±3.0) :</b> Sacrifice noble, meurtre lâche, utilisation de Mahō.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1.5">
+            <b class="text-sky-300 font-imperial block">Gloire, Infamie &amp; Statut</b>
+            <p class="text-stone-300"><b>Gloire (+0.1 à +1.0) :</b> Victoire en duel public, exploit militaire, éloge à la Cour d'Hiver.</p>
+            <p class="text-stone-300"><b>Perte de Gloire / Infamie :</b> Défaite humiliante, rumeur fondée, condamnation par un Magistrat.</p>
+            <p class="text-stone-300"><b>Statut :</b> Échelle sociale (1.0 Ji-Samouraï, 3.0 Magistrat, 5.0+ Daimyo).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ONGLET 4 : COUR & RENCONTRE SOCIALE -->
+      <div data-gm-panel="court" class="hidden space-y-3 text-xs">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="font-imperial font-bold text-sm text-amber-300">🏯 Scènes de Cour, Étiquette &amp; Intrigues</h3>
+          <a href="aides/etiquette-coutumes.html" class="text-[11px] text-amber-400 hover:underline">Guide Étiquette ↗</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-stone-300">
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
+            <b class="text-amber-300 font-imperial block">Compétences Sociales Clés</b>
+            <p><b>Étiquette (Intuition) :</b> Protocole, cadeaux, ne pas offenser un supérieur.</p>
+            <p><b>Courtoisie (Intuition) :</b> Persuader, flatter, manipuler poliment en public.</p>
+            <p><b>Sincérité (Intuition) :</b> Convaincre (ou mentir avec Honnêteté) sans perdre la face.</p>
+            <p><b>Tentation (Intuition) :</b> Exploiter un Vice / Désavantage, corrompre.</p>
+            <p><b>Intimidation (Volonté/Intuition) :</b> Imposer sa volonté par la peur ou l'autorité.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
+            <b class="text-amber-300 font-imperial block">Seuils de ND &amp; Statut Social</b>
+            <p><b>ND de base :</b> 15 + (5 × Rang de Statut de la cible si supérieur).</p>
+            <p><b>Opposition Sociale :</b> Jet du PJ vs Intuition + Étiquette/Courtoisie du PNJ.</p>
+            <p><b>Règle des 2 Refus :</b> Un samouraï poli refuse deux fois un cadeau avant d'accepter au troisième (sinon perte d'Honneur/Gloire).</p>
+            <p><b>Faveurs :</b> 1 Augmentation = faveur mineure ; 2+ Aug. = dette politique durable.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ONGLET 5 : MAGIE, PEUR & SOUILLURE -->
+      <div data-gm-panel="magic" class="hidden space-y-3 text-xs">
+        <div class="flex items-center justify-between gap-2">
+          <h3 class="font-imperial font-bold text-sm text-amber-300">🌀 Magie des Shugenja, Peur &amp; Souillure</h3>
+          <a href="grimoire.html" class="text-[11px] text-amber-400 hover:underline">Ouvrir le Grimoire ↗</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-stone-300">
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
+            <b class="text-sky-300 font-imperial block">Lancement de Sorts</b>
+            <p><b>Jet :</b> (Anneau + Rang d'École) g Anneau.</p>
+            <p><b>ND :</b> 5 + (5 × Maîtrise du sort).</p>
+            <p><b>Affinité :</b> +1 Rang effectif. <b>Déficience :</b> -1 Rang effectif.</p>
+            <p><b>Contre-sort :</b> Art de la Magie + Anneau vs jet du lanceur (coûte 1 emplacement).</p>
+          </div>
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
+            <b class="text-amber-300 font-imperial block">Jets de Peur (Peur X)</b>
+            <p><b>Jet :</b> Volonté g Volonté + Rang d'Honneur en bonus.</p>
+            <p><b>ND :</b> 5 + (5 × Niveau de Peur X).</p>
+            <p><b>Échec :</b> -Xk0 à tous les jets contre la source de Peur pendant la rencontre.</p>
+          </div>
+          <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
+            <b class="text-rose-400 font-imperial block">Souillure de l'Outremonde</b>
+            <p><b>Résister :</b> Terre g Terre vs ND 10 (contact bref) à 25 (blessure d'Oni / Outremonde).</p>
+            <p><b>Thé aux Pétales de Jade :</b> Ralentit la progression sans guérir les rangs acquis.</p>
+            <p><b>Rang ≥ Terre :</b> Risque de perte de contrôle / corruption mentale.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTES DE SCÈNE MJ & REPÈRES -->
+    <section class="card-clean rounded-xl p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-5 space-y-2 text-[11px]">
+        <div class="flex items-center justify-between border-b border-amber-500/20 pb-1.5">
+          <h2 class="font-imperial font-bold text-sm text-amber-300">📖 Repères Rapides L5R 4e</h2>
+          <a href="aides/combat-memento.html" class="text-[10px] text-amber-400 hover:underline">Mémento complet ↗</a>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-stone-300">
+          <div class="p-2 rounded bg-black/35 border border-stone-800">
+            <b class="text-amber-300 block mb-0.5">Seuils de ND</b>
+            Facile : 10 • Moyen : 15<br>Difficile : 20 • Très diff. : 25<br>Héroïque : 30+
+          </div>
+          <div class="p-2 rounded bg-black/35 border border-stone-800">
+            <b class="text-amber-300 block mb-0.5">Augmentations (+5 ND)</b>
+            Dégâts : +1g0 par Aug.<br>Manœuvre : 1 à 3 Aug.<br>Max = Rang de Vide
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-7 space-y-2">
+        <h2 class="font-imperial font-bold text-sm text-amber-300 border-b border-amber-500/20 pb-1.5">
+          📝 Notes de Scène (MJ)
+        </h2>
+        <textarea
+          id="gm-scratchpad"
+          rows="3"
+          placeholder="Indices révélés, noms de PNJ improvisés, faveurs et dettes d'honneur..."
+          class="w-full rounded-lg bg-[#0d0b0b] border border-stone-800 focus:border-amber-500/60 p-2.5 text-xs text-stone-200 placeholder-stone-600 focus:outline-none"
+        ></textarea>
+      </div>
+    </section>
 
   </main>
 
@@ -422,7 +370,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-10">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.6.0</span>
+      <span id="site-version-label">v1.7.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
