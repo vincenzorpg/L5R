@@ -6,6 +6,25 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.9.1] — 2026-11-15
+
+### 🛡️ Corrigé & Renforcé
+- **Vérifications & Règles d'Archétypes L5R 4ᵉ Édition dans la Forge (`js/character-generator.js`, `js/forge-ui.js`, `createcharacter.html`)** :
+  - **Compatibilité stricte de l'avantage *Écoles Multiples* (L5R 4e, p. 150)** :
+    - Interdiction de combiner une école de **Bushi / Shinobi** avec une école de **Shugenja** (et réciproquement), ainsi que de choisir sa propre école principale comme école secondaire.
+    - Filtrage dynamique de la liste déroulante d'école secondaire (masquage automatique des écoles incompatibles avec bandeau d'explication de règle), sélection automatique d'une école compatible lors de l'ajout et réajustement automatique si l'école principale change après coup.
+    - Maintien de toutes les écoles dans *Études dans une Autre École* (remplacement de l'école de départ à la création).
+  - **Filtrage & Verrouillage de l'Atelier 5 (*Voies Martiales & Mystiques*) selon les droits réels de l'archétype** :
+    - **Bushi / Shinobi** : affichage strict des **Katas** uniquement (masquage complet du panneau Sorts/Kihos, de la barre d'emplacements Shugenja et des onglets non autorisés ; un Bushi ne voit plus ni Sorts ni Kihos, sauf *Écoles Multiples* vers *Moine*).
+    - **Shugenja** : affichage strict des **Sorts & Kihos** et des emplacements quotidiens (masquage des Katas).
+    - **Moine (hors Togashi)** : verrouillage du catalogue et des filtres sur les **Kihos** uniquement (masquage des sorts élémentaires, du bouton `+ 3 Universels` et des emplacements Shugenja, sauf *Écoles Multiples* vers *Shugenja*).
+    - **Ise Zumi (Togashi)** : affichage des **Tatouages Mystiques** (et uniquement des arts autorisés si multiclassé).
+    - **Courtisan / Magistrat** : suppression du bouton de contournement libre au profit d'un accès direct à l'Étape 4 (*Écoles Multiples*) ; déblocage automatique des Katas ou des Sorts/Kihos dès qu'une école secondaire compatible est sélectionnée.
+    - **Purge & garde-fous automatiques** : suppression automatique avec notification toast des sorts, kihos, katas ou tatouages devenus incompatibles lors d'un changement d'école ou d'avantage, et blocage des ajouts / bascules d'onglets non autorisés.
+- **Tests unitaires (`tests/unit-tests.js`)** : Ajout de tests couvrant `getSchoolArchetype()`, `isSchoolCompatibleForMultiple()` et `getCharacterArchetypePermissions()`.
+
+---
+
 ## [1.9.0] — 2026-11-15
 
 ### ✨ Ajouté

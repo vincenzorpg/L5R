@@ -147,6 +147,69 @@ function isMultipleSchoolsAdv(advName) {
   return n.includes("ecole multiple") || n.includes("ecoles multiples") || n.includes("multiple school");
 }
 
+function getSchoolArchetype(schoolOrType) {
+  if (!schoolOrType) return "bushi";
+  const target = schoolOrType.school || schoolOrType;
+  const rawType = typeof target === "string" ? target : (target.type || "");
+  const t = rawType.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  if (t.includes("shugenja")) return "shugenja";
+  if (t.includes("bushi")) return "bushi";
+  if (t.includes("ninja") || t.includes("shinobi")) return "ninja";
+  if (t.includes("moine") || t.includes("monk") || t.includes("ise zumi") || t.includes("tatou")) return "moine";
+  if (t.includes("courtisan") || t.includes("courtier") || t.includes("magistrat") || t.includes("barde") || t.includes("erudit")) return "courtisan";
+
+  const name = (target.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (name.includes("shugenja") || name.includes("isawa") || name.includes("kuni") || name.includes("tamori") || name.includes("agasha") || name.includes("soshi") || name.includes("yogo") || name.includes("iuchi") || name.includes("asahina") || name.includes("moshi") || name.includes("kitsu")) return "shugenja";
+  if (name.includes("togashi") || name.includes("moine") || name.includes("ise zumi")) return "moine";
+  if (name.includes("ninja") || name.includes("shinobi") || name.includes("infiltrateur")) return "ninja";
+  if (name.includes("courtisan") || name.includes("barde") || name.includes("enqueteur") || name.includes("erudit") || name.includes("emissaire")) return "courtisan";
+  return "bushi";
+}
+
+function isSchoolCompatibleForMultiple(primarySchool, candidateSchool) {
+  if (!candidateSchool) return false;
+  const pObj = primarySchool?.school || primarySchool;
+  const cObj = candidateSchool?.school || candidateSchool;
+  if (pObj?.id && cObj?.id && pObj.id === cObj.id) return false;
+
+  const pType = getSchoolArchetype(pObj);
+  const cType = getSchoolArchetype(cObj);
+
+  // Règle officielle L5R 4e (p. 150) : Incompatible Bushi / Shugenja
+  if ((pType === "bushi" || pType === "ninja") && cType === "shugenja") return false;
+  if (pType === "shugenja" && (cType === "bushi" || cType === "ninja")) return false;
+  return true;
+}
+
+function getCompatibleMultipleSchools(primarySchool, allSchools) {
+  const catalog = Array.isArray(allSchools) ? allSchools : getAllSchoolsCatalog();
+  return catalog.filter(s => isSchoolCompatibleForMultiple(primarySchool, s));
+}
+
+function getCharacterArchetypePermissions(primarySchool, secondarySchool, isTogashiTattooed = false) {
+  const pType = getSchoolArchetype(primarySchool);
+  const sType = secondarySchool ? getSchoolArchetype(secondarySchool) : null;
+
+  const isPrimaryMartial = (pType === "bushi" || pType === "ninja");
+  const isSecondaryMartial = (sType === "bushi" || sType === "ninja");
+  const isPrimaryShugenja = (pType === "shugenja");
+  const isSecondaryShugenja = (!isPrimaryMartial && sType === "shugenja");
+
+  const canCastSpells = isPrimaryShugenja || isSecondaryShugenja;
+  const canUseKatas = isPrimaryMartial || (!isPrimaryShugenja && isSecondaryMartial);
+  const canUseTattoos = !!isTogashiTattooed;
+  const canUseKihos = (pType === "moine" && !canUseTattoos) || sType === "moine" || canCastSpells;
+
+  return {
+    primaryType: pType,
+    secondaryType: sType,
+    canCastSpells,
+    canUseKatas,
+    canUseKihos,
+    canUseTattoos
+  };
+}
+
 function isDifferentSchoolAdv(advName) {
   const n = (advName || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   return n.includes("autre ecole") || n.includes("different school");
@@ -279,9 +342,15 @@ function updateSecondarySchoolSelection(advIdx, schoolId, rankVal) {
   if (!advantagesList[advIdx]) return;
 
   if (schoolId !== undefined) {
-    advantagesList[advIdx].secondarySchoolId = schoolId;
     const all = getAllSchoolsCatalog();
     const found = all.find(s => s.id === schoolId);
+    const primarySch = getSelectedSchoolObject()?.school;
+    if (found && primarySch && !isSchoolCompatibleForMultiple(primarySch, found)) {
+      notifyForgeUser(`Règle L5R 4e : « ${found.name} » (${found.type}) est incompatible avec une école de ${primarySch.type}.`, 'error');
+      renderAdvDisadv();
+      return;
+    }
+    advantagesList[advIdx].secondarySchoolId = schoolId;
     advantagesList[advIdx].secondarySchoolName = found ? `${found.name} (${found.clanName})` : "";
   }
 
@@ -291,6 +360,9 @@ function updateSecondarySchoolSelection(advIdx, schoolId, rankVal) {
 
   renderAdvDisadv();
   updateAll();
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'secondary-school' } }));
+  }
 }
 
 function updateElementalBlessingSelection(advIdx, ringKey) {
@@ -996,27 +1068,32 @@ function initCatalogSelectors() {
   }
 }
 
-function buildGroupedSchoolOptionsHtml(selectedSchoolId, currentClanKey) {
+function buildGroupedSchoolOptionsHtml(selectedSchoolId, currentClanKey, filterFn = null) {
   const clans = getClans();
   const clanKey = currentClanKey || document.getElementById('sel-clan')?.value || "crabe";
   const ownClan = clans[clanKey];
   let html = "";
 
   if (ownClan) {
-    html += `<optgroup label="🏯 Écoles du ${ownClan.name}">`;
-    (ownClan.schools || []).forEach(s => {
-      const selAttr = s.id === selectedSchoolId ? ' selected' : '';
-      html += `<option value="${s.id}"${selAttr}>${s.name} (${s.bonus})</option>`;
-    });
-    html += `</optgroup>`;
+    const ownSchools = (ownClan.schools || []).filter(s => !filterFn || filterFn(s, clanKey));
+    if (ownSchools.length > 0) {
+      html += `<optgroup label="🏯 Écoles du ${ownClan.name}">`;
+      ownSchools.forEach(s => {
+        const selAttr = s.id === selectedSchoolId ? ' selected' : '';
+        html += `<option value="${s.id}"${selAttr}>${s.name} (${s.bonus})</option>`;
+      });
+      html += `</optgroup>`;
+    }
   }
 
   for (const otherKey in clans) {
     if (otherKey === clanKey) continue;
     const otherClan = clans[otherKey];
     if (!otherClan) continue;
+    const otherSchools = (otherClan.schools || []).filter(s => !filterFn || filterFn(s, otherKey));
+    if (otherSchools.length === 0) continue;
     html += `<optgroup label="🎓 ${otherClan.name}">`;
-    (otherClan.schools || []).forEach(s => {
+    otherSchools.forEach(s => {
       const selAttr = s.id === selectedSchoolId ? ' selected' : '';
       html += `<option value="${s.id}"${selAttr}>${s.name} [${otherClan.name}] (${s.bonus})</option>`;
     });
@@ -1152,6 +1229,22 @@ function resetSheetToNewSelection(preserveAdvDisadv = true) {
   const schObj = getSelectedSchoolObject();
   const sch = schObj?.school;
   if (!fam || !sch) return;
+
+  // Vérification de compatibilité L5R 4e sur Écoles Multiples après changement d'école
+  const multiAdv = (advantagesList || []).find(a => isMultipleSchoolsAdv(a.name));
+  if (multiAdv && multiAdv.secondarySchoolId) {
+    const allSchools = getAllSchoolsCatalog();
+    const secSch = allSchools.find(s => s.id === multiAdv.secondarySchoolId);
+    if (!secSch || !isSchoolCompatibleForMultiple(sch, secSch)) {
+      const compatList = getCompatibleMultipleSchools(sch, allSchools);
+      const fallback = compatList[0] || null;
+      multiAdv.secondarySchoolId = fallback ? fallback.id : "";
+      multiAdv.secondarySchoolName = fallback ? `${fallback.name} (${fallback.clanName})` : "";
+      if (fallback) {
+        notifyForgeUser(`Écoles Multiples ajustée (${fallback.name}) : incompatibilité Bushi / Shugenja.`, 'warn');
+      }
+    }
+  }
 
   document.getElementById('family-bonus').textContent = `Bonus Famille : ${fam.bonus}`;
   document.getElementById('school-bonus').innerHTML = schObj.isExternalClan
@@ -1469,7 +1562,9 @@ function addAdvFromCatalog() {
   }
 
   if (isMultipleSchoolsAdv(item.name)) {
-    const defaultSec = allSchools[0] || null;
+    const primarySch = getSelectedSchoolObject()?.school;
+    const compatSchools = getCompatibleMultipleSchools(primarySch, allSchools);
+    const defaultSec = compatSchools[0] || null;
     newAdv.secondarySchoolId = defaultSec ? defaultSec.id : "";
     newAdv.secondarySchoolName = defaultSec ? `${defaultSec.name} (${defaultSec.clanName})` : "";
     newAdv.secondarySchoolRank = 1;
@@ -1479,6 +1574,9 @@ function addAdvFromCatalog() {
   renderAdvDisadv();
   initCatalogSelectors();
   updateAll();
+  if (isMultipleSchoolsAdv(item.name) && typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'multiple-schools' } }));
+  }
 }
 
 function addDisadvFromCatalog() {
@@ -1521,12 +1619,18 @@ function removeAdv(idx) {
   if (removed && isDifferentSchoolAdv(removed.name)) {
     updateSchoolOptions();
     resetSheetToNewSelection(true);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'remove-different-school' } }));
+    }
     return;
   }
 
   renderAdvDisadv();
   initCatalogSelectors();
   updateAll();
+  if (removed && isMultipleSchoolsAdv(removed.name) && typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-selection-changed', { detail: { source: 'remove-multiple-schools' } }));
+  }
 }
 const removeAdvantage = removeAdv;
 
@@ -1593,9 +1697,27 @@ function renderAdvDisadv() {
       }
 
       if (isMulti) {
-        const currentSecId = a.secondarySchoolId || (allSchools[0]?.id || "");
+        const primarySch = getSelectedSchoolObject()?.school;
+        const primaryArchetype = getSchoolArchetype(primarySch);
+        const compatSchools = getCompatibleMultipleSchools(primarySch, allSchools);
+        let currentSecId = a.secondarySchoolId || (compatSchools[0]?.id || "");
+        const secCandidate = compatSchools.find(s => s.id === currentSecId);
+        if (!secCandidate && compatSchools[0]) {
+          currentSecId = compatSchools[0].id;
+          a.secondarySchoolId = currentSecId;
+          a.secondarySchoolName = `${compatSchools[0].name} (${compatSchools[0].clanName})`;
+        }
         const currentSecRank = a.secondarySchoolRank || 1;
-        const schoolOptionsHtml = buildGroupedSchoolOptionsHtml(currentSecId, currentClanKey);
+        const schoolOptionsHtml = buildGroupedSchoolOptionsHtml(
+          currentSecId,
+          currentClanKey,
+          (candidate) => isSchoolCompatibleForMultiple(primarySch, candidate)
+        );
+        const compatRuleHint = (primaryArchetype === "bushi" || primaryArchetype === "ninja")
+          ? "⛔ Écoles de Shugenja masquées (règle L5R 4e : incompatible Bushi / Shugenja)."
+          : (primaryArchetype === "shugenja"
+              ? "⛔ Écoles de Bushi / Ninja masquées (règle L5R 4e : incompatible Shugenja / Bushi)."
+              : "Règle L5R 4e : choisissez votre seconde école compatible.");
 
         extraHtml += `
           <div class="mt-2 p-2.5 rounded bg-stone-950 border border-amber-500/40 space-y-2">
@@ -1605,7 +1727,7 @@ function renderAdvDisadv() {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <div class="sm:col-span-2">
                 <label class="text-[9px] text-stone-400 block mb-0.5">École suivie :</label>
-                <select onchange="updateSecondarySchoolSelection(${i}, this.value, undefined)" class="w-full p-2.5 rounded font-medium text-xs">
+                <select id="sel-secondary-school-${i}" onchange="updateSecondarySchoolSelection(${i}, this.value, undefined)" class="w-full p-2.5 rounded font-medium text-xs">
                   ${schoolOptionsHtml}
                 </select>
               </div>
@@ -1620,6 +1742,7 @@ function renderAdvDisadv() {
                 </select>
               </div>
             </div>
+            <div class="text-[10px] text-amber-300/80 italic">${compatRuleHint}</div>
           </div>
         `;
       }
@@ -3148,6 +3271,11 @@ if (typeof window !== "undefined") {
   window.isMultipleSchoolsAdv = isMultipleSchoolsAdv;
   window.isDifferentSchoolAdv = isDifferentSchoolAdv;
   window.isElementalBlessingAdv = isElementalBlessingAdv;
+  window.getSchoolArchetype = getSchoolArchetype;
+  window.isSchoolCompatibleForMultiple = isSchoolCompatibleForMultiple;
+  window.getCompatibleMultipleSchools = getCompatibleMultipleSchools;
+  window.getCharacterArchetypePermissions = getCharacterArchetypePermissions;
+  window.getAllSchoolsCatalog = getAllSchoolsCatalog;
   window.buildCharacterContextFromInputs = buildCharacterContextFromInputs;
   window.getEffectiveAdvCost = getEffectiveAdvCost;
   window.getEffectiveDisadvGain = getEffectiveDisadvGain;
@@ -3174,6 +3302,10 @@ if (typeof module !== "undefined" && module.exports) {
     isMultipleSchoolsAdv,
     isDifferentSchoolAdv,
     isElementalBlessingAdv,
+    getSchoolArchetype,
+    isSchoolCompatibleForMultiple,
+    getCompatibleMultipleSchools,
+    getCharacterArchetypePermissions,
     buildCharacterContextFromInputs,
     getCharacterContext,
     getEffectiveAdvCost,

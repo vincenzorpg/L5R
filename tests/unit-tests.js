@@ -179,6 +179,76 @@
       assertEqual(cg.getMasteriesSummary("Kenjutsu", 3), "[R3: Dégainé Éclair]");
       assertEqual(cg.getMasteriesSummary("Kenjutsu (Katana)", 5), "[R3: Dégainé Éclair] [R5: Tranchant Affûté]");
     });
+
+    it("isSchoolCompatibleForMultiple bloque strictement Bushi/Ninja <-> Shugenja et les doublons", function () {
+      const hidaBushi = { id: "bushi_hida", name: "Bushi Hida", type: "Bushi" };
+      const kakitaBushi = { id: "bushi_kakita", name: "Bushi Kakita", type: "Bushi" };
+      const kuniShugenja = { id: "shugenja_kuni", name: "Shugenja Kuni", type: "Shugenja" };
+      const dojiCourtier = { id: "courtisan_doji", name: "Courtisan Doji", type: "Courtisan" };
+      const shosuroShinobi = { id: "ninja_shosuro", name: "Infiltrateur Shosuro", type: "Ninja" };
+      const shinseiMonk = { id: "moine_confrerie", name: "Moine de la Confrérie", type: "Moine" };
+
+      assertEqual(cg.getSchoolArchetype(hidaBushi), "bushi");
+      assertEqual(cg.getSchoolArchetype(kuniShugenja), "shugenja");
+      assertEqual(cg.getSchoolArchetype(shosuroShinobi), "ninja");
+
+      // Incompatibilités L5R 4e (p. 150) & même école
+      assertEqual(cg.isSchoolCompatibleForMultiple(hidaBushi, kuniShugenja), false);
+      assertEqual(cg.isSchoolCompatibleForMultiple(kuniShugenja, hidaBushi), false);
+      assertEqual(cg.isSchoolCompatibleForMultiple(shosuroShinobi, kuniShugenja), false);
+      assertEqual(cg.isSchoolCompatibleForMultiple(hidaBushi, hidaBushi), false);
+
+      // Combinaisons autorisées
+      assertTrue(cg.isSchoolCompatibleForMultiple(hidaBushi, kakitaBushi), "Bushi + autre Bushi autorisé");
+      assertTrue(cg.isSchoolCompatibleForMultiple(hidaBushi, dojiCourtier), "Bushi + Courtisan autorisé");
+      assertTrue(cg.isSchoolCompatibleForMultiple(dojiCourtier, kuniShugenja), "Courtisan + Shugenja autorisé");
+      assertTrue(cg.isSchoolCompatibleForMultiple(shinseiMonk, kuniShugenja), "Moine + Shugenja autorisé");
+    });
+
+    it("getCharacterArchetypePermissions filtre Katas, Sorts, Kihos et Tatouages selon l'école", function () {
+      const bushi = { id: "bushi_hida", name: "Bushi Hida", type: "Bushi" };
+      const shugenja = { id: "shugenja_kuni", name: "Shugenja Kuni", type: "Shugenja" };
+      const courtisan = { id: "courtisan_doji", name: "Courtisan Doji", type: "Courtisan" };
+      const moine = { id: "moine_confrerie", name: "Moine de la Confrérie", type: "Moine" };
+
+      // Bushi seul : Katas uniquement (ni Sorts, ni Kihos)
+      assertDeepEqual(cg.getCharacterArchetypePermissions(bushi, null, false), {
+        primaryType: "bushi",
+        secondaryType: null,
+        canCastSpells: false,
+        canUseKatas: true,
+        canUseKihos: false,
+        canUseTattoos: false
+      });
+
+      // Shugenja seul : Sorts + Kihos uniquement (jamais Katas)
+      assertDeepEqual(cg.getCharacterArchetypePermissions(shugenja, null, false), {
+        primaryType: "shugenja",
+        secondaryType: null,
+        canCastSpells: true,
+        canUseKatas: false,
+        canUseKihos: true,
+        canUseTattoos: false
+      });
+
+      // Moine non-Togashi : Kihos uniquement (pas de sorts élémentaires ni Katas)
+      assertDeepEqual(cg.getCharacterArchetypePermissions(moine, null, false), {
+        primaryType: "moine",
+        secondaryType: null,
+        canCastSpells: false,
+        canUseKatas: false,
+        canUseKihos: true,
+        canUseTattoos: false
+      });
+
+      // Courtisan + Écoles Multiples (Bushi) -> débloque Katas
+      const courtierBushi = cg.getCharacterArchetypePermissions(courtisan, bushi, false);
+      assertTrue(courtierBushi.canUseKatas && !courtierBushi.canCastSpells && !courtierBushi.canUseKihos);
+
+      // Courtisan seul -> aucun art
+      const pureCourtier = cg.getCharacterArchetypePermissions(courtisan, null, false);
+      assertTrue(!pureCourtier.canUseKatas && !pureCourtier.canCastSpells && !pureCourtier.canUseKihos && !pureCourtier.canUseTattoos);
+    });
   });
 
   // ===========================================================================
