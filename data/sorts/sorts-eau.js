@@ -6,7 +6,7 @@
 
 const SORTS_EAU = [
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 1 (11 sorts)
+  // NIVEAU DE MAÎTRISE 1 (12 sorts)
   // =========================================================================
   {
     id: "eau-1-bo-water",
@@ -53,12 +53,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Défense"],
-    source: "Livre des Règles L5R 4e, p. 188",
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "6 mètres (20')",
     area: "Une créature ciblée",
     duration: "3 Rounds",
     raises: "Durée (+1 round), Portée (+1,5 m / +5')",
-    desc: "Affaiblit le flux d'énergie de la cible comme le reflux d'une marée. La cible subit une pénalité de -1g1 sur tous ses jets de dégâts au corps à corps ou à mains nues pour la durée du sort."
+    desc: "L'énergie circule dans l'univers comme l'eau dans le corps mortel : vous transmettez votre vigueur à autrui en vous affaiblissant vous-même. Vous pouvez réduire l'un de vos Traits Physiques d'un montant allant jusqu'à votre Rang d'École ; la cible augmente ce même Trait Physique du même montant (sans pouvoir dépasser le double de son rang normal). Si votre Trait tombe à 0 suite à ce transfert, vous sombrez immédiatement dans l'inconscience et la durée du sort est réduite à 1 round."
   },
   {
     id: "eau-1-flow-of-chi",
@@ -79,7 +79,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 188",
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -92,12 +92,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 1,
     keywords: ["Divination"],
-    source: "Livre des Règles L5R 4e, p. 188",
+    source: "Livre des Règles L5R 4e, p. 187",
     range: "Contact",
-    area: "Un miroir ou une surface d'eau calme",
-    duration: "1 Minute",
-    raises: "Durée (+1 minute)",
-    desc: "Permet de contempler des vérités cachées dans un reflet. En fixant la surface réfléchissante, vous percevez la véritable nature spirituelle de toute personne ou objet qui s'y reflète, dissipant les illusions visuelles, déguisements et métamorphoses magiques (les métamorphes ou créatures de l'Ombre apparaissent sous leur véritable forme)."
+    area: "Un objet ciblé",
+    duration: "Instantanée",
+    raises: "Aucune",
+    desc: "Diviner les propriétés d'un objet est l'un des plus simples enseignements du temple. S'il réussit sur un objet, vous découvrez automatiquement tous ses pouvoirs et capacités (qualités surnaturelles d'un nemuranai, arme maudite, ou sort inscrit sur un parchemin de prière : même sans comprendre un chiffrement, vous identifiez le sort). Vous apprenez également l'origine de l'objet dans les grandes lignes (lieu de forge, clan du porteur le plus durable, etc., à la discrétion du MJ)."
   },
   {
     id: "eau-1-reversal-fortunes",
@@ -110,7 +110,7 @@ const SORTS_EAU = [
     area: "Un individu ciblé",
     duration: "3 Rounds",
     raises: "Durée (+1 round), Portée (+1,5 m / +5')",
-    desc: "L'adaptabilité est le domaine de l'Eau. Pendant toute la durée du sort, la cible gagne le droit de relancer immédiatement n'importe quel jet de dés complet de son choix, une fois par round. La décision doit être prise dès que le résultat du premier jet est connu, et la cible a le droit de conserver le meilleur des deux résultats."
+    desc: "L'adaptabilité est le domaine de l'Eau, et ceux qui reçoivent sa bénédiction en récoltent les fruits. Pendant toute la durée du sort, la cible peut immédiatement relancer n'importe quel jet de dés de son choix, une fois par round. La décision doit être prise dès la fin du premier jet, et la cible peut conserver le résultat de son choix (le premier ou le second)."
   },
   {
     id: "eau-1-rushing-wave",
@@ -136,7 +136,20 @@ const SORTS_EAU = [
     area: "Un individu ou une créature ciblée",
     duration: "1 Heure",
     raises: "Durée (+10 minutes), Portée (passe à 3 m / 10' pour 2 Augmentations)",
-    desc: "La cible peut se déplacer au cours d'un round d'une distance maximale totale égale à (son Anneau d'Eau × 6 mètres / 20') + (le double de votre Anneau d'Eau en mètres). Ce sort ne confère pas d'actions de mouvement supplémentaires, il augmente simplement le plafond de distance maximale franchissable par round."
+    desc: "La cible peut se déplacer au cours d'un round d'une distance maximale totale égale à (son Anneau d'Eau × 6 mètres / 20') + (2 × votre Anneau d'Eau en pieds, soit env. 0,6 m × Eau). Ce sort ne confère pas d'actions de mouvement supplémentaires, il augmente simplement le plafond de distance maximale franchissable par round."
+  },
+  {
+    id: "eau-1-spirit-water",
+    name: "Esprit de l'Eau (Spirit of the Water)",
+    element: "Eau",
+    mastery: 1,
+    keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 188",
+    range: "6 mètres (20')",
+    area: "Un individu ciblé",
+    duration: "Instantanée",
+    raises: "Portée (+1,5 m / +5'), Spéciale (transforme l'action supplémentaire en Action Complexe pour 5 Augmentations)",
+    desc: "L'esprit de l'Eau est fluide et rapide. La cible gagne une Action Simple supplémentaire durant l'Étape des Réactions du round au cours duquel ce sort est achevé. Cette action ne peut pas être utilisée pour porter une attaque."
   },
   {
     id: "eau-1-sympathetic-energies",
@@ -187,12 +200,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: ["Artisanat"],
-    source: "Livre des Règles L5R 4e, p. 189",
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "Personnelle",
     area: "Nourriture créée",
     duration: "Instantanée",
-    raises: "Spéciale (substance pour 1 personne supplémentaire par Augmentation)",
-    desc: "En appelant les esprits de l'Eau nourricière, vous matérialisez une quantité d'eau pure et de riz blanc cuit suffisante pour nourrir et hydrater convenablement un être humain adulte pour une journée entière."
+    raises: "Spéciale (nourriture pour 1 personne supplémentaire par Augmentation)",
+    desc: "En appelant les esprits de l'Eau nourricière, vous créez suffisamment d'eau pure et de riz nature pour sustenter un nombre d'individus égal à (votre Rang d'École + 1) pour une journée entière. Des Augmentations permettent d'améliorer la qualité (fruits de mer ou thé, à la discrétion du MJ). Le ND de lancement est doublé dans l'Outremonde."
   },
   {
     id: "eau-2-reflective-pool",
@@ -200,7 +213,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 2,
     keywords: ["Divination"],
-    source: "Livre des Règles L5R 4e, p. 189",
+    source: "Livre des Règles L5R 4e, p. 188",
     range: "15 kilomètres (10 miles)",
     area: "Étendue d'eau / Lieu ciblé",
     duration: "5 Minutes",
@@ -218,7 +231,7 @@ const SORTS_EAU = [
     area: "Un individu ciblé",
     duration: "Instantanée",
     raises: "Cibles (+1 individu supplémentaire par 2 Augmentations)",
-    desc: "L'Eau purifie et revigore tout ce qu'elle effleure. Le sujet est instantanément rafraîchi comme s'il venait de bénéficier d'une nuit complète de sommeil réparateur. Cela n'annule pas la perte de points de Vide, mais dissipe immédiatement toute fatigue ou épuisement. Si la cible est un shugenja, le sort restaure ses emplacements de sorts quotidiens liés à son Anneau de Vide (utilisables pour n'importe quel élément), mais pas ceux des autres Anneaux. Nul ne peut bénéficier de ce sort plus d'une fois par période de 24 heures."
+    desc: "L'Eau purifie et revigore tout ce qu'elle effleure. Le sujet est instantanément rafraîchi comme s'il venait de bénéficier d'une nuit complète de sommeil réparateur. Cela ne restaure pas les points de Vide dépensés ni les capacités utilisables un nombre limité de fois par jour, mais dissipe toute fatigue ou épuisement. Si la cible est un shugenja, le sort restaure ses emplacements de sorts liés à l'Anneau de Vide (utilisables pour tout élément), mais pas ceux des autres Anneaux. Limité à une fois par période de 24 heures par individu."
   },
   {
     id: "eau-2-ride-the-water",
@@ -287,7 +300,7 @@ const SORTS_EAU = [
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 3 (8 sorts)
+  // NIVEAU DE MAÎTRISE 3 (9 sorts)
   // =========================================================================
   {
     id: "eau-3-castle-water",
@@ -321,12 +334,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 190",
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "5 Rounds",
     raises: "Durée (+1 round), Portée (passe à 3 m / 10' avec 2 Augmentations)",
-    desc: "Comme l'eau se durcit à l'approche de l'hiver, l'eau dans le corps humain devient rigide et impassible face au mal. Toutes les pénalités de ND actuellement infligées par les Rangs de Blessures de la cible sont totalement annulées pour la durée du sort. Toute nouvelle blessure subie applique la pénalité liée au nouvel état atteint. Les Blessures ne sont pas soignées, elles cessent simplement d'entraver le corps."
+    desc: "Comme l'eau se durcit à l'approche de l'hiver, l'eau dans le corps humain devient rigide et impassible face au mal. Toutes les pénalités de ND actuellement infligées par les Rangs de Blessures de la cible sont totalement annulées pour la durée du sort. Toute pénalité additionnelle encourue ensuite s'applique en utilisant la différence entre le malus annulé et le nouveau malus. Les Blessures ne sont pas soignées, elles cessent simplement d'entraver le corps."
   },
   {
     id: "eau-3-regrow-wound",
@@ -334,7 +347,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 3,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 190",
+    source: "Livre des Règles L5R 4e, p. 189",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Concentration",
@@ -350,9 +363,22 @@ const SORTS_EAU = [
     source: "Livre des Règles L5R 4e, p. 190",
     range: "Personnelle",
     area: "Le lanceur",
-    duration: "Spéciale",
+    duration: "Variable",
     raises: "Aucune",
     desc: "Dès l'incantation réussie de ce sort, vous pouvez immédiatement incanter un second sort (de n'importe quel élément) de Niveau de Maîtrise 3 ou inférieur. Si le jet d'incantation de ce second sort réussit, il est stocké en dormance en vous sans faire effet. Vous définissez un déclencheur physique précis (prononcer un mot, dégainer une lame, tomber inconscient). Dès que l'événement survient, le sort stocké se déclenche instantanément. Limité à un seul sort stocké à la fois."
+  },
+  {
+    id: "eau-3-strike-tsunami",
+    name: "Frappe du Tsunami (Strike of the Tsunami)",
+    element: "Eau",
+    mastery: 3,
+    keywords: ["Bataille"],
+    source: "Livre des Règles L5R 4e, p. 190",
+    range: "7,5 mètres (25')",
+    area: "Cône partant du lanceur, large de 3 mètres (10') à son extrémité",
+    duration: "Instantanée",
+    raises: "Dégâts (+1g0), Portée (+1,5 m / +5'), Spéciale (+5 au ND du jet de Terre par Augmentation)",
+    desc: "Vous invoquez une vague déferlante qui submerge tout sur son passage. La vague inflige 3g3 Blessures à tout ce qui se trouve dans la zone d'effet, et tous les adversaires dans la zone doivent réussir un jet d'Anneau de Terre (ND 15) sous peine de subir l'état Renversé (Knockdown). Tout dans la zone est saturé d'eau."
   },
   {
     id: "eau-3-visions-future",
@@ -403,12 +429,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: ["Divination"],
-    source: "Livre des Règles L5R 4e, p. 191",
+    source: "Livre des Règles L5R 4e, p. 190",
     range: "150 kilomètres (100 miles)",
     area: "Deux étendues d'eau",
     duration: "Concentration",
     raises: "Portée (+15 km / +10 miles)",
-    desc: "Lie deux plans d'eau distants. En fixant une étendue d'eau devant vous, vous pouvez voir et entendre tout ce qui se déroule autour d'une autre étendue d'eau située à portée, comme si vous vous trouviez à sa surface."
+    desc: "Lie deux plans d'eau distants. En fixant une étendue d'eau d'au moins 30 cm (1') de large et 2,5 cm (1 pouce) de profondeur, vous pouvez observer tout ce qui se déroule autour d'une autre étendue d'eau connue à portée, comme si vous étiez immergé dedans (vue uniquement, sans le son)."
   },
   {
     id: "eau-4-ebb-flow-battle",
@@ -455,12 +481,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 192",
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "3 mètres (10')",
     area: "Un individu ciblé (peut être le lanceur)",
     duration: "1 Round",
     raises: "Durée (+1 round), Portée (+1,5 m / +5')",
-    desc: "La cible contourne les défenses physiques : ses attaques ignorent les bonus au ND d'Armure conférés par les armures portées, par les sorts de Niveau 3 ou moins et par les effets hors Techniques d'école. Contre les créatures sans armure, son ND d'Armure est réduit de 5. N'ignore ni la Réduction conférée par l'armure, ni les bonus de ND d'Armure issus des Postures Défense ou Défense Totale."
+    desc: "La cible contourne les défenses physiques : ses attaques ignorent les bonus au ND d'Armure conférés par les armures portées, par les sorts de Niveau 3 ou moins et par les effets hors Techniques d'école. Contre les créatures non-humaines ne portant pas d'armure, son ND d'Armure est réduit de 5. N'ignore ni la Réduction conférée par l'armure, ni les bonus de ND d'Armure issus des Postures Défense ou Défense Totale."
   },
   {
     id: "eau-4-symbol-water",
@@ -468,12 +494,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 4,
     keywords: ["Sceau"],
-    source: "Livre des Règles L5R 4e, p. 192",
+    source: "Livre des Règles L5R 4e, p. 191",
     range: "Contact",
     area: "Spéciale (porte, fenêtre, passage)",
     duration: "Permanente",
     raises: "Aucune",
-    desc: "Grave un glyphe de garde sur un passage. Quiconque le franchit sans autorisation doit remporter un jet opposé de son Feu contre l'Eau du shugenja. En cas d'échec, la victime est saisie d'une terreur accablante et doit immédiatement surmonter un effet de Peur 7. Limité à un seul Symbole d'Eau actif par shugenja."
+    desc: "Grave un glyphe de garde sur un objet solide (porte, fenêtre, passage). Quiconque tente de le franchir doit remporter un jet opposé de son Feu contre l'Eau du shugenja. En cas d'échec, la victime est saisie d'une terreur accablante et doit immédiatement affronter un effet de Peur 7. Limité à un seul Symbole d'Eau actif par shugenja ; deux Symboles d'éléments différents ne peuvent affecter la même zone. Dissipable par un autre Symbole d'Eau ou en détruisant la surface gravée."
   },
 
   // =========================================================================
@@ -542,7 +568,7 @@ const SORTS_EAU = [
     area: "Un individu consentant",
     duration: "Nombre de jours égal au Rang d'École du lanceur",
     raises: "Durée (+1 jour par 3 Augmentations)",
-    desc: "Rituel complexe d'une heure. Pour toute la durée, la cible n'a plus besoin de manger, de boire ni de dormir. Un nombre de fois égal à votre Rang d'École pendant la durée du sort, le sujet peut reconstituer la totalité de ses points de Vide en dépensant une simple Action Simple (équivalent d'une nuit de repos). Elle guérit également d'un montant de Blessures par heure égal à (votre Anneau d'Eau × 2). Si la cible est un shugenja, elle regagne tous ses emplacements de sorts à chaque lever de soleil."
+    desc: "Rituel complexe d'une heure. Pour toute la durée, la cible n'a plus besoin de manger, de boire ni de dormir. Un nombre de fois égal à votre Rang d'École pendant la durée du sort, le sujet peut reconstituer la totalité de ses points de Vide en dépensant une Action Simple (équivalent d'une nuit de repos). Elle guérit également d'un montant de Blessures par heure égal à (votre Anneau d'Eau × 2). Si la cible est un shugenja, elle regagne tous ses emplacements de sorts à chaque lever de soleil. Contrecoup : à l'expiration du sort, la cible sombre dans un état d'épuisement total pendant exactement la moitié de la durée du sort (aucune action physique significative, déplacements très lents, voyage impossible)."
   },
   {
     id: "eau-5-suitengus-embrace",
@@ -550,12 +576,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 5,
     keywords: ["Tonnerre"],
-    source: "Livre des Règles L5R 4e, p. 193",
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "7,5 mètres (25')",
     area: "Un individu ciblé",
     duration: "Instantanée",
     raises: "Portée (+1,5 m / +5')",
-    desc: "Remplit instantanément les poumons de la cible d'eau de mer glaciale. La cible est réduite à l'état de Blessure À Terre (Down) en termes d'actions et ne peut rien faire d'autre que tenter de résister. À chaque round, elle effectue un jet de Constitution (ND 15). Trois réussites cumulées lui permettent de rejeter l'eau et de récupérer. Deux échecs consécutifs la font sombrer dans l'inconscience (elle se noie et meurt en 1 minute sans secours magique ou médical, ce dernier nécessitant un jet de Médecine/Intelligence ND 50)."
+    desc: "Remplit instantanément les poumons de la cible d'eau de mer glaciale. La cible est réduite à l'état de Blessure À Terre (Down) en termes d'actions et ne peut rien faire d'autre que tenter de résister. À chaque round, elle effectue un jet de Constitution (ND 15). Trois réussites cumulées lui permettent de récupérer (après 1 round supplémentaire passé à vomir l'eau de mer). Deux échecs consécutifs la font sombrer dans l'inconscience (elle se noie et meurt en 1 minute sans secours magique ou médical, ce dernier nécessitant un jet de Médecine/Intelligence ND 50)."
   },
   {
     id: "eau-5-surge-water",
@@ -580,7 +606,7 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 6,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 193",
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "Contact",
     area: "Un individu ciblé",
     duration: "Instantanée",
@@ -593,12 +619,12 @@ const SORTS_EAU = [
     element: "Eau",
     mastery: 6,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 193",
+    source: "Livre des Règles L5R 4e, p. 192",
     range: "9 mètres (30')",
     area: "Un esprit invoqué",
     duration: "Concentration",
     raises: "Aucune",
-    desc: "Invoque un colosse d'Eau de 3 mètres de haut. Il se déplace d'une distance de (Eau × 4,5 m / 15') par round et sature le sol sur 6 m autour de lui, transformant la zone en Terrain Difficile. Traits Physiques = votre Anneau d'Eau, Jiujutsu = moitié de votre Anneau d'Eau, VD des dégâts = Eau g Eau. Ses Blessures sont calculées avec une Terre égale à votre Eau (sans malus de blessures) et il possède le trait Invulnérable. Disparaît à 0 Blessure."
+    desc: "Invoque un colosse d'Eau de 3 mètres de haut. Il se déplace d'une distance de (Eau × 4,5 m / 15') par round et sature le sol dans un rayon de 6 m (20') autour de lui, transformant la zone en au moins Terrain Modéré (sauf si elle était déjà Terrain Difficile). Traits Physiques = votre Anneau d'Eau, Jiujutsu = moitié de votre Anneau d'Eau, VD des dégâts = Eau g Eau. Ses Blessures sont calculées avec une Terre égale à votre Eau (sans malus de blessures) et il possède le trait Invulnérable. Disparaît à 0 Blessure."
   },
   {
     id: "eau-6-tsunami",

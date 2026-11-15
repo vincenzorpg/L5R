@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.8.2] — 2026-11-15
+
+### 🐛 Corrigé
+- **Conformité des Avantages & Désavantages (`data/avantages-desavantages-data.js`)** d'après le *Livre des Règles L5R 4e* (pp. 146–162) :
+  - Correction de **Grand (`Large`)** (suppression du bonus erroné `+1 PV/palier (+8 PV)`, dégâts `+1g0` sur grandes armes de mêlée), **Guérison Accélérée (`Quick Healer`)** (`Constitution +2` pour la récupération de Blessures, sans prérequis), **Vif (`Quick`)** (`6 pts`, `5 pts` Ninja, bonus de Réflexes en Étape des Réactions après un round sans agir en premier), **Sang d'Osano-Wo** (`Spirituel`, immunité climatique naturelle et réduction de `1g1` des dégâts de sorts élémentaires naturels), **Héritage Ancestral** (`+1g1` hors combat), et clarification de **Mains de Pierre (`Hands of Stone`)** (`+0g1` cumulable aux dégâts à mains nues).
+  - Correction de **Cécité Totale (`Blind`)** (`-3g3` distance, `-1g1` mêlée, ND base `Réflexes + 5`, Eau `-2`, Athlétisme ND 20), **Hanté par un Ancêtre (`Haunted`)** (`-1g1` imposé 1 fois/session en cas de disgrâce), **Malédiction des Sept Fortunes — Bishamon** (`Force -1 rang` pour les dégâts d'armes), **Échec du Bushidō — Courage**, **Épilepsie** (`Volonté ND 10/min`), et suppression d'une clé `id` en double sur **Ascète**.
+  - Ajout des entrées officielles manquantes du Livre de Base : **Tacticien Émérite**, **Langues**, **Lire sur les Lèvres**, **Bénédiction de Daikoku**, **Bénédiction d'Ebisu**, **Serviteur**, **Amour Perdu**, **Malédiction de Seigneur Lune**, et complétion des listes *Touché par / Maudit par un Royaume Spirituel* et *Mauvaise Fortune*.
+- **Conformité des Sorts d'Eau (`data/sorts/sorts-eau.js`)** d'après le *Livre des Règles L5R 4e* (pp. 187–193) :
+  - Refonte de **Reflux de Force (`Ebbing Strength`, p. 187)** (transfert d'un Trait Physique du lanceur vers la cible jusqu'au Rang d'École, au lieu d'une pénalité de `-1g1` aux dégâts) et de **Les Reflets de P'an Ku (`Reflections of P'an Ku`, p. 187)** (divination instantanée d'un objet / parchemin, sans surface réfléchissante).
+  - Précision de **Renversement de Fortune (`Reversal of Fortunes`, p. 188)** (« conserver le résultat de son choix » conforme à l'édition 4e : relance d'un jet complet par round), **La Bénédiction d'Inari** (`Rang d'École + 1` personnes, ND doublé dans l'Outremonde), **Vitesse de la Cascade**, **La Puissance de l'Océan** (contrecoup d'épuisement sur la moitié de la durée), **Éveil de l'Eau** (*Terrain Modéré* sur 6 m), **Domaine de Suitengu**, **Symbole d'Eau**, **Proche de la Glace**, **Vapeurs Régénératrices** et **L'Étreinte de Suitengu**.
+  - Ajout des sorts officiels manquants du Livre de Base : **Esprit de l'Eau (`Spirit of the Water`, Maîtrise 1, p. 188)** et **Frappe du Tsunami (`Strike of the Tsunami`, Maîtrise 3, p. 190)**.
+
+---
+
 ## [1.8.1] — 2026-11-15
 
 ### ✨ Ajouté
