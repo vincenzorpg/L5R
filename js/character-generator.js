@@ -880,6 +880,36 @@ function initCatalogSelectors() {
   }
 }
 
+function buildGroupedSchoolOptionsHtml(selectedSchoolId, currentClanKey) {
+  const clans = getClans();
+  const clanKey = currentClanKey || document.getElementById('sel-clan')?.value || "crabe";
+  const ownClan = clans[clanKey];
+  let html = "";
+
+  if (ownClan) {
+    html += `<optgroup label="🏯 Écoles du ${ownClan.name}">`;
+    (ownClan.schools || []).forEach(s => {
+      const selAttr = s.id === selectedSchoolId ? ' selected' : '';
+      html += `<option value="${s.id}"${selAttr}>${s.name} (${s.bonus})</option>`;
+    });
+    html += `</optgroup>`;
+  }
+
+  for (const otherKey in clans) {
+    if (otherKey === clanKey) continue;
+    const otherClan = clans[otherKey];
+    if (!otherClan) continue;
+    html += `<optgroup label="🎓 ${otherClan.name}">`;
+    (otherClan.schools || []).forEach(s => {
+      const selAttr = s.id === selectedSchoolId ? ' selected' : '';
+      html += `<option value="${s.id}"${selAttr}>${s.name} [${otherClan.name}] (${s.bonus})</option>`;
+    });
+    html += `</optgroup>`;
+  }
+
+  return html;
+}
+
 function updateSchoolOptions(preferredSchoolId) {
   const clans = getClans();
   const clanKey = document.getElementById('sel-clan')?.value || "crabe";
@@ -904,34 +934,11 @@ function updateSchoolOptions(preferredSchoolId) {
       lockHint.innerHTML = `<span class="text-emerald-400 font-bold">🎓 École d'adoption déverrouillée (Avantage payé : 5 XP)</span>`;
     }
 
-    const ownGroup = document.createElement('optgroup');
-    ownGroup.label = `🏯 Écoles du ${clan.name}`;
-    (clan.schools || []).forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s.id;
-      opt.textContent = `${s.name} (${s.bonus})`;
-      ownGroup.appendChild(opt);
-    });
-    schSel.appendChild(ownGroup);
+    const targetId = preferredSchoolId || diffAdv.differentSchoolId || (clan.schools?.[0]?.id || "");
+    schSel.innerHTML = buildGroupedSchoolOptionsHtml(targetId, clanKey);
 
-    for (const otherKey in clans) {
-      if (otherKey === clanKey) continue;
-      const otherClan = clans[otherKey];
-      const extGroup = document.createElement('optgroup');
-      extGroup.label = `🎓 ${otherClan.name}`;
-      (otherClan.schools || []).forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.id;
-        opt.textContent = `${s.name} [${otherClan.name}] (${s.bonus})`;
-        extGroup.appendChild(opt);
-      });
-      schSel.appendChild(extGroup);
-    }
-
-    if (preferredSchoolId && schSel.querySelector(`option[value="${preferredSchoolId}"]`)) {
-      schSel.value = preferredSchoolId;
-    } else if (diffAdv.differentSchoolId && schSel.querySelector(`option[value="${diffAdv.differentSchoolId}"]`)) {
-      schSel.value = diffAdv.differentSchoolId;
+    if (targetId && schSel.querySelector(`option[value="${targetId}"]`)) {
+      schSel.value = targetId;
     }
 
   } else {
@@ -1309,20 +1316,19 @@ function addAdvFromCatalog() {
 
   if (isDifferentSchoolAdv(item.name)) {
     const currentSchObj = getSelectedSchoolObject();
-    const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
-    const defaultExt = (currentSchObj && currentSchObj.isExternalClan)
+    const defaultSch = (currentSchObj && currentSchObj.school)
       ? allSchools.find(s => s.id === currentSchObj.school.id)
-      : (externalSchools[0] || allSchools[0]);
+      : allSchools[0];
 
-    if (defaultExt) {
-      newAdv.differentSchoolId = defaultExt.id;
-      newAdv.differentSchoolName = `${defaultExt.name} (${defaultExt.clanName})`;
+    if (defaultSch) {
+      newAdv.differentSchoolId = defaultSch.id;
+      newAdv.differentSchoolName = `${defaultSch.name} (${defaultSch.clanName})`;
       advantagesList.push(newAdv);
 
       const schSel = document.getElementById('sel-school');
       if (schSel) {
-        updateSchoolOptions(defaultExt.id);
-        schSel.value = defaultExt.id;
+        updateSchoolOptions(defaultSch.id);
+        schSel.value = defaultSch.id;
       }
       resetSheetToNewSelection(true);
       return;
@@ -1435,22 +1441,16 @@ function renderAdvDisadv() {
       }
 
       if (isDiff) {
-        const externalSchools = allSchools.filter(s => s.clanKey !== currentClanKey);
-        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (externalSchools[0]?.id || "");
-
-        const diffOptions = externalSchools.map(sch => `
-          <option value="${sch.id}" ${sch.id === currentDiffId ? 'selected' : ''}>
-            ${sch.clanName} — ${sch.name} (${sch.bonus})
-          </option>
-        `).join('');
+        const currentDiffId = a.differentSchoolId || getSelectedSchoolObject()?.school?.id || (allSchools[0]?.id || "");
+        const diffOptionsHtml = buildGroupedSchoolOptionsHtml(currentDiffId, currentClanKey);
 
         extraHtml += `
           <div class="mt-2 p-2.5 rounded bg-stone-950 border border-emerald-500/40 space-y-1.5">
             <span class="text-[10px] text-emerald-300 font-bold uppercase tracking-wider block font-imperial">
-              🎓 École d'un autre Clan suivie (remplace l'école initiale) :
+              🎓 École suivie (autre Famille ou autre Clan — remplace l'école initiale) :
             </span>
-            <select onchange="updateDifferentSchoolSelection(${i}, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 font-bold">
-              ${diffOptions}
+            <select onchange="updateDifferentSchoolSelection(${i}, this.value)" class="w-full p-2.5 rounded font-medium text-xs">
+              ${diffOptionsHtml}
             </select>
             <div class="text-[10px] text-stone-400 italic">
               Applique le bonus de trait, l'honneur, les 7 compétences et les techniques de cette école tout en gardant votre Clan et votre Famille.
@@ -1462,12 +1462,7 @@ function renderAdvDisadv() {
       if (isMulti) {
         const currentSecId = a.secondarySchoolId || (allSchools[0]?.id || "");
         const currentSecRank = a.secondarySchoolRank || 1;
-
-        const schoolOptions = allSchools.map(sch => `
-          <option value="${sch.id}" ${sch.id === currentSecId ? 'selected' : ''}>
-            ${sch.clanName} — ${sch.name}
-          </option>
-        `).join('');
+        const schoolOptionsHtml = buildGroupedSchoolOptionsHtml(currentSecId, currentClanKey);
 
         extraHtml += `
           <div class="mt-2 p-2.5 rounded bg-stone-950 border border-amber-500/40 space-y-2">
@@ -1477,13 +1472,13 @@ function renderAdvDisadv() {
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <div class="sm:col-span-2">
                 <label class="text-[9px] text-stone-400 block mb-0.5">École suivie :</label>
-                <select onchange="updateSecondarySchoolSelection(${i}, this.value, undefined)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200">
-                  ${schoolOptions}
+                <select onchange="updateSecondarySchoolSelection(${i}, this.value, undefined)" class="w-full p-2.5 rounded font-medium text-xs">
+                  ${schoolOptionsHtml}
                 </select>
               </div>
               <div>
                 <label class="text-[9px] text-stone-400 block mb-0.5">Rang atteint :</label>
-                <select onchange="updateSecondarySchoolSelection(${i}, undefined, this.value)" class="w-full p-1.5 rounded text-xs bg-[#0d0b0b] border border-stone-800 text-amber-200 text-center font-bold">
+                <select onchange="updateSecondarySchoolSelection(${i}, undefined, this.value)" class="w-full p-2.5 rounded font-medium text-xs text-center font-bold">
                   <option value="1" ${currentSecRank === 1 ? 'selected' : ''}>Rang 1</option>
                   <option value="2" ${currentSecRank === 2 ? 'selected' : ''}>Rang 2</option>
                   <option value="3" ${currentSecRank === 3 ? 'selected' : ''}>Rang 3</option>
