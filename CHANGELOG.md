@@ -6,6 +6,24 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.6.0] — 2026-11-15
+
+### ✨ Ajouté
+
+- **Assistant d'Escarmouche (`ecran-mj.html` & `js/gm-screen.js`)** :
+  - Sélection par cases à cocher des PJs impliqués dans la scène avec saisie de leur score d'initiative (ou jet `🎲`).
+  - Choix du nombre de PNJs (`0` à `20`) et de leur modèle L5R 4e (ou stats personnalisées) : le bouton **« Générer l'Escarmouche »** lance automatiquement les initiatives de tous les PNJs et construit le tableau de combat trié (`#1`, `#2`, `#3`…).
+- **Duel Iaijutsu avec Import JSON dédié** :
+  - Bouton **« + Importer JSON PJ »** directement dans l'onglet Duel Iaijutsu pour charger le duelliste A, sélecteur de modèles d'adversaire pour le duelliste B et résolution des 4 phases (*Évaluation*, *Focus*, *Frappe*, *Dégâts*).
+- **Plateau de Dés Roll & Keep inspiré de la Forge** :
+  - Champs dédiés `Lancés g Gardés + Bonus`, options *Explosifs (10)* et *Spécialisation (1)*, 6 raccourcis en 1 clic (`3g2` à `8g4`) et affichage visuel des dés gardés/écartés.
+
+### 🐛 Corrigé
+
+- **Autonomie de l'Écran du MJ (`ecran-mj.html` & `js/gm-screen.js`)** : suppression de la dépendance à `js/character-generator.js` (dont le `bootstrap()` ciblait le DOM de `createcharacter.html`) et intégration d'un moteur Roll & Keep autonome dans `js/gm-screen.js`, rendant les onglets et le lanceur de dés 100 % fonctionnels.
+
+---
+
 ## [1.5.0] — 2026-11-15
 
 ### ✨ Ajouté

@@ -1,16 +1,17 @@
 /**
  * js/gm-screen.js
  * Écran du Maître du Jeu — Les Chroniques de Rokugan (L5R 4e Édition)
- * - Import JSON des PJs (format Carnet de Rokugan schemaVersion: 2)
- * - Onglets MJ : Escarmouche (Initiative & Blessures), Duel Iaijutsu,
- *   Honneur & Gloire, Cour & Social, Magie / Peur / Souillure
- * - Lanceur de dés Roll & Keep intégré (via js/character-generator.js)
+ * - Moteur Roll & Keep autonome (compatible Forge / Node.js)
+ * - Import JSON des PJs (Carnet de Rokugan schemaVersion: 2)
+ * - Générateur d'Escarmouche (PJs impliqués + N PNJs avec initiative auto)
+ * - Duel Iaijutsu (import JSON dédié PJ + adversaire + 4 phases L5R 4e)
+ * - Honneur & Gloire, Cour & Social, Magie / Peur / Souillure
  */
 
 (function (globalScope) {
   'use strict';
 
-  const STORAGE_KEY = 'l5r_gm_screen_v1';
+  const STORAGE_KEY = 'l5r_gm_screen_v2';
 
   const WOUND_LEVELS = [
     { key: 'healthy', label: 'Indemne', penalty: 0, color: 'emerald' },
@@ -39,14 +40,21 @@
   ];
 
   const ENEMY_PRESETS = [
-    { name: 'Bandit / Ronin', initiative: 14, armorTN: 15, reduction: 2, earth: 2, attack: '5g2', damage: '4g2', notes: 'Katana ou lance, moral fragile si blessé Grave.' },
-    { name: 'Ashigaru', initiative: 12, armorTN: 18, reduction: 3, earth: 2, attack: '4g2', damage: '4g2', notes: 'Yari (lance), combat en formation.' },
-    { name: 'Bushi Vétéran', initiative: 18, armorTN: 25, reduction: 5, earth: 3, attack: '7g3', damage: '6g2', notes: '2 attaques/tour (Rang 3), Armure lourde.' },
-    { name: 'Shugenja Adversaire', initiative: 15, armorTN: 15, reduction: 0, earth: 3, attack: '5g3', damage: '4g2', notes: 'Sorts Feu/Air, garde ses distances.' },
-    { name: 'Ninja / Assassin', initiative: 22, armorTN: 23, reduction: 0, earth: 2, attack: '7g4', damage: '5g2', notes: 'Furtivité, poison ou armes dissimulées.' },
-    { name: 'Bakemono (Gobelin)', initiative: 13, armorTN: 15, reduction: 1, earth: 2, attack: '4g2', damage: '3g2', notes: 'Souillure 1+, fuit si isolé.' },
-    { name: 'Oni Mineur', initiative: 16, armorTN: 20, reduction: 6, earth: 4, attack: '7g3', damage: '7g3', notes: 'Peur 3, Carapace, vulnérable au Jade/Cristal.' },
-    { name: 'Kansen / Mort-vivant', initiative: 11, armorTN: 14, reduction: 4, earth: 3, attack: '5g2', damage: '5g2', notes: 'Ignore les malus de blessures (sauf Mort).' }
+    { name: 'Bandit / Ronin', initFormula: '4g2', armorTN: 15, reduction: 2, earth: 2, attack: '5g2', damage: '4g2', notes: 'Katana ou lance, moral fragile si blessé Grave.' },
+    { name: 'Ashigaru', initFormula: '3g2', armorTN: 18, reduction: 3, earth: 2, attack: '4g2', damage: '4g2', notes: 'Yari (lance), combat en formation.' },
+    { name: 'Bushi Vétéran', initFormula: '6g3', armorTN: 25, reduction: 5, earth: 3, attack: '7g3', damage: '6g2', notes: '2 attaques/tour (Rang 3), Armure lourde.' },
+    { name: 'Shugenja Adversaire', initFormula: '4g2', armorTN: 15, reduction: 0, earth: 3, attack: '5g3', damage: '4g2', notes: 'Sorts Feu/Air, garde ses distances.' },
+    { name: 'Ninja / Assassin', initFormula: '7g4', armorTN: 23, reduction: 0, earth: 2, attack: '7g4', damage: '5g2', notes: 'Furtivité, poison ou armes dissimulées.' },
+    { name: 'Bakemono (Gobelin)', initFormula: '4g2', armorTN: 15, reduction: 1, earth: 2, attack: '4g2', damage: '3g2', notes: 'Souillure 1+, fuit si isolé.' },
+    { name: 'Oni Mineur', initFormula: '5g3', armorTN: 20, reduction: 6, earth: 4, attack: '7g3', damage: '7g3', notes: 'Peur 3, Carapace, vulnérable au Jade/Cristal.' },
+    { name: 'Kansen / Mort-vivant', initFormula: '3g2', armorTN: 14, reduction: 4, earth: 3, attack: '5g2', damage: '5g2', notes: 'Ignore les malus de blessures (sauf Mort).' }
+  ];
+
+  const DUEL_PRESETS = [
+    { name: 'Rônin Duelliste', iai: 3, per: 3, void: 2, agi: 3, tn: 18, earth: 2, damage: '4g2' },
+    { name: 'Bushi Lion Impétueux', iai: 3, per: 2, void: 3, agi: 4, tn: 22, earth: 3, damage: '5g2' },
+    { name: 'Duelliste Grue Kakita', iai: 5, per: 4, void: 3, agi: 4, tn: 25, earth: 2, damage: '5g2' },
+    { name: 'Champion d\'École (Rang 4)', iai: 6, per: 4, void: 4, agi: 4, tn: 25, earth: 3, damage: '6g2' }
   ];
 
   function escapeHtml(str) {
@@ -66,9 +74,114 @@
     return Math.max(0, Math.min(10, Math.round((Number(val) || 0) * 10) / 10));
   }
 
-  /**
-   * Calcule l'état de blessure L5R 4e Édition à partir des dégâts subis et de l'Anneau de Terre.
-   */
+  // ===========================================================================
+  // MOTEUR ROLL & KEEP AUTONOME (L5R 4e Édition)
+  // ===========================================================================
+  function parseRollKeepFormula(formulaStr) {
+    const str = String(formulaStr || '').trim();
+    const match = str.match(/(\d+)\s*[gk]\s*(\d+)(?:\s*([+-])\s*(\d+))?/i);
+    if (!match) return { rolled: 0, kept: 0, bonus: 0 };
+    const rolled = parseInt(match[1], 10) || 0;
+    const kept = parseInt(match[2], 10) || 0;
+    let bonus = 0;
+    if (match[4] !== undefined) {
+      const sign = match[3] === '-' ? -1 : 1;
+      bonus = sign * (parseInt(match[4], 10) || 0);
+    }
+    return { rolled, kept, bonus };
+  }
+
+  function applyTenDiceRule(rollX, keepY, bonus = 0) {
+    let r = Math.max(0, parseInt(rollX, 10) || 0);
+    let k = Math.max(0, parseInt(keepY, 10) || 0);
+    let b = parseInt(bonus, 10) || 0;
+    if (k > r) k = r;
+
+    if (r > 10) {
+      let excessR = r - 10;
+      r = 10;
+      if (k < 10) {
+        const canConvert = Math.min(Math.floor(excessR / 2), 10 - k);
+        k += canConvert;
+        excessR -= canConvert * 2;
+      }
+      if (k >= 10 && excessR > 0) {
+        b += excessR * 2;
+      }
+    }
+
+    if (k > 10) {
+      const excessK = k - 10;
+      k = 10;
+      b += excessK * 2;
+    }
+    return { rolled: r, kept: k, bonus: b };
+  }
+
+  function simulateRollAndKeep(rollX, keepY, bonus = 0, options = {}) {
+    const x = Math.max(0, parseInt(rollX, 10) || 0);
+    const y = Math.max(0, parseInt(keepY, 10) || 0);
+    const b = parseInt(bonus, 10) || 0;
+    const explode = options.explode !== undefined ? Boolean(options.explode) : true;
+    const spec = Boolean(options.spec);
+    const maxExplosions = options.maxExplosions !== undefined ? parseInt(options.maxExplosions, 10) : 5;
+    const rng = typeof options.rng === 'function' ? options.rng : Math.random;
+    const rollD10 = () => Math.floor(rng() * 10) + 1;
+
+    const dice = [];
+    for (let i = 0; i < x; i++) {
+      let dieVal = rollD10();
+      if (spec && dieVal === 1) dieVal = rollD10();
+      let totalDie = dieVal;
+      let explodedTimes = 0;
+      while (explode && dieVal === 10 && explodedTimes < maxExplosions) {
+        dieVal = rollD10();
+        totalDie += dieVal;
+        explodedTimes++;
+      }
+      dice.push({ value: totalDie, exploded: explodedTimes > 0 });
+    }
+
+    dice.sort((a, bItem) => bItem.value - a.value);
+    const kept = dice.slice(0, y);
+    const dropped = dice.slice(y);
+    const total = kept.reduce((acc, d) => acc + d.value, 0) + b;
+    return { dice, kept, dropped, bonus: b, total };
+  }
+
+  function formatRollResult(sim) {
+    const kept = Array.isArray(sim && sim.kept) ? sim.kept : [];
+    const dropped = Array.isArray(sim && sim.dropped) ? sim.dropped : [];
+    const formatDie = (d) => (d && typeof d === 'object' ? `${d.value}${d.exploded ? '*' : ''}` : String(d));
+    return {
+      total: Number(sim && sim.total) || 0,
+      kept,
+      dropped,
+      bonus: Number(sim && sim.bonus) || 0,
+      keptRolls: kept.map(formatDie),
+      droppedRolls: dropped.map(formatDie)
+    };
+  }
+
+  function rollFormula(formulaStr, options = {}) {
+    const parsed = parseRollKeepFormula(formulaStr);
+    if (!parsed || parsed.rolled <= 0 || parsed.kept <= 0) return null;
+    const capped = applyTenDiceRule(parsed.rolled, parsed.kept, parsed.bonus);
+    const sim = simulateRollAndKeep(capped.rolled, capped.kept, capped.bonus, {
+      explode: options.explode !== undefined ? Boolean(options.explode) : true,
+      spec: Boolean(options.spec)
+    });
+    const formatted = formatRollResult(sim);
+    const labelFormula = `${capped.rolled}g${capped.kept}${capped.bonus ? (capped.bonus > 0 ? `+${capped.bonus}` : capped.bonus) : ''}`;
+    return {
+      formula: labelFormula,
+      ...formatted
+    };
+  }
+
+  // ===========================================================================
+  // CALCULS L5R 4e (BLESSURES, IMPORT JSON, TRI INITIATIVE)
+  // ===========================================================================
   function computeL5RWoundState(wounds, earthRing = 2, options = {}) {
     const earth = Math.max(1, parseInt(earthRing, 10) || 2);
     const dmg = Math.max(0, parseInt(wounds, 10) || 0);
@@ -118,9 +231,6 @@
     };
   }
 
-  /**
-   * Normalise un JSON de personnage (Carnet de Rokugan schemaVersion: 2 ou format simplifié).
-   */
   function normalizeImportedCharacter(raw) {
     if (!raw || typeof raw !== 'object') {
       throw new Error('Le fichier JSON ne contient pas un objet personnage valide.');
@@ -203,6 +313,7 @@
       voidCurrent: Math.max(0, Math.min(voidRing, isNaN(voidPoints) ? voidRing : voidPoints)),
       wounds: Math.max(0, parseInt(raw.wounds ?? 0, 10) || 0),
       lastInit: null,
+      includedInSkirmish: true,
       woundPenaltyDelta,
       armorName: String(armorObj.name || 'Aucune / Kimono').trim(),
       armorTN: totalTN,
@@ -218,9 +329,6 @@
     };
   }
 
-  /**
-   * Trie les combattants par Initiative décroissante (avec départage déterministe).
-   */
   function sortCombatantsByInit(combatants) {
     return [...combatants].sort((a, b) => {
       const diff = (Number(b.initiative) || 0) - (Number(a.initiative) || 0);
@@ -228,20 +336,6 @@
       if (a.type !== b.type) return a.type === 'pc' ? -1 : 1;
       return String(a.name || '').localeCompare(String(b.name || ''), 'fr');
     });
-  }
-
-  /**
-   * Formate un résultat de simulateRollAndKeep en listes affichables.
-   */
-  function formatRollResult(sim) {
-    const kept = Array.isArray(sim && sim.kept) ? sim.kept : [];
-    const dropped = Array.isArray(sim && sim.dropped) ? sim.dropped : [];
-    const formatDie = (d) => (d && typeof d === 'object' ? `${d.value}${d.exploded ? '*' : ''}` : String(d));
-    return {
-      total: Number(sim && sim.total) || 0,
-      keptRolls: kept.map(formatDie),
-      droppedRolls: dropped.map(formatDie)
-    };
   }
 
   // ===========================================================================
@@ -256,7 +350,6 @@
       combatants: []
     },
     duel: {
-      phase: 1,
       aName: 'Duelliste A (PJ)',
       aPcId: '',
       aIai: 3,
@@ -264,22 +357,23 @@
       aVoid: 3,
       aAgi: 3,
       aTN: 20,
+      aEarth: 2,
+      aWounds: 0,
+      aDamage: '4g2',
       aFocus: 0,
-      aEvalRoll: null,
-      aFocusRoll: null,
-      aStrikeRoll: null,
-      bName: 'Adversaire B',
+      bName: 'Rônin Duelliste',
       bIai: 3,
       bPer: 3,
       bVoid: 2,
       bAgi: 3,
-      bTN: 20,
+      bTN: 18,
+      bEarth: 2,
+      bWounds: 0,
+      bDamage: '4g2',
       bFocus: 0,
-      bEvalRoll: null,
-      bFocusRoll: null,
-      bStrikeRoll: null,
       log: []
     },
+    diceLast: null,
     diceHistory: [],
     gmScratchpad: ''
   };
@@ -312,7 +406,8 @@
               }
             : { round: 1, activeIndex: 0, combatants: [] },
           duel: parsed.duel && typeof parsed.duel === 'object' ? { ...state.duel, ...parsed.duel } : state.duel,
-          diceHistory: Array.isArray(parsed.diceHistory) ? parsed.diceHistory.slice(0, 15) : [],
+          diceLast: parsed.diceLast || null,
+          diceHistory: Array.isArray(parsed.diceHistory) ? parsed.diceHistory.slice(0, 12) : [],
           gmScratchpad: String(parsed.gmScratchpad || '')
         };
       }
@@ -322,41 +417,19 @@
   }
 
   // ===========================================================================
-  // SYNCHRONISATION PJ <-> COMBAT & LANCEUR DE DÉS
+  // LOGIQUE MÉTIER (PJS, ESCARMOUCHE, DUEL, DÉS)
   // ===========================================================================
   function findPc(pcId) {
     return state.pcs.find((p) => p.id === pcId) || null;
   }
 
-  function rollFormula(formulaStr, options = {}) {
-    if (typeof globalScope.parseRollKeepFormula !== 'function' || typeof globalScope.simulateRollAndKeep !== 'function') {
-      return null;
-    }
-    const parsed = globalScope.parseRollKeepFormula(formulaStr);
-    if (!parsed || parsed.rolled <= 0 || parsed.kept <= 0) {
-      return null;
-    }
-    const capped = globalScope.applyTenDiceRule(parsed.rolled, parsed.kept, parsed.bonus);
-    const sim = globalScope.simulateRollAndKeep(capped.rolled, capped.kept, capped.bonus, {
-      explode: true,
-      spec: Boolean(options.spec)
-    });
-    const formatted = formatRollResult(sim);
-    const labelFormula = `${capped.rolled}g${capped.kept}${capped.bonus ? (capped.bonus > 0 ? `+${capped.bonus}` : capped.bonus) : ''}`;
-    return {
-      formula: labelFormula,
-      total: formatted.total,
-      keptRolls: formatted.keptRolls,
-      droppedRolls: formatted.droppedRolls
-    };
-  }
-
-  function pushDiceHistory(entry) {
+  function pushDiceResult(entry) {
     if (!entry) return;
+    state.diceLast = entry;
     state.diceHistory.unshift(entry);
-    state.diceHistory = state.diceHistory.slice(0, 15);
+    state.diceHistory = state.diceHistory.slice(0, 12);
     saveState();
-    renderDiceHistory();
+    renderDiceBox();
   }
 
   function adjustWoundsForTarget(targetType, targetId, delta) {
@@ -398,30 +471,24 @@
     renderAll();
   }
 
-  function addOrUpdatePcInCombat(pcId, initOverride) {
-    const pc = findPc(pcId);
-    if (!pc) return;
+  function createSkirmishEncounter(npcCount, presetIdx, customNpc) {
+    const combatants = [];
 
-    let initVal = initOverride !== undefined && initOverride !== null && initOverride !== ''
-      ? Number(initOverride)
-      : pc.lastInit;
-
-    if (initVal == null || isNaN(initVal)) {
-      const rolled = rollFormula(pc.initFormula);
-      initVal = rolled ? rolled.total : (pc.insightRank + pc.traits.reflexes) * 5;
-    }
-    pc.lastInit = initVal;
-
-    const existing = state.combat.combatants.find((c) => c.pcId === pcId);
-    if (existing) {
-      existing.initiative = initVal;
-    } else {
-      state.combat.combatants.push({
+    // 1. Ajouter les PJs sélectionnés
+    state.pcs.forEach((pc) => {
+      if (pc.includedInSkirmish === false) return;
+      let initScore = pc.lastInit;
+      if (initScore === null || initScore === undefined || initScore === '' || isNaN(Number(initScore))) {
+        const rolled = rollFormula(pc.initFormula);
+        initScore = rolled ? rolled.total : 15;
+        pc.lastInit = initScore;
+      }
+      combatants.push({
         id: uid('cmb'),
         pcId: pc.id,
         type: 'pc',
         name: pc.name,
-        initiative: initVal,
+        initiative: Number(initScore),
         armorTN: pc.armorTN,
         reduction: pc.reduction,
         earth: pc.rings.earth,
@@ -431,37 +498,61 @@
         attack: pc.weapons[0] ? pc.weapons[0].damage : '4g2',
         notes: pc.school || ''
       });
+    });
+
+    // 2. Ajouter les N PNJs en lançant automatiquement leurs initiatives
+    const count = Math.max(0, Math.min(20, parseInt(npcCount, 10) || 0));
+    const preset = (!isNaN(presetIdx) && ENEMY_PRESETS[presetIdx]) ? ENEMY_PRESETS[presetIdx] : customNpc;
+    const baseName = String((preset && preset.name) || 'Adversaire').trim();
+    const initFormula = String((preset && preset.initFormula) || '4g2').trim();
+
+    for (let i = 1; i <= count; i++) {
+      const rolledInit = rollFormula(initFormula);
+      const initScore = rolledInit ? rolledInit.total : 14;
+      combatants.push({
+        id: uid('foe'),
+        pcId: null,
+        type: 'enemy',
+        name: count > 1 ? `${baseName} #${i}` : baseName,
+        initiative: initScore,
+        armorTN: Number(preset.armorTN) || 15,
+        reduction: Number(preset.reduction) || 0,
+        earth: Math.max(1, parseInt(preset.earth, 10) || 2),
+        wounds: 0,
+        stance: 'attaque',
+        statuses: [],
+        attack: String(preset.attack || '5g2'),
+        damage: String(preset.damage || '4g2'),
+        notes: String(preset.notes || '')
+      });
     }
 
-    state.combat.combatants = sortCombatantsByInit(state.combat.combatants);
+    state.combat = {
+      round: 1,
+      activeIndex: 0,
+      combatants: sortCombatantsByInit(combatants)
+    };
     saveState();
     renderAll();
   }
 
-  function addEnemyToCombat(enemyData) {
-    state.combat.combatants.push({
-      id: uid('foe'),
-      pcId: null,
-      type: 'enemy',
-      name: String(enemyData.name || 'Adversaire').trim(),
-      initiative: Number(enemyData.initiative) || 12,
-      armorTN: Number(enemyData.armorTN) || 15,
-      reduction: Number(enemyData.reduction) || 0,
-      earth: Math.max(1, parseInt(enemyData.earth, 10) || 2),
-      wounds: 0,
-      stance: 'attaque',
-      statuses: [],
-      attack: String(enemyData.attack || '5g2').trim(),
-      damage: String(enemyData.damage || '4g2').trim(),
-      notes: String(enemyData.notes || '').trim()
-    });
-    state.combat.combatants = sortCombatantsByInit(state.combat.combatants);
-    saveState();
-    renderCombat();
+  function applyPcToDuelA(pc) {
+    if (!pc) return;
+    const iaiSkill = pc.skills.find((s) => /iaijutsu/i.test(s.name));
+    state.duel.aPcId = pc.id;
+    state.duel.aName = pc.name;
+    state.duel.aIai = iaiSkill ? iaiSkill.rank : 1;
+    state.duel.aPer = pc.traits.perception;
+    state.duel.aVoid = pc.rings.void;
+    state.duel.aAgi = pc.traits.agility;
+    state.duel.aTN = pc.armorTN;
+    state.duel.aEarth = pc.rings.earth;
+    state.duel.aWounds = pc.wounds;
+    state.duel.aDamage = pc.weapons[0] && pc.weapons[0].damage ? pc.weapons[0].damage : '4g2';
   }
 
   // ===========================================================================
-  // RENDU INTERFACE UTILISATEUR
+  // RENDU UI
   // ===========================================================================
   function woundBadgeClass(color) {
     const map = {
@@ -495,13 +586,10 @@
     document.querySelectorAll('[data-gm-tab]').forEach((btn) => {
       const tabId = btn.getAttribute('data-gm-tab');
       const isActive = tabId === state.activeTab;
-      btn.classList.toggle('bg-amber-600', isActive);
-      btn.classList.toggle('text-black', isActive);
-      btn.classList.toggle('border-amber-400', isActive);
-      btn.classList.toggle('font-bold', isActive);
-      btn.classList.toggle('bg-stone-900/70', !isActive);
-      btn.classList.toggle('text-stone-300', !isActive);
-      btn.classList.toggle('border-stone-700', !isActive);
+      btn.setAttribute('aria-selected', String(isActive));
+      btn.className = isActive
+        ? 'px-3.5 py-2 rounded-lg border border-amber-400 bg-amber-600 text-black font-bold text-xs font-imperial cursor-pointer transition shadow'
+        : 'px-3.5 py-2 rounded-lg border border-stone-700 bg-stone-900/70 hover:bg-stone-800 text-stone-300 text-xs font-imperial cursor-pointer transition';
     });
 
     document.querySelectorAll('[data-gm-panel]').forEach((panel) => {
@@ -520,7 +608,7 @@
       container.innerHTML = `
         <div class="col-span-full card-clean rounded-xl p-6 text-center border-dashed border-amber-500/30 space-y-2">
           <div class="text-2xl">📜</div>
-          <p class="text-sm font-imperial text-amber-300">Aucun PJ importé pour le moment</p>
+          <p class="text-sm font-imperial text-amber-300">Aucun PJ importé sur la table</p>
           <p class="text-xs text-stone-400 max-w-md mx-auto">
             Importez un ou plusieurs fichiers <code>.json</code> exportés depuis <b>La Forge</b> ou <b>Le Carnet de Rokugan</b>, ou cliquez sur <b>« Charger 2 PJs d'exemple »</b>.
           </p>
@@ -530,9 +618,7 @@
     }
 
     container.innerHTML = state.pcs.map((pc) => {
-      const wState = computeL5RWoundState(pc.wounds, pc.rings.earth, {
-        woundPenaltyDelta: pc.woundPenaltyDelta
-      });
+      const wState = computeL5RWoundState(pc.wounds, pc.rings.earth, { woundPenaltyDelta: pc.woundPenaltyDelta });
       const penaltyBadge = wState.penalty === null
         ? wState.label
         : wState.penalty === 0
@@ -553,59 +639,51 @@
         : '<div class="text-[11px] text-stone-500 italic">Aucune arme renseignée</div>';
 
       return `
-        <article class="card-clean rounded-xl p-4 space-y-3 border border-amber-500/25 flex flex-col justify-between" data-pc-card="${escapeHtml(pc.id)}">
+        <article class="card-clean rounded-xl p-3.5 space-y-2.5 border border-amber-500/25 flex flex-col justify-between" data-pc-card="${escapeHtml(pc.id)}">
           <div class="space-y-2.5">
             <div class="flex items-start justify-between gap-2 border-b border-amber-500/20 pb-2">
               <div>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="font-imperial font-bold text-base text-amber-300">${escapeHtml(pc.name)}</h3>
+                  <h3 class="font-imperial font-bold text-sm text-amber-300">${escapeHtml(pc.name)}</h3>
                   <span class="px-1.5 py-0.5 rounded bg-amber-950/70 border border-amber-600/40 text-[10px] font-bold text-amber-200">Rang ${pc.insightRank}</span>
                 </div>
                 <p class="text-[11px] text-stone-400">
                   ${escapeHtml(pc.clan.toUpperCase())}${pc.family ? ' • ' + escapeHtml(pc.family) : ''}${pc.school ? ' • ' + escapeHtml(pc.school) : ''}
                 </p>
               </div>
-              <div class="flex items-center gap-1 shrink-0">
-                <button type="button" data-action="pc-to-combat" data-pc-id="${escapeHtml(pc.id)}" class="px-2 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-600/50 text-[10px] font-imperial font-bold text-red-200 transition cursor-pointer" title="Ajouter au traqueur de combat">
-                  + Combat
-                </button>
-                <button type="button" data-action="remove-pc" data-pc-id="${escapeHtml(pc.id)}" class="px-1.5 py-1 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 transition cursor-pointer" title="Retirer ce PJ">
-                  ✕
-                </button>
-              </div>
+              <button type="button" data-action="remove-pc" data-pc-id="${escapeHtml(pc.id)}" class="px-1.5 py-1 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 transition cursor-pointer" title="Retirer ce PJ">✕</button>
             </div>
 
-            <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
-              <div class="p-1.5 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Terre</span><b class="text-sm text-emerald-300">${pc.rings.earth}</b></div>
-              <div class="p-1.5 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Eau</span><b class="text-sm text-sky-300">${pc.rings.water}</b></div>
-              <div class="p-1.5 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Air</span><b class="text-sm text-teal-300">${pc.rings.air}</b></div>
-              <div class="p-1.5 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Feu</span><b class="text-sm text-orange-300">${pc.rings.fire}</b></div>
-              <div class="p-1.5 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Vide</span><b class="text-sm text-purple-300">${pc.rings.void}</b></div>
+            <div class="grid grid-cols-5 gap-1 text-center text-[10px]">
+              <div class="p-1 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Terre</span><b class="text-xs text-emerald-300">${pc.rings.earth}</b></div>
+              <div class="p-1 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Eau</span><b class="text-xs text-sky-300">${pc.rings.water}</b></div>
+              <div class="p-1 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Air</span><b class="text-xs text-teal-300">${pc.rings.air}</b></div>
+              <div class="p-1 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Feu</span><b class="text-xs text-orange-300">${pc.rings.fire}</b></div>
+              <div class="p-1 rounded bg-black/40 border border-stone-800"><span class="block text-stone-400">Vide</span><b class="text-xs text-purple-300">${pc.rings.void}</b></div>
             </div>
 
-            <div class="grid grid-cols-3 gap-2 text-[11px] bg-black/30 rounded-lg p-2 border border-stone-800/80">
-              <div><span class="text-stone-400">ND Armure :</span> <b class="text-amber-300">${pc.armorTN}</b> <span class="text-stone-500">(Réd. ${pc.reduction})</span></div>
+            <div class="grid grid-cols-3 gap-1.5 text-[10px] bg-black/30 rounded-lg p-1.5 border border-stone-800/80">
+              <div><span class="text-stone-400">ND :</span> <b class="text-amber-300">${pc.armorTN}</b> <span class="text-stone-500">(Réd. ${pc.reduction})</span></div>
               <div><span class="text-stone-400">Init :</span> <b class="text-amber-200 font-mono">${escapeHtml(pc.initFormula)}</b></div>
-              <div><span class="text-stone-400">Hon / Glo :</span> <b class="text-stone-200">${pc.honor.toFixed(1)} / ${pc.glory.toFixed(1)}</b></div>
+              <div><span class="text-stone-400">Hon/Glo :</span> <b class="text-stone-200">${pc.honor.toFixed(1)}/${pc.glory.toFixed(1)}</b></div>
             </div>
 
-            <div class="flex items-center justify-between text-xs bg-purple-950/20 border border-purple-800/30 rounded-lg px-2.5 py-1.5">
-              <span class="text-[11px] font-imperial text-purple-300">Points de Vide (${pc.voidCurrent}/${pc.voidMax})</span>
-              <div class="flex items-center gap-1.5">${voidDots}</div>
+            <div class="flex items-center justify-between text-xs bg-purple-950/20 border border-purple-800/30 rounded-lg px-2 py-1">
+              <span class="text-[10px] font-imperial text-purple-300">Vide (${pc.voidCurrent}/${pc.voidMax})</span>
+              <div class="flex items-center gap-1">${voidDots}</div>
             </div>
 
-            <div class="p-2.5 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+            <div class="p-2 rounded-lg bg-black/40 border border-stone-800 space-y-1.5">
               <div class="flex items-center justify-between gap-2 text-xs">
-                <span class="px-2 py-0.5 rounded border text-[11px] font-bold ${woundBadgeClass(wState.color)}">${escapeHtml(penaltyBadge)}</span>
-                <span class="font-mono text-xs text-stone-300"><b>${wState.wounds}</b> / ${wState.maxWounds}</span>
+                <span class="px-2 py-0.5 rounded border text-[10px] font-bold ${woundBadgeClass(wState.color)}">${escapeHtml(penaltyBadge)}</span>
+                <span class="font-mono text-[11px] text-stone-300"><b>${wState.wounds}</b> / ${wState.maxWounds}</span>
               </div>
-              <div class="w-full h-2 rounded-full bg-stone-900 overflow-hidden border border-stone-800">
+              <div class="w-full h-1.5 rounded-full bg-stone-900 overflow-hidden">
                 <div class="h-full transition-all duration-200 ${woundBarColor(wState.color)}" style="width: ${wState.percent}%"></div>
               </div>
-              <div class="flex flex-wrap items-center justify-between gap-1 pt-0.5">
+              <div class="flex flex-wrap items-center justify-between gap-1">
                 <div class="flex items-center gap-1">
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="-5" class="px-1.5 py-0.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-[10px] text-emerald-300 cursor-pointer">-5</button>
-                  <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="-1" class="px-1.5 py-0.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-[10px] text-emerald-300 cursor-pointer">-1</button>
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="1" class="px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+1</button>
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="5" class="px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+5</button>
                   <button type="button" data-action="wound-delta" data-target-type="pc" data-target-id="${escapeHtml(pc.id)}" data-delta="10" class="px-1.5 py-0.5 rounded bg-red-950/80 hover:bg-red-800 border border-red-600/60 text-[10px] font-bold text-red-200 cursor-pointer">+10</button>
@@ -615,72 +693,69 @@
             </div>
 
             <details class="group text-xs border border-stone-800/80 rounded-lg bg-black/25">
-              <summary class="px-2.5 py-1.5 cursor-pointer font-imperial text-[11px] text-amber-300/90 hover:text-amber-200 select-none flex items-center justify-between">
-                <span>Rappels : Armes, Compétences & Traits marquants</span>
+              <summary class="px-2.5 py-1 cursor-pointer font-imperial text-[10px] text-amber-300/90 hover:text-amber-200 select-none flex items-center justify-between">
+                <span>Rappels : Armes, Compétences &amp; Traits</span>
                 <span class="text-stone-500 group-open:rotate-180 transition-transform">▾</span>
               </summary>
-              <div class="p-2.5 pt-1 space-y-2 border-t border-stone-800/60">
+              <div class="p-2 pt-1 space-y-1.5 border-t border-stone-800/60">
                 <div class="space-y-0.5">${weaponsHtml}</div>
                 ${topSkills ? `<div class="flex flex-wrap gap-1">${topSkills}</div>` : ''}
-                ${pc.advantages ? `<div class="text-[11px] text-emerald-300/90"><b>Avantages :</b> ${escapeHtml(pc.advantages)}</div>` : ''}
-                ${pc.disadvantages ? `<div class="text-[11px] text-rose-300/90"><b>Désavantages :</b> ${escapeHtml(pc.disadvantages)}</div>` : ''}
-                ${pc.spells.length > 0 ? `<div class="text-[11px] text-sky-300/90"><b>Sorts :</b> ${escapeHtml(pc.spells.join(', '))}</div>` : ''}
-                ${pc.notes ? `<div class="text-[11px] text-stone-400 italic"><b>Notes fiche :</b> ${escapeHtml(pc.notes)}</div>` : ''}
+                ${pc.advantages ? `<div class="text-[10px] text-emerald-300/90"><b>Avantages :</b> ${escapeHtml(pc.advantages)}</div>` : ''}
+                ${pc.disadvantages ? `<div class="text-[10px] text-rose-300/90"><b>Désavantages :</b> ${escapeHtml(pc.disadvantages)}</div>` : ''}
+                ${pc.spells.length > 0 ? `<div class="text-[10px] text-sky-300/90"><b>Sorts :</b> ${escapeHtml(pc.spells.join(', '))}</div>` : ''}
               </div>
             </details>
 
-            <div>
-              <textarea
-                data-action="pc-gm-note"
-                data-pc-id="${escapeHtml(pc.id)}"
-                rows="2"
-                placeholder="Notes MJ rapides (serments, sombres secrets, pistes en cours...)"
-                class="w-full rounded-lg bg-[#0d0b0b] border border-stone-800 focus:border-amber-500/60 px-2.5 py-1.5 text-[11px] text-stone-200 placeholder-stone-600 focus:outline-none"
-              >${escapeHtml(pc.gmNotes || '')}</textarea>
-            </div>
+            <textarea
+              data-action="pc-gm-note"
+              data-pc-id="${escapeHtml(pc.id)}"
+              rows="1"
+              placeholder="Note MJ rapide..."
+              class="w-full rounded-lg bg-[#0d0b0b] border border-stone-800 focus:border-amber-500/60 px-2 py-1 text-[11px] text-stone-200 placeholder-stone-600 focus:outline-none"
+            >${escapeHtml(pc.gmNotes || '')}</textarea>
           </div>
         </article>
       `;
     }).join('');
   }
 
-  function renderPcInitTable() {
-    const box = document.getElementById('gm-pc-init-box');
+  function renderSkirmishSetup() {
+    const box = document.getElementById('gm-skirmish-pcs');
     if (!box) return;
     if (state.pcs.length === 0) {
-      box.innerHTML = '<div class="text-[11px] text-stone-500 italic">Importez vos PJs ci-dessus pour saisir leurs scores d\'initiative de table.</div>';
+      box.innerHTML = '<div class="text-[11px] text-stone-400 italic">Importez vos PJs ci-dessus pour les cocher et saisir leurs scores d\'initiative.</div>';
       return;
     }
 
-    box.innerHTML = state.pcs.map((pc) => `
-      <div class="flex items-center justify-between gap-2 p-2 rounded-lg bg-black/40 border border-stone-800 text-xs">
-        <div class="min-w-0">
-          <div class="font-bold text-amber-200 truncate">${escapeHtml(pc.name)}</div>
-          <div class="text-[10px] text-stone-400 font-mono">Formule : ${escapeHtml(pc.initFormula)}</div>
+    box.innerHTML = state.pcs.map((pc) => {
+      const checked = pc.includedInSkirmish !== false;
+      return `
+        <div class="flex items-center justify-between gap-2 p-2 rounded-lg border text-xs ${checked ? 'bg-amber-950/20 border-amber-500/40' : 'bg-black/30 border-stone-800 opacity-65'}">
+          <label class="flex items-center gap-2 min-w-0 cursor-pointer">
+            <input type="checkbox" data-action="pc-skirmish-toggle" data-pc-id="${escapeHtml(pc.id)}" ${checked ? 'checked' : ''} class="rounded border-stone-600 bg-stone-900 text-amber-500" />
+            <div class="min-w-0">
+              <div class="font-bold text-amber-200 truncate">${escapeHtml(pc.name)}</div>
+              <div class="text-[10px] text-stone-400 font-mono">${escapeHtml(pc.initFormula)}</div>
+            </div>
+          </label>
+          <div class="flex items-center gap-1 shrink-0">
+            <input
+              type="number"
+              data-action="pc-init-input"
+              data-pc-id="${escapeHtml(pc.id)}"
+              value="${pc.lastInit != null ? pc.lastInit : ''}"
+              placeholder="Init"
+              class="w-14 text-center font-mono font-bold rounded bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 text-xs focus:outline-none"
+            />
+            <button type="button" data-action="roll-pc-init" data-pc-id="${escapeHtml(pc.id)}" title="Lancer ${escapeHtml(pc.initFormula)}" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-xs cursor-pointer">🎲</button>
+          </div>
         </div>
-        <div class="flex items-center gap-1.5 shrink-0">
-          <input
-            type="number"
-            data-action="pc-init-input"
-            data-pc-id="${escapeHtml(pc.id)}"
-            value="${pc.lastInit != null ? pc.lastInit : ''}"
-            placeholder="Score"
-            class="w-16 text-center font-mono font-bold rounded-lg bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 text-xs focus:outline-none"
-          />
-          <button
-            type="button"
-            data-action="roll-pc-init"
-            data-pc-id="${escapeHtml(pc.id)}"
-            title="Lancer ${escapeHtml(pc.initFormula)} automatiquement"
-            class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-xs cursor-pointer"
-          >🎲</button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function renderCombat() {
-    renderPcInitTable();
+    renderSkirmishSetup();
 
     const listEl = document.getElementById('gm-combat-list');
     const roundEl = document.getElementById('gm-combat-round');
@@ -693,7 +768,7 @@
       if (nextUpEl) nextUpEl.textContent = '';
       listEl.innerHTML = `
         <div class="p-6 text-center text-xs text-stone-400 border border-dashed border-stone-800 rounded-xl">
-          Aucun combattant dans l'ordre d'initiative. Saisissez les initiatives de vos PJs ci-dessus et cliquez sur <b>« Appliquer &amp; Trier l'Ordre »</b>, ou ajoutez des adversaires.
+          Aucun combat actif. Cochez les PJs impliqués, choisissez le nombre de PNJs et cliquez sur <b>« ⚔️ Générer l'Escarmouche »</b>.
         </div>
       `;
       return;
@@ -751,14 +826,13 @@
                   data-combat-id="${escapeHtml(c.id)}"
                   value="${c.initiative}"
                   class="w-14 text-center font-mono font-bold text-sm rounded-lg bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 focus:outline-none"
-                  title="Score d'Initiative"
                 />
                 <span class="text-[9px] text-stone-500 uppercase">Init</span>
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
                   ${isActive ? '<span class="px-1.5 py-0.5 rounded bg-amber-500 text-black font-bold text-[10px] uppercase">Tour actif</span>' : ''}
-                  <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPC ? 'bg-sky-950/70 text-sky-300 border-sky-700/50' : 'bg-red-950/70 text-red-300 border-red-700/50'}">${isPC ? 'PJ' : 'Adversaire'}</span>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPC ? 'bg-sky-950/70 text-sky-300 border-sky-700/50' : 'bg-red-950/70 text-red-300 border-red-700/50'}">${isPC ? 'PJ' : 'PNJ'}</span>
                   <h4 class="font-imperial font-bold text-sm text-stone-100 truncate">${escapeHtml(c.name)}</h4>
                 </div>
                 <div class="text-[11px] text-stone-400 flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5">
@@ -783,7 +857,7 @@
                 <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="1" class="px-1.5 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+1</button>
                 <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="5" class="px-1.5 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+5</button>
                 <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="10" class="px-1.5 py-1 rounded bg-red-950/80 hover:bg-red-800 border border-red-600/60 text-[10px] font-bold text-red-200 cursor-pointer">+10</button>
-                <button type="button" data-action="remove-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1.5 py-1 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 cursor-pointer" title="Retirer du combat">✕</button>
+                <button type="button" data-action="remove-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1.5 py-1 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 cursor-pointer" title="Retirer">✕</button>
               </div>
             </div>
           </div>
@@ -804,7 +878,7 @@
     const pcSelect = document.getElementById('duel-a-pc');
     if (pcSelect) {
       const currentVal = d.aPcId || '';
-      pcSelect.innerHTML = '<option value="">— Saisie manuelle —</option>' +
+      pcSelect.innerHTML = '<option value="">— Choisir un PJ de la table —</option>' +
         state.pcs.map((p) => `<option value="${escapeHtml(p.id)}" ${currentVal === p.id ? 'selected' : ''}>${escapeHtml(p.name)}</option>`).join('');
     }
 
@@ -832,13 +906,13 @@
 
     const aTnEffEl = document.getElementById('duel-a-tn-eff');
     const bTnEffEl = document.getElementById('duel-b-tn-eff');
-    if (aTnEffEl) aTnEffEl.textContent = String(d.aTN + d.aFocus * 5);
-    if (bTnEffEl) bTnEffEl.textContent = String(d.bTN + d.bFocus * 5);
+    if (aTnEffEl) aTnEffEl.textContent = String((Number(d.aTN) || 15) + (Number(d.aFocus) || 0) * 5);
+    if (bTnEffEl) bTnEffEl.textContent = String((Number(d.bTN) || 15) + (Number(d.bFocus) || 0) * 5);
 
     const logEl = document.getElementById('duel-log');
     if (logEl) {
       logEl.innerHTML = d.log.length === 0
-        ? '<div class="text-[11px] text-stone-500 italic">Lancez les phases du duel ci-dessus pour suivre le déroulement.</div>'
+        ? '<div class="text-[11px] text-stone-500 italic">Importez le PJ, choisissez ou saisissez son adversaire, puis lancez les 4 phases.</div>'
         : d.log.map((line) => `<div class="p-2 rounded bg-black/35 border border-stone-800 text-[11px] text-stone-200">${line}</div>`).join('');
     }
   }
@@ -883,23 +957,50 @@
     `).join('');
   }
 
-  function renderDiceHistory() {
+  function renderDiceBox() {
+    const resultBox = document.getElementById('gm-dice-result-box');
     const historyEl = document.getElementById('gm-dice-history');
-    if (!historyEl) return;
-    if (state.diceHistory.length === 0) {
-      historyEl.innerHTML = '<div class="text-[11px] text-stone-500 italic">Aucun jet lancé pour le moment.</div>';
-      return;
+
+    if (resultBox) {
+      if (!state.diceLast) {
+        resultBox.innerHTML = '<div class="text-[11px] text-stone-500 italic text-center py-2">Choisissez une formule ou cliquez sur un raccourci pour lancer les dés.</div>';
+      } else {
+        const d = state.diceLast;
+        const keptChips = (d.kept || []).map((die) =>
+          `<span class="px-2 py-1 rounded bg-amber-600 text-black font-extrabold text-xs shadow ${die.exploded ? 'ring-2 ring-amber-300' : ''}">${die.value}${die.exploded ? '★' : ''}</span>`
+        ).join('');
+        const droppedChips = (d.dropped || []).map((die) =>
+          `<span class="px-1.5 py-0.5 rounded bg-stone-900 text-stone-500 text-[10px] line-through border border-stone-800">${die.value}</span>`
+        ).join('');
+        resultBox.innerHTML = `
+          <div class="flex justify-between items-center border-b border-stone-800 pb-1.5 text-xs">
+            <div>
+              <span class="font-bold text-amber-200 font-imperial">${escapeHtml(d.label || 'Lancer Roll & Keep')}</span>
+              <span class="ml-1.5 font-mono text-[11px] text-stone-400">(${escapeHtml(d.formula)})</span>
+            </div>
+            <span class="font-imperial font-black text-amber-300 text-xl">${d.total}</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5 items-center pt-2">
+            ${keptChips}
+            ${droppedChips}
+            ${d.bonus ? `<span class="text-xs text-amber-400 font-bold">${d.bonus > 0 ? '+' + d.bonus : d.bonus}</span>` : ''}
+          </div>
+        `;
+      }
     }
-    historyEl.innerHTML = state.diceHistory.map((item) => `
-      <div class="p-2 rounded-lg bg-black/35 border border-stone-800/80 flex items-center justify-between gap-2 text-xs">
-        <div class="min-w-0">
-          <span class="font-mono font-bold text-amber-300">${escapeHtml(item.formula)}</span>
-          ${item.label ? `<span class="text-stone-400 text-[11px]"> — ${escapeHtml(item.label)}</span>` : ''}
-          <div class="text-[10px] text-stone-500 font-mono truncate">Dés : [${(item.keptRolls || []).join(', ')}]${item.droppedRolls && item.droppedRolls.length ? ` (écartés : ${item.droppedRolls.join(', ')})` : ''}</div>
-        </div>
-        <span class="text-lg font-imperial font-bold text-amber-200 shrink-0">${item.total}</span>
-      </div>
-    `).join('');
+
+    if (historyEl) {
+      if (state.diceHistory.length === 0) {
+        historyEl.innerHTML = '';
+      } else {
+        historyEl.innerHTML = state.diceHistory.slice(0, 8).map((item) => `
+          <div class="px-2 py-1.5 rounded bg-black/35 border border-stone-800/80 flex items-center justify-between gap-2 text-[11px]">
+            <span class="truncate text-stone-300"><b class="font-mono text-amber-300">${escapeHtml(item.formula)}</b>${item.label ? ' — ' + escapeHtml(item.label) : ''}</span>
+            <span class="font-imperial font-bold text-amber-200 shrink-0">${item.total}</span>
+          </div>
+        `).join('');
+      }
+    }
   }
 
   function renderAll() {
@@ -908,7 +1009,7 @@
     renderCombat();
     renderDuel();
     renderHonorPanel();
-    renderDiceHistory();
+    renderDiceBox();
     const scratchEl = document.getElementById('gm-scratchpad');
     if (scratchEl && scratchEl.value !== state.gmScratchpad) {
       scratchEl.value = state.gmScratchpad;
@@ -916,9 +1017,9 @@
   }
 
   // ===========================================================================
-  // IMPORT & ACTIONS UI
+  // ACTIONS UI & INITIALISATION
   // ===========================================================================
-  function handleJsonFiles(fileList) {
+  function handleJsonFiles(fileList, onImportedPc) {
     const files = Array.from(fileList || []);
     if (files.length === 0) return;
     let loadedCount = 0;
@@ -931,8 +1032,10 @@
             const parsed = JSON.parse(text);
             const items = Array.isArray(parsed) ? parsed : [parsed];
             items.forEach((rawChar) => {
-              state.pcs.push(normalizeImportedCharacter(rawChar));
+              const pc = normalizeImportedCharacter(rawChar);
+              state.pcs.push(pc);
               loadedCount++;
+              if (typeof onImportedPc === 'function') onImportedPc(pc);
             });
           } catch (err) {
             errors.push(`${file.name} : ${err.message}`);
@@ -973,7 +1076,7 @@
         skills: [
           { name: 'Armes Lourdes', rank: 4, trait: 'agility' },
           { name: 'Défense', rank: 3, trait: 'reflexes' },
-          { name: 'Athlétisme', rank: 2, trait: 'strength' }
+          { name: 'Iaijutsu', rank: 2, trait: 'agility' }
         ],
         weapons: [{ name: 'Tetsubo', damage: '6g3', type: 'Armes Lourdes' }],
         advantages: 'Haut Seuil de Douleur, Force de la Terre',
@@ -981,27 +1084,26 @@
       },
       {
         schemaVersion: 2,
-        name: 'Isawa Haruka',
-        clan: 'phoenix',
-        family: 'Isawa',
-        school: 'Shugenja Isawa (Rang 2)',
+        name: 'Kakita Haruka',
+        clan: 'crane',
+        family: 'Kakita',
+        school: 'Duelliste Kakita (Rang 2)',
         insightRank: 2,
-        honor: 5.5,
-        glory: 2.5,
+        honor: 5.8,
+        glory: 3.0,
         status: 2.0,
-        traits: { stamina: 2, willpower: 4, strength: 2, perception: 3, reflexes: 3, awareness: 3, agility: 2, intelligence: 4 },
+        traits: { stamina: 2, willpower: 3, strength: 2, perception: 3, reflexes: 4, awareness: 3, agility: 4, intelligence: 3 },
         voidRing: 3,
         voidPoints: 3,
-        armor: { name: 'Kimono de Cérémonie', tnBonus: 0, reduction: 0 },
+        armor: { name: 'Kimono de Duel', tnBonus: 0, reduction: 0 },
         skills: [
-          { name: 'Calligraphie', rank: 4, trait: 'intelligence' },
-          { name: 'Art de la Magie', rank: 4, trait: 'intelligence' },
+          { name: 'Iaijutsu', rank: 4, trait: 'agility' },
+          { name: 'Kenjutsu', rank: 3, trait: 'agility' },
           { name: 'Étiquette', rank: 3, trait: 'awareness' }
         ],
-        weapons: [{ name: 'Wakizashi', damage: '4g2', type: 'Kenjutsu' }],
-        spells: ['Frappe de Jade', 'Cœur de la Fournaise', 'Voie de la Paix'],
-        advantages: 'Affinité Feu, Bénédiction de Benten',
-        disadvantages: 'Doux'
+        weapons: [{ name: 'Katana Kakita', damage: '5g2', type: 'Kenjutsu' }],
+        advantages: 'Virtuose (Iaijutsu), Bénédiction de Benten',
+        disadvantages: 'Fierté'
       }
     ];
     samples.forEach((s) => state.pcs.push(normalizeImportedCharacter(s)));
@@ -1009,24 +1111,37 @@
     renderAll();
   }
 
-  function rollDiceFromUi() {
-    const formulaInput = document.getElementById('gm-dice-formula');
-    const labelInput = document.getElementById('gm-dice-label');
-    const specInput = document.getElementById('gm-dice-spec');
+  function rollFromForgeStyleUi(customFormula, customLabel) {
+    const rollXEl = document.getElementById('gm-dice-x');
+    const keepYEl = document.getElementById('gm-dice-y');
+    const bonusEl = document.getElementById('gm-dice-bonus');
+    const labelEl = document.getElementById('gm-dice-label');
+    const specEl = document.getElementById('gm-dice-spec');
+    const explodeEl = document.getElementById('gm-dice-explode');
     const errorEl = document.getElementById('gm-dice-error');
-    if (!formulaInput) return;
 
-    const rawFormula = formulaInput.value.trim() || '5g3';
-    const result = rollFormula(rawFormula, { spec: Boolean(specInput && specInput.checked) });
-    if (!result) {
-      if (errorEl) errorEl.textContent = 'Formule invalide. Exemple : 6g3 ou 7g4+5';
+    let formula = customFormula;
+    if (!formula && rollXEl && keepYEl) {
+      const x = parseInt(rollXEl.value, 10) || 5;
+      const y = parseInt(keepYEl.value, 10) || 3;
+      const b = parseInt(bonusEl ? bonusEl.value : 0, 10) || 0;
+      formula = `${x}g${y}${b ? (b > 0 ? `+${b}` : b) : ''}`;
+    }
+
+    const res = rollFormula(formula || '5g3', {
+      explode: explodeEl ? explodeEl.checked : true,
+      spec: specEl ? specEl.checked : false
+    });
+
+    if (!res) {
+      if (errorEl) errorEl.textContent = 'Formule invalide (ex: 6g3).';
       return;
     }
     if (errorEl) errorEl.textContent = '';
 
-    pushDiceHistory({
-      ...result,
-      label: labelInput ? labelInput.value.trim() : ''
+    pushDiceResult({
+      ...res,
+      label: customLabel || (labelEl ? labelEl.value.trim() : '') || 'Lancer Roll & Keep'
     });
   }
 
@@ -1035,20 +1150,25 @@
     const isA = side === 'a';
     const name = isA ? d.aName : d.bName;
     const iai = Number(isA ? d.aIai : d.bIai) || 1;
-    const trait = phaseKey === 'eval'
-      ? Number(isA ? d.aPer : d.bPer) || 2
-      : phaseKey === 'focus'
-        ? Number(isA ? d.aVoid : d.bVoid) || 2
-        : Number(isA ? d.aAgi : d.bAgi) || 2;
-    const formula = `${trait + iai}g${trait}`;
+    let formula = `${(Number(isA ? d.aPer : d.bPer) || 2) + iai}g${Number(isA ? d.aPer : d.bPer) || 2}`;
+    if (phaseKey === 'focus') {
+      const v = Number(isA ? d.aVoid : d.bVoid) || 2;
+      formula = `${v + iai}g${v}`;
+    } else if (phaseKey === 'strike') {
+      const agi = Number(isA ? d.aAgi : d.bAgi) || 2;
+      formula = `${agi + iai}g${agi}`;
+    } else if (phaseKey === 'damage') {
+      formula = String(isA ? d.aDamage : d.bDamage) || '4g2';
+    }
+
     const res = rollFormula(formula);
     if (!res) return;
 
-    const phaseLabels = { eval: 'Évaluation', focus: 'Focus', strike: 'Frappe' };
-    pushDiceHistory({ ...res, label: `Duel (${phaseLabels[phaseKey]}) — ${name}` });
+    const phaseLabels = { eval: '1. Évaluation', focus: '2. Focus', strike: '3. Frappe', damage: '4. Dégâts' };
+    pushDiceResult({ ...res, label: `Duel (${phaseLabels[phaseKey]}) — ${name}` });
 
     const tnNote = phaseKey === 'strike'
-      ? ` vs ND ${(isA ? d.bTN + d.bFocus * 5 : d.aTN + d.aFocus * 5)}`
+      ? ` vs ND ${(Number(isA ? d.bTN : d.aTN) || 15) + (Number(isA ? d.bFocus : d.aFocus) || 0) * 5}`
       : '';
     d.log.unshift(`<b>${escapeHtml(phaseLabels[phaseKey])}</b> — ${escapeHtml(name)} (${res.formula}) : <b class="text-amber-300">${res.total}</b>${tnNote}`);
     d.log = d.log.slice(0, 12);
@@ -1060,28 +1180,55 @@
     if (typeof document === 'undefined') return;
     loadState();
 
-    // Modèles d'adversaires
-    const presetSelect = document.getElementById('gm-enemy-preset');
+    // Modèles PNJ pour l'escarmouche
+    const presetSelect = document.getElementById('gm-skirmish-npc-preset');
     if (presetSelect) {
-      presetSelect.innerHTML = '<option value="">— Modèle rapide L5R 4e —</option>' +
-        ENEMY_PRESETS.map((p, idx) => `<option value="${idx}">${escapeHtml(p.name)} (ND ${p.armorTN}, Att ${p.attack})</option>`).join('');
+      presetSelect.innerHTML = ENEMY_PRESETS.map((p, idx) =>
+        `<option value="${idx}">${escapeHtml(p.name)} (Init ${p.initFormula}, ND ${p.armorTN}, Att ${p.attack})</option>`
+      ).join('') + '<option value="custom">— PNJ Personnalisé —</option>';
 
-      presetSelect.addEventListener('change', () => {
-        const idx = parseInt(presetSelect.value, 10);
-        if (isNaN(idx) || !ENEMY_PRESETS[idx]) return;
-        const p = ENEMY_PRESETS[idx];
+      const fillCustomFields = (p) => {
+        if (!p) return;
         document.getElementById('gm-enemy-name').value = p.name;
-        document.getElementById('gm-enemy-init').value = p.initiative;
+        document.getElementById('gm-enemy-init-formula').value = p.initFormula;
         document.getElementById('gm-enemy-tn').value = p.armorTN;
         document.getElementById('gm-enemy-red').value = p.reduction;
         document.getElementById('gm-enemy-earth').value = p.earth;
         document.getElementById('gm-enemy-attack').value = p.attack;
         document.getElementById('gm-enemy-damage').value = p.damage;
         document.getElementById('gm-enemy-notes').value = p.notes;
+      };
+      fillCustomFields(ENEMY_PRESETS[0]);
+
+      presetSelect.addEventListener('change', () => {
+        const idx = parseInt(presetSelect.value, 10);
+        if (!isNaN(idx) && ENEMY_PRESETS[idx]) fillCustomFields(ENEMY_PRESETS[idx]);
       });
     }
 
-    // Import JSON
+    // Modèles d'adversaire pour Duel Iaijutsu
+    const duelPresetEl = document.getElementById('duel-b-preset');
+    if (duelPresetEl) {
+      duelPresetEl.innerHTML = '<option value="">— Modèle d\'adversaire —</option>' +
+        DUEL_PRESETS.map((p, idx) => `<option value="${idx}">${escapeHtml(p.name)} (Iai ${p.iai}, ND ${p.tn})</option>`).join('');
+      duelPresetEl.addEventListener('change', () => {
+        const idx = parseInt(duelPresetEl.value, 10);
+        if (isNaN(idx) || !DUEL_PRESETS[idx]) return;
+        const p = DUEL_PRESETS[idx];
+        state.duel.bName = p.name;
+        state.duel.bIai = p.iai;
+        state.duel.bPer = p.per;
+        state.duel.bVoid = p.void;
+        state.duel.bAgi = p.agi;
+        state.duel.bTN = p.tn;
+        state.duel.bEarth = p.earth;
+        state.duel.bDamage = p.damage;
+        saveState();
+        renderDuel();
+      });
+    }
+
+    // Import JSON principal
     const fileInput = document.getElementById('gm-json-input');
     const dropZone = document.getElementById('gm-drop-zone');
     if (fileInput) {
@@ -1105,6 +1252,17 @@
       });
     }
 
+    // Import JSON dédié au Duel Iaijutsu
+    const duelJsonInput = document.getElementById('duel-a-json');
+    if (duelJsonInput) {
+      duelJsonInput.addEventListener('change', (e) => {
+        handleJsonFiles(e.target.files, (pc) => {
+          applyPcToDuelA(pc);
+        });
+        e.target.value = '';
+      });
+    }
+
     const sampleBtn = document.getElementById('gm-load-sample');
     if (sampleBtn) sampleBtn.addEventListener('click', loadSamplePcs);
 
@@ -1119,105 +1277,80 @@
       });
     }
 
-    // Appliquer les initiatives des PJs au combat et trier
-    const applyAllInitsBtn = document.getElementById('gm-apply-pc-inits');
-    if (applyAllInitsBtn) {
-      applyAllInitsBtn.addEventListener('click', () => {
-        state.pcs.forEach((pc) => {
-          addOrUpdatePcInCombat(pc.id, pc.lastInit);
-        });
-        state.combat.activeIndex = 0;
-        saveState();
-        renderAll();
-      });
-    }
-
-    // Ajout adversaire
-    const enemyForm = document.getElementById('gm-enemy-form');
-    if (enemyForm) {
-      enemyForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        addEnemyToCombat({
-          name: document.getElementById('gm-enemy-name').value || 'Adversaire',
-          initiative: document.getElementById('gm-enemy-init').value,
-          armorTN: document.getElementById('gm-enemy-tn').value,
-          reduction: document.getElementById('gm-enemy-red').value,
-          earth: document.getElementById('gm-enemy-earth').value,
-          attack: document.getElementById('gm-enemy-attack').value,
-          damage: document.getElementById('gm-enemy-damage').value,
-          notes: document.getElementById('gm-enemy-notes').value
-        });
+    // Générateur d'Escarmouche (PJs sélectionnés + N PNJs)
+    const skirmishBtn = document.getElementById('gm-generate-skirmish');
+    if (skirmishBtn) {
+      skirmishBtn.addEventListener('click', () => {
+        const npcCount = document.getElementById('gm-skirmish-npc-count')?.value || 0;
+        const presetVal = document.getElementById('gm-skirmish-npc-preset')?.value;
+        const presetIdx = presetVal === 'custom' ? NaN : parseInt(presetVal, 10);
+        const customNpc = {
+          name: document.getElementById('gm-enemy-name')?.value || 'Adversaire',
+          initFormula: document.getElementById('gm-enemy-init-formula')?.value || '4g2',
+          armorTN: document.getElementById('gm-enemy-tn')?.value || 15,
+          reduction: document.getElementById('gm-enemy-red')?.value || 0,
+          earth: document.getElementById('gm-enemy-earth')?.value || 2,
+          attack: document.getElementById('gm-enemy-attack')?.value || '5g2',
+          damage: document.getElementById('gm-enemy-damage')?.value || '4g2',
+          notes: document.getElementById('gm-enemy-notes')?.value || ''
+        };
+        createSkirmishEncounter(npcCount, presetIdx, customNpc);
       });
     }
 
     // Contrôles de combat
-    const nextTurnBtn = document.getElementById('gm-next-turn');
-    if (nextTurnBtn) {
-      nextTurnBtn.addEventListener('click', () => {
-        if (state.combat.combatants.length === 0) return;
-        state.combat.activeIndex++;
-        if (state.combat.activeIndex >= state.combat.combatants.length) {
-          state.combat.activeIndex = 0;
-          state.combat.round++;
-        }
-        saveState();
-        renderCombat();
-      });
-    }
-
-    const sortBtn = document.getElementById('gm-sort-init');
-    if (sortBtn) {
-      sortBtn.addEventListener('click', () => {
-        state.combat.combatants = sortCombatantsByInit(state.combat.combatants);
+    document.getElementById('gm-next-turn')?.addEventListener('click', () => {
+      if (state.combat.combatants.length === 0) return;
+      state.combat.activeIndex++;
+      if (state.combat.activeIndex >= state.combat.combatants.length) {
         state.combat.activeIndex = 0;
+        state.combat.round++;
+      }
+      saveState();
+      renderCombat();
+    });
+
+    document.getElementById('gm-sort-init')?.addEventListener('click', () => {
+      state.combat.combatants = sortCombatantsByInit(state.combat.combatants);
+      state.combat.activeIndex = 0;
+      saveState();
+      renderCombat();
+    });
+
+    document.getElementById('gm-reset-combat')?.addEventListener('click', () => {
+      if (state.combat.combatants.length === 0 || confirm('Vider le traqueur de combat et réinitialiser au Round 1 ?')) {
+        state.combat = { round: 1, activeIndex: 0, combatants: [] };
         saveState();
         renderCombat();
-      });
-    }
+      }
+    });
 
-    const resetCombatBtn = document.getElementById('gm-reset-combat');
-    if (resetCombatBtn) {
-      resetCombatBtn.addEventListener('click', () => {
-        if (state.combat.combatants.length === 0 || confirm('Vider le traqueur de combat et réinitialiser au Round 1 ?')) {
-          state.combat = { round: 1, activeIndex: 0, combatants: [] };
-          saveState();
-          renderCombat();
-        }
+    // Lanceur de dés (bouton principal + raccourcis)
+    document.getElementById('gm-roll-btn')?.addEventListener('click', () => rollFromForgeStyleUi());
+    document.querySelectorAll('[data-quick-roll]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const f = btn.getAttribute('data-quick-roll');
+        rollFromForgeStyleUi(f, `Jet rapide ${f}`);
       });
-    }
+    });
 
-    // Lanceur de dés
-    const rollBtn = document.getElementById('gm-roll-btn');
-    if (rollBtn) rollBtn.addEventListener('click', rollDiceFromUi);
-    const formulaInput = document.getElementById('gm-dice-formula');
-    if (formulaInput) {
-      formulaInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          rollDiceFromUi();
-        }
+    // Onglets directs
+    document.querySelectorAll('[data-gm-tab]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.activeTab = btn.getAttribute('data-gm-tab');
+        saveState();
+        renderTabs();
       });
-    }
+    });
 
     // Sélecteur PJ pour Duel Iaijutsu
-    const duelPcSelect = document.getElementById('duel-a-pc');
-    if (duelPcSelect) {
-      duelPcSelect.addEventListener('change', () => {
-        const pc = findPc(duelPcSelect.value);
-        state.duel.aPcId = duelPcSelect.value;
-        if (pc) {
-          const iaiSkill = pc.skills.find((s) => /iaijutsu/i.test(s.name));
-          state.duel.aName = pc.name;
-          state.duel.aIai = iaiSkill ? iaiSkill.rank : 1;
-          state.duel.aPer = pc.traits.perception;
-          state.duel.aVoid = pc.rings.void;
-          state.duel.aAgi = pc.traits.agility;
-          state.duel.aTN = pc.armorTN;
-        }
-        saveState();
-        renderDuel();
-      });
-    }
+    document.getElementById('duel-a-pc')?.addEventListener('change', (e) => {
+      const pc = findPc(e.target.value);
+      state.duel.aPcId = e.target.value;
+      if (pc) applyPcToDuelA(pc);
+      saveState();
+      renderDuel();
+    });
 
     const duelFieldMap = {
       'duel-a-name': 'aName', 'duel-a-iai': 'aIai', 'duel-a-per': 'aPer', 'duel-a-void': 'aVoid', 'duel-a-agi': 'aAgi', 'duel-a-tn': 'aTN',
@@ -1234,25 +1367,13 @@
       }
     });
 
-    // Bloc-notes MJ
-    const scratchEl = document.getElementById('gm-scratchpad');
-    if (scratchEl) {
-      scratchEl.addEventListener('input', () => {
-        state.gmScratchpad = scratchEl.value;
-        saveState();
-      });
-    }
+    document.getElementById('gm-scratchpad')?.addEventListener('input', (e) => {
+      state.gmScratchpad = e.target.value;
+      saveState();
+    });
 
-    // Délégation globale des clics
+    // Délégation des actions dynamiques
     document.addEventListener('click', (e) => {
-      const tabBtn = e.target.closest('[data-gm-tab]');
-      if (tabBtn) {
-        state.activeTab = tabBtn.getAttribute('data-gm-tab');
-        saveState();
-        renderTabs();
-        return;
-      }
-
       const btn = e.target.closest('[data-action]');
       if (!btn) return;
       const action = btn.getAttribute('data-action');
@@ -1268,17 +1389,15 @@
           saveState();
           renderPcs();
         }
-      } else if (action === 'pc-to-combat') {
-        addOrUpdatePcInCombat(btn.getAttribute('data-pc-id'));
       } else if (action === 'roll-pc-init') {
         const pc = findPc(btn.getAttribute('data-pc-id'));
         if (pc) {
           const res = rollFormula(pc.initFormula);
           if (res) {
             pc.lastInit = res.total;
-            pushDiceHistory({ ...res, label: `Initiative — ${pc.name}` });
+            pushDiceResult({ ...res, label: `Initiative — ${pc.name}` });
             saveState();
-            renderPcInitTable();
+            renderSkirmishSetup();
           }
         }
       } else if (action === 'remove-pc') {
@@ -1352,6 +1471,13 @@
           saveState();
           renderCombat();
         }
+      } else if (action === 'pc-skirmish-toggle') {
+        const pc = findPc(el.getAttribute('data-pc-id'));
+        if (pc) {
+          pc.includedInSkirmish = Boolean(el.checked);
+          saveState();
+          renderSkirmishSetup();
+        }
       }
     });
 
@@ -1390,6 +1516,7 @@
     globalScope.normalizeImportedCharacter = normalizeImportedCharacter;
     globalScope.sortCombatantsByInit = sortCombatantsByInit;
     globalScope.formatRollResult = formatRollResult;
+    globalScope.rollFormula = rollFormula;
   }
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -1397,10 +1524,15 @@
       WOUND_LEVELS,
       STANCES,
       ENEMY_PRESETS,
+      DUEL_PRESETS,
+      parseRollKeepFormula,
+      applyTenDiceRule,
+      simulateRollAndKeep,
       computeL5RWoundState,
       normalizeImportedCharacter,
       sortCombatantsByInit,
-      formatRollResult
+      formatRollResult,
+      rollFormula
     };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
