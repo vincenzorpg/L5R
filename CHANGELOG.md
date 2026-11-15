@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.10.0] — 2026-11-16
+
+### ✨ Ajouté & Amélioré
+- **Feuille de Personnage Officielle Couleur A4 & Aperçu Interactif PJ (`css/main.css`, `createcharacter.html`, `js/forge-ui.js`, `js/character-generator.js`)** :
+  - **Esthétique officielle *L5R 4e Édition*** (inspirée de `L5R(4e) Character Sheet Final.pdf`) : papier parchemin Washi (`#faf6ea` / `#f4eddc`), bandeaux de sections vert-sumi foncé à liseré doré (`.l5r-bar`), **Cinq Anneaux colorés** (*Terre* vert jade, *Air* indigo, *Eau* bleu saphir, *Feu* rouge vermillon, *Vide* charbon/or avec 10 pastilles de Points de Vide), et réglettes à 10 rangs pour *Honneur*, *Gloire*, *Statut* et *Souillure de l'Outremonde*.
+  - **Aperçu Pleine Page directement consultable par les PJ (`📄 Fiche / PDF`)** : ouverture d'un lecteur A4 structuré sur 3 pages nettes avant impression (`openCharacterSheetPreview()`), avec case à cocher pour inclure ou exclure la Page 3 (*Récit & 20 Questions*), fermeture par bouton ou touche `Échap`, et bouton d'impression / sauvegarde PDF avec `print-color-adjust: exact`.
+  - **Architecture structurée sur 3 pages A4** :
+    - *Page 1* : Identité & Lignée + emblème SVG des Cinq Anneaux, 5 Anneaux & 8 Traits, Vertus/Renommée, **Compétences & Maîtrises** (résolution exacte du Trait associé de chaque compétence au lieu d'Agilité par défaut + lignes d'écriture vierges), **Initiative / ND d'Armure / Seuils de Blessures / Récupération** et **Arsenal complet** (Arme 1, Arme 2 avec calculs complets via `computeWeaponCombatMetrics()`, et tableau Flèches/Notes).
+    - *Page 2* : Rappel identité & Bourse (*Koku / Bu / Zeni*), *Avantages* & *Désavantages* détaillés, *Techniques d'École* avec pastilles d'état (`ACTIF`, `MAÎTRISÉ`) + Seconde École, *Équipement*, et **Arts Martiaux & Mystiques** (emplacements de sorts colorés Air/Terre/Feu/Eau/Vide pour Shugenja, fiches de Sorts/Kihos/Katas avec badges élémentaires et Tatouages Togashi).
+    - *Page 3* : *Chronique du Samouraï & Les Vingt Questions de Rokugan* sur deux colonnes lisibles.
+
+---
+
 ## [1.9.1] — 2026-11-15
 
 ### 🛡️ Corrigé & Renforcé

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main.css?v=2">
 
   <!-- BASES DE DONNÉES DÉPORTÉES -->
   <script src="data/clans-data.js" defer></script>
@@ -32,8 +32,8 @@
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/navbar.js" defer></script>
-  <script src="js/forge-ui.js?v=14" defer></script>
-  <script src="js/character-generator.js?v=14" defer></script>
+  <script src="js/forge-ui.js?v=15" defer></script>
+  <script src="js/character-generator.js?v=15" defer></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
@@ -97,7 +97,7 @@
           <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer" title="Exporter au format Le Carnet de Rokugan (v2)">
             <span>📖</span> <span>Carnet</span>
           </button>
-          <button type="button" onclick="prepareAndPrintPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition cursor-pointer" title="Aperçu et impression Fiche A4 PDF">🖨️ PDF</button>
+          <button type="button" id="btn-open-print-preview" onclick="prepareAndPrintPDF()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/40 font-bold transition cursor-pointer shadow" title="Voir la feuille officielle L5R 4e en couleur et imprimer en PDF">📄 Fiche / PDF</button>
           <button type="button" onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct">
             🔗 Lien
           </button>
@@ -1172,13 +1172,13 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne L5R – MJ David • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.9.1</span>
+      <span id="site-version-label">v1.10.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
   </footer>
 
-  <!-- DOSSIER D'IMPRESSION OFFICIEL A4 (INJECTÉ PAR JS/FORGE-UI.JS) -->
-  <div id="official-print-dossier" class="p-4 font-serif text-black bg-white"></div>
+  <!-- DOSSIER D'IMPRESSION OFFICIEL A4 & APERÇU FEUILLE PJ (INJECTÉ PAR JS/FORGE-UI.JS) -->
+  <div id="official-print-dossier" class="font-serif"></div>
 </body>
 </html>
