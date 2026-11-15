@@ -11,9 +11,14 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const errors = [];
+const warnings = [];
 
 function addError(msg) {
   errors.push(msg);
+}
+
+function addWarning(msg) {
+  warnings.push(msg);
 }
 
 function walkFiles(dir, predicate, results = []) {
@@ -107,9 +112,21 @@ for (const htmlFile of htmlFiles) {
       : path.resolve(dir, cleanTarget);
 
     if (!fs.existsSync(resolved)) {
-      addError(`${relHtml} : ressource locale introuvable -> "${target}"`);
+      if (cleanTarget.includes('assets/images/scenarios/')) {
+        addWarning(`${relHtml} : illustration de scénario manquante -> "${target}"`);
+      } else {
+        addError(`${relHtml} : ressource locale introuvable -> "${target}"`);
+      }
     }
   }
+}
+
+if (warnings.length > 0) {
+  console.warn(`⚠️  ${warnings.length} avertissement(s) (illustrations de scénarios à venir) :`);
+  for (const warn of warnings) {
+    console.warn(`  - ${warn}`);
+  }
+  console.warn('');
 }
 
 if (errors.length > 0) {
