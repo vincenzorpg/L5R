@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.2.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.3.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -168,6 +168,7 @@ L5R/
 │   └── campagne-studio.js              # Studio glisser-déposer et générateur HTML de scénarios
 │
 ├── data/                               # Bases de données modulaires en JavaScript
+│   ├── scenarios-data.js               # Registre centralisé des scénarios de campagne (Accueil, Catalogue & Studio)
 │   ├── clans-data.js                   # Données des 8 clans, familles, écoles et techniques (Rangs 1 à 5)
 │   ├── competences-data.js             # Catalogue des compétences (Nobles, Bugei, Marchandes, Basses)
 │   ├── equipement-data.js              # Armes, armures, valeurs de dégâts/réduction et équipements

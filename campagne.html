@@ -4,43 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chroniques de Campagne — L5R 4e Édition | MJ David</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/main.css">
 
-  <!-- SCRIPT DU MENU GLOBAL -->
+  <!-- DONNÉES CENTRALISÉES & MENU GLOBAL -->
+  <script src="data/scenarios-data.js" defer></script>
   <script src="js/navbar.js" defer></script>
-
-  <style>
-    :root {
-      --dark-lacquer: #0a0808;
-      --gold: #d4af37;
-      --gold-light: #f3e5ab;
-    }
-    body {
-      background-color: var(--dark-lacquer);
-      background-image: radial-gradient(circle at 50% 10%, #200e08 0%, #0a0808 85%);
-      color: #e5dec9;
-      font-family: 'Noto Serif JP', serif;
-    }
-    h1, h2, h3, h4, .font-imperial { font-family: 'Cinzel', serif; }
-    .card-clean {
-      background: rgba(18, 14, 14, 0.94);
-      border: 1px solid rgba(212, 175, 55, 0.25);
-    }
-    .gold-text { color: var(--gold); }
-    .gold-gradient {
-      background: linear-gradient(135deg, #f5e096 0%, #d4af37 50%, #997a15 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .scenario-card:hover {
-      border-color: rgba(212, 175, 55, 0.7);
-      transform: translateY(-2px);
-    }
-  </style>
+  <script src="js/campagne-studio.js" defer></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
@@ -61,29 +35,24 @@
           CHRONIQUES DE ROKUGAN
         </h1>
         <p class="text-xs md:text-sm text-stone-300 leading-relaxed">
-          Recueil des 10 scénarios officiels de la table du MJ David. Chaque acte dispose de sa propre page de lecture détaillée avec synthèse vocale narrative, compte-rendu d'événements et fiches de débriefing.
+          Recueil des scénarios officiels de la table du MJ David. Chaque acte dispose de sa propre page de lecture détaillée avec synthèse vocale narrative HD, compte-rendu d'événements et illustrations de scène.
         </p>
         <div class="pt-2 flex flex-wrap gap-3">
           <a href="campagne-ajouter.html" class="px-4 py-2 rounded bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-bold font-imperial text-xs tracking-wider shadow flex items-center gap-2 transition">
-            <span>➕</span> Déposer un Document & Créer une Page
-          </a>
-          <a href="admin/index.html" class="px-4 py-2 rounded bg-stone-900 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-xs font-bold transition flex items-center gap-2">
-            <span>⚙️</span> CMS Rédacteur
+            <span>➕</span> Déposer un Récit & Soumettre sur GitHub
           </a>
         </div>
       </div>
     </section>
 
-    <!-- GRILLE DES 10 PAGES DE SCÉNARIOS -->
+    <!-- GRILLE DES PAGES DE SCÉNARIOS -->
     <section class="space-y-4">
       <div class="flex justify-between items-baseline border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200">Table des 10 Scénarios Joués</h2>
-        <span class="text-xs text-stone-500 font-mono">10 ACTES DISPONIBLES</span>
+        <h2 id="scenarios-heading" class="text-base md:text-lg font-bold font-imperial text-amber-200">Table des Scénarios Joués</h2>
+        <span id="scenarios-count-badge" class="text-xs text-stone-500 font-mono">10 ACTES DISPONIBLES</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="scenarios-grid">
-        <!-- Rendu dynamique des 10 cartes de scénarios avec liens vers leur page dédiée -->
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="scenarios-grid"></div>
     </section>
 
   </main>
@@ -91,138 +60,11 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Chronique L5R 4e Édition — MJ David • Portail de Campagne</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.2.0</span>
+      <span id="site-version-label">v1.3.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
   </footer>
 
-  <script>
-    const SCENARIOS_DATA = [
-      {
-        id: 1,
-        file: "campagne/scenario-1.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/2015/08/15/scenario-1-championnat-de-topaze/",
-        title: "Championnat de Topaze",
-        author: "Tsuruchi Akira",
-        date: "Acte 1",
-        place: "Village de Tsuma",
-        desc: "Le passage à l'âge adulte (gempukku) des jeunes samouraïs lors du prestigieux tournoi impérial, entre épreuves d'armes, étiquette et premiers complots."
-      },
-      {
-        id: 2,
-        file: "campagne/scenario-2.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/2015/11/03/scenario-2-meurtre-au-chateau-de-kyotei-par-okado-hiruma/",
-        title: "Meurtre au Château de Kyoteï",
-        author: "Okado Hiruma / Tsuruchi Akira",
-        date: "Acte 2",
-        place: "Château de Kyoteï",
-        desc: "Une enquête sous haute tension dans la forteresse où l'honneur des clans et les apparences de cour s'affrontent."
-      },
-      {
-        id: 3,
-        file: "campagne/scenario-3.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/2015/11/29/scenario-3-le-dernier-voyage-par-ryumitaka-isawa/",
-        title: "Le dernier voyage",
-        author: "Ryûmitaka Isawa / Tsuruchi Akira",
-        date: "Acte 3",
-        place: "Routes de Rokugan",
-        desc: "Une mission d'escorte et de pèlerinage confrontant le groupe aux aléas du voyage et aux périls spirituels."
-      },
-      {
-        id: 4,
-        file: "campagne/scenario-4.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
-        title: "Aux côtés de mes frères morts",
-        author: "Table du MJ David",
-        date: "Acte 4",
-        place: "Lisière de l'Outremonde",
-        desc: "L'épreuve du sang et de la poussière auprès des défenseurs du Mur, au contact des esprits des défunts."
-      },
-      {
-        id: 5,
-        file: "campagne/scenario-5.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
-        title: "Entre le ciel et l'enfer",
-        author: "Tsuruchi Akira",
-        date: "Acte 5",
-        place: "Sanctuaires de Montagne",
-        desc: "Un choix moral et spirituel déchirant entre le devoir envers les cieux célestes et la réalité crue du monde terrestre."
-      },
-      {
-        id: 6,
-        file: "campagne/scenario-6.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
-        title: "Le mariage d'Okado Hiruma",
-        author: "Tsuruchi Akira",
-        date: "Acte 6",
-        place: "Terres du Crabe",
-        desc: "Une alliance matrimoniale capitale pour la famille Hiruma, mêlant protocole sévère, rivalités claniques et festivités martiales."
-      },
-      {
-        id: 7,
-        file: "campagne/scenario-7.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
-        title: "Meurtre à Ryoko Owari",
-        author: "Tsuruchi Akira",
-        date: "Acte 7",
-        place: "Ryoko Owari (Cité des Histoires Vertes)",
-        desc: "Plongée dans la cité de l'opium et des intrigues du Clan du Scorpion pour dénouer un homicide politique particulièrement trouble."
-      },
-      {
-        id: 8,
-        file: "campagne/scenario-8.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
-        title: "Le crépuscule de l'honneur",
-        author: "Tsuruchi Akira",
-        date: "Acte 8",
-        place: "Provinces disputées",
-        desc: "Lorsque les ordres d'un seigneur s'opposent frontalement au code du Bushido : l'heure des serments brisés et des tragédies personnelles."
-      },
-      {
-        id: 9,
-        file: "campagne/scenario-9.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
-        title: "« Ce qui ne meurt pas »",
-        author: "Tsuruchi Akira",
-        date: "Acte 9",
-        place: "Terres ancestrales",
-        desc: "Face à une menace occulte défiant les âges, les héros cherchent le secret de ce qui survit au trépas et aux malédictions."
-      },
-      {
-        id: 10,
-        file: "campagne/scenario-10.html",
-        wpUrl: "https://campagnel5rdavid2015.wordpress.com/2026/10/14/scenario-10-la-tombe-de-iuchiban/",
-        title: "La tombe de Iuchiban",
-        author: "Tsuruchi Akira",
-        date: "Acte 10",
-        place: "Le Tombeau Maudit",
-        desc: "L'apogée héroïque de la campagne : l'exploration du repaire scellé du plus grand adepte du sang de Rokugan, Iuchiban."
-      }
-    ];
-
-    const grid = document.getElementById("scenarios-grid");
-    grid.innerHTML = SCENARIOS_DATA.map(s => `
-      <div class="card-clean scenario-card rounded-xl p-5 flex flex-col justify-between space-y-4 transition duration-200">
-        <div class="space-y-2">
-          <div class="flex items-center justify-between text-[10px]">
-            <span class="px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-amber-300 font-bold font-mono">ACTE ${s.id}</span>
-            <span class="text-stone-500">${s.date} • ${s.place}</span>
-          </div>
-          <h3 class="text-base font-bold font-imperial text-amber-200">${s.title}</h3>
-          <p class="text-[11px] text-amber-400/80 italic font-mono">Par : ${s.author}</p>
-          <p class="text-xs text-stone-400 leading-relaxed">${s.desc}</p>
-        </div>
-        <div class="flex items-center justify-between pt-3 border-t border-stone-800/80 gap-2">
-          <a href="${s.wpUrl}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
-            <span>📖</span> Blog ↗
-          </a>
-          <a href="${s.file}" class="px-3.5 py-1.5 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
-            <span>🔊</span> Lire & Écouter →
-          </a>
-        </div>
-      </div>
-    `).join("");
-  </script>
 </body>
 </html>

@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Déposer un Scénario — Campagne L5R | MJ David</title>
-  
+  <title>Studio de Publication de Scénario — Campagne L5R | MJ David</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/main.css">
 
-  <!-- SCRIPT DU MENU GLOBAL & STUDIO DE SCÉNARIO -->
+  <!-- DONNÉES CENTRALISÉES, MENU GLOBAL & MOTEUR DU STUDIO -->
+  <script src="data/scenarios-data.js" defer></script>
   <script src="js/navbar.js" defer></script>
   <script src="js/campagne-studio.js" defer></script>
 </head>
@@ -19,76 +20,219 @@
 
   <header id="site-header"></header>
 
-  <main class="max-w-4xl w-full mx-auto p-4 md:p-8 space-y-6">
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
 
-    <div class="border-b border-amber-500/20 pb-3 flex justify-between items-baseline">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-bold font-imperial gold-gradient">Téléverser & Forger une Page Scénario</h1>
-        <p class="text-xs text-stone-400">Déposez un fichier texte ou rédigez votre séance pour générer la page HTML avec lecteur vocal.</p>
+    <!-- EN-TÊTE DU STUDIO -->
+    <div class="card-clean rounded-2xl p-5 md:p-7 border-amber-500/40 flex flex-wrap justify-between items-center gap-4">
+      <div class="space-y-1.5 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/40 text-[10px] uppercase tracking-widest text-amber-300 font-bold">
+          <span>🚀</span> Publication Simplifiée vers GitHub
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold font-imperial gold-gradient">
+          Studio de Publication d'un Nouveau Scénario
+        </h1>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          <b>1.</b> Glissez votre fichier (<code>.txt</code>, <code>.md</code>) ou collez votre récit •
+          <b>2.</b> Vérifiez l'aperçu en direct •
+          <b>3.</b> Cliquez sur <b>« Soumettre sur GitHub »</b> : la page HTML complète, le menu et la Pull Request sont générés automatiquement.
+        </p>
       </div>
-      <a href="campagne.html" class="text-xs text-amber-400 hover:text-amber-300 font-imperial">← Retour aux Actes</a>
+      <a href="campagne.html" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/30 text-xs text-amber-300 font-imperial font-bold transition">
+        ← Retour aux Chroniques
+      </a>
     </div>
 
-    <!-- ZONE DE DÉPÔT / GLISSER-DÉPOSER -->
-    <div id="drop-zone" class="border-2 border-dashed border-amber-500/40 hover:border-amber-400 rounded-2xl p-8 text-center cursor-pointer transition bg-black/40 space-y-2">
-      <div class="text-4xl text-amber-400">📥</div>
-      <div class="text-sm font-bold font-imperial text-amber-200">Glissez-déposez ici votre document de session</div>
-      <div class="text-xs text-stone-400">Prend en charge les fichiers texte brut (.txt, .md, .doc exporté)</div>
-      <input type="file" id="file-input" accept=".txt,.md" class="hidden">
+    <!-- GRILLE PRINCIPALE : ÉDITEUR (GAUCHE) + APERÇU & PUBLICATION GITHUB (DROITE) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- COLONNE GAUCHE : UPLOAD & FORMULAIRE (7 COLONNES) -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- ÉTAPE 1 : ZONE DE DÉPÔT RAPIDE -->
+        <div id="drop-zone" class="border-2 border-dashed border-amber-500/45 hover:border-amber-400 rounded-2xl p-6 text-center cursor-pointer transition bg-black/50 space-y-2 shadow-lg">
+          <div class="text-3xl text-amber-400">📥</div>
+          <div class="text-sm font-bold font-imperial text-amber-200">
+            Étape 1 — Glissez-déposez votre fichier de récit ici (ou cliquez pour parcourir)
+          </div>
+          <div class="text-[11px] text-stone-400">
+            Formats acceptés : <b>.txt</b>, <b>.md</b>, <b>.html</b> — Détection automatique du titre, du résumé et des paragraphes
+          </div>
+          <div id="upload-status-badge" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 text-[11px] font-bold mt-1"></div>
+          <input type="file" id="file-input" accept=".txt,.md,.html" class="hidden">
+        </div>
+
+        <!-- ÉTAPE 2 : MÉTADONNÉES & CORPS DU RÉCIT -->
+        <section class="card-clean rounded-2xl p-5 md:p-6 space-y-4 text-xs">
+          <div class="flex flex-wrap justify-between items-center border-b border-amber-500/20 pb-2.5 gap-2">
+            <h2 class="text-sm md:text-base font-bold font-imperial text-amber-200 flex items-center gap-2">
+              <span>📜</span> Étape 2 — Informations & Récit de la Séance
+            </h2>
+            <button type="button" onclick="loadSampleScenario()" class="text-[11px] text-amber-400 hover:text-amber-200 underline cursor-pointer">
+              Pré-remplir avec un modèle d'exemple
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-amber-300 font-bold mb-1" for="sc-num">N° d'Acte</label>
+              <input type="number" id="sc-num" value="11" min="1" max="99" oninput="updateLivePreview()" class="w-full p-2 rounded font-bold text-center">
+            </div>
+            <div>
+              <label class="block text-amber-300 font-bold mb-1" for="sc-short-title">Titre court (Frise)</label>
+              <input type="text" id="sc-short-title" placeholder="Ex: Plaine du Lion" oninput="updateLivePreview()" class="w-full p-2 rounded">
+            </div>
+            <div>
+              <label class="block text-amber-300 font-bold mb-1" for="sc-date">Sous-titre / Date</label>
+              <input type="text" id="sc-date" value="Acte 11" oninput="updateLivePreview()" class="w-full p-2 rounded">
+            </div>
+            <div>
+              <label class="block text-amber-300 font-bold mb-1" for="sc-place">Lieu / Province</label>
+              <input type="text" id="sc-place" value="Terres de l'Empire" oninput="updateLivePreview()" class="w-full p-2 rounded">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-amber-300 font-bold mb-1" for="sc-title">Titre complet du Scénario</label>
+              <input type="text" id="sc-title" placeholder="Ex: L'Ombre sur le Col de Beiden" oninput="onTitleInput()" class="w-full p-2.5 rounded text-sm font-imperial">
+            </div>
+            <div>
+              <label class="block text-amber-300 font-bold mb-1" for="sc-author">Narrateur / Auteur du Récit</label>
+              <input type="text" id="sc-author" list="authors-presets" value="Tsuruchi Akira" oninput="updateLivePreview()" class="w-full p-2.5 rounded">
+              <datalist id="authors-presets">
+                <option value="Tsuruchi Akira"></option>
+                <option value="Okado Hiruma"></option>
+                <option value="Hirohito Hida"></option>
+                <option value="Ryujin Mirumoto"></option>
+                <option value="Isawa Ryumitaka"></option>
+                <option value="Hida Samui"></option>
+                <option value="Table du MJ David"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-amber-300 font-bold mb-1" for="sc-summary">Résumé court d'accroche (affiché en en-tête et dans le catalogue)</label>
+            <textarea id="sc-summary" rows="2" placeholder="Résumé introductif en 1 ou 2 phrases..." oninput="updateLivePreview()" class="w-full p-2.5 rounded leading-relaxed"></textarea>
+          </div>
+
+          <!-- BARRE D'OUTILS DE FORMATAGE EXPRESS -->
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <label class="block text-amber-300 font-bold" for="sc-body">Corps intégral du récit</label>
+              <div class="flex flex-wrap gap-1.5 text-[10px]">
+                <button type="button" onclick="insertTag('\n\n## Jour 1 : Titre de section\n\n')" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-amber-300 cursor-pointer">+ Chapitre / Jour (##)</button>
+                <button type="button" onclick="insertTag('\n\n*Pensée intérieure du samouraï...*\n\n')" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-amber-200 italic cursor-pointer">+ Pensée (*...*)</button>
+                <button type="button" onclick="insertTag('\n\n> **Samouraï :** « Votre réplique ici... »\n\n')" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 cursor-pointer">+ Dialogue (>)</button>
+                <button type="button" onclick="insertTag('\n\n[Image: ../assets/images/scenarios/mon-image.jpg | Légende de la scène]\n\n')" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-emerald-300 cursor-pointer">+ Image</button>
+              </div>
+            </div>
+            <textarea id="sc-body" rows="13" placeholder="Déposez un fichier ci-dessus ou collez directement votre texte ici.&#10;&#10;Astuces automatiques :&#10;- Commencez une ligne par ## pour créer un titre de chapitre ou de jour.&#10;- Entourez une phrase d'astérisques *comme ceci* pour une pensée intérieure.&#10;- Commencez une ligne par > pour un encadré de dialogue." oninput="updateLivePreview()" class="w-full p-3 rounded leading-relaxed font-serif text-xs"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-stone-400 mb-1" for="sc-wp-url">Lien de l'article source WordPress (optionnel)</label>
+            <input type="url" id="sc-wp-url" value="https://campagnel5rdavid2015.wordpress.com/la-campagne/" oninput="updateLivePreview()" class="w-full p-2 rounded text-xs">
+          </div>
+        </section>
+
+      </div>
+
+      <!-- COLONNE DROITE : SOUMISSION GITHUB EN 1 CLIC & APERÇU (5 COLONNES) -->
+      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-20">
+
+        <!-- ÉTAPE 3 : PUBLICATION SUR GITHUB -->
+        <section class="card-clean rounded-2xl p-5 md:p-6 space-y-4 border-amber-500/50 bg-gradient-to-b from-[#170f0b] to-[#0a0808] shadow-2xl">
+          <div class="border-b border-amber-500/20 pb-2.5 flex justify-between items-center">
+            <h2 class="text-sm md:text-base font-bold font-imperial gold-text flex items-center gap-2">
+              <span>🚀</span> Étape 3 — Publier en Soumission sur GitHub
+            </h2>
+            <span id="target-file-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/90 border border-amber-500/40 text-amber-300">
+              campagne/scenario-11.html
+            </span>
+          </div>
+
+          <p class="text-[11px] text-stone-300 leading-relaxed">
+            Choisissez le mode de soumission le plus simple pour vous. La page sera créée dans <code>campagne/</code> et ajoutée automatiquement au catalogue et à l'accueil.
+          </p>
+
+          <!-- MODE 1 : SOUMISSION PRÉ-REMPLIE GITHUB -> PULL REQUEST -->
+          <div class="p-3.5 rounded-xl bg-black/70 border border-amber-500/50 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 font-imperial">
+                ★ Mode Recommandé (Zéro Configuration)
+              </span>
+              <span class="text-[10px] text-stone-400 font-mono">Pull Request Pré-remplie</span>
+            </div>
+            <p class="text-[11px] text-stone-400 leading-snug">
+              Pré-remplit directement <code>campagne/scenario-X.html</code> et son code complet sur GitHub (et le copie dans le presse-papiers). Cliquez simplement sur le bouton vert <b>« Commit changes... »</b> puis choisissez <b>« Create a new branch and start a pull request »</b> : dès fusion, la page est automatiquement détectée et ajoutée au catalogue et à l'accueil !
+            </p>
+            <button type="button" onclick="submitScenarioViaGitHubIssue()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-black font-extrabold font-imperial text-xs tracking-wider shadow-lg flex items-center justify-center gap-2 transition transform hover:scale-[1.01] cursor-pointer">
+              <span>🚀</span>
+              <span>Soumettre sur GitHub (Ouvrir la Pull Request pré-remplie)</span>
+            </button>
+            <div id="issue-submit-feedback" class="hidden text-[11px] p-2.5 rounded-lg bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 leading-snug"></div>
+          </div>
+
+          <!-- MODE 2 : PUBLICATION DIRECTE EN 1 CLIC PAR API GITHUB (AVEC TOKEN) -->
+          <details class="p-3.5 rounded-xl bg-black/50 border border-stone-800 space-y-3 text-xs group">
+            <summary class="cursor-pointer font-imperial font-bold text-amber-300 hover:text-amber-200 flex items-center justify-between select-none">
+              <span>⚡ Mode Direct 1-Clic sans quitter cette page (Token GitHub)</span>
+              <span class="text-[10px] text-stone-500 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div class="pt-3 border-t border-stone-800/80 space-y-2.5">
+              <p class="text-[11px] text-stone-400 leading-snug">
+                Si vous indiquez un <i>Personal Access Token</i> GitHub (droits <code>repo</code> ou <code>contents + pull_requests</code>), la branche et la Pull Request sont créées directement en arrière-plan depuis cette page.
+              </p>
+              <input type="password" id="gh-pat-input" placeholder="ghp_... ou github_pat_... (mémorisé sur cet appareil)" class="w-full p-2 rounded text-xs font-mono">
+              <button type="button" id="btn-direct-api-pr" onclick="publishScenarioDirectViaAPI()" class="w-full py-2 px-3 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold font-imperial text-xs transition flex items-center justify-center gap-2 cursor-pointer">
+                <span>⚡</span>
+                <span>Créer la Branche & la Pull Request immédiatement</span>
+              </button>
+              <div id="api-publish-status" class="hidden text-[11px] p-2.5 rounded-lg border leading-snug"></div>
+            </div>
+          </details>
+
+          <!-- MODE 3 : ACTIONS MANUELLES / TEST AUDIO -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <button type="button" onclick="testAudio()" class="py-2 px-3 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/30 text-amber-300 font-bold text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <span>🔊</span> Écouter un extrait
+            </button>
+            <button type="button" onclick="openGitHubWebNewFile()" class="py-2 px-3 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 hover:text-amber-300 font-bold text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer" title="Copie le code HTML et ouvre l'éditeur web GitHub">
+              <span>📋</span> Éditeur Web GitHub
+            </button>
+            <button type="button" onclick="generateAndDownloadHTML()" class="py-2 px-3 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 hover:text-amber-300 font-bold text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <span>💾</span> Télécharger .html
+            </button>
+          </div>
+        </section>
+
+        <!-- APERÇU EN DIRECT DE LA PAGE GÉNÉRÉE -->
+        <section class="card-clean rounded-2xl p-5 space-y-3 border-stone-800">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+            <span class="text-xs font-bold font-imperial text-amber-200 flex items-center gap-1.5">
+              <span>👁️</span> Aperçu en Direct du Rendu Final
+            </span>
+            <span id="preview-stats-badge" class="text-[10px] font-mono text-stone-400">0 paragraphe(s)</span>
+          </div>
+
+          <div id="live-scenario-preview" class="max-h-[420px] overflow-y-auto pr-1 space-y-4 text-xs"></div>
+        </section>
+
+      </div>
+
     </div>
-
-    <!-- FORMULAIRE DE PERSONNALISATION -->
-    <section class="card-clean rounded-xl p-6 space-y-4 text-xs">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div>
-          <label class="block text-amber-300 font-bold mb-1">Numéro d'Acte</label>
-          <input type="number" id="sc-num" value="11" class="w-full p-2 rounded bg-black/60 border border-stone-800 text-stone-200">
-        </div>
-        <div>
-          <label class="block text-amber-300 font-bold mb-1">Date de la Séance</label>
-          <input type="text" id="sc-date" value="Session 11" class="w-full p-2 rounded bg-black/60 border border-stone-800 text-stone-200">
-        </div>
-        <div>
-          <label class="block text-amber-300 font-bold mb-1">Lieu / Province</label>
-          <input type="text" id="sc-place" value="Terres du Lion" class="w-full p-2 rounded bg-black/60 border border-stone-800 text-stone-200">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-amber-300 font-bold mb-1">Titre du Scénario</label>
-        <input type="text" id="sc-title" placeholder="Ex: L'Éveil de l'Ombre sur la Plaine" class="w-full p-2.5 rounded bg-black/60 border border-stone-800 text-stone-200 text-sm font-imperial">
-      </div>
-
-      <div>
-        <label class="block text-amber-300 font-bold mb-1">Résumé court d'accroche</label>
-        <textarea id="sc-summary" rows="2" placeholder="Résumé introductif lu avant le corps du texte..." class="w-full p-2.5 rounded bg-black/60 border border-stone-800 text-stone-200"></textarea>
-      </div>
-
-      <div>
-        <label class="block text-amber-300 font-bold mb-1">Corps du récit de la session</label>
-        <textarea id="sc-body" rows="8" placeholder="Collez ou déposez votre texte ici..." class="w-full p-2.5 rounded bg-black/60 border border-stone-800 text-stone-200 leading-relaxed font-serif"></textarea>
-      </div>
-
-      <!-- BOUTONS D'EXPORTATION -->
-      <div class="pt-2 flex flex-wrap gap-3 justify-end">
-        <button type="button" onclick="testAudio()" class="px-4 py-2 rounded bg-stone-900 border border-amber-500/40 hover:border-amber-300 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition">
-          <span>🔊</span> Tester la lecture audio
-        </button>
-        <button type="button" onclick="generateAndDownloadHTML()" class="px-5 py-2.5 rounded bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition shadow flex items-center gap-2">
-          <span>💾</span> Télécharger la Page HTML (Prête pour /campagne/)
-        </button>
-      </div>
-    </section>
 
   </main>
 
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    <div>Chronique L5R 4e Édition — MJ David • Générateur de Page</div>
+    <div>Chronique L5R 4e Édition — MJ David • Studio de Publication & Soumission GitHub</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.2.0</span>
+      <span id="site-version-label">v1.3.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
   </footer>
+
 </body>
 </html>
