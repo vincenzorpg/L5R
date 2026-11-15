@@ -990,6 +990,10 @@ function initCatalogSelectors() {
   if (typeof updateDisadvButtonState === 'function') {
     updateDisadvButtonState();
   }
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent('l5r-forge-catalogs-updated'));
+  }
 }
 
 function buildGroupedSchoolOptionsHtml(selectedSchoolId, currentClanKey) {
@@ -1399,6 +1403,14 @@ function updateDisadvButtonState() {
   }
 }
 
+function notifyForgeUser(msg, type = 'info') {
+  if (typeof window !== 'undefined' && typeof window.showForgeToast === 'function') {
+    window.showForgeToast(msg, type);
+  } else if (typeof alert === 'function') {
+    alert(msg);
+  }
+}
+
 function addAdvFromCatalog() {
   const sel = document.getElementById('sel-catalog-adv');
   if (!sel || sel.value === "") return;
@@ -1406,14 +1418,14 @@ function addAdvFromCatalog() {
   if (!item) return;
 
   if (advantagesList.some(a => a.name === item.name)) {
-    alert(`L'avantage « ${item.name} » est déjà sélectionné.`);
+    notifyForgeUser(`L'avantage « ${item.name} » est déjà sélectionné.`, 'warn');
     return;
   }
 
   const effectiveCost = getEffectiveAdvCost(item);
   const currentRemainingXP = parseInt(document.getElementById('xp-remaining')?.textContent) || 0;
   if (currentRemainingXP - effectiveCost < 0) {
-    alert(`Impossible d'ajouter « ${item.name} » (${effectiveCost} XP) : solde insuffisant (${currentRemainingXP} XP disponible).`);
+    notifyForgeUser(`Solde XP insuffisant pour « ${item.name} » (${effectiveCost} XP requis, ${currentRemainingXP} XP dispo).`, 'error');
     return;
   }
 
@@ -1476,14 +1488,14 @@ function addDisadvFromCatalog() {
   if (!item) return;
 
   if (disadvantagesList.some(d => d.name === item.name)) {
-    alert(`Le désavantage « ${item.name} » est déjà sélectionné.`);
+    notifyForgeUser(`Le désavantage « ${item.name} » est déjà sélectionné.`, 'warn');
     return;
   }
 
   const effectiveGain = getEffectiveDisadvGain(item);
   const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + (parseInt(d.gain) || 0), 0);
   if (currentTotalGain + effectiveGain > MAX_DISADVANTAGE_XP) {
-    alert(`Seuil dépassé ! Vous avez déjà ${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP de désavantages. L'ajout de « ${item.name} » (+${effectiveGain} XP) atteindrait ${currentTotalGain + effectiveGain} XP.`);
+    notifyForgeUser(`Plafond de 15 XP atteint (${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP). « ${item.name} » (+${effectiveGain} XP) dépasserait la limite.`, 'error');
     return;
   }
 
@@ -1700,14 +1712,25 @@ function renderSkills() {
 
     const isChoiceActive = sk.isChoice && sk.chosen;
     const masteriesHtml = getMasteriesHtml(sk.name, sk.rank);
+    const catMeta = catalogSkills.find(c => c.name === sk.name) || {};
+    const safeSkillName = (sk.name || "").replace(/'/g, "\\'");
+    const traitLabel = catMeta.trait || sk.trait || "Agilité";
+    const nextRank = (parseInt(sk.rank, 10) || 0) + 1;
 
     return `
-      <div class="p-2.5 rounded bg-black/60 border ${isChoiceActive ? 'border-amber-500/50' : 'border-stone-800'} flex flex-col gap-1.5">
+      <div class="p-2.5 rounded bg-black/60 border ${isChoiceActive ? 'border-amber-500/50' : 'border-stone-800'} flex flex-col gap-1.5" data-skill-card="${idx}" data-skill-name="${(sk.name || '').replace(/"/g, '&quot;')}" data-skill-trait="${traitLabel.replace(/"/g, '&quot;')}">
         <div class="flex items-center justify-between gap-2">
-          <div class="flex-1 truncate">
-            <span class="font-bold text-amber-200">${sk.name}</span>
-            ${sk.isSchool ? `<span class="text-[9px] px-1 rounded bg-amber-950 text-amber-400 ml-1 border border-amber-900">${isChoiceActive ? 'École (Choix)' : 'École'}</span>` : ''}
-            ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5 cursor-pointer">⇄ Changer</button>` : ''}
+          <div class="flex-1 min-w-0">
+            <div class="truncate">
+              <span class="font-bold text-amber-200">${sk.name}</span>
+              ${sk.isSchool ? `<span class="text-[9px] px-1 rounded bg-amber-950 text-amber-400 ml-1 border border-amber-900">${isChoiceActive ? 'École (Choix)' : 'École'}</span>` : ''}
+              ${isChoiceActive ? `<button onclick="reopenSkillChoice(${idx})" title="Changer de compétence pour cet emplacement" class="text-[10px] text-stone-400 hover:text-amber-300 underline ml-1.5 cursor-pointer">⇄ Changer</button>` : ''}
+            </div>
+            <div class="flex items-center gap-2 mt-0.5 text-[10px] text-stone-400">
+              <span>${traitLabel}</span>
+              <button type="button" data-skill-pool="${idx}" onclick="if(window.rollSkillFromCard) window.rollSkillFromCard(${idx})" title="Lancer le jet de cette compétence" class="px-1.5 py-0.2 rounded bg-stone-900 hover:bg-amber-950/60 border border-stone-700 hover:border-amber-500/50 text-amber-300 font-bold font-mono transition cursor-pointer">🎲 ${sk.rank}g2</button>
+              <span data-skill-nextxp="${idx}" class="text-stone-500 font-mono">${nextRank <= 10 ? `+1 = ${nextRank} XP` : 'Max'}</span>
+            </div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <label class="text-[10px] text-stone-400 flex items-center gap-1">
@@ -2178,6 +2201,7 @@ function updateAll() {
 
   // 2. Budget XP (Traits, Vide, Compétences, Avantages, Katas & Kihos)
   let xpSpent = 0;
+  let traitsXp = 0;
   const traitsBase = [
     { val: sta, ring: "earth", bonus: (fam?.trait === "Constitution" ? 1 : 0) + (sch?.trait === "Constitution" ? 1 : 0) },
     { val: wil, ring: "earth", bonus: (fam?.trait === "Volonté" ? 1 : 0) + (sch?.trait === "Volonté" ? 1 : 0) },
@@ -2192,16 +2216,18 @@ function updateAll() {
   traitsBase.forEach(t => {
     const baseStart = 2 + t.bonus;
     const blessed = hasElemBlessing(t.ring);
-    xpSpent += calculateTraitXpCost(t.val, baseStart, blessed);
+    traitsXp += calculateTraitXpCost(t.val, baseStart, blessed);
   });
 
   const voidBonus = (fam?.trait === "Vide" ? 1 : 0) + (sch?.trait === "Vide" ? 1 : 0);
   const baseVoid = 2 + voidBonus;
-  xpSpent += calculateVoidXpCost(voi, baseVoid, hasAdv("enlightened"));
+  traitsXp += calculateVoidXpCost(voi, baseVoid, hasAdv("enlightened"));
+  xpSpent += traitsXp;
 
   const isObtuse = hasDisadv("obtuse");
   const isProdigy = hasAdv("prodigy");
   const skillsByName = getIndexedSkillsMap();
+  let skillsXp = 0;
 
   currentSkills.forEach(sk => {
     if (sk.isChoice && !sk.chosen) return;
@@ -2212,7 +2238,7 @@ function updateAll() {
     const isHighSkill = sType.includes("noble") || sType.includes("haute") || sType.includes("high");
     const isExemptHigh = sName.includes("enquete") || sName.includes("investigation") || sName.includes("medecine") || sName.includes("medicine");
 
-    xpSpent += calculateSkillXpCost(sk.rank, {
+    skillsXp += calculateSkillXpCost(sk.rank, {
       isSchool: sk.isSchool,
       spec: sk.spec,
       isProdigy,
@@ -2221,6 +2247,7 @@ function updateAll() {
       isExemptHigh
     });
   });
+  xpSpent += skillsXp;
 
   // Recalcul dynamique des coûts/gains d'Avantages & Désavantages selon le Clan/École (Ticket #18)
   advantagesList.forEach(a => {
@@ -2237,14 +2264,25 @@ function updateAll() {
   xpSpent += advCost;
 
   // Prise en compte du coût en XP des Katas & Kihos si la section 5 est utilisée
+  let artsXp = 0;
   if (typeof window.characterKatas !== "undefined" && Array.isArray(window.characterKatas)) {
-    const kataKihoXP = window.characterKatas.reduce((acc, k) => acc + (parseInt(k.cost ?? k.xpCost ?? k.mastery) || 0), 0);
-    xpSpent += kataKihoXP;
+    artsXp = window.characterKatas.reduce((acc, k) => acc + (parseInt(k.cost ?? k.xpCost ?? k.mastery) || 0), 0);
+    xpSpent += artsXp;
   }
 
   let rawDisadvGain = disadvantagesList.reduce((acc, d) => acc + (parseInt(d.gain) || 0), 0);
   let disadvGain = Math.min(rawDisadvGain, MAX_DISADVANTAGE_XP);
   document.getElementById('disadv-gain-total').textContent = disadvGain;
+
+  const xpBreakdown = {
+    traits: traitsXp,
+    skills: skillsXp,
+    advantages: advCost,
+    arts: artsXp,
+    disadvGain,
+    disadvRawGain: rawDisadvGain,
+    baseXP: parseInt(document.getElementById('base-xp-input')?.value, 10) || 40
+  };
 
   const baseXPInput = document.getElementById('base-xp-input');
   const baseXP = baseXPInput ? (parseInt(baseXPInput.value) || 0) : 40;
@@ -2487,6 +2525,8 @@ function updateAll() {
       status: 1.0,
       xpTotal: totalXP,
       xpSpent: xpSpent,
+      xpRemaining: remainingXP,
+      xpBreakdown: xpBreakdown,
       skills: currentSkills,
       armor: {
         name: armorName,
@@ -2513,7 +2553,9 @@ function updateAll() {
   scheduleAutoSaveDraft();
 
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent('l5r-forge-updated'));
+    window.dispatchEvent(new CustomEvent('l5r-forge-updated', {
+      detail: { xpSpent, totalXP, remainingXP, xpBreakdown, insight, insightRank, armorTN: finalArmorTN }
+    }));
   }
 }
 
@@ -2711,10 +2753,10 @@ function saveCharacterToDojo(forceNew = false) {
     if (typeof renderDojoList === 'function') renderDojoList();
     if (typeof renderDojoRoster === 'function') renderDojoRoster();
 
-    alert(`✅ « ${data.name} » a bien été enregistré dans votre Dojo !`);
+    notifyForgeUser(`« ${data.name} » enregistré dans votre Dojo !`, 'success');
   } catch (err) {
     console.error(err);
-    alert("Erreur lors de l'enregistrement dans le navigateur.");
+    notifyForgeUser("Erreur lors de l'enregistrement dans le navigateur.", 'error');
   }
 }
 
