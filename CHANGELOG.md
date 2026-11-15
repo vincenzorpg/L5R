@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.3.2] — 2026-11-15
+
+### 🔄 Modifié
+
+- **Thème par défaut (`js/navbar.js`)** :
+  - Activation du **Mode Sombre (« Laque Noire »)** par défaut pour tous les visiteurs lorsque aucune préférence n'est enregistrée dans `localStorage` (`l5r_rokugan_theme`), sans basculer automatiquement sur le mode clair selon `prefers-color-scheme: light`.
+  - Le choix manuel via le bouton de bascule de thème dans la barre de navigation reste mémorisé dans `localStorage`.
+
+---
+
 ## [1.3.1] — 2026-11-15
 
 ### 🐛 Corrigé
