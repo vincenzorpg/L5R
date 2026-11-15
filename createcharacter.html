@@ -32,40 +32,55 @@
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/navbar.js" defer></script>
-  <script src="js/forge-ui.js" defer></script>
-  <script src="js/character-generator.js?v=12" defer></script>
+  <script src="js/forge-ui.js?v=13" defer></script>
+  <script src="js/character-generator.js?v=13" defer></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
   <!-- 1. MENU DE NAVIGATION GLOBAL -->
   <header id="site-header"></header>
 
-  <!-- 2. BANDEAU DE COMBAT ET SAUVEGARDE PERSISTANT (RESTAURÉ) -->
-  <aside aria-label="État du personnage" class="sticky top-[54px] z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2.5 px-3 md:px-6 no-print text-xs">
-    <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
-      
-      <div class="flex flex-wrap justify-between items-center gap-3">
-        <!-- Bloc Identité -->
-        <div class="flex items-center gap-2">
-          <span class="text-[10px] tracking-[0.2em] text-amber-500/70 uppercase font-bold">Samouraï :</span>
-          <span id="sticky-pc-name" class="text-sm md:text-base font-bold text-amber-200 font-imperial">Okado Hiruma</span>
-          <span id="sticky-school-badge" class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-300">Bushi Hiruma</span>
+  <!-- 2. COCKPIT COMMANDEMENT & RÉSUMÉ LIVE -->
+  <aside aria-label="État du personnage" class="md:sticky md:top-[54px] z-30 bg-[#0d0b0b]/95 backdrop-blur-md border-b border-amber-500/30 shadow-2xl py-2 px-3 md:px-6 no-print text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col gap-2">
+
+      <div class="flex flex-wrap justify-between items-center gap-2.5">
+        <!-- Bloc Identité & Dojo -->
+        <div class="flex flex-wrap items-center gap-2 min-w-0">
+          <span class="text-[10px] tracking-[0.18em] text-amber-500/70 uppercase font-bold hidden sm:inline">Samouraï :</span>
+          <span id="sticky-pc-name" class="text-sm md:text-base font-bold text-amber-200 font-imperial truncate max-w-[180px] sm:max-w-xs">Okado Hiruma</span>
+          <span id="sticky-school-badge" class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-amber-500/30 text-amber-300 truncate max-w-[200px]">Bushi Hiruma</span>
+          <button type="button" id="btn-toggle-dojo" onclick="toggleDojoDrawer()" class="text-[10px] px-2 py-0.5 rounded bg-amber-950/50 hover:bg-amber-900/60 border border-amber-500/35 text-amber-200 font-bold transition cursor-pointer flex items-center gap-1" title="Ouvrir / fermer mon Dojo local">
+            <span>🏯 Dojo</span>
+            <span id="cockpit-dojo-count" class="px-1 rounded bg-black/50 text-amber-300 font-mono">0</span>
+            <span id="dojo-toggle-chevron" class="text-[9px]">▾</span>
+          </button>
         </div>
 
-        <!-- Bloc XP & Réputation -->
-        <div class="flex items-center gap-4">
-          <div>
-            <span class="text-[9px] text-stone-400 uppercase tracking-wider block">XP restante / Total</span>
+        <!-- Bloc XP, Jauge & Réputation -->
+        <div class="flex flex-wrap items-center gap-3 md:gap-4">
+          <div class="min-w-[175px]">
+            <div class="flex items-center justify-between gap-2 text-[9px] text-stone-400 uppercase tracking-wider">
+              <span>Budget XP</span>
+              <span id="xp-status-label" class="font-bold text-emerald-400">OK</span>
+            </div>
             <div class="flex items-center gap-2">
-              <span class="text-sm font-bold font-imperial">
+              <span class="text-sm font-bold font-imperial whitespace-nowrap">
                 <span id="xp-remaining" class="text-emerald-400">40</span> / <span id="xp-total">40</span> XP
               </span>
               <div class="flex items-center gap-1 bg-black/60 border border-stone-800 rounded px-1.5 py-0.5" title="Modifier l'XP de base (40 par défaut)">
                 <span class="text-[9px] text-stone-500 uppercase font-bold">Base:</span>
-                <input type="number" id="base-xp-input" value="40" min="0" max="999" oninput="updateAll()" class="w-12 bg-transparent text-amber-300 font-bold text-center text-xs focus:outline-none">
+                <input type="number" id="base-xp-input" value="40" min="0" max="999" oninput="updateAll()" class="w-11 bg-transparent text-amber-300 font-bold text-center text-xs focus:outline-none">
               </div>
             </div>
+            <div class="w-full h-1.5 rounded-full bg-stone-900 border border-stone-800 overflow-hidden mt-1" title="Répartition du budget XP dépensé">
+              <div id="xp-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div id="xp-breakdown-strip" class="text-[9px] text-stone-400 font-mono truncate mt-0.5">
+              Traits 0 • Comp 0 • Av 0
+            </div>
           </div>
+
           <div class="border-l border-amber-500/20 pl-3">
             <span class="text-[9px] text-stone-400 uppercase tracking-wider block">Réputation</span>
             <span class="text-sm font-bold text-amber-300 font-imperial" id="insight-display">
@@ -74,21 +89,24 @@
           </div>
         </div>
 
-        <!-- Bloc Actions & Sauvegarde Dojo -->
+        <!-- Bloc Actions & Exports -->
         <div class="flex flex-wrap items-center gap-1.5">
-          <button onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct">
+          <button type="button" onclick="saveCharacterToDojo(false)" class="px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-extrabold transition cursor-pointer shadow" title="Enregistrer dans le Dojo local">
+            💾 Dojo
+          </button>
+          <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer" title="Exporter au format Le Carnet de Rokugan (v2)">
+            <span>📖</span> <span>Carnet</span>
+          </button>
+          <button type="button" onclick="prepareAndPrintPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition cursor-pointer" title="Aperçu et impression Fiche A4 PDF">🖨️ PDF</button>
+          <button type="button" onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct">
             🔗 Lien
           </button>
-          <button onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer">💾 JSON</button>
-          <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer">
+          <button type="button" onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer" title="Télécharger la sauvegarde JSON">💾 JSON</button>
+          <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer" title="Importer un fichier JSON">
             📂 Load
             <input type="file" id="json-input" onchange="importJSONWithMystic(event)" class="hidden" accept=".json">
           </label>
-          <button onclick="prepareAndPrintPDF()" class="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold transition cursor-pointer">🖨️ PDF</button>
-          <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer">
-            <span>📖</span> <span>Carnet</span>
-          </button>
-          <button onclick="resetCharacterWithMystic()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer">Reset</button>
+          <button type="button" onclick="resetCharacterWithMystic()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer" title="Réinitialiser la fiche">Reset</button>
         </div>
       </div>
 
@@ -131,10 +149,10 @@
   </aside>
 
   <!-- CONTENU PRINCIPAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-5">
 
-    <!-- 0. MON DOJO PERSONNEL (CONSERVÉ EN HAUTEUR) -->
-    <section class="card-clean rounded-xl p-4 border-amber-500/40 bg-gradient-to-r from-[#16100c] via-[#120e0e] to-[#16100c] space-y-3">
+    <!-- 0. MON DOJO PERSONNEL (TIROIR REPLIABLE) -->
+    <section id="dojo-drawer-section" class="hidden card-clean rounded-xl p-4 border-amber-500/40 bg-gradient-to-r from-[#16100c] via-[#120e0e] to-[#16100c] space-y-3 no-print">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <span class="text-lg">🏯</span>
@@ -145,28 +163,64 @@
           </div>
         </div>
         <div class="flex flex-wrap gap-2 items-center">
-          <!-- Enregistre ou met à jour le personnage en cours -->
           <button type="button" onclick="saveCharacterToDojo(false)" class="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs cursor-pointer shadow">
             💾 Enregistrer
           </button>
-        
-          <!-- Enregistre une copie distincte dans le Dojo -->
           <button type="button" onclick="saveCharacterToDojo(true)" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/40 font-bold text-xs cursor-pointer">
-            📑 Enregistrer new samouraï
+            📑 Nouvelle copie
           </button>
-        
-          <!-- Réinitialise la fiche pour un tout nouveau personnage -->
           <button type="button" onclick="startNewCharacter()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold text-xs cursor-pointer">
-            ➕ New samouraï
+            ➕ Nouveau samouraï
+          </button>
+          <button type="button" onclick="toggleDojoDrawer(false)" class="px-2 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-400 hover:text-white border border-stone-800 text-xs cursor-pointer" title="Fermer le tiroir Dojo">
+            ✕
           </button>
         </div>
       </div>
       <div id="dojo-roster-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 text-xs"></div>
     </section>
 
+    <!-- BARRE DE NAVIGATION PAR ATELIERS (STEPPER STUDIO) -->
+    <nav id="forge-stepper-bar" aria-label="Étapes de création du samouraï" class="card-clean rounded-xl p-2.5 border-amber-500/35 no-print">
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+        <button type="button" data-step-btn="identity" onclick="setForgeStep('identity')" class="forge-step-btn active">
+          <span>1. Identité</span>
+          <span id="step-pill-identity" class="forge-step-pill">Crabe</span>
+        </button>
+        <button type="button" data-step-btn="rings" onclick="setForgeStep('rings')" class="forge-step-btn">
+          <span>2. Anneaux &amp; Vitalité</span>
+          <span id="step-pill-rings" class="forge-step-pill">ND 20</span>
+        </button>
+        <button type="button" data-step-btn="skills" onclick="setForgeStep('skills')" class="forge-step-btn">
+          <span>3. Compétences</span>
+          <span id="step-pill-skills" class="forge-step-pill">0</span>
+        </button>
+        <button type="button" data-step-btn="perks" onclick="setForgeStep('perks')" class="forge-step-btn">
+          <span>4. Avantages &amp; Failles</span>
+          <span id="step-pill-perks" class="forge-step-pill">0 / 0</span>
+        </button>
+        <button type="button" data-step-btn="mystic" onclick="setForgeStep('mystic')" class="forge-step-btn">
+          <span>5. Arts &amp; Voies</span>
+          <span id="step-pill-mystic" class="forge-step-pill">Auto</span>
+        </button>
+        <button type="button" data-step-btn="gear" onclick="setForgeStep('gear')" class="forge-step-btn">
+          <span>6. Arsenal &amp; Récit</span>
+          <span id="step-pill-gear" class="forge-step-pill">20/20</span>
+        </button>
+        <div class="ml-auto pl-2 border-l border-amber-500/20 shrink-0">
+          <button type="button" data-step-btn="all" onclick="setForgeStep('all')" class="forge-step-btn" title="Afficher toutes les sections en une seule page (Alt+0)">
+            <span>🧭 Tout voir</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
     <!-- 1. ALLÉGEANCE, IDENTITÉ & LIGNÉE -->
-    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">1. Allégeance, Identité & Lignée</h2>
+    <section data-forge-step="identity" class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">1. Allégeance, Identité &amp; Lignée</h2>
+        <span class="text-[11px] text-stone-400">Étape 1/6 • Choisissez votre Clan, Famille et École d'origine</span>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
         <div>
           <label class="block text-stone-400 mb-1">Grand Clan de Rokugan</label>
@@ -187,9 +241,9 @@
           <div class="flex justify-between items-center mb-1">
             <label class="text-stone-400">Nom du Samouraï</label>
             <div class="flex gap-1.5">
-              <button onclick="generateRandomName('m')" title="Prénom Masculin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♂ Aléa</button>
-              <button onclick="generateRandomName('f')" title="Prénom Féminin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♀ Aléa</button>
-              <button onclick="toggleNameOrder()" title="Inverser Prénom/Famille" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-900 text-stone-400 hover:text-amber-300 cursor-pointer">⇄</button>
+              <button type="button" onclick="generateRandomName('m')" title="Prénom Masculin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♂ Aléa</button>
+              <button type="button" onclick="generateRandomName('f')" title="Prénom Féminin" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-800 text-amber-300 hover:bg-stone-700 cursor-pointer">♀ Aléa</button>
+              <button type="button" onclick="toggleNameOrder()" title="Inverser Prénom/Famille" class="text-[10px] px-1.5 py-0.5 rounded bg-stone-900 text-stone-400 hover:text-amber-300 cursor-pointer">⇄</button>
             </div>
           </div>
           <input type="text" id="pc-name" value="Okado Hiruma" oninput="updateStickyName()" class="w-full p-2.5 rounded font-bold">
@@ -204,12 +258,19 @@
         </div>
         <div id="school-techniques-container" class="space-y-2"></div>
       </div>
+
+      <div class="forge-step-footer flex justify-between items-center pt-3 border-t border-amber-500/15 text-xs no-print">
+        <button type="button" onclick="toggleDojoDrawer()" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 font-bold cursor-pointer">🏯 Gérer mon Dojo</button>
+        <button type="button" onclick="setForgeStep('rings')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">Étape 2 : Anneaux &amp; Vitalité →</button>
+      </div>
     </section>
 
+    <!-- ATELIER 2 : ANNEAUX, TRAITS, COMBAT & VITALITÉ -->
+    <div data-forge-step="rings" class="space-y-6">
     <!-- 2. ANNEAUX & TRAITS -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux & 8 Traits Élémentaires</h2>
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">2. Les 5 Anneaux &amp; 8 Traits Élémentaires</h2>
         <span class="text-xs text-stone-400">Base 2 • Trait : <span class="text-amber-300">Rang suivant × 4 XP</span> • Anneau du Vide : <span class="text-amber-300">Rang suivant × 6 XP</span></span>
       </div>
 
@@ -222,7 +283,7 @@
           </div>
           <div class="space-y-2">
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Constitution</span><span id="badge-sta" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Constitution <span data-nextxp="trait-stamina" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-sta" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-stamina', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-stamina" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -230,7 +291,7 @@
               </div>
             </div>
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Volonté</span><span id="badge-wil" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Volonté <span data-nextxp="trait-willpower" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-wil" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-willpower', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-willpower" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -248,7 +309,7 @@
           </div>
           <div class="space-y-2">
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Force</span><span id="badge-str" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Force <span data-nextxp="trait-strength" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-str" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-strength', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-strength" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -256,7 +317,7 @@
               </div>
             </div>
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Perception</span><span id="badge-per" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Perception <span data-nextxp="trait-perception" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-per" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-perception', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-perception" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -274,7 +335,7 @@
           </div>
           <div class="space-y-2">
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Réflexes</span><span id="badge-ref" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Réflexes <span data-nextxp="trait-reflexes" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-ref" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-reflexes', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-reflexes" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -282,7 +343,7 @@
               </div>
             </div>
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Intuition</span><span id="badge-awa" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Intuition <span data-nextxp="trait-awareness" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-awa" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-awareness', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-awareness" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -300,7 +361,7 @@
           </div>
           <div class="space-y-2">
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Agilité</span><span id="badge-agi" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Agilité <span data-nextxp="trait-agility" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-agi" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-agility', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-agility" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -308,7 +369,7 @@
               </div>
             </div>
             <div>
-              <div class="flex justify-between mb-0.5 text-stone-400"><span>Intelligence</span><span id="badge-int" class="text-[10px] text-amber-500"></span></div>
+              <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Intelligence <span data-nextxp="trait-intelligence" class="text-[9px] text-stone-500 font-mono">(+1:12 XP)</span></span><span id="badge-int" class="text-[10px] text-amber-500"></span></div>
               <div class="flex items-center gap-1">
                 <button type="button" onclick="adjustTrait('trait-intelligence', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
                 <input type="number" id="trait-intelligence" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -325,7 +386,7 @@
             <span class="text-base font-bold text-purple-400" id="ring-void">2</span>
           </div>
           <div>
-            <div class="flex justify-between mb-0.5 text-stone-400"><span>Anneau du Vide</span></div>
+            <div class="flex justify-between items-center mb-0.5 text-stone-400"><span>Anneau du Vide</span><span data-nextxp="trait-void" class="text-[9px] text-purple-300 font-mono">(+1:18 XP)</span></div>
             <div class="flex items-center gap-1">
               <button type="button" onclick="adjustTrait('trait-void', -1)" class="w-7 h-7 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center cursor-pointer">-</button>
               <input type="number" id="trait-void" min="2" max="6" value="2" oninput="updateAll()" class="w-full p-1.5 rounded text-center font-bold">
@@ -337,164 +398,285 @@
       </div>
     </section>
 
-    <!-- 3. COMPÉTENCES (SÉLECTEUR MULTIPLE DÉROULANT DU DESIGN D'ORIGINE) -->
+    <!-- 2B. COMBAT & SEUILS DE VITALITÉ (DIRECTEMENT LIÉS AUX ANNEAUX) -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences & Spécialisations</h2>
-        
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">Combat &amp; Seuils de Vitalité (4e Édition)</h2>
+        <span class="text-[11px] text-stone-400">Calculés en temps réel selon Terre, Réflexes, École et Armure</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs text-center">
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">ND d'Armure</div>
+          <div id="stat-armor-tn" class="text-xl font-bold text-emerald-400 font-imperial mt-1">20</div>
+          <div class="text-[10px] text-stone-500">5 + (5 × Réfl.) + Armure</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">Initiative</div>
+          <div id="stat-init" class="text-xl font-bold text-amber-300 font-imperial mt-1">3g2</div>
+          <div class="text-[10px] text-stone-500">(Insight + Réfl.) g Réfl.</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">Honneur</div>
+          <div id="stat-honor" class="text-xl font-bold text-amber-200 font-imperial mt-1">4.5</div>
+          <div class="text-[10px] text-stone-500">Défini par l'école</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800">
+          <div class="text-stone-400">Gloire / Statut</div>
+          <div class="text-xl font-bold text-stone-300 font-imperial mt-1">1.0 / 1.0</div>
+          <div class="text-[10px] text-stone-500">Base Rang 1</div>
+        </div>
+        <div class="p-3 rounded bg-black/60 border border-stone-800 col-span-2 md:col-span-1">
+          <div class="text-stone-400">Récupération Nocturne</div>
+          <div id="stat-heal" class="text-xl font-bold text-blue-300 font-imperial mt-1">5 PV</div>
+          <div class="text-[10px] text-stone-500">Const. × 2 + Rang</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="text-xs font-bold text-stone-300 mb-2 font-imperial">Seuils de Vitalité (Multiplicateurs de Terre) :</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 text-center text-xs">
+          <div class="p-2 rounded bg-emerald-950/40 border border-emerald-800/40"><div class="text-[10px] text-emerald-400">Indemne (+0)</div><div class="font-bold text-stone-200 mt-1" id="w-0">10 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-stone-400">Égratigné (+3)</div><div class="font-bold text-stone-200 mt-1" id="w-1">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-stone-400">Blessé Léger (+5)</div><div class="font-bold text-stone-200 mt-1" id="w-2">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-amber-500">Blessé (+10)</div><div class="font-bold text-stone-200 mt-1" id="w-3">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-amber-600">Gravement (+15)</div><div class="font-bold text-stone-200 mt-1" id="w-4">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-red-500">Estropié (+20)</div><div class="font-bold text-stone-200 mt-1" id="w-5">4 PV</div></div>
+          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-red-600">Inconscient (+40)</div><div class="font-bold text-stone-200 mt-1" id="w-6">4 PV</div></div>
+          <div class="p-2 rounded bg-red-950/60 border border-red-800/60"><div class="text-[10px] text-red-400 font-bold">Mortel</div><div class="font-bold text-red-200 mt-1" id="w-7">4 PV</div></div>
+        </div>
+      </div>
+
+      <div class="forge-step-footer flex justify-between items-center pt-3 border-t border-amber-500/15 text-xs no-print">
+        <button type="button" onclick="setForgeStep('identity')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold cursor-pointer">← 1. Identité &amp; École</button>
+        <button type="button" onclick="setForgeStep('skills')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">Étape 3 : Compétences →</button>
+      </div>
+    </section>
+    </div>
+
+    <!-- 3. COMPÉTENCES (SÉLECTEUR MULTIPLE DÉROULANT + CATÉGORIES & ALERTE CHOIX ÉCOLE) -->
+    <section data-forge-step="skills" class="card-clean rounded-xl p-5 md:p-6 space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold gold-text font-imperial">3. Compétences &amp; Spécialisations</h2>
+          <p class="text-[11px] text-stone-400">Cliquez sur <span class="text-amber-300 font-mono">🎲 XgY</span> sur n'importe quelle compétence pour la tester instantanément.</p>
+        </div>
+
         <div class="flex flex-wrap items-center gap-2 text-xs relative">
           <select id="sel-add-skill" class="hidden"></select>
 
           <div class="relative" id="skills-dropdown-wrapper">
-            <button 
-              type="button" 
-              id="btn-toggle-skills-dropdown" 
-              onclick="toggleSkillsDropdown()" 
+            <button
+              type="button"
+              id="btn-toggle-skills-dropdown"
+              onclick="toggleSkillsDropdown()"
               class="p-2 rounded bg-[#0d0b0b] border border-[#3a3028] hover:border-amber-500/50 text-[#f3e5ab] text-xs font-medium flex items-center gap-2 min-w-[240px] justify-between cursor-pointer shadow"
             >
               <span id="skills-selected-count">Choisir des compétences...</span>
               <span class="text-[9px] text-stone-500 transition-transform" id="skills-dropdown-arrow">▼</span>
             </button>
 
-            <div 
-              id="skills-dropdown-panel" 
-              class="hidden absolute right-0 top-full mt-1.5 w-80 max-h-72 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
+            <div
+              id="skills-dropdown-panel"
+              class="hidden absolute right-0 top-full mt-1.5 w-80 sm:w-96 max-h-80 bg-[#120d0d] border border-amber-500/40 rounded-xl shadow-2xl p-2.5 z-50 flex flex-col gap-2 backdrop-blur-md"
             >
-              <input 
-                type="text" 
-                id="filter-skills-input" 
-                placeholder="🔍 Filtrer les compétences..." 
-                oninput="filterSkillsList()" 
+              <input
+                type="text"
+                id="filter-skills-input"
+                placeholder="🔍 Filtrer les compétences..."
+                oninput="filterSkillsList()"
                 class="w-full p-1.5 rounded text-xs bg-black/60 border border-stone-800 text-amber-200"
               >
-              <div id="skills-checkboxes-container" class="space-y-1 overflow-y-auto max-h-52 pr-1"></div>
+              <div class="flex flex-wrap gap-1" id="skills-cat-chips">
+                <button type="button" data-skill-cat="all" onclick="setSkillDropdownCategory('all')" class="forge-filter-chip active">Tout</button>
+                <button type="button" data-skill-cat="bugei" onclick="setSkillDropdownCategory('bugei')" class="forge-filter-chip">Bugei</button>
+                <button type="button" data-skill-cat="noble" onclick="setSkillDropdownCategory('noble')" class="forge-filter-chip">Noble / Haute</button>
+                <button type="button" data-skill-cat="marchande" onclick="setSkillDropdownCategory('marchande')" class="forge-filter-chip">Marchande</button>
+                <button type="button" data-skill-cat="degradante" onclick="setSkillDropdownCategory('degradante')" class="forge-filter-chip">Dégradante</button>
+              </div>
+              <div id="skills-checkboxes-container" class="space-y-1 overflow-y-auto max-h-48 pr-1"></div>
               <div class="flex justify-between items-center pt-1.5 border-t border-stone-800 text-[10px] text-stone-400">
                 <span id="skills-checked-summary">0 sélectionnée(s)</span>
-                <button type="button" onclick="clearAllSkillCheckboxes()" class="hover:text-amber-300 underline">Tout décocher</button>
+                <button type="button" onclick="clearAllSkillCheckboxes()" class="hover:text-amber-300 underline cursor-pointer">Tout décocher</button>
               </div>
             </div>
           </div>
 
-          <button 
-            type="button" 
-            onclick="addSelectedSkills()" 
+          <button
+            type="button"
+            onclick="addSelectedSkills()"
             title="Ajouter les compétences cochées"
             class="w-9 h-9 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-base transition shadow flex items-center justify-center shrink-0 cursor-pointer"
           >+</button>
         </div>
       </div>
-      
+
+      <div id="skills-choice-alert" class="hidden p-2.5 rounded-lg bg-amber-950/50 border border-amber-500/60 text-amber-200 text-xs flex items-center justify-between gap-2">
+        <span>⚠️ <b id="skills-choice-alert-count">1</b> choix de compétence gratuite d'école (Rang 1) est encore en attente de sélection ci-dessous.</span>
+      </div>
+
       <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
+
+      <div class="forge-step-footer flex justify-between items-center pt-3 border-t border-amber-500/15 text-xs no-print">
+        <button type="button" onclick="setForgeStep('rings')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold cursor-pointer">← 2. Anneaux &amp; Vitalité</button>
+        <button type="button" onclick="setForgeStep('perks')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">Étape 4 : Avantages &amp; Failles →</button>
+      </div>
     </section>
 
     <!-- 4. AVANTAGES & DÉSAVANTAGES (RESTAURATION COMPLETE DE LA CARTE D'APERÇU) -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
-      <!-- 4A. AVANTAGES -->
-      <div class="card-clean rounded-xl p-5 space-y-4 min-w-0 overflow-hidden">
-        <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
-          <h3 class="font-bold text-emerald-400 font-imperial text-sm flex items-center gap-1.5">
-            <span>🌟</span> 4A. Avantages (Traits Héroïques)
-          </h3>
-          <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
-        </div>
-        
-        <div class="flex gap-2 text-xs items-center w-full min-w-0">
-          <select id="sel-catalog-adv" onchange="updateAdvPreview()" class="flex-1 w-0 min-w-0 max-w-full truncate p-2 rounded text-xs font-medium"></select>
-          <button 
-            type="button" 
-            onclick="addAdvFromCatalog()" 
-            title="Ajouter cet avantage" 
-            class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
-          >+</button>
-        </div>
+    <!-- 4. AVANTAGES & DÉSAVANTAGES (AVEC RECHERCHE & FILTRES RAPIDES) -->
+    <section data-forge-step="perks" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
+        <!-- 4A. AVANTAGES -->
+        <div class="card-clean rounded-xl p-5 space-y-3.5 min-w-0 overflow-hidden">
+          <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
+            <h3 class="font-bold text-emerald-400 font-imperial text-sm flex items-center gap-1.5">
+              <span>🌟</span> 4A. Avantages (Traits Héroïques)
+            </h3>
+            <span class="text-xs text-stone-400">Total : <b id="adv-cost-total" class="text-emerald-300">0</b> XP</span>
+          </div>
 
-        <!-- Carte d'Aperçu Dynamique Avantages (Ticket #21) -->
-        <div id="adv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-amber-500/30 space-y-2 text-xs shadow-lg">
-          <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
-            <div>
-              <h4 id="adv-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
-              <span id="adv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-adv inline-block mt-1"></span>
+          <!-- Recherche & Filtres rapides Avantages -->
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center gap-2">
+              <input type="text" id="filter-adv-search" oninput="filterPerksCatalog('adv')" placeholder="🔍 Rechercher un avantage (ex: Grand, Clairvoyant, Bénédiction...)" class="flex-1 p-2 rounded text-xs">
+              <span id="adv-match-count" class="text-[10px] text-stone-400 font-mono shrink-0"></span>
             </div>
-            <div class="text-right">
-              <span id="adv-preview-cost" class="px-2 py-0.5 rounded bg-amber-600 text-black font-bold font-imperial text-[11px] shadow"></span>
-              <div id="adv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+            <div class="flex flex-wrap gap-1" id="adv-cat-chips">
+              <button type="button" data-adv-cat="all" onclick="setPerksCategory('adv', 'all')" class="forge-filter-chip active">Tout</button>
+              <button type="button" data-adv-cat="physique" onclick="setPerksCategory('adv', 'physique')" class="forge-filter-chip">Physique</button>
+              <button type="button" data-adv-cat="mental" onclick="setPerksCategory('adv', 'mental')" class="forge-filter-chip">Mental</button>
+              <button type="button" data-adv-cat="social" onclick="setPerksCategory('adv', 'social')" class="forge-filter-chip">Social</button>
+              <button type="button" data-adv-cat="spirituel" onclick="setPerksCategory('adv', 'spirituel')" class="forge-filter-chip">Spirituel</button>
+              <button type="button" data-adv-cat="materiel" onclick="setPerksCategory('adv', 'materiel')" class="forge-filter-chip">Matériel</button>
+              <button type="button" data-adv-cat="discount" onclick="setPerksCategory('adv', 'discount')" class="forge-filter-chip">★ Réductions Clan</button>
             </div>
           </div>
-          <p id="adv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
-          <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
-            <span class="text-amber-300 font-bold font-imperial block text-[10px] uppercase tracking-wider">
-              📜 Effet Mécanique Officiel (4e Édition) :
-            </span>
-            <p id="adv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+
+          <div class="flex gap-2 text-xs items-center w-full min-w-0">
+            <select id="sel-catalog-adv" onchange="updateAdvPreview()" class="flex-1 w-0 min-w-0 max-w-full truncate p-2 rounded text-xs font-medium"></select>
+            <button
+              type="button"
+              onclick="addAdvFromCatalog()"
+              title="Ajouter cet avantage"
+              class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+            >+</button>
           </div>
+
+          <!-- Carte d'Aperçu Dynamique Avantages -->
+          <div id="adv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-amber-500/30 space-y-2 text-xs shadow-lg">
+            <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
+              <div>
+                <h4 id="adv-preview-name" class="font-bold font-imperial text-amber-200 text-sm"></h4>
+                <span id="adv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-adv inline-block mt-1"></span>
+              </div>
+              <div class="text-right">
+                <span id="adv-preview-cost" class="px-2 py-0.5 rounded bg-amber-600 text-black font-bold font-imperial text-[11px] shadow"></span>
+                <div id="adv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+              </div>
+            </div>
+            <p id="adv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+            <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+              <span class="text-amber-300 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+                📜 Effet Mécanique Officiel (4e Édition) :
+              </span>
+              <p id="adv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div id="adv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
         </div>
 
-        <div id="adv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
+        <!-- 4B. DÉSAVANTAGES -->
+        <div class="card-clean rounded-xl p-5 space-y-3.5 min-w-0 overflow-hidden">
+          <div class="space-y-1.5 border-b border-amber-500/20 pb-2">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-red-400 font-imperial text-sm flex items-center gap-1.5">
+                <span>🩸</span> 4B. Désavantages (Failles &amp; Fardeaux)
+              </h3>
+              <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-stone-900 border border-stone-800 overflow-hidden" title="Plafond officiel : +15 XP maximum">
+              <div id="disadv-progress-bar" class="h-full bg-gradient-to-r from-rose-700 to-amber-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Recherche & Filtres rapides Désavantages -->
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center gap-2">
+              <input type="text" id="filter-disadv-search" oninput="filterPerksCatalog('disadv')" placeholder="🔍 Rechercher un désavantage (ex: Sombre Destin, Obligatoire...)" class="flex-1 p-2 rounded text-xs">
+              <span id="disadv-match-count" class="text-[10px] text-stone-400 font-mono shrink-0"></span>
+            </div>
+            <div class="flex flex-wrap gap-1" id="disadv-cat-chips">
+              <button type="button" data-disadv-cat="all" onclick="setPerksCategory('disadv', 'all')" class="forge-filter-chip active">Tout</button>
+              <button type="button" data-disadv-cat="physique" onclick="setPerksCategory('disadv', 'physique')" class="forge-filter-chip">Physique</button>
+              <button type="button" data-disadv-cat="mental" onclick="setPerksCategory('disadv', 'mental')" class="forge-filter-chip">Mental</button>
+              <button type="button" data-disadv-cat="social" onclick="setPerksCategory('disadv', 'social')" class="forge-filter-chip">Social</button>
+              <button type="button" data-disadv-cat="spirituel" onclick="setPerksCategory('disadv', 'spirituel')" class="forge-filter-chip">Spirituel</button>
+              <button type="button" data-disadv-cat="materiel" onclick="setPerksCategory('disadv', 'materiel')" class="forge-filter-chip">Matériel</button>
+              <button type="button" data-disadv-cat="discount" onclick="setPerksCategory('disadv', 'discount')" class="forge-filter-chip">★ Bonus Clan</button>
+            </div>
+          </div>
+
+          <div class="flex gap-2 text-xs items-center w-full min-w-0">
+            <select id="sel-catalog-disadv" onchange="updateDisadvPreview()" class="flex-1 w-0 min-w-0 max-w-full truncate p-2 rounded text-xs font-medium"></select>
+            <button
+              type="button"
+              onclick="addDisadvFromCatalog()"
+              title="Ajouter ce désavantage"
+              class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/40 hover:border-red-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
+            >+</button>
+          </div>
+
+          <!-- Carte d'Aperçu Dynamique Désavantages -->
+          <div id="disadv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-rose-900/40 space-y-2 text-xs shadow-lg">
+            <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
+              <div>
+                <h4 id="disadv-preview-name" class="font-bold font-imperial text-rose-200 text-sm"></h4>
+                <span id="disadv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-dis inline-block mt-1"></span>
+              </div>
+              <div class="text-right">
+                <span id="disadv-preview-cost" class="px-2 py-0.5 rounded bg-rose-900 text-rose-100 font-bold font-imperial text-[11px] shadow"></span>
+                <div id="disadv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
+              </div>
+            </div>
+            <p id="disadv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
+            <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
+              <span class="text-rose-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">
+                ⚖️ Pénalité Mécanique Officielle (4e Édition) :
+              </span>
+              <p id="disadv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div id="disadv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
+        </div>
       </div>
 
-      <!-- 4B. DÉSAVANTAGES -->
-      <div class="card-clean rounded-xl p-5 space-y-4 min-w-0 overflow-hidden">
-        <div class="flex justify-between items-center border-b border-amber-500/20 pb-2">
-          <h3 class="font-bold text-red-400 font-imperial text-sm flex items-center gap-1.5">
-            <span>🩸</span> 4B. Désavantages (Failles & Fardeaux)
-          </h3>
-          <span class="text-xs text-stone-400">Gain : <b id="disadv-gain-total" class="text-red-300">0</b> / 15 XP</span>
-        </div>
-        
-        <div class="flex gap-2 text-xs items-center w-full min-w-0">
-          <select id="sel-catalog-disadv" onchange="updateDisadvPreview()" class="flex-1 w-0 min-w-0 max-w-full truncate p-2 rounded text-xs font-medium"></select>
-          <button 
-            type="button" 
-            onclick="addDisadvFromCatalog()" 
-            title="Ajouter ce désavantage" 
-            class="w-9 h-9 rounded-lg bg-stone-800 hover:bg-stone-700 text-red-300 border border-red-500/40 hover:border-red-400 font-bold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
-          >+</button>
-        </div>
-
-        <!-- Carte d'Aperçu Dynamique Désavantages (Ticket #21) -->
-        <div id="disadv-preview-card" class="hidden rounded-xl p-3.5 bg-black/80 border border-rose-900/40 space-y-2 text-xs shadow-lg">
-          <div class="flex justify-between items-start gap-2 border-b border-stone-800/80 pb-2">
-            <div>
-              <h4 id="disadv-preview-name" class="font-bold font-imperial text-rose-200 text-sm"></h4>
-              <span id="disadv-preview-type" class="text-[9px] font-bold font-imperial px-2 py-0.5 rounded badge-dis inline-block mt-1"></span>
-            </div>
-            <div class="text-right">
-              <span id="disadv-preview-cost" class="px-2 py-0.5 rounded bg-rose-900 text-rose-100 font-bold font-imperial text-[11px] shadow"></span>
-              <div id="disadv-preview-prereq" class="text-[10px] text-stone-400 mt-1"></div>
-            </div>
-          </div>
-          <p id="disadv-preview-desc" class="text-stone-300 italic text-[11px] leading-relaxed"></p>
-          <div class="p-2.5 rounded bg-stone-950 border border-stone-800/80 space-y-1">
-            <span class="text-rose-400 font-bold font-imperial block text-[10px] uppercase tracking-wider">
-              ⚖️ Pénalité Mécanique Officielle (4e Édition) :
-            </span>
-            <p id="disadv-preview-rule" class="text-stone-300 text-[11px] leading-relaxed"></p>
-          </div>
-        </div>
-
-        <div id="disadv-container" class="space-y-1.5 text-xs max-h-56 overflow-y-auto pt-1"></div>
+      <div class="card-clean rounded-xl px-5 py-3 flex justify-between items-center text-xs no-print">
+        <button type="button" onclick="setForgeStep('skills')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold cursor-pointer">← 3. Compétences</button>
+        <button type="button" onclick="setForgeStep('mystic')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">Étape 5 : Arts &amp; Voies →</button>
       </div>
     </section>
 
     <!-- 5. VOIES MARTIALES & MYSTIQUES (AVEC L'AIDE DE JEU TICKET #19 INTÉGRÉE) -->
-    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40" id="section-mystic-martial">
+    <section data-forge-step="mystic" class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40" id="section-mystic-martial">
       <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
         <div>
           <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
-            <span>⚔️</span> 5. Voies Martiales & Mystiques (Katas, Sorts & Kihos)
+            <span>⚔️</span> 5. Voies Martiales &amp; Mystiques (Katas, Sorts &amp; Kihos)
           </h2>
           <p class="text-xs text-stone-400">
             Cette section s'ajuste dynamiquement à votre école (Katas pour les Bushis, Sorts pour les Shugenjas, Kihos pour les Moines).
           </p>
         </div>
-        
+
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <div id="archetype-active-badge"></div>
-            <div class="flex rounded-lg bg-black/60 border border-stone-800 p-0.5">
-              <button type="button" onclick="setMysticTab('auto')" class="px-2.5 py-1 rounded text-[10px] font-bold text-amber-300 hover:bg-stone-800 transition cursor-pointer">Auto</button>
-              <button type="button" onclick="setMysticTab('katas')" class="px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Katas</button>
-              <button type="button" onclick="setMysticTab('spells')" class="px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Sorts / Kihos</button>
-              <button type="button" id="tab-btn-tattoos" onclick="setMysticTab('tattoos')" class="px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Tatouages</button>
+            <div class="flex rounded-lg bg-black/60 border border-stone-800 p-0.5 gap-0.5" id="mystic-tab-group">
+              <button type="button" data-mystic-tab="auto" onclick="setMysticTab('auto')" class="tab-btn active px-2.5 py-1 rounded text-[10px] font-bold transition cursor-pointer">Auto</button>
+              <button type="button" data-mystic-tab="katas" onclick="setMysticTab('katas')" class="tab-btn px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Katas</button>
+              <button type="button" data-mystic-tab="spells" onclick="setMysticTab('spells')" class="tab-btn px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Sorts / Kihos</button>
+              <button type="button" id="tab-btn-tattoos" data-mystic-tab="tattoos" onclick="setMysticTab('tattoos')" class="tab-btn px-2.5 py-1 rounded text-[10px] font-bold text-stone-400 hover:text-white transition cursor-pointer">Tatouages</button>
             </div>
           <a href="grimoire.html" target="_blank" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-bold transition text-[11px]">
             📖 Grimoire ↗
@@ -627,7 +809,8 @@
               </span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs min-w-0">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs min-w-0">
+              <input type="text" id="filter-spell-search" oninput="populateSpellCatalogSelect(true)" placeholder="🔍 Chercher un sort / kiho..." class="w-full p-2 rounded text-xs">
               <select id="filter-spell-elem" onchange="populateSpellCatalogSelect()" class="w-full min-w-0 max-w-full truncate p-2 rounded text-xs">
                 <option value="tous">Tous les Éléments & Kihos</option>
                 <option value="universel">Universels (Rang 0)</option>
@@ -713,18 +896,17 @@
           </div>
         
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs min-w-0">
+            <input type="text" id="filter-tattoo-search" oninput="populateTattooCatalogSelect(true)" placeholder="🔍 Chercher un tatouage..." class="p-2 rounded text-xs">
             <div class="sm:col-span-2 flex gap-2 items-center w-full min-w-0">
               <select id="sel-catalog-tattoo" onchange="updateTattooPreview()" class="flex-1 w-0 min-w-0 max-w-full truncate p-2 rounded text-xs font-medium"></select>
-              <button 
-                type="button" 
-                onclick="addTattooFromCatalog()" 
-                title="Graver ce tatouage sur votre chair" 
+              <button
+                type="button"
+                onclick="addTattooFromCatalog()"
+                title="Graver ce tatouage sur votre chair"
                 class="w-9 h-9 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-black font-extrabold text-base flex items-center justify-center transition shadow shrink-0 cursor-pointer"
               >+</button>
-            </div>
-            <div class="flex items-center justify-end">
-              <a href="tatouages.html" target="_blank" class="text-[11px] text-emerald-400 hover:underline">
-                Consulter le Livre des Tatouages ↗
+              <a href="tatouages.html" target="_blank" class="text-[11px] text-emerald-400 hover:underline shrink-0 hidden md:inline">
+                Guide ↗
               </a>
             </div>
           </div>
@@ -767,6 +949,7 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs min-w-0">
+              <input type="text" id="filter-kata-search" oninput="populateKataCatalogSelect(true)" placeholder="🔍 Rechercher un Kata..." class="w-full p-2 rounded text-xs">
               <select id="filter-kata-elem" onchange="populateKataCatalogSelect()" class="w-full min-w-0 max-w-full truncate p-2 rounded text-xs">
                 <option value="tous">Tous les Éléments de Kata</option>
                 <option value="Terre">土 Katas de Terre</option>
@@ -775,9 +958,6 @@
                 <option value="Feu">火 Katas de Feu</option>
                 <option value="Vide">空 Katas du Vide</option>
               </select>
-              <div class="p-2 rounded bg-stone-950 border border-stone-800 text-[10px] text-stone-400 flex items-center justify-center">
-                Méditation : 30 min • 1 Kata actif
-              </div>
             </div>
 
             <div class="flex gap-2 text-xs items-center w-full min-w-0">
@@ -816,64 +996,27 @@
           </div>
 
           <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-stone-500">
-            <span>L'XP des Katas est automatiquement déduite de votre solde.</span>
+            <span>Méditation : 30 min • 1 Kata actif • L'XP des Katas est déduite automatiquement.</span>
           </div>
         </div>
 
       </div>
-    </section>
 
-    
-
-    <!-- 6. COMBAT & BLESSURES -->
-    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">6. Combat & Seuils de Vitalité (4e Édition)</h2>
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs text-center">
-        <div class="p-3 rounded bg-black/60 border border-stone-800">
-          <div class="text-stone-400">ND d'Armure</div>
-          <div id="stat-armor-tn" class="text-xl font-bold text-emerald-400 font-imperial mt-1">20</div>
-          <div class="text-[10px] text-stone-500">5 + (5 × Réfl.) + Armure</div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-stone-800">
-          <div class="text-stone-400">Initiative</div>
-          <div id="stat-init" class="text-xl font-bold text-amber-300 font-imperial mt-1">3g2</div>
-          <div class="text-[10px] text-stone-500">(Insight + Réfl.) g Réfl.</div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-stone-800">
-          <div class="text-stone-400">Honneur</div>
-          <div id="stat-honor" class="text-xl font-bold text-amber-200 font-imperial mt-1">4.5</div>
-          <div class="text-[10px] text-stone-500">Défini par l'école</div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-stone-800">
-          <div class="text-stone-400">Gloire / Statut</div>
-          <div class="text-xl font-bold text-stone-300 font-imperial mt-1">1.0 / 1.0</div>
-          <div class="text-[10px] text-stone-500">Base Rang 1</div>
-        </div>
-        <div class="p-3 rounded bg-black/60 border border-stone-800 col-span-2 md:col-span-1">
-          <div class="text-stone-400">Récupération Nocturne</div>
-          <div id="stat-heal" class="text-xl font-bold text-blue-300 font-imperial mt-1">5 PV</div>
-          <div class="text-[10px] text-stone-500">Const. × 2 + Rang</div>
-        </div>
-      </div>
-
-      <div>
-        <div class="text-xs font-bold text-stone-300 mb-2 font-imperial">Seuils de Vitalité (Multiplicateurs de Terre) :</div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 text-center text-xs">
-          <div class="p-2 rounded bg-emerald-950/40 border border-emerald-800/40"><div class="text-[10px] text-emerald-400">Indemne (+0)</div><div class="font-bold text-stone-200 mt-1" id="w-0">10 PV</div></div>
-          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-stone-400">Égratigné (+3)</div><div class="font-bold text-stone-200 mt-1" id="w-1">4 PV</div></div>
-          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-stone-400">Blessé Léger (+5)</div><div class="font-bold text-stone-200 mt-1" id="w-2">4 PV</div></div>
-          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-amber-500">Blessé (+10)</div><div class="font-bold text-stone-200 mt-1" id="w-3">4 PV</div></div>
-          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-amber-600">Gravement (+15)</div><div class="font-bold text-stone-200 mt-1" id="w-4">4 PV</div></div>
-          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-red-500">Estropié (+20)</div><div class="font-bold text-stone-200 mt-1" id="w-5">4 PV</div></div>
-          <div class="p-2 rounded bg-black/50 border border-stone-800"><div class="text-[10px] text-red-600">Inconscient (+40)</div><div class="font-bold text-stone-200 mt-1" id="w-6">4 PV</div></div>
-          <div class="p-2 rounded bg-red-950/60 border border-red-800/60"><div class="text-[10px] text-red-400 font-bold">Mortel</div><div class="font-bold text-red-200 mt-1" id="w-7">4 PV</div></div>
-        </div>
+      <div class="forge-step-footer flex justify-between items-center pt-3 border-t border-amber-500/15 text-xs no-print">
+        <button type="button" onclick="setForgeStep('perks')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold cursor-pointer">← 4. Avantages &amp; Failles</button>
+        <button type="button" onclick="setForgeStep('gear')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">Étape 6 : Arsenal &amp; Récit →</button>
       </div>
     </section>
 
-    <!-- 7. ÉQUIPEMENT & ARMES -->
+    <!-- ATELIER 6 : ÉQUIPEMENT, CHRONIQUE BIOGRAPHIQUE & VINGT QUESTIONS -->
+    <div data-forge-step="gear" class="space-y-6">
+
+    <!-- 6. ÉQUIPEMENT & ARMES -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4">
-      <h2 class="text-base md:text-lg font-bold gold-text font-imperial border-b border-amber-500/20 pb-2">7. Équipement, Armes & Dotation</h2>
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2">
+        <h2 class="text-base md:text-lg font-bold gold-text font-imperial">6. Équipement, Armes &amp; Dotation</h2>
+        <span class="text-[11px] text-stone-400">Étape 6/6 • Ces choix mettent à jour votre ND d'Armure, Attaque et Dégâts</span>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
         <div>
           <label class="block text-stone-400 mb-1">Armure portée</label>
@@ -888,46 +1031,71 @@
           <select id="pc-weapon-2" onchange="updateAll()" class="w-full p-2.5 rounded font-medium"></select>
         </div>
       </div>
+
+      <!-- Résumé Caractéristiques Armure & Armes -->
+      <div id="gear-weapon-summary" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px]"></div>
+
       <div>
-        <label class="block text-stone-400 mb-1 text-xs">Dotation d'École (*Outfit*) & Richesse</label>
+        <label class="block text-stone-400 mb-1 text-xs">Dotation d'École (*Outfit*) &amp; Richesse</label>
         <textarea id="pc-outfit" rows="2" class="w-full p-2.5 rounded text-xs leading-relaxed"></textarea>
       </div>
     </section>
 
-    <!-- 8. CHRONIQUE BIOGRAPHIQUE -->
+    <!-- 7. CHRONIQUE BIOGRAPHIQUE -->
     <section class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/30">
-      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
+      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">
-          8. Chronique Biographique du Samouraï
+          7. Chronique Biographique du Samouraï
         </h2>
-        <span class="text-xs text-stone-400 italic">Exemple inspirant personnalisable</span>
+        <div class="flex items-center gap-2 text-xs">
+          <button type="button" onclick="document.getElementById('pc-background-story').value=''; showForgeToast('Chronique vidée.', 'info');" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-400 border border-stone-800 text-[10px] cursor-pointer">🧹 Vider</button>
+          <span class="text-stone-400 italic text-[11px]">Incluse dans la fiche PDF</span>
+        </div>
       </div>
       <p class="text-xs text-stone-400 leading-relaxed">
-        Vous pouvez modifier librement ce texte pour raconter la jeunesse de votre personnage, ses exploits passés ou la raison de son départ sur les routes de l'Empire.
+        Racontez librement la jeunesse de votre personnage, ses exploits passés ou la raison de son départ sur les routes de l'Empire.
       </p>
       <textarea id="pc-background-story" rows="5" class="w-full p-3 rounded-lg text-xs leading-relaxed font-serif">Né sous les cieux d'encre des terres ancestrales du Clan du Crabe, Okado a grandi au rythme sourd des tambours de garde de la Grande Muraille Kaiu. Élevé dans le culte de l'endurance et de la vigilance, il a été initié dès son plus jeune âge aux secrets des éclaireurs Hiruma : pister les aberrations de Jigoku à travers les marais calcinés, survivre sans eau potable et ne faire confiance qu'à son instinct et à la pureté du jade.
 
 Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son sang-froid face au danger, il parcourt désormais les provinces de Rokugan escorté par son loup fidèle, Shiro. Malgré la rudesse de son éducation et le mépris courtois des courtisans de la capitale, il porte le regard franc d'un défenseur de l'Empire prêt à verser son sang pour que le Mur tienne un jour de plus.</textarea>
     </section>
 
-    <!-- 9. LES VINGT QUESTIONS DE ROKUGAN -->
-    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
+    <!-- 8. LES VINGT QUESTIONS DE ROKUGAN -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
       <div class="border-b border-amber-500/20 pb-3 flex flex-wrap justify-between items-center gap-2">
         <div>
           <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
-            <span>📜</span> 9. Le Jeu des Vingt Questions de Rokugan
+            <span>📜</span> 8. Le Jeu des Vingt Questions de Rokugan
           </h2>
           <p class="text-xs text-stone-400">
             Guide officiel de création psychologique et sociale du samouraï (Livre de Base 4e Édition, p. 88 à 92).
           </p>
         </div>
-        <span class="text-[10px] text-amber-300 font-mono">ENREGISTRÉ AVEC LE PERSONNAGE</span>
+        <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+          <span id="q20-progress-badge" class="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-500/35 text-amber-300 font-mono">20 / 20</span>
+          <button type="button" onclick="toggleAllTwentyQuestionsChapters(true)" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-[10px] cursor-pointer">Tout déplier</button>
+          <button type="button" onclick="toggleAllTwentyQuestionsChapters(false)" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-[10px] cursor-pointer">Replier</button>
+          <button type="button" onclick="clearTwentyQuestions()" class="px-2 py-1 rounded bg-stone-900 hover:bg-red-950 text-red-300 border border-stone-800 text-[10px] cursor-pointer" title="Effacer les 20 réponses pour créer un nouveau personnage">🧹 Tout vider</button>
+          <button type="button" onclick="restoreExampleTwentyQuestions()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 text-[10px] cursor-pointer" title="Restaurer l'exemple Hiruma">↺ Exemple</button>
+        </div>
       </div>
 
-      <div id="twenty-questions-mount" class="space-y-3"></div>
+      <div id="twenty-questions-mount" class="space-y-2.5"></div>
+
+      <div class="forge-step-footer flex flex-wrap justify-between items-center gap-2 pt-3 border-t border-amber-500/15 text-xs no-print">
+        <button type="button" onclick="setForgeStep('mystic')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold cursor-pointer">← 5. Arts &amp; Voies</button>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" onclick="setForgeStep('all')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold cursor-pointer">🧭 Vue complète de révision</button>
+          <button type="button" onclick="prepareAndPrintPDF()" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">🖨️ Imprimer Fiche PDF</button>
+        </div>
+      </div>
     </section>
+    </div>
 
   </main>
+
+  <!-- CONTENEUR DE NOTIFICATIONS TOAST -->
+  <div id="forge-toast-container" aria-live="polite" class="fixed bottom-4 left-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none no-print"></div>
 
   <!-- =====================================================================
        PLATEAU DE DÉS ROLL & KEEP
@@ -960,6 +1128,22 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
         </button>
       </div>
 
+      <!-- Augmentations (+5 ND / jet) & Bonus fixe -->
+      <div class="grid grid-cols-2 gap-2 items-center text-[11px] bg-black/50 p-2 rounded-lg border border-stone-800/80">
+        <div class="flex items-center justify-between gap-1">
+          <span class="text-stone-400 font-bold">Augmentations :</span>
+          <div class="flex items-center gap-1">
+            <button type="button" onclick="adjustDiceAug(-1)" class="w-5 h-5 rounded bg-stone-900 border border-stone-700 text-amber-300 font-bold cursor-pointer">-</button>
+            <span id="dice-aug-display" class="font-mono font-bold text-amber-300 w-5 text-center">0</span>
+            <button type="button" onclick="adjustDiceAug(1)" class="w-5 h-5 rounded bg-stone-900 border border-stone-700 text-amber-300 font-bold cursor-pointer">+</button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-1">
+          <span class="text-stone-400 font-bold">Bonus fixe :</span>
+          <input type="number" id="dice-flat-bonus" value="0" min="-20" max="50" class="w-12 p-0.5 rounded text-center font-bold text-xs">
+        </div>
+      </div>
+
       <div class="flex items-center justify-between text-[11px] text-stone-400">
         <label class="flex items-center gap-1.5 cursor-pointer">
           <input type="checkbox" id="dice-explode-cb" checked class="accent-amber-500"> 10 Explosifs
@@ -971,8 +1155,16 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
 
       <div id="dice-result-box" class="p-3 rounded-xl bg-black/80 border border-stone-800 space-y-2 min-h-[76px] flex flex-col justify-center">
         <div class="text-center text-stone-500 italic text-[11px]">
-          Cliquez sur Toucher, Dégâts, Initiative, un Sort ou lancez manuellement vos dés.
+          Cliquez sur Toucher, Dégâts, Initiative, une Compétence ou lancez manuellement.
         </div>
+      </div>
+
+      <div id="dice-history-box" class="hidden border-t border-stone-800/80 pt-2 space-y-1">
+        <div class="flex justify-between items-center text-[10px] text-stone-500 uppercase tracking-wider">
+          <span>Derniers jets</span>
+          <button type="button" onclick="clearDiceHistory()" class="hover:text-amber-300 underline cursor-pointer">Effacer</button>
+        </div>
+        <div id="dice-history-list" class="space-y-1 max-h-24 overflow-y-auto text-[10px]"></div>
       </div>
     </div>
   </div>
@@ -980,7 +1172,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne L5R – MJ David • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.8.2</span>
+      <span id="site-version-label">v1.9.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

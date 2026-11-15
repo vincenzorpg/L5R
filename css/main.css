@@ -658,6 +658,139 @@ select {
   border-color: #f3e5ab !important;
 }
 
+/* ==========================================================================
+   FORGE DE PERSONNAGE : STUDIO PAR ÉTAPES, FILTRES & NOTIFICATIONS
+   ========================================================================== */
+.forge-step-hidden {
+  display: none !important;
+}
+
+.forge-step-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  background: rgba(15, 11, 10, 0.78);
+  color: #c8beb2;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.forge-step-btn:hover {
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #f3e5ab;
+  transform: translateY(-1px);
+}
+
+.forge-step-btn.active {
+  background: linear-gradient(135deg, #d4af37 0%, #b48608 100%) !important;
+  color: #0c0907 !important;
+  border-color: #fde68a !important;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.28);
+}
+
+.forge-step-pill {
+  padding: 0.08rem 0.4rem;
+  border-radius: 9999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fcd34d;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.forge-step-btn.active .forge-step-pill {
+  background: rgba(12, 9, 7, 0.85);
+  color: #fde68a;
+  border-color: rgba(12, 9, 7, 0.4);
+}
+
+.forge-filter-chip {
+  padding: 0.22rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(168, 162, 158, 0.25);
+  background: rgba(17, 13, 12, 0.75);
+  color: #a8a29e;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.forge-filter-chip:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  color: #fde68a;
+}
+
+.forge-filter-chip.active {
+  background: rgba(217, 119, 6, 0.28);
+  color: #fde68a;
+  border-color: rgba(245, 158, 11, 0.75);
+}
+
+.forge-toast {
+  pointer-events: auto;
+  animation: forgeToastIn 0.22s ease-out;
+}
+
+@keyframes forgeToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+[data-theme="light"] .forge-step-btn {
+  background: rgba(255, 251, 242, 0.92) !important;
+  color: #4a3723 !important;
+  border-color: rgba(140, 94, 11, 0.28) !important;
+}
+
+[data-theme="light"] .forge-step-btn:hover {
+  border-color: #8c5e0b !important;
+  color: #1f1712 !important;
+}
+
+[data-theme="light"] .forge-step-btn.active {
+  background: linear-gradient(135deg, #c28e1c 0%, #9a690a 100%) !important;
+  color: #fffdf7 !important;
+  border-color: #78350f !important;
+}
+
+[data-theme="light"] .forge-step-pill {
+  background: rgba(140, 94, 11, 0.14);
+  color: #78350f;
+  border-color: rgba(140, 94, 11, 0.3);
+}
+
+[data-theme="light"] .forge-step-btn.active .forge-step-pill {
+  background: rgba(255, 253, 247, 0.92);
+  color: #78350f;
+}
+
+[data-theme="light"] .forge-filter-chip {
+  background: rgba(247, 241, 227, 0.92) !important;
+  color: #5c4630 !important;
+  border-color: rgba(140, 94, 11, 0.28) !important;
+}
+
+[data-theme="light"] .forge-filter-chip.active {
+  background: #fde68a !important;
+  color: #78350f !important;
+  border-color: #b45309 !important;
+}
+
 /* Masquage écran du dossier d'impression A4 */
 @media screen {
   #official-print-dossier, #print-sheet { display: none !important; }

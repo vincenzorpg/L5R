@@ -54,19 +54,23 @@ function injectForgeTemplates() {
   const qMount = document.getElementById('twenty-questions-mount');
   if (qMount && !document.getElementById('q20-1')) {
     qMount.innerHTML = TWENTY_QUESTIONS_SECTIONS.map((sec, idx) => `
-      <div class="space-y-3 ${idx > 0 ? 'pt-2' : ''}">
-        <h3 class="text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider border-b border-stone-800 pb-1">
-          ${sec.title}
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+      <details class="q20-chapter rounded-xl border border-stone-800/80 bg-black/40 p-3.5 space-y-3" data-q20-chap="${idx}" ${idx === 0 ? 'open' : ''}>
+        <summary class="flex items-center justify-between cursor-pointer select-none list-none text-xs font-bold font-imperial text-amber-300 uppercase tracking-wider">
+          <span>${sec.title}</span>
+          <span class="flex items-center gap-2">
+            <span id="q20-chap-count-${idx}" class="text-[10px] font-mono px-2 py-0.5 rounded bg-stone-900 text-stone-300 border border-stone-800">${sec.items.length}/${sec.items.length}</span>
+            <span class="text-amber-400 text-[10px]">▾</span>
+          </span>
+        </summary>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-2 border-t border-stone-800/70">
           ${sec.items.map(item => `
             <div class="${item.full ? 'md:col-span-2' : ''}">
               <label class="block text-stone-300 font-bold mb-1" for="q20-${item.id}">${item.q}</label>
-              <input type="text" id="q20-${item.id}" value="${item.val.replace(/"/g, '&quot;')}" class="w-full p-2 rounded text-xs">
+              <input type="text" id="q20-${item.id}" value="${item.val.replace(/"/g, '&quot;')}" oninput="updateTwentyQuestionsProgress()" class="w-full p-2 rounded text-xs">
             </div>
           `).join('')}
         </div>
-      </div>
+      </details>
     `).join('');
   }
 
@@ -269,12 +273,17 @@ function updateArchetypePanels() {
   }
 }
 
-function populateSpellCatalogSelect() {
+function foldForgeSearch(str) {
+  return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function populateSpellCatalogSelect(autoSelectFirst = false) {
   const sel = document.getElementById('sel-catalog-spell');
   if (!sel) return;
   const allSpells = window.SORTS_DATA || [];
   const elemFilter = document.getElementById('filter-spell-elem')?.value || "tous";
   const rankFilter = document.getElementById('filter-spell-rank')?.value || "tous";
+  const searchFilter = foldForgeSearch(document.getElementById('filter-spell-search')?.value || "");
 
   const filtered = allSpells.filter(s => {
     if (s.isMaho || (s.element && s.element.toLowerCase() === "maho")) return false;
@@ -282,7 +291,10 @@ function populateSpellCatalogSelect() {
     const matchElem = elemFilter === "tous" || sElem === elemFilter;
     const sRank = Number(s.mastery) || 0;
     const matchRank = rankFilter === "tous" || (rankFilter === "6" ? sRank >= 6 : sRank === parseInt(rankFilter, 10));
-    return matchElem && matchRank;
+    if (!matchElem || !matchRank) return false;
+    if (!searchFilter) return true;
+    const hay = foldForgeSearch(`${s.name || s.nom || ''} ${s.element || ''} ${(s.keywords || []).join(' ')} ${s.description || ''}`);
+    return hay.includes(searchFilter);
   });
 
   sel.innerHTML = `<option value="">-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --</option>`;
@@ -296,6 +308,9 @@ function populateSpellCatalogSelect() {
     frag.appendChild(opt);
   });
   sel.appendChild(frag);
+  if (autoSelectFirst && searchFilter && filtered.length > 0) {
+    sel.value = filtered[0].id;
+  }
   updateSpellPreview();
 }
 
@@ -506,15 +521,19 @@ function renderCharacterSpells() {
 // =============================================================================
 // KATAS MARTIAUX
 // =============================================================================
-function populateKataCatalogSelect() {
+function populateKataCatalogSelect(autoSelectFirst = false) {
   const sel = document.getElementById('sel-catalog-kata');
   if (!sel) return;
   const rawFilter = (document.getElementById('filter-kata-elem')?.value || "tous").toLowerCase();
+  const searchFilter = foldForgeSearch(document.getElementById('filter-kata-search')?.value || "");
   const allKatas = window.KATAS_DATA || [];
 
   const filtered = allKatas.filter(k => {
-    if (rawFilter === "tous") return true;
-    return (k.element || "").toLowerCase() === rawFilter;
+    const matchElem = rawFilter === "tous" || (k.element || "").toLowerCase() === rawFilter;
+    if (!matchElem) return false;
+    if (!searchFilter) return true;
+    const hay = foldForgeSearch(`${k.name || ''} ${k.element || ''} ${k.schools || ''} ${k.effect || ''}`);
+    return hay.includes(searchFilter);
   });
 
   sel.innerHTML = `<option value="">-- Choisir un Kata martial (${filtered.length} disponible(s)) --</option>`;
@@ -526,6 +545,9 @@ function populateKataCatalogSelect() {
     frag.appendChild(opt);
   });
   sel.appendChild(frag);
+  if (autoSelectFirst && searchFilter && filtered.length > 0) {
+    sel.value = filtered[0].id;
+  }
   updateKataPreview();
 }
 
@@ -659,7 +681,8 @@ function initSkillsMultiSelect() {
 
     const lbl = document.createElement('label');
     lbl.className = "flex items-center justify-between p-1.5 rounded hover:bg-stone-900 cursor-pointer text-xs";
-    lbl.dataset.search = `${s.name} ${s.type} ${s.trait}`.toLowerCase();
+    lbl.dataset.search = foldForgeSearch(`${s.name} ${s.type} ${s.trait}`);
+    lbl.dataset.skillType = foldForgeSearch(s.type || '');
 
     const span = document.createElement('span');
     span.className = "text-amber-200";
@@ -692,13 +715,31 @@ function toggleSkillsDropdown() {
 }
 
 let _skillsFilterTimer = null;
+let _activeSkillDropdownCategory = 'all';
+
+function setSkillDropdownCategory(cat) {
+  _activeSkillDropdownCategory = cat || 'all';
+  document.querySelectorAll('#skills-cat-chips [data-skill-cat]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.skillCat === _activeSkillDropdownCategory);
+  });
+  applySkillsFilterNow();
+}
+
 function applySkillsFilterNow() {
-  const term = (document.getElementById('filter-skills-input')?.value || "").toLowerCase().trim();
+  const term = foldForgeSearch(document.getElementById('filter-skills-input')?.value || "");
   const labels = document.querySelectorAll('#skills-checkboxes-container label');
   for (let i = 0; i < labels.length; i++) {
     const lbl = labels[i];
-    const txt = lbl.dataset.search || lbl.textContent.toLowerCase();
-    lbl.style.display = (!term || txt.includes(term)) ? "flex" : "none";
+    const txt = lbl.dataset.search || foldForgeSearch(lbl.textContent);
+    const sType = lbl.dataset.skillType || '';
+    let matchCat = true;
+    if (_activeSkillDropdownCategory === 'noble') {
+      matchCat = sType.includes('noble') || sType.includes('haute');
+    } else if (_activeSkillDropdownCategory !== 'all') {
+      matchCat = sType.includes(_activeSkillDropdownCategory);
+    }
+    const matchText = !term || txt.includes(term);
+    lbl.style.display = (matchCat && matchText) ? "flex" : "none";
   }
 }
 
@@ -760,13 +801,50 @@ function toggleDiceTray(forceOpen) {
   }
 }
 
+let _diceAugCount = 0;
+let _diceHistory = [];
+
+function adjustDiceAug(delta) {
+  _diceAugCount = Math.max(0, Math.min(10, _diceAugCount + delta));
+  const el = document.getElementById('dice-aug-display');
+  if (el) el.textContent = _diceAugCount;
+}
+
+function clearDiceHistory() {
+  _diceHistory = [];
+  const box = document.getElementById('dice-history-box');
+  const list = document.getElementById('dice-history-list');
+  if (list) list.innerHTML = '';
+  if (box) box.classList.add('hidden');
+}
+
+function renderDiceHistory() {
+  const box = document.getElementById('dice-history-box');
+  const list = document.getElementById('dice-history-list');
+  if (!box || !list) return;
+  if (_diceHistory.length === 0) {
+    box.classList.add('hidden');
+    return;
+  }
+  box.classList.remove('hidden');
+  list.innerHTML = _diceHistory.map(item => `
+    <div class="flex items-center justify-between gap-2 px-2 py-1 rounded bg-black/60 border border-stone-800/80">
+      <span class="truncate text-stone-300">${item.label}${item.aug > 0 ? ` <span class="text-amber-400">(${item.aug} Aug)</span>` : ''}</span>
+      <span class="font-imperial font-bold text-amber-300 shrink-0">${item.total}</span>
+    </div>
+  `).join('');
+}
+
 function rollL5RDicePool(rollX, keepY, bonus, label, explode = true, spec = false) {
   toggleDiceTray(true);
   const resBox = document.getElementById('dice-result-box');
   if (!resBox) return;
 
+  const flatBonus = parseInt(document.getElementById('dice-flat-bonus')?.value, 10) || 0;
+  const totalBonus = (bonus || 0) + flatBonus;
+
   const result = (typeof window.simulateRollAndKeep === 'function')
-    ? window.simulateRollAndKeep(rollX, keepY, bonus || 0, { explode, spec })
+    ? window.simulateRollAndKeep(rollX, keepY, totalBonus, { explode, spec })
     : (function () {
         const dice = [];
         for (let i = 0; i < rollX; i++) {
@@ -784,23 +862,28 @@ function rollL5RDicePool(rollX, keepY, bonus, label, explode = true, spec = fals
         dice.sort((a, b) => b.value - a.value);
         const kept = dice.slice(0, keepY);
         const dropped = dice.slice(keepY);
-        const total = kept.reduce((acc, d) => acc + d.value, 0) + (bonus || 0);
-        return { dice, kept, dropped, bonus: bonus || 0, total };
+        const total = kept.reduce((acc, d) => acc + d.value, 0) + totalBonus;
+        return { dice, kept, dropped, bonus: totalBonus, total };
       })();
 
   const { kept, dropped, total: totalScore } = result;
+  const augNote = _diceAugCount > 0 ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950/70 border border-amber-500/40 text-amber-300 ml-1">+${_diceAugCount * 5} ND (${_diceAugCount} Aug.)</span>` : '';
 
   resBox.innerHTML = `
     <div class="flex justify-between items-center border-b border-stone-800 pb-1 text-xs">
-      <span class="font-bold text-amber-200 font-imperial">${label || 'Lancer de dés'}</span>
-      <span class="font-imperial font-black text-amber-300 text-base">${totalScore}</span>
+      <span class="font-bold text-amber-200 font-imperial truncate">${label || 'Lancer de dés'}${augNote}</span>
+      <span class="font-imperial font-black text-amber-300 text-base shrink-0">${totalScore}</span>
     </div>
     <div class="flex flex-wrap gap-1 items-center pt-1">
       ${kept.map(d => `<span class="die-anim px-2 py-1 rounded bg-amber-600 text-black font-extrabold text-xs shadow ${d.exploded ? 'ring-2 ring-amber-300' : ''}">${d.value}</span>`).join('')}
       ${dropped.map(d => `<span class="px-1.5 py-0.5 rounded bg-stone-900 text-stone-500 text-[10px] line-through border border-stone-800">${d.value}</span>`).join('')}
-      ${bonus ? `<span class="text-xs text-amber-400 font-bold">+${bonus}</span>` : ''}
+      ${totalBonus ? `<span class="text-xs text-amber-400 font-bold">${totalBonus >= 0 ? '+' : ''}${totalBonus}</span>` : ''}
     </div>
   `;
+
+  _diceHistory.unshift({ label: label || `${rollX}g${keepY}`, total: totalScore, aug: _diceAugCount });
+  if (_diceHistory.length > 5) _diceHistory.pop();
+  renderDiceHistory();
 }
 
 function rollFromSticky(metricId, label) {
@@ -844,14 +927,26 @@ function saveToDojo() {
   }
 }
 
+function toggleDojoDrawer(forceOpen) {
+  const sec = document.getElementById('dojo-drawer-section');
+  const chev = document.getElementById('dojo-toggle-chevron');
+  if (!sec) return;
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : sec.classList.contains('hidden');
+  sec.classList.toggle('hidden', !shouldOpen);
+  if (chev) chev.textContent = shouldOpen ? '▴' : '▾';
+  if (shouldOpen) renderDojoRoster();
+}
+
 function renderDojoRoster() {
   const roster = document.getElementById('dojo-roster-list');
-  if (!roster) return;
   const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
   const list = raw ? JSON.parse(raw) : [];
+  const countBadge = document.getElementById('cockpit-dojo-count');
+  if (countBadge) countBadge.textContent = Array.isArray(list) ? list.length : 0;
+  if (!roster) return;
 
   if (!Array.isArray(list) || list.length === 0) {
-    roster.innerHTML = `<div class="text-stone-500 italic text-[11px] col-span-full">Aucun samouraï dans le dojo local. Cliquez sur "Enregistrer le personnage actuel".</div>`;
+    roster.innerHTML = `<div class="text-stone-500 italic text-[11px] col-span-full">Aucun samouraï dans le dojo local. Cliquez sur "Enregistrer".</div>`;
     return;
   }
 
@@ -875,6 +970,7 @@ function renderDojoRoster() {
 function loadFromDojo(id) {
   if (typeof window.loadCharacterFromDojo === 'function') {
     window.loadCharacterFromDojo(id);
+    if (typeof showForgeToast === 'function') showForgeToast('Samouraï chargé depuis le Dojo.', 'success');
   }
 }
 
@@ -882,6 +978,7 @@ function deleteFromDojo(id) {
   if (typeof window.deleteCharacterFromDojo === 'function') {
     window.deleteCharacterFromDojo(id);
     renderDojoRoster();
+    if (typeof showForgeToast === 'function') showForgeToast('Samouraï retiré du Dojo.', 'info');
   }
 }
 
@@ -891,7 +988,8 @@ function shareCharacterUrl() {
     const str = btoa(encodeURIComponent(JSON.stringify(data)));
     const url = `${window.location.origin}${window.location.pathname}?char=${str}`;
     navigator.clipboard.writeText(url).then(() => {
-      alert("Lien direct copié dans votre presse-papiers !");
+      if (typeof showForgeToast === 'function') showForgeToast("Lien direct copié dans le presse-papiers !", "success");
+      else alert("Lien direct copié dans votre presse-papiers !");
     }).catch(() => {
       prompt("Voici votre lien direct :", url);
     });
@@ -1049,24 +1147,32 @@ function updateArchetypePanelsWithTattoos(forceCatalogRefresh = false) {
   }
 }
 
-function populateTattooCatalogSelect() {
+function populateTattooCatalogSelect(autoSelectFirst = false) {
   const sel = document.getElementById('sel-catalog-tattoo');
   if (!sel) return;
   const list = window.TATOUAGES_DATA || [];
   const owned = new Set((window.charTattoosList || []).map(t => t.id));
+  const searchFilter = foldForgeSearch(document.getElementById('filter-tattoo-search')?.value || "");
 
-  sel.innerHTML = `<option value="">-- Choisir un Tatouage de Togashi --</option>`;
+  const filtered = list.filter(t => {
+    if (owned.has(t.id)) return false;
+    if (!searchFilter) return true;
+    return foldForgeSearch(`${t.name || ''} ${t.kanji || ''} ${t.element || ''} ${t.rule || ''}`).includes(searchFilter);
+  });
+
+  sel.innerHTML = `<option value="">-- Choisir un Tatouage de Togashi (${filtered.length}) --</option>`;
   const frag = document.createDocumentFragment();
-  list.forEach(t => {
-    if (!owned.has(t.id)) {
-      const opt = document.createElement('option');
-      opt.value = t.id;
-      const tag = t.element ? `[${t.element} ${t.ringReq || ''}]` : `[${t.source || 'Livre de Base'}]`;
-      opt.textContent = `${tag} ${t.name} ${t.kanji ? '(' + t.kanji + ')' : ''}`;
-      frag.appendChild(opt);
-    }
+  filtered.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t.id;
+    const tag = t.element ? `[${t.element} ${t.ringReq || ''}]` : `[${t.source || 'Livre de Base'}]`;
+    opt.textContent = `${tag} ${t.name} ${t.kanji ? '(' + t.kanji + ')' : ''}`;
+    frag.appendChild(opt);
   });
   sel.appendChild(frag);
+  if (autoSelectFirst && searchFilter && filtered.length > 0) {
+    sel.value = filtered[0].id;
+  }
   updateTattooPreview();
 }
 
@@ -1167,6 +1273,16 @@ function setMysticTab(tab) {
   const slotsBar = document.getElementById('shugenja-slots-bar');
   if (courtierNote) courtierNote.classList.add('hidden');
 
+  document.querySelectorAll('#mystic-tab-group [data-mystic-tab]').forEach(btn => {
+    const isActive = btn.dataset.mysticTab === tab;
+    btn.classList.toggle('active', isActive);
+    if (!isActive) {
+      btn.classList.add('text-stone-400');
+    } else {
+      btn.classList.remove('text-stone-400');
+    }
+  });
+
   if (tab === 'tattoos') {
     pTattoos?.classList.remove('hidden');
     pSpells?.classList.add('hidden');
@@ -1211,6 +1327,440 @@ function handleFamilyOrSchoolChange() {
   updateArchetypePanelsWithTattoos(true);
 }
 
+// =============================================================================
+// SYSTÈME DE NOTIFICATIONS TOAST, STEPPER STUDIO & ERGONOMIE FORGE (v1.9.0)
+// =============================================================================
+function showForgeToast(message, variant = 'info') {
+  const container = document.getElementById('forge-toast-container');
+  if (!container) return;
+
+  const palette = {
+    success: 'bg-emerald-950/95 border-emerald-500/70 text-emerald-100',
+    warn: 'bg-amber-950/95 border-amber-500/70 text-amber-100',
+    error: 'bg-red-950/95 border-red-500/70 text-red-100',
+    info: 'bg-[#171210]/95 border-amber-500/50 text-amber-100'
+  };
+  const icon = variant === 'success' ? '✅' : (variant === 'warn' ? '⚠️' : (variant === 'error' ? '❌' : '✨'));
+
+  const toast = document.createElement('div');
+  toast.className = `forge-toast rounded-xl border px-3.5 py-2.5 shadow-2xl text-xs flex items-center gap-2 backdrop-blur-md ${palette[variant] || palette.info}`;
+  toast.innerHTML = `<span>${icon}</span><span class="font-medium leading-snug">${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.25s ease';
+    setTimeout(() => toast.remove(), 260);
+  }, 3200);
+}
+window.showForgeToast = showForgeToast;
+
+const FORGE_STEPS = ['identity', 'rings', 'skills', 'perks', 'mystic', 'gear', 'all'];
+let _currentForgeStep = 'identity';
+
+function setForgeStep(stepKey, skipScroll = false) {
+  const target = FORGE_STEPS.includes(stepKey) ? stepKey : 'identity';
+  _currentForgeStep = target;
+  try {
+    sessionStorage.setItem('l5r_forge_step', target);
+  } catch (e) {}
+
+  document.querySelectorAll('[data-forge-step]').forEach(el => {
+    const show = target === 'all' || el.dataset.forgeStep === target;
+    el.classList.toggle('forge-step-hidden', !show);
+  });
+
+  document.querySelectorAll('.forge-step-footer').forEach(footer => {
+    footer.classList.toggle('hidden', target === 'all');
+  });
+
+  document.querySelectorAll('#forge-stepper-bar [data-step-btn]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.stepBtn === target);
+  });
+
+  const skillsPanel = document.getElementById('skills-dropdown-panel');
+  if (skillsPanel && !skillsPanel.classList.contains('hidden')) {
+    skillsPanel.classList.add('hidden');
+  }
+
+  if (!skipScroll) {
+    const stepper = document.getElementById('forge-stepper-bar');
+    if (stepper) {
+      const y = stepper.getBoundingClientRect().top + window.scrollY - 140;
+      if (window.scrollY > y) window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    }
+  }
+}
+window.setForgeStep = setForgeStep;
+
+function resolveTraitIdFromLabel(traitLabel) {
+  const t = foldForgeSearch(traitLabel);
+  if (t.includes('const')) return 'trait-stamina';
+  if (t.includes('volon')) return 'trait-willpower';
+  if (t.includes('force')) return 'trait-strength';
+  if (t.includes('percep')) return 'trait-perception';
+  if (t.includes('reflex')) return 'trait-reflexes';
+  if (t.includes('intuit')) return 'trait-awareness';
+  if (t.includes('agil')) return 'trait-agility';
+  if (t.includes('intel')) return 'trait-intelligence';
+  if (t.includes('vide')) return 'trait-void';
+  return 'trait-agility';
+}
+
+function rollSkillFromCard(idx) {
+  const skills = window.currentSkills || [];
+  const sk = skills[idx];
+  if (!sk) return;
+  const catalog = (typeof window.getSkills === 'function') ? window.getSkills() : (window.COMPETENCES_DATA || []);
+  const catMeta = catalog.find(c => c.name === sk.name) || {};
+  const traitLabel = catMeta.trait || sk.trait || 'Agilité';
+  const traitId = resolveTraitIdFromLabel(traitLabel);
+  const traitVal = parseInt(document.getElementById(traitId)?.value, 10) || 2;
+  const rankVal = parseInt(sk.rank, 10) || 0;
+  const rollX = Math.max(1, rankVal + traitVal);
+  const keepY = Math.max(1, traitVal);
+  rollL5RDicePool(rollX, keepY, 0, `${sk.name} (${rollX}g${keepY})`, true, !!sk.spec);
+}
+window.rollSkillFromCard = rollSkillFromCard;
+
+const _perksCategoryState = { adv: 'all', disadv: 'all' };
+
+function setPerksCategory(kind, cat) {
+  const safeKind = kind === 'disadv' ? 'disadv' : 'adv';
+  _perksCategoryState[safeKind] = cat || 'all';
+  const attr = safeKind === 'adv' ? 'data-adv-cat' : 'data-disadv-cat';
+  const containerId = safeKind === 'adv' ? 'adv-cat-chips' : 'disadv-cat-chips';
+  document.querySelectorAll(`#${containerId} [${attr}]`).forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute(attr) === _perksCategoryState[safeKind]);
+  });
+  filterPerksCatalog(safeKind, true);
+}
+window.setPerksCategory = setPerksCategory;
+
+function filterPerksCatalog(kind, autoSelectFirst = true) {
+  const safeKind = kind === 'disadv' ? 'disadv' : 'adv';
+  const sel = document.getElementById(safeKind === 'adv' ? 'sel-catalog-adv' : 'sel-catalog-disadv');
+  if (!sel || typeof window.getAdvantages !== 'function') return;
+
+  const advData = window.getAdvantages();
+  const list = safeKind === 'adv' ? (advData.avantages || []) : (advData.desavantages || []);
+  const ownedSet = new Set(
+    (safeKind === 'adv' ? (window.advantagesList || []) : (window.disadvantagesList || []))
+      .map(x => (x.name || '').toLowerCase().trim())
+  );
+
+  const searchTerm = foldForgeSearch(document.getElementById(safeKind === 'adv' ? 'filter-adv-search' : 'filter-disadv-search')?.value || '');
+  const catFilter = _perksCategoryState[safeKind] || 'all';
+  const prevVal = sel.value;
+
+  const matching = [];
+  list.forEach((item, originalIdx) => {
+    if (ownedSet.has((item.name || '').toLowerCase().trim())) return;
+    const typeKey = foldForgeSearch(item.type || 'general');
+    const effVal = safeKind === 'adv'
+      ? (typeof window.getEffectiveAdvCost === 'function' ? window.getEffectiveAdvCost(item) : item.cost)
+      : (typeof window.getEffectiveDisadvGain === 'function' ? window.getEffectiveDisadvGain(item) : (item.gain ?? item.cost));
+    const baseVal = safeKind === 'adv' ? item.cost : (item.gain ?? item.cost);
+    const hasModifier = safeKind === 'adv' ? (effVal < baseVal) : (effVal > baseVal);
+
+    if (catFilter === 'discount' && !hasModifier) return;
+    if (catFilter !== 'all' && catFilter !== 'discount' && !typeKey.includes(catFilter)) return;
+
+    if (searchTerm) {
+      const hay = foldForgeSearch(`${item.name || ''} ${item.type || ''} ${item.desc || ''} ${item.rule || ''}`);
+      if (!hay.includes(searchTerm)) return;
+    }
+    matching.push({ item, originalIdx, effVal, baseVal });
+  });
+
+  const countBadge = document.getElementById(safeKind === 'adv' ? 'adv-match-count' : 'disadv-match-count');
+  if (countBadge) countBadge.textContent = `${matching.length} résultat(s)`;
+
+  sel.innerHTML = '';
+  if (matching.length === 0) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = searchTerm || catFilter !== 'all'
+      ? '— Aucun résultat pour ce filtre —'
+      : `— Aucun autre ${safeKind === 'adv' ? 'avantage' : 'désavantage'} disponible —`;
+    sel.appendChild(opt);
+    sel.disabled = true;
+  } else {
+    sel.disabled = false;
+    const TYPE_LABELS = {
+      physique: '⚔️ Physique',
+      mental: '🧠 Mental',
+      spirituel: '⛩️ Spirituel',
+      social: '🌸 Social',
+      materiel: '🌿 Matériel'
+    };
+    const grouped = {};
+    matching.forEach(entry => {
+      const k = foldForgeSearch(entry.item.type || 'general');
+      if (!grouped[k]) grouped[k] = [];
+      grouped[k].push(entry);
+    });
+    const frag = document.createDocumentFragment();
+    Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'fr')).forEach(tKey => {
+      const grp = document.createElement('optgroup');
+      grp.label = TYPE_LABELS[tKey] || `📁 ${tKey.toUpperCase()}`;
+      grouped[tKey].sort((a, b) => a.item.name.localeCompare(b.item.name, 'fr')).forEach(({ item, originalIdx, effVal, baseVal }) => {
+        const opt = document.createElement('option');
+        opt.value = originalIdx;
+        if (safeKind === 'adv') {
+          const disc = effVal < baseVal ? ` ★ -${baseVal - effVal} XP` : '';
+          opt.textContent = `  ◆ ${item.name} (${effVal} XP${disc})`;
+        } else {
+          const bonus = effVal > baseVal ? ` ★ +${effVal - baseVal} XP` : '';
+          opt.textContent = `  ◆ ${item.name} (+${effVal} XP${bonus})`;
+        }
+        grp.appendChild(opt);
+      });
+      frag.appendChild(grp);
+    });
+    sel.appendChild(frag);
+
+    if (prevVal && sel.querySelector(`option[value="${prevVal}"]`)) {
+      sel.value = prevVal;
+    } else if (autoSelectFirst && matching[0]) {
+      sel.value = String(matching[0].originalIdx);
+    }
+  }
+
+  if (safeKind === 'adv' && typeof window.updateAdvPreview === 'function') window.updateAdvPreview();
+  if (safeKind === 'disadv' && typeof window.updateDisadvPreview === 'function') window.updateDisadvPreview();
+}
+window.filterPerksCatalog = filterPerksCatalog;
+
+function updateTraitXpHints() {
+  const advList = window.advantagesList || [];
+  const hasBlessedElem = (ringKey) => advList.some(a =>
+    foldForgeSearch(a.name).includes('benediction elementaire') && (a.chosenElement || 'earth').toLowerCase() === ringKey
+  );
+  const hasEnlightened = advList.some(a => a.impact === 'enlightened' || foldForgeSearch(a.name).includes('illumine'));
+
+  const traitDefs = [
+    { id: 'trait-stamina', ring: 'earth' },
+    { id: 'trait-willpower', ring: 'earth' },
+    { id: 'trait-strength', ring: 'water' },
+    { id: 'trait-perception', ring: 'water' },
+    { id: 'trait-reflexes', ring: 'air' },
+    { id: 'trait-awareness', ring: 'air' },
+    { id: 'trait-agility', ring: 'fire' },
+    { id: 'trait-intelligence', ring: 'fire' }
+  ];
+
+  traitDefs.forEach(({ id, ring }) => {
+    const val = parseInt(document.getElementById(id)?.value, 10) || 2;
+    const hintEl = document.querySelector(`[data-nextxp="${id}"]`);
+    if (!hintEl) return;
+    if (val >= 6) {
+      hintEl.textContent = '(Max 6)';
+    } else {
+      const nextCost = Math.max(1, ((val + 1) * 4) - (hasBlessedElem(ring) ? 1 : 0));
+      hintEl.textContent = `(+1:${nextCost} XP)`;
+    }
+  });
+
+  const voidVal = parseInt(document.getElementById('trait-void')?.value, 10) || 2;
+  const voidHint = document.querySelector('[data-nextxp="trait-void"]');
+  if (voidHint) {
+    if (voidVal >= 6) {
+      voidHint.textContent = '(Max 6)';
+    } else {
+      const nextVoidCost = Math.max(1, ((voidVal + 1) * 6) - (hasEnlightened ? 2 : 0));
+      voidHint.textContent = `(+1:${nextVoidCost} XP)`;
+    }
+  }
+}
+
+function updateArmorWeaponSummary() {
+  const box = document.getElementById('gear-weapon-summary');
+  if (!box || typeof window.getEquipment !== 'function') return;
+  const eq = window.getEquipment();
+  const armorVal = document.getElementById('pc-armor')?.value || '0';
+  const w1Name = document.getElementById('pc-weapon-1')?.value || 'Katana';
+  const w2Name = document.getElementById('pc-weapon-2')?.value || 'Aucune';
+
+  const armorObj = (eq.armures || []).find(a => String(a.tnBonus) === String(armorVal)) || { name: 'Vêtements simples', tnBonus: 0, reduction: 0, note: 'Aucun malus de mouvement' };
+  const w1Obj = (eq.armes || []).find(w => w.name === w1Name) || { name: w1Name, vd: '—', skill: '—', type: '—' };
+  const w2Obj = w2Name !== 'Aucune' ? ((eq.armes || []).find(w => w.name === w2Name) || { name: w2Name, vd: '—', skill: '—', type: '—' }) : null;
+
+  box.innerHTML = `
+    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
+      <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">🛡️ Armure équipée</div>
+      <div class="font-bold text-amber-200">${armorObj.name}</div>
+      <div class="text-stone-400">Bonus ND : <b>+${armorObj.tnBonus || 0}</b> • Réduction : <b>${armorObj.reduction || 0}</b></div>
+    </div>
+    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
+      <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">⚔️ Arme Principale</div>
+      <div class="font-bold text-amber-200">${w1Obj.name}</div>
+      <div class="text-stone-400">VD : <b>${w1Obj.vd || '—'}</b> • Comp. : <b>${w1Obj.skill || '—'}</b></div>
+    </div>
+    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
+      <div class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">🏹 Arme Secondaire</div>
+      <div class="font-bold text-stone-200">${w2Obj ? w2Obj.name : 'Aucune'}</div>
+      <div class="text-stone-400">${w2Obj ? `VD : <b>${w2Obj.vd || '—'}</b> • Comp. : <b>${w2Obj.skill || '—'}</b>` : 'Emplacement libre'}</div>
+    </div>
+  `;
+}
+
+function updateTwentyQuestionsProgress() {
+  let filled = 0;
+  let total = 0;
+  TWENTY_QUESTIONS_SECTIONS.forEach((sec, idx) => {
+    let secFilled = 0;
+    sec.items.forEach(item => {
+      total++;
+      const val = (document.getElementById(`q20-${item.id}`)?.value || '').trim();
+      if (val.length > 0) {
+        filled++;
+        secFilled++;
+      }
+    });
+    const chapBadge = document.getElementById(`q20-chap-count-${idx}`);
+    if (chapBadge) chapBadge.textContent = `${secFilled}/${sec.items.length}`;
+  });
+  const badge = document.getElementById('q20-progress-badge');
+  if (badge) badge.textContent = `${filled} / ${total}`;
+  const stepGearPill = document.getElementById('step-pill-gear');
+  if (stepGearPill) stepGearPill.textContent = `${filled}/${total}`;
+  return { filled, total };
+}
+window.updateTwentyQuestionsProgress = updateTwentyQuestionsProgress;
+
+function clearTwentyQuestions() {
+  for (let i = 1; i <= 20; i++) {
+    const el = document.getElementById(`q20-${i}`);
+    if (el) el.value = '';
+  }
+  updateTwentyQuestionsProgress();
+  toggleAllTwentyQuestionsChapters(true);
+  showForgeToast('Les 20 Questions ont été vidées pour votre nouveau personnage.', 'info');
+}
+window.clearTwentyQuestions = clearTwentyQuestions;
+
+function restoreExampleTwentyQuestions() {
+  TWENTY_QUESTIONS_SECTIONS.forEach(sec => {
+    sec.items.forEach(item => {
+      const el = document.getElementById(`q20-${item.id}`);
+      if (el) el.value = item.val;
+    });
+  });
+  updateTwentyQuestionsProgress();
+  showForgeToast('Exemple Hiruma restauré dans les 20 Questions.', 'info');
+}
+window.restoreExampleTwentyQuestions = restoreExampleTwentyQuestions;
+
+function toggleAllTwentyQuestionsChapters(open) {
+  document.querySelectorAll('#twenty-questions-mount details.q20-chapter').forEach(d => {
+    d.open = !!open;
+  });
+}
+window.toggleAllTwentyQuestionsChapters = toggleAllTwentyQuestionsChapters;
+
+function updateForgeUXDashboard(detail) {
+  updateTraitXpHints();
+  updateArmorWeaponSummary();
+  updateTwentyQuestionsProgress();
+
+  // XP Progress bar & Breakdown strip
+  const charState = window.currentChar || {};
+  const breakdown = detail?.xpBreakdown || charState.xpBreakdown || {};
+  const totalXP = detail?.totalXP ?? (parseInt(document.getElementById('xp-total')?.textContent, 10) || 40);
+  const remXP = detail?.remainingXP ?? (parseInt(document.getElementById('xp-remaining')?.textContent, 10) || 0);
+  const spentXP = detail?.xpSpent ?? Math.max(0, totalXP - remXP);
+
+  const bar = document.getElementById('xp-progress-bar');
+  const statusLbl = document.getElementById('xp-status-label');
+  if (bar && statusLbl) {
+    const pct = totalXP > 0 ? Math.min(100, Math.round((spentXP / totalXP) * 100)) : 100;
+    bar.style.width = `${Math.max(4, pct)}%`;
+    if (remXP < 0) {
+      bar.className = 'h-full bg-red-500 transition-all duration-300';
+      statusLbl.textContent = `Dépassement (${remXP} XP)`;
+      statusLbl.className = 'font-bold text-red-400';
+    } else if (remXP === 0) {
+      bar.className = 'h-full bg-emerald-400 transition-all duration-300';
+      statusLbl.textContent = '100% optimisé';
+      statusLbl.className = 'font-bold text-emerald-300';
+    } else {
+      bar.className = 'h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300';
+      statusLbl.textContent = `${pct}% utilisé`;
+      statusLbl.className = 'font-bold text-emerald-400';
+    }
+  }
+
+  const strip = document.getElementById('xp-breakdown-strip');
+  if (strip) {
+    const tXp = breakdown.traits ?? 0;
+    const sXp = breakdown.skills ?? 0;
+    const aXp = breakdown.advantages ?? 0;
+    const artXp = breakdown.arts ?? 0;
+    strip.textContent = `Traits ${tXp} • Comp ${sXp} • Av ${aXp}${artXp > 0 ? ` • Arts ${artXp}` : ''}`;
+  }
+
+  // Disadvantage progress bar (0..15 XP)
+  const disadvGain = parseInt(document.getElementById('disadv-gain-total')?.textContent, 10) || 0;
+  const disBar = document.getElementById('disadv-progress-bar');
+  if (disBar) {
+    disBar.style.width = `${Math.min(100, Math.round((disadvGain / 15) * 100))}%`;
+  }
+
+  // Skills cards live pools, next-rank XP & pending school choice banner
+  const skills = window.currentSkills || [];
+  const pendingChoices = skills.filter(sk => sk.isChoice && !sk.chosen).length;
+  const alertEl = document.getElementById('skills-choice-alert');
+  const alertCount = document.getElementById('skills-choice-alert-count');
+  if (alertEl) {
+    alertEl.classList.toggle('hidden', pendingChoices === 0);
+    if (alertCount) alertCount.textContent = pendingChoices;
+  }
+
+  skills.forEach((sk, idx) => {
+    if (sk.isChoice && !sk.chosen) return;
+    const card = document.querySelector(`#skills-list [data-skill-card="${idx}"]`);
+    const poolBtn = document.querySelector(`#skills-list [data-skill-pool="${idx}"]`);
+    const nextEl = document.querySelector(`#skills-list [data-skill-nextxp="${idx}"]`);
+    const traitId = resolveTraitIdFromLabel(card?.dataset.skillTrait || 'Agilité');
+    const traitVal = parseInt(document.getElementById(traitId)?.value, 10) || 2;
+    const rankVal = parseInt(sk.rank, 10) || 0;
+    if (poolBtn) poolBtn.textContent = `🎲 ${rankVal + traitVal}g${traitVal}`;
+    if (nextEl) nextEl.textContent = rankVal < 10 ? `+1 = ${rankVal + 1} XP` : 'Max';
+  });
+
+  // Stepper live pills
+  const clanSel = document.getElementById('sel-clan');
+  const clanText = clanSel?.options[clanSel.selectedIndex]?.text || 'Clan';
+  const idPill = document.getElementById('step-pill-identity');
+  if (idPill) idPill.textContent = clanText.replace(/^Clan du |^Clan de la |^Clan de l'|^Clan des /i, '').split('(')[0].trim();
+
+  const ringsPill = document.getElementById('step-pill-rings');
+  if (ringsPill) ringsPill.textContent = `ND ${document.getElementById('stat-armor-tn')?.textContent || '20'}`;
+
+  const skPill = document.getElementById('step-pill-skills');
+  if (skPill) {
+    const ownedCount = skills.filter(sk => !sk.isChoice || sk.chosen).length;
+    skPill.textContent = pendingChoices > 0 ? `${ownedCount} • ${pendingChoices} !` : `${ownedCount}`;
+  }
+
+  const perksPill = document.getElementById('step-pill-perks');
+  if (perksPill) {
+    const aCount = (window.advantagesList || []).length;
+    const dCount = (window.disadvantagesList || []).length;
+    perksPill.textContent = `${aCount} / ${dCount}`;
+  }
+
+  const mysticPill = document.getElementById('step-pill-mystic');
+  if (mysticPill) {
+    const spCount = (window.charSpellsList || []).length;
+    const ktCount = (window.charKatasList || []).length;
+    const ttCount = (window.charTattoosList || []).length;
+    const sumArts = spCount + ktCount + ttCount;
+    mysticPill.textContent = sumArts > 0 ? `${sumArts}` : 'Auto';
+  }
+}
+
 let _forgeUIInitialized = false;
 function initForgeUIWhenReady() {
   if (_forgeUIInitialized) return;
@@ -1228,12 +1778,21 @@ function initForgeUIWhenReady() {
   const charParam = params.get("char");
   const loadIdParam = params.get("load");
   const clanParam = params.get("clan");
+  const stepParam = params.get("step");
+
+  const initialStep = stepParam || (() => {
+    try { return sessionStorage.getItem('l5r_forge_step'); } catch (e) { return null; }
+  })() || 'identity';
+  setForgeStep(initialStep, true);
 
   if (charParam) {
     try {
       const decoded = JSON.parse(decodeURIComponent(atob(charParam)));
       applyFullCharacterState(decoded);
       updateArchetypePanelsWithTattoos(true);
+      filterPerksCatalog('adv', false);
+      filterPerksCatalog('disadv', false);
+      updateForgeUXDashboard();
       return;
     } catch (e) {}
   }
@@ -1241,6 +1800,9 @@ function initForgeUIWhenReady() {
   if (loadIdParam) {
     loadFromDojo(loadIdParam);
     updateArchetypePanelsWithTattoos(true);
+    filterPerksCatalog('adv', false);
+    filterPerksCatalog('disadv', false);
+    updateForgeUXDashboard();
     return;
   }
 
@@ -1250,17 +1812,36 @@ function initForgeUIWhenReady() {
   }
 
   updateArchetypePanelsWithTattoos(true);
+  filterPerksCatalog('adv', false);
+  filterPerksCatalog('disadv', false);
+  updateForgeUXDashboard();
 }
 
 window.addEventListener("l5r-forge-ready", initForgeUIWhenReady);
 
 window.addEventListener("l5r-forge-selection-changed", () => {
   handleFamilyOrSchoolChange();
+  updateForgeUXDashboard();
 });
 
-window.addEventListener("l5r-forge-updated", () => {
+window.addEventListener("l5r-forge-catalogs-updated", () => {
+  filterPerksCatalog('adv', false);
+  filterPerksCatalog('disadv', false);
+});
+
+window.addEventListener("l5r-forge-updated", (e) => {
   if (isCharacterTogashiTattooed()) {
     updateArchetypePanelsWithTattoos(false);
+  }
+  updateForgeUXDashboard(e?.detail);
+});
+
+window.addEventListener("keydown", (e) => {
+  if (!e.altKey || e.ctrlKey || e.metaKey) return;
+  const map = { '1': 'identity', '2': 'rings', '3': 'skills', '4': 'perks', '5': 'mystic', '6': 'gear', '0': 'all' };
+  if (map[e.key]) {
+    e.preventDefault();
+    setForgeStep(map[e.key]);
   }
 });
 

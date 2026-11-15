@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.8.2-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.9.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -43,7 +43,7 @@ Le site réunit une **Forge de Samouraïs** automatisée, un **Grimoire** comple
 - **Mon Dojo Personnel (`localStorage`) :** Détection et affichage automatiques des fiches de personnages sauvegardées localement par le joueur, avec résumé tactique (Clan, École, Réputation, Honneur, jet d'attaque, ND d'Armure) et réouverture en un clic dans la Forge.
 
 ### 2. La Forge de Personnage (`createcharacter.html`)
-Un atelier complet de création et d'évolution de samouraï respectant fidèlement les règles officielles du *Livre de Base 4ᵉ Édition* :
+Un atelier complet de création et d'évolution de samouraï en **6 étapes guidées** (avec mode **Vue Complète** `Alt+0`, cockpit XP en direct avec ventilation des coûts et tiroir Dojo repliable), respectant fidèlement les règles officielles du *Livre de Base 4ᵉ Édition* :
 - **Calculs Automatisés en Temps Réel :**
   - Rangs d'Anneaux (Terre, Eau, Air, Feu, Vide) et des 8 Traits associés, avec application automatique des bonus de Famille et d'École.
   - Calcul de la **Réputation (*Insight*)** (`(Somme des Anneaux × 10) + Somme des Compétences` + bonus d'équipement) et détermination du **Rang de Réputation** (Rangs 1 à 5+).

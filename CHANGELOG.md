@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.9.0] — 2026-11-15
+
+### ✨ Ajouté
+- **Refonte Ergonomique Complète de la Forge de Personnage (`createcharacter.html`, `js/forge-ui.js`, `js/character-generator.js`, `css/main.css`)** :
+  - **Navigation Studio par Ateliers & Mode « Vue Complète »** : Découpage en **6 ateliers guidés** (*1. Identité*, *2. Anneaux & Vitalité*, *3. Compétences*, *4. Avantages & Failles*, *5. Arts & Voies*, *6. Arsenal & Récit*) avec badges d'état en temps réel, boutons *Étape précédente / suivante* en pied d'atelier, raccourcis clavier `Alt+1..6` et bascule instantanée vers **`🧭 Tout voir`** (`Alt+0`).
+  - **Cockpit Commandement enrichi & Tiroir Dojo repliable** : Barre de progression XP en direct (`xp-progress-bar`) avec ventilation par poste (`Traits • Compétences • Avantages • Arts`), indicateur d'état du budget, boutons d'action regroupés (`💾 Dojo`, `📖 Carnet`, `🖨️ PDF`, `🔗 Lien`) et **tiroir Dojo repliable** (`#dojo-drawer-section`) pour libérer l'espace vertical dès l'ouverture.
+  - **Anneaux + Combat & Vitalité réunis (Atelier 2)** : Indication du **coût XP du rang suivant** sur chaque Trait et Anneau du Vide (`+1:12 XP` / `18 XP`, tenant compte de *Bénédiction Élémentaire* et *Illuminé*), associée directement aux statistiques de combat et aux 8 seuils de blessures.
+  - **Compétences interactives (Atelier 3)** : Bandeau d'alerte dédié lorsque des **choix gratuits d'école (Rang 1)** restent à sélectionner, filtres rapides par catégorie (*Bugei*, *Noble/Haute*, *Marchande*, *Dégradante*) dans le menu déroulant, affichage du coût `+1 rang` et bouton **`🎲 XgY`** cliquable sur chaque compétence pour lancer son jet directement.
+  - **Recherche & Filtres rapides pour Avantages, Désavantages, Sorts, Kihos, Katas & Tatouages** : Champs de recherche instantanée sans accent et pastilles de catégorie (dont *★ Réductions/Bonus Clan*) préservant les cartes d'aperçu officiel 4e éd. et jauge visuelle `/ 15 XP` sur les Désavantages.
+  - **Atelier Équipement & Vingt Questions revisités (Atelier 6)** : Bandeau récapitulatif en temps réel des caractéristiques d'armure et d'armes équipées, **4 chapitres accordéon** sur les *Vingt Questions de Rokugan* avec compteur (`X / 20`) et actions *Tout vider* / *Restaurer exemple* / *Déplier-Replier*.
+  - **Plateau Roll & Keep & Notifications Toast** : Ajout des **Augmentations** (`+5 ND`), d'un **bonus fixe** et de l'historique des 5 derniers jets dans `#dice-roller-drawer`, plus notifications toast non bloquantes (`#forge-toast-container`).
+
+---
+
 ## [1.8.2] — 2026-11-15
 
 ### 🐛 Corrigé
