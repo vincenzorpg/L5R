@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.11.3] — 2026-11-16
+
+### ✨ Amélioré
+- **Sceau Officiel des 5 Anneaux & Palette Inspirée du Favicon sur la Fiche PDF (`css/main.css`, `js/forge-ui.js`, `js/character-generator.js`, `sw.js`, `createcharacter.html`)** :
+  - **Véritable sceau du site dans l'en-tête** : remplacement du schéma SVG générique par l'emblème officiel des Cinq Anneaux (`assets/images/favicon_cinq_anneaux.png`).
+  - **Anneaux peints aux couleurs du favicon & chiffres centrés** : transformation des pastilles pleines `.l5r-ring-dot` en véritables anneaux cerclés à liseré doré avec centrage vertical exact par `line-height: 23px` (Terre bronze-ocre `#8c5a1b`, Air turquoise clair `#2b8c7f`, Eau bleu saphir `#1b5299`, Feu vermillon `#c23220`, Vide pourpre améthyste `#5d2b8a`), harmonisés avec les emplacements de sorts de Shugenja et les cartouches d'armes.
+
+---
+
 ## [1.11.2] — 2026-11-16
 
 ### 🐛 Corrigé
