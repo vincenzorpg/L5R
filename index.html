@@ -2,8 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Les Chroniques de Rokugan — L5R 4e Édition | Campagne MJ David</title>
+  <meta name="theme-color" content="#1a120b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Forge L5R">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +18,7 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- NAVIGATION COMMUNE & LOGIQUE D'ACCUEIL -->
+  <script src="js/pwa.js" defer></script>
   <script src="data/scenarios-data.js" defer></script>
   <script src="js/navbar.js" defer></script>
   <script src="js/index-ui.js" defer></script>
@@ -74,6 +81,9 @@
           <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-200 border border-amber-500/40 hover:border-amber-400 font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition shrink-0">
             <img src="assets/images/logo_carnet_rokugan.png" alt="Carnet" class="w-4 h-4 rounded object-contain shrink-0"> Carnet de Rokugan
           </a>
+          <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden px-4 py-2.5 rounded-lg bg-emerald-950/70 hover:bg-emerald-900/80 text-emerald-200 border border-emerald-500/50 hover:border-emerald-400 font-bold font-imperial text-xs tracking-wider shadow-lg flex items-center gap-2 transition shrink-0 cursor-pointer">
+            <span>📲</span> App Téléphone
+          </button>
         </div>
       </div>
     </section>
@@ -579,7 +589,7 @@
       </div>
     </div>
     <div id="site-version-footer" class="max-w-7xl mx-auto mt-3 pt-3 border-t border-stone-900/80 text-[10px] text-stone-500 font-mono flex items-center justify-center sm:justify-end gap-2 no-print">
-      <span id="site-version-label">v1.10.1</span>
+      <span id="site-version-label">v1.11.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

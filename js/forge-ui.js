@@ -404,6 +404,91 @@ function injectForgeTemplates() {
       </div>
     `;
   }
+
+  if (document.body && document.getElementById('forge-stepper-bar') && !document.getElementById('mobile-app-dock')) {
+    const mobileWrapper = document.createElement('div');
+    mobileWrapper.id = 'mobile-app-shell';
+    mobileWrapper.className = 'md:hidden no-print';
+    mobileWrapper.innerHTML = `
+      <div id="mobile-more-sheet" class="hidden fixed inset-0 z-[55] bg-black/75 backdrop-blur-sm flex items-end justify-center no-print" role="dialog" aria-modal="true" aria-label="Menu d'actions mobile">
+        <div class="l5r-mobile-sheet-panel w-full max-w-lg rounded-t-2xl bg-[#140e0d] border-t-2 border-amber-500/50 p-4 space-y-2.5 shadow-2xl max-h-[82vh] overflow-y-auto">
+          <div class="w-10 h-1 rounded-full bg-stone-700 mx-auto mb-1"></div>
+          <div class="flex items-center justify-between border-b border-amber-500/20 pb-2">
+            <span class="font-imperial font-bold text-sm text-amber-300">⚔️ Actions &amp; Export Samouraï</span>
+            <button type="button" onclick="toggleMobileMoreSheet(false)" class="px-2.5 py-1 rounded-lg bg-stone-900 text-stone-300 border border-stone-700 text-xs font-bold cursor-pointer">✕ Fermer</button>
+          </div>
+          <div class="grid grid-cols-1 gap-2 text-xs">
+            <button type="button" onclick="toggleMobileMoreSheet(false); downloadCharacterSheetPDF();" class="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial flex items-center justify-between cursor-pointer shadow">
+              <span>📥 Enregistrer le PDF (fidèle A4)</span>
+              <span class="text-[10px] opacity-80">Couleur 1:1</span>
+            </button>
+            <button type="button" onclick="toggleMobileMoreSheet(false); if(window.exportToCarnetRokugan) exportToCarnetRokugan();" class="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl bg-stone-900 border border-amber-500/45 text-amber-200 font-bold flex items-center justify-between cursor-pointer">
+              <span>📖 Exporter « Carnet de Rokugan »</span>
+              <span class="text-[10px] text-amber-400">JSON v2</span>
+            </button>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="toggleMobileMoreSheet(false); if(window.shareCharacterUrl) shareCharacterUrl();" class="min-h-[44px] px-3 py-2 rounded-xl bg-stone-900 border border-stone-700 text-amber-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>🔗</span><span>Partager lien</span>
+              </button>
+              <button type="button" onclick="toggleMobileMoreSheet(false); saveCharacterToDojo(false);" class="min-h-[44px] px-3 py-2 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>💾</span><span>Sauver Dojo</span>
+              </button>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="toggleMobileMoreSheet(false); if(window.exportJSONWithMystic) exportJSONWithMystic();" class="min-h-[44px] px-3 py-2 rounded-xl bg-stone-900 border border-stone-700 text-stone-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>⬇️</span><span>Export JSON</span>
+              </button>
+              <button type="button" onclick="toggleMobileMoreSheet(false); document.getElementById('json-input')?.click();" class="min-h-[44px] px-3 py-2 rounded-xl bg-stone-900 border border-stone-700 text-stone-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>📂</span><span>Charger JSON</span>
+              </button>
+            </div>
+            <button type="button" onclick="toggleMobileMoreSheet(false); if(window.promptPWAInstall) window.promptPWAInstall();" class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-emerald-950/70 border border-emerald-500/45 text-emerald-200 font-bold flex items-center justify-between cursor-pointer">
+              <span>📲 Installer l'App sur téléphone</span>
+              <span class="text-[10px] text-emerald-300">iOS / Android</span>
+            </button>
+            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-stone-800/80">
+              <button type="button" onclick="toggleMobileMoreSheet(false); setForgeStep('all');" class="min-h-[42px] px-3 py-2 rounded-xl bg-stone-900 border border-stone-700 text-amber-300 font-bold cursor-pointer">
+                🧭 Vue complète
+              </button>
+              <button type="button" onclick="toggleMobileMoreSheet(false); if(window.resetCharacterWithMystic) resetCharacterWithMystic();" class="min-h-[42px] px-3 py-2 rounded-xl bg-red-950/60 border border-red-800/50 text-red-300 font-bold cursor-pointer">
+                🔄 Réinitialiser
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav id="mobile-app-dock" aria-label="Navigation rapide application mobile" class="l5r-mobile-dock fixed bottom-0 inset-x-0 z-50 md:hidden no-print">
+        <div class="grid grid-cols-5 h-[58px] text-[10px] font-bold">
+          <button type="button" data-mobile-tab="forge" onclick="handleMobileTab('forge')" class="l5r-mobile-tab active flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+            <span class="text-base leading-none">⛩️</span>
+            <span class="leading-none flex items-center gap-1">Forge <span id="mobile-dock-step-badge" class="text-[9px] font-mono opacity-80">1/6</span></span>
+          </button>
+          <button type="button" data-mobile-tab="dojo" onclick="handleMobileTab('dojo')" class="l5r-mobile-tab flex flex-col items-center justify-center gap-0.5 cursor-pointer relative">
+            <span class="text-base leading-none">🏯</span>
+            <span class="leading-none">Dojo</span>
+            <span id="mobile-dock-dojo-count" class="absolute top-1.5 right-3 min-w-[16px] h-4 px-1 rounded-full bg-amber-600 text-black text-[9px] font-extrabold font-mono flex items-center justify-center">0</span>
+          </button>
+          <button type="button" data-mobile-tab="dice" onclick="handleMobileTab('dice')" class="l5r-mobile-tab flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+            <span class="text-base leading-none">🎲</span>
+            <span class="leading-none">Dés XgY</span>
+          </button>
+          <button type="button" data-mobile-tab="sheet" onclick="handleMobileTab('sheet')" class="l5r-mobile-tab flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+            <span class="text-base leading-none">📄</span>
+            <span class="leading-none">Fiche PDF</span>
+          </button>
+          <button type="button" data-mobile-tab="more" onclick="handleMobileTab('more')" class="l5r-mobile-tab flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+            <span class="text-base leading-none">⋯</span>
+            <span class="leading-none">Plus</span>
+          </button>
+        </div>
+      </nav>
+    `;
+    mobileWrapper.querySelector('#mobile-more-sheet')?.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'mobile-more-sheet') toggleMobileMoreSheet(false);
+    });
+    document.body.appendChild(mobileWrapper);
+  }
 }
 
 // Exécution immédiate au chargement du script (avant DOMContentLoaded)
@@ -1206,6 +1291,7 @@ function toggleDiceTray(forceOpen) {
   } else {
     panel.classList.toggle('hidden');
   }
+  syncMobileAppDock();
 }
 
 let _diceAugCount = 0;
@@ -1342,14 +1428,21 @@ function toggleDojoDrawer(forceOpen) {
   sec.classList.toggle('hidden', !shouldOpen);
   if (chev) chev.textContent = shouldOpen ? '▴' : '▾';
   if (shouldOpen) renderDojoRoster();
+  syncMobileAppDock();
 }
 
 function renderDojoRoster() {
   const roster = document.getElementById('dojo-roster-list');
   const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
   const list = raw ? JSON.parse(raw) : [];
+  const totalCount = Array.isArray(list) ? list.length : 0;
   const countBadge = document.getElementById('cockpit-dojo-count');
-  if (countBadge) countBadge.textContent = Array.isArray(list) ? list.length : 0;
+  if (countBadge) countBadge.textContent = totalCount;
+  const mobCount = document.getElementById('mobile-dock-dojo-count');
+  if (mobCount) {
+    mobCount.textContent = totalCount;
+    mobCount.classList.toggle('hidden', totalCount === 0);
+  }
   if (!roster) return;
 
   if (!Array.isArray(list) || list.length === 0) {
@@ -1631,16 +1724,31 @@ function togglePrintStorySection(show) {
 }
 window.togglePrintStorySection = togglePrintStorySection;
 
+function syncMobileSheetZoom() {
+  const sheet = document.getElementById('print-sheet');
+  if (!sheet) return;
+  if (window.innerWidth < 840) {
+    const scale = Math.min(1, Math.max(0.36, (window.innerWidth - 16) / 820));
+    sheet.style.setProperty('--l5r-mobile-sheet-zoom', scale.toFixed(3));
+  } else {
+    sheet.style.removeProperty('--l5r-mobile-sheet-zoom');
+  }
+}
+window.addEventListener('resize', syncMobileSheetZoom);
+
 function openCharacterSheetPreview() {
   syncAllPrintableSheetContent();
+  syncMobileSheetZoom();
   document.body.classList.add('l5r-preview-active');
   const dossier = document.getElementById('official-print-dossier');
   if (dossier) dossier.scrollTop = 0;
+  syncMobileAppDock();
 }
 window.openCharacterSheetPreview = openCharacterSheetPreview;
 
 function closeCharacterSheetPreview() {
   document.body.classList.remove('l5r-preview-active');
+  syncMobileAppDock();
 }
 window.closeCharacterSheetPreview = closeCharacterSheetPreview;
 
@@ -1686,6 +1794,13 @@ async function downloadCharacterSheetPDF() {
 
     const dossier = document.getElementById('official-print-dossier');
     const prevScroll = dossier ? dossier.scrollTop : 0;
+    const printSheet = document.getElementById('print-sheet');
+    const prevSheetZoom = printSheet ? printSheet.style.zoom : '';
+    const prevSheetWidth = printSheet ? printSheet.style.width : '';
+    if (printSheet) {
+      printSheet.style.zoom = '1';
+      printSheet.style.width = '820px';
+    }
 
     let pdfPageIndex = 0;
     for (const pageEl of pages) {
@@ -1751,6 +1866,12 @@ async function downloadCharacterSheetPDF() {
     }
     window.print();
   } finally {
+    const printSheet = document.getElementById('print-sheet');
+    if (printSheet) {
+      printSheet.style.zoom = '';
+      printSheet.style.width = '';
+      syncMobileSheetZoom();
+    }
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = origHtml || '<span>📥 Enregistrer PDF (fidèle)</span>';
@@ -2053,7 +2174,11 @@ function setForgeStep(stepKey, skipScroll = false) {
   });
 
   document.querySelectorAll('#forge-stepper-bar [data-step-btn]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.stepBtn === target);
+    const isAct = btn.dataset.stepBtn === target;
+    btn.classList.toggle('active', isAct);
+    if (isAct && !skipScroll && window.innerWidth < 768) {
+      try { btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); } catch (e) {}
+    }
   });
 
   const skillsPanel = document.getElementById('skills-dropdown-panel');
@@ -2064,12 +2189,83 @@ function setForgeStep(stepKey, skipScroll = false) {
   if (!skipScroll) {
     const stepper = document.getElementById('forge-stepper-bar');
     if (stepper) {
-      const y = stepper.getBoundingClientRect().top + window.scrollY - 140;
+      const y = stepper.getBoundingClientRect().top + window.scrollY - (window.innerWidth < 768 ? 64 : 140);
       if (window.scrollY > y) window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
     }
   }
+  syncMobileAppDock();
 }
 window.setForgeStep = setForgeStep;
+
+function toggleMobileMoreSheet(forceOpen) {
+  const sheet = document.getElementById('mobile-more-sheet');
+  if (!sheet) return;
+  const open = typeof forceOpen === 'boolean' ? forceOpen : sheet.classList.contains('hidden');
+  sheet.classList.toggle('hidden', !open);
+  syncMobileAppDock();
+}
+window.toggleMobileMoreSheet = toggleMobileMoreSheet;
+
+function syncMobileAppDock() {
+  const dock = document.getElementById('mobile-app-dock');
+  if (!dock) return;
+  const moreOpen = !document.getElementById('mobile-more-sheet')?.classList.contains('hidden');
+  const diceOpen = !document.getElementById('dice-tray-panel')?.classList.contains('hidden');
+  const dojoOpen = !document.getElementById('dojo-drawer-section')?.classList.contains('hidden');
+  const sheetOpen = document.body.classList.contains('l5r-preview-active');
+
+  let activeTab = 'forge';
+  if (moreOpen) activeTab = 'more';
+  else if (sheetOpen) activeTab = 'sheet';
+  else if (diceOpen) activeTab = 'dice';
+  else if (dojoOpen) activeTab = 'dojo';
+
+  dock.querySelectorAll('[data-mobile-tab]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mobileTab === activeTab);
+  });
+
+  const stepBadge = document.getElementById('mobile-dock-step-badge');
+  if (stepBadge) {
+    const idx = FORGE_STEPS.indexOf(_currentForgeStep);
+    stepBadge.textContent = (_currentForgeStep === 'all' || idx === -1) ? 'Tout' : `${idx + 1}/6`;
+  }
+}
+
+function handleMobileTab(tab) {
+  if (tab !== 'more') toggleMobileMoreSheet(false);
+
+  if (tab === 'more') {
+    toggleMobileMoreSheet();
+    return;
+  }
+  if (tab === 'sheet') {
+    prepareAndPrintPDF();
+    return;
+  }
+  if (tab === 'dice') {
+    toggleDiceTray();
+    return;
+  }
+  if (tab === 'dojo') {
+    const sec = document.getElementById('dojo-drawer-section');
+    const willOpen = sec ? sec.classList.contains('hidden') : true;
+    toggleDojoDrawer(willOpen);
+    if (willOpen && sec) {
+      setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40);
+    }
+    return;
+  }
+  // 'forge'
+  toggleDojoDrawer(false);
+  toggleDiceTray(false);
+  const stepper = document.getElementById('forge-stepper-bar');
+  if (stepper) {
+    const y = Math.max(0, stepper.getBoundingClientRect().top + window.scrollY - 62);
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+  syncMobileAppDock();
+}
+window.handleMobileTab = handleMobileTab;
 
 function resolveTraitIdFromLabel(traitLabel) {
   const t = foldForgeSearch(traitLabel);
@@ -2090,7 +2286,9 @@ function rollSkillFromCard(idx) {
   const sk = skills[idx];
   if (!sk) return;
   const catalog = (typeof window.getSkills === 'function') ? window.getSkills() : (window.COMPETENCES_DATA || []);
-  const catMeta = catalog.find(c => c.name === sk.name) || {};
+  const catMeta = (typeof window.resolveCatalogSkillMeta === 'function')
+    ? window.resolveCatalogSkillMeta(sk.name, catalog)
+    : (catalog.find(c => c.name === sk.name) || {});
   const traitLabel = catMeta.trait || sk.trait || 'Agilité';
   const traitId = resolveTraitIdFromLabel(traitLabel);
   const traitVal = parseInt(document.getElementById(traitId)?.value, 10) || 2;
@@ -2447,6 +2645,19 @@ function updateForgeUXDashboard(detail) {
       mysticPill.textContent = parts.length > 0 ? parts.join('+') : 'Cour';
     }
   }
+
+  const mobXpPill = document.getElementById('mobile-xp-pill');
+  if (mobXpPill) {
+    mobXpPill.textContent = `${remXP} / ${totalXP}`;
+    mobXpPill.parentElement.className = remXP < 0
+      ? 'px-2 py-0.5 rounded bg-red-950/80 border border-red-500/50 text-red-300 font-bold'
+      : 'px-2 py-0.5 rounded bg-black/60 border border-amber-500/30 text-emerald-300 font-bold';
+  }
+  const mobNameEl = document.getElementById('mobile-step-header-name');
+  if (mobNameEl) {
+    mobNameEl.textContent = document.getElementById('pc-name')?.value || 'Samouraï';
+  }
+  syncMobileAppDock();
 }
 
 let _forgeUIInitialized = false;
@@ -2467,11 +2678,21 @@ function initForgeUIWhenReady() {
   const loadIdParam = params.get("load");
   const clanParam = params.get("clan");
   const stepParam = params.get("step");
+  const dojoParam = params.get("dojo");
 
   const initialStep = stepParam || (() => {
     try { return sessionStorage.getItem('l5r_forge_step'); } catch (e) { return null; }
   })() || 'identity';
   setForgeStep(initialStep, true);
+
+  document.getElementById('pc-name')?.addEventListener('input', (e) => {
+    const mobName = document.getElementById('mobile-step-header-name');
+    if (mobName) mobName.textContent = e.target.value || 'Samouraï';
+  });
+
+  if (dojoParam === '1') {
+    toggleDojoDrawer(true);
+  }
 
   if (charParam) {
     try {

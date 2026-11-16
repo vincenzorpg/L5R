@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.10.1-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.11.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -121,7 +121,9 @@ L5R/
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
 ├── campagne.html                       # Hub des 10 scénarios de la campagne du MJ David
 ├── campagne-ajouter.html               # Studio d'import et générateur de pages de scénarios HTML
-├── version.json                        # Source unique de vérité pour la version du site (v1.0.0)
+├── version.json                        # Source unique de vérité pour la version du site (v1.11.0)
+├── manifest.webmanifest                # Manifeste PWA installable sur Android & iPhone (mode autonome)
+├── sw.js                               # Service Worker hors-ligne pré-cachant Forge, Dojo & données L5R 4e
 ├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
 ├── GEMINI.md                           # Directives strictes de développement et workflow Git/PR
 ├── README.md                           # Documentation générale du projet
@@ -158,6 +160,7 @@ L5R/
 │   └── main.css                        # Variables CSS, thème Sombre (Laque) / Clair (Parchemin) & print A4
 │
 ├── js/                                 # Moteurs applicatifs en Vanilla JavaScript (ES6+)
+│   ├── pwa.js                          # Gestionnaire PWA (Service Worker, install Android/iOS, mode hors-ligne)
 │   ├── navbar.js                       # Barre de navigation responsive, sélecteur de thème, version & CSS
 │   ├── index-ui.js                     # Rendu déclaratif des Clans, de la frise des scénarios & du Dojo d'accueil
 │   ├── character-generator.js          # Moteur de règles L5R 4e, calculs d'XP, paliers, dés et Dojo
@@ -193,12 +196,14 @@ L5R/
 │   ├── unit-tests.js                   # Assertions unitaires sur la Forge, Roll & Keep, Grimoire & Carnet v2
 │   └── unit-tests.html                 # Exécuteur visuel de la suite de tests dans le navigateur
 │
-└── assets/images/                      # Illustrations et ressources graphiques
-    ├── cinq_anneaux.jpg                # Emblème calligraphié des Cinq Anneaux
-    ├── favicon.svg                     # Sceau vectoriel impérial
-    ├── favicon_cinq_anneaux.png        # Icône PNG des Cinq Anneaux
-    ├── logo_carnet_rokugan.png         # Logo officiel du Carnet de Rokugan
-    └── scenarios/                      # Illustrations des actes (Topaze, Kyoteï, Voyage, Frères Morts...)
+└── assets/                             # Icônes PWA, illustrations et ressources graphiques
+    ├── icons/                          # Icônes installables Android / iOS (180, 192, 512, maskable)
+    └── images/                         # Emblèmes, favicons et illustrations de campagne
+        ├── cinq_anneaux.jpg            # Emblème calligraphié des Cinq Anneaux
+        ├── favicon.svg                 # Sceau vectoriel impérial
+        ├── favicon_cinq_anneaux.png    # Icône PNG des Cinq Anneaux
+        ├── logo_carnet_rokugan.png     # Logo officiel du Carnet de Rokugan
+        └── scenarios/                  # Illustrations des actes (Topaze, Kyoteï, Voyage, Frères Morts...)
 ```
 
 ---

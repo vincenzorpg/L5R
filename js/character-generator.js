@@ -3528,6 +3528,7 @@ if (typeof window !== "undefined") {
   window.getCompatibleMultipleSchools = getCompatibleMultipleSchools;
   window.getCharacterArchetypePermissions = getCharacterArchetypePermissions;
   window.getAllSchoolsCatalog = getAllSchoolsCatalog;
+  window.resolveCatalogSkillMeta = resolveCatalogSkillMeta;
   window.populateOfficialPrintSheet = populateOfficialPrintSheet;
   window.buildCharacterContextFromInputs = buildCharacterContextFromInputs;
   window.getEffectiveAdvCost = getEffectiveAdvCost;
@@ -3559,6 +3560,7 @@ if (typeof module !== "undefined" && module.exports) {
     isSchoolCompatibleForMultiple,
     getCompatibleMultipleSchools,
     getCharacterArchetypePermissions,
+    resolveCatalogSkillMeta,
     buildCharacterContextFromInputs,
     getCharacterContext,
     getEffectiveAdvCost,

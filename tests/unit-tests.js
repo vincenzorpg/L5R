@@ -180,6 +180,18 @@
       assertEqual(cg.getMasteriesSummary("Kenjutsu (Katana)", 5), "[R3: Dégainé Éclair] [R5: Tranchant Affûté]");
     });
 
+    it("resolveCatalogSkillMeta associe exactement le Trait même avec spécialité ou parenthèses", function () {
+      const mockCatalog = [
+        { name: "Calligraphie", trait: "Intelligence", type: "Noble" },
+        { name: "Enquête (Investigation)", trait: "Perception", type: "Noble" },
+        { name: "Connaissance : Outremonde (Shadowlands)", trait: "Intelligence", type: "Dégradante" }
+      ];
+      assertEqual(cg.resolveCatalogSkillMeta("Calligraphie (Chiffre)", mockCatalog).trait, "Intelligence");
+      assertEqual(cg.resolveCatalogSkillMeta("Enquête", mockCatalog).trait, "Perception");
+      assertEqual(cg.resolveCatalogSkillMeta("Connaissance : Outremonde", mockCatalog).trait, "Intelligence");
+      assertEqual(cg.resolveCatalogSkillMeta("Connaissance : Clan du Crabe", mockCatalog).trait, "Intelligence");
+    });
+
     it("isSchoolCompatibleForMultiple bloque strictement Bushi/Ninja <-> Shugenja et les doublons", function () {
       const hidaBushi = { id: "bushi_hida", name: "Bushi Hida", type: "Bushi" };
       const kakitaBushi = { id: "bushi_kakita", name: "Bushi Kakita", type: "Bushi" };
