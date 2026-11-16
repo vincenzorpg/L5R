@@ -6,6 +6,23 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.12.0] — 2026-11-17
+
+### ✨ Ajouté & Amélioré
+- **12 Nouvelles Illustrations de Scénarios (`assets/images/scenarios/`)** :
+  - Génération et intégration de 12 scènes widescreen (`1376×768`) pour illustrer les actes avancés de la campagne :
+    - **Acte 5 (*Entre le ciel et l'enfer*)** : `CielEnfer-1.jpg`, `CielEnfer-2.jpg`, `CielEnfer-3.jpg` (complet 3/3).
+    - **Acte 6 (*Le mariage d'Okado Hiruma*)** : `MariageCrabe-1.jpg`, `MariageCrabe-2.jpg`, `MariageCrabe-3.jpg` (complet 3/3).
+    - **Acte 7 (*Meurtre à Ryoko Owari*)** : `RyokoOwari-1.jpg`, `RyokoOwari-2.jpg`, `RyokoOwari-3.jpg` (complet 3/3).
+    - **Acte 9 (*« Ce qui ne meurt pas »*)** : `CeQuiNeMeurtPas-1.jpg`, `CeQuiNeMeurtPas-2.jpg` (2/3).
+    - **Acte 10 (*La tombe de Iuchiban*)** : `TombeIuchiban-1.jpg` (1/3).
+- **Fiabilisation du Lecteur Audio Narratif sur Tous les Scénarios (`js/narrator.js`, `sw.js`)** :
+  - Découpage automatique des longs paragraphes en phrases courtes (`splitIntoSpeechChunks`, ≤ 220 car.) afin d'éviter la coupure silencieuse de la synthèse vocale après ~15 secondes.
+  - Unification du mode multi-versions (Actes 2 et 3) sur le moteur paragraphe par paragraphe avec surbrillance active (`.reading-active`), suivi visuel et défilement automatique lors du changement d'onglet ou de pause/reprise.
+  - Mémorisation de la voix française et de la vitesse de lecture dans `localStorage`, prise en compte immédiate du changement de vitesse, réinitialisation exacte du libellé « Écouter le Récit » après arrêt et extinction propre à la fermeture de l'onglet (`pagehide`).
+
+---
+
 ## [1.11.4] — 2026-11-16
 
 ### ✨ Amélioré
