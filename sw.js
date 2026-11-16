@@ -3,8 +3,8 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.11.1';
-const RUNTIME_CACHE = 'l5r-runtime-v1.11.1';
+const CACHE_VERSION = 'l5r-forge-v1.11.2';
+const RUNTIME_CACHE = 'l5r-runtime-v1.11.2';
 
 const CORE_ASSETS = [
   './',
@@ -85,8 +85,15 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   const isSameOrigin = url.origin === self.location.origin;
 
-  // Navigation HTML et version.json : Network-First avec repli cache (ignoreSearch pour ?step= / ?source=pwa)
-  if (req.mode === 'navigate' || (isSameOrigin && (url.pathname.endsWith('.html') || url.pathname.endsWith('version.json')))) {
+  // HTML, CSS, JS applicatifs, Manifest et version.json : Network-First avec repli cache hors-ligne
+  const isFreshAsset = isSameOrigin && (
+    url.pathname.endsWith('.html') ||
+    url.pathname.endsWith('.css') ||
+    url.pathname.endsWith('.webmanifest') ||
+    url.pathname.endsWith('version.json') ||
+    url.pathname.includes('/js/')
+  );
+  if (req.mode === 'navigate' || isFreshAsset) {
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -97,18 +104,19 @@ self.addEventListener('fetch', (event) => {
           return res;
         })
         .catch(async () => {
-          const cached = await caches.match(req, { ignoreSearch: true });
+          const cached = await caches.match(req, { ignoreSearch: req.mode === 'navigate' });
           if (cached) return cached;
-          return caches.match('./createcharacter.html');
+          if (req.mode === 'navigate') return caches.match('./createcharacter.html');
+          return caches.match(req, { ignoreSearch: true });
         })
     );
     return;
   }
 
-  // Ressources locales (CSS, JS, Data, Icônes) : Cache-First avec mise à jour en arrière-plan
+  // Ressources lourdes locales (Data, Icônes, Images) : Cache-First avec mise à jour en arrière-plan
   if (isSameOrigin) {
     event.respondWith(
-      caches.match(req, { ignoreSearch: true }).then((cached) => {
+      caches.match(req).then((cached) => {
         const fetchPromise = fetch(req)
           .then((res) => {
             if (res && res.status === 200) {

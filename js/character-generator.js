@@ -3318,7 +3318,7 @@ function populateOfficialPrintSheet() {
 
       return `
         <tr>
-          <td class="text-center font-bold">${sk.isSchool ? '<span class="inline-block w-3 h-3 rounded-full bg-[#2b3627] text-white text-[8px] leading-3">✓</span>' : '<span class="inline-block w-2.5 h-2.5 rounded-full border border-[#8c7b5c]"></span>'}</td>
+          <td class="text-center font-bold">${sk.isSchool ? '<span class="inline-block w-3.5 h-3.5 rounded-full bg-[#2b3627] text-white text-[8px] leading-[13px] text-center align-middle">✓</span>' : '<span class="inline-block w-2.5 h-2.5 rounded-full border border-[#8c7b5c] align-middle"></span>'}</td>
           <td class="font-bold text-[#1a1610]">${displayName}</td>
           <td class="text-center font-bold font-imperial">${sk.rank}</td>
           <td class="text-center text-[#4a3b26]">${tMeta.label}</td>
@@ -3362,7 +3362,7 @@ function populateOfficialPrintSheet() {
             <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Arme</span><b class="font-imperial">${m1.name}</b></div>
             <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Toucher</span><b class="font-imperial text-[#7b2319]">${m1.attackRoll}</b></div>
             <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Dégâts</span><b class="font-imperial text-[#b64329]">${m1.damageRoll}</b></div>
-            <div class="text-[7.5px] text-[#5a4e43] truncate" title="${m1.damageDetail}">${m1.damageDetail}</div>
+            <div class="text-[7.5px] text-[#5a4e43] leading-snug" title="${m1.damageDetail}">${m1.damageDetail}</div>
           </div>
         </div>
         <div class="col-span-4 border-r border-[#8c7b5c]">
@@ -3372,7 +3372,7 @@ function populateOfficialPrintSheet() {
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Arme</span><b class="font-imperial">${m2.name}</b></div>
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Toucher</span><b class="font-imperial text-[#7b2319]">${m2.attackRoll}</b></div>
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Dégâts</span><b class="font-imperial text-[#b64329]">${m2.damageRoll}</b></div>
-              <div class="text-[7.5px] text-[#5a4e43] truncate" title="${m2.damageDetail}">${m2.damageDetail}</div>
+              <div class="text-[7.5px] text-[#5a4e43] leading-snug" title="${m2.damageDetail}">${m2.damageDetail}</div>
             ` : `
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5 text-[#8b7f69]"><span>Arme :</span><span>________________</span></div>
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5 text-[#8b7f69]"><span>Toucher / Dégâts :</span><span>____ / ____</span></div>
@@ -3457,11 +3457,11 @@ function populateOfficialPrintSheet() {
 
   let printTechHtml = techList.map(t => {
     const badge = t.rank === currentRank
-      ? `<span class="px-1 py-0.5 rounded bg-[#f4d89a] text-[#5e3a04] border border-[#b89242] font-bold text-[7.5px]">ACTIF</span>`
+      ? `<span class="inline-block px-1.5 pt-0.5 pb-1 rounded bg-[#f4d89a] text-[#5e3a04] border border-[#b89242] font-bold text-[7.5px] leading-none">ACTIF</span>`
       : (t.rank < currentRank
-        ? `<span class="px-1 py-0.5 rounded bg-[#ddeadd] text-[#243b1d] border border-[#486a3c] font-bold text-[7.5px]">MAÎTRISÉ</span>`
-        : `<span class="px-1 py-0.5 rounded bg-[#e8e3d6] text-[#6a5d47] text-[7.5px]">R${t.rank}</span>`);
-    return `<div class="border-b border-[#e0d8c6] pb-1">${badge} <b class="font-imperial text-[#1a1610]">Rang ${t.rank} — ${t.name} :</b> <span class="text-[#342c23]">${t.effect}</span></div>`;
+        ? `<span class="inline-block px-1.5 pt-0.5 pb-1 rounded bg-[#ddeadd] text-[#243b1d] border border-[#486a3c] font-bold text-[7.5px] leading-none">MAÎTRISÉ</span>`
+        : `<span class="inline-block px-1.5 pt-0.5 pb-1 rounded bg-[#e8e3d6] text-[#6a5d47] text-[7.5px] leading-none">R${t.rank}</span>`);
+    return `<div class="border-b border-[#e0d8c6] pb-1.5 leading-snug">${badge} <b class="font-imperial text-[#1a1610]">Rang ${t.rank} — ${t.name} :</b> <span class="text-[#342c23]">${t.effect}</span></div>`;
   }).join('');
 
   const multiAdv = advantagesList.find(a => isMultipleSchoolsAdv(a.name));

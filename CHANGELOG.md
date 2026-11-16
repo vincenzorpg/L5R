@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.11.2] — 2026-11-16
+
+### 🐛 Corrigé
+- **Alignement & Netteté de l'Export PDF (`css/main.css`, `js/forge-ui.js`, `js/character-generator.js`, `sw.js`, `createcharacter.html`)** :
+  - Suppression des coupures de lettres sur *Clan*, *Famille*, *École* et détails d'armes (retrait de `truncate` et `items-baseline` remplacés par `.l5r-header-row` / `.l5r-header-row-main` avec interligne `1.35` et marge inférieure confortable).
+  - Correction du chevauchement entre les libellés *Honneur / Gloire / Statut / Souillure* et leurs réglettes de cases à cocher dans `Vertus & Renommée` (remplacement de `flex-col justify-around` par `.l5r-virtue-list`, `.l5r-virtue-header`, `.l5r-virtue-track` et pile typographique `Georgia, 'Noto Serif JP', serif`).
+  - Ajustement des marges/alignements de tableaux (`.l5r-table`), pastilles de techniques (`ACTIF`, `MAÎTRISÉ`, `R2`–`R5`), badges Page 2 et passage du Service Worker `sw.js` en stratégie *Network-First* pour les fichiers `.css`/`.js` afin d'éviter toute désynchronisation de style après mise à jour.
+
+---
+
 ## [1.11.1] — 2026-11-16
 
 ### ✨ Ajouté & Amélioré
