@@ -151,7 +151,7 @@
           
           <!-- Marque & Retour Accueil : Les Chroniques de Rokugan -->
           <a href="${rootPrefix}index.html" class="flex items-center gap-2.5 group shrink-0 focus:outline-none">
-            <img src="${rootPrefix}assets/images/favicon.svg" alt="Sceau des Chroniques de Rokugan" width="36" height="36" class="w-9 h-9 rounded-lg shadow-md transition-transform group-hover:scale-105" />
+            <img src="${rootPrefix}assets/images/favicon_cinq_anneaux.png" alt="Logo des Chroniques de Rokugan" width="36" height="36" class="w-9 h-9 rounded-full object-cover border border-amber-500/60 bg-[#0f0b0a] shadow-md transition-transform group-hover:scale-105" />
             <div class="flex flex-col">
               <span class="font-imperial font-bold text-xs sm:text-sm tracking-wider gold-text leading-tight uppercase">LES CHRONIQUES DE ROKUGAN</span>
               <span class="text-[10px] text-stone-400 hidden sm:inline">L5R 4e Édition • Campagne MJ David</span>

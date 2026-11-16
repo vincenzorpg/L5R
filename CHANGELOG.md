@@ -6,6 +6,14 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.11.4] — 2026-11-16
+
+### ✨ Amélioré
+- **Unification du Logo « Les Chroniques de Rokugan » sur le Favicon (`js/navbar.js`, `index.html`, `sw.js`)** :
+  - Remplacement de l'ancien badge carré `favicon.svg` dans la barre de navigation globale et du sceau `竜` du pied de page d'accueil par le médaillon officiel `assets/images/favicon_cinq_anneaux.png`, unifiant ainsi l'identité visuelle entre l'onglet navigateur, le portail, la navigation, la fiche PDF et l'icône d'application mobile.
+
+---
+
 ## [1.11.3] — 2026-11-16
 
 ### ✨ Amélioré
