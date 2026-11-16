@@ -957,41 +957,72 @@ select {
   min-height: 16px;
 }
 
-/* Couleurs officielles des 5 Anneaux : Terre Marron, Air Bleu clair, Eau Bleu, Feu Rouge feu, Vide Violet */
-.l5r-ring-earth {
-  background: #f4ece4 !important;
-  border: 1.5px solid #6b4423 !important;
-  color: #422610 !important;
+/* Couleurs des 5 Anneaux inspirées du sceau/favicon du site (Terre bronze-marron, Air turquoise clair, Eau bleu saphir, Feu vermillon, Vide améthyste) */
+.l5r-ring-dot {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  margin: 4px auto;
+  border: 3px solid #6b4423;
+  background: radial-gradient(circle at 35% 35%, #fffdf8 0%, #f6efe0 100%) !important;
+  box-shadow: inset 0 0 0 1px rgba(184, 146, 66, 0.45), 0 1px 3px rgba(0, 0, 0, 0.14);
+  font-family: Georgia, 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 23px;
+  text-align: center;
 }
-.l5r-ring-earth .l5r-ring-dot { background: #6b4423 !important; color: #fff !important; }
+
+.l5r-ring-earth {
+  background: linear-gradient(180deg, #f7efe2 0%, #efe1ca 100%) !important;
+  border: 1.5px solid #8c5a1b !important;
+  color: #5c370b !important;
+}
+.l5r-ring-earth .l5r-ring-dot {
+  border-color: #96621c !important;
+  color: #4a2906 !important;
+}
 
 .l5r-ring-water {
-  background: #e3eef9 !important;
-  border: 1.5px solid #1d5fa7 !important;
-  color: #10345e !important;
+  background: linear-gradient(180deg, #ebf2fc 0%, #dce8f8 100%) !important;
+  border: 1.5px solid #1b5299 !important;
+  color: #0f3266 !important;
 }
-.l5r-ring-water .l5r-ring-dot { background: #1d5fa7 !important; color: #fff !important; }
+.l5r-ring-water .l5r-ring-dot {
+  border-color: #1b5299 !important;
+  color: #0f3266 !important;
+}
 
 .l5r-ring-air {
-  background: #e6f7fc !important;
-  border: 1.5px solid #3898c8 !important;
-  color: #0c4a6e !important;
+  background: linear-gradient(180deg, #eaf8f5 0%, #d8f0ec 100%) !important;
+  border: 1.5px solid #2b8c7f !important;
+  color: #144d46 !important;
 }
-.l5r-ring-air .l5r-ring-dot { background: #3898c8 !important; color: #fff !important; }
+.l5r-ring-air .l5r-ring-dot {
+  border-color: #2b8c7f !important;
+  color: #144d46 !important;
+}
 
 .l5r-ring-fire {
-  background: #fceae4 !important;
-  border: 1.5px solid #c0392b !important;
-  color: #69180d !important;
+  background: linear-gradient(180deg, #fdf0eb 0%, #f9dfd5 100%) !important;
+  border: 1.5px solid #c23220 !important;
+  color: #75170f !important;
 }
-.l5r-ring-fire .l5r-ring-dot { background: #c0392b !important; color: #fff !important; }
+.l5r-ring-fire .l5r-ring-dot {
+  border-color: #c23220 !important;
+  color: #75170f !important;
+}
 
 .l5r-ring-void {
-  background: #f2eafc !important;
-  border: 1.5px solid #6d28d9 !important;
-  color: #3b0764 !important;
+  background: linear-gradient(180deg, #f3edf9 0%, #e7dcf5 100%) !important;
+  border: 1.5px solid #5d2b8a !important;
+  color: #3b165e !important;
 }
-.l5r-ring-void .l5r-ring-dot { background: #6d28d9 !important; color: #f5e8ff !important; }
+.l5r-ring-void .l5r-ring-dot {
+  border-color: #5d2b8a !important;
+  color: #3b165e !important;
+}
 
 .l5r-pip {
   display: inline-block;

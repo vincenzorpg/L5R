@@ -3,8 +3,8 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.11.2';
-const RUNTIME_CACHE = 'l5r-runtime-v1.11.2';
+const CACHE_VERSION = 'l5r-forge-v1.11.3';
+const RUNTIME_CACHE = 'l5r-runtime-v1.11.3';
 
 const CORE_ASSETS = [
   './',

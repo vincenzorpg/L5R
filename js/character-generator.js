@@ -3358,21 +3358,21 @@ function populateOfficialPrintSheet() {
       <div class="grid grid-cols-12">
         <div class="col-span-5 border-r border-[#8c7b5c]">
           <div class="l5r-bar"><span>Arme 1</span><span>${m1.type}</span></div>
-          <div class="p-1.5 text-[8.5px] space-y-0.5">
-            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Arme</span><b class="font-imperial">${m1.name}</b></div>
-            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Toucher</span><b class="font-imperial text-[#7b2319]">${m1.attackRoll}</b></div>
-            <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Dégâts</span><b class="font-imperial text-[#b64329]">${m1.damageRoll}</b></div>
-            <div class="text-[7.5px] text-[#5a4e43] leading-snug" title="${m1.damageDetail}">${m1.damageDetail}</div>
+          <div class="p-1.5 text-[8.5px] space-y-0.5 leading-snug">
+            <div class="flex items-center justify-between border-b border-[#d7d0c0] pb-1 pt-0.5"><span class="l5r-cell-lbl px-1.5 pb-0.5 rounded-sm">Arme</span><b class="font-imperial">${m1.name}</b></div>
+            <div class="flex items-center justify-between border-b border-[#d7d0c0] pb-1 pt-0.5"><span class="l5r-cell-lbl px-1.5 pb-0.5 rounded-sm">Toucher</span><b class="font-imperial text-[#7b2319]">${m1.attackRoll}</b></div>
+            <div class="flex items-center justify-between border-b border-[#d7d0c0] pb-1 pt-0.5"><span class="l5r-cell-lbl px-1.5 pb-0.5 rounded-sm">Dégâts</span><b class="font-imperial text-[#b64329]">${m1.damageRoll}</b></div>
+            <div class="text-[7.5px] text-[#5a4e43] leading-snug pt-0.5" title="${m1.damageDetail}">${m1.damageDetail}</div>
           </div>
         </div>
         <div class="col-span-4 border-r border-[#8c7b5c]">
           <div class="l5r-bar"><span>Arme 2</span><span>${m2 ? m2.type : 'Secours'}</span></div>
-          <div class="p-1.5 text-[8.5px] space-y-0.5">
+          <div class="p-1.5 text-[8.5px] space-y-0.5 leading-snug">
             ${m2 ? `
-              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Arme</span><b class="font-imperial">${m2.name}</b></div>
-              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Toucher</span><b class="font-imperial text-[#7b2319]">${m2.attackRoll}</b></div>
-              <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5"><span class="l5r-cell-lbl px-1">Dégâts</span><b class="font-imperial text-[#b64329]">${m2.damageRoll}</b></div>
-              <div class="text-[7.5px] text-[#5a4e43] leading-snug" title="${m2.damageDetail}">${m2.damageDetail}</div>
+              <div class="flex items-center justify-between border-b border-[#d7d0c0] pb-1 pt-0.5"><span class="l5r-cell-lbl px-1.5 pb-0.5 rounded-sm">Arme</span><b class="font-imperial">${m2.name}</b></div>
+              <div class="flex items-center justify-between border-b border-[#d7d0c0] pb-1 pt-0.5"><span class="l5r-cell-lbl px-1.5 pb-0.5 rounded-sm">Toucher</span><b class="font-imperial text-[#7b2319]">${m2.attackRoll}</b></div>
+              <div class="flex items-center justify-between border-b border-[#d7d0c0] pb-1 pt-0.5"><span class="l5r-cell-lbl px-1.5 pb-0.5 rounded-sm">Dégâts</span><b class="font-imperial text-[#b64329]">${m2.damageRoll}</b></div>
+              <div class="text-[7.5px] text-[#5a4e43] leading-snug pt-0.5" title="${m2.damageDetail}">${m2.damageDetail}</div>
             ` : `
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5 text-[#8b7f69]"><span>Arme :</span><span>________________</span></div>
               <div class="flex justify-between border-b border-[#d7d0c0] pb-0.5 text-[#8b7f69]"><span>Toucher / Dégâts :</span><span>____ / ____</span></div>
