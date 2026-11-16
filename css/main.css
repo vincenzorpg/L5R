@@ -1007,6 +1007,23 @@ select {
 .l5r-mobile-sheet-panel {
   padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
 }
+.l5r-pwa-banner {
+  animation: forgeToastIn 0.25s ease-out;
+}
+
+[data-theme="light"] .l5r-pwa-banner {
+  background: rgba(251, 246, 234, 0.98) !important;
+  border-color: rgba(140, 94, 11, 0.55) !important;
+  color: #2d2215 !important;
+}
+[data-theme="light"] .l5r-pwa-banner #pwa-smart-banner-sub {
+  color: #5c4630 !important;
+}
+[data-theme="light"] .l5r-pwa-banner #pwa-smart-later-btn {
+  background: #efe6cf !important;
+  color: #4a3723 !important;
+  border-color: rgba(140, 94, 11, 0.35) !important;
+}
 
 [data-theme="light"] .l5r-mobile-dock {
   background: rgba(251, 246, 234, 0.96) !important;
