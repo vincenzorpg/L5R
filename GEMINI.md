@@ -26,8 +26,12 @@ Ce fichier définit les règles strictes et obligatoires à respecter pour toute
    - Ajouter en tête du fichier une nouvelle section `## [X.Y.Z] — YYYY-MM-DD` (format *Keep a Changelog* : `### ✨ Ajouté`, `### 🔄 Modifié`, `### 🐛 Corrigé`, etc.) détaillant précisément les changements apportés.
 3. **Mise à jour de `README.md` (si nécessaire)** :
    - Mettre à jour le badge de version (`Version-vX.Y.Z`), la présentation des fonctionnalités et l'arborescence des fichiers dès qu'un module, un outil ou un fichier est ajouté ou modifié.
-4. **Pull Request avec Release Notes prêtes à publier** :
-   - Le corps (`--body` / `--body-file`) de chaque Pull Request ouverte via `gh pr create` **doit inclure une section dédiée « 📦 Release Notes (`vX.Y.Z`) — Prêtes à publier »** reprenant l'extrait formaté du `CHANGELOG.md` prêt à être utilisé pour la Release GitHub.
+4. **Pull Request avec Release Notes « User-Friendly » prêtes à publier** :
+   - Le corps (`--body` / `--body-file`) de chaque Pull Request ouverte via `gh pr create` **doit inclure une section dédiée « 📦 Release Notes (`vX.Y.Z`) — Prêtes à publier »**.
+   - **Règle de rédaction des Release Notes GitHub (publiques)** :
+     - **Ton joueur / MJ (« user-friendly »)** : courtes, claires et concrètes (**3 à 5 puces maximum** plus une courte phrase d'introduction).
+     - **Zéro jargon technique** : ne jamais mentionner de noms de fichiers (`.js`, `.html`, `.css`), de noms de fonctions, d'identifiants DOM (`#...`), de variables CSS ou de détails d'implémentation — décrire uniquement ce que l'utilisateur voit ou gagne en jeu.
+     - Réserver l'inventaire technique précis (fichiers, fonctions, tests) au `CHANGELOG.md` et au résumé technique de la Pull Request.
 
 ## 3. Pull Request systématique via GitHub CLI (`gh`)
 
