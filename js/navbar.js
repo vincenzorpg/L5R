@@ -367,6 +367,10 @@
                 <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">幕</span>
                 <span>Écran du MJ (Combats & PJs)</span>
               </a>
+              <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/45 text-emerald-200 hover:bg-emerald-900/50 flex items-center gap-2 col-span-2 cursor-pointer text-left">
+                <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-bold text-xs shrink-0">📲</span>
+                <span class="font-bold">Installer l'App Téléphone (Hors-ligne)</span>
+              </button>
               <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-amber-200 flex items-center gap-2.5 col-span-2">
                 <img src="${rootPrefix}assets/images/logo_carnet_rokugan.png" alt="Logo Carnet de Rokugan" class="w-6 h-6 rounded border border-amber-500/50 object-contain bg-black p-0.5 shrink-0" />
                 <span class="font-bold">Carnet de Rokugan</span>
@@ -434,7 +438,20 @@
       .catch(() => {});
   }
 
+  function ensurePwaScript() {
+    if (window.promptPWAInstall) return;
+    const already = Array.from(document.querySelectorAll('script[src]')).some(
+      (s) => (s.getAttribute('src') || '').includes('pwa.js')
+    );
+    if (already) return;
+    const sc = document.createElement('script');
+    sc.src = `${rootPrefix}js/pwa.js`;
+    sc.defer = true;
+    document.head.appendChild(sc);
+  }
+
   function initGlobalUI() {
+    ensurePwaScript();
     renderNavbar();
     syncFooterVersion();
   }

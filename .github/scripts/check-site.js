@@ -121,6 +121,50 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
+// 4. Vérification du Manifeste PWA & du Service Worker hors-ligne
+const manifestPath = path.join(ROOT, 'manifest.webmanifest');
+if (!fs.existsSync(manifestPath)) {
+  addError('manifest.webmanifest manquant à la racine');
+} else {
+  try {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    if (!manifest.start_url) addError('manifest.webmanifest : start_url manquant');
+    if (!Array.isArray(manifest.icons) || manifest.icons.length === 0) {
+      addError('manifest.webmanifest : aucune icône déclarée');
+    } else {
+      for (const icon of manifest.icons) {
+        const cleanIcon = (icon.src || '').split('?')[0];
+        const resolvedIcon = path.resolve(ROOT, cleanIcon);
+        if (!cleanIcon || !fs.existsSync(resolvedIcon)) {
+          addError(`manifest.webmanifest : icône introuvable -> "${icon.src}"`);
+        }
+      }
+    }
+  } catch (err) {
+    addError(`manifest.webmanifest : JSON invalide (${err.message})`);
+  }
+}
+
+const swPath = path.join(ROOT, 'sw.js');
+if (!fs.existsSync(swPath)) {
+  addError('sw.js manquant à la racine');
+} else {
+  const swSrc = fs.readFileSync(swPath, 'utf8');
+  const coreMatch = swSrc.match(/CORE_ASSETS\s*=\s*\[([\s\S]*?)\]/);
+  if (coreMatch) {
+    const itemRegex = /['"]([^'"]+)['"]/g;
+    let m;
+    while ((m = itemRegex.exec(coreMatch[1])) !== null) {
+      const asset = m[1];
+      if (asset === './' || asset === '/') continue;
+      const resolvedAsset = path.resolve(ROOT, asset.split('?')[0]);
+      if (!fs.existsSync(resolvedAsset)) {
+        addError(`sw.js : ressource CORE_ASSETS introuvable -> "${asset}"`);
+      }
+    }
+  }
+}
+
 if (warnings.length > 0) {
   console.warn(`⚠️  ${warnings.length} avertissement(s) (illustrations de scénarios à venir) :`);
   for (const warn of warnings) {

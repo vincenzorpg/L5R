@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.11.0] — 2026-11-16
+
+### ✨ Ajouté & Amélioré
+- **Application Mobile PWA Hors-Ligne (Android & iOS) & Expérience Tactile Forge L5R (`manifest.webmanifest`, `sw.js`, `js/pwa.js`, `assets/icons/`, `createcharacter.html`, `css/main.css`, `js/forge-ui.js`)** :
+  - **Installation directe sur téléphone (`📲 Installer l'App`)** : manifeste complet `manifest.webmanifest` avec icônes dédiées (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`), raccourcis d'écran d'accueil (*Forge PJ*, *Dojo*, *Grimoire*, *Écran MJ*), invite native Android (`beforeinstallprompt`) et guide visuel iOS Safari (*Partager → Sur l'écran d'accueil*).
+  - **Service Worker 100 % Hors-Ligne (`sw.js`)** : pré-cache des pages clés, scripts, bases de données L5R 4e (`data/*.js`), icônes et ressources CDN visitées afin de pouvoir créer un samouraï, consulter ses sorts, lancer les dés Roll & Keep et sauvegarder dans le Dojo même sans réseau.
+  - **Interface Mobile App Native sur `createcharacter.html` (`< 768px`)** :
+    - **Dock de navigation fixe en bas d'écran (`#mobile-app-dock`)** avec zones tactiles confortables et support des encoches (`env(safe-area-inset-bottom)`) : *⛩️ Forge (étape x/6)*, *🏯 Dojo (compteur)*, *🎲 Dés XgY*, *📄 Fiche PDF*, et menu *⋯ Plus* ouvrant un tiroir mobile (`#mobile-more-sheet` : PDF A4, Carnet de Rokugan, Partage lien, JSON, Installation, Vue complète, Reset).
+    - **En-tête d'étape collant avec budget XP en direct** (`#mobile-xp-pill`) et centrage automatique de la pilule active, zones de saisie `16px` bloquant le zoom involontaire sur iPhone/iPad Safari, et boutons `-` / `+` élargis (`min-height: 38px`).
+    - **Aperçu Fiche Officielle A4 adapté au téléphone** : mise à l'échelle proportionnelle automatique (`--l5r-mobile-sheet-zoom` via `syncMobileSheetZoom()`) sur écran étroit tout en restaurant la pleine résolution `820px` lors du téléchargement PDF (`📥 Enregistrer PDF (fidèle)`).
+
+---
+
 ## [1.10.1] — 2026-11-16
 
 ### 🐛 Corrigé & Amélioré
