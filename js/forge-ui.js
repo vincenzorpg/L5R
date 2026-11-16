@@ -103,24 +103,24 @@ function injectForgeTemplates() {
         <section id="print-page-1" class="l5r-sheet-page space-y-2.5">
           <!-- En-tête Impérial -->
           <div class="grid grid-cols-12 gap-3 items-center border-b-2 border-[#7c6a4a] pb-2">
-            <div class="col-span-7 space-y-1 text-[10.5px]">
-              <div class="flex items-baseline gap-2 border-b border-[#8c7b5c] pb-0.5">
-                <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[9px] w-14 shrink-0">Nom</span>
-                <span id="p-name" class="font-imperial font-bold text-[17px] tracking-wide text-[#1a1610] leading-tight">Samouraï</span>
+            <div class="col-span-7 space-y-1.5 text-[10.5px]">
+              <div class="l5r-header-row-main flex items-center gap-2 border-b border-[#8c7b5c] pb-1.5 pt-0.5">
+                <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[9px] w-14 shrink-0 leading-normal">Nom</span>
+                <span id="p-name" class="font-imperial font-bold text-[16px] tracking-wide text-[#1a1610] leading-snug">Samouraï</span>
               </div>
               <div class="grid grid-cols-2 gap-3">
-                <div class="flex items-baseline gap-1.5 border-b border-[#b7aa90] pb-0.5">
-                  <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] shrink-0">Clan</span>
-                  <span id="p-clan" class="font-semibold text-[#1f1a14] truncate">Crabe</span>
+                <div class="l5r-header-row flex items-center gap-1.5 border-b border-[#b7aa90] pb-1 pt-0.5">
+                  <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] shrink-0 leading-normal">Clan</span>
+                  <span id="p-clan" class="font-semibold text-[#1f1a14] leading-snug">Crabe</span>
                 </div>
-                <div class="flex items-baseline gap-1.5 border-b border-[#b7aa90] pb-0.5">
-                  <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] shrink-0">Famille</span>
-                  <span id="p-family" class="font-semibold text-[#1f1a14] truncate">—</span>
+                <div class="l5r-header-row flex items-center gap-1.5 border-b border-[#b7aa90] pb-1 pt-0.5">
+                  <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] shrink-0 leading-normal">Famille</span>
+                  <span id="p-family" class="font-semibold text-[#1f1a14] leading-snug">—</span>
                 </div>
               </div>
-              <div class="flex items-baseline gap-2 border-b border-[#b7aa90] pb-0.5">
-                <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] w-14 shrink-0">École</span>
-                <span id="p-school" class="font-semibold text-[#1f1a14]">École de bushi Hida</span>
+              <div class="l5r-header-row flex items-center gap-2 border-b border-[#b7aa90] pb-1 pt-0.5">
+                <span class="font-imperial font-bold text-[#4a3b26] uppercase text-[8.5px] w-14 shrink-0 leading-normal">École</span>
+                <span id="p-school" class="font-semibold text-[#1f1a14] leading-snug">École de bushi Hida</span>
               </div>
             </div>
 
@@ -132,16 +132,16 @@ function injectForgeTemplates() {
                 <div class="text-[8px] text-[#6a5d47] italic">Réputation = (Anneaux × 10) + Compétences</div>
               </div>
               <svg viewBox="0 0 64 64" class="w-12 h-12 shrink-0" aria-hidden="true">
-                <circle cx="32" cy="14" r="9.5" fill="#e9f1e6" stroke="#486a3c" stroke-width="2"/>
-                <text x="32" y="17.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#243b1d">土</text>
-                <circle cx="49" cy="27" r="9.5" fill="#ececf6" stroke="#494d7a" stroke-width="2"/>
-                <text x="49" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#242648">風</text>
-                <circle cx="42" cy="48" r="9.5" fill="#faeae5" stroke="#b64329" stroke-width="2"/>
-                <text x="42" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#5b1d10">火</text>
-                <circle cx="22" cy="48" r="9.5" fill="#e5eef7" stroke="#2b5986" stroke-width="2"/>
-                <text x="22" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#173452">水</text>
-                <circle cx="15" cy="27" r="9.5" fill="#efece8" stroke="#3c342e" stroke-width="2"/>
-                <text x="15" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e1915">空</text>
+                <circle cx="32" cy="14" r="9.5" fill="#f4ece4" stroke="#6b4423" stroke-width="2"/>
+                <text x="32" y="17.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#422610">土</text>
+                <circle cx="49" cy="27" r="9.5" fill="#e6f7fc" stroke="#3898c8" stroke-width="2"/>
+                <text x="49" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#0c4a6e">風</text>
+                <circle cx="42" cy="48" r="9.5" fill="#fceae4" stroke="#c0392b" stroke-width="2"/>
+                <text x="42" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#69180d">火</text>
+                <circle cx="22" cy="48" r="9.5" fill="#e3eef9" stroke="#1d5fa7" stroke-width="2"/>
+                <text x="22" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#10345e">水</text>
+                <circle cx="15" cy="27" r="9.5" fill="#f2eafc" stroke="#6d28d9" stroke-width="2"/>
+                <text x="15" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#3b0764">空</text>
               </svg>
             </div>
           </div>
@@ -157,7 +157,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">土 Terre</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-earth">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#486a3c]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#6b4423]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Const.</span><b id="p-t-sta" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Volonté</span><b id="p-t-wil" class="font-imperial">2</b></div>
                   </div>
@@ -168,7 +168,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">風 Air</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-air">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#494d7a]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#3898c8]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Réfl.</span><b id="p-t-ref" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Intuit.</span><b id="p-t-awa" class="font-imperial">2</b></div>
                   </div>
@@ -179,7 +179,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">水 Eau</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-water">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#2b5986]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#1d5fa7]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Force</span><b id="p-t-str" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Perc.</span><b id="p-t-per" class="font-imperial">2</b></div>
                   </div>
@@ -190,7 +190,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">火 Feu</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-fire">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#b64329]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#c0392b]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Agil.</span><b id="p-t-agi" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Intell.</span><b id="p-t-int" class="font-imperial">2</b></div>
                   </div>
@@ -201,49 +201,49 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">空 Vide</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-void">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#3c342e]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#6d28d9]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Réserve</span><b id="p-t-voi" class="font-imperial">2</b></div>
                     <div class="text-[7.5px] text-[#5a4e43]">Points/jour</div>
                   </div>
                 </div>
               </div>
-              <div class="mt-1.5 pt-1 border-t border-[#c9bea6] flex items-center justify-between text-[8.5px]">
+              <div class="mt-2 pt-1.5 border-t border-[#c9bea6] flex items-center justify-between text-[8.5px] leading-normal">
                 <span class="font-imperial font-bold uppercase text-[#3c342e] tracking-wider">Points de Vide dépensés :</span>
                 <div id="p-void-dots" class="flex items-center gap-1"></div>
               </div>
             </div>
 
             <!-- Honneur / Gloire / Statut / Souillure -->
-            <div class="col-span-4 l5r-box overflow-hidden flex flex-col justify-between">
+            <div class="col-span-4 l5r-box overflow-hidden">
               <div class="l5r-bar"><span>Vertus &amp; Renommée</span><span>Rang</span></div>
-              <div class="p-2 space-y-1.5 text-[9px] flex-1 flex flex-col justify-around">
-                <div>
-                  <div class="flex justify-between font-bold text-[#2b241d]">
+              <div class="l5r-virtue-list p-2 space-y-2 text-[9px]">
+                <div class="l5r-virtue-item">
+                  <div class="l5r-virtue-header flex items-center justify-between font-bold text-[#2b241d] leading-snug mb-1">
                     <span class="font-imperial uppercase tracking-wider text-[8.5px]">Honneur</span>
                     <span id="p-honor" class="font-imperial text-[#7b2319]">4.5</span>
                   </div>
-                  <div id="p-honor-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                  <div id="p-honor-track" class="l5r-virtue-track flex items-center justify-between gap-0.5 h-[11px]"></div>
                 </div>
-                <div>
-                  <div class="flex justify-between font-bold text-[#2b241d]">
+                <div class="l5r-virtue-item">
+                  <div class="l5r-virtue-header flex items-center justify-between font-bold text-[#2b241d] leading-snug mb-1">
                     <span class="font-imperial uppercase tracking-wider text-[8.5px]">Gloire</span>
                     <span id="p-glory" class="font-imperial">1.0</span>
                   </div>
-                  <div id="p-glory-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                  <div id="p-glory-track" class="l5r-virtue-track flex items-center justify-between gap-0.5 h-[11px]"></div>
                 </div>
-                <div>
-                  <div class="flex justify-between font-bold text-[#2b241d]">
+                <div class="l5r-virtue-item">
+                  <div class="l5r-virtue-header flex items-center justify-between font-bold text-[#2b241d] leading-snug mb-1">
                     <span class="font-imperial uppercase tracking-wider text-[8.5px]">Statut</span>
                     <span id="p-status" class="font-imperial">1.0</span>
                   </div>
-                  <div id="p-status-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                  <div id="p-status-track" class="l5r-virtue-track flex items-center justify-between gap-0.5 h-[11px]"></div>
                 </div>
-                <div>
-                  <div class="flex justify-between font-bold text-[#2b241d]">
+                <div class="l5r-virtue-item">
+                  <div class="l5r-virtue-header flex items-center justify-between font-bold text-[#2b241d] leading-snug mb-1">
                     <span class="font-imperial uppercase tracking-wider text-[8.5px]">Souillure Outremonde</span>
                     <span id="p-taint" class="font-imperial text-[#581f1b]">0.0</span>
                   </div>
-                  <div id="p-taint-track" class="flex justify-between gap-0.5 mt-0.5"></div>
+                  <div id="p-taint-track" class="l5r-virtue-track flex items-center justify-between gap-0.5 h-[11px]"></div>
                 </div>
               </div>
             </div>
@@ -277,18 +277,18 @@ function injectForgeTemplates() {
               <!-- Initiative -->
               <div class="l5r-box overflow-hidden">
                 <div class="l5r-bar"><span>Initiative</span><span id="p-init" class="text-amber-200 font-bold text-[10.5px]">3g2</span></div>
-                <div class="p-1.5 text-[8.5px] space-y-0.5">
-                  <div class="flex justify-between"><span class="text-[#5a4e43]">Base &amp; Bonus :</span><span id="p-init-note" class="font-medium text-right"></span></div>
-                  <div class="flex justify-between border-t border-[#d7d0c0] pt-0.5"><span class="text-[#5a4e43]">Modif. / Initiative actuelle :</span><span class="text-[#8b7f69]">_______</span></div>
+                <div class="p-2 text-[8.5px] space-y-1 leading-snug">
+                  <div class="flex items-center justify-between pb-0.5"><span class="text-[#5a4e43]">Base &amp; Bonus :</span><span id="p-init-note" class="font-medium text-right"></span></div>
+                  <div class="flex items-center justify-between border-t border-[#d7d0c0] pt-1"><span class="text-[#5a4e43]">Modif. / Initiative actuelle :</span><span class="text-[#8b7f69]">_______</span></div>
                 </div>
               </div>
 
               <!-- ND d'Armure & Armure -->
               <div class="l5r-box overflow-hidden">
                 <div class="l5r-bar"><span>ND d'Armure &amp; Protection</span><span id="p-armor-tn" class="text-amber-200 font-bold text-[11px]">20</span></div>
-                <div class="p-1.5 text-[8.5px] space-y-0.5">
-                  <div id="p-armor-note" class="text-[8px] text-[#4a3e31]"></div>
-                  <div class="flex justify-between border-t border-[#d7d0c0] pt-0.5">
+                <div class="p-2 text-[8.5px] space-y-1 leading-snug">
+                  <div id="p-armor-note" class="text-[8px] text-[#4a3e31] pb-0.5"></div>
+                  <div class="flex items-center justify-between border-t border-[#d7d0c0] pt-1">
                     <span><b>Armure :</b> <span id="p-armor-name">Aucune</span></span>
                     <span id="p-armor-reduc" class="font-bold text-[#2b5986]">Réduction : 0</span>
                   </div>
@@ -336,13 +336,13 @@ function injectForgeTemplates() {
         <!-- ===================== PAGE 2 : TECHNIQUES, AVANTAGES, ÉQUIPEMENT & ARTS ===================== -->
         <section id="print-page-2" class="l5r-sheet-page space-y-2.5">
           <!-- Bandeau Rappel Identité & Bourse -->
-          <div class="flex flex-wrap justify-between items-center gap-2 border-b-2 border-[#7c6a4a] pb-1.5 text-[9.5px]">
+          <div class="flex flex-wrap justify-between items-center gap-2 border-b-2 border-[#7c6a4a] pb-2 text-[9.5px] leading-snug">
             <div class="flex flex-wrap items-center gap-2">
               <span class="font-imperial font-bold text-sm text-[#1a1610]" id="p-name-2">Samouraï</span>
-              <span class="px-1.5 py-0.5 rounded bg-[#e3ded0] border border-[#8c7b5c] font-semibold" id="p-clan-2">Crabe</span>
+              <span class="inline-block px-2 pt-0.5 pb-1 rounded bg-[#e3ded0] border border-[#8c7b5c] font-semibold leading-none" id="p-clan-2">Crabe</span>
               <span class="text-[#4a3b26] font-medium" id="p-school-2">École de bushi Hida</span>
             </div>
-            <div class="flex items-center gap-2 text-[8.5px] bg-[#efe6cf] border border-[#8c7b5c] rounded px-2 py-0.5">
+            <div class="flex items-center gap-2 text-[8.5px] bg-[#efe6cf] border border-[#8c7b5c] rounded px-2 pt-0.5 pb-1">
               <b>Bourse :</b>
               <span>Koku : <b class="inline-block w-6 border-b border-[#7c6a4a] text-center">&nbsp;</b></span>
               <span>Bu : <b class="inline-block w-6 border-b border-[#7c6a4a] text-center">&nbsp;</b></span>
@@ -1562,11 +1562,11 @@ function populatePrintableMysticBox() {
   if (slotsPrint) {
     if (perms.canCastSpells) {
       const slotDefs = [
-        { label: '風 Air', ringId: 'ring-air', stroke: '#494d7a', fill: '#d9daf0' },
-        { label: '土 Terre', ringId: 'ring-earth', stroke: '#486a3c', fill: '#d6e6d0' },
-        { label: '火 Feu', ringId: 'ring-fire', stroke: '#b64329', fill: '#f4d3ca' },
-        { label: '水 Eau', ringId: 'ring-water', stroke: '#2b5986', fill: '#cfe1f2' },
-        { label: '空 Vide', ringId: 'ring-void', stroke: '#3c342e', fill: '#ddd7d1' }
+        { label: '風 Air', ringId: 'ring-air', stroke: '#3898c8', fill: '#e6f7fc' },
+        { label: '土 Terre', ringId: 'ring-earth', stroke: '#6b4423', fill: '#f4ece4' },
+        { label: '火 Feu', ringId: 'ring-fire', stroke: '#c0392b', fill: '#fceae4' },
+        { label: '水 Eau', ringId: 'ring-water', stroke: '#1d5fa7', fill: '#e3eef9' },
+        { label: '空 Vide', ringId: 'ring-void', stroke: '#6d28d9', fill: '#f2eafc' }
       ];
       slotsPrint.innerHTML = `
         <div class="flex justify-between items-center font-imperial font-bold text-[#3d3223] border-b border-[#c9bea6] pb-0.5 mb-1">
@@ -1582,9 +1582,9 @@ function populatePrintableMysticBox() {
               circles += `<span style="display:inline-block;width:9px;height:9px;border-radius:9999px;border:1.25px solid ${sd.stroke};background:${active ? sd.fill : '#fffdf7'};opacity:${active ? '1' : '0.35'};"></span>`;
             }
             return `
-              <div class="text-center rounded border px-1 py-1 bg-[#fbf8f0]" style="border-color:${sd.stroke};">
-                <div class="font-imperial font-bold text-[8px]" style="color:${sd.stroke};">${sd.label} (${val})</div>
-                <div class="flex justify-center gap-0.5 mt-0.5">${circles}</div>
+              <div class="text-center rounded border px-1.5 py-1.5 bg-[#fbf8f0]" style="border-color:${sd.stroke};">
+                <div class="font-imperial font-bold text-[8px] leading-snug mb-1.5" style="color:${sd.stroke};">${sd.label} (${val})</div>
+                <div class="flex items-center justify-center gap-0.5 pt-0.5">${circles}</div>
               </div>
             `;
           }).join('')}
@@ -1813,7 +1813,34 @@ async function downloadCharacterSheetPDF() {
         logging: false,
         windowWidth: 1200,
         scrollX: 0,
-        scrollY: 0
+        scrollY: 0,
+        onclone: (clonedDoc) => {
+          try {
+            let mainCssText = '';
+            for (const ss of Array.from(document.styleSheets)) {
+              if (ss.href && ss.href.includes('main.css')) {
+                for (const rule of Array.from(ss.cssRules || [])) {
+                  mainCssText += rule.cssText + '\n';
+                }
+              }
+            }
+            if (mainCssText) {
+              clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach(l => {
+                if ((l.getAttribute('href') || '').includes('main.css')) l.remove();
+              });
+              const inlined = clonedDoc.createElement('style');
+              inlined.textContent = mainCssText;
+              clonedDoc.head.appendChild(inlined);
+            }
+          } catch (e) {}
+          const s = clonedDoc.createElement('style');
+          s.textContent = `
+            #print-sheet, #print-sheet * { letter-spacing: normal; }
+            #print-sheet .truncate { overflow: visible !important; text-overflow: clip !important; white-space: normal !important; }
+            #print-sheet img { display: inline-block !important; }
+          `;
+          clonedDoc.head.appendChild(s);
+        }
       });
       pageEl.style.boxShadow = prevShadow;
 

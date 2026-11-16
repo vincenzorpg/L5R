@@ -472,9 +472,9 @@ select {
 .badge-air,
 .badge-elem-air,
 .badge-dragon {
-  background: rgba(19, 78, 74, 0.4);
-  color: #99f6e4;
-  border: 1px solid #0d9488;
+  background: rgba(14, 165, 233, 0.24);
+  color: #bae6fd;
+  border: 1px solid #38bdf8;
 }
 
 .badge-vide,
@@ -534,9 +534,9 @@ select {
 [data-theme="light"] .badge-air,
 [data-theme="light"] .badge-elem-air,
 [data-theme="light"] .badge-dragon {
-  background: #ccfbf1 !important;
-  color: #115e59 !important;
-  border: 1px solid #0d9488 !important;
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  border: 1px solid #38bdf8 !important;
 }
 
 [data-theme="light"] .badge-vide,
@@ -849,8 +849,52 @@ select {
   color: #1f1a14 !important;
   border: 1.5px solid #7c6a4a !important;
   padding: 14px 16px;
-  font-family: 'Noto Serif JP', Georgia, serif;
+  font-family: Georgia, 'Noto Serif JP', serif;
+  line-height: 1.4;
   position: relative;
+}
+
+.l5r-header-row-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0 6px;
+  border-bottom: 1.5px solid #8c7b5c;
+  min-height: 26px;
+  line-height: 1.35;
+}
+
+.l5r-header-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 5px;
+  border-bottom: 1px solid #b7aa90;
+  min-height: 22px;
+  line-height: 1.35;
+}
+
+.l5r-virtue-list {
+  padding: 8px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.l5r-virtue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.l5r-virtue-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  height: 11px;
 }
 
 .l5r-sheet-page::after {
@@ -868,9 +912,10 @@ select {
   font-family: 'Cinzel', serif;
   font-weight: 700;
   font-size: 9.5px;
+  line-height: 1.35;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 3px 7px;
+  padding: 4px 7px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -912,41 +957,41 @@ select {
   min-height: 16px;
 }
 
-/* Couleurs officielles des 5 Anneaux */
+/* Couleurs officielles des 5 Anneaux : Terre Marron, Air Bleu clair, Eau Bleu, Feu Rouge feu, Vide Violet */
 .l5r-ring-earth {
-  background: #e9f1e6 !important;
-  border: 1.5px solid #486a3c !important;
-  color: #243b1d !important;
+  background: #f4ece4 !important;
+  border: 1.5px solid #6b4423 !important;
+  color: #422610 !important;
 }
-.l5r-ring-earth .l5r-ring-dot { background: #486a3c !important; color: #fff !important; }
+.l5r-ring-earth .l5r-ring-dot { background: #6b4423 !important; color: #fff !important; }
 
 .l5r-ring-water {
-  background: #e5eef7 !important;
-  border: 1.5px solid #2b5986 !important;
-  color: #173452 !important;
+  background: #e3eef9 !important;
+  border: 1.5px solid #1d5fa7 !important;
+  color: #10345e !important;
 }
-.l5r-ring-water .l5r-ring-dot { background: #2b5986 !important; color: #fff !important; }
+.l5r-ring-water .l5r-ring-dot { background: #1d5fa7 !important; color: #fff !important; }
 
 .l5r-ring-air {
-  background: #ececf6 !important;
-  border: 1.5px solid #494d7a !important;
-  color: #242648 !important;
+  background: #e6f7fc !important;
+  border: 1.5px solid #3898c8 !important;
+  color: #0c4a6e !important;
 }
-.l5r-ring-air .l5r-ring-dot { background: #494d7a !important; color: #fff !important; }
+.l5r-ring-air .l5r-ring-dot { background: #3898c8 !important; color: #fff !important; }
 
 .l5r-ring-fire {
-  background: #faeae5 !important;
-  border: 1.5px solid #b64329 !important;
-  color: #5b1d10 !important;
+  background: #fceae4 !important;
+  border: 1.5px solid #c0392b !important;
+  color: #69180d !important;
 }
-.l5r-ring-fire .l5r-ring-dot { background: #b64329 !important; color: #fff !important; }
+.l5r-ring-fire .l5r-ring-dot { background: #c0392b !important; color: #fff !important; }
 
 .l5r-ring-void {
-  background: #efece8 !important;
-  border: 1.5px solid #3c342e !important;
-  color: #1e1915 !important;
+  background: #f2eafc !important;
+  border: 1.5px solid #6d28d9 !important;
+  color: #3b0764 !important;
 }
-.l5r-ring-void .l5r-ring-dot { background: #3c342e !important; color: #f3d98b !important; }
+.l5r-ring-void .l5r-ring-dot { background: #6d28d9 !important; color: #f5e8ff !important; }
 
 .l5r-pip {
   display: inline-block;
@@ -971,13 +1016,15 @@ select {
   background: #e0dbd0 !important;
   color: #1e1913 !important;
   font-size: 8.5px;
+  line-height: 1.35;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   border-bottom: 1px solid #5a503f !important;
-  padding: 2.5px 4px;
+  padding: 3px 4px 4px;
 }
 .l5r-table td {
-  padding: 2.5px 4px;
+  padding: 3px 4px 4px;
+  line-height: 1.35;
   border-bottom: 1px solid #d7d0c0 !important;
 }
 .l5r-table tbody tr:nth-child(even) {
