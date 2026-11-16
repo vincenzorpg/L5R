@@ -132,16 +132,16 @@ function injectForgeTemplates() {
                 <div class="text-[8px] text-[#6a5d47] italic">Réputation = (Anneaux × 10) + Compétences</div>
               </div>
               <svg viewBox="0 0 64 64" class="w-12 h-12 shrink-0" aria-hidden="true">
-                <circle cx="32" cy="14" r="9.5" fill="#e9f1e6" stroke="#486a3c" stroke-width="2"/>
-                <text x="32" y="17.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#243b1d">土</text>
-                <circle cx="49" cy="27" r="9.5" fill="#ececf6" stroke="#494d7a" stroke-width="2"/>
-                <text x="49" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#242648">風</text>
-                <circle cx="42" cy="48" r="9.5" fill="#faeae5" stroke="#b64329" stroke-width="2"/>
-                <text x="42" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#5b1d10">火</text>
-                <circle cx="22" cy="48" r="9.5" fill="#e5eef7" stroke="#2b5986" stroke-width="2"/>
-                <text x="22" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#173452">水</text>
-                <circle cx="15" cy="27" r="9.5" fill="#efece8" stroke="#3c342e" stroke-width="2"/>
-                <text x="15" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e1915">空</text>
+                <circle cx="32" cy="14" r="9.5" fill="#f4ece4" stroke="#6b4423" stroke-width="2"/>
+                <text x="32" y="17.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#422610">土</text>
+                <circle cx="49" cy="27" r="9.5" fill="#e6f7fc" stroke="#3898c8" stroke-width="2"/>
+                <text x="49" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#0c4a6e">風</text>
+                <circle cx="42" cy="48" r="9.5" fill="#fceae4" stroke="#c0392b" stroke-width="2"/>
+                <text x="42" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#69180d">火</text>
+                <circle cx="22" cy="48" r="9.5" fill="#e3eef9" stroke="#1d5fa7" stroke-width="2"/>
+                <text x="22" y="51.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#10345e">水</text>
+                <circle cx="15" cy="27" r="9.5" fill="#f2eafc" stroke="#6d28d9" stroke-width="2"/>
+                <text x="15" y="30.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#3b0764">空</text>
               </svg>
             </div>
           </div>
@@ -157,7 +157,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">土 Terre</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-earth">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#486a3c]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#6b4423]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Const.</span><b id="p-t-sta" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Volonté</span><b id="p-t-wil" class="font-imperial">2</b></div>
                   </div>
@@ -168,7 +168,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">風 Air</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-air">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#494d7a]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#3898c8]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Réfl.</span><b id="p-t-ref" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Intuit.</span><b id="p-t-awa" class="font-imperial">2</b></div>
                   </div>
@@ -179,7 +179,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">水 Eau</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-water">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#2b5986]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#1d5fa7]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Force</span><b id="p-t-str" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Perc.</span><b id="p-t-per" class="font-imperial">2</b></div>
                   </div>
@@ -190,7 +190,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">火 Feu</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-fire">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#b64329]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#c0392b]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Agil.</span><b id="p-t-agi" class="font-imperial">2</b></div>
                     <div class="flex justify-between px-0.5"><span>Intell.</span><b id="p-t-int" class="font-imperial">2</b></div>
                   </div>
@@ -201,7 +201,7 @@ function injectForgeTemplates() {
                     <div class="font-imperial font-bold text-[9.5px] tracking-wider uppercase">空 Vide</div>
                     <div class="l5r-ring-dot w-7 h-7 rounded-full mx-auto my-1 flex items-center justify-center font-imperial font-bold text-sm shadow-sm" id="p-r-void">2</div>
                   </div>
-                  <div class="space-y-0.5 text-[8.5px] border-t border-[#3c342e]/30 pt-1">
+                  <div class="space-y-0.5 text-[8.5px] border-t border-[#6d28d9]/30 pt-1">
                     <div class="flex justify-between px-0.5"><span>Réserve</span><b id="p-t-voi" class="font-imperial">2</b></div>
                     <div class="text-[7.5px] text-[#5a4e43]">Points/jour</div>
                   </div>
@@ -1562,11 +1562,11 @@ function populatePrintableMysticBox() {
   if (slotsPrint) {
     if (perms.canCastSpells) {
       const slotDefs = [
-        { label: '風 Air', ringId: 'ring-air', stroke: '#494d7a', fill: '#d9daf0' },
-        { label: '土 Terre', ringId: 'ring-earth', stroke: '#486a3c', fill: '#d6e6d0' },
-        { label: '火 Feu', ringId: 'ring-fire', stroke: '#b64329', fill: '#f4d3ca' },
-        { label: '水 Eau', ringId: 'ring-water', stroke: '#2b5986', fill: '#cfe1f2' },
-        { label: '空 Vide', ringId: 'ring-void', stroke: '#3c342e', fill: '#ddd7d1' }
+        { label: '風 Air', ringId: 'ring-air', stroke: '#3898c8', fill: '#e6f7fc' },
+        { label: '土 Terre', ringId: 'ring-earth', stroke: '#6b4423', fill: '#f4ece4' },
+        { label: '火 Feu', ringId: 'ring-fire', stroke: '#c0392b', fill: '#fceae4' },
+        { label: '水 Eau', ringId: 'ring-water', stroke: '#1d5fa7', fill: '#e3eef9' },
+        { label: '空 Vide', ringId: 'ring-void', stroke: '#6d28d9', fill: '#f2eafc' }
       ];
       slotsPrint.innerHTML = `
         <div class="flex justify-between items-center font-imperial font-bold text-[#3d3223] border-b border-[#c9bea6] pb-0.5 mb-1">
@@ -1582,9 +1582,9 @@ function populatePrintableMysticBox() {
               circles += `<span style="display:inline-block;width:9px;height:9px;border-radius:9999px;border:1.25px solid ${sd.stroke};background:${active ? sd.fill : '#fffdf7'};opacity:${active ? '1' : '0.35'};"></span>`;
             }
             return `
-              <div class="text-center rounded border px-1 py-1 bg-[#fbf8f0]" style="border-color:${sd.stroke};">
-                <div class="font-imperial font-bold text-[8px]" style="color:${sd.stroke};">${sd.label} (${val})</div>
-                <div class="flex justify-center gap-0.5 mt-0.5">${circles}</div>
+              <div class="text-center rounded border px-1.5 py-1.5 bg-[#fbf8f0]" style="border-color:${sd.stroke};">
+                <div class="font-imperial font-bold text-[8px] leading-snug mb-1.5" style="color:${sd.stroke};">${sd.label} (${val})</div>
+                <div class="flex items-center justify-center gap-0.5 pt-0.5">${circles}</div>
               </div>
             `;
           }).join('')}

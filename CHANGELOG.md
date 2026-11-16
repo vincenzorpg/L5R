@@ -9,7 +9,8 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 ## [1.11.2] — 2026-11-16
 
 ### 🐛 Corrigé
-- **Alignement & Netteté de l'Export PDF (`css/main.css`, `js/forge-ui.js`, `js/character-generator.js`, `sw.js`, `createcharacter.html`)** :
+- **Alignement & Netteté de l'Export PDF + Couleurs Élémentaires (`css/main.css`, `js/forge-ui.js`, `js/character-generator.js`, `sw.js`, `createcharacter.html`)** :
+  - **Couleurs des 5 Anneaux & Éléments harmonisées** : **Terre** en marron (`#6b4423`), **Eau** en bleu (`#1d5fa7`), **Feu** en rouge feu (`#c0392b`), **Air** en bleu clair (`#3898c8`) et **Vide** en violet (`#6d28d9`), appliquées sur les 5 cartes d'Anneaux, le sceau d'en-tête SVG, les emplacements de sorts de Shugenja et les badges d'éléments.
   - Suppression des coupures de lettres sur *Clan*, *Famille*, *École* et détails d'armes (retrait de `truncate` et `items-baseline` remplacés par `.l5r-header-row` / `.l5r-header-row-main` avec interligne `1.35` et marge inférieure confortable).
   - Correction du chevauchement entre les libellés *Honneur / Gloire / Statut / Souillure* et leurs réglettes de cases à cocher dans `Vertus & Renommée` (remplacement de `flex-col justify-around` par `.l5r-virtue-list`, `.l5r-virtue-header`, `.l5r-virtue-track` et pile typographique `Georgia, 'Noto Serif JP', serif`).
   - Ajustement des marges/alignements de tableaux (`.l5r-table`), pastilles de techniques (`ACTIF`, `MAÎTRISÉ`, `R2`–`R5`), badges Page 2 et passage du Service Worker `sw.js` en stratégie *Network-First* pour les fichiers `.css`/`.js` afin d'éviter toute désynchronisation de style après mise à jour.
