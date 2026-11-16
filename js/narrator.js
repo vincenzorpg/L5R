@@ -5,51 +5,164 @@
 // =============================================================================
 
 (function () {
-  const synth = window.speechSynthesis;
+  const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+  const STORAGE_VOICE_KEY = 'l5r_narrator_voice';
+  const STORAGE_RATE_KEY = 'l5r_narrator_rate';
+
   let paragraphs = [];
   let currentIndex = 0;
+  let currentChunkIndex = 0;
+  let currentChunks = [];
   let isPlaying = false;
+  let isPaused = false;
   let selectedVoice = null;
   let activeVersion = 'v1';
-  let utterance = null;
+  let speakGeneration = 0;
 
-  // ===========================================================================
-  // MODE 1 : LECTEUR PARAGRAPHE PAR PARAGRAPHE AVEC SÉLECTION DE VOIX HD
-  // ===========================================================================
-  function initParagraphNarrator() {
-    const container = document.getElementById('story-content');
-    if (!container) return;
+  function isMultiVersionMode() {
+    return !!document.getElementById('content-v1');
+  }
 
+  function getActiveContainer() {
+    if (isMultiVersionMode()) {
+      return document.getElementById(`content-${activeVersion}`) || document.getElementById('story-content');
+    }
+    return document.getElementById('story-content');
+  }
+
+  function collectParagraphs() {
+    const container = getActiveContainer();
+    if (!container) {
+      paragraphs = [];
+      return;
+    }
     paragraphs = Array.from(container.querySelectorAll('p')).filter(p => p.textContent.trim().length > 0);
-    updateProgressUI();
-    loadVoices();
+  }
+
+  /**
+   * Découpe un paragraphe en phrases courtes (< 220 car.) pour éviter la coupure
+   * silencieuse des synthèses vocales cloud (Chrome/Android/Edge) sur les longs textes.
+   */
+  function splitIntoSpeechChunks(text, maxLen = 220) {
+    const clean = text.replace(/\s+/g, ' ').trim();
+    if (!clean) return [];
+    if (clean.length <= maxLen) return [clean];
+
+    const sentences = clean.split(/(?<=[.!?…»])\s+/);
+    const chunks = [];
+    let buffer = '';
+
+    const pushSegment = (segment) => {
+      if (segment.length <= maxLen) {
+        if (!buffer) {
+          buffer = segment;
+        } else if (buffer.length + 1 + segment.length <= maxLen) {
+          buffer += ' ' + segment;
+        } else {
+          chunks.push(buffer);
+          buffer = segment;
+        }
+        return;
+      }
+      if (buffer) {
+        chunks.push(buffer);
+        buffer = '';
+      }
+      // Découpe secondaire sur virgules/deux-points/espaces pour les très longues phrases
+      const subParts = segment.split(/(?<=[,;:])\s+/);
+      for (const part of subParts) {
+        if (part.length <= maxLen) {
+          if (!buffer) buffer = part;
+          else if (buffer.length + 1 + part.length <= maxLen) buffer += ' ' + part;
+          else {
+            chunks.push(buffer);
+            buffer = part;
+          }
+        } else {
+          if (buffer) {
+            chunks.push(buffer);
+            buffer = '';
+          }
+          const words = part.split(/\s+/);
+          for (const word of words) {
+            if (!buffer) buffer = word;
+            else if (buffer.length + 1 + word.length <= maxLen) buffer += ' ' + word;
+            else {
+              chunks.push(buffer);
+              buffer = word;
+            }
+          }
+        }
+      }
+    };
+
+    for (const sentence of sentences) {
+      pushSegment(sentence);
+    }
+    if (buffer) chunks.push(buffer);
+    return chunks.length > 0 ? chunks : [clean];
+  }
+
+  function getSavedRate() {
+    try {
+      return localStorage.getItem(STORAGE_RATE_KEY);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function saveRate(val) {
+    try {
+      localStorage.setItem(STORAGE_RATE_KEY, String(val));
+    } catch (_) {}
+  }
+
+  function getSavedVoice() {
+    try {
+      return localStorage.getItem(STORAGE_VOICE_KEY);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function saveVoice(name) {
+    try {
+      localStorage.setItem(STORAGE_VOICE_KEY, name);
+    } catch (_) {}
   }
 
   function loadVoices() {
-    if (!('speechSynthesis' in window)) return;
+    if (!synth) return;
     const voices = synth.getVoices();
     const frVoices = voices.filter(v => v.lang.startsWith('fr') || v.lang.includes('FR'));
-    const select = document.getElementById('voice-select');
-    if (!select) return;
-    select.innerHTML = "";
 
     frVoices.sort((a, b) => {
-      const isHD_A = a.name.includes("Natural") || a.name.includes("Neural") || a.name.includes("Google") || a.name.includes("Premium");
-      const isHD_B = b.name.includes("Natural") || b.name.includes("Neural") || b.name.includes("Google") || b.name.includes("Premium");
+      const isHD_A = a.name.includes('Natural') || a.name.includes('Neural') || a.name.includes('Google') || a.name.includes('Premium');
+      const isHD_B = b.name.includes('Natural') || b.name.includes('Neural') || b.name.includes('Google') || b.name.includes('Premium');
       return (isHD_B ? 1 : 0) - (isHD_A ? 1 : 0);
     });
 
-    frVoices.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v.name;
-      const isHD = v.name.includes("Natural") || v.name.includes("Neural") || v.name.includes("Google");
-      opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
-      select.appendChild(opt);
-    });
+    const select = document.getElementById('voice-select');
+    const savedVoiceName = getSavedVoice();
+
+    if (select) {
+      select.innerHTML = '';
+      frVoices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        const isHD = v.name.includes('Natural') || v.name.includes('Neural') || v.name.includes('Google') || v.name.includes('Premium');
+        opt.textContent = `${isHD ? '✨ ' : ''}${v.name.replace(/Microsoft |Google |fr-FR/g, '').trim()}`;
+        select.appendChild(opt);
+      });
+    }
 
     if (frVoices.length > 0) {
-      selectedVoice = frVoices[0];
-      select.value = selectedVoice.name;
+      const stillAvailable = selectedVoice && frVoices.find(v => v.name === selectedVoice.name);
+      const savedMatch = savedVoiceName && frVoices.find(v => v.name === savedVoiceName);
+      selectedVoice = stillAvailable || savedMatch || frVoices[0];
+      if (select && selectedVoice) {
+        select.value = selectedVoice.name;
+      }
     }
   }
 
@@ -57,9 +170,10 @@
     const select = document.getElementById('voice-select');
     if (!select || !synth) return;
     const voiceName = select.value;
-    selectedVoice = synth.getVoices().find(v => v.name === voiceName);
-    if (isPlaying) {
-      readCurrentParagraph();
+    selectedVoice = synth.getVoices().find(v => v.name === voiceName) || selectedVoice;
+    if (selectedVoice) saveVoice(selectedVoice.name);
+    if (isPlaying && !isPaused) {
+      readCurrentParagraph(currentChunkIndex);
     }
   }
 
@@ -69,14 +183,17 @@
     const visualizer = document.getElementById('narrator-visualizer');
 
     if (progText) {
-      progText.textContent = `Paragraphe ${paragraphs.length ? currentIndex + 1 : 0} / ${paragraphs.length}`;
+      const shownIdx = paragraphs.length ? (isPlaying || isPaused || currentIndex > 0 ? currentIndex + 1 : 0) : 0;
+      progText.textContent = `Paragraphe ${shownIdx} / ${paragraphs.length}`;
     }
-    if (bar && paragraphs.length) {
-      const pct = ((currentIndex + 1) / paragraphs.length) * 100;
+    if (bar) {
+      const pct = paragraphs.length && (isPlaying || isPaused || currentIndex > 0)
+        ? ((currentIndex + 1) / paragraphs.length) * 100
+        : 0;
       bar.style.width = `${pct}%`;
     }
     if (visualizer) {
-      if (isPlaying) {
+      if (isPlaying && !isPaused) {
         visualizer.classList.add('scale-110', 'bg-amber-600', 'text-black', 'animate-pulse');
         visualizer.classList.remove('bg-amber-950/90', 'text-amber-300');
       } else {
@@ -87,91 +204,180 @@
   }
 
   function highlightParagraph(idx) {
-    paragraphs.forEach((p, i) => {
-      if (i === idx) {
-        p.classList.add('reading-active');
-        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else {
-        p.classList.remove('reading-active');
-      }
+    document.querySelectorAll('#story-content .reading-active').forEach(el => {
+      el.classList.remove('reading-active');
     });
+    const target = paragraphs[idx];
+    if (target) {
+      target.classList.add('reading-active');
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
-  function readCurrentParagraph() {
-    if (!synth) return;
-    synth.cancel();
-    if (currentIndex >= paragraphs.length) {
-      stopAudio();
+  function updatePlayButton() {
+    const btnPlay = document.getElementById('btn-play');
+    const icon = document.getElementById('play-icon');
+    const text = document.getElementById('play-text');
+
+    if (isMultiVersionMode()) {
+      if (btnPlay) {
+        btnPlay.classList.toggle('bg-amber-500', isPlaying && !isPaused);
+      }
       return;
     }
 
-    const p = paragraphs[currentIndex];
-    highlightParagraph(currentIndex);
+    if (isPlaying && !isPaused) {
+      if (icon) icon.textContent = '⏸';
+      if (text) text.textContent = 'Pause';
+    } else if (isPaused) {
+      if (icon) icon.textContent = '▶';
+      if (text) text.textContent = 'Reprendre';
+    } else {
+      if (icon) icon.textContent = '▶';
+      if (text) text.textContent = 'Écouter le Récit';
+    }
+  }
+
+  function finishNarration() {
+    speakGeneration++;
+    if (synth) synth.cancel();
+    isPlaying = false;
+    isPaused = false;
+    currentIndex = 0;
+    currentChunkIndex = 0;
+    currentChunks = [];
+    document.querySelectorAll('#story-content .reading-active').forEach(el => {
+      el.classList.remove('reading-active');
+    });
+    const statusEl = document.getElementById('audio-status');
+    if (statusEl) statusEl.textContent = 'Lecture terminée';
+    updatePlayButton();
     updateProgressUI();
+  }
 
-    const u = new SpeechSynthesisUtterance(p.textContent.trim());
+  function speakCurrentChunk(gen) {
+    if (!synth || gen !== speakGeneration || !isPlaying || isPaused) return;
+    if (currentChunkIndex >= currentChunks.length) {
+      currentIndex++;
+      if (currentIndex < paragraphs.length) {
+        setTimeout(() => {
+          if (gen === speakGeneration && isPlaying && !isPaused) {
+            readCurrentParagraph(0);
+          }
+        }, 220);
+      } else {
+        finishNarration();
+      }
+      return;
+    }
+
+    const chunkText = currentChunks[currentChunkIndex];
+    const u = new SpeechSynthesisUtterance(chunkText);
     u.lang = 'fr-FR';
-    u.rate = parseFloat(document.getElementById('audio-rate')?.value || 1.0);
-    u.pitch = 0.95;
-
+    u.rate = parseFloat(document.getElementById('audio-rate')?.value || '1.0');
+    u.pitch = 0.96;
     if (selectedVoice) u.voice = selectedVoice;
 
     u.onend = () => {
-      if (isPlaying) {
-        currentIndex++;
-        if (currentIndex < paragraphs.length) {
-          setTimeout(readCurrentParagraph, 300);
-        } else {
-          stopAudio();
-        }
-      }
+      if (gen !== speakGeneration || !isPlaying || isPaused) return;
+      currentChunkIndex++;
+      speakCurrentChunk(gen);
     };
 
-    u.onerror = () => {
+    u.onerror = (ev) => {
+      if (gen !== speakGeneration) return;
+      if (ev && (ev.error === 'interrupted' || ev.error === 'canceled')) return;
       isPlaying = false;
+      isPaused = false;
+      const statusEl = document.getElementById('audio-status');
+      if (statusEl) statusEl.textContent = 'Erreur ou interruption';
       updatePlayButton();
+      updateProgressUI();
     };
 
     synth.speak(u);
   }
 
-  function togglePlay() {
+  function readCurrentParagraph(startChunk = 0) {
     if (!synth) return;
+    collectParagraphs();
+    if (paragraphs.length === 0) {
+      stopAudio();
+      return;
+    }
+    if (currentIndex >= paragraphs.length) {
+      finishNarration();
+      return;
+    }
+
+    speakGeneration++;
+    const gen = speakGeneration;
+    synth.cancel();
+
+    const p = paragraphs[currentIndex];
+    highlightParagraph(currentIndex);
+    updateProgressUI();
+
+    currentChunks = splitIntoSpeechChunks(p.textContent);
+    currentChunkIndex = Math.min(startChunk, Math.max(0, currentChunks.length - 1));
+    speakCurrentChunk(gen);
+  }
+
+  function setStatus(text) {
     const statusEl = document.getElementById('audio-status');
-    if (isPlaying) {
+    if (statusEl) statusEl.textContent = text;
+  }
+
+  // ===========================================================================
+  // MODE 1 : LECTEUR PARAGRAPHE PAR PARAGRAPHE (ACTES 1, 4 À 10)
+  // ===========================================================================
+  function initParagraphNarrator() {
+    collectParagraphs();
+    updateProgressUI();
+    updatePlayButton();
+    loadVoices();
+  }
+
+  function togglePlay() {
+    if (!synth) {
+      alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+      return;
+    }
+
+    if (isPlaying && !isPaused) {
       synth.pause();
-      isPlaying = false;
-      if (statusEl) statusEl.textContent = "Lecture en pause";
-    } else {
+      isPaused = true;
+      setStatus('Lecture en pause');
+    } else if (isPlaying && isPaused) {
+      isPaused = false;
       if (synth.paused) {
         synth.resume();
       } else {
-        readCurrentParagraph();
+        readCurrentParagraph(currentChunkIndex);
       }
+      setStatus('Lecture vocale en cours...');
+    } else {
       isPlaying = true;
-      if (statusEl) statusEl.textContent = "Lecture vocale en cours...";
+      isPaused = false;
+      setStatus('Lecture vocale en cours...');
+      readCurrentParagraph(0);
     }
     updatePlayButton();
     updateProgressUI();
   }
 
-  function updatePlayButton() {
-    const icon = document.getElementById('play-icon');
-    const text = document.getElementById('play-text');
-    if (isPlaying) {
-      if (icon) icon.textContent = "⏸";
-      if (text) text.textContent = "Pause";
-    } else {
-      if (icon) icon.textContent = "▶";
-      if (text) text.textContent = "Reprendre";
-    }
-  }
-
   function nextParagraph() {
+    collectParagraphs();
     if (currentIndex < paragraphs.length - 1) {
       currentIndex++;
-      if (isPlaying) readCurrentParagraph();
-      else {
+      currentChunkIndex = 0;
+      if (isPlaying && !isPaused) {
+        readCurrentParagraph(0);
+      } else {
+        if (synth) {
+          speakGeneration++;
+          synth.cancel();
+        }
         highlightParagraph(currentIndex);
         updateProgressUI();
       }
@@ -179,10 +385,17 @@
   }
 
   function prevParagraph() {
+    collectParagraphs();
     if (currentIndex > 0) {
       currentIndex--;
-      if (isPlaying) readCurrentParagraph();
-      else {
+      currentChunkIndex = 0;
+      if (isPlaying && !isPaused) {
+        readCurrentParagraph(0);
+      } else {
+        if (synth) {
+          speakGeneration++;
+          synth.cancel();
+        }
         highlightParagraph(currentIndex);
         updateProgressUI();
       }
@@ -204,16 +417,18 @@
     if (targetContent) targetContent.classList.remove('hidden');
     if (targetTab) targetTab.classList.add('active');
 
+    collectParagraphs();
+
     const hasV3 = !!document.getElementById('content-v3');
     const names = hasV3
       ? {
-          v1: "Okado Hiruma (Clan du Crabe)",
-          v2: "Tsuruchi Akira (Enquête détaillée)",
-          v3: "Hida Samui (5 Chapitres)"
+          v1: 'Okado Hiruma (Clan du Crabe)',
+          v2: 'Tsuruchi Akira (Enquête détaillée)',
+          v3: 'Hida Samui (5 Chapitres)'
         }
       : {
-          v1: "Ryûmitaka Isawa (Trafic à Shinjo Kyuden)",
-          v2: "Tsuruchi Akira (Récit complet)"
+          v1: 'Ryûmitaka Isawa (Trafic à Shinjo Kyuden)',
+          v2: 'Tsuruchi Akira (Récit complet)'
         };
 
     const detailEl = document.getElementById('audio-detail');
@@ -223,73 +438,57 @@
   }
 
   function playVersionAudio() {
-    if (!('speechSynthesis' in window)) {
+    if (!synth) {
       alert("La synthèse vocale n'est pas supportée par votre navigateur.");
       return;
     }
 
-    const statusEl = document.getElementById('audio-status');
-    const rateEl = document.getElementById('audio-rate');
-    const btnPlay = document.getElementById('btn-play');
-
-    if (synth.paused && isPlaying) {
-      synth.resume();
-      if (statusEl) statusEl.textContent = "Lecture en cours...";
+    if (isPlaying && isPaused) {
+      isPaused = false;
+      setStatus('Lecture vocale en cours...');
+      if (synth.paused) {
+        synth.resume();
+      } else {
+        readCurrentParagraph(currentChunkIndex);
+      }
+      updatePlayButton();
       return;
     }
 
-    synth.cancel();
+    if (isPlaying && !isPaused) return;
 
-    const title = document.getElementById('story-title')?.textContent.trim() || "";
-    const activeContainer = document.getElementById(`content-${activeVersion}`) || document.getElementById('story-content');
-    const contentText = activeContainer ? activeContainer.innerText.trim() : "";
-    const fullSpeechText = `${title}. ${contentText}`;
-
-    utterance = new SpeechSynthesisUtterance(fullSpeechText);
-    utterance.lang = 'fr-FR';
-    utterance.rate = parseFloat(rateEl?.value || 1.0);
-
-    const voices = synth.getVoices();
-    const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang === 'fr_FR');
-    if (frVoice) utterance.voice = frVoice;
-
-    utterance.onstart = () => {
-      isPlaying = true;
-      if (statusEl) statusEl.textContent = "Lecture vocale en cours...";
-      btnPlay?.classList.add('bg-amber-500');
-    };
-
-    utterance.onend = () => {
-      isPlaying = false;
-      if (statusEl) statusEl.textContent = "Lecture terminée";
-      btnPlay?.classList.remove('bg-amber-500');
-    };
-
-    utterance.onerror = () => {
-      isPlaying = false;
-      if (statusEl) statusEl.textContent = "Erreur ou interruption";
-      btnPlay?.classList.remove('bg-amber-500');
-    };
-
-    synth.speak(utterance);
+    collectParagraphs();
+    currentIndex = 0;
+    currentChunkIndex = 0;
+    isPlaying = true;
+    isPaused = false;
+    setStatus('Lecture vocale en cours...');
+    updatePlayButton();
+    readCurrentParagraph(0);
   }
 
   function pauseVersionAudio() {
-    const statusEl = document.getElementById('audio-status');
-    if (synth && synth.speaking && !synth.paused) {
+    if (!synth) return;
+    if (isPlaying && !isPaused) {
       synth.pause();
-      if (statusEl) statusEl.textContent = "Lecture en pause";
+      isPaused = true;
+      setStatus('Lecture en pause');
+      updatePlayButton();
     }
   }
 
   function stopAudio() {
+    speakGeneration++;
     if (synth) synth.cancel();
     isPlaying = false;
+    isPaused = false;
     currentIndex = 0;
-    paragraphs.forEach(p => p.classList.remove('reading-active'));
-    const statusEl = document.getElementById('audio-status');
-    if (statusEl) statusEl.textContent = "Voix Narrative Prête";
-    document.getElementById('btn-play')?.classList.remove('bg-amber-500');
+    currentChunkIndex = 0;
+    currentChunks = [];
+    document.querySelectorAll('#story-content .reading-active').forEach(el => {
+      el.classList.remove('reading-active');
+    });
+    setStatus('Voix Narrative Prête');
     updatePlayButton();
     updateProgressUI();
   }
@@ -304,23 +503,43 @@
   window.readText = playVersionAudio;
 
   window.addEventListener('DOMContentLoaded', () => {
+    const rateEl = document.getElementById('audio-rate');
+    if (rateEl) {
+      const savedRate = getSavedRate();
+      if (savedRate && Array.from(rateEl.options).some(o => o.value === savedRate)) {
+        rateEl.value = savedRate;
+      }
+      rateEl.addEventListener('change', () => {
+        saveRate(rateEl.value);
+        if (isPlaying && !isPaused) {
+          readCurrentParagraph(currentChunkIndex);
+        }
+      });
+    }
+
     const btnPlay = document.getElementById('btn-play');
     const btnPause = document.getElementById('btn-pause');
     const btnStop = document.getElementById('btn-stop');
 
-    if (btnPlay && btnPause && btnStop) {
+    if (isMultiVersionMode() && btnPlay && btnPause && btnStop) {
       btnPlay.addEventListener('click', playVersionAudio);
       btnPause.addEventListener('click', pauseVersionAudio);
       btnStop.addEventListener('click', stopAudio);
+      collectParagraphs();
+    } else if (document.getElementById('story-content')) {
+      initParagraphNarrator();
     }
 
-    if ('speechSynthesis' in window) {
-      if (document.getElementById('voice-select')) {
-        window.speechSynthesis.onvoiceschanged = loadVoices;
-        initParagraphNarrator();
-      } else {
-        window.speechSynthesis.onvoiceschanged = () => {};
-      }
+    if (synth) {
+      loadVoices();
+      synth.onvoiceschanged = loadVoices;
+    }
+  });
+
+  window.addEventListener('pagehide', () => {
+    if (synth && (isPlaying || synth.speaking)) {
+      speakGeneration++;
+      synth.cancel();
     }
   });
 })();
