@@ -6,8 +6,28 @@
 (function () {
   'use strict';
 
-  const IOS_DISMISSED_KEY = 'l5r_pwa_ios_dismissed';
+  const BANNER_DISMISSED_AT_KEY = 'l5r_pwa_banner_dismissed_at';
+  const BANNER_SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
   let deferredInstallPrompt = null;
+  let _smartBannerHiddenThisSession = false;
+
+  function isMobileContext() {
+    const ua = window.navigator.userAgent || '';
+    const touchMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    return touchMobile || isIOSDevice() || window.innerWidth < 768;
+  }
+
+  function isBannerSnoozed() {
+    if (_smartBannerHiddenThisSession) return true;
+    try {
+      const raw = localStorage.getItem(BANNER_DISMISSED_AT_KEY);
+      if (!raw) return false;
+      const ts = parseInt(raw, 10) || 0;
+      return (Date.now() - ts) < BANNER_SNOOZE_MS;
+    } catch (e) {
+      return false;
+    }
+  }
 
   function getRootPrefix() {
     const path = window.location.pathname || '';
@@ -64,6 +84,65 @@
     });
   }
 
+  function renderSmartInstallBanner() {
+    if (!document.body || window.location.pathname.includes('/tests/')) return;
+    const standalone = isStandaloneMode();
+    const existing = document.getElementById('pwa-smart-install-banner');
+
+    if (standalone || isBannerSnoozed()) {
+      if (existing) existing.classList.add('hidden');
+      return;
+    }
+
+    const shouldShow = !!deferredInstallPrompt || isMobileContext();
+    if (!shouldShow) {
+      if (existing) existing.classList.add('hidden');
+      return;
+    }
+
+    const prefix = getRootPrefix();
+    const hasForgeDock = !!(document.getElementById('mobile-app-dock') || document.getElementById('forge-stepper-bar'));
+    const subtitle = deferredInstallPrompt
+      ? "Installation en 1 toucher • Accès plein écran & hors-ligne à table."
+      : (isIOSDevice()
+          ? "Touchez Installer pour ajouter Forge L5R sur votre écran d'accueil iPhone."
+          : "Ajoutez Forge L5R sur votre écran d'accueil pour jouer sans réseau.");
+
+    let banner = existing;
+    if (!banner) {
+      banner = document.createElement('aside');
+      banner.id = 'pwa-smart-install-banner';
+      banner.setAttribute('aria-label', "Installer l'application Forge L5R");
+      banner.className = `l5r-pwa-banner no-print fixed z-[48] ${hasForgeDock ? 'bottom-[68px] md:bottom-4' : 'bottom-3 md:bottom-4'} left-3 right-3 md:right-auto md:left-4 md:w-[375px] rounded-2xl border border-amber-500/55 bg-[#140e0d]/96 backdrop-blur-md p-3 shadow-2xl`;
+      banner.innerHTML = `
+        <div class="flex items-center gap-3">
+          <img src="${prefix}assets/icons/icon-192.png" alt="Icône Forge L5R" class="w-11 h-11 rounded-xl border border-amber-500/50 shrink-0 shadow" />
+          <div class="min-w-0 flex-1">
+            <div class="font-imperial font-bold text-xs text-amber-300 leading-tight truncate">
+              Forge L5R — App Téléphone
+            </div>
+            <p id="pwa-smart-banner-sub" class="text-[11px] text-stone-300 leading-snug mt-0.5">${subtitle}</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-2 mt-2.5">
+          <button type="button" id="pwa-smart-later-btn" class="px-3 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-[11px] font-bold cursor-pointer">
+            Plus tard
+          </button>
+          <button type="button" id="pwa-smart-install-action" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black text-[11px] font-extrabold font-imperial shadow cursor-pointer flex items-center gap-1.5">
+            <span>📲</span><span>Installer</span>
+          </button>
+        </div>
+      `;
+      banner.querySelector('#pwa-smart-later-btn')?.addEventListener('click', dismissSmartInstallBanner);
+      banner.querySelector('#pwa-smart-install-action')?.addEventListener('click', promptPWAInstall);
+      document.body.appendChild(banner);
+    } else {
+      const subEl = banner.querySelector('#pwa-smart-banner-sub');
+      if (subEl) subEl.textContent = subtitle;
+      banner.classList.remove('hidden');
+    }
+  }
+
   function updateInstallUi() {
     const standalone = isStandaloneMode();
     document.documentElement.classList.toggle('l5r-pwa-standalone', standalone);
@@ -79,16 +158,7 @@
       }
     });
 
-    const iosBanner = document.getElementById('pwa-ios-banner');
-    if (iosBanner) {
-      let dismissed = false;
-      try { dismissed = localStorage.getItem(IOS_DISMISSED_KEY) === '1'; } catch (e) {}
-      if (!standalone && isIOSDevice() && !dismissed && document.getElementById('forge-stepper-bar')) {
-        iosBanner.classList.remove('hidden');
-      } else {
-        iosBanner.classList.add('hidden');
-      }
-    }
+    renderSmartInstallBanner();
   }
 
   function updateNetworkUi() {
@@ -163,9 +233,10 @@
     openIosInstallGuideModal();
   }
 
-  function dismissIosBanner() {
-    try { localStorage.setItem(IOS_DISMISSED_KEY, '1'); } catch (e) {}
-    const b = document.getElementById('pwa-ios-banner');
+  function dismissSmartInstallBanner() {
+    _smartBannerHiddenThisSession = true;
+    try { localStorage.setItem(BANNER_DISMISSED_AT_KEY, String(Date.now())); } catch (e) {}
+    const b = document.getElementById('pwa-smart-install-banner');
     if (b) b.classList.add('hidden');
   }
 
@@ -219,12 +290,14 @@
   });
 
   window.promptPWAInstall = promptPWAInstall;
-  window.dismissIosPwaBanner = dismissIosBanner;
+  window.dismissIosPwaBanner = dismissSmartInstallBanner;
+  window.dismissPwaInstallBanner = dismissSmartInstallBanner;
   window.getPWAState = function () {
     return {
       standalone: isStandaloneMode(),
       ios: isIOSDevice(),
       hasInstallPrompt: !!deferredInstallPrompt,
+      bannerSnoozed: isBannerSnoozed(),
       online: navigator.onLine !== false
     };
   };
@@ -232,13 +305,20 @@
   ensurePwaHeadTags();
   registerServiceWorker();
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      updateInstallUi();
-      updateNetworkUi();
-    });
-  } else {
-    updateInstallUi();
+  function onReadyInitPwa() {
     updateNetworkUi();
+    // Légère temporisation sur mobile pour laisser la page se stabiliser avant d'afficher l'invite
+    if (deferredInstallPrompt) {
+      updateInstallUi();
+    } else {
+      updateInstallUi();
+      setTimeout(updateInstallUi, 750);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', onReadyInitPwa);
+  } else {
+    onReadyInitPwa();
   }
 })();

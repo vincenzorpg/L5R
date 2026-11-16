@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.11.1] — 2026-11-16
+
+### ✨ Ajouté & Amélioré
+- **Proposition Automatique d'Installation PWA sur Tout le Site (`js/pwa.js`, `css/main.css`, `createcharacter.html`, `sw.js`)** :
+  - Ajout d'une bannière d'invitation intelligente `#pwa-smart-install-banner` sur toutes les pages du site dès qu'un visiteur arrive sur téléphone (Android / iOS) ou navigateur compatible `beforeinstallprompt` (tant que l'application n'est pas déjà installée).
+  - Positionnement adaptatif : flotte proprement au-dessus du dock mobile (`#mobile-app-dock`) dans `createcharacter.html`, avec bouton **`📲 Installer`** en 1 toucher (popup système Android ou guide iOS Safari) et bouton **`Plus tard`** mémorisé 7 jours dans `localStorage`.
+
+---
+
 ## [1.11.0] — 2026-11-16
 
 ### ✨ Ajouté & Amélioré
