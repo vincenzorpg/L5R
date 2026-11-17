@@ -29,6 +29,7 @@ const SCENARIOS_DATA = [
     author: "Okado Hiruma / Tsuruchi Akira / Hida Samui",
     date: "Acte 2",
     place: "Château de Kyoteï",
+    cover: "assets/images/scenarios/cover-2.jpg",
     desc: "Une enquête sous haute tension dans la forteresse où l'honneur des clans et les apparences de cour s'affrontent."
   },
   {
@@ -54,6 +55,7 @@ const SCENARIOS_DATA = [
     author: "Campagne de la Chronique de Rokugan",
     date: "Acte 4",
     place: "Lisière de l'Outremonde",
+    cover: "assets/images/scenarios/cover-4.jpg",
     desc: "L'épreuve du sang et de la poussière auprès des défenseurs du Mur, au contact des esprits des défunts."
   },
   {
@@ -79,6 +81,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 6",
     place: "Terres du Crabe",
+    cover: "assets/images/scenarios/cover-6.jpg",
     desc: "Une alliance matrimoniale capitale pour la famille Hiruma, mêlant protocole sévère, rivalités claniques et festivités martiales."
   },
   {
@@ -91,6 +94,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 7",
     place: "Ryoko Owari (Cité des Histoires Vertes)",
+    cover: "assets/images/scenarios/cover-7.jpg",
     desc: "Plongée dans la cité de l'opium et des intrigues du Clan du Scorpion pour dénouer un homicide politique particulièrement trouble."
   },
   {
@@ -103,6 +107,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 8",
     place: "Provinces disputées",
+    cover: "assets/images/scenarios/cover-8.jpg",
     desc: "Lorsque les ordres d'un seigneur s'opposent frontalement au code du Bushido : l'heure des serments brisés et des tragédies personnelles."
   },
   {
@@ -115,6 +120,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 9",
     place: "Terres ancestrales",
+    cover: "assets/images/scenarios/cover-9.jpg",
     desc: "Face à une menace occulte défiant les âges, les héros cherchent le secret de ce qui survit au trépas et aux malédictions."
   },
   {
@@ -127,6 +133,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 10",
     place: "Le Tombeau Maudit",
+    cover: "assets/images/scenarios/cover-10.jpg",
     desc: "L'apogée héroïque de la campagne : l'exploration du repaire scellé du plus grand adepte du sang de Rokugan, Iuchiban.",
     finale: true
   }
