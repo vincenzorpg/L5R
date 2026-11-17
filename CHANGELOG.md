@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.13.0] — 2026-11-17
+
+### ✨ Ajouté & Complété
+- **Intégralité des Illustrations de Scènes (30/30 — Actes 1 à 10)** (`assets/images/scenarios/`) :
+  - Génération et intégration des 6 dernières scènes manquantes (`1376×768`) :
+    - **Acte 8 (*Le crépuscule de l'honneur*)** : `Crepuscule-1.jpg`, `Crepuscule-2.jpg`, `Crepuscule-3.jpg` (complet 3/3).
+    - **Acte 9 (*« Ce qui ne meurt pas »*)** : `CeQuiNeMeurtPas-3.jpg` (complet 3/3).
+    - **Acte 10 (*La tombe de Iuchiban*)** : `TombeIuchiban-2.jpg`, `TombeIuchiban-3.jpg` (complet 3/3).
+- **Couvertures Principales en Style Dessin Japonais (Actes 1, 3, 5) & Support Catalogue** (`assets/images/scenarios/cover-*.jpg`, `data/scenarios-data.js`, `js/campagne-studio.js`, `css/main.css`, `campagne/scenario-1.html`, `campagne/scenario-3.html`, `campagne/scenario-5.html`) :
+  - Génération des 3 premières couvertures au trait d'encre *sumi-e* et lavis d'aquarelle *nihonga* (`cover-1.jpg`, `cover-3.jpg`, `cover-5.jpg`), affichées en bannière d'en-tête `.scenario-cover` sur les pages de scénarios et en couverture des cartes sur le portail de campagne (`campagne.html`).
+  - Prise en charge de la métadonnée `cover` / `l5r-scenario-cover` dans `data/scenarios-data.js` et `js/campagne-studio.js` pour étendre les couvertures japonaises aux Actes 2, 4 et 6 à 10 lors du prochain lot.
+
+---
+
 ## [1.12.0] — 2026-11-17
 
 ### ✨ Ajouté & Amélioré

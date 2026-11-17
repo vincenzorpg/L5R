@@ -638,6 +638,22 @@ select {
   border-top-color: var(--border-gold) !important;
 }
 
+.scenario-cover {
+  margin-top: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.75);
+  background: #0c0a09;
+}
+.scenario-cover img {
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: cover;
+  display: block;
+}
+
 .reading-active {
   background: rgba(212, 175, 55, 0.08) !important;
   border-left: 3px solid #d4af37 !important;
