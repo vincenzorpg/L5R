@@ -1222,6 +1222,7 @@ const CLANS_DATA = {
   // =========================================================================
   araignee: {
     name: "Clan de l'Araignée",
+    gmOnly: true,
     families: [
       { name: "Chuda", trait: "Intelligence", bonus: "+1 Intelligence" },
       { name: "Daigotsu", trait: "Constitution", bonus: "+1 Constitution" },
@@ -1351,7 +1352,7 @@ const CLANS_DATA = {
       { name: "Fuzake (Singe)", trait: "Perception", bonus: "+1 Perception" },
       { name: "Tsi (Loriot)", trait: "Force", bonus: "+1 Force" },
       { name: "Morito (Bœuf)", trait: "Constitution", bonus: "+1 Constitution" },
-      { name: "Chuda orig. (Serpent)", trait: "Force", bonus: "+1 Force" },
+      { name: "Chuda orig. (Serpent)", trait: "Force", bonus: "+1 Force", gmOnly: true },
       { name: "Suzume (Moineau)", trait: "Intuition", bonus: "+1 Intuition" },
       { name: "Kasuga (Tortue)", trait: "Perception", bonus: "+1 Perception" }
     ],
@@ -1482,7 +1483,7 @@ const CLANS_DATA = {
         trait: "Agilité",
         bonus: "+1 Agilité",
         honor: 3.5,
-        skills: ["Défense", "Équitation", "Chasse (Pistage)", "Kenjutsu", "Connaissance : Kolat", "Connaissance : Pègre", "Une compétence au choix"],
+        skills: ["Défense", "Équitation", "Chasse (Pistage)", "Kenjutsu", "Une Compétence de Connaissance au choix", "Connaissance : Pègre", "Une compétence au choix"],
         outfit: "Armure lourde ou légère, vêtements robustes, Daisho, Arme Lourde ou Arme d'Hast, Poney de Rokugan, nécessaire de voyage, 3 koku",
         techniques: [
           { rank: 1, name: "Héritage des Quatre Vents (Legacy of the Four Winds)", effect: "À cheval, +1g0 à l'Initiative au début du combat et +1g0 aux jets d'attaque." },
@@ -1495,6 +1496,7 @@ const CLANS_DATA = {
       {
         id: "chuda-shugenja-original",
         family: "Chuda orig. (Serpent)",
+        gmOnly: true,
         name: "Shugenja Chuda Originel (Clan du Serpent, Core p. 224)",
         type: "Shugenja",
         trait: "Volonté",

@@ -171,6 +171,7 @@
     {
       id: "ninja-to",
       name: "Ninja-tō",
+      gmOnly: true,
       vd: "2g2",
       dr: "2k2",
       type: "Sabre (Moyen, Ninja)",
@@ -646,6 +647,7 @@
     {
       id: "shuriken",
       name: "Shuriken",
+      gmOnly: true,
       vd: "1g1",
       dr: "1k1",
       noStrength: true,
@@ -660,6 +662,7 @@
     {
       id: "tsubute",
       name: "Tsubute",
+      gmOnly: true,
       vd: "1g1",
       dr: "1k1",
       noStrength: true,
@@ -674,6 +677,7 @@
     {
       id: "blowgun",
       name: "Sarbacane (Blowgun)",
+      gmOnly: true,
       vd: "0g0",
       dr: "1 Blessure",
       noStrength: true,
@@ -689,6 +693,7 @@
     {
       id: "nageteppo_smoke",
       name: "Nageteppo fumigène [Imperial Histories 1]",
+      gmOnly: true,
       vd: "1g1",
       dr: "1k1",
       noStrength: true,
@@ -702,6 +707,7 @@
     {
       id: "nageteppo_incendiary",
       name: "Nageteppo incendiaire [Imperial Histories 1]",
+      gmOnly: true,
       vd: "3g2",
       dr: "3k2",
       noStrength: true,

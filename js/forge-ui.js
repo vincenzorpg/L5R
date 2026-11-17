@@ -584,26 +584,39 @@ function sanitizeMysticListsForPermissions(perms, notify = false) {
   return false;
 }
 
+function canDisplayKihosInForge(perms) {
+  if (!perms || !perms.canUseKihos) return false;
+  if (perms.primaryType === 'moine' || perms.secondaryType === 'moine') return true;
+  if (typeof window.isGmSecretsUnlocked === 'function' && window.isGmSecretsUnlocked()) return true;
+  const advs = Array.isArray(window.advantagesList) ? window.advantagesList : [];
+  return advs.some(a => a && (
+    a.impact === 'friend_of_the_brotherhood' ||
+    foldForgeSearch(a.name).includes('ami de la confrerie') ||
+    foldForgeSearch(a.name).includes('friend of the brotherhood')
+  ));
+}
+
 function applySpellsFilterConstraints(perms) {
   const elemSel = document.getElementById('filter-spell-elem');
+  const rankSel = document.getElementById('filter-spell-rank');
   const univBtn = document.getElementById('btn-add-universal-spells');
   const titleEl = document.getElementById('spells-panel-title');
   const hintEl = document.getElementById('spells-panel-footer-hint');
+  const showKihos = canDisplayKihosInForge(perms);
 
   if (elemSel) {
     Array.from(elemSel.options).forEach(opt => {
       if (opt.value === 'kiho') {
-        const allowKihoOpt = perms.canUseKihos;
-        opt.hidden = !allowKihoOpt;
-        opt.disabled = !allowKihoOpt;
-        opt.textContent = (!perms.canCastSpells && perms.canUseKihos)
+        opt.hidden = !showKihos;
+        opt.disabled = !showKihos;
+        opt.textContent = (!perms.canCastSpells && showKihos)
           ? '🥋 Tous les Kihos (64)'
           : '🥋 Kihos (Moines)';
       } else if (opt.value === 'tous') {
         const allowAll = perms.canCastSpells;
         opt.hidden = !allowAll;
         opt.disabled = !allowAll;
-        opt.textContent = (perms.canCastSpells && perms.canUseKihos)
+        opt.textContent = (perms.canCastSpells && showKihos)
           ? 'Tous les Éléments & Kihos'
           : 'Tous les Éléments (Sorts)';
       } else if (opt.value === 'universel') {
@@ -611,25 +624,39 @@ function applySpellsFilterConstraints(perms) {
         opt.hidden = !allowUniv;
         opt.disabled = !allowUniv;
       } else {
-        const allowElem = perms.canCastSpells || perms.canUseKihos;
+        const allowElem = perms.canCastSpells || showKihos;
         opt.hidden = !allowElem;
         opt.disabled = !allowElem;
       }
     });
 
-    if (!perms.canCastSpells && perms.canUseKihos) {
+    if (!perms.canCastSpells && showKihos) {
       if (elemSel.value === 'tous' || elemSel.value === 'universel') {
         elemSel.value = 'kiho';
       }
-    } else if (perms.canCastSpells && !perms.canUseKihos && elemSel.value === 'kiho') {
+    } else if (perms.canCastSpells && !showKihos && elemSel.value === 'kiho') {
       elemSel.value = 'tous';
+    }
+  }
+
+  if (rankSel) {
+    Array.from(rankSel.options).forEach(opt => {
+      if (opt.value === '7' || opt.value === '8') {
+        opt.hidden = !showKihos;
+        opt.disabled = !showKihos;
+      } else if (opt.value === 'tous') {
+        opt.textContent = showKihos ? 'Tous les Rangs (0 à 8)' : 'Tous les Rangs (0 à 6)';
+      }
+    });
+    if (!showKihos && (rankSel.value === '7' || rankSel.value === '8')) {
+      rankSel.value = 'tous';
     }
   }
 
   if (univBtn) univBtn.classList.toggle('hidden', !perms.canCastSpells);
 
   if (titleEl) {
-    if (perms.canCastSpells && perms.canUseKihos) {
+    if (perms.canCastSpells && showKihos) {
       titleEl.innerHTML = '<span>📜</span> 5A. Parchemins de Sorts &amp; Kihos';
     } else if (perms.canCastSpells) {
       titleEl.innerHTML = '<span>📜</span> 5A. Parchemins de Sorts';
@@ -640,8 +667,8 @@ function applySpellsFilterConstraints(perms) {
 
   if (hintEl) {
     const clanVal = document.getElementById('sel-clan')?.value || '';
-    if (perms.canCastSpells && perms.canUseKihos) {
-      hintEl.textContent = 'Parchemins : 0 XP • Kihos (Shugenja) : 2× Maîtrise en XP.';
+    if (perms.canCastSpells && showKihos) {
+      hintEl.textContent = 'Parchemins : 0 XP • Kihos (Shugenja) : 2× Maîtrise en XP (1× avec Ami de la Confrérie).';
     } else if (perms.canCastSpells) {
       hintEl.textContent = 'Parchemins de sorts : 0 XP (Sorts de départ & parchemins).';
     } else if (clanVal === 'confrerie') {
@@ -750,6 +777,7 @@ function populateSpellCatalogSelect(autoSelectFirst = false) {
   if (!sel) return;
   const allSpells = window.SORTS_DATA || [];
   const perms = getActiveForgePermissions();
+  const showKihos = canDisplayKihosInForge(perms);
   const elemFilter = document.getElementById('filter-spell-elem')?.value || "tous";
   const rankFilter = document.getElementById('filter-spell-rank')?.value || "tous";
   const searchFilter = foldForgeSearch(document.getElementById('filter-spell-search')?.value || "");
@@ -758,7 +786,7 @@ function populateSpellCatalogSelect(autoSelectFirst = false) {
     if (s.isMaho || (s.element && s.element.toLowerCase() === "maho")) return false;
     const isKiho = !!s.isKiho || (s.element || "").toLowerCase() === "kiho";
     if (!perms.canCastSpells && !isKiho) return false;
-    if (!perms.canUseKihos && isKiho) return false;
+    if (!showKihos && isKiho) return false;
     const sElem = (isKiho ? "kiho" : (s.element || "universel")).toLowerCase();
     const sRing = (s.ring || s.element || "").toLowerCase();
     const matchElem = elemFilter === "tous" || sElem === elemFilter || (isKiho && sRing.includes(elemFilter));
@@ -770,9 +798,9 @@ function populateSpellCatalogSelect(autoSelectFirst = false) {
     return hay.includes(searchFilter);
   });
 
-  const emptyPlaceholder = (!perms.canCastSpells && perms.canUseKihos)
+  const emptyPlaceholder = (!perms.canCastSpells && showKihos)
     ? `-- Choisir un kiho (${filtered.length} disponible(s)) --`
-    : (perms.canCastSpells && !perms.canUseKihos)
+    : (perms.canCastSpells && !showKihos)
       ? `-- Choisir un sort (${filtered.length} disponible(s)) --`
       : `-- Choisir un sort ou kiho (${filtered.length} disponible(s)) --`;
   sel.innerHTML = `<option value="">${emptyPlaceholder}</option>`;
@@ -1032,8 +1060,10 @@ function populateKataCatalogSelect(autoSelectFirst = false) {
   const rawFilter = (document.getElementById('filter-kata-elem')?.value || "tous").toLowerCase();
   const searchFilter = foldForgeSearch(document.getElementById('filter-kata-search')?.value || "");
   const allKatas = window.KATAS_DATA || [];
+  const includeSecrets = typeof window.isGmSecretsUnlocked === 'function' && window.isGmSecretsUnlocked();
 
   const filtered = allKatas.filter(k => {
+    if (!includeSecrets && k && k.gmOnly === true) return false;
     const matchElem = rawFilter === "tous" || (k.element || "").toLowerCase().includes(rawFilter);
     if (!matchElem) return false;
     if (!searchFilter) return true;
@@ -2375,9 +2405,11 @@ function filterPerksCatalog(kind, autoSelectFirst = true) {
   const searchTerm = foldForgeSearch(document.getElementById(safeKind === 'adv' ? 'filter-adv-search' : 'filter-disadv-search')?.value || '');
   const catFilter = _perksCategoryState[safeKind] || 'all';
   const prevVal = sel.value;
+  const includeSecrets = typeof window.isGmSecretsUnlocked === 'function' && window.isGmSecretsUnlocked();
 
   const matching = [];
   list.forEach((item, originalIdx) => {
+    if (!includeSecrets && item && item.gmOnly === true) return;
     if (ownedSet.has((item.name || '').toLowerCase().trim())) return;
     const typeKey = foldForgeSearch(item.type || 'general');
     const effVal = safeKind === 'adv'
@@ -2741,6 +2773,8 @@ function initForgeUIWhenReady() {
     if (mobName) mobName.textContent = e.target.value || 'Samouraï';
   });
 
+  refreshGmSecretsUiState();
+
   if (dojoParam === '1') {
     toggleDojoDrawer(true);
   }
@@ -2810,3 +2844,88 @@ window.addEventListener("DOMContentLoaded", () => {
     initForgeUIWhenReady();
   }
 });
+
+// =============================================================================
+// ACCÈS MJ DISCRET (DÉVERROUILLAGE CLAN DE L'ARAIGNÉE, SECRETS & ARSENAL SHINOBI)
+// =============================================================================
+function isValidGmSecretPassword(pwd) {
+  const p = String(pwd || "").trim().toLowerCase();
+  return p === "iuchiban" || p === "maho" || p === "jigoku" || p === "outremonde" || p === "araignee" || p === "araignée" || p === "kolat" || p === "daigotsu";
+}
+
+function refreshGmSecretsUiState() {
+  const unlocked = typeof window.isGmSecretsUnlocked === 'function' && window.isGmSecretsUnlocked();
+  const btn = document.getElementById('btn-toggle-gm-secrets');
+  if (btn) {
+    if (unlocked) {
+      btn.textContent = '🕷️ Secrets MJ actifs';
+      btn.title = 'Options secrètes déverrouillées (Araignée, Kolat, Outremonde, Shinobi) — cliquer pour verrouiller';
+      btn.className = 'px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900/80 border border-red-700/70 text-red-300 transition cursor-pointer';
+    } else {
+      btn.textContent = '🔒 MJ';
+      btn.title = 'Accès MJ : déverrouiller les factions et options secrètes';
+      btn.className = 'px-1.5 py-0.5 rounded bg-stone-900/90 hover:bg-stone-800 border border-stone-800 text-stone-500 hover:text-amber-300 transition cursor-pointer';
+    }
+  }
+}
+
+function refreshForgeAfterGmSecretsChange() {
+  refreshGmSecretsUiState();
+  if (typeof window.initClans === 'function') window.initClans(true);
+  if (typeof window.initCatalogSelectors === 'function') window.initCatalogSelectors();
+  filterPerksCatalog('adv', false);
+  filterPerksCatalog('disadv', false);
+  populateKataCatalogSelect(false);
+  updateArchetypePanelsWithTattoos(false, true);
+  updateForgeUXDashboard();
+}
+
+function toggleGmSecretsModal(forceState) {
+  const modal = document.getElementById('gm-secrets-modal');
+  const errorEl = document.getElementById('gm-secrets-error');
+  const input = document.getElementById('gm-secrets-password-input');
+  const lockedPanel = document.getElementById('gm-secrets-locked-panel');
+  const unlockedPanel = document.getElementById('gm-secrets-unlocked-panel');
+  if (!modal) return;
+
+  const isOpen = !modal.classList.contains('hidden');
+  const shouldOpen = typeof forceState === 'boolean' ? forceState : !isOpen;
+  if (shouldOpen) {
+    const unlocked = typeof window.isGmSecretsUnlocked === 'function' && window.isGmSecretsUnlocked();
+    if (lockedPanel) lockedPanel.classList.toggle('hidden', unlocked);
+    if (unlockedPanel) unlockedPanel.classList.toggle('hidden', !unlocked);
+    modal.classList.remove('hidden');
+    if (errorEl) errorEl.classList.add('hidden');
+    if (!unlocked && input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 50);
+    }
+  } else {
+    modal.classList.add('hidden');
+  }
+}
+
+function unlockGmSecretsWithPassword() {
+  const input = document.getElementById('gm-secrets-password-input');
+  const errorEl = document.getElementById('gm-secrets-error');
+  if (isValidGmSecretPassword(input?.value)) {
+    try { sessionStorage.setItem('l5r_maho_unlocked', 'true'); } catch (_) {}
+    if (errorEl) errorEl.classList.add('hidden');
+    toggleGmSecretsModal(false);
+    refreshForgeAfterGmSecretsChange();
+  } else if (errorEl) {
+    errorEl.classList.remove('hidden');
+  }
+}
+
+function lockGmSecrets() {
+  try { sessionStorage.removeItem('l5r_maho_unlocked'); } catch (_) {}
+  toggleGmSecretsModal(false);
+  refreshForgeAfterGmSecretsChange();
+}
+
+window.isValidGmSecretPassword = isValidGmSecretPassword;
+window.refreshGmSecretsUiState = refreshGmSecretsUiState;
+window.toggleGmSecretsModal = toggleGmSecretsModal;
+window.unlockGmSecretsWithPassword = unlockGmSecretsWithPassword;
+window.lockGmSecrets = lockGmSecrets;

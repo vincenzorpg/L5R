@@ -719,6 +719,56 @@
   });
 
   // ===========================================================================
+  // 8. ACCÈS MJ & DISSIMULATION DES FACTIONS / SECRETS POUR LES PJ
+  // ===========================================================================
+  describe("8. Accès MJ & Dissimulation du Clan de l'Araignée / Secrets pour les PJ", function () {
+    it("isGmSecretsUnlocked est verrouillé par défaut et isGmSecretEntry identifie les entrées secrètes", function () {
+      assertEqual(cg.isGmSecretsUnlocked(), false, "Secrets MJ verrouillés par défaut");
+      const clans = catalogScope.CLANS_DATA || {};
+      assertTrue(cg.isGmSecretEntry(clans.araignee), "Clan de l'Araignée marqué gmOnly");
+
+      const mineurs = clans.mineurs || { families: [], schools: [] };
+      const chudaFam = (mineurs.families || []).find(f => /Chuda/i.test(f.name || ""));
+      const chudaSchool = (mineurs.schools || []).find(s => s.id === "chuda-shugenja-original");
+      assertTrue(cg.isGmSecretEntry(chudaFam), "Famille Chuda (Serpent) marquée gmOnly");
+      assertTrue(cg.isGmSecretEntry(chudaSchool), "École Shugenja Chuda originelle marquée gmOnly");
+
+      const l5r = catalogScope.L5R_DATA || {};
+      const secretIds = ["adv-parangon-sombre", "adv-savoir-interdit", "dis-consume-shourido", "dis-agent-dormant", "dis-souillure-outremonde"];
+      const allPerks = [...(l5r.advantages || []), ...(l5r.disadvantages || [])];
+      secretIds.forEach(id => {
+        const entry = allPerks.find(p => p.id === id);
+        assertTrue(cg.isGmSecretEntry(entry), `Avantage/Désavantage secret ${id} marqué gmOnly`);
+      });
+
+      const katas = catalogScope.KATAS_DATA || [];
+      const spiderKata = katas.find(k => k.id === "kata-terre-force-araignee");
+      assertTrue(cg.isGmSecretEntry(spiderKata), "Kata La Force de l'Araignée marqué gmOnly");
+
+      const eq = typeof catalogScope.getEquipment === "function" ? catalogScope.getEquipment() : {};
+      const ninjaTo = (eq.weapons || []).find(w => w.id === "ninja-to");
+      const shuriken = (eq.weapons || []).find(w => w.id === "shuriken");
+      assertTrue(cg.isGmSecretEntry(ninjaTo), "Ninja-tō marqué gmOnly");
+      assertTrue(cg.isGmSecretEntry(shuriken), "Shuriken marqué gmOnly");
+    });
+
+    it("Les catalogues PJ excluent les clans/écoles gmOnly tout en préservant les 95 écoles pour l'accès MJ", function () {
+      const clans = catalogScope.CLANS_DATA || {};
+      const publicClans = Object.keys(clans).filter(k => !cg.isGmSecretEntry(clans[k]));
+      assertEqual(publicClans.length, 12, "12 clans publics visibles pour les PJ");
+      assertTrue(!publicClans.includes("araignee"), "Le Clan de l'Araignée est absent du catalogue public");
+
+      if (!isNode && typeof cg.getAllSchoolsCatalog === "function") {
+        const publicSchools = cg.getAllSchoolsCatalog(false);
+        const fullSchools = cg.getAllSchoolsCatalog(true);
+        assertEqual(fullSchools.length, 95, "95 écoles complètes avec secrets déverrouillés");
+        assertTrue(publicSchools.length < fullSchools.length, "Écoles secrètes masquées aux PJ");
+        assertTrue(!publicSchools.some(s => s.clanKey === "araignee" || s.id === "chuda-shugenja-original"), "Aucune école Araignée/Chuda visible côté PJ");
+      }
+    });
+  });
+
+  // ===========================================================================
   // RAPPORT D'EXÉCUTION (NODE.JS & NAVIGATEUR)
   // ===========================================================================
   const totalPassed = suites.reduce((acc, s) => acc + s.passed, 0);

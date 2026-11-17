@@ -44,7 +44,7 @@ const COMPETENCES_DATA = [
     name: "Connaissance (Lore)",
     trait: "Intelligence",
     type: "Noble",
-    emphases: "Variable selon la sous-compétence (Anatomie*, Architecture, Bushido, Clan Majeur [au choix], Éléments, Culture Gaijin [au choix], Fantômes, Héraldique, Histoire, Maho*, Nature, Culture Non-humaine [au choix], Présages, Outremonde*, Shugenja, Royaumes Spirituels, Théologie, Pègre*, Guerre... — * = Dégradante)",
+    emphases: "Variable selon la sous-compétence (Anatomie*, Architecture, Bushido, Clan Majeur [au choix], Éléments, Culture Gaijin [au choix], Fantômes, Héraldique, Histoire, Nature, Culture Non-humaine [au choix], Présages, Outremonde*, Shugenja, Royaumes Spirituels, Théologie, Pègre*, Guerre... — * = Dégradante)",
     desc: "Macro-compétence regroupant l'érudition rokuganie (Héraldique pour reconnaître la Gloire, Bushido ND 30 pour discerner l'Honneur, Histoire, Théologie, etc.). Les sous-compétences marquées d'un astérisque (*) sont des Compétences Dégradantes.",
     masteries: "Aucune (R10 : 1 Augmentation Gratuite sur tous les jets)."
   },
