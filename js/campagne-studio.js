@@ -250,7 +250,7 @@ ${formattedBody}
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Chronique L5R 4e Édition — MJ David • ${escapeHtmlSafe(date)} : ${escapeHtmlSafe(title)} (par ${escapeHtmlSafe(author)})</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.12.0</span>
+      <span id="site-version-label">v1.13.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
@@ -320,23 +320,38 @@ function renderCampagneCatalog() {
   if (heading) heading.textContent = `Table des ${list.length} Scénarios Joués`;
 
   grid.innerHTML = list.map(s => `
-    <div class="card-clean card-hover rounded-xl p-5 flex flex-col justify-between space-y-4 transition duration-200">
-      <div class="space-y-2">
-        <div class="flex items-center justify-between text-[10px]">
-          <span class="px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-amber-300 font-bold font-mono">ACTE ${s.id}</span>
-          <span class="text-stone-500">${escapeHtmlSafe(s.date)} • ${escapeHtmlSafe(s.place)}</span>
+    <div class="card-clean card-hover rounded-xl overflow-hidden flex flex-col justify-between transition duration-200 group">
+      ${s.cover ? `
+        <a href="${escapeHtmlSafe(s.file)}" class="block relative aspect-[16/9] max-h-52 w-full overflow-hidden border-b border-amber-500/30 bg-black">
+          <img src="${escapeHtmlSafe(s.cover)}" alt="Illustration principale — ${escapeHtmlSafe(s.title)}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+          <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-[10px]">
+            <span class="px-2.5 py-0.5 rounded bg-black/85 border border-amber-500/50 text-amber-300 font-bold font-mono backdrop-blur-sm">ACTE ${s.id}</span>
+            <span class="px-2 py-0.5 rounded bg-black/75 text-stone-200 backdrop-blur-sm">${escapeHtmlSafe(s.place)}</span>
+          </div>
+        </a>
+      ` : ""}
+      <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+        <div class="space-y-2">
+          ${!s.cover ? `
+          <div class="flex items-center justify-between text-[10px]">
+            <span class="px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-amber-300 font-bold font-mono">ACTE ${s.id}</span>
+            <span class="text-stone-500">${escapeHtmlSafe(s.date)} • ${escapeHtmlSafe(s.place)}</span>
+          </div>` : `
+          <div class="text-[10px] text-stone-400 font-mono">${escapeHtmlSafe(s.date)} • Illustration principale</div>
+          `}
+          <h3 class="text-base font-bold font-imperial text-amber-200">${escapeHtmlSafe(s.title)}</h3>
+          <p class="text-[11px] text-amber-400/80 italic font-mono">Par : ${escapeHtmlSafe(s.author)}</p>
+          <p class="text-xs text-stone-400 leading-relaxed">${escapeHtmlSafe(s.desc)}</p>
         </div>
-        <h3 class="text-base font-bold font-imperial text-amber-200">${escapeHtmlSafe(s.title)}</h3>
-        <p class="text-[11px] text-amber-400/80 italic font-mono">Par : ${escapeHtmlSafe(s.author)}</p>
-        <p class="text-xs text-stone-400 leading-relaxed">${escapeHtmlSafe(s.desc)}</p>
-      </div>
-      <div class="flex items-center justify-between pt-3 border-t border-stone-800/80 gap-2">
-        <a href="${escapeHtmlSafe(s.wpUrl)}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
-          <span>📖</span> Blog ↗
-        </a>
-        <a href="${escapeHtmlSafe(s.file)}" class="px-3.5 py-1.5 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
-          <span>🔊</span> Lire & Écouter →
-        </a>
+        <div class="flex items-center justify-between pt-3 border-t border-stone-800/80 gap-2">
+          <a href="${escapeHtmlSafe(s.wpUrl)}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-stone-500 hover:text-amber-300 transition flex items-center gap-1">
+            <span>📖</span> Blog ↗
+          </a>
+          <a href="${escapeHtmlSafe(s.file)}" class="px-3.5 py-1.5 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+            <span>🔊</span> Lire & Écouter →
+          </a>
+        </div>
       </div>
     </div>
   `).join("");

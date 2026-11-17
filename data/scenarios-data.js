@@ -16,6 +16,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 1",
     place: "Village de Tsuma",
+    cover: "assets/images/scenarios/cover-1.jpg",
     desc: "Le passage à l'âge adulte (gempukku) des jeunes samouraïs lors du prestigieux tournoi impérial, entre épreuves d'armes, étiquette et premiers complots."
   },
   {
@@ -40,6 +41,7 @@ const SCENARIOS_DATA = [
     author: "Ryûmitaka Isawa / Tsuruchi Akira",
     date: "Acte 3",
     place: "Routes de Rokugan",
+    cover: "assets/images/scenarios/cover-3.jpg",
     desc: "Une mission d'escorte et de pèlerinage confrontant le groupe aux aléas du voyage et aux périls spirituels."
   },
   {
@@ -64,6 +66,7 @@ const SCENARIOS_DATA = [
     author: "Tsuruchi Akira",
     date: "Acte 5",
     place: "Sanctuaires de Montagne",
+    cover: "assets/images/scenarios/cover-5.jpg",
     desc: "Un choix moral et spirituel déchirant entre le devoir envers les cieux célestes et la réalité crue du monde terrestre."
   },
   {
@@ -160,6 +163,7 @@ async function discoverNewScenarios() {
       const desc = getMeta("l5r-scenario-desc") ||
         (doc.getElementById("story-summary")?.textContent || "").replace(/^[«"\s]+|[»"\s]+$/g, "").trim();
       const wpUrl = getMeta("l5r-scenario-wp-url") || "https://campagnel5rdavid2015.wordpress.com/la-campagne/";
+      const cover = getMeta("l5r-scenario-cover") || "";
 
       if (!SCENARIOS_DATA.some(s => Number(s.id) === nextId)) {
         SCENARIOS_DATA.push({
@@ -172,6 +176,7 @@ async function discoverNewScenarios() {
           author,
           date,
           place,
+          ...(cover ? { cover } : {}),
           desc
         });
         foundNew = true;
