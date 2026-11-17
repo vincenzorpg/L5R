@@ -3,8 +3,8 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.15.1';
-const RUNTIME_CACHE = 'l5r-runtime-v1.15.1';
+const CACHE_VERSION = 'l5r-forge-v1.15.2';
+const RUNTIME_CACHE = 'l5r-runtime-v1.15.2';
 
 const CORE_ASSETS = [
   './',
@@ -96,8 +96,9 @@ self.addEventListener('fetch', (event) => {
     url.pathname.includes('/js/')
   );
   if (req.mode === 'navigate' || isFreshAsset) {
+    const netReq = req.mode === 'navigate' ? req : new Request(req, { cache: 'no-cache' });
     event.respondWith(
-      fetch(req)
+      fetch(netReq)
         .then((res) => {
           if (res && res.status === 200) {
             const clone = res.clone();

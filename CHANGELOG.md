@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.15.2] — 2026-11-17
+
+### 🐛 Corrigé
+- **Invalideur de Cache Navigateur & Service Worker (`createcharacter.html`, `sw.js`)** :
+  - Incrémentation des paramètres de version (`css/main.css?v=10`, `js/pwa.js?v=3`, `js/navbar.js?v=2`, `js/forge-ui.js?v=24`, `js/character-generator.js?v=21`) afin de forcer le chargement immédiat du correctif d'accès aux Kihos des moines et de la barre d'étapes sans attendre l'expiration du cache HTTP.
+  - Revalidation systématique (`cache: 'no-cache'`) dans `sw.js` pour les ressources applicatives (`/js/`, `.css`, `.html`).
+
+---
+
 ## [1.15.1] — 2026-11-17
 
 ### 🐛 Corrigé & Ajusté
