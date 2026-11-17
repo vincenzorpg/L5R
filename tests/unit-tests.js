@@ -615,12 +615,22 @@
       assertEqual(ids.size, all.length, "Aucun identifiant de sort en doublon");
     });
 
-    it("Les sorts et kihos corrigés portent les mécaniques exactes L5R 4e", function () {
+    it("Les sorts, kihos et mahō corrigés portent les mécaniques exactes L5R 4e", function () {
       const byId = catalogScope.SORTS_BY_ID || {};
       assertTrue(!!byId["earth-1-soul-of-stone"], "Âme de Pierre (Core) présent");
+      assertTrue(!!byId["earth-3-purge-taint"], "Purger la Souillure présent");
+      assertTrue(!!byId["earth-4-tomb-jade"] && /2g2/.test(byId["earth-4-tomb-jade"].desc || ""), "Tombeau de Jade : 2g2 Blessures");
+      assertTrue(!!byId["feu-4-ward-thunder"], "Garde du Tonnerre présent");
+      assertTrue(!!byId["feu-5-follow-flame"] && /6k5|6g5/.test(byId["feu-5-follow-flame"].desc || ""), "Poursuite de la Flamme : 6k5 Blessures");
       assertTrue(!!byId["void-2-false-whispers"] && /Aucunes?/i.test(byId["void-2-false-whispers"].raises || ""), "Faux Murmures sans augmentations");
       assertTrue(!!byId["kiho-void-4-banish-all-shadows"] && byId["kiho-void-4-banish-all-shadows"].isKiho === true, "Bannir Toutes les Ombres");
       assertTrue(!!byId["maho-2-hates-heart"] && byId["maho-2-hates-heart"].mastery === 3 && byId["maho-2-hates-heart"].keywords.includes("Air"), "Cœur de Haine : Air 3 Mahō");
+
+      const mahoList = catalogScope.SORTS_MAHO || [];
+      assertTrue(
+        mahoList.every(m => m.isMaho === true && Array.isArray(m.keywords) && m.keywords.some(k => /mah[oō]/i.test(k))),
+        "Tous les sortilèges de Mahō portent isMaho et le mot-clé Mahō"
+      );
     });
 
     it("KATAS_DATA réunit les 40 Katas officiels 4e édition sans doublon", function () {
@@ -646,6 +656,32 @@
       const dis = l5r.disadvantages || [];
       assertTrue(dis.some(d => d.id === "dis-nom-gaijin"), "Nom Gaijin présent");
       assertTrue(dis.some(d => /Brash|Téméraire/.test(d.name || "")), "Téméraire (Brash) présent");
+    });
+
+    it("CLANS_DATA, COMPETENCES_DATA, EQUIPEMENT et GM_RULES_CARDS respectent les standards 4e", function () {
+      const clans = catalogScope.CLANS_DATA || {};
+      const clanKeys = Object.keys(clans);
+      assertEqual(clanKeys.length, 13, "13 clans & factions dans CLANS_DATA");
+      assertTrue(
+        clanKeys.every(k => Array.isArray(clans[k].families) && clans[k].families.length >= 1 && Array.isArray(clans[k].schools) && clans[k].schools.length >= 1),
+        "Chaque clan possède familles et écoles"
+      );
+      const totalSchools = clanKeys.reduce((acc, k) => acc + clans[k].schools.length, 0);
+      assertEqual(totalSchools, 95, "95 écoles officielles répertoriées");
+
+      const comps = catalogScope.COMPETENCES_DATA || [];
+      assertEqual(comps.length, 55, "55 compétences officielles");
+      assertEqual(new Set(comps.map(c => c.name)).size, comps.length, "Aucun nom de compétence en doublon");
+
+      const eq = typeof catalogScope.getEquipment === "function" ? catalogScope.getEquipment() : {};
+      assertEqual((eq.weapons || []).length, 54, "54 armes");
+      assertEqual((eq.armors || []).length, 10, "10 armures");
+      assertEqual((eq.arrows || []).length, 6, "6 types de flèches");
+      const katana = (eq.weapons || []).find(w => w.id === "katana");
+      assertTrue(!!katana && katana.vd === "3g2", "Katana : 3g2");
+      assertEqual((eq.weapons || []).filter(w => typeof w.bowStrength === "number").length, 3, "3 arcs avec bowStrength");
+
+      assertEqual((gmRules.GM_RULES_CARDS || []).length, 13, "13 fiches officielles dans le Paravent MJ");
     });
   });
 
