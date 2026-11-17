@@ -154,7 +154,7 @@
             <img src="${rootPrefix}assets/images/favicon_cinq_anneaux.png" alt="Logo des Chroniques de Rokugan" width="36" height="36" class="w-9 h-9 rounded-full object-cover border border-amber-500/60 bg-[#0f0b0a] shadow-md transition-transform group-hover:scale-105" />
             <div class="flex flex-col">
               <span class="font-imperial font-bold text-xs sm:text-sm tracking-wider gold-text leading-tight uppercase">LES CHRONIQUES DE ROKUGAN</span>
-              <span class="text-[10px] text-stone-400 hidden sm:inline">L5R 4e Édition • Campagne MJ David</span>
+              <span class="text-[10px] text-stone-400 hidden sm:inline">L5R 4e Édition • Campagne de la Chronique de Rokugan</span>
             </div>
           </a>
 
@@ -234,12 +234,21 @@
                   </div>
                 </a>
 
-                <!-- Sorts & Kiho -->
+                <!-- Grimoire des Sorts -->
                 <a href="${rootPrefix}grimoire.html" class="px-2.5 py-2 rounded-lg hover:bg-sky-950/40 text-stone-200 hover:text-sky-200 flex items-center gap-3 text-xs transition">
                   <span class="w-7 h-7 rounded border bg-sky-950/80 text-sky-300 border-sky-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">法</span>
                   <div class="flex flex-col">
-                    <span class="font-bold text-sky-300">Sorts & Kiho</span>
-                    <span class="text-[10px] text-stone-400 font-sans">Grimoire des éléments & prières</span>
+                    <span class="font-bold text-sky-300">Grimoire des Sorts</span>
+                    <span class="text-[10px] text-stone-400 font-sans">Prières aux Kami, Éléments &amp; Mahō</span>
+                  </div>
+                </a>
+
+                <!-- Recueil des Kihos -->
+                <a href="${rootPrefix}kihos.html" class="px-2.5 py-2 rounded-lg hover:bg-emerald-950/40 text-stone-200 hover:text-emerald-200 flex items-center gap-3 text-xs transition">
+                  <span class="w-7 h-7 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">気</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-emerald-300">Recueil des Kihos</span>
+                    <span class="text-[10px] text-stone-400 font-sans">Arts mystiques des Moines &amp; Atemi</span>
                   </div>
                 </a>
 
@@ -357,15 +366,19 @@
             <div class="grid grid-cols-2 gap-1.5">
               <a href="${rootPrefix}grimoire.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-sky-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-sky-950/80 text-sky-300 border-sky-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">法</span>
-                <span>Sorts & Kiho</span>
+                <span>Grimoire (Sorts)</span>
+              </a>
+              <a href="${rootPrefix}kihos.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-2">
+                <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">気</span>
+                <span>Kihos (Moines)</span>
               </a>
               <a href="${rootPrefix}tatouages.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-teal-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-teal-950/80 text-teal-300 border-teal-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">墨</span>
                 <span>Tatouages</span>
               </a>
-              <a href="${rootPrefix}ecran-mj.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-2 col-span-2">
+              <a href="${rootPrefix}ecran-mj.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">幕</span>
-                <span>Écran du MJ (Combats & PJs)</span>
+                <span>Écran du MJ</span>
               </a>
               <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/45 text-emerald-200 hover:bg-emerald-900/50 flex items-center gap-2 col-span-2 cursor-pointer text-left">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-bold text-xs shrink-0">📲</span>

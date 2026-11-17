@@ -1,15 +1,15 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.14.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.15.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
 [![Licence](https://img.shields.io/badge/License-Non--commercial%20Fan%20Content-lightgrey?style=flat-square)](#)
 
-Portail numérique interactif, boîte à outils d'arbitrage et annales officielles de la campagne de jeu de rôle sur table **La Légende des Cinq Anneaux (4ᵉ Édition)**, menée sous la maîtrise du **MJ David**.
+Portail numérique interactif, boîte à outils d'arbitrage et annales officielles de jeu de rôle sur table pour **La Légende des Cinq Anneaux (4ᵉ Édition)**, consacré à la **Campagne de la Chronique de Rokugan**.
 
-Le site réunit une **Forge de Samouraïs** automatisée, un **Grimoire** complet des prières et Kihos, un **Codex des Tatouages Togashi**, l'**Encyclopédie des Huit Grands Clans**, des **Mémentos d'Arbitrage Tactique** et le recueil intégral de nos **10 Scénarios de Campagne** illustrés et narrés vocalement.
+Le site réunit une **Forge de Samouraïs** automatisée, un **Grimoire** des prières et sortilèges, un **Recueil dédié des Kihos**, un **Codex des Tatouages Togashi**, l'**Encyclopédie des Huit Grands Clans**, l'**Écran du Maître du Jeu**, des **Mémentos d'Arbitrage Tactique** et nos **10 Scénarios de Campagne** illustrés et narrés vocalement.
 
 🌐 **Site officiel en ligne :** [https://vincenzorpg.github.io/L5R/](https://vincenzorpg.github.io/L5R/)  
 📦 **Releases & Versions :** [https://github.com/vincenzorpg/L5R/releases](https://github.com/vincenzorpg/L5R/releases)
@@ -64,11 +64,10 @@ Un atelier complet de création et d'évolution de samouraï en **6 étapes guid
   - Génération d'un lien de partage universel encodé en Base64 (`?char=...`).
   - **Dossier d'Impression Officiel A4** vectoriel prêt pour l'impression papier ou PDF (`@media print`).
 
-### 3. Le Grimoire des Éléments & Kihos (`grimoire.html`)
-- **Base de Données Modulaire (`data/sorts-data.js` & `data/sorts/`) :** Prières universelles (5 sorts : *Sentir*, *Communier*, *Invoquer*, *Commandement*, *Transmutation*), sorts des 5 Éléments (Terre, Eau, Feu, Air, Vide) de Maîtrise 1 à 6, Kihos de la Confrérie (Maîtrises 1 à 8) et sortilèges de Mahō (avec coût de sang et Souillure exacts).
-- **Filtrage Instantané & Permaliens :** Recherche par nom, mot-clé ou effet, filtrage combiné par Élément/Voie et Rang de Maîtrise, et ciblage direct d'un sort par ancre URL (`grimoire.html#sort-<id>`) avec animation de mise en évidence.
-- **Aide de Jeu Tactique Intégrée :** Mémento complet sur le lancement des sorts (formule, ND, slots, affinités) et sur l'acquisition des Kihos par archétype selon les règles du *Livre de l'Eau* (p. 266).
-- **Sceau Interdit de Mahō :** Verrouillage par mot de passe des parchemins de magie du sang afin de préserver le secret du MJ autour de la table.
+### 3. Le Grimoire des Sorts (`grimoire.html`) & le Recueil des Kihos (`kihos.html`)
+- **Grimoire des Sorts (`grimoire.html`) :** 308 sortilèges répartis entre prières universelles (5 sorts), sorts des 5 Éléments (Terre, Eau, Feu, Air, Vide) de Maîtrise 1 à 6 et 46 sortilèges interdits de Mahō sous mot de passe.
+- **Recueil des Kihos (`kihos.html`) :** Page dédiée aux 64 Kihos des moines (Interne, Martial, Kharmique, Mystique, attaques *Atemi*) avec mémento officiel et tableau d'acquisition (*Livre de Base* p. 266).
+- **Filtrage Instantané & Permaliens :** Recherche par nom, mot-clé ou effet et ciblage direct par ancre URL (`grimoire.html#sort-<id>`, `kihos.html#kiho-<id>`).
 
 ### 4. Le Codex des Tatouages Sacrés (`tatouages.html`)
 - **Référentiel de l'Ordre Togashi (`data/tatouages-data.js`) :** Règles officielles des moines tatoués *Ise Zumi* (progression aux Rangs 1, 3 et 5, activation en Action Gratuite, durée `2 × Rang d'École` rounds, tatouages fusionnés).
@@ -117,11 +116,12 @@ L5R/
 ├── index.html                          # Portail d'accueil, Dojo local et navigation rapide
 ├── createcharacter.html                # Forge de Personnage L5R 4e, lanceur de dés XgY et impression A4
 ├── ecran-mj.html                       # Écran interactif du Maître du Jeu (PJs, Escarmouche, Paravent, Duel, Dés)
-├── grimoire.html                       # Grimoire interactif des sorts, prières, kihos et mahō
+├── grimoire.html                       # Grimoire interactif des sorts élémentaires, prières et mahō
+├── kihos.html                          # Recueil interactif des 64 Kihos des moines & règles Atemi
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
-├── campagne.html                       # Hub des 10 scénarios de la campagne du MJ David
+├── campagne.html                       # Hub des 10 scénarios de la Campagne de la Chronique de Rokugan
 ├── campagne-ajouter.html               # Studio d'import et générateur de pages de scénarios HTML
-├── version.json                        # Source unique de vérité pour la version du site (v1.14.0)
+├── version.json                        # Source unique de vérité pour la version du site (v1.15.0)
 ├── manifest.webmanifest                # Manifeste PWA installable sur Android & iPhone (mode autonome)
 ├── sw.js                               # Service Worker hors-ligne pré-cachant Forge, Dojo & données L5R 4e
 ├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
@@ -167,6 +167,7 @@ L5R/
 │   ├── forge-ui.js                     # UI étendue de la Forge (Sorts, Katas, Tatouages, 20 Questions & Print A4)
 │   ├── export-carnet.js                # Moteur d'export JSON conforme au Carnet de Rokugan (schemaVersion: 2)
 │   ├── grimoire.js                     # Moteur de recherche, filtrage, ancres URL et Sceau de Mahō
+│   ├── kihos.js                        # Moteur dédié de filtrage et permaliens du Recueil des Kihos
 │   ├── tatouages.js                    # Moteur de filtrage et modale du Codex des Tatouages Togashi
 │   ├── gm-screen.js                    # Moteur complet de l'Écran du MJ (Escarmouche, Paravent, Duel, Dés R&K)
 │   ├── narrator.js                     # Lecteur vocal narrateur HD & sélecteur multi-versions des scénarios
@@ -272,6 +273,6 @@ Conformément aux directives du projet ([`GEMINI.md`](GEMINI.md)) :
 
 ## 📜 Crédits & Mentions Légales
 
-- **Maître de Jeu & Direction de Campagne :** **MJ David** (table active depuis 2015 — [Archive WordPress](https://campagnel5rdavid2015.wordpress.com/)).
+- **Maître de Jeu & Direction de Campagne :** **Campagne de la Chronique de Rokugan** (table active depuis 2015 — [Archive WordPress](https://campagnel5rdavid2015.wordpress.com/)).
 - **Chroniqueurs & Personnages de la Table :** *Tsuruchi Akira*, *Okado Hiruma*, *Hida Samui*, *Isawa Ryumitaka*, *Kakita Sutokhu*, *Mirumoto Mansouri*.
 - **Mentions Légales :** *La Légende des Cinq Anneaux* (*Legend of the Five Rings* / L5R) est une marque déposée d'Alderac Entertainment Group (AEG) et Fantasy Flight Games / Edge Studio. Ce dépôt est un projet amateur à but strictement récréatif et non commercial.

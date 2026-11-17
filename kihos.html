@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recueil des Kihos — Arts Mystiques des Moines | L5R 4e Édition</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- DONNÉES KIHOS & MOTEUR -->
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/navbar.js" defer></script>
+  <script src="data/sorts/sorts-kiho.js" defer></script>
+  <script src="js/kihos.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- HEADER / MENU CENTRALISÉ -->
+  <header id="site-header"></header>
+
+  <!-- CONTENU PRINCIPAL DU RECUEIL DES KIHOS -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- TITRE & ACCROCHE -->
+    <div class="text-center space-y-2">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/35 text-emerald-300 text-[10px] uppercase tracking-widest font-imperial font-bold">
+        <span>🥋</span> Confrérie de Shinsei &amp; Ordres Monastiques
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold font-imperial tracking-wide text-emerald-300">
+        Recueil des Kihos &amp; Arts Mystiques
+      </h1>
+      <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto">
+        Les 64 Kihō officiels de la 4ᵉ Édition (<i>Livre de Base</i> et <i>Livres des Éléments</i>), classés par Anneau, Type (Interne, Martial, Kharmique, Mystique) et Maîtrise.
+      </p>
+      <div class="pt-1 flex justify-center gap-3 text-[11px]">
+        <a href="grimoire.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-amber-300 border border-amber-500/30 font-imperial font-bold transition">
+          📜 Grimoire des Sorts →
+        </a>
+        <a href="tatouages.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-teal-300 border border-teal-500/30 font-imperial font-bold transition">
+          🐉 Tatouages Togashi →
+        </a>
+      </div>
+    </div>
+
+    <!-- AIDE DE JEU OFFICIELLE : RÈGLES DES KIHOS (L5R 4E pp. 261-262, 266) -->
+    <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border border-emerald-500/35 bg-black/70 text-xs">
+      <div class="flex flex-wrap justify-between items-center gap-3 border-b border-emerald-500/20 pb-3">
+        <div>
+          <h2 class="text-base md:text-lg font-bold text-emerald-300 font-imperial flex items-center gap-2">
+            <span>⛩️</span> Mémento Officiel : Maîtrise &amp; Activation des Kihos
+          </h2>
+          <p class="text-stone-400 text-[11px]">
+            Règles complètes des Voies Monastiques (<i>Livre de Base L5R 4e Édition</i>, pp. 231, 261–262 &amp; 266).
+          </p>
+        </div>
+        <button
+          type="button"
+          onclick="document.getElementById('aide-kihos-body').classList.toggle('hidden')"
+          class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-emerald-300 border border-emerald-500/30 font-bold font-imperial text-[11px] transition cursor-pointer"
+        >
+          Afficher / Masquer le Mémento ▾
+        </button>
+      </div>
+
+      <div id="aide-kihos-body" class="space-y-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-stone-950/90 border border-emerald-500/25 space-y-2.5">
+            <h3 class="font-bold font-imperial text-emerald-300 text-sm border-b border-stone-800 pb-1.5">
+              🥋 Activation &amp; Limites de Cumul (pp. 261–262)
+            </h3>
+            <ul class="space-y-2 text-stone-300 leading-relaxed">
+              <li>
+                <b class="text-emerald-200">Activation (hors mention contraire) :</b>
+                Soit en dépensant <b>1 Point de Vide</b> (<b>Action Gratuite</b> ; considérée comme Technique d'École pour la Confrérie, hors limite d'1 PV/round), soit via un jet de <b>Méditation / Vide ND 15</b> (<b>Action Complexe</b>) ou <b>ND 30</b> (<b>Action Simple</b>). Pour un Kihō <i>Atemi</i>, la dépense de PV ou le jet ND 15 s'effectue en <b>Action Gratuite</b> intégrée à l'attaque.
+              </li>
+              <li>
+                <b class="text-emerald-200">Les 4 Catégories &amp; Cumul :</b>
+                Un moine ne peut avoir actifs simultanément qu'<b>1 Kihō Interne</b>, <b>1 Kharmique</b> et <b>1 Mystique</b>. Plusieurs Kihō <b>Martiaux</b> peuvent être actifs ensemble, mais <b>un seul effet Kihō</b> peut être délivré par frappe à mains nues.
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-stone-950/90 border border-rose-500/25 space-y-2.5">
+            <h3 class="font-bold font-imperial text-rose-300 text-sm border-b border-stone-800 pb-1.5">
+              ✋ Attaques Atemi &amp; Apprentissage (pp. 231, 262)
+            </h3>
+            <ul class="space-y-2 text-stone-300 leading-relaxed">
+              <li>
+                <b class="text-rose-200">Attaques « (Atemi) » :</b>
+                Frappes ciblées sur les points nerveux devant toucher la <b>peau nue</b> : toute armure <b>double son bonus au ND d'Armure</b> contre ces attaques. Elles n'infligent <b>aucun dégât normal</b> (sauf précision contraire), déclenchant uniquement l'effet du Kihō (spécialisation optionnelle : <i>Jiujutsu (Atemi)</i>).
+              </li>
+              <li>
+                <b class="text-emerald-200">Progression Confrérie :</b>
+                Un moine débute avec <b>3 Kihō gratuits</b>, puis en reçoit <b>2 nouveaux à chaque gain de Rang d'École</b>. Des Kihō bonus s'achètent au coût de leur <b>Niveau de Maîtrise en XP</b> (max bonus = Rangs d'École cumulés de Moine).
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-stone-950/90 border border-stone-800 space-y-2.5">
+          <div class="flex flex-wrap justify-between items-center gap-2">
+            <h3 class="font-bold font-imperial text-amber-200 text-sm">
+              ⚖️ Acquisition des Kihos selon la Voie du Personnage (Livre de Base, p. 266)
+            </h3>
+            <span class="text-[10px] text-amber-400">
+              💡 L'Avantage « Ami de la Confrérie » (5 XP / 4 XP Dragon) est requis pour les non-membres autorisés.
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-[11px]">
+              <thead>
+                <tr class="border-b border-stone-800 text-amber-300 font-imperial">
+                  <th class="py-2 pr-3">Archétype / Ordre</th>
+                  <th class="py-2 px-3">Condition de Maîtrise</th>
+                  <th class="py-2 px-3">Coût en XP</th>
+                  <th class="py-2 pl-3">Limite maximale de Kihos</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-800/70 text-stone-300">
+                <tr>
+                  <td class="py-2 pr-3 font-bold text-emerald-300">Moine de la Confrérie de Shinsei</td>
+                  <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
+                  <td class="py-2 px-3">Maîtrise en XP</td>
+                  <td class="py-2 pl-3">3 gratuits + 2/Rang ; bonus ≤ somme Rangs de Moine</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-bold text-amber-200">Autre École de Moine (ex : Togashi, Henshin)</td>
+                  <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
+                  <td class="py-2 px-3">1,5 × le coût normal (arrondi au supérieur)</td>
+                  <td class="py-2 pl-3">Maximum égal au Rang d'École de Moine</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-bold text-blue-300">Shugenja (règle optionnelle, p. 266)</td>
+                  <td class="py-2 px-3 font-mono">Anneau seul ≥ Maîtrise</td>
+                  <td class="py-2 px-3">2 × le coût normal</td>
+                  <td class="py-2 pl-3">Maximum égal au Rang d'École de Shugenja</td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 font-bold text-purple-300">Ninja (campagne mystique optionnelle)</td>
+                  <td class="py-2 px-3 font-mono">Rang d'École seul ≥ Maîtrise</td>
+                  <td class="py-2 px-3">2 × le coût normal</td>
+                  <td class="py-2 pl-3">Maximum égal au Rang d'École de Ninja</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANDEAU DE RECHERCHE & FILTRES -->
+    <section class="card-spell rounded-xl p-4 md:p-5 space-y-4">
+      <div class="flex flex-wrap gap-1.5 text-[11px] font-imperial">
+        <button type="button" data-kiho-ring-chip="tous" onclick="setKihoRingQuick('tous')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-black font-bold border border-amber-500/40 cursor-pointer transition">Tous les Anneaux</button>
+        <button type="button" data-kiho-ring-chip="air" onclick="setKihoRingQuick('air')" class="px-3 py-1.5 rounded-lg bg-stone-900/80 text-stone-300 border border-stone-800 hover:border-teal-500/50 cursor-pointer transition">風 Air</button>
+        <button type="button" data-kiho-ring-chip="terre" onclick="setKihoRingQuick('terre')" class="px-3 py-1.5 rounded-lg bg-stone-900/80 text-stone-300 border border-stone-800 hover:border-amber-500/50 cursor-pointer transition">土 Terre</button>
+        <button type="button" data-kiho-ring-chip="eau" onclick="setKihoRingQuick('eau')" class="px-3 py-1.5 rounded-lg bg-stone-900/80 text-stone-300 border border-stone-800 hover:border-blue-500/50 cursor-pointer transition">水 Eau</button>
+        <button type="button" data-kiho-ring-chip="feu" onclick="setKihoRingQuick('feu')" class="px-3 py-1.5 rounded-lg bg-stone-900/80 text-stone-300 border border-stone-800 hover:border-red-500/50 cursor-pointer transition">火 Feu</button>
+        <button type="button" data-kiho-ring-chip="vide" onclick="setKihoRingQuick('vide')" class="px-3 py-1.5 rounded-lg bg-stone-900/80 text-stone-300 border border-stone-800 hover:border-purple-500/50 cursor-pointer transition">空 Vide</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 text-xs items-end">
+        <div class="md:col-span-5 space-y-1">
+          <label for="kiho-search" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Recherche par nom, mot-clé ou effet
+          </label>
+          <div class="relative">
+            <input
+              type="text"
+              id="kiho-search"
+              placeholder="Ex: Poing d'Air, Atemi, Armure, Vide..."
+              class="w-full p-2.5 pl-8 rounded text-xs font-medium placeholder-stone-600 focus:ring-1 focus:ring-emerald-500"
+            >
+            <span class="absolute left-2.5 top-2.5 text-stone-500">🔍</span>
+          </div>
+        </div>
+
+        <div class="md:col-span-2 space-y-1">
+          <label for="kiho-ring-select" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Anneau
+          </label>
+          <select id="kiho-ring-select" class="w-full p-2.5 rounded text-xs font-medium cursor-pointer">
+            <option value="tous">Tous les Anneaux</option>
+            <option value="air">Air</option>
+            <option value="terre">Terre</option>
+            <option value="eau">Eau</option>
+            <option value="feu">Feu</option>
+            <option value="vide">Vide</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2 space-y-1">
+          <label for="kiho-type-select" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Catégorie
+          </label>
+          <select id="kiho-type-select" class="w-full p-2.5 rounded text-xs font-medium cursor-pointer">
+            <option value="tous">Toutes Catégories</option>
+            <option value="interne">Interne</option>
+            <option value="martial">Martial</option>
+            <option value="kharmique">Kharmique</option>
+            <option value="mystique">Mystique</option>
+            <option value="atemi">Atemi uniquement</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2 space-y-1">
+          <label for="kiho-rank-select" class="block text-stone-400 font-bold uppercase tracking-wider text-[10px]">
+            Maîtrise
+          </label>
+          <select id="kiho-rank-select" class="w-full p-2.5 rounded text-xs font-medium cursor-pointer">
+            <option value="tous">Tous les Rangs</option>
+            <option value="1">Maîtrise 1</option>
+            <option value="2">Maîtrise 2</option>
+            <option value="3">Maîtrise 3</option>
+            <option value="4">Maîtrise 4</option>
+            <option value="5">Maîtrise 5</option>
+            <option value="6">Maîtrise 6</option>
+            <option value="7">Maîtrise 7</option>
+            <option value="8">Maîtrise 8</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-1">
+          <button
+            type="button"
+            onclick="resetAllKihoFilters()"
+            class="w-full p-2.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 font-bold transition text-xs cursor-pointer"
+            title="Réinitialiser les filtres"
+          >
+            ↺
+          </button>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center text-[11px] border-t border-emerald-500/15 pt-2 text-stone-400">
+        <div>
+          Résultats affichés : <b id="kihos-count" class="text-emerald-300 font-bold font-imperial">0</b> Kihō(s)
+        </div>
+        <span class="text-[10px] font-mono text-stone-500">Confrérie de Shinsei • 4e Édition</span>
+      </div>
+    </section>
+
+    <!-- GRILLE DES KIHOS -->
+    <section id="kihos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+
+    <!-- ÉTAT AUCUN RÉSULTAT -->
+    <div id="no-results" class="hidden text-center py-16 card-spell rounded-xl space-y-3">
+      <div class="text-3xl">🥋</div>
+      <p class="text-stone-300 font-bold text-sm">Aucun Kihō ne correspond à votre recherche.</p>
+      <p class="text-stone-500 text-xs">Modifiez vos filtres d'Anneau, de Catégorie ou de Maîtrise.</p>
+      <button onclick="resetAllKihoFilters()" class="mt-2 px-3 py-1.5 bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-200 border border-emerald-500/40 rounded text-xs font-bold transition cursor-pointer">
+        Effacer tous les filtres
+      </button>
+    </div>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60">
+    <div>Campagne de la Chronique de Rokugan — Recueil des Kihos &amp; Confrérie de Shinsei</div>
+    <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
+      <span id="site-version-label">v1.15.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+    </div>
+  </footer>
+
+</body>
+</html>

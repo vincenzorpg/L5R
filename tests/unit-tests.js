@@ -12,6 +12,7 @@
 
   const cg = isNode ? require("../js/character-generator.js") : window;
   const gr = isNode ? require("../js/grimoire.js") : window;
+  const kh = isNode ? require("../js/kihos.js") : window;
   const ec = isNode ? require("../js/export-carnet.js") : window;
   const gm = isNode ? require("../js/gm-screen.js") : window;
   const gmRules = isNode ? require("../data/gm-rules-data.js") : window;
@@ -682,6 +683,27 @@
       assertEqual((eq.weapons || []).filter(w => typeof w.bowStrength === "number").length, 3, "3 arcs avec bowStrength");
 
       assertEqual((gmRules.GM_RULES_CARDS || []).length, 13, "13 fiches officielles dans le Paravent MJ");
+    });
+  });
+
+  // ===========================================================================
+  // 7. RECUEIL DES KIHOS (js/kihos.js)
+  // ===========================================================================
+  describe("7. Recueil des Kihos — Filtrage par Anneau, Catégorie, Maîtrise & Atemi", function () {
+    it("filterKihosList filtre les 64 Kihos officiels par Anneau, Type, Maîtrise et Atemi", function () {
+      const kihos = catalogScope.SORTS_KIHO || [];
+      assertEqual(kh.filterKihosList(kihos, {}).length, 64, "Total Kihos");
+      assertEqual(kh.filterKihosList(kihos, { ring: "air" }).length, 18, "Kihos d'Air");
+      assertEqual(kh.filterKihosList(kihos, { ring: "terre" }).length, 17, "Kihos de Terre");
+      assertEqual(kh.filterKihosList(kihos, { ring: "eau" }).length, 8, "Kihos d'Eau");
+      assertEqual(kh.filterKihosList(kihos, { ring: "feu" }).length, 12, "Kihos de Feu");
+      assertEqual(kh.filterKihosList(kihos, { ring: "vide" }).length, 9, "Kihos du Vide");
+
+      const kharmiques = kh.filterKihosList(kihos, { type: "kharmique" });
+      assertEqual(kharmiques.length, 14, "14 Kihos Kharmiques (orthographes Kharmic/Kharmique unifiées)");
+      assertEqual(kh.filterKihosList(kihos, { type: "atemi" }).length, 21, "21 Kihos Atemi");
+      assertEqual(kh.filterKihosList(kihos, { rank: "7" }).length, 8, "8 Kihos de Maîtrise 7");
+      assertEqual(kh.filterKihosList(kihos, { rank: "8" }).length, 2, "2 Kihos de Maîtrise 8");
     });
   });
 

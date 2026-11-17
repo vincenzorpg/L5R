@@ -18,7 +18,6 @@
   <script src="data/sorts/sorts-feu.js" defer></script>
   <script src="data/sorts/sorts-eau.js" defer></script>
   <script src="data/sorts/sorts-vide.js" defer></script>
-  <script src="data/sorts/sorts-kiho.js" defer></script>
   <script src="data/sorts/sorts-maho.js" defer></script>
 
   <!-- AGRÉGATEUR PRINCIPAL PUIS MOTEUR -->
@@ -37,25 +36,36 @@
 
     <!-- TITRE & ACCROCHE -->
     <div class="text-center space-y-2">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/60 border border-sky-500/35 text-sky-300 text-[10px] uppercase tracking-widest font-imperial font-bold">
+        <span>📜</span> Prières aux Kami &amp; Magies Élémentaires
+      </div>
       <h1 class="text-2xl md:text-4xl font-extrabold font-imperial tracking-wide text-amber-300">
-        Grimoire des Prières & Sortilèges
+        Grimoire des Prières &amp; Sortilèges
       </h1>
       <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto">
-        Recueil officiel des invocations aux Kami élémentaires, Kihos de la Confrérie et magies sacrées de Rokugan (4ᵉ Édition).
+        Recueil officiel des invocations aux Kami (Universels, Terre, Eau, Feu, Air, Vide) et sortilèges interdits de Mahō (4ᵉ Édition).
       </p>
+      <div class="pt-1 flex justify-center gap-3 text-[11px]">
+        <a href="kihos.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-emerald-300 border border-emerald-500/30 font-imperial font-bold transition">
+          🥋 Recueil des 64 Kihos (Moines) →
+        </a>
+        <a href="tatouages.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-teal-300 border border-teal-500/30 font-imperial font-bold transition">
+          🐉 Tatouages Togashi →
+        </a>
+      </div>
     </div>
 
     <!-- ===================================================================
-     AIDE DE JEU TACTIQUE : SORTS & KIHOS (L5R 4E ÉDITION) — TICKET #19
+     AIDE DE JEU TACTIQUE : SORTS & MAHŌ (L5R 4E ÉDITION)
      =================================================================== -->
 <section class="card-clean rounded-xl p-5 md:p-6 space-y-5 border border-amber-500/40 bg-black/70 text-xs">
   <div class="flex flex-wrap justify-between items-center gap-3 border-b border-amber-500/20 pb-3">
     <div>
       <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
-        <span>⛩️</span> Aide de Jeu : Invocations des Kami (Sorts) & Mystères du Chi (Kihos)
+        <span>⛩️</span> Aide de Jeu : Invocations des Kami (Sorts) &amp; Mahō
       </h2>
       <p class="text-stone-400 text-[11px]">
-        Mémento officiel des règles de magie élémentaire et d'arts mystiques de La Légende des Cinq Anneaux (4e Édition).
+        Mémento officiel des règles de magie élémentaire et de magie du sang de La Légende des Cinq Anneaux (4e Édition).
       </p>
     </div>
     <button
@@ -67,8 +77,8 @@
     </button>
   </div>
 
-  <div id="aide-kiho-sorts-body" class="space-y-6">
-    <!-- 1. VOIE DES SHUGENJA (SORTS) -->
+  <div id="aide-kiho-sorts-body" class="space-y-5">
+    <!-- 1. VOIE DES SHUGENJA (SORTS) & 2. MAHŌ -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
       <div class="p-4 rounded-xl bg-stone-950/90 border border-amber-500/25 space-y-3">
         <h3 class="font-bold font-imperial text-amber-300 text-sm border-b border-stone-800 pb-1.5">
@@ -99,102 +109,34 @@
         </ul>
       </div>
 
-      <!-- 2. VOIE DES MOINES (KIHOS) -->
-      <div class="p-4 rounded-xl bg-stone-950/90 border border-emerald-500/25 space-y-3">
-        <h3 class="font-bold font-imperial text-emerald-300 text-sm border-b border-stone-800 pb-1.5">
-          🥋 2. Activation &amp; Types de Kihos (Livre de Base, pp. 261–262)
-        </h3>
-        <ul class="space-y-2 text-stone-300 leading-relaxed">
-          <li>
-            <b class="text-emerald-200">Prérequis &amp; Coût d'Acquisition :</b>
-            Un moine compare <span class="font-mono text-emerald-300">(Anneau de l'Élément + Rang d'École) ≥ Maîtrise</span> (coût en XP = <b>Maîtrise</b> pour la Confrérie, <b>×1,5 arrondi au supérieur</b> pour les autres moines).
-          </li>
-          <li>
-            <b class="text-emerald-200">Activation (hors mention contraire) :</b>
-            Soit en dépensant <b>1 Point de Vide</b> (<b>Action Gratuite</b> ; considérée comme Technique d'École pour la Confrérie, hors limite d'1 PV/round), soit via un jet de <b>Méditation / Vide ND 15</b> (<b>Action Complexe</b>) ou <b>ND 30</b> (<b>Action Simple</b>). Pour un Kihō <i>Atemi</i>, la dépense de PV ou le jet ND 15 s'effectue en <b>Action Gratuite</b> avec l'attaque.
-          </li>
-          <li>
-            <b class="text-emerald-200">Les 4 Catégories &amp; Cumul :</b>
-            Un moine ne peut avoir actifs simultanément qu'<b>1 Kihō Interne</b>, <b>1 Karmique</b> et <b>1 Mystique</b>. Plusieurs Kihō <b>Martiaux</b> peuvent être actifs ensemble, mais un seul effet Kihō peut être délivré par frappe à mains nues.
-          </li>
-          <li>
-            <b class="text-emerald-200">Attaques Atemi « (Atemi) » :</b>
-            Frappes précises sur les centres nerveux devant toucher la <b>peau nue</b> : toute armure <b>double son bonus au ND d'Armure</b> contre ces attaques. Elles n'infligent <b>aucun dégât normal</b> (sauf précision contraire), déclenchant uniquement l'effet du Kihō (spécialisation optionnelle : <i>Jiujutsu (Atemi)</i>).
-          </li>
-        </ul>
+      <!-- 2. MAGIE DU SANG (MAHŌ — LIVRE DE BASE pp. 267-269) -->
+      <div class="p-4 rounded-xl bg-red-950/20 border border-red-900/40 space-y-3 flex flex-col justify-between">
+        <div class="space-y-2.5">
+          <h3 class="font-bold font-imperial text-red-300 text-sm border-b border-red-900/40 pb-1.5">
+            🩸 2. Magie du Sang — Mahō (Livre de Base, pp. 267–269)
+          </h3>
+          <ul class="space-y-2 text-stone-300 leading-relaxed text-[11px]">
+            <li>
+              <b class="text-red-200">Accès &amp; Jet d'Invocation :</b>
+              Quiconque connaît l'incantation peut lancer de la Mahō sans restriction de Rang d'École (exception optionnelle MJ pour l'école Chuda). Le jet d'invocation utilise le <b>Rang de Réputation (Insight Rank) + Anneau de l'Élément g Anneau de l'Élément</b> contre <b>ND = 5 + (5 × Niveau de Maîtrise)</b>, en dépensant <b>Maîtrise Actions Complexes</b> (min 1 via Augmentations).
+            </li>
+            <li>
+              <b class="text-red-200">Prix du Sang :</b>
+              Le lanceur doit verser un total de Blessures égal à <b>2 × Niveau de Maîtrise</b> (sur lui-même ou sur une cible intelligente <i>consentante</i> ou <i>sans défense</i> — jamais en attaquant durant l'incantation), payées <b>que le jet réussisse ou échoue</b>. Chaque tranche supplémentaire de <b>2 × Niveau de Maîtrise</b> Blessures versées confère <b>+1 Augmentation Gratuite</b> au jet de lancement.
+            </li>
+            <li>
+              <b class="text-red-200">Souillure de l'Outremonde :</b>
+              Chaque réussite d'un sort de Mahō inflige immédiatement au lanceur <b>(Niveau de Maîtrise − 1) points de Souillure</b> (minimum <b>1 point</b>).
+            </li>
+          </ul>
+        </div>
+        <div class="p-3 rounded-lg bg-emerald-950/30 border border-emerald-500/30 flex items-center justify-between gap-2 text-[11px]">
+          <span class="text-emerald-200">🥋 Les Kihōs des Moines disposent désormais de leur recueil dédié.</span>
+          <a href="kihos.html" class="px-2.5 py-1 rounded bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-200 border border-emerald-500/40 font-imperial font-bold shrink-0 transition">
+            Ouvrir les Kihos →
+          </a>
+        </div>
       </div>
-    </div>
-
-    <!-- 3. TABLEAU DES RÈGLES : KIHOS HORS-CONFRÉRIE (LIVRE DE BASE p. 266) -->
-    <div class="p-4 rounded-xl bg-stone-950/90 border border-stone-800 space-y-2.5">
-      <div class="flex flex-wrap justify-between items-center gap-2">
-        <h3 class="font-bold font-imperial text-amber-200 text-sm">
-          ⚖️ 3. Acquisition des Kihos selon la Voie du Personnage (Livre de Base, p. 266)
-        </h3>
-        <span class="text-[10px] text-amber-400">
-          💡 L'Avantage « Ami de la Confrérie » (5 XP / 4 XP Dragon) autorise les Moine/Shugenja à acheter des Kihos via leur Anneau.
-        </span>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-[11px]">
-          <thead>
-            <tr class="border-b border-stone-800 text-amber-300 font-imperial">
-              <th class="py-2 pr-3">Archétype / Ordre</th>
-              <th class="py-2 px-3">Condition de Maîtrise</th>
-              <th class="py-2 px-3">Coût en XP</th>
-              <th class="py-2 pl-3">Limite maximale de Kihos</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-stone-800/70 text-stone-300">
-            <tr>
-              <td class="py-2 pr-3 font-bold text-emerald-300">Moine de la Confrérie de Shinsei</td>
-              <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
-              <td class="py-2 px-3">Coût normal (Maîtrise en XP)</td>
-              <td class="py-2 pl-3">Aucune limite fixe (+ Kihos gratuits par Rang)</td>
-            </tr>
-            <tr>
-              <td class="py-2 pr-3 font-bold text-amber-200">Autre École de Moine (ex : Togashi, Henshin)</td>
-              <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
-              <td class="py-2 px-3">1,5 × le coût normal (arrondi au supérieur)</td>
-              <td class="py-2 pl-3">Maximum égal au Rang d'École de Moine</td>
-            </tr>
-            <tr>
-              <td class="py-2 pr-3 font-bold text-blue-300">Shugenja (règle optionnelle, p. 266)</td>
-              <td class="py-2 px-3 font-mono">Anneau seul ≥ Maîtrise</td>
-              <td class="py-2 px-3">2 × le coût normal</td>
-              <td class="py-2 pl-3">Maximum égal au Rang d'École de Shugenja</td>
-            </tr>
-            <tr>
-              <td class="py-2 pr-3 font-bold text-purple-300">Ninja (campagne mystique optionnelle)</td>
-              <td class="py-2 px-3 font-mono">Rang d'École seul ≥ Maîtrise</td>
-              <td class="py-2 px-3">2 × le coût normal</td>
-              <td class="py-2 pl-3">Maximum égal au Rang d'École de Ninja</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 4. MAGIE DU SANG (MAHŌ — LIVRE DE BASE pp. 267-269) -->
-    <div class="p-4 rounded-xl bg-red-950/20 border border-red-900/40 space-y-2">
-      <h3 class="font-bold font-imperial text-red-300 text-sm border-b border-red-900/40 pb-1">
-        🩸 4. Magie du Sang — Mahō (Livre de Base, pp. 267–269)
-      </h3>
-      <ul class="space-y-1.5 text-stone-300 leading-relaxed text-[11px]">
-        <li>
-          <b class="text-red-200">Accès &amp; Jet d'Invocation :</b>
-          Quiconque connaît l'incantation peut lancer de la Mahō sans restriction de Rang d'École (exception optionnelle MJ pour l'école Chuda). Le jet d'invocation utilise le <b>Rang de Réputation (Insight Rank) + Anneau de l'Élément g Anneau de l'Élément</b> contre <b>ND = 5 + (5 × Niveau de Maîtrise)</b>, en dépensant <b>Maîtrise Actions Complexes</b> (min 1 via Augmentations).
-        </li>
-        <li>
-          <b class="text-red-200">Prix du Sang :</b>
-          Le lanceur doit verser un total de Blessures égal à <b>2 × Niveau de Maîtrise</b> (sur lui-même ou sur une cible intelligente <i>consentante</i> ou <i>sans défense</i> — jamais en attaquant durant l'incantation), payées <b>que le jet réussisse ou échoue</b>. Chaque tranche supplémentaire de <b>2 × Niveau de Maîtrise</b> Blessures versées confère <b>+1 Augmentation Gratuite</b> au jet de lancement.
-        </li>
-        <li>
-          <b class="text-red-200">Souillure de l'Outremonde :</b>
-          Chaque réussite d'un sort de Mahō inflige immédiatement au lanceur <b>(Niveau de Maîtrise − 1) points de Souillure</b> (minimum <b>1 point</b>).
-        </li>
-      </ul>
     </div>
   </div>
 </section>
@@ -231,7 +173,6 @@
             <option value="feu">Feu (Destruction & Énergie)</option>
             <option value="air">Air (Illusion & Détection)</option>
             <option value="vide">Vide (Ishiken-dō)</option>
-            <option value="kiho">Kihos (Moines & Shinsei)</option>
             <option value="maho" id="opt-maho" class="text-red-400">🩸 Mahō (Magie du Sang)</option>
           </select>
         </div>
@@ -250,8 +191,6 @@
             <option value="4">Rang 4</option>
             <option value="5">Rang 5</option>
             <option value="6">Rang 6</option>
-            <option value="7">Rang 7 (Kihos)</option>
-            <option value="8">Rang 8 (Kihos)</option>
           </select>
         </div>
 
@@ -339,9 +278,9 @@
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60">
-    <div>Campagne L5R – Grimoire Shugenja & Moines • Liaison dynamique avec le Carnet de Rokugan</div>
+    <div>Campagne de la Chronique de Rokugan – Grimoire des Prières &amp; Sorts • Liaison dynamique avec le Carnet de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.14.0</span>
+      <span id="site-version-label">v1.15.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
