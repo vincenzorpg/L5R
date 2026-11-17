@@ -6,6 +6,18 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.17.0] — 2026-11-17
+
+### ✨ Ajouté & Réorganisé
+- **Complément Exhaustif des Familles Vassales sur les 8 Pages de Clans (`clans/*.html`, *The Great Clans* pp. 284–291)** :
+  - Ajout de toutes les familles vassales manquantes jusqu'ici sur l'ensemble des 8 Grands Clans (**57** lignées vassales au total) : **Crabe** (`Endo`, `Fundai`, `Kakeguchi`, `Kano`, `Maisuna`, `Meishozo`, `Moshibaru`, `Raikuto`, `Ugawari`), **Grue** (`Ashidaka`, `Hiramichi`, `Hiramori`, `Iwasaki`, `Kotagama`, `Tsume`), **Dragon** (`Chiyu`, `Hiasobi`, `Izaku`, `Koukan`, `Sakura`, `Zurui`), **Lion** (`Hosokawa`, `Ikeda`, `Ise`, `Katai`, `Koritome`, `Murame`, `Noroko`, `Seizuka`, `Shimizu` déchue), **Mante** (`Byako`, `Goraiku`, `Hogosha`, `Kagehisa`, `Shudo`, `Suguru`, `Watanabe`), **Phénix** (`Atsumaru`, `Chukan`, `Izaku`, `Nani`, `Nasu`, `Shingon`, `Sodona`), **Scorpion** (`Aotora`, `Kochako`, `Naganori`, `Nanbu`, `Rokugo`, `Tansaku`, `Tokagure`) et **Licorne** (`Battue`, `Hyuga`, `Kenshin`, `Marta`, `Naoko`, `Onshigawa`, `Suio`).
+- **Ergonomie, Classement par Famille Bushi & Accordéons (`js/clans-ui.js`, `css/main.css`, `clans/*.html`)** :
+  - Classement systématique des lignées en plaçant les **Familles de Bushi en tête** sur chaque page de clan.
+  - Intégration d'accordéons repliables (`<details class="clan-accordion">`) pour les descriptions des familles vassales, les rangs 1 à 5 des écoles de base et les règles des écoles avancées/voies alternatives, réduisant fortement la hauteur visuelle par défaut.
+  - Ajout d'une barre de filtres interactifs par lignée (`Toutes`, `⚔️ Bushi uniquement`, ou par famille patronne), de raccourcis directs « Voir les écoles de cette lignée ↓ » et de boutons « Tout déplier / Tout replier ».
+
+---
+
 ## [1.16.1] — 2026-11-17
 
 ### 🐛 Corrigé

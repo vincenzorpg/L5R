@@ -11,7 +11,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- SCRIPT DU MENU GLOBAL -->
-  <script src="../js/navbar.js" defer></script>
+  <link rel="stylesheet" href="../css/main.css?v=12">
+  <script src="../js/navbar.js?v=3" defer></script>
+  <script src="../js/clans-ui.js?v=1" defer></script>
 
   <style>
     :root {
@@ -136,99 +138,191 @@
       </div>
     </section>
 
-    <!-- 2. LES FAMILLES DU CLAN (EXACT 4E) -->
-    <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Les Familles du Clan & Familles Vassales</h2>
-        <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 105-106 ; The Great Clans, p. 20-27, 284.</span>
+        <!-- 2. LES FAMILLES DU CLAN & FAMILLES VASSALES (RANGÉES PAR BUSHI EN TÊTE) -->
+    <section id="sec-families" class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Lignées du Clan &amp; Familles Vassales (Familles Bushi en tête)</h2>
+          <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 105-106 ; The Great Clans, p. 20-27, 284-285, 289.</span>
+        </div>
+        <button type="button" data-toggle-details-scope="sec-families" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+          Tout déplier
+        </button>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-
-        <!-- HIDA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Hida</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Force</span>
+        <!-- FAMILLE HIDA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Hida</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Force</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Descendants du Kami Hida, parmi les samouraïs les plus imposants et les plus puissants de tout l'Empire. Leur incombe la charge de défendre Rokugan ; ce sont à la fois des guerriers redoutables et des tacticiens défensifs accomplis, prompts à mépriser l'étiquette des autres clans.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Descendants du Kami Hida, parmi les samouraïs les plus imposants et les plus puissants de tout l'Empire. Leur incombe la charge de défendre Rokugan ; ce sont à la fois des guerriers redoutables et des tacticiens défensifs accomplis, prompts à mépriser l'étiquette des autres clans.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Moshibaru</b> (rônin intégrés via l'Hiver des Vingt Gobelins).
-          </div>
-        </div>
-
-        <!-- HIRUMA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Hiruma</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Agilité</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Silencieux et mortels, les Hiruma sont les éclaireurs et yojimbo du Crabe. Aussi agiles et rapides que les Hida sont puissants, ils assument la tâche périlleuse de patrouiller dans l'Outremonde pour repérer les forces ennemies avant qu'elles n'atteignent le Mur.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Raikuto</b> (diplomates rattachés aux Hiruma puis temporairement aux Yasuki).
-          </div>
-        </div>
-
-        <!-- KAIU -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kaiu</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intelligence</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Ingénieurs de siège, maîtres forgerons et architectes responsables des prouesses techniques les plus durables de l'Empire, à commencer par l'entretien et l'armement du Grand Mur des Bâtisseurs (Mur Kaiu).
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Ingénieurs de siège, forgerons d'acier et armuriers d'élite.
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Kakeguchi, Moshibaru)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Kakeguchi :</b> Descendant d'un compagnon de Hida qui veilla sans attendre de récompense ; fervents soutiens des Hida, souvent officiers militaires, gardes-frontières ou magistrats. (Great Clans p. 284)</li>
+              <li><b class="text-amber-300">Moshibaru :</b> Née après le premier Hiver des Vingt Gobelins instauré au IVe siècle par Hida Ichido ; cette lignée accueille les rônin ayant gagné leur admission au sein du Clan du Crabe. (Great Clans p. 285)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="hida" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
-        <!-- KUNI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kuni</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intelligence</span>
+        <!-- FAMILLE HIRUMA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Hiruma</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Agilité</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Éclaireurs</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Silencieux et mortels, les Hiruma sont les éclaireurs et yojimbo du Crabe. Aussi agiles et rapides que les Hida sont puissants, ils assument la tâche périlleuse de patrouiller dans l'Outremonde pour repérer les forces ennemies avant qu'elles n'atteignent le Mur.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Sinistres d'apparence et d'actes, les Kuni comptent parmi les shugenja les plus redoutés de l'Empire. Convaincus qu'on ne peut vaincre l'Outremonde sans le comprendre, ils étudient des secrets qui briseraient l'esprit d'hommes ordinaires.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Ugawari</b> (capture et détention de créatures de l'Outremonde pour étude).
-          </div>
-        </div>
-
-        <!-- TORITAKA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Toritaka</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Perception</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Ancien Clan Mineur du Faucon absorbé par le Crabe au XIIe siècle pour empêcher une menace surnaturelle de grandir en son sein. Originaires de terres hantées, les Toritaka possèdent une connaissance inégalée des fantômes (<i>yorei</i>), <i>gaki</i> et esprits de toutes sortes.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Chasseurs de spectres, exorcistes et traqueurs d'esprits.
-          </div>
-        </div>
-
-        <!-- YASUKI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Yasuki</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intuition</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Autrefois famille de la Grue ayant rallié le Crabe au IIIe siècle (déclenchant la guerre Yasuki). Marchands et courtisans d'esprit pragmatique et retors, ils recherchent chaque avantage financier et logistique pour ravitailler le Clan.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Négociants impériaux, courtiers en ressources rares, intendants.
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Endo, Raikuto)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Endo :</b> Fondée par le jeune ingénieur Kaiu Endo qui rebâtit Shiro Hiruma en deux ans après sa reconquête ; vouée au maintien et à la défense des terres Hiruma face à l'Outremonde. (Great Clans p. 289)</li>
+              <li><b class="text-amber-300">Raikuto :</b> Issus de la noble diplomate Hiruma Saitsune ; servent en cour aux côtés des Yasuki, auxquels ils jurèrent temporairement fidélité jusqu'à la reconquête des terres Hiruma. (Great Clans p. 285)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="hiruma" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
+        <!-- FAMILLE KAIU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kaiu</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Intelligence</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Ingénieurs</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Ingénieurs de siège, maîtres forgerons et architectes responsables des prouesses techniques les plus durables de l'Empire, à commencer par l'entretien et l'armement du Grand Mur des Bâtisseurs (Mur Kaiu).
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Fundai, Maisuna)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Fundai :</b> Fondée au VIe siècle ; maîtres charpentiers navals des ports du Crabe et concepteurs des célèbres navires-tortues cuirassés (<i>kotetsukan</i>). (Great Clans p. 284)</li>
+              <li><b class="text-amber-300">Maisuna :</b> Tailleurs de pierre et ingénieurs légendaires qui étendirent les fortifications du Mur Kaiu après la Bataille de la Vague Déferlante et en assurent l'entretien séculaire. (Great Clans p. 284)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="kaiu" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE TORITAKA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Toritaka</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Perception</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Chasseurs d'esprits</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Ancien Clan Mineur du Faucon absorbé par le Crabe au XIIe siècle pour empêcher une menace surnaturelle de grandir en son sein. Originaires de terres hantées, les Toritaka possèdent une connaissance inégalée des fantômes (<i>yorei</i>), <i>gaki</i> et esprits de toutes sortes.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <div class="rounded-lg bg-black/35 border border-stone-800/70 px-2.5 py-2 text-[10px] text-stone-400">
+            <b>Profils :</b> Chasseurs de spectres, exorcistes et traqueurs d'esprits (aucune famille vassale répertoriée).
+          </div>
+            <button type="button" data-jump-lineage="toritaka" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE KUNI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kuni</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Intelligence</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Sinistres d'apparence et d'actes, les Kuni comptent parmi les shugenja les plus redoutés de l'Empire. Convaincus qu'on ne peut vaincre l'Outremonde sans le comprendre, ils étudient des secrets qui briseraient l'esprit d'hommes ordinaires.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Meishozo, Ugawari)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Meishozo :</b> Créée au VIIIe siècle autour des techniques de maquillage et d'infiltration ; officiellement garants des peintures rituelles Kuni, ils infiltrent secrètement les cultes occultes. (Great Clans p. 284)</li>
+              <li><b class="text-amber-300">Ugawari :</b> Petite lignée marginale née au IVe siècle, spécialisée dans la capture et la détention de créatures de l'Outremonde vivantes pour les dissections et études des Kuni. (Great Clans p. 285)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="kuni" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE YASUKI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Yasuki</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Intuition</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">📜 Cour & Négoce</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Autrefois famille de la Grue ayant rallié le Crabe au IIIe siècle (déclenchant la guerre Yasuki). Marchands et courtisans d'esprit pragmatique et retors, ils recherchent chaque avantage financier et logistique pour ravitailler le Clan.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (1 : Kano)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Kano :</b> Artisans héritiers du passé Grue ayant suivi les Yasuki lors de la Première Guerre Yasuki ; rares créateurs d'art pacifique au sein du Crabe, s'alliant parfois aux forges Kaiu. (Great Clans p. 284)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="yasuki" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -265,206 +359,313 @@
       </div>
     </section>
 
-    <!-- 4. ÉCOLES DE BASE OFFICIELLES (LIVRE DE BASE & SUPPLÉMENTS) -->
-    <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
+        <!-- 4 & 5. ÉCOLES ET VOIES ALTERNATIVES (RANGÉES PAR LIGNÉE BUSHI + FILTRE INTERACTIF) -->
+    <section id="sec-schools" class="space-y-6">
+      <div class="border-b border-amber-500/20 pb-3 space-y-3">
+        <div class="flex flex-wrap justify-between items-baseline gap-2">
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
         <span class="text-xs text-stone-400">Core pp. 106-108, 219 ; Great Clans pp. 39-40 ; Emerald Empire p. 247 ; Imperial Histories I p. 147.</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div id="clan-lineage-filter-bar" class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-filter-lineage="all" class="clan-lineage-pill is-active">Toutes</button> <button type="button" data-filter-lineage="bushi" class="clan-lineage-pill">⚔️ Bushi uniquement</button> <button type="button" data-filter-lineage="hida" class="clan-lineage-pill">⚔️ Hida</button> <button type="button" data-filter-lineage="hiruma" class="clan-lineage-pill">⚔️ Hiruma</button> <button type="button" data-filter-lineage="kaiu" class="clan-lineage-pill">⚔️ Kaiu</button> <button type="button" data-filter-lineage="toritaka" class="clan-lineage-pill">⚔️ Toritaka</button> <button type="button" data-filter-lineage="kuni" class="clan-lineage-pill">Kuni</button> <button type="button" data-filter-lineage="yasuki" class="clan-lineage-pill">Yasuki</button>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="clan-schools-visible-count" class="text-[11px] font-mono text-stone-400"></span>
+            <button type="button" data-toggle-details-scope="sec-schools" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+              Tout déplier
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-
-        <!-- BUSHI HIDA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="hida" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Hida Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 106-107</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hida</span> <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 106-107</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Constitution • <b>Honneur :</b> 3.5<br>
             <b>Compétences :</b> Athlétisme, Défense, Armes Lourdes (Tetsubo), Intimidation, Kenjutsu, Connaissance : Outremonde, une compétence Bugei au choix.<br>
             <b>Équipement :</b> Armure légère ou lourde, vêtements robustes, Daisho, Arme Lourde ou Arme d'Hast, nécessaire de voyage, 3 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-amber-300">Rang 1 — La Voie du Crabe :</b> Ignorez les malus de ND liés au port d'une Armure Lourde sur toutes les compétences sauf Discrétion. +1g0 au total des jets de dégâts avec une Arme Lourde.</li>
               <li><b class="text-amber-300">Rang 2 — La Montagne ne Bouge Pas :</b> Gagnez une Réduction égale à votre Anneau de Terre.</li>
               <li><b class="text-amber-300">Rang 3 — Deux Pinces, Un Esprit :</b> Attaque par Action Simple au lieu d'Action Complexe avec les Armes Lourdes ou armes à mot-clé Samouraï.</li>
               <li><b class="text-amber-300">Rang 4 — Coup Dévastateur :</b> 1/rencontre avec une Arme Lourde, réduisez la Réduction de l'ennemi de 4 pour cette attaque ; si elle réussit, infligez l'état Hébété (<i>Dazed</i> ; récupération : jet d'Anneau de Terre durant la phase de Réactions contre ND = jet de dégâts, -5 par échec).</li>
               <li><b class="text-amber-300">Rang 5 — La Montagne ne Tombe Pas :</b> Dépensez 1 Vide en phase de Réactions : durant votre prochain Tour et jusqu'à la prochaine phase de Réactions, agissez comme Indemne et ignorez Hébété, Fatigué et Sonné.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- BUSHI HIRUMA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="hiruma" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Hiruma Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold border border-blue-800/40">Core p. 108</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hiruma</span> <span class="text-[9px] px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold border border-blue-800/40">Core p. 108</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Volonté • <b>Honneur :</b> 4.5<br>
             <b>Compétences :</b> Athlétisme, Chasse, Kenjutsu (Katana), Kyujutsu, Connaissance : Outremonde, Discrétion, une compétence au choix.<br>
             <b>Équipement :</b> Armure d'ashigaru ou légère, vêtements robustes, Daisho, Arc avec 20 flèches ou Couteau, nécessaire de voyage, 3 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-amber-300">Rang 1 — La Flamme de la Torche Vacille :</b> +1g0 aux jets d'attaque en posture d'Attaque. Doublez la durée des rations de nourriture, eau et jade pour un nombre de personnes égal à votre rang de Chasse.</li>
               <li><b class="text-amber-300">Rang 2 — La Petite Leçon du Loup :</b> En posture d'Attaque, ajoutez +5 à votre ND d'Armure à chaque touche en mêlée (cumulable jusqu'à votre Rang d'École pour la durée de l'escarmouche).</li>
               <li><b class="text-amber-300">Rang 3 — Ailes du Colibri :</b> 1/Round quand vous êtes ciblé, ajoutez 2 × Rang d'École à votre ND d'Armure contre cette attaque (cumulable avec tout autre bonus).</li>
               <li><b class="text-amber-300">Rang 4 — Le Requin Sent le Sang :</b> Attaque par Action Simple avec toute arme portant le mot-clé Samouraï.</li>
               <li><b class="text-amber-300">Rang 5 — La Lumière du Jour ne Gaspille Aucun Mouvement :</b> Reportez tout excédent de Blessures au-delà du nécessaire pour tuer une cible sur la prochaine cible touchée (pas deux attaques de suite ; limité à l'escarmouche).</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- SHUGENJA KUNI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="toritaka" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-bold text-amber-200 text-sm font-imperial">Toritaka Bushi School [Bushi]</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Toritaka</span> <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 219 (Faucon)</span></div>
+          </div>
+          <div class="text-stone-300 leading-relaxed space-y-1 text-[11px]">
+            <p><b>Bénéfice :</b> +1 Force • <b>Honneur :</b> 5.5 • <b>Compétences :</b> Dressage (Faucons), Chasse 2, Kenjutsu, Connaissance : Royaumes Spirituels, Lances, une compétence.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p><b>R1 :</b> +1g0 aux jets de Perception et +1g0 dégâts contre les créatures d'autres Royaumes Spirituels. • <b>R2 :</b> Détection de ces créatures par Perception ND Air × 5. • <b>R3 :</b> Attaque Action Simple avec Lance ou arme Samouraï. • <b>R4 :</b> 1 Vide annule les malus d'obscurité/aveuglement pour 2 Rounds. • <b>R5 :</b> Ignore 5 de Réduction (et -10 contre esprits pour 1 Vide pendant 1 Round).</p></div>
+            </details>
+          </div>
+        </div>
+<div data-lineage="kaiu" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-bold text-amber-200 text-sm font-imperial">Kaiu Engineer [Artisan / Bushi]</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Kaiu</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Great Clans p. 39</span></div>
+          </div>
+          <div class="text-stone-300 leading-relaxed space-y-1 text-[11px]">
+            <p><b>Bénéfice :</b> +1 Intelligence • <b>Honneur :</b> 4.5 • <b>Compétences :</b> Art de la Guerre, Artisanat : Armurerie, Artisanat : Forge d'Armes, Défense, Ingénierie (1 sp.), Connaissance : Architecture, Éventails de Guerre.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p><b>R1 :</b> +1g0 aux jets de Compétences d'École ; Vide accorde +2g2 (au lieu de +1g1). • <b>R2 :</b> Ingénierie ND 25 ajoute Rang × 100 Blessures aux grands édifices ; relance les dés de siège < Rang. • <b>R3 :</b> Double temps/coût pour ajouter Rang en Réduction et ⌈Rang/2⌉ au ND d'une armure forgée. • <b>R4 :</b> ±⌈Rang/2⌉ en Bataille de Masse ; Action Simple avec katana, dai-tsuchi ou éventail. • <b>R5 :</b> Confère en permanence +1g0 att. ou +0g1 dég. à une arme forgée (ou rend un katana Incassable en dépensant tout son Vide).</p></div>
+            </details>
+          </div>
+        </div>
+<div data-lineage="hida,hiruma" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-bold text-amber-200 text-sm font-imperial">Hida Pragmatist [Bushi] &amp; Hiruma Scout [Bushi]</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hida</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">EE p. 247 • IH1 p. 147</span></div>
+          </div>
+          <div class="text-stone-300 leading-relaxed space-y-1.5 text-[11px]">
+            <p><b>Hida Pragmatist (Kobo Ichi-Kai, EE p. 247) :</b> +1 Agilité • H 2.5 • Jiujutsu (Armes Improvisées) 2. R1 : +1g0 vs Intimidation/Peur ; +1g0 att./dég. à mains nues/armes improvisées (garde les dés les plus élevés). R2 : Attaque Supplémentaire pour 3 Aug. R3 : Action Simple mains nues/improvisées/Samouraï. R4 : Riposte contre attaque ennemie avec sa propre arme. R5 : 1 Vide = Action Complexe ignorant malus de Blessures et +3g1 dégâts.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1"><b>Hiruma Scout School (IH1 p. 147) :</b> +1 Réflexes • H 4.5 • Ajoute Discrétion à l'Initiative (R1), court en Défense Totale (R2), invisibilité immobile contre 1 Vide (R3), Action Simple armes Samouraï/Couteau/Arc ou vs Outremonde (R4), Augmentations illimitées et -10 Réduction sur cible surprise (R5).</p></div>
+            </details>
+          </div>
+        </div>
+<div data-lineage="kuni" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Kuni Shugenja School [Shugenja]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/30">Core p. 107</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kuni</span> <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/30">Core p. 107</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Volonté • <b>Honneur :</b> 2.5 • <b>Affinité/Déficience :</b> Terre / Air.<br>
             <b>Compétences :</b> Calligraphie (Chiffre), Défense, Connaissance : Outremonde 2, Connaissance : Théologie, Art de la Magie, une compétence d'arme.<br>
             <b>Sorts :</b> Sens, Communion, Convocation, 3 Terre, 2 Feu, 1 Eau.<br>
             <b>Équipement :</b> Robes, Wakizashi, Couteau, Sacoche à parchemins, nécessaire de voyage, 3 koku.</p>
-            <p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-amber-300">Technique — Regard dans l'Ombre :</b> +1g0 à tous vos jets d'Incantation contre les créatures non-humaines. Tout sort infligeant des dégâts cause +1g1 supplémentaires aux cibles portant la Souillure de l'Outremonde. Augmentation Gratuite sur tout sort portant le mot-clé <i>Jade</i>.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-amber-300">Technique — Regard dans l'Ombre :</b> +1g0 à tous vos jets d'Incantation contre les créatures non-humaines. Tout sort infligeant des dégâts cause +1g1 supplémentaires aux cibles portant la Souillure de l'Outremonde. Augmentation Gratuite sur tout sort portant le mot-clé <i>Jade</i>.</p></div>
+            </details>
           </div>
         </div>
-
-        <!-- COURTISAN YASUKI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="yasuki" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Yasuki Courtier School [Courtisan]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 font-bold border border-cyan-500/30">Core p. 107-108</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Yasuki</span> <span class="text-[9px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 font-bold border border-cyan-500/30">Core p. 107-108</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Perception • <b>Honneur :</b> 2.5<br>
             <b>Compétences :</b> Commerce (Évaluation), Courtisan, Défense, Étiquette, Intimidation, Sincérité (Tromperie), une compétence Marchande au choix.<br>
             <b>Équipement :</b> Vêtements traditionnels, Wakizashi, Couteau, nécessaire de calligraphie, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-amber-300">Rang 1 — La Voie de la Carpe :</b> Augmentation Gratuite en Commerce ; aucune perte d'Honneur ou de Gloire à l'utiliser publiquement. Jet Opposé Commerce/Perception vs Étiquette/Intuition pour découvrir un bien ou service désiré par votre interlocuteur.</li>
               <li><b class="text-amber-300">Rang 2 — Fais Comme Nous Disons :</b> Rang d'École/session, relancez un jet raté de Sincérité ou d'Intimidation (gardez le 2e).</li>
               <li><b class="text-amber-300">Rang 3 — Trésors de la Carpe :</b> Lancez Commerce/Intuition ND 20 pour trouver un objet rare ou utile pour autrui (Augmentations pour plus rareté ; pas pour votre usage personnel).</li>
               <li><b class="text-amber-300">Rang 4 — Ruses de la Carpe :</b> Le ND de tout Jet Social visant à vous mentir ou tromper augmente de 5 × Rang d'École.</li>
               <li><b class="text-amber-300">Rang 5 — Ce qui est à Toi est à Moi :</b> Si vous procurez un bien matériel dont quelqu'un a besoin, gagnez +5g0 à vos Jets Sociaux Opposés contre lui pendant 24 heures.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- ÉCOLES DE BASE COMPLÉMENTAIRES (TORITAKA, KAIU, KUNI WITCH-HUNTER, HIDA PRAGMATIST, HIRUMA SCOUT) -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-amber-200 text-sm font-imperial">Toritaka Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 219 (Faucon)</span>
-          </div>
-          <div class="text-stone-300 leading-relaxed space-y-1 text-[11px]">
-            <p><b>Bénéfice :</b> +1 Force • <b>Honneur :</b> 5.5 • <b>Compétences :</b> Dressage (Faucons), Chasse 2, Kenjutsu, Connaissance : Royaumes Spirituels, Lances, une compétence.</p>
-            <p><b>R1 :</b> +1g0 aux jets de Perception et +1g0 dégâts contre les créatures d'autres Royaumes Spirituels. • <b>R2 :</b> Détection de ces créatures par Perception ND Air × 5. • <b>R3 :</b> Attaque Action Simple avec Lance ou arme Samouraï. • <b>R4 :</b> 1 Vide annule les malus d'obscurité/aveuglement pour 2 Rounds. • <b>R5 :</b> Ignore 5 de Réduction (et -10 contre esprits pour 1 Vide pendant 1 Round).</p>
-          </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-amber-200 text-sm font-imperial">Kaiu Engineer [Artisan / Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Great Clans p. 39</span>
-          </div>
-          <div class="text-stone-300 leading-relaxed space-y-1 text-[11px]">
-            <p><b>Bénéfice :</b> +1 Intelligence • <b>Honneur :</b> 4.5 • <b>Compétences :</b> Art de la Guerre, Artisanat : Armurerie, Artisanat : Forge d'Armes, Défense, Ingénierie (1 sp.), Connaissance : Architecture, Éventails de Guerre.</p>
-            <p><b>R1 :</b> +1g0 aux jets de Compétences d'École ; Vide accorde +2g2 (au lieu de +1g1). • <b>R2 :</b> Ingénierie ND 25 ajoute Rang × 100 Blessures aux grands édifices ; relance les dés de siège < Rang. • <b>R3 :</b> Double temps/coût pour ajouter Rang en Réduction et ⌈Rang/2⌉ au ND d'une armure forgée. • <b>R4 :</b> ±⌈Rang/2⌉ en Bataille de Masse ; Action Simple avec katana, dai-tsuchi ou éventail. • <b>R5 :</b> Confère en permanence +1g0 att. ou +0g1 dég. à une arme forgée (ou rend un katana Incassable en dépensant tout son Vide).</p>
-          </div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="kuni" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Kuni Witch-Hunter [Moine]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/30">Great Clans p. 40</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kuni</span> <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/30">Great Clans p. 40</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1 text-[11px]">
             <p><b>Bénéfice :</b> +1 Volonté • <b>Honneur :</b> 5.5 • <b>Compétences :</b> Enquête, Jiujutsu, Kenjutsu, Connaissance : Outremonde, Connaissance : Maho, Méditation, une compétence.</p>
-            <p><b>R1 :</b> Action Complexe avec pendentif de jade (Enquête/Intuition vs Sincérité/Volonté, +1g0/Rang complet de Souillure) pour détecter la Souillure ; +1g1 résistance Souillure et attaques contre créatures/Souillés. • <b>R2 :</b> Action Gratuite Connaissance : Outremonde/Intelligence ND 20 pour forces/faiblesses (1/Aug.). • <b>R3 :</b> Attaque mêlée Action Simple vs Outremonde/Souillé. • <b>R4 :</b> +3g0 aux R1/R2 ; +1 Kiho. • <b>R5 :</b> +4g1 attaque et dégâts vs Outremonde/Souillé.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p><b>R1 :</b> Action Complexe avec pendentif de jade (Enquête/Intuition vs Sincérité/Volonté, +1g0/Rang complet de Souillure) pour détecter la Souillure ; +1g1 résistance Souillure et attaques contre créatures/Souillés. • <b>R2 :</b> Action Gratuite Connaissance : Outremonde/Intelligence ND 20 pour forces/faiblesses (1/Aug.). • <b>R3 :</b> Attaque mêlée Action Simple vs Outremonde/Souillé. • <b>R4 :</b> +3g0 aux R1/R2 ; +1 Kiho. • <b>R5 :</b> +4g1 attaque et dégâts vs Outremonde/Souillé.</p></div>
+            </details>
           </div>
         </div>
-
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-amber-200 text-sm font-imperial">Hida Pragmatist [Bushi] &amp; Hiruma Scout [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">EE p. 247 • IH1 p. 147</span>
-          </div>
-          <div class="text-stone-300 leading-relaxed space-y-1.5 text-[11px]">
-            <p><b>Hida Pragmatist (Kobo Ichi-Kai, EE p. 247) :</b> +1 Agilité • H 2.5 • Jiujutsu (Armes Improvisées) 2. R1 : +1g0 vs Intimidation/Peur ; +1g0 att./dég. à mains nues/armes improvisées (garde les dés les plus élevés). R2 : Attaque Supplémentaire pour 3 Aug. R3 : Action Simple mains nues/improvisées/Samouraï. R4 : Riposte contre attaque ennemie avec sa propre arme. R5 : 1 Vide = Action Complexe ignorant malus de Blessures et +3g1 dégâts.</p>
-            <p class="border-t border-stone-800 pt-1"><b>Hiruma Scout School (IH1 p. 147) :</b> +1 Réflexes • H 4.5 • Ajoute Discrétion à l'Initiative (R1), court en Défense Totale (R2), invisibilité immobile contre 1 Vide (R3), Action Simple armes Samouraï/Couteau/Arc ou vs Outremonde (R4), Augmentations illimitées et -10 Réduction sur cible surprise (R5).</p>
-          </div>
-        </div>
-
       </div>
-    </section>
 
-    <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <div class="border-b border-amber-500/20 pb-2">
-        <h3 class="text-sm font-bold font-imperial text-amber-300">
+      <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
+      <div class="card-clean rounded-xl p-6 space-y-4">
+        <div class="border-b border-amber-500/20 pb-2">
+          <h3 class="text-sm font-bold font-imperial text-amber-300">
           5. Écoles Avancées & Voies Alternatives Officielles
         </h3>
         <span class="text-[11px] text-stone-400">Texte exact des prérequis, rangs remplacés et effets mécaniques (Core p. 247, 251 ; Great Clans ; Air/Earth/Fire ; Strongholds ; IH2).</span>
-      </div>
-
-      <!-- ÉCOLE AVANCÉE -->
-      <div class="p-4 rounded-xl bg-amber-950/20 border border-amber-500/30 text-xs space-y-1.5">
+        </div>
+        <div id="clan-adv-schools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+<div data-lineage="hida,kaiu,hiruma" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-amber-950/20 border border-amber-500/30 text-xs space-y-1.5">
         <div class="flex flex-wrap justify-between items-baseline gap-2">
           <b class="text-amber-300 font-imperial text-sm">École Avancée : Defender of the Wall [Bushi]</b>
-          <span class="text-[10px] text-amber-200/80 font-mono">Core p. 247 • Prérequis : Terre 4, Force 5 • Défense 4, Armes Lourdes 4, Connaissance : Outremonde 5</span>
+          <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hida</span> <span class="text-[10px] text-amber-200/80 font-mono">Core p. 247 • Prérequis : Terre 4, Force 5 • Défense 4, Armes Lourdes 4, Connaissance : Outremonde 5</span></div>
         </div>
-        <p class="text-stone-300 text-[11px] leading-relaxed">
+        <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
           <b>Rang 1 (The Flames of Purity) :</b> Les créatures possédant la Souillure de l'Outremonde ne peuvent pas faire exploser leurs 10 sur les jets d'attaque ou de dégâts contre vous. •
           <b>Rang 2 (Hida's Strength) :</b> Vous gagnez une Réduction de 8 même sans porter d'armure (cumulable avec toute armure ou Technique). •
           <b>Rang 3 (The Crab Are the Wall) :</b> 1/Round, vous pouvez annuler immédiatement un Effet Conditionnel qui vous affecte (sauf Monté ou Saisi).
-        </p>
+        </p></div>
+          </details>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Crab Berserker [Bushi]</b>
+<div data-lineage="hida,hiruma,toritaka" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Crab Berserker [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hida</span></div>
           <span class="text-[10px] text-stone-500 block">Core p. 251 • Rang 2 • Remplace Bushi Crabe 2 • Terre 4</span>
-          <p class="text-stone-300 text-[11px]">1/escarmouche (Phase de Réactions) pendant 2 × Terre Rounds : pas de posture Centre/Défense/Défense Totale ni compétences non-Bugei, mais ignore tous les malus de Blessures, gagne +2g1 attaque et dégâts, et continue de se battre mort jusqu'à atteindre 2 × seuil fatal (ou fin de rage).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">1/escarmouche (Phase de Réactions) pendant 2 × Terre Rounds : pas de posture Centre/Défense/Défense Totale ni compétences non-Bugei, mais ignore tous les malus de Blessures, gagne +2g1 attaque et dégâts, et continue de se battre mort jusqu'à atteindre 2 × seuil fatal (ou fin de rage).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Oni Slayer [Shugenja]</b>
-          <span class="text-[10px] text-stone-500 block">Core p. 251 • Rang 3 • Remplace Kuni Shugenja 3 • Outremonde 3</span>
-          <p class="text-stone-300 text-[11px]">1h et 1 emplacement de Terre créent un cercle de confinement (Rang × 5 pieds²) contre les oni : un oni piégé doit réussir un jet de Volonté vs votre Jet d'Incantation pour en sortir (tant qu'il est actif, vous avez 1 emplacement de Terre en moins par jour).</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Toritaka Exorcist [Shugenja]</b>
-          <span class="text-[10px] text-stone-500 block">Great Clans p. 42 • Rang 2 • Remplace Kuni Shugenja 2 • Vol 3, Per 3, Calligraphie 3</span>
-          <p class="text-stone-300 text-[11px]">Enquête (Obs.)/Per ND 20 (+2 Aug. pour identifier le type) détecte les esprits dangereux. Action Complexe + 1 emplacement : Jet Opposé de Volonté (+2g2 avec sceau d'exorcisme) pour expulser un esprit possesseur pour 24h min.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Crab Defender [Bushi] &amp; Falcon's Strike [Bushi]</b>
+<div data-lineage="hida,hiruma,toritaka" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Crab Defender [Bushi] &amp; Falcon's Strike [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hida</span></div>
           <span class="text-[10px] text-stone-500 block">Book of Air p. 172 • Rang 2 • Remplace Hida/Hiruma/Toritaka 2</span>
-          <p class="text-stone-300 text-[11px]"><b>Crab Defender (Intuition 3, Agi 3, Iaijutsu 4) :</b> +Terre × 3 Réduction durant l'étape Frappe d'un duel iaijutsu. • <b>Falcon's Strike (Kyujutsu [Yumi] 3) :</b> Utilise Perception au lieu de Réflexes à l'attaque et au lieu de la Force du Yumi aux dégâts.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Crab Defender (Intuition 3, Agi 3, Iaijutsu 4) :</b> +Terre × 3 Réduction durant l'étape Frappe d'un duel iaijutsu. • <b>Falcon's Strike (Kyujutsu [Yumi] 3) :</b> Utilise Perception au lieu de Réflexes à l'attaque et au lieu de la Force du Yumi aux dégâts.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Hiruma Snipers [Bushi] &amp; Hiruma Slayers [Bushi]</b>
+<div data-lineage="hiruma" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Hiruma Snipers [Bushi] &amp; Hiruma Slayers [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hiruma</span></div>
           <span class="text-[10px] text-stone-500 block">Air p. 172 / Earth p. 191 • Rang 4 • Remplace Hiruma Bushi/Scout 4</span>
-          <p class="text-stone-300 text-[11px]"><b>Hiruma Snipers (Kyujutsu 5, Réf 4) :</b> Tir au yumi en Action Simple ; ignore toute Réduction naturelle/armure et moitié de la magique. • <b>Hiruma Slayers (Armes Lourdes [Masakari] 5) :</b> Pas de malus en main secondaire au masakari ; Action Simple ; +3g0 dégâts en Assaut (ou Attaque vs Outremonde/Souillé).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Hiruma Snipers (Kyujutsu 5, Réf 4) :</b> Tir au yumi en Action Simple ; ignore toute Réduction naturelle/armure et moitié de la magique. • <b>Hiruma Slayers (Armes Lourdes [Masakari] 5) :</b> Pas de malus en main secondaire au masakari ; Action Simple ; +3g0 dégâts en Assaut (ou Attaque vs Outremonde/Souillé).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Crab Sumai Wrestler [Bushi] &amp; Crab Knife-Fighters</b>
+<div data-lineage="hida,hiruma,yasuki" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Crab Sumai Wrestler [Bushi] &amp; Crab Knife-Fighters</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Hida</span></div>
           <span class="text-[10px] text-stone-500 block">Earth p. 191 (R2) • Fire p. 177 (R3/R4)</span>
-          <p class="text-stone-300 text-[11px]"><b>Sumai Wrestler (Hida/Yasuki 2, Jiujutsu [Sumai] 4) :</b> Perd Petit et gagne Grand gratuitement ; +1g0 (+2g0 si Grand) pour contrôler un Grapple et +1g1 dégâts. • <b>Knife-Fighters (Hida/Pragmatist 4 ou Hiruma 3, Couteaux 3) :</b> Main libre + tanto = +3g1 dégâts et ignore l'armure (5 pts de Réduction naturelle).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Sumai Wrestler (Hida/Yasuki 2, Jiujutsu [Sumai] 4) :</b> Perd Petit et gagne Grand gratuitement ; +1g0 (+2g0 si Grand) pour contrôler un Grapple et +1g1 dégâts. • <b>Knife-Fighters (Hida/Pragmatist 4 ou Hiruma 3, Couteaux 3) :</b> Main libre + tanto = +3g1 dégâts et ignore l'armure (5 pts de Réduction naturelle).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Kaiu Siegemaster [Bushi] &amp; Kuni Crystal Master</b>
+<div data-lineage="kaiu,kuni" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Kaiu Siegemaster [Bushi] &amp; Kuni Crystal Master</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Kaiu</span></div>
           <span class="text-[10px] text-stone-500 block">Book of Earth p. 192, 195 • Rangs 5 &amp; 4</span>
-          <p class="text-stone-300 text-[11px]"><b>Kaiu Siegemaster (Kaiu 5, Art de la Guerre 5, Ingénierie 5) :</b> ±Rang d'École entier en Bataille de Masse lors d'un siège ; +2g0 en défense au tir de siège et +50% Réduction aux structures. • <b>Kuni Crystal Master (Kuni 4, Terre 5, Art Magie 5, Éléments [Cristal] 5) :</b> +1 Action Complexe + 1 Vide infuse un sort de Feu/Terre de +1g1 dégâts et du mot-clé Cristal.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Kaiu Siegemaster (Kaiu 5, Art de la Guerre 5, Ingénierie 5) :</b> ±Rang d'École entier en Bataille de Masse lors d'un siège ; +2g0 en défense au tir de siège et +50% Réduction aux structures. • <b>Kuni Crystal Master (Kuni 4, Terre 5, Art Magie 5, Éléments [Cristal] 5) :</b> +1 Action Complexe + 1 Vide infuse un sort de Feu/Terre de +1g1 dégâts et du mot-clé Cristal.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Yasuki Extortionist / Enforcer &amp; Severed Hand</b>
+<div data-lineage="yasuki,hiruma,hida" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Yasuki Extortionist / Enforcer &amp; Severed Hand</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Yasuki</span></div>
           <span class="text-[10px] text-stone-500 block">Earth p. 202 (R4) • Strongholds p. 45 (R2/R3)</span>
-          <p class="text-stone-300 text-[11px]"><b>Extortionist (Yasuki 4) :</b> Intimidation/Volonté vs Étiquette/Volonté inflige Obligation ou Chantage (3 pts). • <b>Enforcer (Yasuki/Pragmatist 2) :</b> Intimidation opposée confère +1g0 (+1g0/Aug.) au 1er Round. • <b>Severed Hand (Bushi Crabe 4) :</b> Utilise Volonté pour résister aux Jets Sociaux. • <b>Hiruma Yojimbo (Hiruma 3) :</b> Action Gratuite Garde après une mêlée réussie.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Extortionist (Yasuki 4) :</b> Intimidation/Volonté vs Étiquette/Volonté inflige Obligation ou Chantage (3 pts). • <b>Enforcer (Yasuki/Pragmatist 2) :</b> Intimidation opposée confère +1g0 (+1g0/Aug.) au 1er Round. • <b>Severed Hand (Bushi Crabe 4) :</b> Utilise Volonté pour résister aux Jets Sociaux. • <b>Hiruma Yojimbo (Hiruma 3) :</b> Action Gratuite Garde après une mêlée réussie.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Kaiu Shipmasters &amp; Order of the Stone Crab</b>
+<div data-lineage="kaiu,hida,hiruma" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Kaiu Shipmasters &amp; Order of the Stone Crab</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Kaiu</span></div>
           <span class="text-[10px] text-stone-500 block">Imperial Histories II p. 128, 198 • Rangs 3 &amp; 4</span>
-          <p class="text-stone-300 text-[11px]"><b>Kaiu Shipmasters (Kaiu 3 / Siegemaster 1, Art Guerre 4, Navigation 5) :</b> Maîtrise tactique navale des navires-tortues cuirassés. • <b>Order of the Stone Crab (Tout Bushi 4) :</b> Garde du corps stoïque d'Hida Tsuneo.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Kaiu Shipmasters (Kaiu 3 / Siegemaster 1, Art Guerre 4, Navigation 5) :</b> Maîtrise tactique navale des navires-tortues cuirassés. • <b>Order of the Stone Crab (Tout Bushi 4) :</b> Garde du corps stoïque d'Hida Tsuneo.</p></div>
+          </details>
         </div>
+<div data-lineage="kuni" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Oni Slayer [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kuni</span></div>
+          <span class="text-[10px] text-stone-500 block">Core p. 251 • Rang 3 • Remplace Kuni Shugenja 3 • Outremonde 3</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">1h et 1 emplacement de Terre créent un cercle de confinement (Rang × 5 pieds²) contre les oni : un oni piégé doit réussir un jet de Volonté vs votre Jet d'Incantation pour en sortir (tant qu'il est actif, vous avez 1 emplacement de Terre en moins par jour).</p></div>
+          </details>
+        </div>
+<div data-lineage="kuni,toritaka" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Toritaka Exorcist [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kuni</span></div>
+          <span class="text-[10px] text-stone-500 block">Great Clans p. 42 • Rang 2 • Remplace Kuni Shugenja 2 • Vol 3, Per 3, Calligraphie 3</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Enquête (Obs.)/Per ND 20 (+2 Aug. pour identifier le type) détecte les esprits dangereux. Action Complexe + 1 emplacement : Jet Opposé de Volonté (+2g2 avec sceau d'exorcisme) pour expulser un esprit possesseur pour 24h min.</p></div>
+          </details>
+        </div>
+        </div>
+        <p id="clan-adv-empty-hint" class="hidden text-[11px] text-stone-500 italic text-center py-2">
+          Aucune école avancée ou voie alternative spécifique pour ce filtre.
+        </p>
       </div>
     </section>
 
@@ -474,7 +675,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Fiche technique du Clan du Crabe</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.16.1</span>
+      <span id="site-version-label">v1.17.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

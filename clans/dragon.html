@@ -11,7 +11,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- SCRIPT DU MENU GLOBAL -->
-  <script src="../js/navbar.js" defer></script>
+  <link rel="stylesheet" href="../css/main.css?v=12">
+  <script src="../js/navbar.js?v=3" defer></script>
+  <script src="../js/clans-ui.js?v=1" defer></script>
 
   <style>
     :root {
@@ -134,71 +136,132 @@
       </div>
     </section>
 
-    <!-- 2. LES QUATRE FAMILLES DU DRAGON & FAMILLES VASSALES -->
-    <section class="space-y-4">
-      <div class="border-b border-emerald-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-emerald-300">2. Les Familles du Clan &amp; Familles Vassales</h2>
-        <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 112 ; The Great Clans, p. 81-86, 285.</span>
+        <!-- 2. LES FAMILLES DU CLAN & FAMILLES VASSALES (RANGÉES PAR BUSHI EN TÊTE) -->
+    <section id="sec-families" class="space-y-4">
+      <div class="border-b border-emerald-500/20 pb-2 flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Lignées du Clan &amp; Familles Vassales (Familles Bushi en tête)</h2>
+          <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 113-116 ; The Great Clans, p. 81-87, 286, 289, 291.</span>
+        </div>
+        <button type="button" data-toggle-details-scope="sec-families" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+          Tout déplier
+        </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-
-        <!-- KITSUKI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-emerald-200 text-sm font-imperial">Famille Kitsuki</h3>
-            <span class="text-[10px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/40">+1 Intuition</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+        <!-- FAMILLE MIRUMOTO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-emerald-200 text-sm font-imperial">Famille Mirumoto</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-emerald-950/80 border-emerald-800/40 text-emerald-300">+1 Agilité</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Bras armé et régents temporels du Clan du Dragon, assurant le commandement militaire et la défense des frontières montagnardes tandis que les Togashi se consacrent à la méditation. Fondée par Mirumoto, père du style <i>Niten</i> à deux sabres.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Érudits, diplomates et enquêteurs du clan fondés par Agasha Kitsuki. La méthode Kitsuki repose sur l'observation empirique, la collecte d'indices matériels et la logique formelle, contrastant souvent avec le système judiciaire rokugani fondé sur le témoignage social.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Enquêteurs, magistrats de clan ou d'Émeraude, diplomates, légistes.
-          </div>
-        </div>
-
-        <!-- MIRUMOTO -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-emerald-200 text-sm font-imperial">Famille Mirumoto</h3>
-            <span class="text-[10px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/40">+1 Agilité</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Bras armé et régents temporels du Clan du Dragon, assurant le commandement militaire et la défense des frontières montagnardes tandis que les Togashi se consacrent à la méditation. Fondée par Mirumoto, père du style <i>Niten</i> à deux sabres.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassaux :</b> <b>Koukan</b> (lignée de moines silencieux servant d'informateurs et d'yeux secrets) • <b>Zurui</b> (yojimbo dévoués à la garde des shugenja du clan).
-          </div>
-        </div>
-
-        <!-- TAMORI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-emerald-200 text-sm font-imperial">Famille Tamori</h3>
-            <span class="text-[10px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/40">+1 Volonté</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Héritiers des shugenja restés loyaux au Dragon après la défection des Agasha vers le Phénix. Les Tamori privilégient les magies de la Terre et du Feu, l'alchimie de guerre et l'entraînement martial aux côtés des bushi Mirumoto.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Shugenja de Terre/Feu, alchimistes préparant des potions de sorts, forgerons d'armes rituelles.
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-emerald-300">
+              <span>🌿 Familles Vassales (2 : Koukan, Zurui)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-emerald-300">Koukan :</b> Ordre monastique de samouraïs pieux des Mirumoto parcourant l'Empire pour secourir les humbles tout en relayant nouvelles et renseignements vers les montagnes du Dragon. (Great Clans p. 286)</li>
+              <li><b class="text-emerald-300">Zurui :</b> Descendants de Mirumoto Sasugo (épouse Shiba de l'ère Gozoku) ; yojimbo d'une abnégation totale voués à protéger les shugenja du clan au péril de leur vie. (Great Clans p. 286)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="mirumoto" class="text-[10px] font-bold text-emerald-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
-        <!-- TOGASHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-emerald-200 text-sm font-imperial">Ordre Monastique Togashi</h3>
-            <span class="text-[10px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/40">+1 Réflexes</span>
+        <!-- FAMILLE KITSUKI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-emerald-200 text-sm font-imperial">Famille Kitsuki</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-emerald-950/80 border-emerald-800/40 text-emerald-300">+1 Intuition</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">📜 Cour & Enquête</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Érudits, diplomates et enquêteurs du clan fondés par Agasha Kitsuki. La méthode Kitsuki repose sur l'observation empirique, la collecte d'indices matériels et la logique formelle, contrastant souvent avec le système judiciaire rokugani fondé sur le témoignage social.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Ordre monastique plutôt que famille héréditaire, ouvert aux novices capables de survivre aux épreuves des sommets. Les moines tatoués (<i>ise zumi</i>) reçoivent dans leur chair les tatouages mystiques du sang de Togashi.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Ordres associés :</b> <b>Hoshi</b> (moines proches de la Confrérie) • <b>Hitomi</b> (lignée du Soleil et de la Lune).
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-emerald-300">
+              <span>🌿 Familles Vassales (1 : Sakura)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-emerald-300">Sakura :</b> Fondée en 1120 autour des compagnons de Kitsuki Sakura qui mirent sous scellés le dangereux journal de Kitsuki Kaagi ; chargée de traquer et supprimer les savoirs interdits. (Great Clans p. 291)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="kitsuki" class="text-[10px] font-bold text-emerald-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
+        <!-- FAMILLE TAMORI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-emerald-200 text-sm font-imperial">Famille Tamori</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-emerald-950/80 border-emerald-800/40 text-emerald-300">+1 Volonté</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Héritiers des shugenja restés loyaux au Dragon après la défection des Agasha vers le Phénix. Les Tamori privilégient les magies de la Terre et du Feu, l'alchimie de guerre et l'entraînement martial aux côtés des bushi Mirumoto.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-emerald-300">
+              <span>🌿 Familles Vassales (3 : Chiyu, Hiasobi, Izaku)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-emerald-300">Chiyu :</b> Anciens rônin shugenja herboristes accueillis après la Guerre des Clans par les Tamori ; dédiés à la médecine, aux baumes et aux remèdes naturels des montagnes. (Great Clans p. 289)</li>
+              <li><b class="text-emerald-300">Hiasobi :</b> Maîtres du <i>kagaku</i> (alchimie du feu et feux d'artifice <i>hanabi</i>), anciens élèves d'Asahina Maryoku recueillis et intégrés par le daimyo Tamori. (Great Clans p. 289)</li>
+              <li><b class="text-emerald-300">Izaku :</b> Gardiens de la grande Bibliothèque Izaku de savoirs magiques ; unique famille vassale autorisée par Toturi I à servir simultanément le Dragon (Tamori) et le Phénix (Agasha). (Great Clans p. 289)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="tamori" class="text-[10px] font-bold text-emerald-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- ORDRE MONASTIQUE TOGASHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-emerald-200 text-sm font-imperial">Ordre Monastique Togashi</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-emerald-950/80 border-emerald-800/40 text-emerald-300">+1 Réflexes</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🥋 Ordre Monastique</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Ordre monastique plutôt que famille héréditaire, ouvert aux novices capables de survivre aux épreuves des sommets. Les moines tatoués (<i>ise zumi</i>) reçoivent dans leur chair les tatouages mystiques du sang de Togashi.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <div class="rounded-lg bg-black/35 border border-stone-800/70 px-2.5 py-2 text-[10px] text-stone-400">
+            <b>Profils :</b> Moines tatoués <i>Ise Zumi</i>, <i>Hoshi Tsurui Zumi</i> et <i>Hitomi Kikage Zumi</i> (aucune famille vassale héréditaire).
+          </div>
+            <button type="button" data-jump-lineage="togashi" class="text-[10px] font-bold text-emerald-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -235,197 +298,303 @@
       </div>
     </section>
 
-    <!-- 4. ÉCOLES FONDAMENTALES DE BASE & SUPPLÉMENTAIRES -->
-    <section class="space-y-4">
-      <div class="border-b border-emerald-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-emerald-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
+        <!-- 4 & 5. ÉCOLES ET VOIES ALTERNATIVES (RANGÉES PAR LIGNÉE BUSHI + FILTRE INTERACTIF) -->
+    <section id="sec-schools" class="space-y-6">
+      <div class="border-b border-emerald-500/20 pb-3 space-y-3">
+        <div class="flex flex-wrap justify-between items-baseline gap-2">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-emerald-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
         <span class="text-xs text-stone-400">Core pp. 112-116 ; Emerald Empire p. 221 ; Imperial Histories I pp. 214-215.</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div id="clan-lineage-filter-bar" class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-filter-lineage="all" class="clan-lineage-pill is-active">Toutes</button> <button type="button" data-filter-lineage="bushi" class="clan-lineage-pill">⚔️ Bushi uniquement</button> <button type="button" data-filter-lineage="mirumoto" class="clan-lineage-pill">⚔️ Mirumoto</button> <button type="button" data-filter-lineage="kitsuki" class="clan-lineage-pill">Kitsuki</button> <button type="button" data-filter-lineage="tamori" class="clan-lineage-pill">Tamori</button> <button type="button" data-filter-lineage="togashi" class="clan-lineage-pill">Togashi</button>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="clan-schools-visible-count" class="text-[11px] font-mono text-stone-400"></span>
+            <button type="button" data-toggle-details-scope="sec-schools" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+              Tout déplier
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-
-        <!-- MIRUMOTO BUSHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="mirumoto" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-emerald-200 text-sm font-imperial">Mirumoto Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-800/40">Core p. 113</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span> <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-800/40">Core p. 113</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Constitution • <b>Honneur :</b> 4.5<br>
             <b>Compétences :</b> Défense, Iaijutsu, Kenjutsu (Katana), Connaissance : Shugenja, Méditation, Connaissance : Théologie, une compétence Bugei ou Noble.<br>
             <b>Équipement :</b> Armure légère, vêtements robustes, Daisho, 1 arme, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-emerald-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-emerald-300">Rang 1 — La Voie du Dragon :</b> Sans aucun malus pour le combat à deux armes avec katana en main directrice et wakizashi en main secondaire ; ajoutez votre Rang d'École au ND d'Armure (cumulatif avec le bonus normal du combat à deux armes). De plus, ciblé par un sort, vous pouvez augmenter ou diminuer de 5 le ND du jet d'Incantation.</li>
               <li><b class="text-emerald-300">Rang 2 — Le Calme au Cœur du Tonnerre :</b> En posture du Centre, bonus au total de vos jets d'Iaijutsu égal à votre rang de Kenjutsu.</li>
               <li><b class="text-emerald-300">Rang 3 — Fort et Rapide :</b> Attaque par Action Simple avec toute arme portant le mot-clé <i>Samouraï</i>.</li>
               <li><b class="text-emerald-300">Rang 4 — Représailles Furieuses :</b> En phase de Réactions, désignez un ennemi vous ayant attaqué (ou tenté) ce Round : +3g0 à tous vos jets d'attaque contre lui à votre prochain Tour.</li>
               <li><b class="text-emerald-300">Rang 5 — Cœur du Dragon :</b> Avec katana (directrice) et wakizashi (secondaire), si vous attaquez deux fois durant votre Tour, vous pouvez porter une attaque supplémentaire avec l'arme secondaire par Action Gratuite.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- KITSUKI INVESTIGATOR -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="mirumoto,togashi" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-bold text-emerald-200 text-sm font-imperial">Écoles de Base Complémentaires (Épéiste Taoïste Mirumoto • Hoshi Tsurui Zumi • Hitomi Kikage Zumi)</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-emerald-300 font-bold border border-emerald-500/30">Emerald Empire p. 221 • IH1 pp. 214-215</span></div>
+          </div>
+          <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+            <summary class="flex items-center justify-between text-[11px] font-bold text-emerald-300">
+              <span>📜 Détails des Écoles Complémentaires (3)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-2"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-[11px] text-stone-300">
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-emerald-300">Mirumoto Taoist Swordsman [Bushi] (EE p. 221)</b>
+              <p>+1 Vide • H 5.5 (1 koku, Ascétique gratuit). R1 : sans armure avec un sabre, Réduction = Rang d'École + 2 et +1g0 aux dégâts. R2 : Renversement coûte 1 Aug. de moins ; en Grapple avec sabre, inflige dégâts du sabre. R3 : 1 Vide sur dégâts du sabre (cumulatif). R4 : Action Simple avec sabre. R5 : 1/escarmouche, dépensez autant de Vide que désiré en dégâts.</p>
+            </div>
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-emerald-300">Hoshi Tsurui Zumi [Moine] (IH1 p. 214)</b>
+              <p>+1 Vide (Vide initial 3 comme Moine Confrérie, 2 Kiho + 2/Rang) • H 4.5. <i>Swift Fist, Subtle Heart</i> : par Action Gratuite, 1 Vide active pour Rang d'École Rounds le choix au début de chaque Tour entre +1g1 attaque à mains nues OU +1g0 dégâts à mains nues. Débute avec 1 Tatouage (+1 au Rang 4).</p>
+            </div>
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-emerald-300">Hitomi Kikage Zumi [Moine] (IH1 p. 215)</b>
+              <p>+1 Réflexes • H 4.5. R1 : +1 Tatouage ; ajoutez Réflexes au ND d'Armure ; Réflexes pour contrôler un Grapple. R2 : 1 Vide en dégâts à mains nues. R3 : Action Simple à mains nues + 1 Tatouage. R4 : Renversement −1 Aug. et +1g1 dégâts à mains nues. R5 : Renversement (+2 Aug.) ou Projection en Grapple (Terre ND 20) rend Sonné + 1 Tatouage.</p>
+            </div>
+          </div></div>
+          </details>
+        </div>
+<div data-lineage="kitsuki" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-emerald-200 text-sm font-imperial">Kitsuki Investigator School [Courtisan]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 113-114</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kitsuki</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 113-114</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Perception • <b>Honneur :</b> 5.5<br>
             <b>Compétences :</b> Courtisan, Étiquette (Courtoisie), Enquête (Interrogatoire), Kenjutsu, Méditation, Sincérité, une compétence de Connaissance.<br>
             <b>Équipement :</b> Vêtements traditionnels, Wakizashi, Couteau, nécessaire de calligraphie, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-emerald-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-emerald-300">Rang 1 — La Méthode de Kitsuki :</b> Augmentation Gratuite sur tous vos jets d'Enquête. Ajoutez votre Trait Perception à votre ND d'Armure en escarmouche.</li>
               <li><b class="text-emerald-300">Rang 2 — La Sagesse qu'Apporte le Vent :</b> Tout Jet Social visant à vous mentir/tromper ou toute manœuvre Feinte ou Désarmement contre vous subit +5 par Rang d'École Kitsuki au ND.</li>
               <li><b class="text-emerald-300">Rang 3 — Connaître le Rythme du Cœur :</b> Enquête (Observation)/Perception contre ND 5 × Intelligence cible révèle une image fidèle de sa personnalité et ses motivations.</li>
               <li><b class="text-emerald-300">Rang 4 — Trouver la Voie :</b> 1/jour par interlocuteur, Jet Opposé Enquête (Interrogatoire)/Intelligence vs Étiquette (Courtoisie)/Intelligence pour identifier un allié ou ennemi (+1 par Augmentation).</li>
               <li><b class="text-emerald-300">Rang 5 — Les Yeux Trahissent le Cœur :</b> Tout mensonge conscient envers vous déclenche automatiquement Enquête (Interrog.)/Perception vs Sincérité (Tromperie)/Volonté (+5g0 si vous savez déjà qu'on vous ment ; Augmentations révèlent davantage).</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- TAMORI SHUGENJA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="tamori" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-emerald-200 text-sm font-imperial">Tamori Shugenja School [Shugenja]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/30">Core p. 114-115</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Tamori</span> <span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/30">Core p. 114-115</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Constitution • <b>Honneur :</b> 4.5 • <b>Affinité/Déficience :</b> Terre / Air.<br>
             <b>Compétences :</b> Athlétisme, Calligraphie (Chiffre), Défense, Divination, Connaissance : Théologie, Médecine, Art de la Magie.<br>
             <b>Sorts :</b> Sens, Communion, Convocation, 3 Terre, 2 Feu, 1 Eau.<br>
             <b>Équipement :</b> Robes, Wakizashi, 1 arme au choix, Sacoche à parchemins, nécessaire de voyage, 5 koku.</p>
-            <p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-emerald-300">Technique — Chair des Éléments :</b> Dépensez un emplacement de sort pour distiller un sort connu à cible unique (personne/créature) en potion (en autant d'heures que son Niveau de Maîtrise), occupant l'emplacement jusqu'à activation : Action Simple pour boire ou Action Complexe (Athlétisme [Lancer]/Agilité) pour lancer. Augmentation Gratuite sur tout sort avec mot-clé <i>Artisanat</i>.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-emerald-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-emerald-300">Technique — Chair des Éléments :</b> Dépensez un emplacement de sort pour distiller un sort connu à cible unique (personne/créature) en potion (en autant d'heures que son Niveau de Maîtrise), occupant l'emplacement jusqu'à activation : Action Simple pour boire ou Action Complexe (Athlétisme [Lancer]/Agilité) pour lancer. Augmentation Gratuite sur tout sort avec mot-clé <i>Artisanat</i>.</p></div>
+            </details>
           </div>
         </div>
-
-        <!-- TOGASHI TATTOOED ORDER -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="togashi" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-emerald-200 text-sm font-imperial">Togashi Tattooed Order (Ise Zumi) [Moine]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-teal-950 text-teal-300 font-bold border border-teal-500/30">Core p. 115-116</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Togashi</span> <span class="text-[9px] px-2 py-0.5 rounded bg-teal-950 text-teal-300 font-bold border border-teal-500/30">Core p. 115-116</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Vide • <b>Honneur :</b> 4.5<br>
             <b>Compétences :</b> Athlétisme, Défense, Artisanat : Tatouage, Jiujutsu, une compétence de Connaissance, Méditation, une compétence non-Dégradante.<br>
             <b>Équipement :</b> Robes, Bo, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-emerald-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-emerald-300">Rang 1 — Sang du Kami :</b> Vous recevez 2 Tatouages mystiques (Core pp. 263-266). Activables par Action Gratuite s'ils sont exposés (1 seul actif à la fois sauf exception ; durée : 2 × Rang d'École Rounds).</li>
               <li><b class="text-emerald-300">Rang 2 — Corps de Pierre :</b> +1g1 au total de tous vos jets d'attaque et de dégâts à mains nues.</li>
               <li><b class="text-emerald-300">Rang 3 — Bénédiction du Kami :</b> +2 Tatouages supplémentaires.</li>
               <li><b class="text-emerald-300">Rang 4 — Volonté de Pierre :</b> Attaques à mains nues par Action Simple au lieu d'Action Complexe.</li>
               <li><b class="text-emerald-300">Rang 5 — Contact du Kami :</b> +2 Tatouages supplémentaires.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- ÉCOLES DE BASE COMPLÉMENTAIRES -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-emerald-200 text-sm font-imperial">Écoles de Base Complémentaires (Épéiste Taoïste Mirumoto • Hoshi Tsurui Zumi • Hitomi Kikage Zumi)</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-emerald-300 font-bold border border-emerald-500/30">Emerald Empire p. 221 • IH1 pp. 214-215</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-stone-300">
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-emerald-300">Mirumoto Taoist Swordsman [Bushi] (EE p. 221)</b>
-              <p>+1 Vide • H 5.5 (1 koku, Ascétique gratuit). R1 : sans armure avec un sabre, Réduction = Rang d'École + 2 et +1g0 aux dégâts. R2 : Renversement coûte 1 Aug. de moins ; en Grapple avec sabre, inflige dégâts du sabre. R3 : 1 Vide sur dégâts du sabre (cumulatif). R4 : Action Simple avec sabre. R5 : 1/escarmouche, dépensez autant de Vide que désiré en dégâts.</p>
-            </div>
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-emerald-300">Hoshi Tsurui Zumi [Moine] (IH1 p. 214)</b>
-              <p>+1 Vide (Vide initial 3 comme Moine Confrérie, 2 Kiho + 2/Rang) • H 4.5. <i>Swift Fist, Subtle Heart</i> : par Action Gratuite, 1 Vide active pour Rang d'École Rounds le choix au début de chaque Tour entre +1g1 attaque à mains nues OU +1g0 dégâts à mains nues. Débute avec 1 Tatouage (+1 au Rang 4).</p>
-            </div>
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-emerald-300">Hitomi Kikage Zumi [Moine] (IH1 p. 215)</b>
-              <p>+1 Réflexes • H 4.5. R1 : +1 Tatouage ; ajoutez Réflexes au ND d'Armure ; Réflexes pour contrôler un Grapple. R2 : 1 Vide en dégâts à mains nues. R3 : Action Simple à mains nues + 1 Tatouage. R4 : Renversement −1 Aug. et +1g1 dégâts à mains nues. R5 : Renversement (+2 Aug.) ou Projection en Grapple (Terre ND 20) rend Sonné + 1 Tatouage.</p>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </section>
 
-    <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <div class="border-b border-emerald-500/20 pb-2">
-        <h3 class="text-sm font-bold font-imperial text-emerald-300">
+      <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
+      <div class="card-clean rounded-xl p-6 space-y-4">
+        <div class="border-b border-emerald-500/20 pb-2">
+          <h3 class="text-sm font-bold font-imperial text-emerald-300">
           5. Écoles Avancées &amp; Voies Alternatives Officielles
         </h3>
         <span class="text-[11px] text-stone-400">Textes officiels complets (Core pp. 247, 252 ; Great Clans pp. 102-104 ; Earth/Fire ; Strongholds ; IH1).</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-emerald-950/20 rounded border border-emerald-500/30 space-y-1">
-          <b class="text-emerald-300 block">École Avancée : Swordmasters [Bushi]</b>
+        </div>
+        <div id="clan-adv-schools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+<div data-lineage="mirumoto" data-bushi="true" class="clan-school-card p-3 bg-emerald-950/20 rounded border border-emerald-500/30 space-y-1">
+          <b class="text-emerald-300 block">École Avancée : Swordmasters [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 247 • Feu 4, Vide 4 • Iaijutsu 5, Kenjutsu 5, Théologie 4</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> Katana (main directrice) et wakizashi (secondaire) : vous pouvez dépenser des points de Vide 2 fois par Tour.<br>
             <b>R2 :</b> En duel iaijutsu, +1g1 automatique au jet de Focus (comme après victoire d'Évaluation, n'affecte pas le bonus adverse).<br>
             <b>R3 :</b> Avec katana + wakizashi, ignorez toute Réduction des adversaires.
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-emerald-950/20 rounded border border-emerald-500/30 space-y-1">
-          <b class="text-emerald-300 block">École Avancée : Mirumoto Master Sensei [Bushi]</b>
+<div data-lineage="mirumoto" data-bushi="true" class="clan-school-card p-3 bg-emerald-950/20 rounded border border-emerald-500/30 space-y-1">
+          <b class="text-emerald-300 block">École Avancée : Mirumoto Master Sensei [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans p. 102 • Air 5, Terre 4, Vide 5 • Kenjutsu 5, Méd. 6 • Pas Brash/Proud</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> Au sabre, mettre un ennemi Down/Out/Dead rend 1 point de Vide (peut dépasser Anneau jusqu'à fin d'escarmouche).<br>
             <b>R2 :</b> Action Simple + 1 Vide pour ignorer les malus de Blessures (y compris Down, hors Out) durant l'escarmouche (ou 10 min).<br>
             <b>R3 :</b> 1/jour Action Simple, Intuition/Méditation ND 25 + 5/allié partage R1 à vos alliés pour l'escarmouche.
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-emerald-950/20 rounded border border-emerald-500/30 space-y-1">
-          <b class="text-emerald-300 block">École Avancée : Tamori Master of the Mountain [Shug.]</b>
+<div data-lineage="mirumoto" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Mirumoto Mountaineer [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span></div>
+          <span class="text-[10px] text-stone-400 block">Core p. 252 • Rang 2 (rempl. Mirumoto 2) • Athlétisme (Escalade) 3</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Si surpris en début d'escarmouche, second jet immédiat Athlétisme/Agilité pour annuler la surprise. Ajoute ⌈Athlétisme/2⌉ à tous vos jets d'attaque à distance.</p></div>
+          </details>
+        </div>
+<div data-lineage="mirumoto,kitsuki" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">The Dragon's Flame [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span></div>
+          <span class="text-[10px] text-stone-400 block">Great Clans p. 103 • Rang 4 (rempl. tout Bushi Dragon 4) • Kyujutsu 5</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Bonus de +1g0 aux jets d'attaque, ou +2g2 lorsque vous utilisez un arc.</p></div>
+          </details>
+        </div>
+<div data-lineage="kitsuki" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Kitsuki Justicar [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Kitsuki</span></div>
+          <span class="text-[10px] text-stone-400 block">IH1 p. 148-149 • Rang 3 (rempl. Kitsuki 3) • Iaijutsu 4, Enquête 4</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Ajoutez rang d'Enquête aux jets d'Évaluation iaijutsu ; +1g0 en Focus/Frappe contre un criminel condamné par autorité Dragon/Impériale supérieure, et +1g0 Chasse/Enquête pour le traquer.</p></div>
+          </details>
+        </div>
+<div data-lineage="mirumoto" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Hojatsu's Legacy [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span></div>
+          <span class="text-[10px] text-stone-400 block">Book of Fire p. 177 • Rang 4/5 (Mirumoto 4 / Taoïste 5) • Iaijutsu 5</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Pendant l'Évaluation d'un duel, Action Gratuite + 1 Vide force un Jet Opposé Kenjutsu/Feu : si remporté, l'adversaire ne peut dépenser de Vide sur son jet de Focus.</p></div>
+          </details>
+        </div>
+<div data-lineage="mirumoto,tamori,togashi" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Mirumoto Sentinel &amp; Water Hammer Smith</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Mirumoto</span></div>
+          <span class="text-[10px] text-stone-400 block">Strongholds p. 108 • Transcendent Brotherhood (Fire p. 180)</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Sentinel (R3/4) :</b> +1g0 à 3 Bugei dans sa province (<i>Connaissance Terrain</i>) + Vide opposé réduit Eau adverse de 1 pour Mouvement. <b>Water Hammer Smith (R2) :</b> 1 Vide/emplacement Eau ajoute 2 × Eau aux jets d'Artisanat du jour. <b>Transcendent Brotherhood (R2) :</b> 1h Méditation/Feu ND 20 = immunité au feu normal (1/2 Aug. magique/volcan) pendant Feu heures + (+Feu) aux traits/comp. Perception, Intuition, Intelligence pendant douleur et 10 min.</p></div>
+          </details>
+        </div>
+<div data-lineage="tamori" data-bushi="false" class="clan-school-card p-3 bg-emerald-950/20 rounded border border-emerald-500/30 space-y-1">
+          <b class="text-emerald-300 block">École Avancée : Tamori Master of the Mountain [Shug.]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Tamori</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans p. 102-103 • 1 Anneau à 4, 2 à 3 • Art de la Magie 5</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> Dépensez 2 emplacements d'un Anneau non opposé (Air↔Terre, Feu↔Eau) au lieu d'1 du bon Anneau.<br>
             <b>R2 :</b> +1 Rang de Shugenja. Action Gratuite + 1 emplacement = Réduction 2 et +10 ND Armure (Terre Rounds), mais 1 Augmentation à vide sur vos sorts.<br>
             <b>R3 :</b> Action Simple + 1 Vide + 1 emplacement = +4g1 aux sorts d'un mot-clé choisi (rencontre / 1h).
-          </p>
+          </p></div>
+          </details>
         </div>
-
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Mirumoto Mountaineer [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">Core p. 252 • Rang 2 (rempl. Mirumoto 2) • Athlétisme (Escalade) 3</span>
-          <p class="text-stone-300 text-[11px]">Si surpris en début d'escarmouche, second jet immédiat Athlétisme/Agilité pour annuler la surprise. Ajoute ⌈Athlétisme/2⌉ à tous vos jets d'attaque à distance.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Tamori Warrior Priest [Shugenja]</b>
+<div data-lineage="tamori" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Tamori Warrior Priest [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Tamori</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 252 • Rang 4 (rempl. Tamori 4) • 1 Compétence d'Arme 3</span>
-          <p class="text-stone-300 text-[11px]">Action Gratuite + 1 emplacement = +1g0 sur un jet Bugei (max Rang d'École/Round). Attaque Action Simple avec arme invoquée (<i>Bo of Water</i>, <i>Tetsubo of Earth</i>, <i>Katana of Fire</i>, <i>Yari of Air</i>).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Action Gratuite + 1 emplacement = +1g0 sur un jet Bugei (max Rang d'École/Round). Attaque Action Simple avec arme invoquée (<i>Bo of Water</i>, <i>Tetsubo of Earth</i>, <i>Katana of Fire</i>, <i>Yari of Air</i>).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Kitsuki Debater [Courtisan]</b>
+<div data-lineage="kitsuki" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Kitsuki Debater [Courtisan]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kitsuki</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans p. 103 • Rang 3 (rempl. Kitsuki 3) • Courtisan 3, Étiquette (Conv.) 5</span>
-          <p class="text-stone-300 text-[11px]">Étiquette (Conversation)/Intuition ND 20 (+Aug.) force la cible à Sincérité/Intuition ND 20 + 5/Aug. ou subir −1g1 à son prochain Jet Social contre vous.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Étiquette (Conversation)/Intuition ND 20 (+Aug.) force la cible à Sincérité/Intuition ND 20 + 5/Aug. ou subir −1g1 à son prochain Jet Social contre vous.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">The Dragon's Flame [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">Great Clans p. 103 • Rang 4 (rempl. tout Bushi Dragon 4) • Kyujutsu 5</span>
-          <p class="text-stone-300 text-[11px]">Bonus de +1g0 aux jets d'attaque, ou +2g2 lorsque vous utilisez un arc.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Togashi Defender [Moine]</b>
+<div data-lineage="togashi" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Togashi Defender [Moine]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Togashi</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans p. 104 • Rang 3 (rempl. Togashi 3)</span>
-          <p class="text-stone-300 text-[11px]">Sans armure ni Kiho/Tatouage actif, gagnez Réduction = 3 + Anneau de Vide. Vous gagnez 1 Tatouage supplémentaire.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Sans armure ni Kiho/Tatouage actif, gagnez Réduction = 3 + Anneau de Vide. Vous gagnez 1 Tatouage supplémentaire.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Tamori Weaponsmith [Artisan/Shug.]</b>
+<div data-lineage="tamori" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-emerald-300 block">Tamori Weaponsmith [Artisan/Shug.]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Tamori</span></div>
           <span class="text-[10px] text-stone-400 block">Book of Earth p. 195 • Rang 2 (rempl. Tamori 2) • Forge 3 + sort créant arme</span>
-          <p class="text-stone-300 text-[11px]">En terminant une arme Samouraï par Artisanat, dépensez tous vos points de Vide pour infuser (Terre) Augmentations Gratuites dans l'arme (rechargées tous les 30 jours ; max Terre armes actives).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-emerald-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">En terminant une arme Samouraï par Artisanat, dépensez tous vos points de Vide pour infuser (Terre) Augmentations Gratuites dans l'arme (rechargées tous les 30 jours ; max Terre armes actives).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Kitsuki Justicar [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">IH1 p. 148-149 • Rang 3 (rempl. Kitsuki 3) • Iaijutsu 4, Enquête 4</span>
-          <p class="text-stone-300 text-[11px]">Ajoutez rang d'Enquête aux jets d'Évaluation iaijutsu ; +1g0 en Focus/Frappe contre un criminel condamné par autorité Dragon/Impériale supérieure, et +1g0 Chasse/Enquête pour le traquer.</p>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Hojatsu's Legacy [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">Book of Fire p. 177 • Rang 4/5 (Mirumoto 4 / Taoïste 5) • Iaijutsu 5</span>
-          <p class="text-stone-300 text-[11px]">Pendant l'Évaluation d'un duel, Action Gratuite + 1 Vide force un Jet Opposé Kenjutsu/Feu : si remporté, l'adversaire ne peut dépenser de Vide sur son jet de Focus.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-emerald-300 block">Mirumoto Sentinel &amp; Water Hammer Smith</b>
-          <span class="text-[10px] text-stone-400 block">Strongholds p. 108 • Transcendent Brotherhood (Fire p. 180)</span>
-          <p class="text-stone-300 text-[11px]"><b>Sentinel (R3/4) :</b> +1g0 à 3 Bugei dans sa province (<i>Connaissance Terrain</i>) + Vide opposé réduit Eau adverse de 1 pour Mouvement. <b>Water Hammer Smith (R2) :</b> 1 Vide/emplacement Eau ajoute 2 × Eau aux jets d'Artisanat du jour. <b>Transcendent Brotherhood (R2) :</b> 1h Méditation/Feu ND 20 = immunité au feu normal (1/2 Aug. magique/volcan) pendant Feu heures + (+Feu) aux traits/comp. Perception, Intuition, Intelligence pendant douleur et 10 min.</p>
-        </div>
+        <p id="clan-adv-empty-hint" class="hidden text-[11px] text-stone-500 italic text-center py-2">
+          Aucune école avancée ou voie alternative spécifique pour ce filtre.
+        </p>
       </div>
     </section>
 
@@ -442,7 +611,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Fiche technique du Clan du Dragon</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.16.1</span>
+      <span id="site-version-label">v1.17.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
