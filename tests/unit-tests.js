@@ -815,6 +815,90 @@
   });
 
   // ===========================================================================
+  // 11. IMPORT CARNET DE ROKUGAN (schemaVersion: 2 -> FORGE L5R 4E)
+  // ===========================================================================
+  describe("11. Importation depuis Le Carnet de Rokugan (schemaVersion: 2 -> Forge)", function () {
+    it("isCarnetRokuganPayload et extractCarnetCandidates détectent fidèlement Carnet v2, Forge et listes", function () {
+      assertTrue(ec.isCarnetRokuganPayload({ schemaVersion: 2, name: "Hida", traits: { stamina: 3 } }), "Carnet v2 détecté");
+      assertTrue(ec.isCarnetRokuganPayload({ name: "Kakita", traits: { reflexes: 4 }, voidRing: 3 }), "Carnet avec traits anglais détecté");
+      assertTrue(!ec.isCarnetRokuganPayload({ clan: "crabe", family: "0", school: "bushi-hida", traits: { sta: 3, wil: 2 } }), "Sauvegarde Forge native reconnue comme non-Carnet");
+
+      const arrCand = ec.extractCarnetCandidates([{ name: "A" }, { name: "B" }]);
+      assertEqual(arrCand.length, 2, "Tableau racine extrait");
+      const wrapCand = ec.extractCarnetCandidates({ characters: [{ name: "C" }] });
+      assertEqual(wrapCand[0].name, "C", "Enveloppe { characters } extraite");
+    });
+
+    it("convertCarnetToForgeData convertit traits anglais, école, compétences, équipement et verrou secrets MJ", function () {
+      const clans = catalogScope.CLANS_DATA || {};
+      const skillsCat = catalogScope.COMPETENCES_DATA || [];
+      const advCat = catalogScope.AVANTAGES_DESAVANTAGES || {};
+      const eqCat = catalogScope.EQUIPEMENT_DATA || { armures: [], armes: [] };
+      const spellsCat = catalogScope.SORTS_DATA || [];
+
+      assertEqual(ec.resolveForgeSkillName("investigation", skillsCat), "Enquête (Investigation)", "Alias Enquête exact");
+      assertEqual(ec.resolveForgeSkillName("Lore: Theology", skillsCat), "Connaissance : Théologie", "Alias Lore: Theology exact");
+
+      const carnetSample = {
+        schemaVersion: 2,
+        name: "Kakita Haruto",
+        clan: "Grue",
+        family: "Kakita",
+        school: "Duelliste Kakita",
+        schoolId: "kakita-bushi",
+        xp: { total: 55, spent: 50 },
+        traits: {
+          stamina: 2, willpower: 3, strength: 2, perception: 2,
+          agility: 3, intelligence: 2, reflexes: 4, awareness: 3
+        },
+        voidRing: 3,
+        armor: { name: "Armure légère", bonus: 5, reduction: 3 },
+        weapons: [{ name: "Katana" }, { name: "Yumi" }],
+        skills: [
+          { name: "Iaijutsu", rank: 4, isSchool: true, emphases: ["Focus"] },
+          { name: "Kenjutsu", rank: 2, isSchool: true, emphases: [] },
+          { name: "Etiquette", rank: 1, isSchool: true, emphases: [] },
+          { name: "Sincerity", rank: 1, isSchool: true, emphases: [] },
+          { name: "Investigation", rank: 2, isSchool: false, emphases: [] }
+        ],
+        advantages: "Chance\nGrande Destinée",
+        disadvantages: "Sensible à la Douleur",
+        notes: "Kimono de soie, daisho"
+      };
+
+      const res = ec.convertCarnetToForgeData(carnetSample, {
+        clansData: clans,
+        skillsCatalog: skillsCat,
+        advCatalog: advCat,
+        equipData: eqCat,
+        spellsCatalog: spellsCat,
+        includeSecrets: false
+      });
+
+      assertEqual(res.summary.sourceFormat, "carnet-v2", "Format source identifié carnet-v2");
+      assertEqual(res.forgeData.clan, "grue", "Clan Grue résolu");
+      assertEqual(res.forgeData.school, "duelliste-kakita", "École Duelliste Kakita résolue");
+      assertEqual(res.forgeData.traits.ref, 4, "Réflexes convertis (4)");
+      assertEqual(res.forgeData.traits.voi, 3, "Vide converti (3)");
+      assertEqual(res.forgeData.baseXP, "55", "XP total conservé");
+      assertEqual(res.forgeData.armor, "5", "Armure légère résolue (+5)");
+      assertEqual(res.forgeData.weapon1, "Katana", "Arme principale Katana résolue");
+      assertEqual(res.forgeData.weapon2, "Yumi (Arc, Flèches Saule 2g2)", "Arme secondaire Yumi résolue");
+      assertTrue(res.forgeData.skills.some(s => s.name.startsWith("Iaijutsu") && s.rank === 4 && s.spec === true && s.isSchool === true), "Compétence Iaijutsu + spécialité + école conservées");
+      assertTrue(res.forgeData.skills.some(s => s.name === "Enquête (Investigation)" && s.rank === 2 && s.isSchool === false), "Compétence hors-école Enquête importée");
+      assertTrue(res.forgeData.advantages.length >= 2, "Avantages importés depuis chaîne Carnet");
+      assertTrue(res.forgeData.disadvantages.length >= 1, "Désavantages importés depuis chaîne Carnet");
+
+      // Vérifie que les écoles gmOnly restent verrouillées sans secrets MJ
+      const spiderSample = { schemaVersion: 2, name: "Daigotsu Test", clan: "Araignée", schoolId: "daigotsu-bushi", traits: { stamina: 3 } };
+      const lockedRes = ec.convertCarnetToForgeData(spiderSample, { clansData: clans, skillsCatalog: skillsCat, includeSecrets: false });
+      assertTrue(lockedRes.warnings.length > 0 && lockedRes.forgeData.clan !== "araignee", "Clan secret MJ bloqué par défaut");
+      const unlockedRes = ec.convertCarnetToForgeData(spiderSample, { clansData: clans, skillsCatalog: skillsCat, includeSecrets: true });
+      assertEqual(unlockedRes.forgeData.clan, "araignee", "Clan secret résolu si secrets MJ déverrouillés");
+    });
+  });
+
+  // ===========================================================================
   // RAPPORT D'EXÉCUTION (NODE.JS & NAVIGATEUR)
   // ===========================================================================
   const totalPassed = suites.reduce((acc, s) => acc + s.passed, 0);

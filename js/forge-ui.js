@@ -427,8 +427,8 @@ function injectForgeTemplates() {
               <button type="button" onclick="toggleMobileMoreSheet(false); if(window.exportJSONWithMystic) exportJSONWithMystic();" class="min-h-[44px] px-3 py-2 rounded-xl bg-stone-900 border border-stone-700 text-stone-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
                 <span>⬇️</span><span>Export JSON</span>
               </button>
-              <button type="button" onclick="toggleMobileMoreSheet(false); document.getElementById('json-input')?.click();" class="min-h-[44px] px-3 py-2 rounded-xl bg-stone-900 border border-stone-700 text-stone-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
-                <span>📂</span><span>Charger JSON</span>
+              <button type="button" onclick="toggleMobileMoreSheet(false); if(window.openImportCharacterModal) openImportCharacterModal(); else document.getElementById('json-input')?.click();" class="min-h-[44px] px-3 py-2 rounded-xl bg-stone-900 border border-emerald-500/45 text-emerald-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>📥</span><span>Importer (Carnet/JSON)</span>
               </button>
             </div>
             <button type="button" onclick="toggleMobileMoreSheet(false); if(window.promptPWAInstall) window.promptPWAInstall();" class="w-full min-h-[44px] px-3.5 py-2 rounded-xl bg-emerald-950/70 border border-emerald-500/45 text-emerald-200 font-bold flex items-center justify-between cursor-pointer">
@@ -2954,3 +2954,388 @@ window.refreshGmSecretsUiState = refreshGmSecretsUiState;
 window.toggleGmSecretsModal = toggleGmSecretsModal;
 window.unlockGmSecretsWithPassword = unlockGmSecretsWithPassword;
 window.lockGmSecrets = lockGmSecrets;
+
+// =============================================================================
+// 11. MODALE D'IMPORTATION (LE CARNET DE ROKUGAN v1/v2 & FORGE JSON)
+// =============================================================================
+let _pendingImportCandidates = [];
+let _pendingImportConverted = null;
+
+function ensureImportCharacterModal() {
+  let modal = document.getElementById('forge-import-modal');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.id = 'forge-import-modal';
+  modal.className = 'hidden fixed inset-0 z-[75] bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 no-print';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'import-modal-title');
+  modal.innerHTML = `
+    <div class="w-full max-w-2xl rounded-2xl bg-[#120d0c] border border-amber-500/45 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="px-5 py-3.5 border-b border-amber-500/25 flex items-center justify-between gap-2 bg-black/50 shrink-0">
+        <div>
+          <h3 id="import-modal-title" class="text-sm sm:text-base font-imperial font-bold text-amber-300">
+            📥 Importer un Personnage dans la Forge
+          </h3>
+          <p class="text-[11px] text-stone-400">
+            Compatible <b class="text-amber-200">Le Carnet de Rokugan (JSON v1/v2)</b> et <b class="text-emerald-300">sauvegardes Forge L5R 4e</b>.
+          </p>
+        </div>
+        <button type="button" onclick="closeImportCharacterModal()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs font-bold cursor-pointer">✕ Fermer</button>
+      </div>
+
+      <div class="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs">
+        <div id="import-dropzone" class="rounded-xl border-2 border-dashed border-amber-500/45 bg-black/45 p-4 text-center space-y-2 hover:border-amber-400 transition">
+          <div class="text-sm font-bold text-amber-200">Glissez-déposez un fichier <code>.json</code> ici</div>
+          <p class="text-[11px] text-stone-400">Exportez depuis <b>Le Carnet de Rokugan</b> (<i>Exporter / Sauvegarder en JSON</i>) ou sélectionnez une fiche Forge.</p>
+          <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
+            <label class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial cursor-pointer shadow">
+              📂 Choisir un fichier .json
+              <input type="file" id="import-modal-file" accept=".json,application/json" class="hidden">
+            </label>
+            <button type="button" id="btn-import-clear" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold cursor-pointer">🧹 Effacer</button>
+          </div>
+          <div id="import-file-label" class="text-[10px] text-emerald-300 font-mono hidden"></div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label for="import-modal-textarea" class="text-[11px] font-bold text-stone-300 uppercase tracking-wider">Ou collez directement le JSON du personnage :</label>
+            <span class="text-[10px] text-stone-500 font-mono">schemaVersion: 2 / Forge</span>
+          </div>
+          <textarea id="import-modal-textarea" rows="4" placeholder='{"schemaVersion": 2, "name": "Hida Tetsuo", "clan": "Crabe", ...}' class="w-full p-2.5 rounded-lg bg-black/75 border border-stone-800 text-stone-200 font-mono text-[11px] focus:border-amber-500/70 focus:outline-none"></textarea>
+        </div>
+
+        <div id="import-error-box" class="hidden p-2.5 rounded-lg bg-red-950/70 border border-red-500/50 text-red-200 text-[11px]"></div>
+
+        <div id="import-candidate-wrap" class="hidden space-y-1">
+          <label for="import-candidate-select" class="text-[11px] font-bold text-amber-300">Plusieurs samouraïs détectés dans ce fichier :</label>
+          <select id="import-candidate-select" class="w-full p-2 rounded-lg bg-stone-950 border border-amber-500/40 text-amber-200 text-xs font-bold"></select>
+        </div>
+
+        <div id="import-preview-card" class="hidden rounded-xl border border-emerald-500/40 bg-stone-950/90 p-3.5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-2">
+            <div>
+              <span id="import-preview-format" class="inline-block text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 mb-1">Carnet v2</span>
+              <h4 id="import-preview-name" class="text-sm font-imperial font-bold text-amber-200">—</h4>
+              <div id="import-preview-lineage" class="text-[11px] text-stone-400">—</div>
+            </div>
+            <div class="text-right font-mono text-[11px]">
+              <div class="text-amber-300 font-bold" id="import-preview-xp">XP : 40</div>
+              <div class="text-stone-400" id="import-preview-counts">—</div>
+            </div>
+          </div>
+          <div id="import-preview-traits" class="grid grid-cols-3 sm:grid-cols-5 gap-1.5 text-[10px] font-mono"></div>
+          <div id="import-warnings-box" class="hidden p-2 rounded bg-amber-950/40 border border-amber-500/40 text-amber-200 text-[10.5px] space-y-0.5"></div>
+        </div>
+      </div>
+
+      <div class="px-5 py-3 border-t border-amber-500/20 bg-black/50 flex flex-wrap items-center justify-end gap-2 shrink-0">
+        <button type="button" onclick="closeImportCharacterModal()" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold text-xs cursor-pointer">Annuler</button>
+        <button type="button" id="btn-confirm-import-sheet" onclick="confirmImportCharacter(false)" disabled class="px-4 py-2 rounded-lg bg-stone-800 text-stone-500 border border-stone-700 font-bold text-xs cursor-not-allowed transition">📥 Charger sur la fiche</button>
+        <button type="button" id="btn-confirm-import-dojo" onclick="confirmImportCharacter(true)" disabled class="px-4 py-2 rounded-lg bg-amber-600/40 text-black/60 font-extrabold font-imperial text-xs cursor-not-allowed transition shadow">🏯 Importer &amp; Sauver Dojo</button>
+      </div>
+    </div>
+  `;
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeImportCharacterModal();
+  });
+
+  const fileInput = modal.querySelector('#import-modal-file');
+  const textarea = modal.querySelector('#import-modal-textarea');
+  const dropzone = modal.querySelector('#import-dropzone');
+  const clearBtn = modal.querySelector('#btn-import-clear');
+  const candSelect = modal.querySelector('#import-candidate-select');
+
+  if (fileInput) {
+    fileInput.addEventListener('change', (ev) => {
+      const f = ev.target?.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (re) => {
+        const lbl = modal.querySelector('#import-file-label');
+        if (lbl) {
+          lbl.textContent = `Fichier : ${f.name}`;
+          lbl.classList.remove('hidden');
+        }
+        if (textarea) textarea.value = String(re.target?.result || '');
+        previewImportJsonText(textarea?.value || '');
+      };
+      reader.readAsText(f);
+      ev.target.value = '';
+    });
+  }
+
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(evtName => {
+      dropzone.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-amber-400', 'bg-amber-950/20');
+      });
+    });
+    ['dragleave', 'drop'].forEach(evtName => {
+      dropzone.addEventListener(evtName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-amber-400', 'bg-amber-950/20');
+      });
+    });
+    dropzone.addEventListener('drop', (e) => {
+      const f = e.dataTransfer?.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (re) => {
+        const lbl = modal.querySelector('#import-file-label');
+        if (lbl) {
+          lbl.textContent = `Fichier : ${f.name}`;
+          lbl.classList.remove('hidden');
+        }
+        if (textarea) textarea.value = String(re.target?.result || '');
+        previewImportJsonText(textarea?.value || '');
+      };
+      reader.readAsText(f);
+    });
+  }
+
+  if (textarea) {
+    textarea.addEventListener('input', () => previewImportJsonText(textarea.value));
+  }
+
+  if (candSelect) {
+    candSelect.addEventListener('change', () => {
+      const idx = parseInt(candSelect.value, 10) || 0;
+      renderImportCandidatePreview(_pendingImportCandidates[idx]);
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (textarea) textarea.value = '';
+      const lbl = modal.querySelector('#import-file-label');
+      if (lbl) lbl.classList.add('hidden');
+      previewImportJsonText('');
+    });
+  }
+
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function setImportConfirmButtonsEnabled(enabled) {
+  const btnSheet = document.getElementById('btn-confirm-import-sheet');
+  const btnDojo = document.getElementById('btn-confirm-import-dojo');
+  if (btnSheet) {
+    btnSheet.disabled = !enabled;
+    btnSheet.className = enabled
+      ? 'px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-emerald-300 border border-emerald-500/50 font-bold text-xs cursor-pointer transition'
+      : 'px-4 py-2 rounded-lg bg-stone-800 text-stone-500 border border-stone-700 font-bold text-xs cursor-not-allowed transition';
+  }
+  if (btnDojo) {
+    btnDojo.disabled = !enabled;
+    btnDojo.className = enabled
+      ? 'px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial text-xs cursor-pointer transition shadow'
+      : 'px-4 py-2 rounded-lg bg-amber-600/40 text-black/60 font-extrabold font-imperial text-xs cursor-not-allowed transition shadow';
+  }
+}
+
+function renderImportCandidatePreview(rawCandidate) {
+  const errBox = document.getElementById('import-error-box');
+  const previewCard = document.getElementById('import-preview-card');
+  if (!rawCandidate) {
+    _pendingImportConverted = null;
+    if (previewCard) previewCard.classList.add('hidden');
+    setImportConfirmButtonsEnabled(false);
+    return;
+  }
+
+  try {
+    const includeSecrets = typeof window.isGmSecretsUnlocked === 'function' && window.isGmSecretsUnlocked();
+    const res = typeof window.convertCarnetToForgeData === 'function'
+      ? window.convertCarnetToForgeData(rawCandidate, {
+          clansData: window.CLANS_DATA || {},
+          skillsCatalog: window.COMPETENCES_DATA || [],
+          advCatalog: window.AVANTAGES_DESAVANTAGES || {},
+          equipData: window.EQUIPEMENT_DATA || { armures: [], armes: [] },
+          spellsCatalog: window.SORTS_DATA || [],
+          includeSecrets
+        })
+      : { forgeData: rawCandidate, warnings: [], summary: { sourceFormat: 'forge', name: rawCandidate.name || 'Samouraï', traits: rawCandidate.traits || {} } };
+
+    _pendingImportConverted = res;
+    if (errBox) errBox.classList.add('hidden');
+    if (!previewCard) return;
+
+    const sum = res.summary || {};
+    const fmtEl = document.getElementById('import-preview-format');
+    const nameEl = document.getElementById('import-preview-name');
+    const linEl = document.getElementById('import-preview-lineage');
+    const xpEl = document.getElementById('import-preview-xp');
+    const cntEl = document.getElementById('import-preview-counts');
+    const traitsEl = document.getElementById('import-preview-traits');
+    const warnEl = document.getElementById('import-warnings-box');
+
+    if (fmtEl) {
+      fmtEl.textContent = sum.sourceFormat === 'carnet-v2'
+        ? 'Format détecté : Le Carnet de Rokugan (JSON v1/v2)'
+        : 'Format détecté : Sauvegarde Forge L5R 4e';
+    }
+    if (nameEl) nameEl.textContent = sum.name || 'Samouraï';
+    if (linEl) linEl.textContent = [sum.clanLabel, sum.familyLabel, sum.schoolLabel].filter(Boolean).join(' • ');
+    if (xpEl) xpEl.textContent = `Budget XP : ${sum.xpTotal ?? 40}`;
+    if (cntEl) cntEl.textContent = `${sum.skillsCount || 0} comp. • ${sum.advantagesCount || 0} av./dés. • ${sum.spellsCount || 0} sort(s)`;
+
+    if (traitsEl) {
+      const tr = sum.traits || {};
+      const traitPairs = [
+        ['Const.', tr.sta ?? 2], ['Vol.', tr.wil ?? 2],
+        ['Force', tr.str ?? 2], ['Perc.', tr.per ?? 2],
+        ['Réfl.', tr.ref ?? 2], ['Intuit.', tr.awa ?? 2],
+        ['Agil.', tr.agi ?? 2], ['Intell.', tr.int ?? 2],
+        ['Vide', tr.voi ?? 2]
+      ];
+      traitsEl.innerHTML = traitPairs.map(([lbl, val]) =>
+        `<div class="px-2 py-1 rounded bg-black/60 border border-stone-800 flex justify-between"><span class="text-stone-400">${lbl}</span><b class="text-amber-300">${val}</b></div>`
+      ).join('');
+    }
+
+    if (warnEl) {
+      warnEl.textContent = '';
+      if (Array.isArray(res.warnings) && res.warnings.length > 0) {
+        res.warnings.forEach(w => {
+          const line = document.createElement('div');
+          line.textContent = `⚠️ ${w}`;
+          warnEl.appendChild(line);
+        });
+        warnEl.classList.remove('hidden');
+      } else {
+        warnEl.classList.add('hidden');
+      }
+    }
+
+    previewCard.classList.remove('hidden');
+    setImportConfirmButtonsEnabled(true);
+  } catch (err) {
+    _pendingImportConverted = null;
+    if (previewCard) previewCard.classList.add('hidden');
+    if (errBox) {
+      errBox.textContent = err?.message || 'Impossible de convertir ce personnage JSON.';
+      errBox.classList.remove('hidden');
+    }
+    setImportConfirmButtonsEnabled(false);
+  }
+}
+
+function previewImportJsonText(rawText) {
+  const trimmed = String(rawText || '').trim();
+  const errBox = document.getElementById('import-error-box');
+  const candWrap = document.getElementById('import-candidate-wrap');
+  const candSel = document.getElementById('import-candidate-select');
+  const previewCard = document.getElementById('import-preview-card');
+
+  if (!trimmed) {
+    _pendingImportCandidates = [];
+    _pendingImportConverted = null;
+    if (errBox) errBox.classList.add('hidden');
+    if (candWrap) candWrap.classList.add('hidden');
+    if (previewCard) previewCard.classList.add('hidden');
+    setImportConfirmButtonsEnabled(false);
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed);
+    const candidates = typeof window.extractCarnetCandidates === 'function'
+      ? window.extractCarnetCandidates(parsed)
+      : [parsed];
+    _pendingImportCandidates = candidates;
+
+    if (candWrap && candSel) {
+      candSel.textContent = '';
+      if (candidates.length > 1) {
+        candidates.forEach((c, idx) => {
+          const opt = document.createElement('option');
+          opt.value = String(idx);
+          opt.textContent = `${c.name || `Samouraï #${idx + 1}`} (${c.clan || c.school || 'JSON'})`;
+          candSel.appendChild(opt);
+        });
+        candWrap.classList.remove('hidden');
+      } else {
+        candWrap.classList.add('hidden');
+      }
+    }
+
+    renderImportCandidatePreview(candidates[0]);
+  } catch (err) {
+    _pendingImportCandidates = [];
+    _pendingImportConverted = null;
+    if (candWrap) candWrap.classList.add('hidden');
+    if (previewCard) previewCard.classList.add('hidden');
+    if (errBox) {
+      errBox.textContent = `JSON invalide : ${err.message}`;
+      errBox.classList.remove('hidden');
+    }
+    setImportConfirmButtonsEnabled(false);
+  }
+}
+
+function openImportCharacterModal() {
+  const modal = ensureImportCharacterModal();
+  modal.classList.remove('hidden');
+  const ta = modal.querySelector('#import-modal-textarea');
+  if (ta && !ta.value.trim()) {
+    previewImportJsonText('');
+    setTimeout(() => ta.focus(), 40);
+  }
+}
+
+function openImportCharacterModalWithJson(rawText, fileName = '') {
+  const modal = ensureImportCharacterModal();
+  modal.classList.remove('hidden');
+  const lbl = modal.querySelector('#import-file-label');
+  if (lbl) {
+    if (fileName) {
+      lbl.textContent = `Fichier : ${fileName}`;
+      lbl.classList.remove('hidden');
+    } else {
+      lbl.classList.add('hidden');
+    }
+  }
+  const ta = modal.querySelector('#import-modal-textarea');
+  if (ta) ta.value = String(rawText || '');
+  previewImportJsonText(rawText);
+}
+
+function closeImportCharacterModal() {
+  const modal = document.getElementById('forge-import-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function confirmImportCharacter(saveToDojoToo = false) {
+  if (!_pendingImportConverted || !_pendingImportConverted.forgeData) return;
+  const payload = _pendingImportConverted.forgeData;
+
+  if (typeof window.applyCharacterDataToSheet === 'function') {
+    window.applyCharacterDataToSheet(payload);
+  }
+  if (saveToDojoToo && typeof window.saveCharacterToDojo === 'function') {
+    window.saveCharacterToDojo(true);
+    if (typeof renderDojoRoster === 'function') renderDojoRoster();
+  }
+
+  closeImportCharacterModal();
+  if (typeof showForgeToast === 'function') {
+    showForgeToast(
+      saveToDojoToo
+        ? `« ${payload.name} » importé dans la Forge et enregistré dans Mon Dojo !`
+        : `« ${payload.name} » importé dans la Forge !`,
+      'success'
+    );
+  }
+}
+
+window.openImportCharacterModal = openImportCharacterModal;
+window.openImportCharacterModalWithJson = openImportCharacterModalWithJson;
+window.closeImportCharacterModal = closeImportCharacterModal;
+window.previewImportJsonText = previewImportJsonText;
+window.confirmImportCharacter = confirmImportCharacter;
