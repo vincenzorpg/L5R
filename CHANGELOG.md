@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.16.1] — 2026-11-17
+
+### 🐛 Corrigé
+- **Menus Déroulants de Navigation (`js/navbar.js`, `css/main.css`, `createcharacter.html`)** :
+  - Suppression de l'interstice vertical (`mt-1.5` remplacé par un conteneur `.nav-dropdown-panel` à `top-full pt-2`) entre les boutons du haut (*Clans majeurs*, *Aides*, *Outils*) et leur panneau déroulant afin que la souris ne perde plus le survol en descendant vers un lien.
+  - Ajout d'un délai de grâce de `220 ms` au départ du pointeur, d'un déclenchement par clic/tactile (`is-open` / `aria-expanded`) et d'une fermeture propre au clic extérieur ou via `Échap`.
+
+---
+
 ## [1.16.0] — 2026-11-17
 
 ### ✨ Ajouté & Dissimulé (Accès MJ vs Vue Joueurs)

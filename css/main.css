@@ -1262,3 +1262,17 @@ select {
     color: #8b0000 !important;
   }
 }
+
+/* Menus déroulants de navigation : zéro interstice + maintien fluide au survol */
+.nav-dropdown:hover .nav-dropdown-panel,
+.nav-dropdown:focus-within .nav-dropdown-panel,
+.nav-dropdown.is-open .nav-dropdown-panel {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.nav-dropdown:hover .nav-dropdown-chevron,
+.nav-dropdown:focus-within .nav-dropdown-chevron,
+.nav-dropdown.is-open .nav-dropdown-chevron {
+  transform: rotate(180deg);
+}
