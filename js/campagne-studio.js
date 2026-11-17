@@ -103,7 +103,7 @@ function buildScenarioHTML(meta) {
   const author = (meta.author || "Tsuruchi Akira").trim();
   const date = (meta.date || `Acte ${id}`).trim();
   const place = (meta.place || "Terres de Rokugan").trim();
-  const summary = (meta.summary || meta.desc || "Chronique officielle de la table du MJ David.").trim();
+  const summary = (meta.summary || meta.desc || "Chronique officielle de la Campagne de la Chronique de Rokugan.").trim();
   const wpUrl = (meta.wpUrl || "https://campagnel5rdavid2015.wordpress.com/la-campagne/").trim();
   const formattedBody = formatScenarioBodyToHTML(meta.body || "");
 
@@ -117,7 +117,7 @@ function buildScenarioHTML(meta) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scénario ${id} : ${escapeHtmlSafe(title)} — L5R 4e | MJ David</title>
+  <title>Scénario ${id} : ${escapeHtmlSafe(title)} — Campagne de la Chronique de Rokugan</title>
   <meta name="l5r-scenario-id" content="${id}">
   <meta name="l5r-scenario-short-title" content="${escapeHtmlSafe(shortTitle)}">
   <meta name="l5r-scenario-title" content="${escapeHtmlSafe(title)}">
@@ -248,9 +248,9 @@ ${formattedBody}
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
-    <div>Chronique L5R 4e Édition — MJ David • ${escapeHtmlSafe(date)} : ${escapeHtmlSafe(title)} (par ${escapeHtmlSafe(author)})</div>
+    <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • ${escapeHtmlSafe(date)} : ${escapeHtmlSafe(title)} (par ${escapeHtmlSafe(author)})</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.14.0</span>
+      <span id="site-version-label">v1.15.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
@@ -278,7 +278,7 @@ function buildUpdatedScenariosDataJS(existingList, newMeta) {
     author: (newMeta.author || "Tsuruchi Akira").trim(),
     date: (newMeta.date || `Acte ${id}`).trim(),
     place: (newMeta.place || "Terres de Rokugan").trim(),
-    desc: (newMeta.summary || newMeta.desc || "Chronique officielle de la table du MJ David.").trim()
+    desc: (newMeta.summary || newMeta.desc || "Chronique officielle de la Campagne de la Chronique de Rokugan.").trim()
   };
 
   const existingIdx = list.findIndex(s => Number(s.id) === id);
@@ -364,7 +364,7 @@ function collectStudioMeta() {
   const author = (document.getElementById('sc-author')?.value || "Tsuruchi Akira").trim();
   const date = (document.getElementById('sc-date')?.value || `Acte ${id}`).trim();
   const place = (document.getElementById('sc-place')?.value || "Terres de l'Empire").trim();
-  const summary = (document.getElementById('sc-summary')?.value || "").trim() || "Chronique officielle de la table du MJ David.";
+  const summary = (document.getElementById('sc-summary')?.value || "").trim() || "Chronique officielle de la Campagne de la Chronique de Rokugan.";
   const body = (document.getElementById('sc-body')?.value || "").trim();
   const wpUrl = (document.getElementById('sc-wp-url')?.value || "https://campagnel5rdavid2015.wordpress.com/la-campagne/").trim();
 

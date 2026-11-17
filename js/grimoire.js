@@ -415,6 +415,11 @@
     const elParam = p.get("el");
     if (elParam && elementSelect) {
       const elLower = normalizeText(elParam);
+      if (elLower === "kiho" && !elementSelect.querySelector('option[value="kiho"]')) {
+        const qSuffix = qParam ? `?q=${encodeURIComponent(qParam)}` : "";
+        window.location.replace(`kihos.html${qSuffix}`);
+        return;
+      }
       if (elLower === "maho") {
         if (isMahoUnlocked) elementSelect.value = "maho";
       } else {

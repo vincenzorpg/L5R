@@ -51,7 +51,7 @@ const SCENARIOS_DATA = [
     file: "campagne/scenario-4.html",
     wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
     title: "Aux côtés de mes frères morts",
-    author: "Table du MJ David",
+    author: "Campagne de la Chronique de Rokugan",
     date: "Acte 4",
     place: "Lisière de l'Outremonde",
     desc: "L'épreuve du sang et de la poussière auprès des défenseurs du Mur, au contact des esprits des défunts."
@@ -157,7 +157,7 @@ async function discoverNewScenarios() {
       const rawTitle = getMeta("l5r-scenario-title") ||
         (doc.getElementById("story-title")?.textContent || `Acte ${nextId}`).replace(/^Sc[ée]nario\s*\d+\s*:\s*/i, "").trim();
       const shortTitle = getMeta("l5r-scenario-short-title") || rawTitle.slice(0, 20);
-      const author = getMeta("l5r-scenario-author") || "Table du MJ David";
+      const author = getMeta("l5r-scenario-author") || "Campagne de la Chronique de Rokugan";
       const date = getMeta("l5r-scenario-date") || `Acte ${nextId}`;
       const place = getMeta("l5r-scenario-place") || "Terres de Rokugan";
       const desc = getMeta("l5r-scenario-desc") ||
