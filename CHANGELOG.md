@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.19.0] — 2026-11-17
+
+### ✨ Ajouté & Complété
+- **Intégralité des 10 Couvertures Principales en Style Dessin Japonais (Actes 1 à 10)** (`assets/images/scenarios/cover-2,4,6,7,8,9,10.jpg`, `data/scenarios-data.js`, `campagne/scenario-2,4,6,7,8,9,10.html`, `sw.js`) :
+  - Génération et intégration des **7 dernières couvertures principales** (`1376×768`) au trait d'encre *sumi-e*, lavis d'aquarelle *nihonga* et touches dorées pour les Scénarios 2 (*Kyoteï*), 4 (*Frères morts*), 6 (*Mariage d'Okado*), 7 (*Ryoko Owari*), 8 (*Le crépuscule de l'honneur*), 9 (*« Ce qui ne meurt pas »*) et 10 (*La tombe de Iuchiban*).
+  - Chaque acte de la campagne possède désormais sa bannière d'ouverture `.scenario-cover` sur sa page dédiée et sa vignette de couverture sur le catalogue `campagne.html` (**10/10 couvertures japonaises + 30/30 scènes intérieures**).
+
+---
+
 ## [1.18.0] — 2026-11-17
 
 ### ✨ Ajouté
