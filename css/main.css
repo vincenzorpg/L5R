@@ -1331,3 +1331,87 @@ select {
 [data-theme="light"] .clan-accordion > summary {
   color: #78350f;
 }
+
+/* Atlas & Carte interactive de Rokugan */
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(var(--pin-scale, 1));
+  z-index: 10;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  transition: transform 0.16s ease, z-index 0s;
+}
+.map-pin:hover,
+.map-pin.is-selected {
+  z-index: 30;
+  transform: translate(-50%, -50%) scale(calc(var(--pin-scale, 1) * 1.18));
+}
+.map-pin-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: rgba(12, 10, 10, 0.92);
+  border: 2px solid var(--pin-color, #d4af37);
+  color: #fef3c7;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.78);
+}
+.map-pin-dot.is-major {
+  width: 25px;
+  height: 25px;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25), 0 3px 10px rgba(0, 0, 0, 0.85);
+}
+.map-pin.is-selected .map-pin-dot {
+  border-color: #fde047;
+  background: #92400e;
+  box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.42), 0 4px 12px rgba(0, 0, 0, 0.95);
+}
+.map-pin-step {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 9px;
+  color: #fde047;
+  line-height: 1;
+}
+.map-pin-label {
+  margin-top: 2px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(10, 8, 8, 0.88);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #f5f5f4;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.14s ease;
+  text-shadow: 0 1px 2px #000;
+}
+.map-pin-label.is-visible,
+.map-pin:hover .map-pin-label,
+.map-pin.is-selected .map-pin-label {
+  opacity: 1;
+}
+@keyframes rokuganDashFlow {
+  to { stroke-dashoffset: -4.6; }
+}
+.map-route-animated {
+  animation: rokuganDashFlow 1.8s linear infinite;
+}
+@keyframes rokuganPinPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7); }
+  50% { box-shadow: 0 0 0 7px rgba(250, 204, 21, 0); }
+}
+.map-pin.is-pulse .map-pin-dot {
+  animation: rokuganPinPulse 1.8s ease-in-out infinite;
+}

@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.18.0] — 2026-11-17
+
+### ✨ Ajouté
+- **Carte Interactive de Rokugan & Itinéraire des PJs (`carte.html`, `data/carte-data.js`, `js/carte-rokugan.js`, `assets/images/carte_rokugan.jpg`)** :
+  - Carte complète et haute définition de l'Empire d'Émeraude zoomable à la molette, déplaçable à la souris/au doigt, avec boutons de zoom (`+`, `−`, `Réinitialiser`).
+  - **42 lieux emblématiques calibrés** (capitales impériales, châteaux claniques, cols stratégiques, forêts, îles et Terres de l'Outremonde) filtrables par clan/catégorie et recherchables instantanément, avec fiches détaillées et liens directs vers les encyclopédies de clans.
+  - **Tracé animé du Chemin des PJs sur les 10 Actes de la Campagne** (de *Tsuma* jusqu'à *La tombe de Iuchiban*) avec curseur chronologique Acte par Acte (`Actes 1 à N / 10`), bouton d'affichage/masquage et liens directs vers chaque récit de scénario.
+- **Navigation, Service Worker & Tests (`js/navbar.js`, `index.html`, `campagne.html`, `sw.js`, `tests/unit-tests.js`)** :
+  - Ajout de la **Carte de Rokugan** dans le menu *Outils* (bureau & mobile), sur la page d'accueil et sur la page Campagne.
+  - Ajout de la Suite 9 de tests unitaires couvrant `ROKUGAN_LOCATIONS`, `CAMPAIGN_ROUTE`, `filterLocations` et `buildRoutePointsUpToAct`.
+
+---
+
 ## [1.17.0] — 2026-11-17
 
 ### ✨ Ajouté & Réorganisé
