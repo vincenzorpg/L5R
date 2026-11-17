@@ -11,7 +11,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- NAVIGATION SUPÉRIEURE -->
-  <script src="../js/navbar.js" defer></script>
+  <link rel="stylesheet" href="../css/main.css?v=12">
+  <script src="../js/navbar.js?v=3" defer></script>
+  <script src="../js/clans-ui.js?v=1" defer></script>
 
   <style>
     :root {
@@ -135,99 +137,189 @@
       </div>
     </section>
 
-    <!-- 2. LES SIX FAMILLES DE LA LICORNE & FAMILLES VASSALES -->
-    <section class="space-y-4">
-      <div class="border-b border-purple-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">2. Les Familles du Clan &amp; Familles Vassales</h2>
-        <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 129 ; The Great Clans, p. 244-252, 287-288.</span>
+        <!-- 2. LES FAMILLES DU CLAN & FAMILLES VASSALES (RANGÉES PAR BUSHI EN TÊTE) -->
+    <section id="sec-families" class="space-y-4">
+      <div class="border-b border-purple-500/20 pb-2 flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Lignées du Clan &amp; Familles Vassales (Familles Bushi en tête)</h2>
+          <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 131-135 ; The Great Clans, p. 238-243, 288-290.</span>
+        </div>
+        <button type="button" data-toggle-details-scope="sec-families" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+          Tout déplier
+        </button>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-
-        <!-- SHINJO -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Shinjo</h3>
-            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Réflexes</span>
+        <!-- FAMILLE MOTO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Moto</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-purple-950/80 border-purple-800/40 text-purple-300">+1 Agilité</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Cavalerie</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Descendants de tribus barbares des sables ralliées au clan lors du voyage. Imposants, impétueux et méprisés par les cours conservatrices pour leur sang étranger, ils sont la pointe d'acier de la cavalerie de choc Licorne.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Lignée dirigeante descendant de la Kami. Éclaireurs à cheval, archers montés et commandants adaptables à tout terrain.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Marta</b> (conteurs oraux issus de la suiviste étrangère Martazera, transmettant l'histoire de mémoire).
-          </div>
-        </div>
-
-        <!-- MOTO -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Moto</h3>
-            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Agilité</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Issus des tribus des steppes (Ujik-Hai) ralliées durant l'exil, ils forment l'assaut lourd du clan avec cimeterres, armes lourdes et prêtres Shi-Tien Yen-Wang.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Cavaliers d'assaut, Vengeurs, Garde Blanche, prêtres de la Mort.
-          </div>
-        </div>
-
-        <!-- UTAKU -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Utaku</h3>
-            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Constitution</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Lignée matriarcale célèbre pour ses destriers Utaku et ses Vierges Guerrières d'honneur exemplaire ; les hommes dirigent les écuries ou combattent à pied.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassaux :</b> <b>Hyuga</b> (premiers dompteurs et maîtres d'écurie) • <b>Naoko</b> (foyer des Utaku attachés aux coutumes étrangères).
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-purple-300">
+              <span>🌿 Familles Vassales (1 : Onshigawa)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-purple-300">Onshigawa :</b> Créée au VIe siècle dans les steppes par Moto Khatalan, baptisée en mémoire d'un prétendant tombé en la poursuivant ; éclaireurs et tirailleurs d'élite aux côtés des généraux Licorne. (Great Clans p. 289)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="moto" class="text-[10px] font-bold text-purple-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
-        <!-- IUCHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Iuchi</h3>
-            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Intelligence</span>
+        <!-- FAMILLE UTAKU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Utaku</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-purple-950/80 border-purple-800/40 text-purple-300">+1 Constitution</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Vierges Guerrières</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Ancêtres des plus prestigieux destriers de guerre du continent, fondés par la stricte Otaku. Leurs femmes servent dans la légendaire cavalerie d'élite des Vierges Guerrières tandis que les hommes forment l'infanterie et gèrent les haras.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Shugenja nomades maîtrisant la magie de l'Eau, les déplacements rapides et la doctrine étrangère des amulettes <i>Meishōdō</i>.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Battue</b> (traqueurs nomades basés à la Tour du Kelet veillant contre la maho et la Souillure).
-          </div>
-        </div>
-
-        <!-- IDE -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Ide</h3>
-            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Perception</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Diplomates, négociateurs et marchands chargés d'apaiser les frictions culturelles avec les clans sédentaires et les caravanes des Terres Brûlées.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Suio</b> (linguistes et interprètes des langues étrangères et coutumes rokugani).
-          </div>
-        </div>
-
-        <!-- HORIUCHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Horiuchi</h3>
-            <span class="text-[10px] text-purple-400 font-bold px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/40">+1 Volonté</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Branche shugenja issue d'Iuchi Horiuchi (<i>The Great Clans p. 257</i>), spécialisée dans la magie de la Terre et l'art talismanique du <i>Meishōdō</i> scellant les prières dans des charmes matériels.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Fabricants d'amulettes Meishōdō, shugenja de Terre et arpenteurs mystiques.
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-purple-300">
+              <span>🌿 Familles Vassales (2 : Hyuga, Naoko)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-purple-300">Hyuga :</b> Descendants du premier homme Utaku parvenu à dompter les fiers destriers Otaku ; maîtres d'écurie héréditaires du clan. (Great Clans p. 288)</li>
+              <li><b class="text-purple-300">Naoko :</b> Descendants d'Otaku Naoko ; refuge des Utaku attachés aux coutumes et prénoms étrangers hérités du Grand Exil dans les Sables Brûlants. (Great Clans p. 288)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="utaku" class="text-[10px] font-bold text-purple-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
+        <!-- FAMILLE SHINJO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Shinjo</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-purple-950/80 border-purple-800/40 text-purple-300">+1 Réflexes</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Éclaireurs</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Descendants directs du Kami Shinjo et lignée dirigeante du clan. Éclaireurs intrépides, cavaliers endurcis et messagers émérites, ils incarnent la curiosité et le sens du mouvement perpétuel de la Licorne.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-purple-300">
+              <span>🌿 Familles Vassales (1 : Marta)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-purple-300">Marta :</b> Descendants de la suiviste étrangère Martazera ; conteurs oraux chargés de préserver la mémoire et l'histoire du clan sans recourir à l'écrit. (Great Clans p. 288)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="shinjo" class="text-[10px] font-bold text-purple-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE IDE -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Ide</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-purple-950/80 border-purple-800/40 text-purple-300">+1 Intuition</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">📜 Cour & Négoce</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Diplomates, marchands et négociateurs rompus au protocole rokugani. Leur patience et leur générosité ouvrent les cours impériales aux rudes guerriers de la steppe.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-purple-300">
+              <span>🌿 Familles Vassales (1 : Suio)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-purple-300">Suio :</b> Linguistes et interprètes des langues des Sables Brûlants, des coutumes impériales et des dialectes des Moto du désert. (Great Clans p. 288-289)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="ide" class="text-[10px] font-bold text-purple-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE IUCHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Iuchi</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-purple-950/80 border-purple-800/40 text-purple-300">+1 Intelligence</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Shugenja nomades maîtrisant la magie de l'Eau, les déplacements rapides et la doctrine étrangère des amulettes <i>Meishōdō</i>.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-purple-300">
+              <span>🌿 Familles Vassales (2 : Battue, Kenshin)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-purple-300">Battue :</b> Fondée après la trahison de Iuchi Nagol ; traqueurs semi-nomades basés à la Tour du Kelet veillant contre la corruption et la Souillure sur les terres Licorne. (Great Clans p. 288)</li>
+              <li><b class="text-purple-300">Kenshin :</b> Lignée ancienne où les femmes naissent douées pour la magie des kami et les hommes sans don, ces derniers devenant les plus fidèles yojimbo de leurs sœurs shugenja. (Great Clans p. 290)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="iuchi" class="text-[10px] font-bold text-purple-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE HORIUCHI -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-purple-200 text-sm font-imperial">Famille Horiuchi</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-purple-950/80 border-purple-800/40 text-purple-300">+1 Intelligence</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja / Meishōdō</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Lignée issue d'Iuchi Horiuchi, dédiée aux arts des amulettes <i>Meishōdō</i>, à la magie de la Terre et à l'arpentage mystique.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <div class="rounded-lg bg-black/35 border border-stone-800/70 px-2.5 py-2 text-[10px] text-stone-400">
+            <b>Profils :</b> Fabricants d'amulettes <i>Meishōdō</i>, shugenja de Terre et arpenteurs mystiques (aucune famille vassale répertoriée).
+          </div>
+            <button type="button" data-jump-lineage="horiuchi" class="text-[10px] font-bold text-purple-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -264,159 +356,229 @@
       </div>
     </section>
 
-    <!-- 4. LES QUATRE ÉCOLES FONDAMENTALES & SUPPLÉMENTAIRES -->
-    <section class="space-y-4">
-      <div class="border-b border-purple-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
+        <!-- 4 & 5. ÉCOLES ET VOIES ALTERNATIVES (RANGÉES PAR LIGNÉE BUSHI + FILTRE INTERACTIF) -->
+    <section id="sec-schools" class="space-y-6">
+      <div class="border-b border-purple-500/20 pb-3 space-y-3">
+        <div class="flex flex-wrap justify-between items-baseline gap-2">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-purple-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
         <span class="text-xs text-stone-400">Core pp. 129-132 ; Emerald Empire p. 31 ; Great Clans pp. 257-258 ; IH1 p. 241 ; IH2 p. 168.</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div id="clan-lineage-filter-bar" class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-filter-lineage="all" class="clan-lineage-pill is-active">Toutes</button> <button type="button" data-filter-lineage="bushi" class="clan-lineage-pill">⚔️ Bushi uniquement</button> <button type="button" data-filter-lineage="moto" class="clan-lineage-pill">⚔️ Moto</button> <button type="button" data-filter-lineage="utaku" class="clan-lineage-pill">⚔️ Utaku</button> <button type="button" data-filter-lineage="shinjo" class="clan-lineage-pill">⚔️ Shinjo</button> <button type="button" data-filter-lineage="ide" class="clan-lineage-pill">Ide</button> <button type="button" data-filter-lineage="iuchi" class="clan-lineage-pill">Iuchi</button> <button type="button" data-filter-lineage="horiuchi" class="clan-lineage-pill">Horiuchi</button>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="clan-schools-visible-count" class="text-[11px] font-mono text-stone-400"></span>
+            <button type="button" data-toggle-details-scope="sec-schools" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+              Tout déplier
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-
-        <!-- MOTO BUSHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="moto" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-purple-200 text-sm font-imperial">Moto Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold border border-purple-800/40">Core p. 130</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Moto</span> <span class="text-[9px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold border border-purple-800/40">Core p. 130</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Force • <b>Honneur :</b> 3.5<br>
             <b>Compétences :</b> Athlétisme, Défense, Équitation, Chasse, Kenjutsu (Cimeterre), une compétence Bugei, une compétence au choix.<br>
             <b>Équipement :</b> Armure lourde ou d'équitation, Daisho, Arme Lourde ou d'Hast, 1 arme, Cheval Licorne, 10 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-purple-300">Rang 1 — La Voie de la Licorne :</b> Arme à deux mains d'une seule main (hors arcs). +1g0 aux dégâts à cheval, au cimeterre ou avec arme de mêlée à deux mains (non cumulatif). Les cimeterres ont le mot-clé <i>Samouraï</i> pour vous.</li>
               <li><b class="text-purple-300">Rang 2 — Le Sourire de Shinsei :</b> Bonus aux jets d'attaque égal à ⌊malus de ND des Blessures adverses / 2⌋ (max +10).</li>
               <li><b class="text-purple-300">Rang 3 — Frappe du Vent du Désert :</b> Attaques par Action Simple avec toute arme de mêlée.</li>
               <li><b class="text-purple-300">Rang 4 — La Charge de la Folie :</b> 1/escarmouche, réduire un ennemi à <i>Out</i> accorde 1 attaque gratuite immédiate sur une autre cible (sans Augmentations).</li>
               <li><b class="text-purple-300">Rang 5 — Moto ne Cède Jamais :</b> À cheval ou en Assaut, gardez +⌊Force/2⌋ dés de dégâts avec arme à deux mains ou <i>Samouraï</i>.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- UTAKU BATTLE MAIDEN -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="utaku" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-purple-200 text-sm font-imperial">Utaku Battle Maiden School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 131</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Utaku</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 131</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Réflexes • <b>Honneur :</b> 6.5<br>
             <b>Compétences :</b> Art de la Guerre, Défense, Équitation 2, Kenjutsu, Sincérité, une compétence Noble ou Bugei.<br>
             <b>Équipement :</b> Armure légère ou d'équitation, Daisho, 1 arme, Destrier Utaku, 10 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-purple-300">Rang 1 — Chevaucher en Harmonie :</b> Bonus = Rang d'Honneur à 1 jet d'attaque/Round (ou à 1 jet de dégâts à cheval). Ajoutez votre Rang d'Honneur à tous vos jets d'Équitation.</li>
               <li><b class="text-purple-300">Rang 2 — Le Vide de la Guerre :</b> À l'Étape 1 du Round, +5 à l'Initiative OU au ND d'Armure jusqu'à réutilisation.</li>
               <li><b class="text-purple-300">Rang 3 — Sentir la Brise :</b> À cheval, attaques par Action Simple.</li>
               <li><b class="text-purple-300">Rang 4 — Le Vent ne s'Arrête Jamais :</b> 1 Vide permet en 1 Action Simple de charger et attaquer (vitesse monture si à cheval) : +2g1 aux dégâts si touche.</li>
               <li><b class="text-purple-300">Rang 5 — La Bénédiction d'Otaku :</b> Début de Tour Action Gratuite + 1 Vide ajoute Honneur à tous vos jets de dégâts et Compétences Bugei ce Tour (cumulatif avec R1).</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- IDE EMISSARY -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="shinjo,horiuchi,moto,utaku" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-bold text-purple-200 text-sm font-imperial">Écoles de Base Complémentaires (Shinjo Bushi • Horiuchi/Meishodo • Moto Vindicator • Moto Death Priest • Utaku Infantry)</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Shinjo</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-purple-300 font-bold border border-purple-500/30">EE p. 31 • GC pp. 257-258 • IH1/IH2</span></div>
+          </div>
+          <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+            <summary class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+              <span>📜 Détails des Écoles Complémentaires (3)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-2"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-[11px] text-stone-300">
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-purple-300">Shinjo Bushi [Bushi] (EE p. 31)</b>
+              <p>+1 Agilité • H 4.5 • Équitation 2. R1 : +Équitation en sus d'un Vide sur Compétence d'École (hors Centre). R2 : Défense Totale oppose Agilité pour esquiver (Rang/Round). R3 : Action Simple armes <i>Samouraï</i> et arc à cheval. R4 : riposte Gratuite en Défense/Totale. R5 : jet Vide ND 20 à cheval (30 à pied) économise le point de Vide.</p>
+            </div>
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-purple-300">Horiuchi / Meishodo (GC p. 257) &amp; Death Priest (IH1)</b>
+              <p><b>Horiuchi :</b> +1 Const. • Terre/Air • Art. Meishodo ND 15 + 5×Maîtrise (max 3) scelle amulettes activées sans jet par Action Complexe. <b>Death Priest :</b> +1 Volonté • Terre/Air • Action Simple + 1 emplacement (Volonté opposé, Rang × 30 m) supprime dés explosifs/relances (Rang Rounds).</p>
+            </div>
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-purple-300">Moto Vindicator (GC p. 258) &amp; Utaku Mounted Infantry (IH2)</b>
+              <p><b>Vindicator :</b> +1 Volonté • R1 : réduit malus Blessures ou +ND = Rang+Volonté (×2 Outremonde) ; R3 Action Simple mêlée ; R4 +2g0 vs Souillés ; R5 +malus Blessures en dégâts. <b>Utaku Infantry :</b> +1 Agilité • Kenjutsu/Hast/Lances : R1 +1g0 attaque (+Rang/2 ND en Défense) ; R2 Eau +1 à pied, +1g0 Init ; R3 Action Simple ; R4 1 Vide +Honneur dés lancés ; R5 +4g2 dégâts.</p>
+            </div>
+          </div></div>
+          </details>
+        </div>
+<div data-lineage="ide" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-purple-200 text-sm font-imperial">Ide Emissary School [Courtisan]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-cyan-300 font-bold border border-cyan-500/30">Core p. 131-132</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Ide</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-cyan-300 font-bold border border-cyan-500/30">Core p. 131-132</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Intuition • <b>Honneur :</b> 5.5<br>
             <b>Compétences :</b> Calligraphie, Commerce, Courtisan, Étiquette (Conversation), Équitation, Sincérité (Honnêteté), une compétence Noble ou Art Scène.<br>
             <b>Équipement :</b> Vêtements extravagants, Wakizashi, 1 arme, nécessaire de calligraphie et voyage, 10 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-purple-300">Rang 1 — Le Cœur Parle :</b> Étiquette (Courtoisie)/Intuition ND 20 évite d'offenser par inadvertance. Aug. Gratuite en Sincérité (Honnêteté), mais +5 ND en Tromperie.</li>
               <li><b class="text-purple-300">Rang 2 — Percer les Voiles :</b> Étiquette/Intuition vs Étiquette/Volonté dévoile les émotions générales réelles (+détails par Aug.).</li>
               <li><b class="text-purple-300">Rang 3 — Le Cœur Écoute :</b> Après 10 min (hors Ennemi Juré), Sincérité (Honnêteté)/Intuition vs Étiquette/Volonté améliore l'attitude (Allié du jour à 2 Aug.).</li>
               <li><b class="text-purple-300">Rang 4 — Répondre au Cœur :</b> Lancez +(Rang d'École) dés non gardés avec les Techniques R2 et R3.</li>
               <li><b class="text-purple-300">Rang 5 — La Main Immuable de la Paix :</b> 1 Vide + Sincérité/Intuition vs Étiquette/Intuition (Honneur ≥ 2.0) empêche toute hostilité contre vous pendant 2 × Rang heures.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- IUCHI SHUGENJA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="iuchi" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-purple-200 text-sm font-imperial">Iuchi Shugenja School [Shugenja]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-teal-300 font-bold border border-teal-500/30">Core p. 132</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Iuchi</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-teal-300 font-bold border border-teal-500/30">Core p. 132</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Perception • <b>Honneur :</b> 5.5 • <b>Affinité / Déficience :</b> Eau / Feu.<br>
             <b>Compétences :</b> Art de la Guerre, Calligraphie (Chiffre), Équitation, Connaissance : Théologie, Méditation, Art de la Magie, une compétence Noble ou Bugei.<br>
             <b>Sorts :</b> Sens, Communion, Convocation, 3 Eau, 2 Terre, 1 Air.<br>
             <b>Équipement :</b> Vêtements extravagants, Wakizashi, 1 arme, Cheval Licorne, 10 koku.</p>
-            <p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-purple-300">Technique — Esprit du Vent :</b> Par Action Complexe, sacrifiez un emplacement de sort de n'importe quel Élément pour accorder à une cible une Action Simple de Déplacement supplémentaire lors de son prochain Tour. Augmentation Gratuite sur tout sort portant le mot-clé <i>Voyage</i>.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-purple-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-purple-300">Technique — Esprit du Vent :</b> Par Action Complexe, sacrifiez un emplacement de sort de n'importe quel Élément pour accorder à une cible une Action Simple de Déplacement supplémentaire lors de son prochain Tour. Augmentation Gratuite sur tout sort portant le mot-clé <i>Voyage</i>.</p></div>
+            </details>
           </div>
         </div>
-
-        <!-- ÉCOLES DE BASE COMPLÉMENTAIRES -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-purple-200 text-sm font-imperial">Écoles de Base Complémentaires (Shinjo Bushi • Horiuchi/Meishodo • Moto Vindicator • Moto Death Priest • Utaku Infantry)</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-purple-300 font-bold border border-purple-500/30">EE p. 31 • GC pp. 257-258 • IH1/IH2</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-stone-300">
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-purple-300">Shinjo Bushi [Bushi] (EE p. 31)</b>
-              <p>+1 Agilité • H 4.5 • Équitation 2. R1 : +Équitation en sus d'un Vide sur Compétence d'École (hors Centre). R2 : Défense Totale oppose Agilité pour esquiver (Rang/Round). R3 : Action Simple armes <i>Samouraï</i> et arc à cheval. R4 : riposte Gratuite en Défense/Totale. R5 : jet Vide ND 20 à cheval (30 à pied) économise le point de Vide.</p>
-            </div>
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-purple-300">Horiuchi / Meishodo (GC p. 257) &amp; Death Priest (IH1)</b>
-              <p><b>Horiuchi :</b> +1 Const. • Terre/Air • Art. Meishodo ND 15 + 5×Maîtrise (max 3) scelle amulettes activées sans jet par Action Complexe. <b>Death Priest :</b> +1 Volonté • Terre/Air • Action Simple + 1 emplacement (Volonté opposé, Rang × 30 m) supprime dés explosifs/relances (Rang Rounds).</p>
-            </div>
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-purple-300">Moto Vindicator (GC p. 258) &amp; Utaku Mounted Infantry (IH2)</b>
-              <p><b>Vindicator :</b> +1 Volonté • R1 : réduit malus Blessures ou +ND = Rang+Volonté (×2 Outremonde) ; R3 Action Simple mêlée ; R4 +2g0 vs Souillés ; R5 +malus Blessures en dégâts. <b>Utaku Infantry :</b> +1 Agilité • Kenjutsu/Hast/Lances : R1 +1g0 attaque (+Rang/2 ND en Défense) ; R2 Eau +1 à pied, +1g0 Init ; R3 Action Simple ; R4 1 Vide +Honneur dés lancés ; R5 +4g2 dégâts.</p>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </section>
 
-    <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <div class="border-b border-purple-500/20 pb-2">
-        <h3 class="text-sm font-bold font-imperial text-purple-300">
+      <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
+      <div class="card-clean rounded-xl p-6 space-y-4">
+        <div class="border-b border-purple-500/20 pb-2">
+          <h3 class="text-sm font-bold font-imperial text-purple-300">
           5. Écoles Avancées &amp; Voies Alternatives Officielles
         </h3>
         <span class="text-[11px] text-stone-400">Textes officiels complets (Core pp. 250, 255 ; Great Clans pp. 259-260 ; Air/Earth ; Strongholds p. 61).</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-purple-950/20 rounded border border-purple-500/30 space-y-1">
-          <b class="text-purple-300 block">École Avancée : The White Guard [Bushi]</b>
+        </div>
+        <div id="clan-adv-schools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+<div data-lineage="moto,utaku" data-bushi="true" class="clan-school-card p-3 bg-purple-950/20 rounded border border-purple-500/30 space-y-1">
+          <b class="text-purple-300 block">École Avancée : The White Guard [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Moto</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 250 • Terre 5, Agilité 5, Force 4 • Équitation 5, Théologie 5 • Dévot Seigneurs de la Mort (sauf avant 1160)</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-purple-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> Début de Tour Action Gratuite + 1 Vide impose malus +(Théologie) à tous les ND d'une cible à ≤ 9 m (30') pour toute la rencontre (1 cible max).<br>
             <b>R2 :</b> Ignorez un total de malus de Blessures égal à 2 × Théologie.<br>
             <b>R3 :</b> En attaquant, dépensez 1 Vide pour ajouter 5 × Théologie au total du jet.
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-purple-300 block">Shinjo Scout &amp; Iuchi Traveler</b>
+<div data-lineage="shinjo,iuchi" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-purple-300 block">Shinjo Scout &amp; Iuchi Traveler</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Shinjo</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 255 • Rang 2 (Moto/Shinjo Bushi 2) / Rang 3 (Iuchi/Horiuchi 3)</span>
-          <p class="text-stone-300 text-[11px]"><b>Shinjo Scout (Discr. 3) :</b> Utilisez Discrétion à cheval ; considérez avoir <i>Connaissance du Terrain</i> partout ; +1g0 aux attaques monté. <b>Iuchi Traveler (Athl. 2, Équit. 2) :</b> Action Simple + 1 Vide + 1 emplacement Air/Eau téléporte instantanément jusqu'à Rang × 30 m (100') (+2e Vide pour emmener votre monture).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-purple-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Shinjo Scout (Discr. 3) :</b> Utilisez Discrétion à cheval ; considérez avoir <i>Connaissance du Terrain</i> partout ; +1g0 aux attaques monté. <b>Iuchi Traveler (Athl. 2, Équit. 2) :</b> Action Simple + 1 Vide + 1 emplacement Air/Eau téléporte instantanément jusqu'à Rang × 30 m (100') (+2e Vide pour emmener votre monture).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-purple-300 block">Ide Trader, Moto Fanatic &amp; Utaku Horse Master</b>
+<div data-lineage="ide,moto,utaku" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-purple-300 block">Ide Trader, Moto Fanatic &amp; Utaku Horse Master</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Ide</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans pp. 259-260 • R2 / R4 / R2</span>
-          <p class="text-stone-300 text-[11px]"><b>Ide Trader (Ide 2, Com. 3) :</b> Aucune perte d'Honneur/Gloire pour Commerce ; Courtisan (+2×Commerce) vs Étiq. (ou ND 25) gagne un Allié (Dévotion 1) gratuit. <b>Moto Fanatic (Moto 4) :</b> En Assaut, Action Simple + 1 Vide = Réduction égale au Rang. <b>Utaku Horse Master (Homme Utaku R2) :</b> +2g0 Dressage, Équitation et Chasse.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-purple-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Ide Trader (Ide 2, Com. 3) :</b> Aucune perte d'Honneur/Gloire pour Commerce ; Courtisan (+2×Commerce) vs Étiq. (ou ND 25) gagne un Allié (Dévotion 1) gratuit. <b>Moto Fanatic (Moto 4) :</b> En Assaut, Action Simple + 1 Vide = Réduction égale au Rang. <b>Utaku Horse Master (Homme Utaku R2) :</b> +2g0 Dressage, Équitation et Chasse.</p></div>
+          </details>
         </div>
-
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-purple-300 block">Unicorn Yomanri Archer &amp; The Hand of Peace</b>
+<div data-lineage="shinjo,utaku,ide" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-purple-300 block">Unicorn Yomanri Archer &amp; The Hand of Peace</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Shinjo</span></div>
           <span class="text-[10px] text-stone-400 block">Book of Air pp. 173, 178 • Rang 4</span>
-          <p class="text-stone-300 text-[11px]"><b>Yomanri Archer (Agilité 4, Kyujutsu 5) :</b> Consacrez jusqu'à (Agilité) Actions Simples à viser avant de tirer (hors Centre) pour gagner chacune +1g1 attaque OU +1g0 dégâts (perdu si interrompu). <b>Hand of Peace (Ide 4, Honneur 5.0+) :</b> 2/rencontre, Rhétorique/Intuition vs Courtoisie/Volonté impose une concession majeure (perdu 1 mois si violence).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-purple-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Yomanri Archer (Agilité 4, Kyujutsu 5) :</b> Consacrez jusqu'à (Agilité) Actions Simples à viser avant de tirer (hors Centre) pour gagner chacune +1g1 attaque OU +1g0 dégâts (perdu si interrompu). <b>Hand of Peace (Ide 4, Honneur 5.0+) :</b> 2/rencontre, Rhétorique/Intuition vs Courtoisie/Volonté impose une concession majeure (perdu 1 mois si violence).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-purple-300 block">Unicorn Bariqu Wrestler &amp; Iuchi Couriers</b>
+<div data-lineage="moto,utaku,iuchi" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-purple-300 block">Unicorn Bariqu Wrestler &amp; Iuchi Couriers</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Moto</span></div>
           <span class="text-[10px] text-stone-400 block">Book of Earth pp. 193, 196 • Rang 2</span>
-          <p class="text-stone-300 text-[11px]"><b>Bariqu Wrestler (Bariqu 3) :</b> +1g1 pour contrôler un Grapple (sans Bariqu adverse) et +2g0 si Agilité supérieure (cumulatifs). <b>Iuchi Couriers / Lords of the Plains (Équit. 3, Connaissance Terrain) :</b> 5 min Méditation ND 15 bénit jusqu'à (Terre) chevaux pour Terre heures sans fatigue ni pénalité de terrain.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-purple-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Bariqu Wrestler (Bariqu 3) :</b> +1g1 pour contrôler un Grapple (sans Bariqu adverse) et +2g0 si Agilité supérieure (cumulatifs). <b>Iuchi Couriers / Lords of the Plains (Équit. 3, Connaissance Terrain) :</b> 5 min Méditation ND 15 bénit jusqu'à (Terre) chevaux pour Terre heures sans fatigue ni pénalité de terrain.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-purple-300 block">Calm Heart Duelist &amp; Ide Caravan Master</b>
+<div data-lineage="shinjo,utaku,ide" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-purple-300 block">Calm Heart Duelist &amp; Ide Caravan Master</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Shinjo</span></div>
           <span class="text-[10px] text-stone-400 block">Strongholds p. 61 • Rang 3 / Rang 1</span>
-          <p class="text-stone-300 text-[11px]"><b>Calm Heart Duelist (Iaijutsu 3, Droit 1) :</b> +1g0 en Iaijutsu si vous ne frappez pas pour tuer ; attaque Action Simple au katana ou wakizashi. <b>Ide Caravan Master (Ide 1, Commerce 2) :</b> +1g1 en Commerce et Jets Sociaux avec clients ; <i>Richesse</i> (niv. 1) et 1× <i>Connaissance du Terrain</i> gratuits.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-purple-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Calm Heart Duelist (Iaijutsu 3, Droit 1) :</b> +1g0 en Iaijutsu si vous ne frappez pas pour tuer ; attaque Action Simple au katana ou wakizashi. <b>Ide Caravan Master (Ide 1, Commerce 2) :</b> +1g1 en Commerce et Jets Sociaux avec clients ; <i>Richesse</i> (niv. 1) et 1× <i>Connaissance du Terrain</i> gratuits.</p></div>
+          </details>
         </div>
+        </div>
+        <p id="clan-adv-empty-hint" class="hidden text-[11px] text-stone-500 italic text-center py-2">
+          Aucune école avancée ou voie alternative spécifique pour ce filtre.
+        </p>
       </div>
     </section>
 
@@ -426,7 +588,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Fiche technique du Clan de la Licorne</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.16.1</span>
+      <span id="site-version-label">v1.17.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

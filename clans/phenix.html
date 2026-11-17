@@ -11,7 +11,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
  
   <!-- SCRIPT DU MENU GLOBAL -->
-  <script src="../js/navbar.js" defer></script>
+  <link rel="stylesheet" href="../css/main.css?v=12">
+  <script src="../js/navbar.js?v=3" defer></script>
+  <script src="../js/clans-ui.js?v=1" defer></script>
   
   <style>
     :root {
@@ -135,71 +137,138 @@
       </div>
     </section>
 
-    <!-- 2. LES QUATRE FAMILLES DU PHÉNIX & FAMILLES VASSALES -->
-    <section class="space-y-4">
-      <div class="border-b border-red-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">2. Les Familles du Clan &amp; Familles Vassales</h2>
-        <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 123 ; The Great Clans, p. 181-190, 286.</span>
+        <!-- 2. LES FAMILLES DU CLAN & FAMILLES VASSALES (RANGÉES PAR BUSHI EN TÊTE) -->
+    <section id="sec-families" class="space-y-4">
+      <div class="border-b border-orange-500/20 pb-2 flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Lignées du Clan &amp; Familles Vassales (Familles Bushi en tête)</h2>
+          <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 124-127 ; The Great Clans, p. 181-185, 287, 289, 291.</span>
+        </div>
+        <button type="button" data-toggle-details-scope="sec-families" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+          Tout déplier
+        </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-
-        <!-- ISAWA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Isawa</h3>
-            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Volonté</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+        <!-- FAMILLE SHIBA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-orange-200 text-sm font-imperial">Famille Shiba</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-orange-950/80 border-orange-800/40 text-orange-300">+1 Perception</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Yojimbo</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Descendants du Kami Shiba liés par son serment d'abnégation envers Isawa. Guerriers philosophes et artisans accomplis, ils servent de yojimbo dévoués aux prêtres du clan et étudient la poésie comme la lance.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Lignée dirigeante et autorité mystique absolue du clan via le Conseil des Cinq Maîtres Élémentaires. Les shugenja Isawa ne souffrent d'aucune déficience élémentaire native et forment les rarissimes Ishiken manipulant l'Anneau de Vide.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Profils :</b> Maîtres des Éléments, prêtres du Vide (Ishiken), Gardiens Élémentaires, érudits.
-          </div>
-        </div>
-
-        <!-- SHIBA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Shiba</h3>
-            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Perception</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Descendants du Kami Shiba liés par son serment d'abnégation envers Isawa. Guerriers philosophes et artisans accomplis, ils servent de yojimbo dévoués aux prêtres du clan et étudient la poésie comme la lance.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassaux :</b> <b>Nasu</b> (bureaucrates discrets du clan sauvés du Gozoku) • <b>Sodona</b> (yojimbo d'élite protégeant les nobles Shiba).
-          </div>
-        </div>
-
-        <!-- ASAKO -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Asako</h3>
-            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Intuition</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Lignée d'historiens, de médecins et de diplomates pacifiques conservant les plus vastes archives impériales. Elle abrite également les mystiques Henshin ainsi que les redoutés Inquisiteurs Asako.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassaux :</b> <b>Nani</b> (guetteurs surveillant tout Henshin égaré sur une Fausse Voie) • <b>Chukan</b> (bibliothécaires et archivistes).
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-orange-300">
+              <span>🌿 Familles Vassales (2 : Nasu, Sodona)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-orange-300">Nasu :</b> Ancienne famille impériale sauvée de la chute du Gozoku par Shiba Gaijushiko ; bureaucrates isolés et discrets assurant la gestion administrative du Phénix. (Great Clans p. 287)</li>
+              <li><b class="text-orange-300">Sodona :</b> Créée au IXe siècle après la mort d'un Champion du Phénix ; fournit des yojimbo d'élite chargés de protéger spécifiquement les nobles et dignitaires Shiba. (Great Clans p. 287)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="shiba" class="text-[10px] font-bold text-orange-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
-        <!-- AGASHA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-red-200 text-sm font-imperial">Famille Agasha</h3>
-            <span class="text-[10px] text-red-400 font-bold px-2 py-0.5 rounded bg-red-950/80 border border-red-800/40">+1 Perception</span>
+        <!-- FAMILLE ISAWA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-orange-200 text-sm font-imperial">Famille Isawa</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-orange-950/80 border-orange-800/40 text-orange-300">+1 Volonté</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Lignée dirigeante et autorité mystique absolue du clan via le Conseil des Cinq Maîtres Élémentaires. Les shugenja Isawa ne souffrent d'aucune déficience élémentaire native et forment les rarissimes Ishiken manipulant l'Anneau de Vide.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Ancienne famille du Dragon ayant rejoint le Phénix au XIIe siècle. Chercheurs, herboristes et alchimistes, les Agasha combinent la théologie à l'expérimentation matérielle pour transposer les Éléments.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Atsumaru</b> (forestiers cueilleurs d'herbes et d'ingrédients alchimiques rares).
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-orange-300">
+              <span>🌿 Familles Vassales (1 : Shingon)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-orange-300">Shingon :</b> Descendants d'Asako Shingon (XIIe s.) élevés après la forge de cinq <i>nemuranai</i> élémentaires avec Iuchi Yogosha ; maîtres dans l'éveil élémentaire d'objets sacrés. (Great Clans p. 291)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="isawa" class="text-[10px] font-bold text-orange-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
+        <!-- FAMILLE ASAKO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-orange-200 text-sm font-imperial">Famille Asako</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-orange-950/80 border-orange-800/40 text-orange-300">+1 Intuition</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">📜 Cour & Archives</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Lignée d'historiens, de médecins et de diplomates pacifiques conservant les plus vastes archives impériales. Elle abrite également les mystiques Henshin ainsi que les redoutés Inquisiteurs Asako.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-orange-300">
+              <span>🌿 Familles Vassales (2 : Chukan, Nani)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-orange-300">Chukan :</b> Fondée au IIe siècle par l'érudit Asako Chukan ; bibliothécaires infatigables cataloguant l'immense fonds de parchemins des temples Asako. (Great Clans p. 287)</li>
+              <li><b class="text-orange-300">Nani :</b> Guetteurs spirituels fondés après le sauvetage du premier Henshin égaré ; chargés de veiller à ce qu'aucun Henshin ne sombre sur une Fausse Voie. (Great Clans p. 287)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="asako" class="text-[10px] font-bold text-orange-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE AGASHA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-orange-200 text-sm font-imperial">Famille Agasha</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-orange-950/80 border-orange-800/40 text-orange-300">+1 Perception</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja / Alchimie</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Ancienne famille du Dragon ayant rejoint le Phénix au XIIe siècle. Chercheurs, herboristes et alchimistes, les Agasha combinent la théologie à l'expérimentation matérielle pour transposer les Éléments.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-orange-300">
+              <span>🌿 Familles Vassales (2 : Atsumaru, Izaku)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-orange-300">Atsumaru :</b> Forestiers fidèles d'origine rônin ayant suivi les Agasha lors de leur départ du Dragon pour récolter herbes rares et réactifs alchimiques. (Great Clans p. 287)</li>
+              <li><b class="text-orange-300">Izaku :</b> Gardiens de la grande Bibliothèque Izaku de savoirs magiques ; unique famille vassale servant simultanément le Phénix (Agasha) et le Dragon (Tamori) par décret impérial. (Great Clans p. 289)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="agasha" class="text-[10px] font-bold text-orange-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -236,169 +305,257 @@
       </div>
     </section>
 
-    <!-- 4. LES QUATRE ÉCOLES FONDAMENTALES & SUPPLÉMENTAIRES -->
-    <section class="space-y-4">
-      <div class="border-b border-red-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
+        <!-- 4 & 5. ÉCOLES ET VOIES ALTERNATIVES (RANGÉES PAR LIGNÉE BUSHI + FILTRE INTERACTIF) -->
+    <section id="sec-schools" class="space-y-6">
+      <div class="border-b border-orange-500/20 pb-3 space-y-3">
+        <div class="flex flex-wrap justify-between items-baseline gap-2">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-red-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
         <span class="text-xs text-stone-400">Core pp. 123-125 ; Great Clans p. 199 ; Emerald Empire p. 123.</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div id="clan-lineage-filter-bar" class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-filter-lineage="all" class="clan-lineage-pill is-active">Toutes</button> <button type="button" data-filter-lineage="bushi" class="clan-lineage-pill">⚔️ Bushi uniquement</button> <button type="button" data-filter-lineage="shiba" class="clan-lineage-pill">⚔️ Shiba</button> <button type="button" data-filter-lineage="isawa" class="clan-lineage-pill">Isawa</button> <button type="button" data-filter-lineage="asako" class="clan-lineage-pill">Asako</button> <button type="button" data-filter-lineage="agasha" class="clan-lineage-pill">Agasha</button>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="clan-schools-visible-count" class="text-[11px] font-mono text-stone-400"></span>
+            <button type="button" data-toggle-details-scope="sec-schools" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+              Tout déplier
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-
-        <!-- SHIBA BUSHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="shiba" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-red-200 text-sm font-imperial">Shiba Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Core p. 124</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Shiba</span> <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Core p. 124</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Agilité • <b>Honneur :</b> 5.5<br>
             <b>Compétences :</b> Défense, Kenjutsu, Kyujutsu, Méditation (Récupération du Vide), Lances, Connaissance : Théologie, une compétence Bugei ou Noble.<br>
             <b>Équipement :</b> Armure légère, vêtements robustes, Daisho, 1 arme, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-orange-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-red-300">Rang 1 — La Voie du Phénix :</b> Lorsque vous dépensez 1 Vide pour +1g1 sur un jet, vous pouvez en dépenser 2 (pour +2g2). Manœuvre Garde par Action Gratuite, mais le protégé ne reçoit que +5 ND d'Armure (au lieu de +10).</li>
               <li><b class="text-red-300">Rang 2 — Danser avec les Éléments :</b> En choisissant votre Posture, désignez une cible à ≤ 9 m (30') : vous augmentez ou diminuez de 5 le ND de tout sort qu'elle lance ou qui la cible (de même quand vous êtes ciblé).</li>
               <li><b class="text-red-300">Rang 3 — Un avec le Vide :</b> En phase de Réactions si un autre personnage a dépensé du Vide ce Round, regagnez 1 Vide (peut dépasser le max jusqu'à fin d'escarmouche ; max 2/escarmouche).</li>
               <li><b class="text-red-300">Rang 4 — Se Mouvoir avec le Monde :</b> Attaques par Action Simple avec Arme d'Hast, Lance ou arme <i>Samouraï</i>.</li>
               <li><b class="text-red-300">Rang 5 — Contact du Vide :</b> Chaque point de Vide dépensé compte double (si applicable) ; vous pouvez dépenser du Vide en améliorations 2 fois par Tour.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- ASAKO LOREMASTER -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="asako" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-red-200 text-sm font-imperial">Asako Loremaster School [Courtisan]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 125</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Asako</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 125</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Intelligence • <b>Honneur :</b> 6.5<br>
             <b>Compétences :</b> Courtisan, Étiquette (Courtoisie), Connaissance : Histoire, Connaissance : Théologie (Fortunes), Méditation, Sincérité, une compétence de Connaissance.<br>
             <b>Équipement :</b> Vêtements pratiques, Wakizashi, nécessaire de calligraphie, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-orange-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-red-300">Rang 1 — Temple de l'Âme :</b> Augmentation Gratuite sur tout jet de Connaissance (Lore). Un Vide sur Étiquette confère +3g1 (au lieu de +1g1).</li>
               <li><b class="text-red-300">Rang 2 — De ses Cendres :</b> Après 1 jour d'observation d'une cour, Histoire/Perception ND 20 confère +2g0 à tous vos Jets Sociaux dans cette cour pour 2 jours (réactivable).</li>
               <li><b class="text-red-300">Rang 3 — Voix de l'Univers :</b> Après 1h de discussion, Histoire/Intelligence ND 25 permet à un allié d'ajouter votre Histoire à ses Jets Sociaux pendant 24h (2 Aug. = +1 allié).</li>
               <li><b class="text-red-300">Rang 4 — Esprit Invincible :</b> Sur échec à un Jet Social Opposé de résistance (Courtisan, Tentation, Intimidation hors Peur), relancez avec Intelligence.</li>
               <li><b class="text-red-300">Rang 5 — Sagesse des Âges :</b> +5g0 au total de tout jet de Connaissance (y compris pour vos autres Techniques d'École).</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- ISAWA & AGASHA SHUGENJA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="isawa" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-red-200 text-sm font-imperial">Isawa Shugenja School [Shugenja]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 124-125</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Isawa</span> <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 124-125</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Intelligence • <b>Honneur :</b> 4.5<br>
             <b>Affinité / Déficience :</b> Tout Élément au choix (y compris le Vide) / <i>Aucune Déficience</i>.<br>
             <b>Compétences :</b> Calligraphie (Chiffre), Connaissance : Théologie, une Connaissance au choix, Médecine, Méditation, Art de la Magie, une compétence Noble.<br>
             <b>Sorts :</b> Sens, Communion, Convocation, 3 d'un Élément, 2 d'un deuxième, 1 d'un troisième, 1 d'un quatrième.</p>
-            <p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-red-300">Technique — Le Don d'Isawa :</b> Augmentation Gratuite sur tous les sorts de l'Élément choisi comme Affinité (et accès exclusif à l'Avantage <i>Ishiken-do</i> pour apprendre et lancer les sorts de Vide).</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-orange-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-red-300">Technique — Le Don d'Isawa :</b> Augmentation Gratuite sur tous les sorts de l'Élément choisi comme Affinité (et accès exclusif à l'Avantage <i>Ishiken-do</i> pour apprendre et lancer les sorts de Vide).</p></div>
+            </details>
           </div>
         </div>
-
-        <!-- AGASHA SHUGENJA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="agasha" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-red-200 text-sm font-imperial">Agasha Shugenja School [Shugenja]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-orange-950 text-orange-300 font-bold border border-orange-500/30">Core p. 123-124</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Agasha</span> <span class="text-[9px] px-2 py-0.5 rounded bg-orange-950 text-orange-300 font-bold border border-orange-500/30">Core p. 123-124</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Intelligence • <b>Honneur :</b> 4.5<br>
             <b>Affinité / Déficience :</b> Feu / Eau.<br>
             <b>Compétences :</b> Calligraphie (Chiffre), un Artisanat au choix, Défense, Étiquette, Connaissance : Théologie, Art de la Magie, une compétence Noble ou Bugei.<br>
             <b>Sorts :</b> Sens, Communion, Convocation, 3 Feu, 2 Terre, 1 Air.</p>
-            <p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-red-300">Technique — Éléments de Toute Chose :</b> À l'incantation, dépensez 1 point de Vide pour substituer un autre Anneau élémentaire à celui du sort (dépensant un emplacement de ce nouvel Anneau). Augmentation Gratuite sur tout sort portant le mot-clé <i>Artisanat</i>.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-orange-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-red-300">Technique — Éléments de Toute Chose :</b> À l'incantation, dépensez 1 point de Vide pour substituer un autre Anneau élémentaire à celui du sort (dépensant un emplacement de ce nouvel Anneau). Augmentation Gratuite sur tout sort portant le mot-clé <i>Artisanat</i>.</p></div>
+            </details>
           </div>
         </div>
-
-        <!-- ÉCOLES DE BASE COMPLÉMENTAIRES -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
+<div data-lineage="asako,shiba" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-red-200 text-sm font-imperial">Écoles de Base Complémentaires (Asako Henshin • Shiba Artisan)</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-orange-300 font-bold border border-orange-500/30">Great Clans p. 199 • Emerald Empire p. 123</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Asako</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-orange-300 font-bold border border-orange-500/30">Great Clans p. 199 • Emerald Empire p. 123</span></div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] text-stone-300">
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+          <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+            <summary class="flex items-center justify-between text-[11px] font-bold text-orange-300">
+              <span>📜 Détails des Écoles Complémentaires (2)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-2"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-[11px] text-stone-300">
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
               <b class="text-red-300">Asako Henshin [Moine] (GC p. 199)</b>
               <p>+1 Volonté • H 5.5 • Méditation 2. R1 : Action Simple (5 × Rép./jour) ajuste les 2 Traits d'un Anneau de +(ou −)Rang d'École (moitié arr. inf. min 1 sur autrui) pour Rép. min (1 seul Mystère/Énigme actif à la fois). R2 (Terre) : immunisé Conditions hors Saisi/Monté (Terre heures). R3 (Air) : perce les illusions (Rang heures). R4 (Feu) : dégâts mains nues gardés = Feu (Rang Rounds) ou 1 Vide réduit attaque reçue de Feu dés lancés. R5 (Eau) : Éléments (Eau) ND 20 = 1 Complexe + 1 Simple ou 3 Simples/Tour.</p>
             </div>
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
               <b class="text-red-300">Shiba Artisan [Artisan] (EE p. 123)</b>
               <p>+1 Intelligence • H 4.5 • Artisanat (2 spécialités). R1 : +2g2 (au lieu de +1g1) par Vide sur un Artisanat choisi. R2 : 1/mois Artisanat ND 15 donne marge en XP d'<i>Alliés</i> temporaires (Rang semaines). R3 : utilisez cet Artisanat à la place d'une Compétence Sociale. R4 : 1/jour (15 min) Artisanat ND 30 restaure tout le Vide de vous et Rang d'École personnes. R5 : toute personne dans la salle où votre œuvre est exposée gagne +1 Vide temporaire/jour (+2 pour vous).</p>
             </div>
-          </div>
+          </div></div>
+          </details>
         </div>
-
       </div>
-    </section>
 
-    <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <div class="border-b border-red-500/20 pb-2">
-        <h3 class="text-sm font-bold font-imperial text-red-300">
+      <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
+      <div class="card-clean rounded-xl p-6 space-y-4">
+        <div class="border-b border-orange-500/20 pb-2">
+          <h3 class="text-sm font-bold font-imperial text-red-300">
           5. Écoles Avancées &amp; Voies Alternatives Officielles
         </h3>
         <span class="text-[11px] text-stone-400">Textes officiels complets (Core pp. 249, 254 ; Great Clans pp. 200-202 ; Air/Earth/Fire ; Strongholds ; IH1).</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-red-950/20 rounded border border-red-500/30 space-y-1">
-          <b class="text-red-300 block">École Avancée : Elemental Guard [Shugenja]</b>
+        </div>
+        <div id="clan-adv-schools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+<div data-lineage="isawa,shiba" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">Isawa Tensai &amp; Shiba Yojimbo</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Isawa</span></div>
+          <span class="text-[10px] text-stone-400 block">Core p. 254 • Tensai (Isawa 2) / Yojimbo (Shiba Bushi 3)</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Isawa Tensai (R2, Éléments 3, Magie 3) :</b> +1 Affinité supplémentaire dans votre Élément d'Affinité, mais Déficience dans TOUS les autres Éléments. <b>Shiba Yojimbo (R3, Honneur 5.0+) :</b> Défense/Réflexes ND 25 à ≤ 3 m (10') pour encaisser les dégâts à la place de votre protégé (−20 au lieu de −10 avec 1 Vide).</p></div>
+          </details>
+        </div>
+<div data-lineage="shiba,isawa" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">Shiba Armorsmith &amp; Isawa Temple Guardians</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Shiba</span></div>
+          <span class="text-[10px] text-stone-400 block">Book of Earth pp. 193, 196 • Rang 2 / Rang 3</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Armorsmith (R2, Armurier 3, Déf. 3) :</b> +1g0 Forge (armures) ; sous armure, 1 Vide pour ND ajoute +10 + 2 × Terre. <b>Temple Guardians (R3, Terre 4, Théol. 3) :</b> En lieu sacré, Aug. Gratuite sur sorts de Terre et 1 Vide donne le mot-clé Jade aux sorts de dégâts de Terre.</p></div>
+          </details>
+        </div>
+<div data-lineage="asako,shiba" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">Asako Scholar, Provincial Guard &amp; Philosopher</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Asako</span></div>
+          <span class="text-[10px] text-stone-400 block">Fire p. 190 • Strongholds p. 76</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Asako Scholar (R3) :</b> Enquête/Intell. ND 25 empêche rivaux d'utiliser Vide/Augmentations en Social contre vous (+1 allié/Aug.) pendant 24h. <b>Provincial Guard (R2) :</b> +Étiquette au ND quand 1 Vide augmente ND en Défense/Totale. <b>Asako Philosopher (R2) :</b> +1g1 Jets Sociaux Opposés d'Étiquette.</p></div>
+          </details>
+        </div>
+<div data-lineage="isawa" data-bushi="false" class="clan-school-card p-3 bg-red-950/20 rounded border border-red-500/30 space-y-1">
+          <b class="text-red-300 block">École Avancée : Elemental Guard [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Isawa</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 249 • 1 Anneau choisi à 6 • Magie 6, Théologie 6 • Sorts Niv. 4</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> +1 Rang pour l'Élément choisi ; Action Gratuite + 1 Vide ajoute 2 × Anneau au ND d'Armure (Rang min).<br>
             <b>R2 :</b> +1 Rang Shugenja ; Anneau choisi +2 pour le nombre d'emplacements/jour.<br>
             <b>R3 :</b> +1 Rang pour Élément choisi ; 1 sort Niv. 3+ de cet Élément lançable par Action Simple (Vide/jour).
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-red-950/20 rounded border border-red-500/30 space-y-1">
-          <b class="text-red-300 block">École Avancée : Asako Inquisitors [Moine]</b>
+<div data-lineage="asako" data-bushi="false" class="clan-school-card p-3 bg-red-950/20 rounded border border-red-500/30 space-y-1">
+          <b class="text-red-300 block">École Avancée : Asako Inquisitors [Moine]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Asako</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans p. 200 • Vide 4, 2 Anneaux 3 • Droit 4, Shugenja 3 • Sorts 4 ou Action Simple + Inquisitor's Strike • Non-Souillé</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> +1 Rang Shugenja (ou +1 Kiho). Action Complexe prépare une perturbation : Action Gratuite force +2 Aug. à vide sur un sort ennemi.<br>
             <b>R2 :</b> 1 Vide donne le mot-clé Jade/Cristal à vos sorts (ou attaque Action Simple vs mage criminel).<br>
             <b>R3 :</b> +1 Rang Shugenja (ou +1 Kiho) ; perturbation en Action Simple (+3 Aug. forcées).
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">Isawa Tensai &amp; Shiba Yojimbo</b>
-          <span class="text-[10px] text-stone-400 block">Core p. 254 • Tensai (Isawa 2) / Yojimbo (Shiba Bushi 3)</span>
-          <p class="text-stone-300 text-[11px]"><b>Isawa Tensai (R2, Éléments 3, Magie 3) :</b> +1 Affinité supplémentaire dans votre Élément d'Affinité, mais Déficience dans TOUS les autres Éléments. <b>Shiba Yojimbo (R3, Honneur 5.0+) :</b> Défense/Réflexes ND 25 à ≤ 3 m (10') pour encaisser les dégâts à la place de votre protégé (−20 au lieu de −10 avec 1 Vide).</p>
-        </div>
-
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">Elemental Legions &amp; Order of Chikai</b>
+<div data-lineage="isawa,shiba" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">Elemental Legions &amp; Order of Chikai</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Isawa</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans pp. 201-202 • Rang 3 / Rang 5 (Shiba Bushi)</span>
-          <p class="text-stone-300 text-[11px]"><b>Elemental Legions (R3) :</b> Gagnez 1 Vide bonus (Traits de l'Élément, max Rang) quand un allié lance un sort d'Air (+10 ND Armure), Terre (−10 blessures), Feu (Comp. 0→1) ou Eau (échange d'Initiative). <b>Order of Chikai (R5, Shiba Yojimbo) :</b> +1 Vide annule totalement les dégâts interceptés.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Elemental Legions (R3) :</b> Gagnez 1 Vide bonus (Traits de l'Élément, max Rang) quand un allié lance un sort d'Air (+10 ND Armure), Terre (−10 blessures), Feu (Comp. 0→1) ou Eau (échange d'Initiative). <b>Order of Chikai (R5, Shiba Yojimbo) :</b> +1 Vide annule totalement les dégâts interceptés.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">Mist Legion, Shiba Illusionist &amp; Sacred Light</b>
+<div data-lineage="isawa,shiba" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">Mist Legion, Shiba Illusionist &amp; Sacred Light</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Isawa</span></div>
           <span class="text-[10px] text-stone-400 block">Book of Air pp. 181-182 • R3 / R1 / R2</span>
-          <p class="text-stone-300 text-[11px]"><b>Mist Legion (R3 Isawa Air) :</b> Réputation/jour, 1 Vide lance <i>Summon Fog</i> ou <i>False Realm</i> en Action Simple. <b>Shiba Illusionist (R1) :</b> Affinité Air + Rang emplacements dédiés (<i>Token of Memory, Flight of Doves, Mists of Illusion</i>). <b>Sisters of the Sacred Light (R2 Isawa Air) :</b> Bannir Air pour 2 Aug. (Sens) / 3 Aug. (Communion).</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Mist Legion (R3 Isawa Air) :</b> Réputation/jour, 1 Vide lance <i>Summon Fog</i> ou <i>False Realm</i> en Action Simple. <b>Shiba Illusionist (R1) :</b> Affinité Air + Rang emplacements dédiés (<i>Token of Memory, Flight of Doves, Mists of Illusion</i>). <b>Sisters of the Sacred Light (R2 Isawa Air) :</b> Bannir Air pour 2 Aug. (Sens) / 3 Aug. (Communion).</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">Shiba Armorsmith &amp; Isawa Temple Guardians</b>
-          <span class="text-[10px] text-stone-400 block">Book of Earth pp. 193, 196 • Rang 2 / Rang 3</span>
-          <p class="text-stone-300 text-[11px]"><b>Armorsmith (R2, Armurier 3, Déf. 3) :</b> +1g0 Forge (armures) ; sous armure, 1 Vide pour ND ajoute +10 + 2 × Terre. <b>Temple Guardians (R3, Terre 4, Théol. 3) :</b> En lieu sacré, Aug. Gratuite sur sorts de Terre et 1 Vide donne le mot-clé Jade aux sorts de dégâts de Terre.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">Agasha Alchemist &amp; Inferno Guard</b>
+<div data-lineage="agasha,isawa" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">Agasha Alchemist &amp; Inferno Guard</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Agasha</span></div>
           <span class="text-[10px] text-stone-400 block">Book of Fire p. 182 • Rang 3 (Agasha 3 / Isawa Feu 3)</span>
-          <p class="text-stone-300 text-[11px]"><b>Alchemist (Feu 3, Magie 3) :</b> Stocke un sort de Feu à cible unique en potion ; +1 emplacement remplace ou ajoute un mot-clé élémentaire (hors Vide). <b>Inferno Guard (Feu 3, Bat. 3) :</b> 1 Vide ou +1 emplacement ajoute <i>Peur (Maîtrise)</i> aux sorts de Feu de zone.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Alchemist (Feu 3, Magie 3) :</b> Stocke un sort de Feu à cible unique en potion ; +1 emplacement remplace ou ajoute un mot-clé élémentaire (hors Vide). <b>Inferno Guard (Feu 3, Bat. 3) :</b> 1 Vide ou +1 emplacement ajoute <i>Peur (Maîtrise)</i> aux sorts de Feu de zone.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">Asako Scholar, Provincial Guard &amp; Philosopher</b>
-          <span class="text-[10px] text-stone-400 block">Fire p. 190 • Strongholds p. 76</span>
-          <p class="text-stone-300 text-[11px]"><b>Asako Scholar (R3) :</b> Enquête/Intell. ND 25 empêche rivaux d'utiliser Vide/Augmentations en Social contre vous (+1 allié/Aug.) pendant 24h. <b>Provincial Guard (R2) :</b> +Étiquette au ND quand 1 Vide augmente ND en Défense/Totale. <b>Asako Philosopher (R2) :</b> +1g1 Jets Sociaux Opposés d'Étiquette.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-red-300 block">The Nameless Ones [Shugenja]</b>
+<div data-lineage="isawa,agasha,asako" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-red-300 block">The Nameless Ones [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Isawa</span></div>
           <span class="text-[10px] text-stone-400 block">Imperial Histories I p. 214 • Rang 3 (Isawa 3) • Ishiken-do</span>
-          <p class="text-stone-300 text-[11px]">Contre une cible Souillée, dépensez des emplacements supplémentaires (max Anneau de Vide) pour réduire sa Réduction de votre Rang d'École chacun jusqu'à votre prochain Tour.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-orange-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Contre une cible Souillée, dépensez des emplacements supplémentaires (max Anneau de Vide) pour réduire sa Réduction de votre Rang d'École chacun jusqu'à votre prochain Tour.</p></div>
+          </details>
         </div>
+        </div>
+        <p id="clan-adv-empty-hint" class="hidden text-[11px] text-stone-500 italic text-center py-2">
+          Aucune école avancée ou voie alternative spécifique pour ce filtre.
+        </p>
       </div>
     </section>
 
@@ -408,7 +565,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Fiche technique du Clan du Phénix</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.16.1</span>
+      <span id="site-version-label">v1.17.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

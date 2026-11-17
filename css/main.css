@@ -1276,3 +1276,58 @@ select {
 .nav-dropdown.is-open .nav-dropdown-chevron {
   transform: rotate(180deg);
 }
+
+/* Accordéons & Filtres ergonomiques des pages de Clans */
+.clan-accordion > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.clan-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+.clan-accordion .clan-chevron {
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+.clan-accordion[open] .clan-chevron {
+  transform: rotate(180deg);
+}
+.clan-lineage-pill {
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(168, 162, 158, 0.28);
+  background: rgba(12, 10, 10, 0.72);
+  color: #d6d3d1;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.clan-lineage-pill:hover {
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #fde68a;
+}
+.clan-lineage-pill.is-active {
+  background: rgba(217, 119, 6, 0.22);
+  border-color: rgba(245, 158, 11, 0.75);
+  color: #fde68a;
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.25);
+}
+[data-theme="light"] .clan-lineage-pill {
+  background: rgba(245, 238, 222, 0.9);
+  border-color: rgba(140, 94, 11, 0.32);
+  color: #44382b;
+}
+[data-theme="light"] .clan-lineage-pill:hover {
+  border-color: rgba(140, 94, 11, 0.7);
+  color: #78350f;
+}
+[data-theme="light"] .clan-lineage-pill.is-active {
+  background: rgba(180, 83, 9, 0.16);
+  border-color: #92400e;
+  color: #78350f;
+}
+[data-theme="light"] .clan-accordion > summary {
+  color: #78350f;
+}

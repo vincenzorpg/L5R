@@ -11,7 +11,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- SCRIPT DU MENU GLOBAL -->
-  <script src="../js/navbar.js" defer></script>
+  <link rel="stylesheet" href="../css/main.css?v=12">
+  <script src="../js/navbar.js?v=3" defer></script>
+  <script src="../js/clans-ui.js?v=1" defer></script>
 
   <style>
     :root {
@@ -135,71 +137,140 @@
       </div>
     </section>
 
-    <!-- 2. LES QUATRE FAMILLES DU LION & FAMILLES VASSALES -->
-    <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">2. Les Familles du Clan &amp; Familles Vassales</h2>
-        <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 116 ; The Great Clans, p. 116-123, 285-286.</span>
+        <!-- 2. LES FAMILLES DU CLAN & FAMILLES VASSALES (RANGÉES PAR BUSHI EN TÊTE) -->
+    <section id="sec-families" class="space-y-4">
+      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Lignées du Clan &amp; Familles Vassales (Familles Bushi en tête)</h2>
+          <span class="text-xs text-stone-400">Livre de Base 4e Édition, p. 117-120 ; The Great Clans, p. 117-126, 286-287, 290-291.</span>
+        </div>
+        <button type="button" data-toggle-details-scope="sec-families" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+          Tout déplier
+        </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-
-        <!-- AKODO -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Akodo</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Agilité</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+        <!-- FAMILLE AKODO -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Akodo</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Agilité</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Stratèges</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Descendants directs du fondateur Akodo et cœur tactique de l'armée impériale. Modèles de discipline, de maîtrise émotionnelle et de sens du devoir, ils commandent les légions selon les préceptes de l'art de la guerre.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Seigneurs et théoriciens de la guerre formés aux préceptes du traité <i>Commandement</i>. Les Akodo cultivent le sang-froid, la discipline et la vision tactique globale, subordonnant l'impulsion à la précision des manœuvres.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Katai</b> (anciens rônin élevés pour servir de bûcherons et pionniers royaux dans les forêts).
-          </div>
-        </div>
-
-        <!-- MATSU -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Matsu</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Force</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Plus vaste famille militaire de Rokugan, à forte tradition matriarcale. Connus pour leur férocité et leur dévotion au Bushido, les guerriers Matsu mènent les charges frontales et constituent le fer de lance de la Fierté du Lion.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassaux :</b> <b>Ikeda</b> (cavalerie lourde) • <b>Koritome</b> (maîtres archers) • <i>(Shimizu : lignée déchue)</i>.
-          </div>
-        </div>
-
-        <!-- IKOMA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Ikoma</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intuition</span>
-          </div>
-          <p class="text-stone-300 leading-relaxed">
-            Chroniqueurs, historiens et orateurs du clan. Les Ikoma utilisent le récit épique et la rhétorique pour galvaniser les armées, défendre le prestige du Lion à la cour et accomplir secrètement les tâches indignes de leurs frères honorables.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Hosokawa</b> (archivistes méticuleux préservant les annales et parchemins du clan).
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (3 : Katai, Seizuka, Shimizu (déchue))</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Katai :</b> Anciens rônin fidèles à l'Impératrice Yugozohime contre le Gozoku, reçus chez les Akodo pour veiller sur les forêts de Kokoro Nezuban Mori et en fournir le bois d'œuvre. (Great Clans p. 286)</li>
+              <li><b class="text-amber-300">Seizuka :</b> Fondée au XIIe siècle par l'explorateur Akodo Seizuka dont les cartes permirent la prise de Toshi Ranbo en 1153 ; cartographes militaires d'élite du clan. (Great Clans p. 291)</li>
+              <li><b class="text-amber-300">Shimizu (déchue) :</b> Ancienne lignée récompensée au VIIIe siècle pour avoir démasqué un sorcier corrompu, puis entièrement purgée et rayée des annales au IXe siècle après avoir sombré dans le déshonneur. (Great Clans p. 286)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="akodo" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
-        <!-- KITSU -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
-          <div class="flex justify-between items-baseline">
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kitsu</h3>
-            <span class="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40">+1 Intelligence</span>
+        <!-- FAMILLE MATSU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-amber-600/35 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Matsu</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Force</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-amber-950/70 text-amber-300 border-amber-600/40">⚔️ Bushi / Berserkers</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Plus vaste famille du clan et force de choc la plus féroce de Rokugan. Issues de l'héritage matriarcal de Dame Matsu, leurs troupes priment l'assaut frontal, l'honneur inflexible et la fierté guerrière, entretenant une rivalité légendaire avec la Grue.
+            </p>
           </div>
-          <p class="text-stone-300 leading-relaxed">
-            Prêtres, généalogistes et médiums dépositaires des rites funéraires du clan. Descendant en partie des anciens êtres spirituels kitsu, ils communient avec les ancêtres résidant en Yomi et discernent la pureté des lignées.
-          </p>
-          <div class="text-[10px] text-stone-400 border-t border-stone-800 pt-1">
-            <b>Vassal :</b> <b>Ise</b> (traqueurs d'esprits et chasseurs de créatures surnaturelles menaçant le clan).
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Ikeda, Koritome)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Ikeda :</b> Fondée après le retour de la Licorne (fin VIIIe s.) par un Matsu ayant étudié leurs tactiques équestres ; maîtres de la cavalerie lourde du Lion. (Great Clans p. 286)</li>
+              <li><b class="text-amber-300">Koritome :</b> Créée par Hantei VIII en hommage au héros Matsu Koritome à la Bataille du Cerf Blanc en réunissant les deux cents meilleurs archers du clan. (Great Clans p. 286-287)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="matsu" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
           </div>
         </div>
-
+        <!-- FAMILLE IKOMA -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Ikoma</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Intuition</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">📜 Cour & Histoire</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Chroniqueurs, historiens et orateurs du clan. Les Ikoma utilisent le récit épique et la rhétorique pour galvaniser les armées, défendre le prestige du Lion à la cour et accomplir secrètement les tâches indignes de leurs frères honorables.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Hosokawa, Murame)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Hosokawa :</b> Descendants d'Ikoma Kyube (VIIIe s.) ; archivistes d'une abnégation austère coordonnant tous les rapports des scribes et historiens Ikoma à travers l'Empire. (Great Clans p. 286)</li>
+              <li><b class="text-amber-300">Murame :</b> Fondée après la Guerre contre les Ténèbres pour permettre à Ikoma Murame et aux instructeurs du Collège de Guerre de préserver les traditions martiales développées par les Ikoma. (Great Clans p. 290)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="ikoma" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
+        <!-- FAMILLE KITSU -->
+        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 flex flex-col justify-between gap-2.5">
+          <div class="space-y-2">
+            <div class="flex flex-wrap justify-between items-center gap-1.5">
+              <h3 class="font-bold text-amber-200 text-sm font-imperial">Famille Kitsu</h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-950/80 border-amber-800/40 text-amber-300">+1 Intelligence</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded border bg-stone-900/90 text-stone-300 border-stone-700/60">🌀 Shugenja</span>
+            </div>
+            <p class="text-stone-300 leading-relaxed text-xs">
+              Prêtres, généalogistes et médiums dépositaires des rites funéraires du clan. Descendant en partie des anciens êtres spirituels kitsu, ils communient avec les ancêtres résidant en Yomi et discernent la pureté des lignées.
+            </p>
+          </div>
+          <div class="space-y-2 pt-1">
+          <details class="clan-accordion rounded-lg bg-black/45 border border-stone-800/90 p-2.5">
+            <summary class="flex items-center justify-between gap-2 text-[11px] font-bold text-amber-300">
+              <span>🌿 Familles Vassales (2 : Ise, Noroko)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <ul class="mt-2 pt-2 border-t border-stone-800/80 space-y-1.5 text-[11px] text-stone-300 leading-relaxed">
+              <li><b class="text-amber-300">Ise :</b> Descendants du militant shugenja Kitsu Ise, voués depuis l'aube de l'Empire à traquer et détruire les entités spirituelles dangereuses menaçant les terres Lion. (Great Clans p. 286)</li>
+              <li><b class="text-amber-300">Noroko :</b> Anciens Kitsu rônin réintégrés après la Guerre contre les Ténèbres pour traquer toute résurgence de corruption spirituelle au sein du clan, souvent aux côtés du Champion de Jade. (Great Clans p. 290-291)</li>
+            </ul>
+          </details>
+            <button type="button" data-jump-lineage="kitsu" class="text-[10px] font-bold text-amber-300 hover:underline cursor-pointer">
+              Voir les écoles de cette lignée ↓
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -236,178 +307,266 @@
       </div>
     </section>
 
-    <!-- 4. LES QUATRE ÉCOLES FONDAMENTALES & SUPPLÉMENTAIRES -->
-    <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
+        <!-- 4 & 5. ÉCOLES ET VOIES ALTERNATIVES (RANGÉES PAR LIGNÉE BUSHI + FILTRE INTERACTIF) -->
+    <section id="sec-schools" class="space-y-6">
+      <div class="border-b border-amber-500/20 pb-3 space-y-3">
+        <div class="flex flex-wrap justify-between items-baseline gap-2">
+          <h2 class="text-base md:text-lg font-bold font-imperial text-amber-300">4. Écoles de Base Officielles (Rangs 1 à 5)</h2>
         <span class="text-xs text-stone-400">Core pp. 116-119 ; Great Clans p. 137 ; Emerald Empire p. 109.</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div id="clan-lineage-filter-bar" class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-filter-lineage="all" class="clan-lineage-pill is-active">Toutes</button> <button type="button" data-filter-lineage="bushi" class="clan-lineage-pill">⚔️ Bushi uniquement</button> <button type="button" data-filter-lineage="akodo" class="clan-lineage-pill">⚔️ Akodo</button> <button type="button" data-filter-lineage="matsu" class="clan-lineage-pill">⚔️ Matsu</button> <button type="button" data-filter-lineage="ikoma" class="clan-lineage-pill">Ikoma</button> <button type="button" data-filter-lineage="kitsu" class="clan-lineage-pill">Kitsu</button>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="clan-schools-visible-count" class="text-[11px] font-mono text-stone-400"></span>
+            <button type="button" data-toggle-details-scope="sec-schools" class="px-3 py-1 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-stone-700 text-[11px] font-bold text-stone-300 cursor-pointer">
+              Tout déplier
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-
-        <!-- AKODO BUSHI -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="akodo" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Akodo Bushi School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 116-117</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Akodo</span> <span class="text-[9px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold border border-amber-800/40">Core p. 116-117</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Perception • <b>Honneur :</b> 6.5<br>
             <b>Compétences :</b> Art de la Guerre (Bataille de Masse), Défense, Kenjutsu, Kyujutsu, Connaissance : Histoire, Sincérité, une compétence Bugei ou Noble.<br>
             <b>Équipement :</b> Armure légère, vêtements robustes, Daisho, 1 arme, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-amber-300">Rang 1 — La Voie du Lion :</b> En attaquant, choisissez soit d'ignorer la part du ND d'Armure provenant de l'armure adverse (sans ignorer la Réduction), soit de gagner une Augmentation Gratuite. De plus, +1g0 au total de votre premier jet d'attaque en mêlée contre un adversaire dans l'escarmouche, ou contre tout ennemi ayant déclaré une Augmentation contre vous depuis votre dernier Tour (+1g0 max).</li>
               <li><b class="text-amber-300">Rang 2 — Force de la Pureté :</b> Ajoutez votre Rang d'Honneur à un seul jet de votre choix durant votre Tour en escarmouche (hors dégâts et hors posture du Centre).</li>
               <li><b class="text-amber-300">Rang 3 — Force de mes Ancêtres :</b> Attaques par Action Simple avec les armes portant le mot-clé <i>Samouraï</i>.</li>
               <li><b class="text-amber-300">Rang 4 — Triomphe avant la Bataille :</b> 1/escarmouche en phase de Réactions, désignez un ennemi : ignorez ses bonus de Posture au ND d'Armure durant le Round suivant.</li>
               <li><b class="text-amber-300">Rang 5 — La Dernière Leçon d'Akodo :</b> Sur un jet Bugei avec Augmentations, si vous atteignez le ND de base mais manquez le ND augmenté, le jet réussit tout de même sans effets des Augmentations.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- MATSU BERSERKER -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="matsu" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Matsu Berserker School [Bushi]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Core p. 117</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Matsu</span> <span class="text-[9px] px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold border border-red-800/40">Core p. 117</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Force • <b>Honneur :</b> 6.5<br>
             <b>Compétences :</b> Art de la Guerre, Jiujutsu, Kenjutsu (Katana), Kyujutsu, Connaissance : Histoire, deux compétences Bugei.<br>
             <b>Équipement :</b> Armure lourde ou légère, vêtements robustes, Daisho, Arme Lourde ou Arme d'Hast, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-amber-300">Rang 1 — Le Rugissement du Lion :</b> Ajoutez votre Rang d'Honneur au total de tous vos jets de dégâts. En posture d'Assaut, +1,5 m (5') par Tour en sus du bonus normal de posture (sans dépasser le max/Tour).</li>
               <li><b class="text-amber-300">Rang 2 — La Fureur de Matsu :</b> En posture d'Assaut, si vous touchez un adversaire choisi à 9 m (30') ou moins, il est figé par la peur (ne peut se déplacer pour quitter son emplacement ; jet Volonté sans malus contre ND = dégâts en phase de Réactions ou fin à la 2e phase de Réactions).</li>
               <li><b class="text-amber-300">Rang 3 — La Charge du Lion :</b> Attaques de mêlée par Action Simple au lieu d'Action Complexe.</li>
               <li><b class="text-amber-300">Rang 4 — Le Courage de Matsu :</b> Ignorez (Rang d'Honneur) points de malus de Blessures, ou 2 × Rang d'Honneur en posture d'Assaut.</li>
               <li><b class="text-amber-300">Rang 5 — La Victoire du Lion :</b> 1/rencontre après un jet de dégâts, 1 Vide par Action Gratuite fait exploser tous vos dés gardés (y compris les non-10).</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- IKOMA BARD -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="matsu" data-bushi="true" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-bold text-amber-200 text-sm font-imperial">Écoles de Base Complémentaires (Matsu Beastmaster • Ikoma Lion's Shadow)</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Matsu</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Great Clans p. 137 • Emerald Empire p. 109</span></div>
+          </div>
+          <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+            <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+              <span>📜 Détails des Écoles Complémentaires (2)</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-2"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-[11px] text-stone-300">
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-amber-300">Matsu Beastmaster [Bushi] (GC p. 137)</b>
+              <p>+1 Agilité • H 5.5 • Dressage 2. R1 : lien avec 1 lion de guerre (ordonner d'Attaquer par Action Complexe ; sinon Garde). R2 : 2e lion ; trait Rapide 2 ; +1 palier Blessures aux lions (36: +15, 60: Mort). R3 : Action Simple (mains nues, katana, wakizashi, magari-yari, nage-yari, couteaux) et ordonner d'Attaquer par Action Simple. R4 : 2 attaques de griffes/Round ; +2g1 dégâts ensemble ; lion peut bouger (Action Simple). R5 : 3e lion ; +10 ND Armure, +2 Réduction et Peur +2.</p>
+            </div>
+<div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
+              <b class="text-amber-300">Ikoma Lion's Shadow [Bushi] (EE p. 109)</b>
+              <p>+1 Intuition • H 3.5. R1 : aucune perte d'Honneur pour Compétences Dégradantes au service du Lion ; Action Gratuite (Rang d'École/jour) donne +1g0 attaque et Jets Opposés contre jusqu'à Rang d'École ennemis. R2 : +1g0 à tous jets de Compétences d'École. R3 : 1/Round Action Gratuite, −3 points d'Honneur pour +2g1 attaque, dégâts et Jets Sociaux Opposés. R4 : Action Simple arme de mêlée. R5 : 1 Vide lance Courtisan/Intuition vs Étiquette/Intuition pour soustraire (Intuition + Honneur cible) à ses attaques et Jets Sociaux Opposés pendant Rang d'École heures.</p>
+            </div>
+          </div></div>
+          </details>
+        </div>
+<div data-lineage="ikoma" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Ikoma Bard School [Courtisan]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 118</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Ikoma</span> <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Core p. 118</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Intelligence • <b>Honneur :</b> 6.5<br>
             <b>Compétences :</b> Courtisan, Étiquette, Connaissance : Histoire (Clan du Lion), Art de la Scène : Conteur, Sincérité (Honnêteté), une compétence Noble, une compétence Bugei.<br>
             <b>Équipement :</b> Vêtements traditionnels, Wakizashi, Couteau, nécessaire de calligraphie, nécessaire de voyage, 5 koku.</p>
-            <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Techniques d'École (Rangs 1 à 5)</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <ul class="space-y-1 border-t border-stone-800 pt-1.5 text-[11px]">
               <li><b class="text-amber-300">Rang 1 — Le Héraut de la Gloire :</b> Recevez gratuitement <i>Mémoire Exacte</i> (remboursé si déjà acquis). Conteur/Intuition ND 20 loue un exploit et confère +(Rang d'École) points de Gloire (jusqu'à Rang d'École fois/personne/mois).</li>
               <li><b class="text-amber-300">Rang 2 — Le Cœur du Lion :</b> Aucune perte d'Honneur/Gloire pour manifester vos émotions pour un autre Lion ou une noble cause ; +5 par Rang d'École au ND pour vous influencer par Intimidation ou Tentation.</li>
               <li><b class="text-amber-300">Rang 3 — La Voix des Ancêtres :</b> Oratoire/Intuition ND 15 + 5/allié (+5 supplémentaires hors Lion) permet à chaque allié d'ajouter son Rang d'Honneur à un jet de Compétence durant ce combat.</li>
               <li><b class="text-amber-300">Rang 4 — La Force de la Tradition :</b> Action Simple (Rang d'École/session), Conteur/Intuition ND 25 : permet à l'allié de relancer un échec dans la journée avec +Honneur en dés lancés (−2 Honneur si le 2e échoue).</li>
               <li><b class="text-amber-300">Rang 5 — Chaque Lion est ton Frère :</b> 5/session en Jet Social Opposé, ajoutez votre rang en Conteur en dés non gardés.</li>
             </ul>
+            </details>
           </div>
         </div>
-
-        <!-- KITSU SHUGENJA -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
+<div data-lineage="kitsu" data-bushi="false" class="clan-school-card p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2">
           <div class="flex justify-between items-center gap-2">
             <span class="font-bold text-amber-200 text-sm font-imperial">Kitsu Shugenja School [Shugenja]</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-teal-950 text-teal-300 font-bold border border-teal-500/30">Core p. 118-119</span>
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kitsu</span> <span class="text-[9px] px-2 py-0.5 rounded bg-teal-950 text-teal-300 font-bold border border-teal-500/30">Core p. 118-119</span></div>
           </div>
           <div class="text-stone-300 leading-relaxed space-y-1.5">
             <p><b>Bénéfice :</b> +1 Perception • <b>Honneur :</b> 6.5 • <b>Affinité/Déficience :</b> Eau / Feu.<br>
             <b>Compétences :</b> Art de la Guerre, Calligraphie (Chiffre), Étiquette, Connaissance : Histoire, Connaissance : Théologie, Art de la Magie, une compétence Noble ou Bugei.<br>
             <b>Sorts :</b> Sens, Communion, Convocation, 3 Eau, 2 Air, 1 Terre.<br>
             <b>Équipement :</b> Robes, Wakizashi, Couteau, Sacoche à parchemins, nécessaire de voyage, 5 koku.</p>
-            <p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-amber-300">Technique — Les Yeux des Ancêtres :</b> Jet d'Incantation (comme sort d'Eau) ND = 5 × Volonté cible révèle tous ses Avantages et Désavantages Spirituels ; 1 Vide annule l'un de ces Avantages Spirituels pendant (Rang d'École) minutes. Augmentation Gratuite sur tout sort portant le mot-clé <i>Bataille</i>.</p>
+            <details class="clan-accordion rounded-lg bg-black/35 border border-stone-800/80 p-2 mt-1.5">
+              <summary class="flex items-center justify-between text-[11px] font-bold text-amber-300">
+                <span>📜 Détails &amp; Techniques d'École</span>
+                <span class="clan-chevron text-[10px]">▾</span>
+              </summary>
+              <div class="mt-1.5 pt-1.5 border-t border-stone-800/80 space-y-1"><p class="border-t border-stone-800 pt-1.5 text-[11px]"><b class="text-amber-300">Technique — Les Yeux des Ancêtres :</b> Jet d'Incantation (comme sort d'Eau) ND = 5 × Volonté cible révèle tous ses Avantages et Désavantages Spirituels ; 1 Vide annule l'un de ces Avantages Spirituels pendant (Rang d'École) minutes. Augmentation Gratuite sur tout sort portant le mot-clé <i>Bataille</i>.</p></div>
+            </details>
           </div>
         </div>
-
-        <!-- ÉCOLES DE BASE COMPLÉMENTAIRES -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 lg:col-span-2">
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-amber-200 text-sm font-imperial">Écoles de Base Complémentaires (Matsu Beastmaster • Ikoma Lion's Shadow)</span>
-            <span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-amber-300 font-bold border border-amber-500/30">Great Clans p. 137 • Emerald Empire p. 109</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] text-stone-300">
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-amber-300">Matsu Beastmaster [Bushi] (GC p. 137)</b>
-              <p>+1 Agilité • H 5.5 • Dressage 2. R1 : lien avec 1 lion de guerre (ordonner d'Attaquer par Action Complexe ; sinon Garde). R2 : 2e lion ; trait Rapide 2 ; +1 palier Blessures aux lions (36: +15, 60: Mort). R3 : Action Simple (mains nues, katana, wakizashi, magari-yari, nage-yari, couteaux) et ordonner d'Attaquer par Action Simple. R4 : 2 attaques de griffes/Round ; +2g1 dégâts ensemble ; lion peut bouger (Action Simple). R5 : 3e lion ; +10 ND Armure, +2 Réduction et Peur +2.</p>
-            </div>
-            <div class="p-2.5 rounded bg-black/40 border border-stone-800/80 space-y-1">
-              <b class="text-amber-300">Ikoma Lion's Shadow [Bushi] (EE p. 109)</b>
-              <p>+1 Intuition • H 3.5. R1 : aucune perte d'Honneur pour Compétences Dégradantes au service du Lion ; Action Gratuite (Rang d'École/jour) donne +1g0 attaque et Jets Opposés contre jusqu'à Rang d'École ennemis. R2 : +1g0 à tous jets de Compétences d'École. R3 : 1/Round Action Gratuite, −3 points d'Honneur pour +2g1 attaque, dégâts et Jets Sociaux Opposés. R4 : Action Simple arme de mêlée. R5 : 1 Vide lance Courtisan/Intuition vs Étiquette/Intuition pour soustraire (Intuition + Honneur cible) à ses attaques et Jets Sociaux Opposés pendant Rang d'École heures.</p>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </section>
 
-    <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
-    <section class="card-clean rounded-xl p-6 space-y-4">
-      <div class="border-b border-amber-500/20 pb-2">
-        <h3 class="text-sm font-bold font-imperial text-amber-300">
+      <!-- 5. ÉCOLES AVANCÉES & VOIES ALTERNATIVES OFFICIELLES -->
+      <div class="card-clean rounded-xl p-6 space-y-4">
+        <div class="border-b border-amber-500/20 pb-2">
+          <h3 class="text-sm font-bold font-imperial text-amber-300">
           5. Écoles Avancées &amp; Voies Alternatives Officielles
         </h3>
         <span class="text-[11px] text-stone-400">Textes officiels complets (Core pp. 248, 253 ; Great Clans pp. 138-140 ; Air/Earth ; Strongholds ; IH1).</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        <div class="p-3 bg-amber-950/20 rounded border border-amber-500/30 space-y-1">
-          <b class="text-amber-300 block">École Avancée : The Lion's Pride [Bushi]</b>
+        </div>
+        <div id="clan-adv-schools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+<div data-lineage="matsu" data-bushi="true" class="clan-school-card p-3 bg-amber-950/20 rounded border border-amber-500/30 space-y-1">
+          <b class="text-amber-300 block">École Avancée : The Lion's Pride [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Matsu</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 248 • Agilité 5, Force 5 • Art Guerre 5, 4 Armes 3 • Honneur 6, Femme Matsu</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> +10 ND d'Armure en posture d'Assaut.<br>
             <b>R2 :</b> Ennemis d'Honneur inférieur à ≤ 9 m (30') ne peuvent relancer leurs 10 (annulé pour la rencontre si cible dépense 2 Vide en Réactions).<br>
             <b>R3 :</b> Si attaquée avant d'avoir agi ce Round, dépensez 1 Vide pour contre-attaquer immédiatement par Action Simple (résolu avant ; il ne reste qu'1 Action Simple à votre Tour).
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-amber-950/20 rounded border border-amber-500/30 space-y-1">
-          <b class="text-amber-300 block">École Avancée : Akodo Tactical Master [Bushi]</b>
+<div data-lineage="akodo" data-bushi="true" class="clan-school-card p-3 bg-amber-950/20 rounded border border-amber-500/30 space-y-1">
+          <b class="text-amber-300 block">École Avancée : Akodo Tactical Master [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Akodo</span></div>
           <span class="text-[10px] text-stone-400 block">Great Clans p. 138-139 • Eau 4, Intelligence 5 • Bataille (Masse) 5, Go/Shogi 4</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> Relancez 1 dé par Tour de Bataille de Masse et 1 dé sur toute attaque comportant ≥ 1 Augmentation.<br>
             <b>R2 :</b> Dépensez 1 Vide pour choisir n'importe quelle Opportunité Héroïque en Bataille de Masse.<br>
             <b>R3 :</b> Dépensez 1 Vide pour gagner +5g1 sur un jet de Bataille ou +2g2 sur un jet Bugei (au lieu de +1g1).
-          </p>
+          </p></div>
+          </details>
         </div>
-        <div class="p-3 bg-amber-950/20 rounded border border-amber-500/30 space-y-1">
-          <b class="text-amber-300 block">École Avancée : Kitsu Sodan-Senzo [Shug.]</b>
+<div data-lineage="akodo,matsu,ikoma" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Deathseeker [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Akodo</span></div>
+          <span class="text-[10px] text-stone-400 block">Core p. 253 • Rang 1 (tout Bushi Lion 1) • Honneur 5, Désav. Déshonoré</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Conserve bénéfices/équipement R1. 1/Tour ajoutez votre Rang d'Honneur à un jet de dégâts (−5 ND Armure jusqu'à la phase de Réactions suivante). +1g0 aux jets d'attaque en posture d'Assaut.</p></div>
+          </details>
+        </div>
+<div data-lineage="akodo" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Akodo Kensai [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Akodo</span></div>
+          <span class="text-[10px] text-stone-400 block">Great Clans p. 139 • Rang 4 (tout Bushi Lion 4) • Iaijutsu 4, Kenjutsu 5, Prodige (+1 si sans)</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Au sabre et en posture d'Attaque, ajoutez votre Rang d'Honneur au ND d'Armure contre la 1re attaque de mêlée de chaque Round. 1/escarmouche, activez un Kata par Action Gratuite.</p></div>
+          </details>
+        </div>
+<div data-lineage="akodo,matsu,ikoma" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Lion Scout &amp; Lion Paragon [Bushi]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Akodo</span></div>
+          <span class="text-[10px] text-stone-400 block">Great Clans p. 140 • Rang 2 / Rang 3 (Bushi Lion)</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Scout (R2, Bat. 2, Chasse 3) :</b> Déplacement normal en Discrétion ; +1g0 Discrétion et Bugei d'Agilité. <b>Paragon (R3, Vide 4, Kenjutsu 5, Honneur 7) :</b> 1 attaque/Tour par Action Simple ; 1/escarmouche 1 Vide double votre Honneur pour vos Techniques (peut dépasser 10).</p></div>
+          </details>
+        </div>
+<div data-lineage="akodo,ikoma,matsu" data-bushi="true" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Siege Strategist, Ikoma Warden &amp; Lioness Legion</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-amber-950/60 border-amber-700/40 text-amber-300">⚔️ Akodo</span></div>
+          <span class="text-[10px] text-stone-400 block">Book of Earth p. 192 • Strongholds p. 135</span>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]"><b>Siege Strategist (R4/5) :</b> Opportunité Héroïque auto en siège offensif et −50 % Réduction des structures. <b>Ikoma Warden (R2) :</b> Monté +1g0 Bugei ; +2g2 par Vide sur Équitation/Enquête. <b>Lioness Legion (R2) :</b> +1,5 m (5') en Assaut ; Déplacement Complexe Eau × 7,5 m (25').</p></div>
+          </details>
+        </div>
+<div data-lineage="kitsu" data-bushi="false" class="clan-school-card p-3 bg-amber-950/20 rounded border border-amber-500/30 space-y-1">
+          <b class="text-amber-300 block">École Avancée : Kitsu Sodan-Senzo [Shug.]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kitsu</span></div>
           <span class="text-[10px] text-stone-400 block">IH1 p. 241 • Eau 4, Intuition 3 • Royaumes Esp. 4, Méd. 5 • Sorts Eau Niv. 4, vrai sang Kitsu</span>
-          <p class="text-stone-300 text-[11px] leading-relaxed">
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px] leading-relaxed">
             <b>R1 :</b> Détecte portails spirituels (Rang × 10 miles secret ND 25 ; auto ≤ Rang miles). +1 Rang Shugenja.<br>
             <b>R2 :</b> +0g1 dégâts à mains nues. Méditation ND 30 projette votre âme en Meido ou Yomi pour parler aux ancêtres.<br>
             <b>R3 :</b> Emmenez 1 passager silencieux en Yomi/Meido (s'il réussit Méditation). +1 Rang Shugenja.
-          </p>
+          </p></div>
+          </details>
         </div>
-
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Deathseeker [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">Core p. 253 • Rang 1 (tout Bushi Lion 1) • Honneur 5, Désav. Déshonoré</span>
-          <p class="text-stone-300 text-[11px]">Conserve bénéfices/équipement R1. 1/Tour ajoutez votre Rang d'Honneur à un jet de dégâts (−5 ND Armure jusqu'à la phase de Réactions suivante). +1g0 aux jets d'attaque en posture d'Assaut.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Bishamon's Chosen [Shugenja]</b>
+<div data-lineage="kitsu" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Bishamon's Chosen [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kitsu</span></div>
           <span class="text-[10px] text-stone-400 block">Core p. 253 • Rang 3 (Kitsu 3) • Art de la Guerre 3</span>
-          <p class="text-stone-300 text-[11px]">Action Gratuite + 1 emplacement = +1g0 sur tout jet basé sur la Force (dont dégâts de mêlée) ou sur un jet d'Incantation d'un sort avec mot-clé <i>Bataille</i>.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Action Gratuite + 1 emplacement = +1g0 sur tout jet basé sur la Force (dont dégâts de mêlée) ou sur un jet d'Incantation d'un sort avec mot-clé <i>Bataille</i>.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Akodo Kensai [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">Great Clans p. 139 • Rang 4 (tout Bushi Lion 4) • Iaijutsu 4, Kenjutsu 5, Prodige (+1 si sans)</span>
-          <p class="text-stone-300 text-[11px]">Au sabre et en posture d'Attaque, ajoutez votre Rang d'Honneur au ND d'Armure contre la 1re attaque de mêlée de chaque Round. 1/escarmouche, activez un Kata par Action Gratuite.</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Lion Scout &amp; Lion Paragon [Bushi]</b>
-          <span class="text-[10px] text-stone-400 block">Great Clans p. 140 • Rang 2 / Rang 3 (Bushi Lion)</span>
-          <p class="text-stone-300 text-[11px]"><b>Scout (R2, Bat. 2, Chasse 3) :</b> Déplacement normal en Discrétion ; +1g0 Discrétion et Bugei d'Agilité. <b>Paragon (R3, Vide 4, Kenjutsu 5, Honneur 7) :</b> 1 attaque/Tour par Action Simple ; 1/escarmouche 1 Vide double votre Honneur pour vos Techniques (peut dépasser 10).</p>
-        </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Kitsu Spirit Legion [Shugenja]</b>
+<div data-lineage="kitsu" data-bushi="false" class="clan-school-card p-3 bg-black/50 rounded border border-stone-800 space-y-1">
+          <b class="text-amber-300 block">Kitsu Spirit Legion [Shugenja]</b> <div class="my-1"><span class="text-[9px] font-bold px-1.5 py-0.5 rounded border bg-stone-900 border-stone-700 text-stone-300">🏛️ Kitsu</span></div>
           <span class="text-[10px] text-stone-400 block">Book of Air p. 180 • Rang 4 (Kitsu 4) • Don spirituel de naissance</span>
-          <p class="text-stone-300 text-[11px]">Action Complexe + 2 emplacements d'un Élément + 1 Vide invoque un guerrier spectral (Anneaux 2, Élément sacrifié 3, Kenjutsu 3, Défense 2, daisho, armure légère) pour (Rang) heures.</p>
+          <details class="clan-accordion rounded bg-black/30 border border-stone-800/70 px-2 py-1.5 mt-1">
+            <summary class="flex items-center justify-between text-[10px] font-bold text-amber-300">
+              <span>⚖️ Règles &amp; Effets détaillés</span>
+              <span class="clan-chevron text-[10px]">▾</span>
+            </summary>
+            <div class="mt-1.5 pt-1.5 border-t border-stone-800/70"><p class="text-stone-300 text-[11px]">Action Complexe + 2 emplacements d'un Élément + 1 Vide invoque un guerrier spectral (Anneaux 2, Élément sacrifié 3, Kenjutsu 3, Défense 2, daisho, armure légère) pour (Rang) heures.</p></div>
+          </details>
         </div>
-        <div class="p-3 bg-black/50 rounded border border-stone-800 space-y-1">
-          <b class="text-amber-300 block">Siege Strategist, Ikoma Warden &amp; Lioness Legion</b>
-          <span class="text-[10px] text-stone-400 block">Book of Earth p. 192 • Strongholds p. 135</span>
-          <p class="text-stone-300 text-[11px]"><b>Siege Strategist (R4/5) :</b> Opportunité Héroïque auto en siège offensif et −50 % Réduction des structures. <b>Ikoma Warden (R2) :</b> Monté +1g0 Bugei ; +2g2 par Vide sur Équitation/Enquête. <b>Lioness Legion (R2) :</b> +1,5 m (5') en Assaut ; Déplacement Complexe Eau × 7,5 m (25').</p>
         </div>
+        <p id="clan-adv-empty-hint" class="hidden text-[11px] text-stone-500 italic text-center py-2">
+          Aucune école avancée ou voie alternative spécifique pour ce filtre.
+        </p>
       </div>
     </section>
 
@@ -417,7 +576,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Fiche technique du Clan du Lion</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.16.1</span>
+      <span id="site-version-label">v1.17.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
