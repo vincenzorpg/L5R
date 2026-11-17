@@ -133,7 +133,7 @@
 
     // Icône SVG chevron bas
     const chevronDownSvg = `
-      <svg class="w-3 h-3 opacity-70 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg class="nav-dropdown-chevron w-3 h-3 opacity-70 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
       </svg>
     `;
@@ -174,56 +174,61 @@
             </a>
 
             <!-- 3. CLANS MAJEURS -->
-            <div class="relative group">
-              <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-emerald-950/40 text-stone-200 group-hover:text-emerald-300 border border-stone-800 group-hover:border-emerald-500/50 transition focus:outline-none">
+            <div class="relative group nav-dropdown">
+              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-emerald-950/40 text-stone-200 group-hover:text-emerald-300 border border-stone-800 group-hover:border-emerald-500/50 transition focus:outline-none">
                 <span class="w-5 h-5 rounded flex items-center justify-center bg-emerald-950/80 border border-emerald-600/50 text-emerald-400 font-serif font-bold text-xs">家</span>
                 <span>Clans majeurs</span>
                 ${chevronDownSvg}
               </button>
-              <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100 transition-all duration-150 absolute left-0 mt-1.5 w-60 card-clean rounded-xl p-2 shadow-2xl grid grid-cols-1 gap-1 border border-emerald-700/40 z-50 backdrop-blur-md">
-                ${clansList
-                  .map(
-                    (c) => `
-                  <a href="${rootPrefix}clans/${c.id}.html" class="px-2.5 py-1.5 rounded-lg hover:bg-stone-800/80 text-stone-200 hover:text-amber-200 flex items-center gap-2.5 text-xs transition">
-                    <span class="w-6 h-6 rounded border flex items-center justify-center font-serif font-bold text-xs shrink-0 ${c.badge}">${c.kanji}</span>
-                    <span class="font-bold tracking-wide">${c.name}</span>
-                  </a>`
-                  )
-                  .join('')}
+              <div class="nav-dropdown-panel invisible opacity-0 pointer-events-none transition-all duration-150 absolute left-0 top-full pt-2 z-50">
+                <div class="w-60 card-clean rounded-xl p-2 shadow-2xl grid grid-cols-1 gap-1 border border-emerald-700/40 backdrop-blur-md">
+                  ${clansList
+                    .map(
+                      (c) => `
+                    <a href="${rootPrefix}clans/${c.id}.html" class="px-2.5 py-1.5 rounded-lg hover:bg-stone-800/80 text-stone-200 hover:text-amber-200 flex items-center gap-2.5 text-xs transition">
+                      <span class="w-6 h-6 rounded border flex items-center justify-center font-serif font-bold text-xs shrink-0 ${c.badge}">${c.kanji}</span>
+                      <span class="font-bold tracking-wide">${c.name}</span>
+                    </a>`
+                    )
+                    .join('')}
+                </div>
               </div>
             </div>
 
             <!-- 4. AIDES (Mémento Combat, Code du Bushido, Étiquette & Coutumes) -->
-            <div class="relative group">
-              <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-amber-950/40 text-stone-200 group-hover:text-amber-300 border border-stone-800 group-hover:border-amber-500/50 transition focus:outline-none">
+            <div class="relative group nav-dropdown">
+              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-amber-950/40 text-stone-200 group-hover:text-amber-300 border border-stone-800 group-hover:border-amber-500/50 transition focus:outline-none">
                 <span class="w-5 h-5 rounded flex items-center justify-center bg-amber-950/80 border border-amber-600/50 text-amber-400 font-serif font-bold text-xs">書</span>
                 <span>Aides</span>
                 ${chevronDownSvg}
               </button>
-              <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100 transition-all duration-150 absolute left-0 mt-1.5 w-72 card-clean rounded-xl p-2 shadow-2xl flex flex-col gap-1 border border-amber-600/40 z-50 backdrop-blur-md">
-                ${aidesList
-                  .map(
-                    (a) => `
-                  <a href="${rootPrefix}aides/${a.slug}" class="px-2.5 py-2 rounded-lg hover:bg-stone-800/80 text-stone-200 hover:text-amber-200 flex items-center gap-3 text-xs transition">
-                    <span class="w-7 h-7 rounded border flex items-center justify-center font-serif font-bold text-sm shrink-0 ${a.badge}">${a.kanji}</span>
-                    <div class="flex flex-col">
-                      <span class="font-bold">${a.name}</span>
-                      <span class="text-[10px] text-stone-400 font-sans">${a.desc}</span>
-                    </div>
-                  </a>`
-                  )
-                  .join('')}
+              <div class="nav-dropdown-panel invisible opacity-0 pointer-events-none transition-all duration-150 absolute left-0 top-full pt-2 z-50">
+                <div class="w-72 card-clean rounded-xl p-2 shadow-2xl flex flex-col gap-1 border border-amber-600/40 backdrop-blur-md">
+                  ${aidesList
+                    .map(
+                      (a) => `
+                    <a href="${rootPrefix}aides/${a.slug}" class="px-2.5 py-2 rounded-lg hover:bg-stone-800/80 text-stone-200 hover:text-amber-200 flex items-center gap-3 text-xs transition">
+                      <span class="w-7 h-7 rounded border flex items-center justify-center font-serif font-bold text-sm shrink-0 ${a.badge}">${a.kanji}</span>
+                      <div class="flex flex-col">
+                        <span class="font-bold">${a.name}</span>
+                        <span class="text-[10px] text-stone-400 font-sans">${a.desc}</span>
+                      </div>
+                    </a>`
+                    )
+                    .join('')}
+                </div>
               </div>
             </div>
 
             <!-- 5. OUTILS (La Forge, Sorts & Kiho, Tatouages, Carnet de Rokugan) -->
-            <div class="relative group">
-              <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-sky-950/40 text-stone-200 group-hover:text-sky-300 border border-stone-800 group-hover:border-sky-500/50 transition focus:outline-none">
+            <div class="relative group nav-dropdown">
+              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-sky-950/40 text-stone-200 group-hover:text-sky-300 border border-stone-800 group-hover:border-sky-500/50 transition focus:outline-none">
                 <span class="w-5 h-5 rounded flex items-center justify-center bg-sky-950/80 border border-sky-600/50 text-sky-300 font-serif font-bold text-xs">器</span>
                 <span>Outils</span>
                 ${chevronDownSvg}
               </button>
-              <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100 transition-all duration-150 absolute right-0 mt-1.5 w-72 card-clean rounded-xl p-2 shadow-2xl flex flex-col gap-1 border border-amber-500/40 z-50 backdrop-blur-md">
+              <div class="nav-dropdown-panel invisible opacity-0 pointer-events-none transition-all duration-150 absolute right-0 top-full pt-2 z-50">
+                <div class="w-72 card-clean rounded-xl p-2 shadow-2xl flex flex-col gap-1 border border-amber-500/40 backdrop-blur-md">
                 
                 <!-- La Forge -->
                 <a href="${rootPrefix}createcharacter.html" class="px-2.5 py-2 rounded-lg hover:bg-red-950/40 text-stone-200 hover:text-red-200 flex items-center gap-3 text-xs transition">
@@ -284,6 +289,7 @@
                   </div>
                 </a>
 
+                </div>
               </div>
             </div>
 
@@ -430,6 +436,80 @@
       mobileBtn.addEventListener('click', () => {
         const isHidden = mobilePanel.classList.toggle('hidden');
         mobileBtn.setAttribute('aria-expanded', String(!isHidden));
+      });
+    }
+
+    // Maintien fluide & tolérant des menus déroulants bureau (délai de grâce + clic)
+    const dropdowns = Array.from(header.querySelectorAll('.nav-dropdown'));
+    const closeTimers = new WeakMap();
+
+    function setDropdownState(dd, isOpen, pinned = false) {
+      const t = closeTimers.get(dd);
+      if (t) {
+        clearTimeout(t);
+        closeTimers.delete(dd);
+      }
+      dd.classList.toggle('is-open', isOpen);
+      dd.dataset.pinned = isOpen && pinned ? 'true' : 'false';
+      const trigger = dd.querySelector('.nav-dropdown-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    function closeAllDropdowns(exceptDd = null) {
+      dropdowns.forEach((dd) => {
+        if (dd !== exceptDd) setDropdownState(dd, false, false);
+      });
+    }
+
+    dropdowns.forEach((dd) => {
+      const trigger = dd.querySelector('.nav-dropdown-trigger');
+      dd.addEventListener('mouseenter', () => {
+        closeAllDropdowns(dd);
+        const alreadyPinned = dd.dataset.pinned === 'true';
+        setDropdownState(dd, true, alreadyPinned);
+      });
+      dd.addEventListener('mouseleave', () => {
+        if (dd.dataset.pinned === 'true') return;
+        const timer = setTimeout(() => {
+          setDropdownState(dd, false, false);
+        }, 220);
+        closeTimers.set(dd, timer);
+      });
+      if (trigger) {
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const willPin = dd.dataset.pinned !== 'true';
+          closeAllDropdowns(dd);
+          setDropdownState(dd, willPin, willPin);
+        });
+      }
+    });
+
+    if (!window.__l5rNavbarGlobalListenersBound) {
+      window.__l5rNavbarGlobalListenersBound = true;
+      document.addEventListener('click', (e) => {
+        const h = document.getElementById('site-header');
+        if (!h) return;
+        if (!e.target.closest('.nav-dropdown')) {
+          h.querySelectorAll('.nav-dropdown').forEach((dd) => {
+            dd.classList.remove('is-open');
+            dd.dataset.pinned = 'false';
+            const tr = dd.querySelector('.nav-dropdown-trigger');
+            if (tr) tr.setAttribute('aria-expanded', 'false');
+          });
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        const h = document.getElementById('site-header');
+        if (!h) return;
+        h.querySelectorAll('.nav-dropdown').forEach((dd) => {
+          dd.classList.remove('is-open');
+          dd.dataset.pinned = 'false';
+          const tr = dd.querySelector('.nav-dropdown-trigger');
+          if (tr) tr.setAttribute('aria-expanded', 'false');
+        });
       });
     }
   }
