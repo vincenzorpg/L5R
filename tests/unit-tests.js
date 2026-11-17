@@ -18,6 +18,7 @@
   const gmRules = isNode ? require("../data/gm-rules-data.js") : window;
   const carteData = isNode ? require("../data/carte-data.js") : window;
   const carteUi = isNode ? require("../js/carte-rokugan.js") : window;
+  const ecolesUi = isNode ? require("../js/ecoles.js") : window;
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -790,6 +791,26 @@
       assertTrue(crabeFiltered.length >= 5 && crabeFiltered.every(l => l.faction === "crabe"), "Filtre par clan Crabe exact");
       const searchRyoko = carteUi.filterLocations(locs, { query: "ryoko" });
       assertEqual(searchRyoko.length, 1, "Recherche Ryoko Owari exacte");
+    });
+  });
+
+  // ===========================================================================
+  // 10. EXPLORATEUR & COMPARATEUR DES ÉCOLES (js/ecoles.js)
+  // ===========================================================================
+  describe("10. Explorateur & Comparateur des Écoles (Filtrage secrets MJ, tri & filtres)", function () {
+    it("buildSchoolsCatalogEntries exclut les écoles gmOnly par défaut et permet tri/filtrage", function () {
+      const clans = catalogScope.CLANS_DATA || {};
+      const pubList = ecolesUi.buildSchoolsCatalogEntries(clans, false);
+      const fullList = ecolesUi.buildSchoolsCatalogEntries(clans, true);
+      assertEqual(pubList.length, 88, "88 écoles publiques visibles aux PJ");
+      assertEqual(fullList.length, 95, "95 écoles complètes avec secrets MJ");
+      assertTrue(!pubList.some(s => s.clanKey === "araignee" || s.id === "chuda-shugenja-original"), "Aucune école secrète visible sans déverrouillage MJ");
+
+      const bushiHon5 = ecolesUi.filterSchoolsEntries(pubList, { type: "Bushi", minHonor: 5.5 });
+      assertTrue(bushiHon5.length >= 3 && bushiHon5.every(s => s.type === "Bushi" && s.honor >= 5.5), "Filtre Bushi + Honneur >= 5.5 exact");
+
+      const sortedDesc = ecolesUi.sortSchoolsEntries(pubList, "honor", "desc");
+      assertTrue(sortedDesc[0].honor >= sortedDesc[sortedDesc.length - 1].honor, "Tri décroissant par Honneur exact");
     });
   });
 

@@ -18,7 +18,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-  <link rel="stylesheet" href="css/main.css?v=11">
+  <link rel="stylesheet" href="css/main.css?v=14">
 
   <!-- BASES DE DONNÉES DÉPORTÉES -->
   <script src="data/clans-data.js" defer></script>
@@ -41,8 +41,8 @@
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/pwa.js?v=3" defer></script>
-  <script src="js/navbar.js?v=3" defer></script>
-  <script src="js/forge-ui.js?v=25" defer></script>
+  <script src="js/navbar.js?v=4" defer></script>
+  <script src="js/forge-ui.js?v=26" defer></script>
   <script src="js/character-generator.js?v=22" defer></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -259,7 +259,10 @@
           <div id="family-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
         </div>
         <div>
-          <label class="block text-stone-400 mb-1">École de Clan (Rang 1)</label>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-stone-400">École de Clan (Rang 1)</label>
+            <a href="ecoles.html" target="_blank" rel="noopener noreferrer" class="text-[10px] text-amber-300 hover:underline font-bold">⚖️ Comparer toutes les écoles ↗</a>
+          </div>
           <select id="sel-school" onchange="onSchoolChange()" class="w-full p-2.5 rounded font-medium"></select>
           <div id="school-bonus" class="text-[11px] text-amber-400 mt-1">Bonus : +1 Trait</div>
           <div id="school-lock-hint" class="text-[10px] text-stone-500 italic mt-0.5"></div>
@@ -1204,7 +1207,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 pb-24 md:pb-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne de la Chronique de Rokugan • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.19.0</span>
+      <span id="site-version-label">v1.20.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
       <span>•</span>

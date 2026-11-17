@@ -3,13 +3,14 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.19.0';
-const RUNTIME_CACHE = 'l5r-runtime-v1.19.0';
+const CACHE_VERSION = 'l5r-forge-v1.20.0';
+const RUNTIME_CACHE = 'l5r-runtime-v1.20.0';
 
 const CORE_ASSETS = [
   './',
   './index.html',
   './createcharacter.html',
+  './ecoles.html',
   './grimoire.html',
   './kihos.html',
   './tatouages.html',
@@ -22,6 +23,7 @@ const CORE_ASSETS = [
   './js/pwa.js',
   './js/navbar.js',
   './js/clans-ui.js',
+  './js/ecoles.js',
   './js/carte-rokugan.js',
   './data/carte-data.js',
   './assets/images/carte_rokugan.jpg',
