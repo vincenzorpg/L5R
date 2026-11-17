@@ -16,6 +16,8 @@
   const ec = isNode ? require("../js/export-carnet.js") : window;
   const gm = isNode ? require("../js/gm-screen.js") : window;
   const gmRules = isNode ? require("../data/gm-rules-data.js") : window;
+  const carteData = isNode ? require("../data/carte-data.js") : window;
+  const carteUi = isNode ? require("../js/carte-rokugan.js") : window;
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -765,6 +767,29 @@
         assertTrue(publicSchools.length < fullSchools.length, "Écoles secrètes masquées aux PJ");
         assertTrue(!publicSchools.some(s => s.clanKey === "araignee" || s.id === "chuda-shugenja-original"), "Aucune école Araignée/Chuda visible côté PJ");
       }
+    });
+  });
+
+  // ===========================================================================
+  // 9. CARTE INTERACTIVE DE ROKUGAN & CHEMIN DES PJS
+  // ===========================================================================
+  describe("9. Carte Interactive de Rokugan & Chemin de Campagne (data/carte-data.js & js/carte-rokugan.js)", function () {
+    it("ROKUGAN_LOCATIONS et CAMPAIGN_ROUTE couvrent toutes les capitales et les 10 Actes de campagne", function () {
+      const locs = carteData.ROKUGAN_LOCATIONS || [];
+      const route = carteData.CAMPAIGN_ROUTE || [];
+      assertTrue(locs.length >= 40, "Au moins 40 lieux répertoriés sur Rokugan");
+      assertTrue(locs.every(l => l.x >= 0 && l.x <= 100 && l.y >= 0 && l.y <= 100), "Toutes les coordonnées sont en 0..100 %");
+      assertEqual(route.length, 10, "10 Actes chronologiques dans CAMPAIGN_ROUTE");
+      const locIds = new Set(locs.map(l => l.id));
+      assertTrue(route.every(act => locIds.has(act.locationId)), "Chaque Acte référence un lieu existant de ROKUGAN_LOCATIONS");
+
+      const segsUpTo4 = carteUi.buildRoutePointsUpToAct(route, 4);
+      assertEqual(segsUpTo4.length, 4, "Tracé progressif jusqu'à l'Acte 4");
+
+      const crabeFiltered = carteUi.filterLocations(locs, { faction: "crabe" });
+      assertTrue(crabeFiltered.length >= 5 && crabeFiltered.every(l => l.faction === "crabe"), "Filtre par clan Crabe exact");
+      const searchRyoko = carteUi.filterLocations(locs, { query: "ryoko" });
+      assertEqual(searchRyoko.length, 1, "Recherche Ryoko Owari exacte");
     });
   });
 
