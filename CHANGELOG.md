@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.16.0] — 2026-11-17
+
+### ✨ Ajouté & Dissimulé (Accès MJ vs Vue Joueurs)
+- **Dissimulation des Factions & Options Secrètes dans la Forge (`data/*.js`, `js/character-generator.js`, `js/forge-ui.js`, `createcharacter.html`)** :
+  - Marquage `gmOnly: true` et masquage par défaut côté joueurs du **Clan de l'Araignée** (`araignee`), de la famille/école **Chuda originelle (Serpent)**, des **Avantages & Désavantages secrets** (*Parangon Sombre*, *Savoir Interdit*, *Consumés par le Shouridō*, *Agent Dormant* Kolat, *Souillure de l'Outremonde*), du **Kata** *La Force de l'Araignée*, des **armes shinobi** (*Ninja-tō*, *Shuriken*, *Tsubute*, *Sarbacane*, *Nageteppo*), et nettoyage des références spoilers dans `Morito Bushi`, `Connaissance (Lore)`, `katas-data.js`, `avantages-desavantages-data.js` et `grimoire.html`.
+  - Ajout d'un accès **🔒 MJ** discret en pied de page de `createcharacter.html` (`#btn-toggle-gm-secrets` + modale `#gm-secrets-modal`) partageant la même session de déverrouillage que le sceau du Grimoire (`sessionStorage.l5r_maho_unlocked`) tout en conservant la compatibilité complète des exports `Carnet de Rokugan` (`schemaVersion: 2`).
+- **Ergonomie des Kihos pour Shugenjas vs Moines (`js/forge-ui.js`)** :
+  - Masquage du filtre et des Kihos dans le panneau 5A des Shugenjas qui ne disposent pas de l'avantage *Ami de la Confrérie* (tout en conservant l'accès permanent aux Kihos pour tous les Moines : Confrérie, Ordre Tatoué Togashi et Henshin Asako).
+- **Tests Unitaires (`tests/unit-tests.js`)** :
+  - Ajout de la Suite 8 vérifiant le verrouillage par défaut des secrets MJ (`isGmSecretsUnlocked`), le marquage `gmOnly` et l'exclusion des 12 clans publics vs 95 écoles complètes.
+
+---
+
 ## [1.15.2] — 2026-11-17
 
 ### 🐛 Corrigé

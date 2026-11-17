@@ -31,7 +31,7 @@
       element: "Terre",
       mastery: 4,
       cost: 4,
-      schools: "Bushi Daigotsu, Bushi Hida, Bushi Ichiro, Bushi Moto",
+      schools: "Bushi Hida, Bushi Ichiro, Bushi Moto",
       source: "Livre de Base (p. 260)",
       desc: "Réduit toutes vos pénalités de ND dues aux Rangs de Blessures d'un montant égal à votre Anneau de Terre."
     },
@@ -61,6 +61,7 @@
       element: "Terre",
       mastery: 3,
       cost: 3,
+      gmOnly: true,
       schools: "Tout Bushi du Clan de l'Araignée",
       source: "The Great Clans (p. 282)",
       desc: "Une fois par Round, si vous infligez au moins 15 Blessures à votre adversaire, celui-ci subit une pénalité de -3 au total de tous ses jets lors de son prochain Tour."
@@ -175,7 +176,7 @@
       element: "Eau",
       mastery: 5,
       cost: 5,
-      schools: "Bushi Daigotsu, Bushi Bayushi, Éclaireur Daidoji, Acteur Shosuro, Infiltrateur Shosuro, Ninja Goju",
+      schools: "Bushi Bayushi, Éclaireur Daidoji, Acteur Shosuro, Infiltrateur Shosuro",
       source: "The Great Clans (p. 282)",
       desc: "Une fois par Round, vous pouvez calculer la distance d'une Action de Mouvement comme si votre Anneau d'Eau était égal à votre Rang de Compétence Discrétion (Stealth). Cela ne modifie pas la distance maximale franchissable en un Round."
     },
@@ -313,7 +314,7 @@
       element: "Feu",
       mastery: 4,
       cost: 4,
-      schools: "Bushi Daigotsu, Berserker Matsu, Bushi Usagi",
+      schools: "Berserker Matsu, Bushi Usagi",
       source: "Livre de Base (p. 260)",
       desc: "Vous pouvez ajouter votre Anneau de Feu à votre ND d'Armure tant que vous êtes en Posture d'Attaque Totale (Full Attack Stance)."
     },

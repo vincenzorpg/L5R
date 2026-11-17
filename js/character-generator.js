@@ -25,6 +25,21 @@ function normalizeFold(str) {
   return cached;
 }
 
+function isGmSecretsUnlocked() {
+  if (typeof sessionStorage !== "undefined") {
+    try {
+      return sessionStorage.getItem("l5r_maho_unlocked") === "true";
+    } catch (_) {
+      return false;
+    }
+  }
+  return false;
+}
+
+function isGmSecretEntry(entry) {
+  return Boolean(entry && entry.gmOnly === true);
+}
+
 const _catalogIndexCache = {
   skillsRef: null,
   skillsByName: new Map(),
@@ -333,12 +348,14 @@ function isElementalBlessingAdv(advObjOrName) {
   return n.includes("benediction elementaire") || n.includes("elemental blessing");
 }
 
-function getAllSchoolsCatalog() {
+function getAllSchoolsCatalog(includeSecrets = isGmSecretsUnlocked()) {
   const clans = getClans();
   const allSchools = [];
   for (const cKey in clans) {
     const clan = clans[cKey];
+    if (!includeSecrets && isGmSecretEntry(clan)) continue;
     (clan.schools || []).forEach((sch, sIdx) => {
+      if (!includeSecrets && isGmSecretEntry(sch)) return;
       allSchools.push({
         clanKey: cKey,
         clanName: clan.name,
@@ -904,16 +921,46 @@ function bootstrap() {
   }
 }
 
-function initClans() {
+function initClans(preserveCurrent = false) {
   const clans = getClans();
   const clanSel = document.getElementById('sel-clan');
   if (!clanSel) return;
+  const includeSecrets = isGmSecretsUnlocked();
+  const prevClan = clanSel.value;
+  const famSel = document.getElementById('sel-family');
+  const prevFam = famSel ? famSel.value : '';
+  const schSel = document.getElementById('sel-school');
+  const prevSch = schSel ? schSel.value : '';
+
   clanSel.innerHTML = "";
   for (let k in clans) {
+    if (!includeSecrets && isGmSecretEntry(clans[k])) continue;
     let opt = document.createElement('option');
     opt.value = k;
     opt.textContent = clans[k].name;
     clanSel.appendChild(opt);
+  }
+  const prevStillAvailable = prevClan && clanSel.querySelector(`option[value="${prevClan}"]`);
+  if (prevStillAvailable) {
+    clanSel.value = prevClan;
+  }
+  if (preserveCurrent && prevStillAvailable) {
+    const clan = clans[prevClan];
+    if (famSel && clan) {
+      famSel.innerHTML = "";
+      clan.families.forEach((f, idx) => {
+        if (!includeSecrets && isGmSecretEntry(f)) return;
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${f.name} (${f.bonus})`;
+        famSel.appendChild(opt);
+      });
+      if (prevFam && famSel.querySelector(`option[value="${prevFam}"]`)) {
+        famSel.value = prevFam;
+      }
+    }
+    updateSchoolOptions(prevSch);
+    return;
   }
   onClanChange();
 }
@@ -926,6 +973,7 @@ function initCatalogSelectors() {
   const skills = getSkills();
   const eq = getEquipment();
   const adv = getAdvantages();
+  const includeSecrets = isGmSecretsUnlocked();
 
   // Dictionnaires visuels pour les catégories
   const SKILL_TYPE_SYMBOLS = {
@@ -1049,7 +1097,9 @@ function initCatalogSelectors() {
     const w1Frag = document.createDocumentFragment();
     const w2Frag = document.createDocumentFragment();
 
-    (eq.armes || []).forEach(w => {
+    (eq.armes || [])
+      .filter(w => includeSecrets || !isGmSecretEntry(w))
+      .forEach(w => {
       const opt1 = document.createElement('option');
       opt1.value = w.name;
       opt1.textContent = `${w.name} (VD ${w.vd}, ${w.type})`;
@@ -1083,7 +1133,7 @@ function initCatalogSelectors() {
 
     const availableAdv = (adv.avantages || [])
       .map((item, originalIdx) => ({ item, originalIdx }))
-      .filter(({ item }) => !ownedAdvNames.has(item.name.toLowerCase().trim()));
+      .filter(({ item }) => (includeSecrets || !isGmSecretEntry(item)) && !ownedAdvNames.has(item.name.toLowerCase().trim()));
 
     if (availableAdv.length === 0) {
       const opt = document.createElement('option');
@@ -1147,7 +1197,7 @@ function initCatalogSelectors() {
 
     const availableDis = (adv.desavantages || [])
       .map((item, originalIdx) => ({ item, originalIdx }))
-      .filter(({ item }) => !ownedDisNames.has(item.name.toLowerCase().trim()));
+      .filter(({ item }) => (includeSecrets || !isGmSecretEntry(item)) && !ownedDisNames.has(item.name.toLowerCase().trim()));
 
     if (availableDis.length === 0) {
       const opt = document.createElement('option');
@@ -1214,10 +1264,11 @@ function buildGroupedSchoolOptionsHtml(selectedSchoolId, currentClanKey, filterF
   const clans = getClans();
   const clanKey = currentClanKey || document.getElementById('sel-clan')?.value || "crabe";
   const ownClan = clans[clanKey];
+  const includeSecrets = isGmSecretsUnlocked();
   let html = "";
 
-  if (ownClan) {
-    const ownSchools = (ownClan.schools || []).filter(s => !filterFn || filterFn(s, clanKey));
+  if (ownClan && (includeSecrets || !isGmSecretEntry(ownClan))) {
+    const ownSchools = (ownClan.schools || []).filter(s => (includeSecrets || !isGmSecretEntry(s)) && (!filterFn || filterFn(s, clanKey)));
     if (ownSchools.length > 0) {
       html += `<optgroup label="🏯 Écoles du ${ownClan.name}">`;
       ownSchools.forEach(s => {
@@ -1231,8 +1282,8 @@ function buildGroupedSchoolOptionsHtml(selectedSchoolId, currentClanKey, filterF
   for (const otherKey in clans) {
     if (otherKey === clanKey) continue;
     const otherClan = clans[otherKey];
-    if (!otherClan) continue;
-    const otherSchools = (otherClan.schools || []).filter(s => !filterFn || filterFn(s, otherKey));
+    if (!otherClan || (!includeSecrets && isGmSecretEntry(otherClan))) continue;
+    const otherSchools = (otherClan.schools || []).filter(s => (includeSecrets || !isGmSecretEntry(s)) && (!filterFn || filterFn(s, otherKey)));
     if (otherSchools.length === 0) continue;
     html += `<optgroup label="🎓 ${otherClan.name}">`;
     otherSchools.forEach(s => {
@@ -1277,8 +1328,10 @@ function updateSchoolOptions(preferredSchoolId) {
     }
 
   } else {
-    const familySchools = (clan.schools || []).filter(s => s.family === selectedFamily);
-    const availableSchools = familySchools.length > 0 ? familySchools : clan.schools;
+    const includeSecrets = isGmSecretsUnlocked();
+    const visibleSchools = (clan.schools || []).filter(s => includeSecrets || !isGmSecretEntry(s));
+    const familySchools = visibleSchools.filter(s => s.family === selectedFamily);
+    const availableSchools = familySchools.length > 0 ? familySchools : visibleSchools;
 
     availableSchools.forEach(s => {
       const opt = document.createElement('option');
@@ -1316,8 +1369,10 @@ function onClanChange() {
   if (!clan) return;
 
   const famSel = document.getElementById('sel-family');
+  const includeSecrets = isGmSecretsUnlocked();
   famSel.innerHTML = "";
   clan.families.forEach((f, idx) => {
+    if (!includeSecrets && isGmSecretEntry(f)) return;
     let opt = document.createElement('option');
     opt.value = idx;
     opt.textContent = `${f.name} (${f.bonus})`;
@@ -3690,6 +3745,10 @@ if (typeof window !== "undefined") {
   window.isSchoolCompatibleForMultiple = isSchoolCompatibleForMultiple;
   window.getCompatibleMultipleSchools = getCompatibleMultipleSchools;
   window.getCharacterArchetypePermissions = getCharacterArchetypePermissions;
+  window.isGmSecretsUnlocked = isGmSecretsUnlocked;
+  window.isGmSecretEntry = isGmSecretEntry;
+  window.initClans = initClans;
+  window.initCatalogSelectors = initCatalogSelectors;
   window.getAllSchoolsCatalog = getAllSchoolsCatalog;
   window.resolveCatalogSkillMeta = resolveCatalogSkillMeta;
   window.populateOfficialPrintSheet = populateOfficialPrintSheet;
@@ -3714,6 +3773,9 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     MAX_DISADVANTAGE_XP,
     SKILL_MASTERIES,
+    isGmSecretsUnlocked,
+    isGmSecretEntry,
+    getAllSchoolsCatalog,
     getMasteriesHtml,
     getMasteriesSummary,
     isMultipleSchoolsAdv,

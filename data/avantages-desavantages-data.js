@@ -174,7 +174,7 @@
       type: "Mental",
       cost: 3,
       impact: "crafty",
-      prerequisite: "2 pts pour le Scorpion, l'Araignée et les Ninja",
+      prerequisite: "2 pts pour le Clan du Scorpion et les Ninja",
       desc: "Vous comprenez instinctivement comment accomplir des actes que la plupart des gens évitent à tout prix.",
       rule: "Chaque fois que vous devriez effectuer un jet non entraîné (Unskilled Roll) avec une Compétence Dégradante (Low Skill), vous êtes considéré comme possédant le Rang 1 dans cette compétence."
     },
@@ -193,6 +193,7 @@
       name: "Parangon Sombre (Dark Paragon)",
       type: "Mental",
       cost: 5,
+      gmOnly: true,
       impact: "dark_paragon",
       prerequisite: "4 pts pour le Clan de l'Araignée (incompatible avec Modèle de Bushidō et Échec du Bushidō)",
       desc: "Vous maîtrisez l'un des sept préceptes du Shouridō, l'antithèse sombre du Bushidō.",
@@ -203,6 +204,7 @@
       name: "Savoir Interdit (Forbidden Knowledge)",
       type: "Mental",
       cost: 5,
+      gmOnly: true,
       impact: "forbidden_knowledge",
       prerequisite: "Choisir le domaine avec le MJ",
       desc: "Vous détenez un savoir tabou dont la simple détention ferait naître les plus graves soupçons.",
@@ -428,7 +430,7 @@
       type: "Social",
       cost: 5,
       impact: "heart_of_vengeance",
-      prerequisite: "4 pts pour le Clan de l'Araignée (choisir 1 Clan ou faction)",
+      prerequisite: "Choisir 1 Clan ou faction (avec accord du MJ)",
       desc: "Une haine inextinguible vous anime envers un Clan ou une faction de l'Empire.",
       rule: "Choisissez un Clan ou une faction (Confrérie de Shinsei, Famille Impériale, etc.) : vous gagnez un bonus de +1g1 au total de tout Jet Opposé effectué contre un membre de cette faction."
     },
@@ -539,7 +541,7 @@
       type: "Social",
       cost: 8,
       impact: "spy_network",
-      prerequisite: "Enemies of the Empire, p. 50 • 7 pts Famille Daidoji, 6 pts Scorpion, 5 pts Kolat",
+      prerequisite: "Enemies of the Empire, p. 50 • 7 pts Famille Daidoji, 6 pts Scorpion",
       desc: "Vous disposez d'un réseau de renseignement clandestin actif dans les terres habitées.",
       rule: "1 fois par session, si vous êtes en mesure de contacter votre réseau (inutilisable en désert isolé, Outremonde ou Shinomen Mori), vous obtenez une information utile autrement inaccessible."
     },
@@ -569,7 +571,7 @@
       type: "Social",
       cost: 6,
       impact: "stolen_identity",
-      prerequisite: "Strongholds of the Empire, p. 93 • 5 pts pour le Clan de l'Araignée",
+      prerequisite: "Strongholds of the Empire, p. 93",
       desc: "Dans les ruines d'Otosan Uchi, vous avez mis la main sur les attributs d'une identité d'emprunt complète.",
       rule: "Choisissez un nom d'emprunt, une Famille et une École d'un autre Grand Clan : vous recevez son Équipement de départ (sans les koku) et gagnez 2 Augmentations Gratuites sur tout jet de Comédie (Acting) pour vous faire passer pour cette identité."
     },
@@ -1012,7 +1014,7 @@
       cost: 3,
       gain: 3,
       impact: "disturbing_countenance",
-      prerequisite: "Vaut 4 pts pour le Clan de l'Araignée",
+      prerequisite: "Aucun",
       desc: "Quelque chose dans vos traits met instinctivement autrui mal à l'aise et sur ses gardes.",
       rule: "Le ND de tous vos Jets de Compétences Sociales est augmenté de +5."
     },
@@ -1147,6 +1149,7 @@
       type: "Mental",
       cost: 4,
       gain: 4,
+      gmOnly: true,
       impact: "consumed",
       prerequisite: "Vaut +1 pt pour l'Araignée • Contrôle 4, Détermination 6, Clairvoyance 4, Savoir 4, Perfection 5 (6 Grue), Force 5, Volonté 4",
       desc: "Vous avez emprunté la voie du Shouridō jusqu'à être entièrement consumé par l'un de ses sept préceptes.",
@@ -1357,6 +1360,7 @@
       type: "Mental",
       cost: 5,
       gain: 5,
+      gmOnly: true,
       impact: "sleeper_agent",
       prerequisite: "Enemies of the Empire, p. 50 (8 pts si mécanisme d'autodestruction en cas d'échec)",
       desc: "À votre insu, les Kolat vous ont conditionné par un mot déclencheur implanté dans votre esprit.",
@@ -1441,7 +1445,7 @@
       impact: "dark_secret",
       prerequisite: "Vaut 5 pts pour les Ninja",
       desc: "Vous connaissez ou avez commis un acte dont la révélation mènerait à votre perte.",
-      rule: "Si ce secret est découvert (lignée honteuse, appartenance au Kolat/Gozoku, crime impardonnable), vous risquez le seppuku forcé voire l'exécution."
+      rule: "Si ce secret est découvert (lignée honteuse, société secrète, trahison ou crime impardonnable), vous risquez le seppuku forcé voire l'exécution."
     },
     {
       id: "dis-charge-famille",
@@ -1718,6 +1722,7 @@
       type: "Spirituel",
       cost: 4,
       gain: 4,
+      gmOnly: true,
       impact: "shadowlands_taint",
       prerequisite: "Aucun",
       desc: "Vous portez dès la création la trace spirituelle de Jigoku.",
