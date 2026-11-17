@@ -1,12 +1,13 @@
 /**
- * data/sorts-feu-data.js — L5R 4e Édition
- * Recueil exhaustif officiel de la Magie du Feu (Shugenja & Ishiken).
- * Sources : Livre des Règles L5R 4e (p. 180-187), The Book of Fire & The Great Clans.
+ * data/sorts/sorts-feu.js — L5R 4e Édition
+ * Recueil officiel exact de la Magie du Feu (59 sorts).
+ * Sources : Livre de Base L5R 4e (pp. 180–187), The Book of Fire (pp. 184–189)
+ *           et Imperial Histories 2 (pp. 52–53).
  */
 
 const SORTS_FEU = [
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 1 (12 sorts)
+  // NIVEAU DE MAÎTRISE 1 (15 sorts : 10 Livre de Base + 4 Book of Fire + 1 IH2)
   // =========================================================================
   {
     id: "feu-1-biting-steel",
@@ -19,7 +20,7 @@ const SORTS_FEU = [
     area: "1 arme à lame en acier",
     duration: "1 Minute",
     raises: "Durée (+1 minute)",
-    desc: "Les esprits du feu insufflent leur fureur dans le métal d'une arme blanche en acier (épée, couteau, naginata, etc.). Le sort ne peut pas cibler un nemuranai, une arme non métallique ou une arme déjà améliorée par magie. La VD (jets de dégâts) de l'arme augmente de +1g1 pour la durée du sort."
+    desc: "Les esprits du feu insufflent leur fureur dans des armes à lame en acier (épées, couteaux, naginata, etc.). Ne peut affecter les armes qui ne sont pas des lames métalliques, les nemuranai, ni les armes déjà améliorées par des effets magiques. La VD de l'arme augmente de +1g1 pour la durée du sort."
   },
   {
     id: "feu-1-burning-kiss-steel",
@@ -32,7 +33,20 @@ const SORTS_FEU = [
     area: "Une arme de mêlée tenue en main par le lanceur",
     duration: "5 Minutes",
     raises: "Durée (+2 minutes)",
-    desc: "Un filet de flammes jaillit de vos mains pour embraser votre arme. L'arme bénéficie d'un bonus de +1g1 aux jets d'attaque de mêlée. Ce bonus passe à +2g2 lorsque vous attaquez des adversaires montés ou de taille supérieure à celle d'un humain. Si vous lâchez ou perdez l'arme, le sort prend fin immédiatement."
+    desc: "Une vrille de flammes s'étend de vos mains pour envelopper votre arme (si vous lâchez ou perdez l'arme, le sort cesse). L'arme gagne un bonus de +1g1 aux jets d'attaque de mêlée. Ce bonus passe à +2g2 lorsque vous combattez des adversaires plus grands que la taille humaine."
+  },
+  {
+    id: "feu-1-elemental-crucible",
+    name: "Creuset Élémentaire (Elemental Crucible)",
+    element: "Feu",
+    mastery: 1,
+    keywords: [],
+    source: "Imperial Histories 2 (p. 52)",
+    range: "Contact",
+    area: "Un objet d'un maximum de 0,03 m³ (1 pied cube)",
+    duration: "Instantanée",
+    raises: "Zone (+0,03 m³ / +1 pied cube par Augmentation)",
+    desc: "Ancêtre du sort de Transmutation d'Agasha. En dépouillant un objet inanimé des autres Éléments (sauf le Vide), le sort ne laisse subsister qu'un unique Élément déclaré à l'incantation (l'eau s'évapore, la terre s'effrite, le feu se dissipe, l'air laisse place au vide). Certains objets trop complexes (tel un katana) échappent à cet effet (à la discrétion du MJ)."
   },
   {
     id: "feu-1-envious-flames",
@@ -45,7 +59,7 @@ const SORTS_FEU = [
     area: "Une cible",
     duration: "Instantanée",
     raises: "Aucune",
-    desc: "Un kami de Feu solitaire fonce vers la cible et frappe infailliblement tant qu'elle se trouve à portée. Le sort inflige 2g2 Blessures. La douleur est cuisante : si la cible est un shugenja en train d'incanter un sort, le ND de son jet de Volonté pour maintenir sa concentration passe à 20 + les dégâts subis (au lieu de 10 + dégâts)."
+    desc: "Un unique kami de Feu jaillit vers la cible et la frappe infailliblement tant qu'elle est à portée, infligeant 2g2 Blessures. Ces brûlures sont cuisantes : si la cible doit effectuer un jet de Volonté à la suite de ce sort, son ND passe à (20 + les dégâts infligés) au lieu du (10 + dégâts infligés) normal."
   },
   {
     id: "feu-1-extinguish",
@@ -57,8 +71,21 @@ const SORTS_FEU = [
     range: "Personnelle",
     area: "Rayon de 30 mètres (100')",
     duration: "Instantanée",
-    raises: "Zone (+6 m / +20' de rayon)",
-    desc: "Ce sort congédie les kami de Feu présents dans la zone. Tout incendie ou flamme non magique est immédiatement étouffé. De plus, toute source infligeant des dégâts de feu (qu'elle soit magique ou profane) voit sa VD réduite de -1g1 jusqu'au début du round suivant."
+    raises: "Zone (+6 m / +20')",
+    desc: "Congédie les kami de Feu présents dans la zone. Tout feu non magique dans la zone est immédiatement éteint, et tout dégât infligé par le feu (magique ou non) voit sa VD réduite de -1g1 jusqu'au début du Round suivant."
+  },
+  {
+    id: "feu-1-fire-kamis-blessing",
+    name: "Bénédiction du Kami de Feu (Fire Kami's Blessing)",
+    element: "Feu",
+    mastery: 1,
+    keywords: [],
+    source: "The Book of Fire (p. 185)",
+    range: "Contact",
+    area: "Une créature ciblée (peut être le lanceur)",
+    duration: "1 Heure",
+    raises: "Durée (+30 minutes)",
+    desc: "Stimule l'esprit et la mémoire du bénéficiaire pour lui rappeler les détails les plus obscurs. Pendant la durée du sort, la cible gagne un bonus de +Xg0 (où X est votre Anneau de Feu) à tous ses jets de Compétences Nobles (High) ou de Compétences Marchandes (Merchant) utilisant le Trait Intelligence."
   },
   {
     id: "feu-1-fires-purity",
@@ -71,7 +98,7 @@ const SORTS_FEU = [
     area: "Une cible",
     duration: "1 Minute",
     raises: "Dégâts (+1g0 par tranche de 2 Augmentations)",
-    desc: "Enveloppe la cible d'un linceul de flammes ardentes qui ne la blesse pas et n'abîme pas son équipement. Quiconque entre en contact avec elle ou la frappe par une attaque de mêlée subit 2g2 Blessures. De plus, les attaques de mêlée portées par la cible (à mains nues ou avec une arme portée lors du lancement) infligent +2g2 Blessures supplémentaires. Tout objet posé par la cible ne peut être repris sans subir les dégâts. Les armes à distance traversent ce rempart normalement."
+    desc: "Enveloppe une personne d'un suaire de flammes lumineuses sans la blesser ni abîmer ce qu'elle porte. Quiconque entre en contact avec elle ou la frappe au corps à corps subit 2g2 Blessures. Toute personne frappée au corps à corps par la cible (à mains nues ou avec une arme qu'elle portait à l'incantation) subit 2g2 Blessures supplémentaires. Tout objet déposé au sol par la cible subira les dégâts s'il est repris ensuite. Les armes à distance traversent la barrière normalement."
   },
   {
     id: "feu-1-fires-cleanse",
@@ -79,12 +106,12 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 1,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 181",
     range: "Personnelle",
     area: "Rayon de 9 mètres (30')",
     duration: "Instantanée",
-    raises: "Zone (+1,5 m / +5' de rayon par tranche de 2 Augmentations)",
-    desc: "Les kami de Feu sont déchaînés dans un maelström chaotique qui consume tout autour du shugenja. Toutes les créatures dans la zone subissent des dégâts d'une VD égale à votre Anneau de Feu (jet lancé une seule fois et appliqué à tous). Les kami tentant de vous épargner en partie, vous ne subissez que la moitié des dégâts obtenus (arrondie au supérieur)."
+    raises: "Zone (+1,5 m / +5' par tranche de 2 Augmentations)",
+    source: "Livre des Règles L5R 4e, p. 181",
+    desc: "Déchaîne les kami dans un chaos frénétique qui détruit tout autour de vous. Toute personne dans la zone (vous inclus) subit des dégâts d'une VD égale à votre Anneau de Feu (jet lancé une seule fois et appliqué à tous). Toutefois, vous ne subissez que la moitié des dégâts (arrondie au supérieur)."
   },
   {
     id: "feu-1-fury-osano-wo",
@@ -97,7 +124,20 @@ const SORTS_FEU = [
     area: "Une cible",
     duration: "Instantanée",
     raises: "Dégâts (+1g0 par tranche de 2 Augmentations)",
-    desc: "Ne peut être lancé qu'en extérieur. Invoque la foudre du ciel sur la cible pour lui infliger 5g2 Blessures. Toute personne située à 3 m (10') ou moins de la cible doit réussir un jet de Vigueur (ND 15) sous peine d'être Rendue Sourde pendant 2 rounds. En cas d'orage modéré, les dégâts passent à 6g2 ; lors d'une tempête violente ou d'un ouragan, ils atteignent 6g3."
+    desc: "Ne peut être lancé qu'en extérieur. Fait tomber un éclair du ciel sur la cible, lui infligeant 5g2 Blessures. Quiconque se trouve à 3 mètres (10') ou moins de la cible doit réussir un jet de Constitution ND 15 pour éviter d'être Rendu Sourd pendant 2 Rounds. Pendant un orage modéré, les dégâts passent à 6g2 ; lors d'un orage violent ou d'un ouragan, ils atteignent 6g3."
+  },
+  {
+    id: "feu-1-gift-amaterasu",
+    name: "Le Don d'Amaterasu (Gift of Amaterasu)",
+    element: "Feu",
+    mastery: 1,
+    keywords: ["Défense"],
+    source: "The Book of Fire (p. 184)",
+    range: "15 mètres (50')",
+    area: "Sphère de 15 mètres (50') de rayon",
+    duration: "10 Minutes",
+    raises: "Portée (+7,5 m / +25'), Durée (+5 minutes)",
+    desc: "Invoque une vive lumière solaire chaleureuse baignant la zone comme en plein jour — même de nuit, en intérieur ou sous terre."
   },
   {
     id: "feu-1-katana-fire",
@@ -109,8 +149,8 @@ const SORTS_FEU = [
     range: "Personnelle ou 6 mètres (20')",
     area: "Une arme créée",
     duration: "5 Minutes",
-    raises: "Dégâts (+1g0), Durée (+5 min), Portée (+1,5 m / +5')",
-    desc: "Matérialise une lame de flammes pures (forme par défaut : katana de VD 2g2, modifiable en n'importe quelle autre épée avec 1 Augmentation). Vous pouvez utiliser votre Rang d'École à la place de la compétence Kenjutsu pour la manier. Si vous possédez la compétence Kenjutsu, vous ajoutez votre Rang d'Honneur à tous les jets de dégâts. Elle disparaît si vous la lâchez. Vous pouvez aussi la faire apparaître entre les mains d'un allié à 6 m (il ne bénéficie pas du bonus d'Honneur aux dégâts)."
+    raises: "Dégâts (+1g0), Durée (+5 minutes), Portée (+1,5 m / +5')",
+    desc: "Invoque une lame de feu pur (forme par défaut : katana de VD 2g2, modifiable en n'importe quelle autre épée avec 1 Augmentation). Vous pouvez utiliser votre Rang d'École à la place de la compétence Kenjutsu. Si vous possédez la compétence Kenjutsu, vous ajoutez votre Rang d'Honneur à tous les jets de dégâts faits avec cette arme. Disparaît si elle quitte votre main. Vous pouvez la faire apparaître entre les mains d'un allié à 6 m (il est traité comme le lanceur sans bénéficier du bonus d'Honneur aux dégâts)."
   },
   {
     id: "feu-1-never-alone",
@@ -121,9 +161,22 @@ const SORTS_FEU = [
     source: "Livre des Règles L5R 4e, p. 182",
     range: "Contact",
     area: "Une cible",
-    duration: "5 Rounds (Spéciale)",
+    duration: "5 Rounds (voir description)",
     raises: "Cibles (+1 cible)",
-    desc: "Connecte un allié au courage et à la détermination de ses ancêtres. La cible gagne un bonus égal à votre Anneau de Feu à tous ses jets d'attaque, de Compétence et de Trait. Cet effet s'interrompt dès que le temps est écoulé, ou dès que la cible rate un jet d'attaque ou de compétence, ou dès qu'elle subit des Blessures de n'importe quelle provenance."
+    desc: "Ouvre les yeux d'un allié sur le courage de ses ancêtres. La cible reçoit un bonus égal à votre Anneau de Feu à tous ses jets d'attaque, de Compétence et de Trait. Cet effet prend fin à l'expiration de la durée, ou dès que la cible échoue à un jet d'attaque ou de Compétence, ou dès qu'elle subit des Blessures de quelque source que ce soit (au premier des événements)."
+  },
+  {
+    id: "feu-1-osano-wos-blessing",
+    name: "Bénédiction d'Osano-Wo (Osano-Wo's Blessing)",
+    element: "Feu",
+    mastery: 1,
+    keywords: [],
+    source: "The Book of Fire (p. 184)",
+    range: "30 mètres (100')",
+    area: "Rayon de 12 mètres (40')",
+    duration: "30 Minutes",
+    raises: "Portée (+7,5 m / +25'), Zone (+3 m / +10' de rayon), Durée (+10 minutes)",
+    desc: "L'exact opposé d'Éteindre : galvanise tous les feux dans la zone d'effet. Ils deviennent impossibles à éteindre par des moyens ordinaires, et toute tentative magique de les éteindre (comme Éteindre) doit remporter un jet opposé de Feu contre vous."
   },
   {
     id: "feu-1-raging-forge",
@@ -136,37 +189,24 @@ const SORTS_FEU = [
     area: "Une arme ou une armure",
     duration: "Instantanée",
     raises: "Aucune",
-    desc: "Invoque la puissance de la forge pour réparer et restaurer un objet matériel de qualité ordinaire (arme ou armure). L'objet perd tous ses défauts, encoches, fentes ou fissures et retrouve sa forme parfaite. Ne peut pas réparer un objet brisé en morceaux ou totalement détruit."
+    desc: "Restaure un objet matériel de qualité ordinaire (arme ou armure) dans sa forme parfaite : l'objet perd toutes ses éraflures, fissures ou brèches. Ne peut réparer un objet effectivement brisé en morceaux ou détruit, et n'affecte que les objets de qualité ordinaire."
   },
   {
-    id: "feu-1-spark-insight",
-    name: "Étincelle d'Inspiration (Spark of Insight)",
+    id: "feu-1-warning-flame",
+    name: "Flamme d'Avertissement (Warning Flame)",
     element: "Feu",
     mastery: 1,
-    keywords: [],
-    source: "The Book of Fire",
-    range: "Personnelle",
-    area: "Le lanceur",
-    duration: "1 Heure",
-    raises: "Durée (+30 minutes)",
-    desc: "L'agilité mentale des kami de Feu embrase l'esprit du shugenja d'une étincelle de vivacité créative. Pour toute la durée du sort, le lanceur gagne un bonus de +1g1 sur tous ses jets de Compétences Savantes ou d'Artisanat."
-  },
-  {
-    id: "feu-1-touch-osano-wo",
-    name: "La Poigne d'Osano-Wo (Touch of Osano-Wo)",
-    element: "Feu",
-    mastery: 1,
-    keywords: ["Tonnerre"],
-    source: "The Great Clans",
+    keywords: ["Bataille"],
+    source: "The Book of Fire (p. 186)",
     range: "Contact",
-    area: "Une créature ciblée",
-    duration: "Instantanée",
-    raises: "Dégâts (+1g0 par tranche de 2 Augmentations)",
-    desc: "Une décharge fulgurante de foudre crépitante frappe la cible au contact, lui infligeant 2g2 Blessures. De plus, la cible doit immédiatement réussir un jet de Vigueur (ND 15) sous peine d'être Étourdie (Dazed) pour 1 round sous la violence du choc."
+    area: "Une personne ciblée (peut être le lanceur)",
+    duration: "10 Rounds",
+    raises: "Durée (+2 rounds), Zone (+1 personne par 2 Augmentations)",
+    desc: "Excite les kami de Feu dans l'esprit pour déceler et réagir aux dangers. Pendant la durée du sort, la cible est immunisée contre la surprise, ajoute +1g0 à ses jets d'Initiative et ajoute +3 à son total d'Initiative lors de l'Étape des Réactions de chaque Round."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 2 (10 sorts)
+  // NIVEAU DE MAÎTRISE 2 (10 sorts : 8 Livre de Base + 2 Book of Fire)
   // =========================================================================
   {
     id: "feu-2-disrupt-aura",
@@ -176,10 +216,10 @@ const SORTS_FEU = [
     keywords: [],
     source: "Livre des Règles L5R 4e, p. 182",
     range: "15 mètres (50')",
-    area: "Une créature ou individu ciblé",
+    area: "Une personne ou créature ciblée",
     duration: "24 Heures",
     raises: "Durée (+12 heures par Augmentation)",
-    desc: "Attise artificiellement le Feu interne de la cible pour rompre son équilibre élémentaire. Tant que le sort est actif, la cible ne peut recevoir aucune guérison magique (les sorts, objets ou Techniques restaurant des Blessures échouent automatiquement). Les soins profanes via la compétence Médecine fonctionnent toujours."
+    desc: "Délibérément déséquilibrée par l'agitation du Feu interne, la cible ne peut plus être guérie par aucun moyen magique (sorts, objets ou Techniques visant à restaurer des Blessures échouent automatiquement ; les soins profanes par Médecine restent efficaces). Sentir (Feu) révèle de nombreux esprits de Feu agités dans la victime."
   },
   {
     id: "feu-2-enticing-dance-flame",
@@ -192,7 +232,7 @@ const SORTS_FEU = [
     area: "Rayon de 6 mètres (20')",
     duration: "2 Rounds",
     raises: "Durée (+1 round)",
-    desc: "Les kami de Feu jaillissent en une danse frénétique à l'endroit désigné, embrasant la zone. Chaque cible présente subit 3g2 Blessures au round où le sort prend effet. Au début de chaque round ultérieur où le sort demeure actif, chaque cible se trouvant encore dans la zone subit 2g1 Blessures supplémentaires."
+    desc: "Les kami de Feu embrasent l'endroit désigné dans une danse féroce. Chaque cible dans la zone subit 3g2 Blessures lors du Round où le sort prend effet, puis 2g1 Blessures supplémentaires au début de chaque Round suivant tant que le sort demeure actif et que la cible reste dans la zone."
   },
   {
     id: "feu-2-fires-from-within",
@@ -205,20 +245,7 @@ const SORTS_FEU = [
     area: "Une cible",
     duration: "Instantanée",
     raises: "Cibles (+1 cible par tranche de 2 Augmentations)",
-    desc: "Le trait d'attaque classique de l'élément Feu : forme une sphère de flammes dans la paume du lanceur qui grossit en filant vers sa cible. Inflige des dégâts dont la VD est égale à votre Anneau de Feu (ex. : 4g4 avec Feu 4)."
-  },
-  {
-    id: "feu-2-flame-arrow",
-    name: "Flèche de Flammes (Flame-Lanced Arrow)",
-    element: "Feu",
-    mastery: 2,
-    keywords: ["Artisanat", "Bataille"],
-    source: "The Book of Fire",
-    range: "Contact",
-    area: "Jusqu'à 10 flèches ou munitions",
-    duration: "10 Minutes",
-    raises: "Munitions (+5 par Augmentation), Durée (+5 minutes)",
-    desc: "Enchante un carquois de flèches qui s'enflamment vivement dès qu'elles sont encochées. Toute flèche tirée inflige +1g1 Blessures supplémentaires de feu et embrase automatiquement les matières et structures inflammables touchées."
+    desc: "Forme dans votre paume un globe de flammes qui fonce et enfle jusqu'à frapper la cible avec une VD égale à votre Anneau de Feu."
   },
   {
     id: "feu-2-hurried-steps",
@@ -229,9 +256,9 @@ const SORTS_FEU = [
     source: "Livre des Règles L5R 4e, p. 182",
     range: "Personnelle",
     area: "Le lanceur",
-    duration: "2 Rounds (Spéciale)",
+    duration: "2 Rounds (voir description)",
     raises: "Aucune",
-    desc: "La vivacité de pensée de l'élément Feu accélère votre magie. Le temps d'incantation de votre prochain sort de Feu est réduit de 4 rounds. Si ce prochain sort est de Niveau de Maîtrise 3 ou moins, il est incanté instantanément en tant qu'Action Simple. Si vous ne commencez pas à lancer ce sort dans les 2 rounds suivants, l'effet est perdu."
+    desc: "Le temps d'incantation du prochain sort de Feu que vous lancez est réduit de 4 Rounds. Si ce prochain sort est de Niveau de Maîtrise 3 ou inférieur, il se lance instantanément en tant qu'Action Simple. Si vous ne commencez pas à lancer ce nouveau sort dans les 2 Rounds suivants, le bénéfice est perdu."
   },
   {
     id: "feu-2-mental-quickness",
@@ -239,12 +266,25 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 2,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 183",
     range: "Contact",
     area: "Un objet",
     duration: "10 Minutes",
     raises: "Aucune",
-    desc: "Insuffle la ruse et l'acuité des kami de Feu dans un objet matériel. Quiconque porte cet objet sur lui voit son Trait d'Intelligence augmenter de +3 points pour toute la durée du sort."
+    source: "Livre des Règles L5R 4e, p. 182",
+    desc: "Imprègne un objet matériel de la vivacité du feu. Quiconque porte cet objet sur lui voit son Trait d'Intelligence augmenté de +3 pour la durée du sort."
+  },
+  {
+    id: "feu-2-purity-shinsei",
+    name: "La Pureté de Shinsei (Purity of Shinsei)",
+    element: "Feu",
+    mastery: 2,
+    keywords: ["Défense"],
+    source: "The Book of Fire (p. 186)",
+    range: "15 mètres (50')",
+    area: "Une personne ou un effet ciblé",
+    duration: "Instantanée",
+    raises: "Portée (+3 m / +10'), Zone (+1 cible par 2 Augmentations)",
+    desc: "Développé à l'origine par les Isawa contre les magies Yōbanjin puis contre les sorts étrangers. Met immédiatement fin aux effets d'un sort ou effet magique gaijin actif (sur un individu, un village, un château ou un objet physique, à la discrétion du MJ ; utilisable en Contresort contre la magie Meishōdō et gaijin si les règles optionnelles de Contresort sont en vigueur)."
   },
   {
     id: "feu-2-relentless-heat",
@@ -257,20 +297,7 @@ const SORTS_FEU = [
     area: "Une armure",
     duration: "10 Rounds",
     raises: "Durée (+2 rounds)",
-    desc: "L'armure ciblée rougeoie d'une chaleur de désert implacable. Tout adversaire tentant de frapper le porteur en mêlée (que le coup touche ou rate) acquiert immédiatement l'état Fatigué jusqu'au début de son prochain tour (la pénalité s'appliquant dès le jet d'attaque déclencheur). Un assaillant en Posture d'Attaque Totale repasse immédiatement en Posture d'Attaque. Sans effet sur les attaques à distance ou les sorts."
-  },
-  {
-    id: "feu-2-stride-fire",
-    name: "La Marche du Feu (Stride of Fire)",
-    element: "Feu",
-    mastery: 2,
-    keywords: ["Voyage"],
-    source: "The Book of Fire",
-    range: "Personnelle",
-    area: "Le lanceur",
-    duration: "10 Minutes",
-    raises: "Durée (+5 minutes)",
-    desc: "Rend vos pieds et vos vêtements immunisés contre les braises, les incendies au sol et la roche en fusion. Vous traversez les zones de feu sans subir le moindre dommage et votre distance de déplacement terrestre est augmentée de +1,5 m (+5') par round."
+    desc: "Une armure ciblée rayonne d'une chaleur implacable. Tout adversaire qui tente de frapper son porteur (que l'attaque touche ou non) devient immédiatement Fatigué (Fatigued) jusqu'au début de son prochain Tour (les pénalités s'appliquent dès le jet d'attaque qui a déclenché le sort, et tout attaquant en Posture Assaut / Full Attack repasse immédiatement en Posture Attaque). Sans effet sur les attaques à distance ni les sorts ciblant le porteur."
   },
   {
     id: "feu-2-tail-fire-dragon",
@@ -283,7 +310,7 @@ const SORTS_FEU = [
     area: "Le lanceur",
     duration: "4 Rounds",
     raises: "Durée (+1 round)",
-    desc: "Crée un fouet ardent qui jaillit de votre main pour frapper vos ennemis jusqu'à 9 m (30'). Vos jets d'attaque avec ce fouet utilisent [Agilité + (2 × Rang d'École)] g [Agilité]. Les dégâts ont une VD égale à votre Anneau de Feu."
+    desc: "Invoque une vrille de flammes semblable à un fouet jaillissant de votre main (inoffensive pour vous) pour frapper des ennemis jusqu'à 9 mètres (30'). Votre jet d'attaque avec la vrille est égal à [Agilité + (2 × Rang d'École)] g [Agilité], et inflige une VD égale à votre Anneau de Feu."
   },
   {
     id: "feu-2-ward-purity",
@@ -296,24 +323,50 @@ const SORTS_FEU = [
     area: "Rayon de 4,5 mètres (15') autour de l'objet touché",
     duration: "1 Jour",
     raises: "Aucune",
-    desc: "Trace des kanjis sacrés pendant 1 minute sur une surface fixe. La zone repousse l'influence de l'Outremonde et de l'Ombre Trompeuse : les créatures Souillées ou corrompues par l'Ombre ne peuvent pas pénétrer dans le cercle à moins de réussir un jet de Volonté opposé contre votre Anneau de Feu."
+    desc: "Nécessite 1 minute d'efforts concentrés pour tracer des kanji complexes à la craie ou à l'encre sur une surface plane (qui doit rester immobile et l'inscription bien visible sous peine de dissiper le sceau ; les Gardes qui se chevauchent ne se cumulent pas). Les créatures ayant au moins 1 Rang de Souillure de l'Outremonde ou contrôlées par l'Ombre Rampante doivent remporter un jet opposé de Volonté contre vous (avec un bonus de +5 à votre jet) pour entrer dans la zone. Celles qui réussissent à pénétrer s'embrasent dans d'atroces souffrances et subissent un nombre de Blessures égal à (votre Anneau de Feu + votre Rang de Statut Global / Insight Rank) à chaque Round où elles restent dans la zone. Attaques à distance et projectiles sont épargnés."
+  },
+  {
+    id: "feu-2-wings-fire",
+    name: "Ailes de Feu (Wings of Fire)",
+    element: "Feu",
+    mastery: 2,
+    keywords: ["Voyage"],
+    source: "The Book of Fire (p. 186)",
+    range: "Contact",
+    area: "Le lanceur",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes), Spéciale (+1 Rang d'Eau effectif pour le déplacement pour 3 Augmentations)",
+    desc: "De grandes ailes de plumes enflammées poussent sur vos bras et votre dos, vous permettant de voler lentement (vitesse égale à Eau 1, ou à Eau 4 si vous planez depuis une hauteur importante). Tant que le sort dure, vos bras ne servent qu'à battre des ailes et vous enflammez tout objet très inflammable (papier, parchemins) que vous touchez (vêtements épargnés). À l'expiration, les kami se dispersent immédiatement sans vous reposer au sol."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 3 (9 sorts)
+  // NIVEAU DE MAÎTRISE 3 (11 sorts : 7 Livre de Base + 4 Book of Fire)
   // =========================================================================
   {
-    id: "feu-3-brand-fire-kami",
-    name: "La Marque du Kami de Feu (Brand of the Fire Kami)",
+    id: "feu-3-agashas-shield",
+    name: "Bouclier d'Agasha / Malédiction de Tamori (Agasha's Shield)",
     element: "Feu",
     mastery: 3,
-    keywords: ["Sceau"],
-    source: "The Book of Fire",
-    range: "Contact",
-    area: "Une cible vivante",
-    duration: "1 Mois",
-    raises: "Durée (+1 mois)",
-    desc: "Imprime un sceau ardent indélébile sur la chair d'une créature. Le lanceur perçoit à tout moment la direction générale de la marque, et la cible ne peut dissimuler sa présence aux kami de Feu (malus de -3g0 à tous ses jets de Discrétion)."
+    keywords: ["Défense", "Sceau"],
+    source: "The Book of Fire (p. 186)",
+    range: "Contact / Personnelle",
+    area: "Rayon de 9 mètres (30') autour du lanceur",
+    duration: "6 Rounds",
+    raises: "Zone (+1,5 m / +5' de rayon), Durée (+1 round)",
+    desc: "Établit une zone où des kami de Feu amicaux repoussent les autres kami de Feu. Tout sort de Feu hostile incanté à l'intérieur de la zone subit une pénalité de -4g0 à son jet d'incantation ; tout sort de Feu hostile lancé de l'extérieur vers l'intérieur subit une pénalité de -3g0 à sa VD."
+  },
+  {
+    id: "feu-3-breath-battle",
+    name: "Le Souffle de la Bataille (The Breath of Battle)",
+    element: "Feu",
+    mastery: 3,
+    keywords: ["Bataille", "Impérial"],
+    source: "The Book of Fire (p. 187)",
+    range: "9 mètres (30')",
+    area: "Une personne ciblée",
+    duration: "5 Rounds",
+    raises: "Zone (+1 cible par 2 Augmentations), Durée (+1 round), Portée (+3 m / +10')",
+    desc: "Contrepartie honorable de Brumes de Bataille invoquant la faveur du Soleil. La cible gagne un bonus de +1g1 à tous ses jets de Compétences basés sur l'Agilité et +1g0 à tous ses jets de dégâts tant qu'elle reste sous la lumière directe du Soleil (inopérant sous terre, de nuit ou par temps couvert, sauf sous l'effet du Don d'Amaterasu ; ignore les obstacles mineurs tels que feuillage ou shōji)."
   },
   {
     id: "feu-3-breath-fire-dragon",
@@ -323,10 +376,10 @@ const SORTS_FEU = [
     keywords: [],
     source: "Livre des Règles L5R 4e, p. 183",
     range: "Personnelle",
-    area: "Souffle de 4,5 m de long sur 1,5 m de large (15' × 5')",
+    area: "Souffle de 4,5 mètres de long sur 1,5 mètre de large (15' × 5')",
     duration: "4 Rounds",
     raises: "Aucune",
-    desc: "Une prière au Dragon Céleste de Feu qui vous octroie la capacité de cracher une gerbe de flammes une fois par round par une Action Simple. La gerbe inflige des dégâts d'une VD égale à votre Anneau de Feu à toutes les créatures dans la zone. Vous ne pouvez ni parler ni incanter d'autres sorts tant que cet effet est maintenu (vous pouvez y mettre fin prématurément durant l'Étape des Réactions)."
+    desc: "Vous octroie la capacité de cracher une gerbe de flammes par votre bouche ouverte une fois par Round en Action Simple (VD égale à votre Anneau de Feu sur toutes les cibles devant vous dans la zone). Vous ne pouvez entreprendre aucune autre action que cracher le feu tant que vous êtes sous l'effet de ce sort (vous pouvez toutefois y mettre fin durant l'Étape des Réactions de n'importe quel Round antérieur)."
   },
   {
     id: "feu-3-fiery-wrath",
@@ -339,7 +392,7 @@ const SORTS_FEU = [
     area: "Une structure isolée ou une zone de 15 m × 15 m (50' × 50')",
     duration: "Instantanée",
     raises: "Aucune",
-    desc: "Conçu à l'origine pour débroussailler ou démolir des bâtiments en bois sans effort. Tous les matériaux inflammables dans la zone prennent feu et se consument jusqu'à réduction en cendres complètes (impossible à éteindre sans magie). Les êtres vivants et les matériaux incombustibles ne subissent aucun dégât : les vêtements des personnes prises dans la zone brûlent, mais leur chair n'est pas même roussie."
+    desc: "Tous les matériaux inflammables dans la zone prennent feu instantanément et brûlent jusqu'à réduction complète en cendres (le feu ne peut être éteint que par magie : l'eau ordinaire, le sable et autres retardants restent sans effet ; il ne se propage pas aux édifices voisins). Les êtres vivants et les matériaux non inflammables restent indemnes : les vêtements portés par les personnes dans la zone s'embrasent, mais leur chair n'est même pas roussie."
   },
   {
     id: "feu-3-fist-osano-wo",
@@ -352,7 +405,7 @@ const SORTS_FEU = [
     area: "Rayon de 6 mètres (20')",
     duration: "1 Round",
     raises: "Zone (+3 m / +10' de rayon)",
-    desc: "Invoque la fureur céleste d'Osano-Wo : de multiples éclairs et globes de flammes s'abattent sur la zone. Les structures fragiles en bois ou en papier sont détruites ou s'embrasent. Le sort inflige des dégâts avec une VD égale à votre Anneau de Feu à toute créature présente dans la zone. Utiliser ce sort en zone habitée est considéré comme un acte criminel sauf péril de guerre majeur."
+    desc: "De multiples éclairs et traits enflammés en forme de poings s'abattent du ciel sur la zone d'effet. Les structures légères ou très inflammables (telles que la plupart des maisons rokugani) sont détruites ou s'embrasent. Inflige une VD égale à votre Anneau de Feu à toute personne prise dans la zone. Employer ce sort dans une zone peuplée est considéré comme un acte criminel sauf circonstance extrême."
   },
   {
     id: "feu-3-haze-battle",
@@ -365,7 +418,7 @@ const SORTS_FEU = [
     area: "Une cible",
     duration: "5 Rounds (ou 1 heure hors combat)",
     raises: "Durée (+1 round)",
-    desc: "Remplit l'esprit de la cible d'une rage aveugle et erratique. En combat, elle adopte immédiatement la Posture d'Attaque Totale et ne peut plus en changer. Hors combat, elle gagne les Désavantages Impétueux (Brash) et Entêté (Contrary). La cible peut résister par un jet opposé de Volonté contre votre [Volonté + Anneau de Feu], tenté à chaque Étape des Réactions (ou toutes les 10 min hors combat)."
+    desc: "Emplit la cible d'une fureur incontrôlée : elle adopte immédiatement la Posture Assaut (Full Attack) et ne peut en changer pendant la durée du sort (hors combat, elle acquiert les Désavantages Impétueux / Brash et Entêté / Contrary). Elle peut tenter de résister par un jet opposé de Volonté (vous ajoutez votre Anneau de Feu au total de votre jet), effectué durant l'Étape des Réactions de chaque Round en combat ou toutes les 10 minutes hors combat."
   },
   {
     id: "feu-3-hungry-blade",
@@ -378,7 +431,20 @@ const SORTS_FEU = [
     area: "Une arme",
     duration: "5 Rounds",
     raises: "Durée (+1 round)",
-    desc: "Une version avancée de Morsure de l'Acier applicable à tout type d'arme. Une gaine de flammes enveloppe l'arme : son manieur gagne +1g0 à tous ses jets d'attaque et tous ses dés de dégâts explosent sur un résultat de 8 ou plus (les résultats de 8 et 9 n'explosent toutefois qu'une seule fois par dé)."
+    desc: "Forme plus puissante de Morsure de l'Acier capable de renforcer n'importe quelle arme en la gainant d'un léger fourreau de flammes. Le porteur ajoute +1g0 à tous ses jets d'attaque, et tous ses dés de dégâts explosent sur un 8 ou plus (toutefois, chaque dé ne peut exploser qu'une seule fois sur un 8 ou 9, même avec d'autres effets permettant aux 9 d'exploser)."
+  },
+  {
+    id: "feu-3-oath-heavens",
+    name: "Le Serment des Cieux (Oath of the Heavens)",
+    element: "Feu",
+    mastery: 3,
+    keywords: [],
+    source: "The Book of Fire (p. 187)",
+    range: "Contact",
+    area: "Deux personnes ciblées (traditionnellement le lanceur et un allié)",
+    duration: "5 Rounds",
+    raises: "Durée (+1 round), Spéciale (+1g0 au bonus par 2 Augmentations)",
+    desc: "Ancien secret Agasha et Tamori unissant deux compagnons (shugenja et yōjimbō, par exemple). Pour la durée du sort, les deux bénéficiaires reçoivent un bonus de +2g0 à tous leurs jets impliquant l'Anneau de Feu et ses Traits (Agilité et Intelligence). Toutefois, si l'un des deux devient Fatigué, Étourdi (Dazed) ou Assommé (Stunned), l'autre partage aussitôt le même état ; si l'un tombe À Terre (Down), Hors de Combat (Out) ou Mort, le sort prend fin immédiatement."
   },
   {
     id: "feu-3-ravenous-swarms",
@@ -388,10 +454,10 @@ const SORTS_FEU = [
     keywords: [],
     source: "Livre des Règles L5R 4e, p. 184",
     range: "9 mètres (30')",
-    area: "Une cible",
+    area: "Une personne ciblée",
     duration: "5 Rounds",
     raises: "Durée (+1 round)",
-    desc: "Projette un trait enflammé infligeant 4k3 Blessures à l'impact, puis des braises tourbillonnent autour de la cible en guettant ses faux pas. Si la cible tente d'incanter le moindre sort de Feu pendant la durée, les flammes l'attaquent : elle subit 3k3 Blessures supplémentaires et son jet d'incantation échoue automatiquement (l'emplacement de sort étant perdu)."
+    desc: "Un trait de flammes inflige 4k3 Blessures à l'impact, puis les flammes encerclent la cible pendant la durée du sort. Si la cible incante le moindre sort de Feu durant ce laps de temps, les kami de Feu frappent immédiatement, infligeant 3k3 Blessures supplémentaires et faisant automatiquement échouer son jet d'incantation (l'emplacement de sort étant perdu)."
   },
   {
     id: "feu-3-shining-light",
@@ -399,42 +465,42 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 3,
     keywords: ["Défense"],
-    source: "Livre des Règles L5R 4e, p. 185",
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "9 mètres (30')",
-    area: "Une armure",
+    area: "Une armure ciblée",
     duration: "10 Rounds",
     raises: "Dégâts (+1g0 par tranche de 2 Augmentations), Durée (+2 rounds)",
-    desc: "Lie un esprit ardent dans une pièce d'armure. Chaque fois que le porteur est attaqué au corps à corps, l'armure émet un flash aveuglant immédiat : l'assaillant subit 2k2 Blessures et se retrouve Aveuglé jusqu'à l'Étape des Réactions du même round. Sans effet sur les attaques à distance."
+    desc: "Lie un kami de Feu dans une pièce d'armure (heaume, plastron). Chaque fois que le porteur est attaqué en mêlée, l'attaquant subit immédiatement après 2k2 Blessures et se trouve Aveuglé (Blinded) jusqu'à l'Étape des Réactions du même Round. Sans effet sur les attaques à distance."
   },
   {
-    id: "feu-3-strike-osano-wo",
-    name: "Le Coup d'Osano-Wo (Strike of Osano-Wo)",
+    id: "feu-3-whispering-flames",
+    name: "Flammes Murmurantes (Whispering Flames)",
     element: "Feu",
     mastery: 3,
-    keywords: ["Tonnerre", "Bataille"],
-    source: "The Great Clans",
-    range: "30 mètres (100')",
-    area: "Une créature ciblée",
-    duration: "Instantanée",
-    raises: "Dégâts (+1g1 par tranche de 2 Augmentations), Portée (+6 m / +20')",
-    desc: "Un trait de foudre horizontal et dévastateur jaillit des mains tendues de l'incantateur pour percuter la cible. Inflige 4g3 Blessures ignorant totalement la Réduction conférée par les armures profanes."
+    keywords: ["Illusion"],
+    range: "15 mètres (50')",
+    area: "Toutes les personnes dans un rayon de 3 mètres (10')",
+    duration: "3 Rounds",
+    raises: "Portée (+3 m / +10'), Zone (+1,5 m / +5' de rayon par 2 Augmentations), Durée (+1 round)",
+    source: "The Book of Fire (p. 187)",
+    desc: "Sort pacifique attribué à Asahina lui-même. Les kami de Feu dansent dans une lumière rythmique envoûtante qui distrait toute personne dans la zone (état Étourdi / Dazed pendant la durée du sort). Les cibles peuvent tenter de s'en libérer durant l'Étape des Réactions de chaque Round par un jet de Volonté contre un ND égal à (Feu du lanceur × 10). Les animaux, bêtes et morts-vivants sans esprit sont totalement immunisés (bonus potentiel aux gaijin et non-humains à la discrétion du MJ)."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 4 (7 sorts)
+  // NIVEAU DE MAÎTRISE 4 (9 sorts : 6 Livre de Base + 3 Book of Fire)
   // =========================================================================
   {
-    id: "feu-4-boiling-blood",
-    name: "Sang Bouillonnant (Boiling Blood)",
+    id: "feu-4-blessing-sun",
+    name: "Bénédiction du Soleil (Blessing of the Sun)",
     element: "Feu",
     mastery: 4,
-    keywords: ["Bataille"],
-    source: "The Great Clans",
-    range: "15 mètres (50')",
-    area: "Une créature ciblée",
+    keywords: [],
+    source: "The Book of Fire (p. 187)",
+    range: "Contact",
+    area: "Une personne consentante ciblée (peut être le lanceur)",
     duration: "3 Rounds",
-    raises: "Portée (+3 m / +10'), Durée (+1 round)",
-    desc: "Fait monter brutalement la température du flux sanguin dans les veines de la victime. La cible subit 3g2 Blessures au début de chacun de ses tours et subit un malus de -2g2 sur tous ses jets d'action pour la durée du sort en raison de l'atroce souffrance."
+    raises: "Portée (passe à 3 m / 10' avec 2 Augmentations), Durée (+1 round)",
+    desc: "Récupère instantanément de l'état Étourdi (Dazed) et permet pendant la durée du sort d'ignorer l'état Fatigué ainsi que les pénalités de ND dues aux Blessures sur tous les jets liés au Feu (Agilité, Intelligence et jets d'incantation de Feu). Contrecoup : dès que le sort expire, la cible devient Fatiguée (cumulatif avec toute Fatigue antérieure) et ne peut en guérir d'aucune façon (repos, magie ou Techniques) pendant 24 heures."
   },
   {
     id: "feu-4-death-flame",
@@ -442,12 +508,12 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 4,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 185",
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "30 mètres (100')",
     area: "Une cible",
     duration: "5 Rounds",
     raises: "Aucune",
-    desc: "Étouffe violemment le Feu intérieur de la victime : ses deux Traits d'Agilité et d'Intelligence sont réduits d'une valeur égale à votre Anneau de Feu (avec un minimum de 1). Si vous maintenez votre Concentration, la cible ne peut échapper à l'effet. Si vous ne vous concentrez pas, elle peut tenter au début de chaque tour un jet opposé de Feu (avec son score d'origine) contre vous pour dissiper le sort."
+    desc: "Étouffe le Feu élémentaire de la cible, réduisant ses Rangs d'Agilité et d'Intelligence d'un montant égal à votre Anneau de Feu (minimum 1). Si vous maintenez votre Concentration, la cible ne peut y échapper ; sinon, au début de chacun de ses Tours, la cible peut tenter un jet opposé de Feu contre vous (avec son Anneau de Feu d'origine non modifié) pour mettre fin au sort."
   },
   {
     id: "feu-4-defense-firestorm",
@@ -455,12 +521,38 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 4,
     keywords: ["Défense"],
-    source: "Livre des Règles L5R 4e, p. 185",
+    source: "Livre des Règles L5R 4e, p. 184",
     range: "Contact",
-    area: "Une armure",
+    area: "Une armure ciblée",
     duration: "5 Rounds",
     raises: "Durée (+1 round)",
-    desc: "Fait surgir une aura de flammes magiques autour d'une armure. Ces flammes n'abîment pas les êtres vivants mais réduisent instantanément en cendres toutes les armes en bois (y compris les flèches et la plupart des armes d'hast) avant qu'elles n'atteignent le porteur, annulant leurs dégâts. Le rideau de feu masque également le porteur, augmentant son ND d'Armure de +20."
+    desc: "Une aura de flammes magiques entoure le porteur de l'armure sans blesser ni lui ni les autres êtres vivants. Toutefois, toutes les armes en bois (flèches et plupart des armes d'hast incluses) se consument instantanément avant d'atteindre la cible sans infliger de dégâts. Les flammes brouillent aussi la vue et augmentent le ND d'Armure du porteur de +20."
+  },
+  {
+    id: "feu-4-essence-fire",
+    name: "Essence de Feu (Essence of Fire)",
+    element: "Feu",
+    mastery: 4,
+    keywords: ["Sceau", "Impérial"],
+    source: "The Book of Fire (p. 188)",
+    range: "3 mètres (10')",
+    area: "Deux duellistes ciblés",
+    duration: "Un duel iaijutsu",
+    raises: "Spéciale (avec 4 Augmentations, supprime également les Techniques de bushi des deux duellistes)",
+    desc: "Bénédiction traditionnelle Asahina et Seppun lors d'un duel iaijutsu : chasse immédiatement tout autre sort actif sur les deux duellistes et protège le duel contre toute ingérence jusqu'à son terme — tout sort ciblant l'un ou l'autre des duellistes pendant le duel subit un malus de -3g0 à son jet d'incantation. (Une variante controversée à 4 Augmentations réprime aussi les Techniques de bushi.)"
+  },
+  {
+    id: "feu-4-eyes-phoenix",
+    name: "Les Yeux du Phénix (Eyes of the Phoenix)",
+    element: "Feu",
+    mastery: 4,
+    keywords: ["Illusion"],
+    source: "The Book of Fire (p. 188)",
+    range: "7,5 mètres (25')",
+    area: "Une créature ciblée",
+    duration: "1 Heure",
+    raises: "Portée (+1,5 m / +5'), Zone (+1 créature par 2 Augmentations)",
+    desc: "Un petit nuage de kami de Feu flotte droit devant les yeux de la cible, donnant l'impression saisissante que ses yeux sont en flammes. À l'incantation, tous les alliés de la cible vulnérables à la Peur subissent un effet de Peur 3. Plus important encore, la cible est Aveuglée (Blinded) pendant toute la durée du sort."
   },
   {
     id: "feu-4-mending-forge",
@@ -473,20 +565,7 @@ const SORTS_FEU = [
     area: "Un objet ciblé",
     duration: "Instantanée",
     raises: "Aucune",
-    desc: "Met à profit le versant créateur du Feu pour réparer un objet brisé ou détruit, à condition d'avoir réuni tous ses morceaux devant vous (le sort nécessite 1 minute d'incantation et de concentration). L'objet retrouve son intégrité d'origine. Pour réparer un nemuranai ou un objet de qualité Supérieure ou mieux, un sacrifice équivalent doit être offert aux kami de Feu (un objet de valeur égale à brûler)."
-  },
-  {
-    id: "feu-4-rain-fire",
-    name: "Pluie de Feu (Rain of Fire)",
-    element: "Feu",
-    mastery: 4,
-    keywords: ["Bataille"],
-    source: "The Book of Fire",
-    range: "90 mètres (300')",
-    area: "Rayon de 15 mètres (50')",
-    duration: "3 Rounds",
-    raises: "Portée (+15 m / +50'), Durée (+1 round)",
-    desc: "Fait tomber du ciel une averse drue de météores incandescents et de braises ardentes. Toute créature commençant son tour dans la zone subit 4g2 Blessures de feu. En Bataille de Masse, ce sort confère un bonus de +3g1 au camp du shugenja sur le Tableau de Bataille."
+    desc: "Restaure tout objet matériel endommagé ou détruit dans un état neuf et intact, pourvu que tous ses morceaux soient réunis devant vous (si un seul fragment manque, le sort échoue). Nécessite 1 minute d'incantation et de concentration. Pour réparer un objet de qualité Supérieure (Fine) ou mieux, vous devez offrir aux kami de Feu un présent (un autre objet qu'ils consumeront et détruiront) d'une valeur équivalente."
   },
   {
     id: "feu-4-symbol-fire",
@@ -499,7 +578,7 @@ const SORTS_FEU = [
     area: "Rayon de 3 mètres (10')",
     duration: "Permanente",
     raises: "Aucune",
-    desc: "Grave un sceau protecteur sur une porte, un passage ou un seuil. Quiconque franchit le passage sans autorisation doit réussir un jet opposé de son Eau contre votre Feu sous peine de subir 3k3 Blessures, d'être Étourdi (Dazed) et Aveuglé (Blinded) pendant 1 round. Un seul Symbole de Feu peut être actif par shugenja à la fois."
+    desc: "Grave un glyphe de garde sur un objet solide (porte, fenêtre, portail ou passage). Quiconque tente de le franchir doit remporter un jet opposé d'Eau contre le Feu du lanceur sous peine d'être Étourdi (Dazed), Aveuglé (Blinded) pendant 1 Round et de subir 3k3 Blessures. Un seul Symbole de Feu actif par shugenja, et deux Symboles d'Éléments différents ne peuvent jamais affecter la même zone. Dissipable par un autre Symbole de Feu ou en détruisant la surface gravée."
   },
   {
     id: "feu-4-wall-fire",
@@ -507,29 +586,81 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 4,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 186",
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "30 mètres (100')",
-    area: "Mur de 3 m de haut, 30 cm d'épaisseur et 7,5 m de long (10' × 1' × 25')",
+    area: "Mur de 3 m (10') de haut, 30 cm (1') d'épaisseur et 7,5 m (25') de long",
     duration: "1 Heure",
-    raises: "Zone (+1 segment de mêmes dimensions par Augmentation)",
-    desc: "Érige un rideau vertical de flammes vengeresses infranchissable. Toute créature touchant le mur subit 6k6 Blessures. Si le mur est créé directement sur l'emplacement occupé par des personnes, celles-ci doivent réussir un jet de Réflexes (ND 20) pour éviter de subir ces Blessures."
+    raises: "Zone (+1 incrément de base à l'une des trois dimensions par Augmentation : +3 m haut, +30 cm épaisseur ou +7,5 m long)",
+    desc: "Érige un mur de flammes bloquant le passage et infligeant 6k6 Blessures à quiconque le touche. Peut être réduit en hauteur ou en épaisseur à volonté mais toute la masse de flammes doit être employée. S'il est créé sur un emplacement occupé par des créatures, elles doivent réussir un jet de Réflexes (ND 20) pour éviter de subir les Blessures."
+  },
+  {
+    id: "feu-4-ward-thunder",
+    name: "Garde du Tonnerre (Ward of Thunder)",
+    element: "Feu",
+    mastery: 4,
+    keywords: ["Défense", "Sceau", "Tonnerre"],
+    source: "Livre des Règles L5R 4e, p. 185",
+    range: "Contact",
+    area: "Rayon de 4,5 mètres (15') autour de l'armure",
+    duration: "1 Heure",
+    raises: "Aucune",
+    desc: "Grave le kanji du Tonnerre sur une armure pour appeler la protection d'Osano-Wo. Toute personne située à moins de 4,5 m (15') de l'armure est totalement protégée des incendies et du tonnerre non magiques pendant la durée du sort. De plus, tout sort de Feu lancé par un autre shugenja que vous ciblant quoi que ce soit dans la zone d'effet voit le ND de son jet d'incantation augmenté de +20."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 5 (6 sorts)
+  // NIVEAU DE MAÎTRISE 5 (7 sorts : 4 Livre de Base + 3 Book of Fire)
   // =========================================================================
+  {
+    id: "feu-5-castle-fire",
+    name: "Château de Feu (Castle of Fire)",
+    element: "Feu",
+    mastery: 5,
+    keywords: ["Bataille", "Défense"],
+    source: "The Book of Fire (p. 188)",
+    range: "Centré sur le lanceur",
+    area: "Cercle de 9 mètres (30') de rayon autour du lanceur",
+    duration: "10 Rounds",
+    raises: "Zone (+1,5 m / +5' de rayon pour 2 Augmentations), Durée (+2 rounds)",
+    desc: "Érige autour du lanceur un mur circulaire de flammes de 30 cm (1') d'épaisseur sur 3 m (10') de haut. Quiconque se trouve sur son tracé à l'apparition doit réussir un jet de Réflexes ND 20 pour bondir à l'intérieur ou à l'extérieur. Toute flèche ou projectile traversant la barrière est instantanément incinéré. Toute créature qui traverse le mur ou se fait surprendre à son apparition subit 6g6 dégâts et prend feu."
+  },
+  {
+    id: "feu-5-consumed-five-fires",
+    name: "Consumé par Cinq Feux (Consumed by Five Fires)",
+    element: "Feu",
+    mastery: 5,
+    keywords: [],
+    source: "The Book of Fire (p. 188)",
+    range: "30 mètres (100')",
+    area: "Une créature ciblée (et le lanceur)",
+    duration: "Instantanée",
+    raises: "Portée (+15 m / +50')",
+    desc: "Sort ultime de sacrifice vital. La créature ciblée est immédiatement tuée (réduite à l'état Mort puis réduite en cendres en quelques secondes). En contrepartie, le lanceur subit aussitôt exactement le même nombre de Blessures que celles infligées à la cible — ces dégâts ne peuvent être réduits ni atténués d'aucune façon (s'ils sont mortels, le lanceur périt inévitablement). Échoue automatiquement contre les créatures résistantes au Feu et ne peut tuer des entités divines telles que les Fortunes."
+  },
   {
     id: "feu-5-destructive-wave",
     name: "Vague Destructrice (Destructive Wave)",
     element: "Feu",
     mastery: 5,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 186",
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "Personnelle",
     area: "Rayon de 7,5 mètres (25')",
     duration: "Instantanée",
     raises: "Dégâts (+1k1 par tranche de 2 Augmentations)",
-    desc: "Les kami de Feu se déploient en onde circulaire depuis le lanceur. Toutes les créatures dans la zone (alliées comme ennemies) subissent 7k7 Blessures. Vous êtes la seule personne immunisée contre les dégâts du sort."
+    desc: "Fait déferler depuis le lanceur une vague de flammes brûlantes. Toute cible dans la zone (alliée comme ennemie) subit 7k7 Blessures. Vous seul échappez aux dégâts du sort."
+  },
+  {
+    id: "feu-5-dragons-talon",
+    name: "La Serre du Dragon / Feu de Kuro (The Dragon's Talon)",
+    element: "Feu",
+    mastery: 5,
+    keywords: ["Bataille"],
+    source: "The Book of Fire (p. 189)",
+    range: "30 mètres (100')",
+    area: "Jusqu'à 10 créatures ciblées à portée",
+    duration: "Instantanée",
+    raises: "Portée (+7,5 m / +25'), Zone (+2 cibles par Augmentation)",
+    desc: "Des traits enflammés en forme de têtes de dragons grondantes jaillissent des mains du shugenja et frappent jusqu'à 10 cibles, infligeant 8g6 dégâts à chacune. Toutefois, les kami de Feu refusent par orgueil de frapper des adversaires de valeur : ne peut viser que des ennemis de Rang de Statut Global (Insight Rank) 1 ou 2, ou des non-humains d'une puissance équivalente (à l'appréciation du MJ)."
   },
   {
     id: "feu-5-everburning-rage",
@@ -537,38 +668,25 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 5,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 186",
+    source: "Livre des Règles L5R 4e, p. 185",
     range: "7,5 mètres (25')",
     area: "Une cible",
     duration: "1 Round",
-    raises: "Durée (+1 round), Cibles (+1 cible)",
-    desc: "Une terrible malédiction qui embrase les nerfs de la cible sous une douleur atroce sans brûler sa chair. Pour la durée du sort, la victime est considérée comme étant au Niveau de Blessure À Terre (Down) et subit toutes les pénalités et conditions associées. À l'expiration du sort, la douleur cesse net et la cible peut se relever."
+    raises: "Durée (+1 round), Cibles (+1)",
+    desc: "Malédiction qui brûle les nerfs et ligaments de la cible sans infliger de Blessures réelles. Pendant la durée du sort, la victime est considérée comme étant au Rang de Blessure À Terre (Down) et en subit toutes les pénalités et conditions. À l'expiration, la douleur cesse d'un coup et la cible peut se relever comme si rien ne s'était passé."
   },
   {
     id: "feu-5-follow-flame",
     name: "Poursuite de la Flamme (Follow the Flame)",
     element: "Feu",
     mastery: 5,
-    keywords: ["Voyage"],
+    keywords: [],
     source: "Livre des Règles L5R 4e, p. 186",
     range: "Personnelle",
-    area: "Le lanceur",
+    area: "Voir description",
     duration: "5 Rounds",
-    raises: "Aucune",
-    desc: "Permet de fusionner avec l'énergie des flammes pour vous téléporter instantanément d'un foyer de feu à un autre en Action Gratuite, jusqu'à une distance maximale de (Anneau de Feu × 30 mètres), tant que les deux feux font au moins la taille d'une torche et vous sont visibles."
-  },
-  {
-    id: "feu-5-heart-inferno",
-    name: "Cœur de l'Inferno (Heart of the Inferno)",
-    element: "Feu",
-    mastery: 5,
-    keywords: ["Bataille"],
-    source: "The Book of Fire",
-    range: "30 mètres (100')",
-    area: "Rayon de 9 mètres (30')",
-    duration: "5 Rounds",
-    raises: "Zone (+1,5 m / +5' de rayon), Durée (+1 round)",
-    desc: "Fait converger les feux primordiaux en une tempête thermique grondante. Quiconque commence son tour dans la zone subit 5g5 Blessures au round initial, puis 3g3 Blessures à chacun de ses tours. Les flèches et tirs profanes traversant la fournaise sont désintégrés en vol."
+    raises: "Dégâts (+1g0 par Augmentation)",
+    desc: "Au Round d'incantation et à chaque Round suivant (désigner une cible lors des Rounds ultérieurs est une Action Simple), vous pouvez désigner une cible dans votre champ de vision à moins de 90 mètres (300') et envoyer un flot de flammes qui serpente au sol vers elle à raison de 22,5 mètres (75') par Round en contournant les obstacles infranchissables ou ininflammables. Une fois à destination, la cible s'embrase et subit 6k5 Blessures ; elle reste en feu et subit la moitié des Blessures (arrondie à l'inférieur) à chaque Round suivant jusqu'à ce que le feu soit éteint normalement ou que le sort expire."
   },
   {
     id: "feu-5-light-sun",
@@ -581,7 +699,7 @@ const SORTS_FEU = [
     area: "Rayon de 9 mètres (30')",
     duration: "10 Rounds",
     raises: "Aucune",
-    desc: "Fait descendre un rayon concentré de lumière solaire pure. Toute créature dans la zone subit 2g2 Blessures par round dues à la chaleur cuisante. Les cibles humaines subissent de surcroît +2g1 Blessures supplémentaires par Rang d'Honneur en dessous de 4, et +2g2 Blessures si elles possèdent au moins 1 Rang de Souillure ou sont corrompues par l'Ombre. Tout humain d'Honneur 0 est Aveuglé pendant un nombre de rounds égal à votre Anneau de Feu."
+    desc: "Prière favorite de la famille Moshi. Fait descendre un faisceau concentré de pure lumière solaire sur la zone. Toute personne dans la zone subit 2k2 Blessures par Round dues à la chaleur intense. Les cibles humaines uniquement subissent +2k1 Blessures supplémentaires par Rang d'Honneur en dessous de 4, ainsi que +2k2 Blessures supplémentaires si elles ont au moins 1 Rang de Souillure de l'Outremonde ou sont contrôlées par l'Ombre Rampante. Les cibles humaines d'Honneur 0 sont Aveuglées (Blinded) pendant un nombre de Rounds égal à votre Anneau de Feu."
   },
   {
     id: "feu-5-wings-phoenix",
@@ -589,16 +707,16 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 5,
     keywords: ["Voyage"],
-    source: "Livre des Règles L5R 4e, p. 187",
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "Personnelle",
     area: "Le lanceur",
     duration: "10 Rounds",
     raises: "Aucune",
-    desc: "Deux gigantesques ailes de flammes pures se déploient dans votre dos. Vous gagnez la faculté de voler à une vitesse égale à (Eau × 3 m) par Action Gratuite ou (Eau × 6 m) par Action Simple. Si vous êtes encore dans les airs à l'expiration du sort, les kami de Feu vous descendent doucement au sol avant de se dissiper."
+    desc: "Des ailes géantes formées de nuages de kami de Feu jaillissent de votre dos. Vous pouvez voler pendant la durée du sort à une vitesse de (Eau × 3 m / 10') par Action Gratuite ou (Eau × 6 m / 20') par Action Simple. Si vous êtes en vol à l'expiration du sort, les kami de Feu vous ramènent au sol avant de repartir."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 6 (4 sorts)
+  // NIVEAU DE MAÎTRISE 6 (6 sorts : 3 Livre de Base + 3 Book of Fire)
   // =========================================================================
   {
     id: "feu-6-beam-inferno",
@@ -606,12 +724,38 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 6,
     keywords: [],
-    source: "Livre des Règles L5R 4e, p. 187",
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "60 mètres (200')",
     area: "Une cible",
     duration: "Instantanée",
     raises: "Aucune",
-    desc: "L'un des sorts d'annihilation les plus dévastateurs de Rokugan. Libère un trait d'énergie thermique pure contre une cible unique, lui infligeant 10k10 Blessures. Tous les feux ordinaires dans un rayon de 60 mètres s'agitent et brûlent avec une intensité décuplée pendant plusieurs minutes."
+    desc: "Une formidable décharge de feu s'abat sur la cible choisie, lui infligeant 10k10 Blessures. Le sort met tous les kami de Feu environnants en agitation, et tous les feux normaux à portée brûlent plus fort et plus violemment pendant de nombreuses minutes."
+  },
+  {
+    id: "feu-6-curse-burning-hand",
+    name: "Malédiction de la Main Brûlante (Curse of the Burning Hand)",
+    element: "Feu",
+    mastery: 6,
+    keywords: [],
+    source: "The Book of Fire (p. 189)",
+    range: "3 mètres (10')",
+    area: "Une créature ciblée",
+    duration: "Infinie",
+    raises: "Portée (+1,5 m / +5')",
+    desc: "Exige 1 minute entière d'incantation et de remporter un jet opposé de Feu contre la cible pour lier un kami de Feu hostile à son âme. Une fois maudite, la victime est constamment enveloppée de flammes qui ne la blessent pas, mais infligent 3g3 dégâts à tout allié, ami ou innocent qui la touche et enflamment tout objet inflammable touché. Hostile, le kami recule soudain chaque fois que la victime tente de s'en servir contre ses ennemis. Dure indéfiniment sauf dissipation ou bannissement."
+  },
+  {
+    id: "feu-6-elements-fury",
+    name: "La Fureur des Éléments (The Elements' Fury)",
+    element: "Feu",
+    mastery: 6,
+    keywords: [],
+    source: "The Book of Fire (p. 189)",
+    range: "Personnelle",
+    area: "Le lanceur",
+    duration: "Instantanée",
+    raises: "Spéciale (+1 sort supplémentaire par tranche de 3 Augmentations)",
+    desc: "Forme suprême de Pas Pressés attribuée à Naka Kaeteru. À l'achèvement du sort, vous pouvez lancer immédiatement un nombre de sorts de Niveau de Maîtrise 4 ou inférieur égal à votre Anneau de Feu, en lançant chacun d'eux en tant qu'Action Gratuite quel que soit son temps d'incantation normal (jets d'incantation et emplacements dépensés normalement, sans avoir à prendre d'Augmentations pour accélérer l'incantation)."
   },
   {
     id: "feu-6-globe-everlasting-sun",
@@ -619,25 +763,25 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 6,
     keywords: ["Défense"],
-    source: "Livre des Règles L5R 4e, p. 187",
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "150 mètres (500')",
-    area: "Rayon de 1,5 kilomètre (1 mile)",
+    area: "1,6 kilomètre (1 mile)",
     duration: "1 Jour",
     raises: "Aucune",
-    desc: "Apaise la colère de tous les kami de Feu dans la région (traditionnellement utilisé lors des couronnements impériaux). Tous les bâtiments de la zone deviennent totalement insensibles au feu magique, et le ND de lancement de tout sort de Feu dans la zone augmente de +15. Les flammes profanes continuent de brûler mais deviennent léthargiques et ne se propagent plus."
+    desc: "Apaise tous les kami de Feu dans la zone (fréquemment invoqué lors des grands festivals et couronnements impériaux). Tous les bâtiments dans la zone deviennent immunisés aux effets du feu magique, et tous les sorts de Feu lancés dans la zone voient le ND de leur jet d'incantation augmenté de +15. Les feux ordinaires s'allument et brûlent mais demeurent apathiques et se propagent difficilement."
   },
   {
-    id: "feu-6-rise-flame",
-    name: "Éveil de la Flamme (Rise, Flame)",
+    id: "feu-6-rise-fire",
+    name: "Éveil du Feu (Rise, Fire)",
     element: "Feu",
     mastery: 6,
     keywords: [],
-    source: "The Book of Fire",
+    source: "The Book of Fire (p. 189)",
     range: "9 mètres (30')",
     area: "Un esprit invoqué",
     duration: "Concentration",
     raises: "Aucune",
-    desc: "Invoque un colosse de flammes pures et rugissantes haut de 3 mètres qui obéit à vos ordres mentaux. Ses Traits physiques sont égaux à votre Anneau de Feu, il attaque en Jiujutsu avec un score égal à votre Anneau de Feu et inflige des dégâts d'une VD égale à (Feu)g(Feu) ignorant la Réduction d'armure. Il possède une Réduction de 15, est Invulnérable et toute créature au contact ou au corps à corps avec lui subit 3g3 Blessures de feu au début de chaque round."
+    desc: "Accomplissement suprême du sort Invocation, appelant un massif kami de Feu pur d'apparence humanoïde d'environ 3 mètres (10') de haut aux contours sans cesse changeants. Il se déplace jusqu'à (3 m / 10' × votre Anneau de Feu) par Round et embrase tout objet facilement inflammable dans un rayon de 3 m (10'). Tous ses Traits Physiques sont égaux à votre Anneau de Feu, il attaque avec un rang de Jiujutsu égal à la moitié de votre Anneau de Feu et inflige une VD égale à votre Anneau de Feu (Feu g Feu) — toute cible touchée prend feu et subit 1g1 dégâts supplémentaires par Round jusqu'à extinction (non cumulable). Il encaisse les dégâts comme un humain ayant une Terre égale à votre Anneau de Feu (sans malus de Blessures), est Invulnérable et est dissipé s'il est réduit à 0 Blessure."
   },
   {
     id: "feu-6-souls-blade",
@@ -645,12 +789,12 @@ const SORTS_FEU = [
     element: "Feu",
     mastery: 6,
     keywords: ["Artisanat"],
-    source: "Livre des Règles L5R 4e, p. 187",
+    source: "Livre des Règles L5R 4e, p. 186",
     range: "Contact",
-    area: "Une arme",
+    area: "Une arme ciblée",
     duration: "5 Rounds",
     raises: "Durée (+1 round par tranche de 3 Augmentations)",
-    desc: "Lie la furie d'une tempête de feu dans une arme. Pendant toute la durée du sort, l'arme surmonte et ignore la capacité Invulnérabilité (Invulnerability), et chaque coup réussi infligeant des dégâts Assomme automatiquement la cible (état Stunned)."
+    desc: "Infuse une arme de la pleine furie d'un orage de feu. Pour toute la durée du sort, l'arme surmonte et ignore l'Invulnérabilité (Invulnerability), et toute cible touchée par cette arme est automatiquement Assommée (Stunned)."
   }
 ];
 

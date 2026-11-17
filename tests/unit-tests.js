@@ -16,6 +16,37 @@
   const gm = isNode ? require("../js/gm-screen.js") : window;
   const gmRules = isNode ? require("../data/gm-rules-data.js") : window;
 
+  const catalogScope = isNode ? (() => {
+    const fs = require("fs");
+    const path = require("path");
+    const vm = require("vm");
+    const root = path.resolve(__dirname, "..");
+    const win = {};
+    win.window = win;
+    const sandbox = vm.createContext({ window: win, globalThis: win, console });
+    const dataScripts = [
+      "data/competences-data.js",
+      "data/equipement-data.js",
+      "data/clans-data.js",
+      "data/avantages-desavantages-data.js",
+      "data/katas-data.js",
+      "data/tatouages-data.js",
+      "data/sorts/sorts-universels.js",
+      "data/sorts/sorts-air.js",
+      "data/sorts/sorts-terre.js",
+      "data/sorts/sorts-feu.js",
+      "data/sorts/sorts-eau.js",
+      "data/sorts/sorts-vide.js",
+      "data/sorts/sorts-kiho.js",
+      "data/sorts/sorts-maho.js",
+      "data/sorts-data.js"
+    ];
+    for (const rel of dataScripts) {
+      vm.runInContext(fs.readFileSync(path.join(root, rel), "utf8"), sandbox, { filename: rel });
+    }
+    return win;
+  })() : window;
+
   const suites = [];
   let currentSuite = null;
 
@@ -135,28 +166,37 @@
       assertEqual(cg.calculateVoidXpCost(3, 2, true), 16);
     });
 
-    it("calculateSkillXpCost gère les compétences d'école, spécialisations, Prodige et Esprit Obtus", function () {
+    it("calculateSkillXpCost gère les compétences d'école, spécialisations et Esprit Obtus (L5R 4e exact)", function () {
       // Compétence hors école de 0 à 3 : 1 + 2 + 3 = 6 XP
       assertEqual(cg.calculateSkillXpCost(3, { isSchool: false }), 6);
       // Compétence d'école (Rang 1 gratuit) de 1 à 3 : 2 + 3 = 5 XP (+2 XP avec spé = 7 XP)
       assertEqual(cg.calculateSkillXpCost(3, { isSchool: true, spec: true }), 7);
-      // Prodige sur compétence d'école de 1 à 3 : (2-1) + (3-1) = 1 + 2 = 3 XP
-      assertEqual(cg.calculateSkillXpCost(3, { isSchool: true, isProdigy: true }), 3);
+      // Prodige en 4e Édition confère +1g0 sur les Compétences d'École (aucune réduction XP)
+      assertEqual(cg.calculateSkillXpCost(3, { isSchool: true, isProdigy: true }), 5);
       // Esprit Obtus double les compétences Nobles/Hautes hors Enquête/Médecine
       assertEqual(cg.calculateSkillXpCost(2, { isSchool: false, isObtuse: true, isHighSkill: true, isExemptHigh: false }), 6); // (1+2)*2 = 6
       assertEqual(cg.calculateSkillXpCost(2, { isSchool: false, isObtuse: true, isHighSkill: true, isExemptHigh: true }), 3);  // exempté = 3
     });
 
-    it("getEffectiveAdvCost et getEffectiveDisadvGain appliquent les réductions et bonus par Clan et École", function () {
-      const crabBushiCtx = cg.buildCharacterContextFromInputs("crabe", "hida", "École de bushi Hida", "Bushi");
+    it("getEffectiveAdvCost, getEffectiveDisadvGain et MAX_DISADVANTAGE_XP respectent le Livre de Base 4e Édition", function () {
+      assertEqual(cg.MAX_DISADVANTAGE_XP, 10);
+      const crabBushiCtx = cg.buildCharacterContextFromInputs("crabe", "hida", "Bushi Hida", "Bushi");
       assertEqual(cg.getEffectiveAdvCost({ name: "Grand (Large)", cost: 4 }, crabBushiCtx), 3);
       assertEqual(cg.getEffectiveAdvCost({ name: "Force de la Terre", cost: 3 }, crabBushiCtx), 2);
+      assertEqual(cg.getEffectiveAdvCost({ name: "Mains de Crabe (Crab Hands)", cost: 3 }, crabBushiCtx), 2);
       assertEqual(cg.getEffectiveDisadvGain({ name: "Antisocial", gain: 2 }, crabBushiCtx), 3);
       assertEqual(cg.getEffectiveDisadvGain({ name: "Esprit Obtus", gain: 3 }, crabBushiCtx), 4);
 
-      const phoenixShugenjaCtx = cg.buildCharacterContextFromInputs("phenix", "isawa", "École de shugenja Isawa", "Shugenja");
+      const phoenixShugenjaCtx = cg.buildCharacterContextFromInputs("phenix", "isawa", "Shugenja Isawa", "Shugenja");
       assertEqual(cg.getEffectiveAdvCost({ name: "Ishiken-do", cost: 8 }, phoenixShugenjaCtx), 6);
       assertEqual(cg.getEffectiveAdvCost({ name: "Ami des Éléments", cost: 4 }, phoenixShugenjaCtx), 3);
+      assertEqual(cg.getEffectiveAdvCost({ name: "Bénédiction de Fukurokujin", impact: "fukurokujins_blessing", cost: 4 }, phoenixShugenjaCtx), 3);
+      assertEqual(cg.getEffectiveDisadvGain({ name: "Cœur Tendre", impact: "soft_hearted", gain: 2 }, phoenixShugenjaCtx), 3);
+
+      const ninjaCtx = cg.buildCharacterContextFromInputs("scorpion", "shosuro", "Infiltrateur Shosuro", "Ninja");
+      assertEqual(cg.getEffectiveAdvCost({ name: "Silencieux (Silent)", impact: "silent", cost: 3 }, ninjaCtx), 2);
+      assertEqual(cg.getEffectiveAdvCost({ name: "Astucieux (Crafty)", impact: "crafty", cost: 3 }, ninjaCtx), 2);
+      assertEqual(cg.getEffectiveDisadvGain({ name: "Sombre Secret", impact: "dark_secret", gain: 4 }, ninjaCtx), 5);
     });
 
     it("calculateArmorTN et calculateWoundThresholds calculent le ND d'Armure et les paliers de blessures", function () {
@@ -164,20 +204,22 @@
       assertEqual(cg.calculateArmorTN(3, 10, 2), 32);
 
       // Terre 3 => Indemne 15 PV, paliers 6 PV
-      assertDeepEqual(cg.calculateWoundThresholds(3), { multiplier: 3, healthy: 15, step: 6 });
+      assertDeepEqual(cg.calculateWoundThresholds(3), { multiplier: 3, bonusPerRank: 0, healthy: 15, step: 6 });
 
-      // Guerrier de Fer Daidoji avec Honneur 4.5 et Terre 2 => utilise floor(4.5) = 4 (20 PV / 8 PV)
-      assertDeepEqual(cg.calculateWoundThresholds(2, { isDaidoji: true, honorScore: 4.5 }), {
-        multiplier: 4,
-        healthy: 20,
-        step: 8
+      // Guerrier de Fer Daidoji Rang 1 (Core p.111) avec Honneur 6.5 et Terre 2 => +(max(1, floor(6.5)-4)) = +2 PV par palier (12 PV / 6 PV)
+      assertDeepEqual(cg.calculateWoundThresholds(2, { isDaidoji: true, honorScore: 6.5 }), {
+        multiplier: 2,
+        bonusPerRank: 2,
+        healthy: 12,
+        step: 6
       });
     });
 
     it("getMasteriesSummary retourne les maîtrises débloquées aux rangs 3, 5 et 7", function () {
       assertEqual(cg.getMasteriesSummary("Kenjutsu", 2), "");
-      assertEqual(cg.getMasteriesSummary("Kenjutsu", 3), "[R3: Dégainé Éclair]");
-      assertEqual(cg.getMasteriesSummary("Kenjutsu (Katana)", 5), "[R3: Dégainé Éclair] [R5: Tranchant Affûté]");
+      assertEqual(cg.getMasteriesSummary("Kenjutsu", 3), "[R3: Frappe Tranchante]");
+      assertEqual(cg.getMasteriesSummary("Kenjutsu (Katana)", 5), "[R3: Frappe Tranchante] [R5: Dégainé Éclair]");
+      assertEqual(cg.getMasteriesSummary("Iaijutsu", 7), "[R3: Dégainé Fulgurant] [R5: Maîtrise du Focus] [R7: Lame Sereine]");
     });
 
     it("resolveCatalogSkillMeta associe exactement le Trait même avec spécialité ou parenthèses", function () {
@@ -522,10 +564,11 @@
     });
 
     it("computeEffectiveCombatantTN gère Postures, Défense PJ, Étourdi, Aveuglé et À terre", function () {
-      const pcRef = { armorBonus: 10, defenseBonus: 6 };
+      const pcRef = { armorBonus: 10, defenseBonus: 6, traits: { reflexes: 3 } };
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "assaut", statuses: [] }, pcRef).effectiveTN, 20);
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "defense", statuses: [] }, pcRef).effectiveTN, 36);
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "defense", statuses: ["stunned"] }, pcRef).effectiveTN, 15); // 5 + armorBonus 10
+      assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 25, stance: "attaque", statuses: ["blinded"] }, null).effectiveTN, 9); // Réflexes 4 + 5
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 25, stance: "attaque", statuses: ["prone", "blinded"] }, null).effectiveTN, 5);
     });
 
@@ -540,8 +583,69 @@
       assertEqual(spell.formula, "6g3");
       assertEqual(spell.tn, 20);
 
+      // Déficience L5R 4e (LdB p.164) : -1 Rang d'École effectif (aucun +5 ND) ; Rang 0 = impossible
+      const defOk = gm.computeMagicCastParams(3, 2, 2, 0, "deficiency");
+      assertEqual(defOk.formula, "4g3");
+      assertEqual(defOk.tn, 15);
+      assertEqual(defOk.cannotCast, false);
+      assertEqual(gm.computeMagicCastParams(3, 1, 1, 0, "deficiency").cannotCast, true);
+
       const res = gm.filterGmRulesCards(gmRules.GM_RULES_CARDS, "all", "étourdi");
       assertTrue(res.length >= 1, "Le paravent doit retrouver la fiche contenant Étourdi");
+    });
+  });
+
+  // ===========================================================================
+  // 6. CATALOGUES OFFICIELS L5R 4E (SORTS, KATAS, TATOUAGES, AVANTAGES)
+  // ===========================================================================
+  describe("6. Catalogues L5R 4e — Intégrité, Volumes & Règles Exactes", function () {
+    it("SORTS_DATA agrège les 372 sorts, kihos et mahō officiels sans doublon d'ID", function () {
+      assertEqual((catalogScope.SORTS_UNIVERSELS || []).length, 5, "Universels");
+      assertEqual((catalogScope.SORTS_AIR || []).length, 68, "Air");
+      assertEqual((catalogScope.SORTS_TERRE || []).length, 58, "Terre");
+      assertEqual((catalogScope.SORTS_FEU || []).length, 59, "Feu");
+      assertEqual((catalogScope.SORTS_EAU || []).length, 41, "Eau");
+      assertEqual((catalogScope.SORTS_VIDE || []).length, 31, "Vide");
+      assertEqual((catalogScope.SORTS_KIHO || []).length, 64, "Kiho");
+      assertEqual((catalogScope.SORTS_MAHO || []).length, 46, "Maho");
+
+      const all = catalogScope.SORTS_DATA || [];
+      assertEqual(all.length, 372, "Total SORTS_DATA");
+      const ids = new Set(all.map(s => s.id));
+      assertEqual(ids.size, all.length, "Aucun identifiant de sort en doublon");
+    });
+
+    it("Les sorts et kihos corrigés portent les mécaniques exactes L5R 4e", function () {
+      const byId = catalogScope.SORTS_BY_ID || {};
+      assertTrue(!!byId["earth-1-soul-of-stone"], "Âme de Pierre (Core) présent");
+      assertTrue(!!byId["void-2-false-whispers"] && /Aucunes?/i.test(byId["void-2-false-whispers"].raises || ""), "Faux Murmures sans augmentations");
+      assertTrue(!!byId["kiho-void-4-banish-all-shadows"] && byId["kiho-void-4-banish-all-shadows"].isKiho === true, "Bannir Toutes les Ombres");
+      assertTrue(!!byId["maho-2-hates-heart"] && byId["maho-2-hates-heart"].mastery === 3 && byId["maho-2-hates-heart"].keywords.includes("Air"), "Cœur de Haine : Air 3 Mahō");
+    });
+
+    it("KATAS_DATA réunit les 40 Katas officiels 4e édition sans doublon", function () {
+      const katas = catalogScope.KATAS_DATA || [];
+      assertEqual(katas.length, 40, "Total Katas");
+      assertEqual(new Set(katas.map(k => k.id)).size, katas.length, "Aucun ID Kata en doublon");
+      const multiElem = katas.find(k => k.id === "kata-acier-empire-sur-fil");
+      assertTrue(!!multiElem && multiElem.element === "Air / Feu", "Kata bi-élémentaire Air / Feu");
+    });
+
+    it("TATOUAGES_DATA réunit les 24 Tatouages Togashi officiels 4e édition sans doublon", function () {
+      const tattoos = catalogScope.TATOUAGES_DATA || [];
+      assertEqual(tattoos.length, 24, "Total Tatouages");
+      assertEqual(new Set(tattoos.map(t => t.id)).size, tattoos.length, "Aucun ID Tatouage en doublon");
+      const dragon = tattoos.find(t => t.id === "tatouage-dragon");
+      const spider = tattoos.find(t => t.id === "tatouage-araignee");
+      assertTrue(!!dragon && /cône/i.test(dragon.rule || ""), "Tatouage Dragon (souffle en cône)");
+      assertTrue(!!spider && /verticales/i.test(spider.rule || ""), "Tatouage Araignée (parois verticales)");
+    });
+
+    it("L5R_DATA contient les avantages et désavantages corrigés (Nom Gaijin, Téméraire...)", function () {
+      const l5r = catalogScope.L5R_DATA || {};
+      const dis = l5r.disadvantages || [];
+      assertTrue(dis.some(d => d.id === "dis-nom-gaijin"), "Nom Gaijin présent");
+      assertTrue(dis.some(d => /Brash|Téméraire/.test(d.name || "")), "Téméraire (Brash) présent");
     });
   });
 

@@ -1,52 +1,55 @@
 /**
  * data/tatouages-data.js — L5R 4e Édition
- * Recueil exhaustif officiel de l'Ordre Tatoué Togashi (Ise Zumi)
- * Sources : Livre de Base (p. 263-266), Book of Air, Book of Earth, Book of Fire, Book of Water.
+ * Recueil officiel exact de l'Ordre Tatoué Togashi (Ise Zumi) (24 Tatouages).
+ * Sources : Livre de Base L5R 4e (pp. 115–116), The Book of Air (p. 195),
+ *           The Book of Earth (p. 207) et The Book of Fire (p. 192).
  *
- * RÈGLES DE BASE DES TATOUAGES ISE ZUMI :
- * - Progression : 2 tatouages aux Rangs 1, 3 et 5.
- * - Activation : Action Libre (Free Action), à condition que le tatouage soit à l'air libre.
- * - Limite : 1 seul tatouage actif simultanément (sauf mention explicite contraire).
- * - Durée : Nombre de rounds égal au double du Rang d'École (2 × Rang d'École), sauf durée spéciale indiquée.
+ * RÈGLES OFFICIELLES DES TATOUAGES ISE ZUMI (Livre de Base p. 115) :
+ * - Progression : 2 tatouages aux Rangs d'École 1, 3 et 5.
+ * - Exposition : Ne s'activent que découverts (inopérants s'ils sont couverts par un vêtement ou une armure).
+ * - Activation : Action Gratuite (Free Action), sauf mention contraire.
+ * - Limite : 1 seul tatouage actif simultanément (sauf mention contraire).
+ * - Durée : Nombre de rounds égal au double du Rang d'École (2 × Rang d'École), sauf mention contraire.
+ * - Option Tatouages Fusionnés (Book of Air p. 195) : En renonçant à un nouveau tatouage lors d'un gain de Rang, deux tatouages existants peuvent fusionner en un seul (s'activent ensemble en Action Gratuite pour 1 Point de Vide, sans jamais pouvoir être activés séparément).
  */
 
 (function () {
   const TATOUAGES_DATA = [
     // ==========================================
-    // --- 1. LIVRE DE BASE V4 (22 TATOUAGES) ---
+    // --- 1. LIVRE DE BASE V4 (20 TATOUAGES) ---
     // ==========================================
     {
       id: "tatouage-balance",
       name: "Balance (Balance)",
       kanji: "天秤",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 263)",
-      desc: "Deux plateaux en équilibre parfait, harmonisant le corps avec les flux magiques.",
-      rule: "Tant que ce tatouage est actif, le ND de tout jet d'incantation de sort (Spell Casting Roll) ciblant le moine est augmenté ou diminué d'une valeur égale à (2 × Rang d'École) + 5. Le joueur détermine s'il s'agit d'une augmentation ou d'une diminution au moment de l'activation."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 115)",
+      desc: "Le symbole spirituel du yin et du yang apaise l'esprit et l'âme.",
+      rule: "Tant que ce tatouage est actif, le ND de tous les jets d'incantation (Spell Casting Rolls) effectués en vous ciblant est augmenté ou diminué d'un montant égal à (2 × votre Rang d'École + 5). Vous choisissez s'il s'agit d'une augmentation ou d'une diminution au moment de l'activation."
     },
     {
       id: "tatouage-bambou",
       name: "Bambou (Bamboo)",
       kanji: "竹",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 263)",
-      desc: "Une tige de bambou vert peinte le long du dos, symbole de flexibilité et d'endurance.",
-      rule: "Tant que ce tatouage est actif, le ND d'Armure (Armor TN) du moine augmente d'une valeur égale à (2 × Rang d'École) + 5."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 115)",
+      desc: "Le bambou croît avec rapidité et résiste par sa souplesse sans jamais rompre.",
+      rule: "Tant que ce tatouage est actif, votre ND d'Armure (Armor TN) est augmenté d'un montant égal à (2 × votre Rang d'École + 5)."
     },
     {
       id: "tatouage-brasier",
       name: "Brasier (Blaze)",
       kanji: "火炎",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 263)",
-      desc: "Des flammes vives et dansantes parcourant les mains et les avant-bras.",
-      rule: "Les frappes à mains nues du moine s'enflamment. Toutes ses attaques à mains nues infligent un montant de dégâts de feu supplémentaire égal à son (Anneau de Feu + Rang d'École)."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 115)",
+      desc: "Libère la puissance et la furie du feu sur les mains et avant-bras.",
+      rule: "Vos frappes à mains nues s'accompagnent de flammes vacillantes qui infligent un montant supplémentaire de dégâts de feu égal à (votre Anneau de Feu + votre Rang d'École)."
     },
     {
       id: "tatouage-centipede",
@@ -55,86 +58,86 @@
       type: "Togashi",
       activation: "Action Complexe de Mouvement",
       duration: "Jusqu'à 1 jour entier",
-      source: "Livre de Base (p. 263)",
-      desc: "Un long scolopendre courant le long d'un membre inférieur.",
-      rule: "Le moine peut entreprendre une Action Complexe de Mouvement pour courir à une allure surhumaine : il parcourt une distance égale à son Anneau d'Eau × 100 pieds (environ Eau × 30 mètres) par action. Dure jusqu'à 24h. S'il s'arrête plus d'une minute, l'effet cesse et le moine devient Épuisé (aucune action physique pendant 12 heures)."
+      source: "Livre de Base (p. 115)",
+      desc: "Des centaines de pattes agissant à l'unisson pour porter le moine à travers l'Empire.",
+      rule: "À l'activation, vous pouvez effectuer une Action de Mouvement Complexe spéciale permettant de parcourir une distance égale à (votre Anneau d'Eau × 100 pieds, soit env. 30 m × Eau). Cet effet dure jusqu'à une journée entière, permettant de traverser l'Empire en un jour. Si vous vous arrêtez plus d'une minute, l'effet prend fin. À la fin de l'effet, vous vous effondrez d'épuisement et ne pouvez accomplir aucune action physique pendant 12 heures."
     },
     {
       id: "tatouage-crabe",
       name: "Crabe (Crab)",
       kanji: "蟹",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 263)",
-      desc: "Une carapace solide de crabe peinte en aplat sur le torse ou les épaules.",
-      rule: "Le moine bénéficie d'une Réduction des dégâts égale à son Anneau de Terre. Se cumule normalement avec toute armure ou technique."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Le minuscule crabe possède une carapace d'une résistance sans mesure pour sa taille.",
+      rule: "Tant que ce tatouage est actif, vous bénéficiez d'une Réduction égale à votre Anneau de Terre."
     },
     {
       id: "tatouage-dragon",
       name: "Dragon (Dragon)",
       kanji: "龍",
       type: "Togashi",
-      activation: "Action Libre (Dépense 1 point de Vide)",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 264)",
-      desc: "L'effigie majestueuse du Dragon céleste enroulée autour du buste.",
-      rule: "Requiert la dépense de 1 point de Vide à l'activation. Le moine dégage une présence terrifiante : il acquiert la capacité Peur (Fear) à un rang égal à son Rang d'École."
+      activation: "Action Complexe (pendant l'activation du tatouage)",
+      duration: "Instantané / 2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Un tatouage redoutable renfermant le souffle incandescent du Dragon Céleste.",
+      rule: "Par une Action Complexe, vous pouvez cracher du feu dans un cône mesurant (3 mètres / 10' + votre Rang d'École en pieds, soit env. +30 cm/Rang) de long et 1,5 mètre (5') de large à son extrémité. Ce feu inflige des dégâts à toute cible dans sa zone d'effet avec une VD égale à votre Anneau de Feu (Feu g Feu). Vous subissez vous-même un nombre de Blessures égal à votre Anneau de Feu à chaque utilisation."
     },
     {
       id: "tatouage-faucon",
-      name: "Faucon (Falcon)",
+      name: "Faucon (Hawk)",
       kanji: "鷹",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre d'heures égal au Rang d'École",
-      source: "Livre de Base (p. 264)",
-      desc: "Un rapace aux serres acérées prêt à fondre sur sa proie depuis l'omoplate.",
-      rule: "Le moine développe une acuité visuelle perçante : il ignore toutes les pénalités de visibilité liées à la distance, au brouillard, à la pluie ou à la faible luminosité pour ses jets de Perception."
+      activation: "Action Complexe",
+      duration: "Instantané",
+      source: "Livre de Base (p. 116)",
+      desc: "Emprunte l'essence du rapace des cimes pour franchir de grands espaces d'un bond.",
+      rule: "Par une Action Complexe, vous pouvez effectuer un bond sur une distance maximale égale à (votre Anneau d'Eau × 7,5 mètres / 25')."
     },
     {
       id: "tatouage-grue",
       name: "Grue (Crane)",
       kanji: "鶴",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "1 heure",
-      source: "Livre de Base (p. 264)",
-      desc: "Une grue élégante déployant ses ailes immaculées sur l'épaule.",
-      rule: "À l'activation, confère un réservoir de dés bonus égal à (Rang d'École + Anneau d'Air). Pendant l'heure qui suit, le moine peut dépenser ces dés pour obtenir +1g0 par dé sur ses jets de compétences sociales (limité à son Anneau de Vide par jet). Les dés non dépensés disparaissent après 1 heure."
+      activation: "Action Gratuite",
+      duration: "1 Heure",
+      source: "Livre de Base (p. 116)",
+      desc: "Symbole de bonne fortune, d'élégance et de beauté.",
+      rule: "À l'activation, vous gagnez une réserve de dés bonus égale à (votre Rang d'École + votre Anneau d'Air), dépensables sur tout jet de Compétence Sociale pour un bonus de +1g0 par dé (sans pouvoir ajouter plus de dés bonus à un même jet que votre Anneau de Vide). Les dés non utilisés après 1 heure sont perdus. Ce tatouage reste considéré comme actif pendant toute l'heure, et si vous activez un autre tatouage, les dés non dépensés sont perdus."
     },
     {
       id: "tatouage-ki-rin",
       name: "Ki-Rin (Ki-Rin)",
       kanji: "麒麟",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 264)",
-      desc: "La bête sacrée porteuse de fortune et de miracles célestes.",
-      rule: "Tant que le tatouage est actif, le moine peut relancer un dé ou un jet complet par round, et conserve le résultat le plus favorable des deux."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Peu de présages de bonne fortune égalent la créature sacrée des cieux.",
+      rule: "Dès l'activation et tant qu'il dure, vous pouvez immédiatement relancer n'importe quel unique jet de dé par round, en conservant le plus élevé des deux résultats."
     },
     {
       id: "tatouage-lion",
       name: "Lion (Lion)",
       kanji: "獅子",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 264)",
-      desc: "Un lion noble et musculeux prêt à bondir, symbole d'excellence guerrière.",
-      rule: "Lors de l'activation, le moine choisit une Compétence Bugei : il gagne temporairement un nombre de rangs dans cette compétence égal à son Rang d'École."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Le lion fier et noble, incarnant la maîtrise martiale.",
+      rule: "À l'activation, vous gagnez un nombre de Rangs égal à votre Rang d'École dans n'importe quelle Compétence Bugei de votre choix."
     },
     {
       id: "tatouage-loup",
       name: "Loup (Wolf)",
       kanji: "狼",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre d'heures égal au Rang d'École",
-      source: "Livre de Base (p. 264)",
-      desc: "Une silhouette de loup traqueur aux sens affûtés sur l'avant-bras.",
-      rule: "Le moine reçoit un nombre d'Augmentations Gratuites égal à son Rang d'École sur tous ses jets de Chasse (Pistage et traque)."
+      activation: "Action Gratuite",
+      duration: "Rang d'École en heures",
+      source: "Livre de Base (p. 116)",
+      desc: "Le grand pisteur des terres sauvages aux sens surnaturellement affûtés.",
+      rule: "À l'activation, vos sens deviennent surhumains et vous percevez les moindres détails et odeurs individuelles. Vous gagnez un nombre d'Augmentations Gratuites égal à votre Rang d'École sur tous vos jets de Compétence Chasse (Pistage) [Hunting (Tracking)]. Cet effet dure un nombre d'heures égal à votre Rang d'École."
     },
     {
       id: "tatouage-mante",
@@ -143,211 +146,145 @@
       type: "Togashi",
       activation: "Passif (Permanent)",
       duration: "Permanent",
-      source: "Livre de Base (p. 264)",
-      desc: "Une mante religieuse miniature aux pinces dressées sans peur.",
-      rule: "Le moine est totalement immunisé de façon permanente contre les effets de Peur. Ce tatouage ne compte pas dans la limite d'un seul tatouage actif."
+      source: "Livre de Base (p. 116)",
+      desc: "La mante est un combattant féroce et intrépide malgré sa taille minuscule.",
+      rule: "Dès réception de ce tatouage, vous êtes totalement immunisé contre tous les effets de Peur (Fear). Ce tatouage est actif en permanence et n'empêche pas l'utilisation d'autres tatouages."
     },
     {
       id: "tatouage-montagne",
       name: "Montagne (Mountain)",
       kanji: "山",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 265)",
-      desc: "Les hauts sommets escarpés des monts du Dragon gravés en aplat sombre.",
-      rule: "Le corps résiste au traumatisme : le moine réduit toutes les pénalités de ND infligées par ses Rangs de Blessures d'un montant égal à (Rang d'École + 2)."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "La montagne est éternelle et inébranlable face aux épreuves.",
+      rule: "À l'activation, toutes vos pénalités de Blessures (Wound Penalties) sont réduites d'un montant égal à (votre Rang d'École + 2)."
     },
     {
       id: "tatouage-ocean",
       name: "Océan (Ocean)",
       kanji: "海",
       type: "Togashi",
-      activation: "Action Libre / Passif",
-      duration: "Permanent + Rétablissement instantané",
-      source: "Livre de Base (p. 265)",
-      desc: "Des rouleaux d'écume marine et de vagues infinies ondulant sur les flancs.",
-      rule: "Le moine n'a plus besoin de boire ni de manger pour subsister. Une fois tous les 3 jours, il peut l'activer pour bénéficier instantanément des bienfaits de 8 heures de repos et récupérer tous ses points de Vide."
+      activation: "Passif / Action Gratuite",
+      duration: "Permanent / Instantané",
+      source: "Livre de Base (p. 116)",
+      desc: "Les abysses sans limites de l'océan détiennent les secrets de la vie et du renouveau.",
+      rule: "Dès que vous recevez ce tatouage, vous n'avez plus besoin ni de boire ni de manger (bien que vous le puissiez si vous le souhaitez). À l'activation, vous êtes instantanément rafraîchi comme après huit heures de sommeil et regagnez tous vos points de Vide dépensés. Ce tatouage ne peut être utilisé qu'une fois tous les trois jours."
     },
     {
       id: "tatouage-phenix",
       name: "Phénix (Phoenix)",
       kanji: "鳳凰",
       type: "Togashi",
-      activation: "Automatique (Réaction)",
-      duration: "Instantanée",
-      source: "Livre de Base (p. 265)",
-      desc: "L'oiseau immortel aux ailes de braise déployées sur la poitrine.",
-      rule: "Si le moine dispose d'au moins 1 point de Vide non dépensé et chute au rang Hors de Combat ou pire, le phénix s'active seul : tous ses points de Vide sont dépensés et il guérit immédiatement (Rang d'École × 10) Blessures. Limité à une fois par semaine."
+      activation: "Automatique",
+      duration: "Instantané",
+      source: "Livre de Base (p. 116)",
+      desc: "Le phénix ne peut jamais être véritablement vaincu et renaît de ses cendres.",
+      rule: "Vous devez posséder au moins un point de Vide non dépensé pour que ce tatouage se déclenche. Lorsque vous êtes réduit au Rang de Blessure À Terre (Down) ou en dessous, ce tatouage s'active automatiquement : tous vos points de Vide non dépensés sont perdus, et vous guérissez immédiatement d'un nombre de Blessures égal à (votre Rang d'École × 10). Ce tatouage ne peut pas être activé plus d'une fois par semaine."
     },
     {
       id: "tatouage-scorpion",
       name: "Scorpion (Scorpion)",
       kanji: "蠍",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 265)",
-      desc: "Un scorpion noir luisant prêt à piquer sur le poignet.",
-      rule: "Le moine gagne +Rang d'École g 0 sur ses jets de Discrétion. De plus, ses attaques à mains nues rendent la cible Étourdie (Dazed) pour 1 round dès qu'un dé explose sur son jet de dégâts."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Le scorpion est silencieux, patient et mortel.",
+      rule: "Tant que ce tatouage est actif, vous lancez un nombre de dés supplémentaires égal à votre Rang d'École (+Rang g 0) sur tout jet de Compétence Discrétion (Stealth). De plus, durant cet effet, vos attaques à mains nues infligent automatiquement l'état Étourdi (Dazed) à votre adversaire si au moins un dé explose sur votre jet de dégâts."
     },
     {
-      id: "tatouage-singe",
-      name: "Singe (Monkey)",
-      kanji: "猿",
+      id: "tatouage-araignee",
+      name: "Araignée (Spider)",
+      kanji: "蜘蛛",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 265)",
-      desc: "Un macaque agile bondissant d'un membre à l'autre.",
-      rule: "Bonus de +(2 × Rang d'École) à tous ses jets d'Athlétisme. Se relever lorsqu'il est À Terre (Prone) devient une Action Libre sans coût en mouvement."
-    },
-    {
-      id: "tatouage-soleil",
-      name: "Soleil (Sun)",
-      kanji: "日",
-      type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 265)",
-      desc: "Un disque solaire étincelant gravé dans la paume.",
-      rule: "Le moine irradie d'une lumière solaire pure dans un rayon de 9 mètres. Toute créature ayant au moins 1 Rang de Souillure subit -2g0 à ses jets d'attaque et encaisse (Rang d'École)g(Rang d'École) dégâts au début de chaque tour passé dans la zone."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "L'araignée est vive et adroite, échappant aux prédateurs grâce à son agilité.",
+      rule: "Tant que ce tatouage est actif, vous pouvez vous déplacer sur des surfaces verticales et inversées (telles que murs verticaux ou plafonds) lorsque vous effectuez des Actions de Mouvement. Vous vous déplacez à la moitié de votre vitesse normale en agissant ainsi."
     },
     {
       id: "tatouage-tempete",
       name: "Tempête (Storm)",
       kanji: "嵐",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 265)",
-      desc: "Des spirales de nuées orageuses et d'éclairs zébrant les cuisses.",
-      rule: "Le coût de la manœuvre Renversement (Knockdown) à mains nues est réduit à une seule Augmentation au lieu de deux."
-    },
-    {
-      id: "tatouage-tortue",
-      name: "Tortue (Turtle)",
-      kanji: "亀",
-      type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 266)",
-      desc: "Une tortue millénaire parée d'écaille protectrice sur le sternum.",
-      rule: "Bonus de +(Rang d'École × 2) au ND d'Armure en Posture Défense ou Défense Totale. Confère également +1g1 sur tous les jets de Volonté pour contrer la manipulation sociale ou l'intimidation."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "La tempête est la furie de la nature et peu savent résister à sa puissance brute.",
+      rule: "Tant que ce tatouage est actif, vos attaques à mains nues ne nécessitent qu'une seule Augmentation (au lieu de deux) pour utiliser la manœuvre Renversement (Knockdown)."
     },
     {
       id: "tatouage-vide",
       name: "Vide (Void)",
       kanji: "空",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 266)",
-      desc: "Le cercle parfait de l'Ensō tracé à l'encre noire au plexus.",
-      rule: "Le moine perçoit directement l'essence vitale des créatures : il détecte l'emplacement exact de tout être vivant dans un rayon de (Rang d'École × 10) pieds (Rang × 3 m)."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Ce kanji d'encre noire incarne l'unité avec toute chose.",
+      rule: "À l'activation, vous percevez toute vie autour de vous : vous connaissez l'emplacement et des détails généraux sur tous les êtres vivants dans un rayon de (votre Rang d'École × 3 mètres / 10'), même sans pouvoir les voir. Vous ne connaissez que des détails généraux (« deux guerriers », « deux lapins ») et non leur identité exacte, sauf s'il s'agit d'individus qui vous sont bien connus."
     },
     {
       id: "tatouage-vent",
       name: "Vent (Wind)",
       kanji: "風",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Livre de Base (p. 266)",
-      desc: "Des courants d'air vaporeux enroulés autour des jambes.",
-      rule: "Confère une Action Simple supplémentaire par tour (ne pouvant pas être utilisée pour attaquer) et lève la restriction de mouvement maximale liée à l'Anneau d'Eau."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "Livre de Base (p. 116)",
+      desc: "Le vent est rapide et se déplace sans nulle entrave.",
+      rule: "Tant que ce tatouage est actif, vous gagnez une Action Simple supplémentaire par round, qui ne peut être utilisée pour porter une attaque. De plus, votre déplacement total maximal n'est plus limité à (votre Anneau d'Eau × 6 mètres / 20')."
     },
 
     // ==========================================
-    // --- 2. SUPPLÉMENTS OFFICIELS V4 ---
+    // --- 2. SUPPLÉMENTS OFFICIELS V4 (4 TATOUAGES) ---
     // ==========================================
-    {
-      id: "tatouage-chuchotement",
-      name: "Chuchotement (Whisper)",
-      kanji: "囁き",
-      type: "Togashi",
-      activation: "Action Complexe",
-      duration: "Instantané",
-      source: "Book of Air (p. 182)",
-      desc: "Un motif de spirale d'air discret près de l'oreille ou de la mâchoire.",
-      rule: "Permet de chuchoter un message mental à n'importe quelle personne située dans un rayon de (10 × Rang d'École) miles. La cible entend la voix distinctement dans son esprit, mais ne peut pas répondre sans moyen magique."
-    },
     {
       id: "tatouage-nuage",
       name: "Nuage (Cloud)",
       kanji: "雲",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Air (p. 182)",
-      desc: "Des volutes de brume nébuleuse estompant les contours corporels du moine.",
-      rule: "Toute attaque de mêlée portée contre le moine qui réussit doit immédiatement réussir un second jet d'attaque identique ou échouer. En contrepartie, le moine ne peut porter aucune attaque tant que ce tatouage est actif."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "The Book of Air (p. 195)",
+      desc: "Confère au moine les qualités éthérées du vent et des cieux.",
+      rule: "Tant que ce tatouage est actif, toute attaque de mêlée qui vous touche avec succès doit immédiatement réussir un second jet d'attaque : si ce second jet échoue, le coup rate. En contrepartie, tant que ce tatouage est actif, vous ne pouvez porter aucune attaque d'aucune sorte."
+    },
+    {
+      id: "tatouage-chuchotement",
+      name: "Chuchotement (Whisper)",
+      kanji: "囁き",
+      type: "Togashi",
+      activation: "Action Complexe (pendant l'activation du tatouage)",
+      duration: "2 × Rang d'École en rounds",
+      source: "The Book of Air (p. 195)",
+      desc: "Tatouage très rare figurant une personne de profil portant la main à la bouche.",
+      rule: "Tant que ce tatouage est actif, par une Action Complexe vous pouvez envoyer un message chuchoté à n'importe quelle personne située dans un rayon de (10 × votre Rang d'École) miles (× 1,6 km). Vous ne pouvez pas recevoir de messages de la cible à moins qu'elle ne partage le même tatouage ou dispose d'un autre moyen de transmission."
     },
     {
       id: "tatouage-ours",
       name: "Ours (Bear)",
       kanji: "熊",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Earth (p. 177)",
-      desc: "L'ours des forêts montagneuses dressé sur ses pattes arrière.",
-      rule: "À l'activation, le moine choisit : soit d'augmenter son Trait de Vigueur d'une valeur égale à son Rang d'École, soit d'augmenter son Trait de Force d'une valeur égale à la moitié de son Rang d'École (arrondie au supérieur)."
-    },
-    {
-      id: "tatouage-sanglier",
-      name: "Sanglier (Boar)",
-      kanji: "猪",
-      type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Earth (p. 177)",
-      desc: "Un sanglier massif aux défenses acérées labourant la terre sur l'épaule.",
-      rule: "Le moine devient impossible à déstabiliser lors d'une charge : il gagne +2g0 aux dégâts de ses attaques à mains nues en Posture Assaut (Full Attack) et ne subit pas le malus de ND d'Armure habituel de cette posture."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "The Book of Earth (p. 207)",
+      desc: "L'ours est une force primordiale de la nature, redoutable jusque dans ses moments de faiblesse.",
+      rule: "Tant que ce tatouage est actif, vous pouvez choisir soit d'augmenter votre Constitution (Stamina) d'un montant égal à votre Rang d'École, soit d'augmenter votre Force (Strength) d'un montant égal à la moitié de votre Rang d'École (arrondie au supérieur) — mais jamais les deux simultanément."
     },
     {
       id: "tatouage-volcan",
       name: "Volcan (Volcano)",
       kanji: "火山",
       type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Fire (p. 172)",
-      desc: "Un pic rocheux crachant des veines de magma incandescent sur le torse.",
-      rule: "La peau prend la consistance de roche magmatique. Le moine gagne une Réduction de 5 contre les armes en bois ou projectiles enflammés. Tout assaillant le frappant avec une arme en métal doit réussir un jet opposé de Feu ou lâcher son arme devenue brûlante."
-    },
-    {
-      id: "tatouage-centaure",
-      name: "Centaure / Sagittaire (Centaur)",
-      kanji: "人馬",
-      type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Fire (p. 172)",
-      desc: "Une créature hybride mi-homme mi-cheval bandant un arc de braise.",
-      rule: "Les membres inférieurs acquièrent l'endurance d'un étalon de guerre : le moine ajoute son Anneau de Feu à ses jets d'Initiative et ses distances de saut sont doublées."
-    },
-    {
-      id: "tatouage-poisson-chat",
-      name: "Poisson-Chat (Catfish / Namazu)",
-      kanji: "鯰",
-      type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Water (p. 175)",
-      desc: "Le silure géant des légendes fluviales couché le long des vertèbres.",
-      rule: "Le corps devient extrêmement glissant et insaisissable. Le moine est totalement immunisé contre la manœuvre Lutte (Grapple) et bénéficie d'un bonus de +3g1 pour s'extirper de tout lien, entrave ou piège physique."
-    },
-    {
-      id: "tatouage-raie",
-      name: "Raie (Manta Ray)",
-      kanji: "鱏",
-      type: "Togashi",
-      activation: "Action Libre",
-      duration: "Nombre de rounds égal au double du Rang d'École",
-      source: "Book of Water (p. 175)",
-      desc: "Une grande raie glissant gracieusement sur les omoplates.",
-      rule: "Le moine nage à sa vitesse de course terrestre normale, peut respirer sous l'eau sans aucune difficulté et ne subit aucun malus de combat sous-marin."
+      activation: "Action Gratuite",
+      duration: "2 × Rang d'École en rounds",
+      source: "The Book of Fire (p. 192)",
+      desc: "La peau du torse et des membres supérieurs prend l'aspect de lave noire fissurée d'éclats incandescents.",
+      rule: "Tout objet inflammable frappant le corps du moine (armes en bois, flèches) se consume en cendres, conférant Réduction 5 contre ces attaques. Les armes métalliques infligent leurs dégâts normaux, mais leurs porteurs doivent remporter un jet opposé de Feu contre le moine sous peine de lâcher leur arme brûlante (les Armes Sacrées et nemuranai sont immunisés). Les attaques à mains nues (dont Frapper en Lutte) infligent des dégâts normaux — sauf si le MJ juge que des coups très puissants (> 2 dés gardés) fissurent la lave, infligeant au frappeur des Blessures égales à l'Anneau de Feu du moine. L'effet peut être évité via Coup Précis visant tête ou membres inférieurs."
     }
   ];
 

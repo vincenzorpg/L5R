@@ -49,335 +49,245 @@
 
   <!-- CONTENU DU MÉMENTO -->
   <main class="max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
+<header class="text-center space-y-2 border-b border-amber-500/20 pb-6">
+      <p class="text-xs uppercase tracking-[0.25em] text-amber-400 font-imperial">Aide de Jeu — Livre de Base (pp. 76–89, 198–199, 236–240)</p>
+      <h1 class="text-3xl md:text-5xl font-imperial font-bold gold-gradient">Mémento du Combat &amp; des Duels</h1>
+      <p class="text-stone-400 text-sm max-w-2xl mx-auto">Texte exact et complet des mécaniques de jets, d'escarmouche, des 5 Postures, des Manœuvres, des États préjudiciables, de la Lutte, du Duel Iaijutsu et des Batailles Rangées (4<sup>e</sup> Édition).</p>
+    </header>
 
-    <!-- HERO SECTION -->
-    <section class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6 shadow-2xl">
-      <div class="space-y-2 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/60 border border-amber-500/30 text-[10px] uppercase tracking-widest text-amber-300 font-bold">
-          <span>📜</span> Guide Tactique & Arbitrage 4e Édition
-        </div>
-        <h1 class="text-2xl md:text-4xl font-black font-imperial tracking-wide gold-gradient">
-          MÉMENTO DU COMBAT & DES DUELS
-        </h1>
-        <p class="text-xs md:text-sm text-stone-300 italic">
-          « L'acier n'est qu'un prolongement de l'esprit : agir avec hésitation, c'est inviter la lame adverse dans son propre cœur. »
-        </p>
+    <!-- 1. MÉCANIQUES FONDAMENTALES -->
+    <section class="card-clean rounded-xl p-6 space-y-5">
+      <div class="flex items-center gap-3 border-b border-amber-500/20 pb-3">
+        <span class="text-2xl">🎲</span>
+        <h2 class="text-xl font-imperial font-bold text-amber-300">Formules Clés du Système Roll &amp; Keep (XkY / XgY)</h2>
       </div>
-      <div class="flex flex-col gap-2 shrink-0 text-center">
-        <span class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Initiative d'Escarmouche</span>
-        <div class="p-2.5 px-4 rounded-xl bg-black/60 border border-amber-500/40 text-sm font-bold font-imperial text-amber-300 shadow">
-          (Rang d'Insight + Réflexes) g Réflexes
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs text-stone-300">
+        <div class="p-4 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-200 text-sm">Table 2.1 : Seuils de Difficulté (ND)</h3>
+          <ul class="space-y-1 font-mono">
+            <li><b class="text-stone-200">Aucun jet</b> : Anodin (Mundane)</li>
+            <li><b class="text-emerald-300">5</b> : Très facile &nbsp;•&nbsp; <b class="text-emerald-300">10</b> : Facile</li>
+            <li><b class="text-amber-200">15</b> : Moyen &nbsp;•&nbsp; <b class="text-amber-300">20</b> : Modéré</li>
+            <li><b class="text-orange-300">25</b> : Difficile &nbsp;•&nbsp; <b class="text-red-300">30</b> : Très difficile</li>
+            <li><b class="text-rose-400">40</b> : Héroïque &nbsp;•&nbsp; <b class="text-rose-500">60</b> : Impossible</li>
+          </ul>
         </div>
-        <span class="text-[9px] text-stone-500 italic">Conservée pour toute l'escarmouche</span>
+        <div class="p-4 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-200 text-sm">Règle des 10 Dés &amp; Explosions</h3>
+          <p><b>Dés explosifs :</b> Un <b>10</b> est relancé et additionné (sauf jet Sans Compétence ou effet interdisant l'explosion). Une <b>Spécialisation</b> relance les <b>1</b> une seule fois.</p>
+          <p><b>Règle des 10 dés :</b> Maximum 10 lancés / 10 gardés. Chaque tranche de <b>2</b> dés lancés au-delà de 10 devient <b>+1 dé gardé</b> (jusqu'à 10g10). Une fois à 10g10, chaque dé lancé <b>ou</b> gardé supplémentaire ajoute <b>+2 au total</b> (ex. 13g9 → 10g10+2 ; 14g12 → 10g10+12).</p>
+        </div>
+        <div class="p-4 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-200 text-sm">Points de Vide &amp; Augmentations</h3>
+          <p><b>1 Point de Vide / Round max :</b> +1g1 (Compétence/Trait/Anneau/Sort, jamais dégâts/Init.) ; considérer Compétence 0 comme rang 1 ; réduire de 10 les Blessures d'1 source ; au début du Round : +10 ND Armure (1 Round), échanger son Init. (1/Round), ou +10 Init. (1/escarmouche).</p>
+          <p><b>Augmentations :</b> +5 ND chacune (max = Anneau de Vide, hors gratuites). Échec si jet &lt; ND total.</p>
+        </div>
       </div>
-    </section>
-
-    <!-- SECTION 1 : CHRONOLOGIE COMPLÈTE DU ROUND D'ESCARMOUCHE -->
-    <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2 flex justify-between items-baseline">
-        <div>
-          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">1. Déroulement d'un Round d'Escarmouche</h2>
-          <span class="text-xs text-stone-400">Une escarmouche se résout en rounds successifs articulés en 3 étapes impératives (Livre de Base, p. 81-83).</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-stone-300">
+        <div class="p-4 rounded-lg bg-black/35 border border-stone-800 space-y-1">
+          <b class="text-amber-200">Types de jets :</b> Compétence = <code>(Compétence + Trait) g Trait</code> ; Trait/Anneau = <code>Rang g Rang</code> ; <b>Sans Compétence (rang 0)</b> = <code>Trait g Trait</code> sans explosion, sans Augmentation et sans bonus d'arme/équipement.
         </div>
-        <span class="text-xs font-imperial text-amber-400 hidden sm:inline">Structure du Tour</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        
-        <!-- ÉTAPE 1 -->
-        <div class="card-clean rounded-xl p-4 space-y-2.5 border-t-2 border-amber-500 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[10px]">Étape 1</span>
-              <span class="text-stone-400 font-imperial font-bold">Début du Round</span>
-            </div>
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Initiative & Préparation</h3>
-            <p class="text-stone-300 leading-relaxed">
-              <b>Au Round 1 :</b> Chaque belligérant effectue son jet d'Initiative : <b>(Insight + Réflexes) g Réflexes</b>. Ce score détermine l'ordre d'action pour toute la rencontre.
-            </p>
-            <p class="text-stone-400 leading-relaxed">
-              Les combattants surpris ne lancent pas l'Initiative et agissent en dernier au Round 1 avec un malus de <b>-5 au ND d'Armure</b>.
-            </p>
-          </div>
-          <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-amber-300">
-            ⚡ <b>Dépense de Vide :</b> +10 au score d'Initiative pour le round en cours.
-          </div>
+        <div class="p-4 rounded-lg bg-black/35 border border-stone-800 space-y-1">
+          <b class="text-amber-200">Jets Coopératifs &amp; Cumulatifs :</b> Coopératif : 1 assistant = <code>+1g0</code> ; 2+ assistants = bonus au total égal au Trait (ou rang de Compétence s'il est inférieur) de chacun. Cumulatif : somme de jets ; tout jet raté inflige <b>+10 ND</b> au suivant.
         </div>
-
-        <!-- ÉTAPE 2 -->
-        <div class="card-clean rounded-xl p-4 space-y-2.5 border-t-2 border-red-500 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">Étape 2</span>
-              <span class="text-stone-400 font-imperial font-bold">Résolution des Tours</span>
-            </div>
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Posture & Actions du Tour</h3>
-            <p class="text-stone-300 leading-relaxed">
-              Les combattants agissent à tour de rôle, par ordre décroissant d'Initiative. <b>Au début précis de son tour</b>, le personnage :
-            </p>
-            <ol class="list-decimal pl-4 space-y-1 text-stone-300">
-              <li><b>Déclare sa Posture :</b> Elle prend effet aussitôt et persiste jusqu'au début de son propre tour au round suivant.</li>
-              <li><b>Exécute ses Actions :</b> Soit <b>1 Action Complexe</b>, soit <b>2 Actions Simples</b>, ainsi que des Actions Gratuites.</li>
-            </ol>
-          </div>
-          <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-stone-300">
-            🏃 <b>Déplacement :</b> Eau × 1,5 m (Gratuit) | Eau × 3 m (Simple) | Eau × 6 m (Course Complexe).
-          </div>
-        </div>
-
-        <!-- ÉTAPE 3 -->
-        <div class="card-clean rounded-xl p-4 space-y-2.5 border-t-2 border-blue-500 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 font-bold uppercase text-[10px]">Étape 3</span>
-              <span class="text-stone-400 font-imperial font-bold">Fin du Round</span>
-            </div>
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Phase de Réaction</h3>
-            <p class="text-stone-300 leading-relaxed">
-              Une fois que tous les protagonistes ont agi :
-            </p>
-            <ul class="list-disc pl-4 space-y-1 text-stone-300">
-              <li><b>Expiration des effets :</b> Les sorts et bonus temporaires valables « 1 round » prennent fin.</li>
-              <li><b>Récupération d'états :</b> Jets de Terre contre les états préjudiciables (Étourdi / Dazed, poison, feu).</li>
-              <li><b>Techniques de Réaction :</b> Résolution des capacités d'école spécifiques déclenchées en fin de tour.</li>
-            </ul>
-          </div>
-          <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-stone-400">
-            🔄 On enchaîne directement sur l'Étape 2 du round suivant.
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <!-- SECTION 2 : LES CINQ POSTURES DE COMBAT -->
-    <section class="space-y-4">
-      <div class="border-b border-amber-500/20 pb-2">
-        <h2 class="text-base md:text-lg font-bold font-imperial gold-text">2. Les 5 Postures de Combat (Stances)</h2>
-        <span class="text-xs text-stone-400">La posture est choisie au début du tour du personnage et reste en vigueur jusqu'à son tour au round suivant (Livre de Base, p. 84-85).</span>
+    <!-- 2. DÉROULEMENT D'UN ROUND D'ESCARMOUCHE -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <div class="flex items-center gap-3 border-b border-amber-500/20 pb-3">
+        <span class="text-2xl">⚔️</span>
+        <h2 class="text-xl font-imperial font-bold text-amber-300">1. Déroulement d'un Round d'Escarmouche &amp; Actions</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-stone-300">
+        <div class="p-4 rounded-lg bg-black/35 border border-stone-800 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-200 text-sm">Étape 1 : Initiative &amp; Posture</h3>
+          <p><b>Initiative (Round 1) :</b> <code>(Rang Réputation + Réflexes) g Réflexes</code>. Ordre décroissant toute l'escarmouche.</p>
+          <p><b>Embuscade (p. 82) :</b> Perception vs Discrétion (ou Survie). Cibles surprises : <b>-10 à l'Initiative</b> pour toute l'escarmouche.</p>
+          <p>Chacun choisit sa Posture au Round 1 (puis peut en changer au début de son Tour).</p>
+        </div>
+        <div class="p-4 rounded-lg bg-black/35 border border-stone-800 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-200 text-sm">Étape 2 : Tour d'Action &amp; Mouvement</h3>
+          <p>Par Tour : <b>1 Action Complexe + Actions Gratuites</b> OU <b>2 Actions Simples + Actions Gratuites</b> (même Action Gratuite 1×/Round max).</p>
+          <p><b>Mouvement :</b> Gratuite = <code>Eau × 1,5 m (5')</code> ; Simple = <code>Eau × 3 m (10')</code> ; maximum absolu = <code>Eau × 6 m (20')</code>/Round. Terrain Modéré = Eau -1 (min 1) ; Difficile = Eau -2 (min 1 ; option -5/-10 aux jets physiques).</p>
+        </div>
+        <div class="p-4 rounded-lg bg-black/35 border border-stone-800 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-200 text-sm">Étape 3 : Phase de Réaction &amp; Blessures</h3>
+          <p>Fin des effets temporaires ; jets de Terre ND 20 pour récupérer d'<i>Étourdi</i> ou d'<i>Hébété</i>.</p>
+          <p><b>ND Armure :</b> <code>(Réflexes × 5) + 5 + Armure</code>. <b>Paliers (Terre ×2 standard) :</b> Indemne (Terre×5), Éraflure (+3), Légère (+5), Moyenne (+10), Grave (+15), Handicapante (+20), Hors de combat (pas d'action, saigne/meurt si non soigné), Mort (Terre×19 total).</p>
+          <p><b>Guérison nocturne :</b> <code>(2 × Constitution) + Rang de Réputation</code> Blessures.</p>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
-
-        <!-- ATTAQUE (EAU) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-blue-500/40 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-              <span class="font-bold text-blue-300 font-imperial text-sm">水 Attaque</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-950 text-blue-300">Eau</span>
-            </div>
-            <p class="text-stone-300 leading-relaxed">
-              Posture martiale équilibrée adoptée par défaut. Aucune restriction sur les actions : permet le corps-à-corps, le tir à l'arc, les sorts et les déplacements normaux.
-            </p>
-          </div>
-          <div class="text-[10px] text-stone-400 pt-1 border-t border-stone-800/60 font-bold">
-            ND d'Armure standard (sans bonus ni malus).
-          </div>
-        </div>
-
-        <!-- ATTAQUE TOTALE (FEU) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-red-500/40 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-              <span class="font-bold text-red-300 font-imperial text-sm">火 Attaque Totale</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-950 text-red-300">Feu</span>
-            </div>
-            <p class="text-stone-300 leading-relaxed">
-              Assaut sauvage et désespéré. Confère <b>+2g1 à tous les jets d'attaque au corps-à-corps</b> et permet de se déplacer de +1,5 m supplémentaire vers l'ennemi.
-            </p>
-          </div>
-          <div class="text-[10px] text-red-400 font-bold pt-1 border-t border-stone-800/60">
-            Malus : -10 au ND d'Armure. Tir à l'arc interdit. Doit attaquer ou avancer.
-          </div>
-        </div>
-
-        <!-- DÉFENSE (AIR) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-teal-500/40 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-              <span class="font-bold text-teal-300 font-imperial text-sm">風 Défense</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 text-teal-300">Air</span>
-            </div>
-            <p class="text-stone-300 leading-relaxed">
-              Garde fluide et prudente. Le combattant pare et esquive. Il ajoute son <b>rang de Défense + son Anneau d'Air</b> à son ND d'Armure.
-            </p>
-          </div>
-          <div class="text-[10px] text-teal-400 font-bold pt-1 border-t border-stone-800/60">
-            Attaques physiques impossibles. Sorts et mouvements permis.
-          </div>
-        </div>
-
-        <!-- DÉFENSE TOTALE (TERRE) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-amber-500/40 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-              <span class="font-bold text-amber-300 font-imperial text-sm">土 Défense Totale</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300">Terre</span>
-            </div>
-            <p class="text-stone-300 leading-relaxed">
-              Consomme <b>1 Action Complexe</b>. Le samouraï effectue un jet de <b>Défense / Réflexes</b>. Il ajoute <b>la moitié du résultat (arrondie au supérieur)</b> à son ND d'Armure.
-            </p>
-          </div>
-          <div class="text-[10px] text-amber-400 font-bold pt-1 border-t border-stone-800/60">
-            Seules les Actions Gratuites sont permises ce tour.
-          </div>
-        </div>
-
-        <!-- CENTRE (VIDE) -->
-        <div class="card-clean rounded-xl p-3.5 space-y-2 border-purple-500/40 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center border-b border-stone-800 pb-1">
-              <span class="font-bold text-purple-300 font-imperial text-sm">空 Centre</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-950 text-purple-300">Vide</span>
-            </div>
-            <p class="text-stone-300 leading-relaxed">
-              Méditation martiale. Aucune action ce tour. Au tour suivant : <b>+1g1 + Rang de Vide</b> sur n'importe quel jet, et <b>+10 à l'Initiative</b> pour le round suivant.
-            </p>
-          </div>
-          <div class="text-[10px] text-purple-300 font-bold pt-1 border-t border-stone-800/60">
-            Posture obligatoire lors des duels d'Iaijutsu.
-          </div>
-        </div>
-
+      <!-- Table 2.2 Exemples d'actions -->
+      <div class="overflow-x-auto pt-2">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-amber-950/35 border-b border-amber-500/30 font-imperial text-amber-300">
+              <th class="p-2.5">Actions Gratuites (1×/Round)</th>
+              <th class="p-2.5">Actions Simples (2/Tour)</th>
+              <th class="p-2.5">Actions Complexes (1/Tour)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-800/80 text-stone-300">
+            <tr>
+              <td class="p-2.5 align-top">Dégainer une petite arme • Parler (≤ 5 mots) • Se déplacer (Eau × 1,5 m) • Sortir un parchemin • Lâcher un objet/arme</td>
+              <td class="p-2.5 align-top">Activer un Kata • Dégainer une arme moyenne ou grande • Se déplacer (Eau × 3 m) • Descendre de monture • Garder quelqu'un • Ramasser une arme/objet • Ranger un parchemin • Parler (&gt; 5 mots) • Se relever (À terre)</td>
+              <td class="p-2.5 align-top">Attaquer (mêlée ou distance) • Lancer un Sort • Utiliser une Compétence (hors Combat) • Bander un arc • Monter à cheval • Défense Totale • Initier une Lutte</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 3 : PROCÉDURE OFFICIELLE DU DUEL D'IAIJUTSU -->
-    <section class="card-clean rounded-xl p-6 space-y-5 border-amber-500/40 shadow-xl">
-      <div class="border-b border-amber-500/20 pb-2 flex flex-wrap justify-between items-baseline gap-2">
-        <div>
-          <h2 class="text-base md:text-lg font-bold font-imperial gold-text">3. Le Duel d'Iaijutsu (3 Rounds Rituels)</h2>
-          <span class="text-xs text-stone-400">Procédure formelle au premier sang ou à mort (Livre de Base, p. 87-88). Les deux duellistes sont en posture du Centre.</span>
-        </div>
-        <span class="text-xs text-amber-400 font-imperial">Art suprême du sabre</span>
+    <!-- 3. LES 5 POSTURES -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <div class="flex items-center gap-3 border-b border-amber-500/20 pb-3">
+        <span class="text-2xl">🛡️</span>
+        <h2 class="text-xl font-imperial font-bold text-amber-300">2. Les 5 Postures de Combat (Stances — p. 84)</h2>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        
-        <!-- ROUND 1 : ÉVALUATION -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-bold uppercase text-[10px]">Round 1</span>
-              <span class="font-bold text-stone-300">Observation</span>
-            </div>
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Évaluation (Assessment)</h3>
-            <p class="text-stone-300 leading-relaxed">
-              Chaque duelliste effectue un jet d'<b>Iaijutsu (Évaluation) / Intuition</b> contre un <b>ND = 10 + (5 × Réputation adverse)</b>.
-            </p>
-            <p class="text-stone-400 leading-relaxed">
-              La réussite révèle 1 caractéristique cachée (Rang de Vide, Réflexes, rang d'Iaijutsu ou niveau de blessures actuel) + 1 information par Augmentation réussie.
-            </p>
-          </div>
-          <div class="p-2 rounded bg-amber-950/40 border border-amber-800/40 text-[10px] text-amber-300">
-            Si votre total dépasse celui de l'adversaire de 10+, vous gagnez <b>+1g1</b> au jet de Concentration du Round 2.
-          </div>
-        </div>
-
-        <!-- ROUND 2 : CONCENTRATION -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-bold uppercase text-[10px]">Round 2</span>
-              <span class="font-bold text-stone-300">Tension Pure</span>
-            </div>
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Concentration (Focus)</h3>
-            <p class="text-stone-300 leading-relaxed">
-              Jet en opposition d'<b>Iaijutsu (Concentration) / Vide</b>. Celui qui dépasse son rival d'au moins <b>5 points frappe en premier</b> au Round 3.
-            </p>
-            <p class="text-stone-400 leading-relaxed">
-              Pour chaque tranche complète de 5 points d'écart au-delà des 5 premiers, le vainqueur remporte <b>1 Augmentation Gratuite</b> applicable sur sa frappe.
-            </p>
-          </div>
-          <div class="p-2 rounded bg-purple-950/40 border border-purple-800/40 text-[10px] text-purple-300">
-            ⚔️ <b>Frappe Karmique :</b> Si l'écart est inférieur à 5, les deux sabres frappent au même instant !
-          </div>
-        </div>
-
-        <!-- ROUND 3 : LA FRAPPE -->
-        <div class="p-4 rounded-xl bg-black/60 border border-stone-800 space-y-2 flex flex-col justify-between">
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-bold uppercase text-[10px]">Round 3</span>
-              <span class="font-bold text-stone-300">Résolution</span>
-            </div>
-            <h3 class="font-bold text-amber-200 text-sm font-imperial">Frappe (Strike)</h3>
-            <p class="text-stone-300 leading-relaxed">
-              Le vainqueur du Round 2 frappe : jet d'<b>Iaijutsu / Réflexes</b> contre le <b>ND d'Armure normal</b> de sa cible (armure incluse).
-            </p>
-            <p class="text-stone-400 leading-relaxed">
-              Application immédiate des Augmentations gratuites gagnées. Les dégâts du sabre sont aussitôt résolus.
-            </p>
-          </div>
-          <div class="p-2 rounded bg-red-950/40 border border-red-800/40 text-[10px] text-red-300">
-            🩸 <b>Premier Sang :</b> Le premier qui inflige des blessures l'emporte. <b>À Mort :</b> Si le second survit, il porte sa réplique.
-          </div>
-        </div>
-
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-amber-950/35 border-b border-amber-500/30 font-imperial text-amber-300">
+              <th class="p-3">Posture (Élément)</th>
+              <th class="p-3">Effet sur le ND d'Armure</th>
+              <th class="p-3">Bonus / Effet</th>
+              <th class="p-3">Restrictions Exactes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-800/80 text-stone-300">
+            <tr class="hover:bg-amber-950/15">
+              <td class="p-3 font-bold text-sky-300">Attaque (Eau)</td>
+              <td class="p-3 font-mono">Normal</td>
+              <td class="p-3">Standard, polyvalente.</td>
+              <td class="p-3">Aucune restriction.</td>
+            </tr>
+            <tr class="hover:bg-amber-950/15">
+              <td class="p-3 font-bold text-red-400">Assaut (Feu)</td>
+              <td class="p-3 font-mono text-red-400">-10</td>
+              <td class="p-3">+2g1 aux jets d'attaque ; +1,5 m (5') à une Action de Déplacement (1/Round, sans dépasser le max/Round).</td>
+              <td class="p-3">Actions Simples/Complexes d'attaque uniquement ; Déplacement vers l'ennemi seul ; interdit à distance ou monté.</td>
+            </tr>
+            <tr class="hover:bg-amber-950/15">
+              <td class="p-3 font-bold text-teal-300">Défense (Air)</td>
+              <td class="p-3 font-mono text-emerald-300">+ (Air + Défense)</td>
+              <td class="p-3">Protection accrue tout en agissant librement.</td>
+              <td class="p-3">Ne peut effectuer aucune attaque.</td>
+            </tr>
+            <tr class="hover:bg-amber-950/15">
+              <td class="p-3 font-bold text-amber-300">Défense Totale (Terre)</td>
+              <td class="p-3 font-mono text-emerald-400">+ ⌈(Défense / Réflexes) ÷ 2⌉</td>
+              <td class="p-3">L'Action Complexe ajoute la moitié du jet (arrondie au supérieur) au ND jusqu'au prochain Tour.</td>
+              <td class="p-3">Le jet est une Action Complexe ; Actions Gratuites uniquement ce Round.</td>
+            </tr>
+            <tr class="hover:bg-amber-950/15">
+              <td class="p-3 font-bold text-purple-300">Centre (Vide)</td>
+              <td class="p-3 font-mono">Normal</td>
+              <td class="p-3">Au Round suivant : <b>+1g1 + Anneau de Vide</b> à UN jet de votre Tour, et <b>+10 à l'Initiative</b> pour ce Round uniquement.</td>
+              <td class="p-3">Renonce à toutes Actions durant le Round passé en Posture Centre.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 4 : FORMULES CLÉS DU SYSTÈME D10 & MANŒUVRES -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-      
-      <!-- FORMULES DE BASE -->
-      <div class="card-clean rounded-xl p-5 space-y-3">
-        <h3 class="font-bold text-amber-200 text-sm font-imperial border-b border-amber-500/20 pb-2">
-          Formules Clés du Système Roll & Keep (XkY)
-        </h3>
-        <ul class="space-y-2.5 text-stone-300">
-          <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>Attaque au Corps-à-corps :</span>
-            <b class="text-amber-300 font-imperial">(Compétence + Agilité) g Agilité</b>
-          </li>
-          <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>Attaque à l'Arc (Tir) :</span>
-            <b class="text-amber-300 font-imperial">(Kyujutsu + Réflexes) g Réflexes</b>
-          </li>
-          <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>Dégâts d'une Arme :</span>
-            <b class="text-red-300 font-imperial">(VD_lancée + Force) g VD_gardée</b>
-          </li>
-          <li class="flex justify-between items-baseline border-b border-stone-800/60 pb-1.5">
-            <span>ND d'Armure pour être touché :</span>
-            <b class="text-emerald-300 font-imperial">5 + (5 × Réflexes) + Armure</b>
-          </li>
-          <li class="flex justify-between items-baseline">
-            <span>Guérison Nocturne :</span>
-            <b class="text-blue-300 font-imperial">(Constitution × 2) + Rang de Réputation</b>
-          </li>
+    <!-- 4. MANŒUVRES & ÉTATS PRÉJUDICIABLES -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <div class="flex items-center gap-3 border-b border-amber-500/20 pb-2">
+          <span class="text-xl">🎯</span>
+          <h2 class="text-lg font-imperial font-bold text-amber-300">Manœuvres de Combat (pp. 85–87)</h2>
+        </div>
+        <ul class="space-y-2 text-xs text-stone-300">
+          <li><b class="text-amber-200">Coup Précis (1–4 Aug.) :</b> 1 Aug. membre • 2 main/pied • 3 tête • 4 œil/oreille/doigt (effets à la discrétion du MJ).</li>
+          <li><b class="text-amber-200">Désarmement (3 Aug.) :</b> Inflige <b>2g1</b> sans Force, puis Force opposé ; l'adversaire lâche son arme si vaincu (Simple pour la ramasser).</li>
+          <li><b class="text-amber-200">Attaque Supplémentaire (5 Aug.) :</b> 5 Augmentations réussies sur la 1<sup>re</sup> attaque (sans autre bonus) octroient une 2<sup>e</sup> attaque immédiate (1/Tour ; la 1<sup>re</sup> doit toucher).</li>
+          <li><b class="text-amber-200">Feinte (2 Aug.) :</b> En cas de succès, ajoute <code>⌊(Jet d'attaque − ND d'Armure) ÷ 2⌋</code> aux dégâts de cette attaque (max 5 × Rang Réputation).</li>
+          <li><b class="text-amber-200">Garde (0 Aug., Action Simple) :</b> Interdit en Assaut. 1 allié à ≤ 1,5 m gagne <b>+10 ND Armure</b> et vous subissez <b>-5 ND Armure</b> jusqu'à votre Tour suivant.</li>
+          <li><b class="text-amber-200">Dégâts Accrus (1+ Aug.) :</b> +1g0 dégâts par Aug. (toutes les Aug. de ce type d'un Round comptent comme 1 seul effet pour la réduction d'Augmentations).</li>
+          <li><b class="text-amber-200">Renversement (2 ou 4 Aug.) :</b> 2 Aug. (bipède) / 4 Aug. (quadrupède) : dégâts normaux + Force opposé ; cible mise <b>À terre</b> en cas de victoire.</li>
         </ul>
       </div>
 
-      <!-- AUGMENTATIONS & MANŒUVRES TACTIQUES -->
-      <div class="card-clean rounded-xl p-5 space-y-3">
-        <h3 class="font-bold text-amber-200 text-sm font-imperial border-b border-amber-500/20 pb-2">
-          Augmentations (Raises) & Manœuvres
-        </h3>
-        <p class="text-stone-300 leading-relaxed">
-          Chaque Augmentation déclarée avant le jet augmente le Niveau de Difficulté de <b>+5</b>. En cas d'échec face au nouveau ND, l'action est totalement manquée.
-        </p>
-        <ul class="space-y-1.5 text-stone-300">
-          <li><b>Dégâts accrus :</b> +1g0 aux dégâts par augmentation déclarée.</li>
-          <li><b>Feinte (2 Raises) :</b> Si l'attaque touche, la moitié des dégâts infligés est convertie en réduction du ND d'Armure de la cible pour votre prochaine attaque.</li>
-          <li><b>Désarmement (3 Raises) :</b> Si l'attaque réussit, l'adversaire lâche son arme principale.</li>
-          <li><b>Renversement (2 Raises) :</b> Jet de Force en opposition : la cible est mise à terre (Prone : -10 au ND d'Armure).</li>
-          <li><b>Garder un allié :</b> Action Gratuite ou Simple : ajoutez +10 au ND d'Armure de votre allié adjacent, votre ND d'Armure est réduit de 5.</li>
-        </ul>
-        <div class="p-2 rounded bg-black/60 border border-stone-800 text-[11px] text-amber-300 mt-2">
-          ⚡ <b>Limite d'Augmentations :</b> Un samouraï ne peut jamais déclarer plus d'Augmentations sur un jet que son <b>Rang de Vide</b>.
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <div class="flex items-center gap-3 border-b border-amber-500/20 pb-2">
+          <span class="text-xl">⛓️</span>
+          <h2 class="text-lg font-imperial font-bold text-amber-300">États Préjudiciables &amp; Lutte (pp. 88–89)</h2>
         </div>
+        <ul class="space-y-2 text-xs text-stone-300">
+          <li><b class="text-amber-200">Aveuglé :</b> ND Armure de base = <code>Réflexes + 5</code> (+ armure). Attaques : <b>-3g3</b> à distance, <b>-1g1</b> mêlée. Eau -2 (min 1) pour mvt ; Simple de mvt = Athlétisme/Agilité ND 20 ou À terre.</li>
+          <li><b class="text-amber-200">À terre :</b> <b>-10 ND Armure</b> en mêlée. Aucun Déplacement ; Postures Attaque/Défense seuls ; pas d'armes grandes ; <b>-2g0</b> attaques (moyennes/petites). Action Simple pour se relever.</li>
+          <li><b class="text-amber-200">Enchevêtré :</b> Aucune Action sauf tenter de se libérer (Force vs ND ou Opposé, 1/Round). Peut être saisi en Lutte sans jet d'attaque.</li>
+          <li><b class="text-amber-200">Étourdi :</b> Aucune action ; ND Armure = <code>5 + bonus d'armure</code>. Terre ND 20 en Réaction pour récupérer, sinon fin à l'issue du Round suivant.</li>
+          <li><b class="text-amber-200">Hébété :</b> <b>-3g0</b> à toutes actions (dés gardés ≤ lancés). Postures Défense/Défense Totale seuls, pas de duel. Terre ND 20 en Réaction (-5 ND/échec).</li>
+          <li><b class="text-amber-200">Lutte :</b> Initier = <code>Jiujutsu / Agilité</code> (Complexe, ignore le bonus d'armure au ND). En lutte = ND <code>5 + armure</code>. Contrôle au début du Tour = <code>Jiujutsu / Force</code> opposé. Actions du contrôleur : Frapper (Complexe, mains nues sans Aug.), Projeter (Complexe, À terre à 1,5 m), Rompre (Simple), Maintenir (Gratuite).</li>
+          <li><b class="text-amber-200">Fatigué / À jeun / Surélevé :</b> Fatigué (24h sans repos) = +5 ND (+5/j), pas d'Assaut, Volonté 20/2h après Constit. jours. À jeun = pas de Vide par repos après 24h, +5 ND après 2j, 2g1/j après Constit. jours. Monté/Surélevé (+1,2 m) = +1g0 attaque, pas d'Assaut monté.</li>
+        </ul>
       </div>
-
     </section>
 
+    <!-- 5. DUEL D'IAIJUTSU -->
+    <section class="card-clean rounded-xl p-6 space-y-4">
+      <div class="flex items-center gap-3 border-b border-amber-500/20 pb-3">
+        <span class="text-2xl">⚡</span>
+        <h2 class="text-xl font-imperial font-bold text-amber-300">3. Le Duel d'Iaijutsu (3 Rounds) &amp; Taryu-Jiai (pp. 87–88)</h2>
+      </div>
+      <p class="text-xs text-stone-300">Les deux duellistes sont en <b>Posture Centre</b> tout au long du duel et ne peuvent entreprendre aucune autre action. Dans un <b>Taryu-Jiai</b> (duel de shugenja), remplacez <i>Iaijutsu</i> par <i>Art de la Magie</i> et lancez les dégâts avec votre Anneau d'Affinité.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-stone-300">
+        <div class="p-4 rounded-lg bg-black/40 border border-amber-500/30 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-300">1. Évaluation (Round 1)</h3>
+          <p class="font-mono text-amber-200">Iaijutsu (Évaluation) / Intuition vs ND 10 + (5 × Rang Réputation adverse)</p>
+          <p>Résolu à l'Initiative du plus rapide. Révèle 1 info (+1/Aug. : Vide, Réflexes, Iaijutsu, Spécialisations, Pts de Vide restants, Niveau de blessure). Dépasser le score opposé de <b>10+</b> confère <b>+1g1 au Focus</b>. Concéder ici est honorable.</p>
+        </div>
+        <div class="p-4 rounded-lg bg-black/40 border border-amber-500/30 space-y-2">
+          <h3 class="font-imperial font-bold text-amber-300">2. Concentration (Round 2)</h3>
+          <p class="font-mono text-amber-200">Jet Opposé : Iaijutsu (Concentration) / Vide</p>
+          <p>Résolu à l'Initiative du plus rapide. Gagner par <b>5+</b> accorde la première frappe et <b>1 Augmentation gratuite</b> par tranche de 5 points au-delà (5→0, 10→1, 15→2...). Écart &lt; 5 = <b>Frappe Karmique</b> simultanée (et cause du duel abandonnée).</p>
+        </div>
+        <div class="p-4 rounded-lg bg-black/40 border border-amber-500/30 space-y-2">
+          <h3 class="font-imperial font-bold text-red-400">3. Frappe (Round 3)</h3>
+          <p class="font-mono text-red-300">Iaijutsu / Réflexes vs ND d'Armure normal adverse</p>
+          <p>Résolu à l'Initiative du plus lent (pas de +5×Focus en 4<sup>e</sup>). Au 1<sup>er</sup> sang : frapper après avoir été touché est extrêmement déshonorant. À mort : s'ils survivent, continue en escarmouche.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ARMURES, FLÈCHES & BATAILLE RANGÉE -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <div class="flex items-center gap-3 border-b border-amber-500/20 pb-2">
+          <span class="text-xl">🏹</span>
+          <h2 class="text-lg font-imperial font-bold text-amber-300">Armures &amp; Flèches (pp. 198–199)</h2>
+        </div>
+        <ul class="space-y-1.5 text-xs text-stone-300">
+          <li><b>Ashigaru :</b> +3 ND Armure, Réduction 1 (5 koku).</li>
+          <li><b>Armure Légère :</b> +5 ND, Réduction 3, +5 ND Athlétisme &amp; Discrétion (25 koku).</li>
+          <li><b>Armure Lourde :</b> +10 ND, Réduction 5, +5 ND Compétences d'Agilité &amp; Réflexes (40 koku).</li>
+          <li><b>Armure de Cavalerie :</b> +4 ND (+12 monté), Réduction 4, compte comme Lourde (+5 ND Agi/Réfl. sauf monté) (55 koku).</li>
+          <li><b>Flèches (Table 3.1) :</b> Saule <code>2g2</code> (1 bu) • Perce-armure <code>1g1</code> (2 bu, ignore bonus d'armure au ND) • Coupe-chair <code>2g3</code> (5 bu, double bonus d'armure au ND, ½ portée) • Sifflante <code>0g1</code> (5 bu) • Coupe-corde <code>1g1</code> (3 bu, +2 Aug. grat. Coup Précis objet, ½ portée).</li>
+        </ul>
+      </div>
+      <div class="card-clean rounded-xl p-6 space-y-3">
+        <div class="flex items-center gap-3 border-b border-amber-500/20 pb-2">
+          <span class="text-xl">🚩</span>
+          <h2 class="text-lg font-imperial font-bold text-amber-300">Batailles Rangées — Mass Battle (pp. 236–240)</h2>
+        </div>
+        <ul class="space-y-1.5 text-xs text-stone-300">
+          <li><b>Durée :</b> Tours de Bataille de 30 min (~1 Tour par 250 soldats par camp).</li>
+          <li><b>1. Déclaration :</b> Réserves, Désengagé, Engagé ou Très engagé. Jet opposé des généraux : <code>Art de la Guerre (Combat de masse) / Perception</code> (écart ≥ 5 = Avantage/Désavantage ; &lt; 5 = Égalité).</li>
+          <li><b>2. Détermination :</b> Chaque joueur lance <code>1d10 + Eau + Art de la Guerre</code> sur la Table de Bataille (0 à 6 dés non explosifs de Blessures, Gloire, Duel ou Opportunité Héroïque).</li>
+          <li><b>3. Résolution :</b> Duel d'honneur ou Opportunité Héroïque (peut être refusée, souvent avec malus au général).</li>
+        </ul>
+      </div>
+    </section>
   </main>
 
   <!-- PIED DE PAGE -->
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10 no-print">
     <div>Chronique L5R 4e Édition — MJ David • Mémento officiel d'arbitrage de combat</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.13.0</span>
+      <span id="site-version-label">v1.14.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

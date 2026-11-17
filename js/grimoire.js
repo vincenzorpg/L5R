@@ -226,6 +226,10 @@
         let badgeTitle = spellElem.toUpperCase();
         if (spellElem === "kiho" && spell.ring) {
           badgeTitle = `KIHO (${spell.ring.toUpperCase()})`;
+        } else if (spellElem === "maho") {
+          const kwList = Array.isArray(spell.keywords) ? spell.keywords : [];
+          const mahoRing = kwList.find(k => ["Air", "Terre", "Feu", "Eau", "Vide"].includes(k));
+          badgeTitle = mahoRing ? `MAHŌ (${mahoRing.toUpperCase()})` : "MAHŌ";
         }
         const rankLabel = spellRank === 0 ? "(Universel)" : `— Rang ${spellRank}`;
 

@@ -1,12 +1,13 @@
 /**
- * data/sorts-terre-data.js — L5R 4e Édition
- * Recueil exhaustif officiel de la Magie de la Terre.
- * Sources : Livre de Base V4 (p. 173-180) et The Book of Earth (p. 197-201).
+ * data/sorts/sorts-terre.js — L5R 4e Édition
+ * Recueil officiel exact de la Magie de la Terre (58 sorts).
+ * Sources : Livre de Base L5R 4e (pp. 173–180), The Book of Earth (pp. 197–201)
+ *           et Imperial Histories 2 (p. 52).
  */
 
 const SORTS_TERRE = [
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 1
+  // NIVEAU DE MAÎTRISE 1 (11 sorts : 10 Livre de Base + 1 Book of Earth)
   // =========================================================================
   {
     id: "earth-1-armor-earth",
@@ -19,7 +20,7 @@ const SORTS_TERRE = [
     duration: "10 Rounds",
     raises: "Durée (+2 rounds par Augmentation)",
     source: "Livre de Base (p. 173)",
-    desc: "Infuse la force de la Terre dans votre organisme, affaiblissant l'impact des coups physiques et magiques. Vous gagnez une Réduction de dégâts égale à (Anneau de Terre + Rang d'École). En contrepartie, votre corps s'alourdit : votre Anneau d'Eau effectif est réduit de 1 pour vos déplacements tant que le sort dure."
+    desc: "Infuse la force de la Terre dans votre corps, réduisant la force de toute attaque physique ou magique qui vous frappe. Pour la durée du sort, vous gagnez une Réduction égale à (votre Anneau de Terre + votre Rang d'École). En contrepartie, cette infusion de Terre ralentit vos mouvements : votre Anneau d'Eau est considéré comme inférieur de 1 Rang pour le calcul des déplacements tant que vous êtes sous l'effet de ce sort."
   },
   {
     id: "earth-1-courage-thunders",
@@ -27,12 +28,12 @@ const SORTS_TERRE = [
     element: "Terre",
     mastery: 1,
     keywords: ["Bataille"],
-    range: "Personnelle",
-    area: "Nombre de cibles à 9 m (30') égal au Rang d'École du shugenja",
+    range: "9 mètres (30')",
+    area: "Cibles jusqu'au Rang d'École de shugenja du lanceur",
     duration: "10 Minutes",
     raises: "Durée (+1 minute), Cibles (+1)",
     source: "Livre de Base (p. 173)",
-    desc: "Insuffle le courage inébranlable des Sept Tonnerres aux sujets (qui peuvent inclure le lanceur). Les cibles gagnent un bonus de +5g0 à tous leurs jets pour résister aux effets de Peur (naturels ou magiques). Les samouraïs n'appartenant pas aux sept Clans Majeurs originels ne reçoivent qu'un bonus de +3g0. Quiconque possède au moins un plein Rang de Souillure ne peut bénéficier du sort. Deux shugenja ou plus connaissant ce sort peuvent s'unir en rituel pour additionner leur plus haut Rang de Terre à la somme de leurs Rangs d'École pour le nombre de cibles."
+    desc: "Insuffle aux cibles (qui peuvent inclure le lanceur) un courage ferme et inébranlable, soutenu par la puissance éternelle de la Terre. Pour la durée du sort, toutes les cibles gagnent +5g0 à leurs jets pour résister à tout effet de Peur, qu'il soit magique ou naturel. Toutefois, ce sort est associé à la mémoire des légendaires Sept Tonnerres : les samouraïs n'appartenant pas aux sept Clans Majeurs originels ne reçoivent qu'un bonus de +3g0. Quiconque possède au moins un plein Rang de Souillure de l'Outremonde ne peut bénéficier de ce sort, bien que cela révèle automatiquement qu'il est Souillé. Ce sort peut être lancé en rituel combiné par deux shugenja ou plus qui le connaissent, auquel cas ils additionnent leur plus haut Anneau de Terre unique à la somme de leurs Rangs d'École pour déterminer le nombre de cibles."
   },
   {
     id: "earth-1-stagnation",
@@ -45,7 +46,7 @@ const SORTS_TERRE = [
     duration: "6 Rounds",
     raises: "Durée (+2 rounds), Portée (+3 m / +10'), Cibles (+1, max 4 cibles au total)",
     source: "Livre de Base (p. 174)",
-    desc: "Appelle la Terre contenue dans le corps de la cible pour l'alourdir et entraver ses gestes. La cible subit un malus de -2g0 à tous ses jets basés sur le Trait Agilité, et son Anneau d'Eau est considéré comme réduit de 1 pour calculer ses distances de déplacement."
+    desc: "Appelle la Terre présente dans le corps de la cible pour l'alourdir et entraver ses mouvements. La cible subit un malus de -2g0 à tous ses jets utilisant le Trait Agilité, et son Anneau d'Eau est considéré comme inférieur de 1 Rang pour calculer la distance qu'elle peut parcourir."
   },
   {
     id: "earth-1-earths-touch",
@@ -58,7 +59,7 @@ const SORTS_TERRE = [
     duration: "1 Heure",
     raises: "Durée (+30 minutes), Cibles (+1 par 2 Augmentations, max 3 cibles au total)",
     source: "Livre de Base (p. 174)",
-    desc: "Invoque les kami de Terre pour fortifier la santé physique ou l'endurance mentale de la cible (qui peut être le lanceur). L'un des deux Traits de Terre de la cible (au choix de l'incantateur : Constitution ou Volonté) augmente de +1 pour la durée du sort. Cela n'augmente pas la valeur de l'Anneau de Terre en lui-même."
+    desc: "Invoque les kami de Terre afin de renforcer la santé physique et la force mentale d'un individu (qui peut être le lanceur). Pour la durée du sort, l'un des Traits de Terre de la cible (au choix du lanceur : Constitution ou Volonté) est augmenté de +1. Cela n'augmente pas l'Anneau lui-même, mais accroît la capacité à résister aux tentations, poisons, ou à dominer autrui."
   },
   {
     id: "earth-1-elemental-ward",
@@ -71,7 +72,7 @@ const SORTS_TERRE = [
     duration: "1 Heure",
     raises: "Durée (+30 minutes), Cibles (+1 par 2 Augmentations)",
     source: "Livre de Base (p. 174)",
-    desc: "Les esprits de Terre créent un rempart autour de l'âme et du corps de la cible, repoussant les intrusions élémentaires hostiles. Lors du lancement, vous choisissez un élément spécifique (hors Vide et Mahō). Tous les sorts de cet élément ciblant la personne protégée voient leur ND d'incantation pénalisé de +(Rang d'École × 5). Cette pénalité s'applique également aux sorts bénéfiques alliés (comme la guérison d'Eau)."
+    desc: "Utilise la puissance de Terre pour renforcer la résistance naturelle du corps à la magie hostile. Les esprits de Terre cuirassent l'âme et le corps de la cible, repoussant les autres kami lorsqu'ils tentent de l'affecter. Lors de l'incantation, le shugenja choisit un Élément spécifique (qui ne peut être ni le Vide ni la Mahō). Les sorts de cet Élément ciblant la personne protégée subissent une pénalité de ND égale à (Rang d'École du lanceur × 5). Malheureusement, cette protection s'applique également aux sorts « bénéfiques », tels que la guérison."
   },
   {
     id: "earth-1-jade-strike",
@@ -84,7 +85,7 @@ const SORTS_TERRE = [
     duration: "Instantanée",
     raises: "Dégâts (+1g0), Portée (+3 m / +10'), Cibles (+1 cible, max 5 cibles au total)",
     source: "Livre de Base (p. 174)",
-    desc: "Libère les esprits purs de jade sous la forme d'un trait d'énergie verte irisée qui frappe infailliblement la cible sans pouvoir être dévié physiquement. Si la cible possède au moins un plein Rang de Souillure de l'Outremonde, le sort inflige une VD de 3g3 blessures, calcinant les chairs impures. Si la cible a moins d'un plein Rang de Souillure, elle ne subit absolument aucun dégât."
+    desc: "Invoque les plus purs kami de Terre — ceux du jade — sous la forme d'une décharge d'énergie verte irisée qui frappe infailliblement la cible choisie sans pouvoir être interceptée ni déviée (bien que Résistance à la Magie et les défenses magiques puissent la contrer). Si la cible possède au moins un plein Rang de Souillure, la Frappe de Jade inflige une VD de 3g3, brûlant et noircissant les chairs souillées. En revanche, une cible possédant moins d'un plein Rang de Souillure ne subit aucun dégât. Lancer Frappe de Jade sur une cible non souillée est généralement perçu comme une grave insulte — sauf peut-être parmi les rangs paranoïaques de la famille Kuni, qui y voient une sage précaution."
   },
   {
     id: "earth-1-jurojins-balm",
@@ -97,7 +98,7 @@ const SORTS_TERRE = [
     duration: "1 Heure",
     raises: "Durée (+30 minutes), Cibles (+1 par 2 Augmentations, max 5 cibles au total)",
     source: "Livre de Base (p. 174)",
-    desc: "Remplit l'organisme de la vigueur de la Terre afin de chasser impuretés et toxines. Si la cible est exposée à un poison ou une toxine durant le sort (ou en subit déjà les effets), elle peut relancer tout jet de Constitution raté pour y résister, avec un bonus de +2g0 sur le second jet. Le sort purge également l'ivresse et empêche la cible d'être intoxiquée par l'alcool pendant toute la durée."
+    desc: "Remplit le corps de la cible de la pureté et de la vigueur de la Terre, chassant poisons et impuretés. Si la cible subit les effets d'un poison ou d'une toxine pendant la durée du sort (ou se trouve déjà empoisonnée au moment où il la cible), elle peut relancer tout jet de Constitution raté pour y résister, avec un bonus de +2g0 sur le second jet (si ce second jet échoue également, le poison produit son plein effet). Ce sort soigne également l'ivresse et empêche la cible d'être enivrée pendant toute sa durée."
   },
   {
     id: "earth-1-minor-binding",
@@ -106,11 +107,37 @@ const SORTS_TERRE = [
     mastery: 1,
     keywords: ["Artisanat"],
     range: "18 mètres (60')",
-    area: "Une cible souillée",
+    area: "Une cible",
     duration: "2 Heures",
     raises: "Durée (+1 heure), Portée (+6 m / +20')",
     source: "Livre de Base (p. 174)",
-    desc: "Pionnier chez les Kuni pour emprisonner et interroger les engeances de l'Outremonde. Toute créature de l'Outremonde ayant un Anneau de Terre de 3 ou moins peut être ciblée. Elle est ligotée par des liens de terre et incapable d'agir. Sans effet sur les Perdus (Lost), les Seigneurs Oni ou leurs rejetons, les créatures de Terre 4+, ou les êtres non souillés."
+    desc: "Pionnier chez les Kuni pour emprisonner les créatures mineures de l'Outremonde à des fins d'interrogatoire. Toute créature de l'Outremonde ayant un Anneau de Terre de 3 ou moins peut être ciblée. Ne peut affecter les Perdus (Lost), les Seigneurs Oni ni leurs rejetons, les créatures ayant Terre 4 ou plus, ni les créatures non souillées. En cas de succès, des menottes de fer formées de purs esprits de Terre entravent la créature et la rendent physiquement impuissante pour la durée du sort, avant de tomber en poussière à l'expiration."
+  },
+  {
+    id: "earth-1-soul-of-stone",
+    name: "Âme de Pierre (Soul of Stone)",
+    element: "Terre",
+    mastery: 1,
+    keywords: ["Défense"],
+    range: "Contact",
+    area: "Une cible",
+    duration: "1 Heure",
+    raises: "Durée (+30 minutes)",
+    source: "Livre de Base (p. 175)",
+    desc: "Emplit l'âme de la cible de la force ferme et inflexible de la pierre. Pour la durée du sort, les sentiments de la cible sont immuables et toute tentative de la détourner ou de la distraire se heurte à une détermination surnaturelle. Elle gagne un bonus de +3g0 à tout jet visant à résister à la manipulation émotionnelle ou aux distractions du désir, y compris les jets de Courtisan (Manipulation), de Tentation, les Compulsions et tout effet similaire jugé pertinent par le MJ. Toutefois, cette maîtrise de soi de pierre rend difficile la lecture et l'influence des émotions d'autrui : pendant la durée du sort, la cible subit un malus de -1g0 à tous ses jets de Trait Intuition et de Compétences basées sur l'Intuition effectués pour influencer autrui."
+  },
+  {
+    id: "earth-1-stones-endurance",
+    name: "L'Endurance de la Pierre (Stone's Endurance)",
+    element: "Terre",
+    mastery: 1,
+    keywords: ["Voyage"],
+    range: "Personnelle ou Contact",
+    area: "Une créature ciblée (peut être le lanceur)",
+    duration: "6 Heures",
+    raises: "Durée (+1 heure)",
+    source: "The Book of Earth (p. 200)",
+    desc: "Développé à l'origine par les Licornes pour permettre à leurs chevaux de chevaucher longtemps sans faiblir, puis adopté par les autres clans — notamment le Crabe. Pendant la durée du sort, la cible est immunisée à l'état Fatigué (Fatigued) dû au manque de repos, et sa Constitution est considérée comme supérieure de 1 Rang pour tout jet ou effet reposant spécifiquement sur la Constitution (résister aux poisons, retenir son souffle sous l'eau, etc.). Le sort peut être relancé plusieurs fois sur la même cible, mais les esprits de Terre ne peuvent soutenir cet effort au-delà de 24 heures consécutives. À l'expiration du sort, la cible devient automatiquement Fatiguée jusqu'à ce qu'elle se repose au moins la moitié du temps passé sous l'effet du sort."
   },
   {
     id: "earth-1-tetsubo-earth",
@@ -123,11 +150,11 @@ const SORTS_TERRE = [
     duration: "5 Minutes",
     raises: "Dégâts (+1g0), Durée (+5 minutes), Portée (+1,5 m / +5')",
     source: "Livre de Base (p. 175)",
-    desc: "Matérialise un tetsubō de terre dense constellé de blocs de pierre (VD 2g2). Une Augmentation permet de lui donner la forme de n'importe quelle autre arme lourde. Vous pouvez utiliser votre Rang d'École à la place de la compétence Armes Lourdes pour la manier. Si vous possédez la compétence Armes Lourdes, l'arme confère une Augmentation Gratuite pour la manœuvre Renversement (Knockdown). Disparaît si elle quitte vos mains. Vous pouvez la faire apparaître dans les mains d'un allié à 6 m (il n'obtient pas l'Augmentation Gratuite)."
+    desc: "Vous invoquez un tetsubō de terre pure constellé de pierres (VD 2g2). Une Augmentation permet d'en changer la forme pour n'importe quelle autre arme lourde de votre choix. Vous pouvez utiliser votre Rang d'École à la place de la compétence Armes Lourdes pour la manier. Si vous possédez la compétence Armes Lourdes, ce tetsubō vous octroie une Augmentation Gratuite utilisable uniquement pour la manœuvre Renversement (Knockdown). Le tetsubō disparaît s'il quitte votre main. Vous pouvez le faire apparaître entre les mains d'un allié à 6 m (20') : il est alors traité comme le lanceur pour tous les effets du sort, mais ne bénéficie pas de l'Augmentation Gratuite."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 2
+  // NIVEAU DE MAÎTRISE 2 (11 sorts : 8 Livre de Base + 3 Book of Earth)
   // =========================================================================
   {
     id: "earth-2-be-mountain",
@@ -140,7 +167,7 @@ const SORTS_TERRE = [
     duration: "4 Rounds",
     raises: "Durée (+1 round)",
     source: "Livre de Base (p. 175)",
-    desc: "Variante de l'Armure de Terre conçue pour protéger autrui. Les kami enveloppent la peau de l'allié d'une croûte rocheuse qui repousse les impacts physiques : la cible gagne une Réduction de dégâts égale à (5 × Rang d'École du shugenja), plafonnée à un maximum de 20. En contrepartie, la cible ne peut plus entreprendre d'Actions de Mouvement Simples (les Actions de Mouvement Gratuites demeurent autorisées)."
+    desc: "Variante d'Armure de Terre conçue pour protéger des alliés. Recouvre la peau d'un allié volontaire d'une barrière rocailleuse qui repousse les coups physiques. La cible gagne une Réduction égale à (5 × Rang d'École du lanceur), jusqu'à un maximum de 20, mais ne peut plus effectuer d'Actions de Mouvement Simples pendant toute la durée du sort (les Actions de Mouvement Gratuites restent permises)."
   },
   {
     id: "earth-2-earth-becomes-sky",
@@ -151,9 +178,9 @@ const SORTS_TERRE = [
     range: "30 mètres (100')",
     area: "Une créature ciblée",
     duration: "Instantanée",
-    raises: "Dégâts (+1g0), Cibles (+1 créature), Spéciale (imprégner les rochers de Jade avec 2 Augmentations)",
+    raises: "Dégâts (+1g0), Cibles (+1 cible), Spéciale (imprégner les rochers de Jade avec 2 Augmentations)",
     source: "Livre de Base (p. 175)",
-    desc: "Arrache plusieurs volumineux blocs de pierre du sol pour les projeter avec une précision infaillible sur la cible. Les dégâts ont une VD égale à votre Anneau de Terre. Si plusieurs cibles sont visées, la VD de dégâts subie par chaque cible est réduite de -1g1 par cible supplémentaire (avec un minimum de 1g1 par cible). Ces rochers sont profanes, mais 2 Augmentations permettent de les saturer d'essence de Jade."
+    desc: "Fait jaillir du sol plusieurs rochers massifs qui fendent les airs pour frapper infailliblement une (ou plusieurs) créature(s) ciblée(s). La cible subit des dégâts d'une VD égale à votre Anneau de Terre. Si vous frappez plusieurs cibles, la VD est réduite de -1g1 par cible supplémentaire (avec un minimum de 1g1 par cible). Ces rochers sont faits de pierre normale et profane et ne contournent pas normalement la Réduction ou l'Invulnérabilité, mais un shugenja peut les imprégner du pouvoir du Jade avec 2 Augmentations."
   },
   {
     id: "earth-2-embrace-kenro",
@@ -166,7 +193,7 @@ const SORTS_TERRE = [
     duration: "1 Heure",
     raises: "Durée (+30 minutes)",
     source: "Livre de Base (p. 176)",
-    desc: "Permet au sujet de plonger dans le sol et la roche, qui deviennent aussi limpides et praticables que de l'eau. Il voit à travers la terre sur 90 mètres (100 yards) et s'y déplace dans toutes les directions aussi facilement qu'à l'air libre. Il peut voir la surface depuis le sous-sol, mais ne peut parler, attaquer, lancer de sorts ou interagir avec l'extérieur sans en émerger complètement (ce qui met fin au sort). Si le sort expire sous terre, les esprits expulsent immédiatement le sujet à l'air libre le plus proche."
+    desc: "Permet à la cible (qui peut être le lanceur ou un tiers) de plonger littéralement dans le sol, qui devient pour elle aussi limpide et aisé à traverser que de l'eau. Elle peut voir à travers la terre sur 90 mètres (100 yards) et s'y déplacer dans toutes les directions aussi facilement que dans l'air normal. Elle voit l'extérieur à travers la bordure du sol, mais ne peut ni attaquer, ni lancer de sorts, ni entendre, ni interagir d'aucune façon avec ceux à l'extérieur sans émerger du sol (ce qui met immédiatement fin au sort). Si le sort expire alors que la cible se trouve encore sous terre, les esprits de Terre s'offensent de sa présence et l'expulsent immédiatement vers l'air libre le plus proche."
   },
   {
     id: "earth-2-force-will",
@@ -179,7 +206,7 @@ const SORTS_TERRE = [
     duration: "2 Rounds",
     raises: "Durée (+1 round, max 4 rounds au total)",
     source: "Livre de Base (p. 176)",
-    desc: "Les kami renforcent la volonté de vivre du sujet à un degré surhumain. Pendant toute la durée du sort, la cible est totalement immunisée contre les pénalités et effets de tous les Rangs de Blessures — y compris l'état de mort clinique si son rang Hors de Combat est rempli. À l'expiration du sort, l'intégralité des blessures et conséquences accumulées reprennent immédiatement leurs droits."
+    desc: "Infuse la cible d'une résistance surhumaine à la douleur et à la mort. Pendant toute la durée du sort, la cible est totalement immunisée à toutes les pénalités et effets des Rangs de Blessures — y compris l'état Mort si son rang Hors de Combat est intégralement rempli. Toutefois, dès que le sort expire, tous les effets des Blessures accumulées s'appliquent immédiatement."
   },
   {
     id: "earth-2-grasp-earth",
@@ -192,7 +219,7 @@ const SORTS_TERRE = [
     duration: "5 Rounds",
     raises: "Durée (+1 round), Portée (+1,5 m / +5'), Cibles (+1 par 2 Augmentations)",
     source: "Livre de Base (p. 176)",
-    desc: "Une colossale serre rocheuse surgit du sol pour agripper la victime. Celle-ci ne peut plus se déplacer que d'un maximum de 1 mètre (3') par round en dépensant une Action de Mouvement Simple, et ne peut plus faire d'Action Gratuite de mouvement. La cible peut briser la prise en réussissant, au prix d'une Action Complexe, un jet brut de Force contre un ND égal à (5 × Anneau de Terre du shugenja)."
+    desc: "Les kami de Terre surgissent du sol pour agripper la cible — souvent sous la forme d'une main ou serre géante aux doigts de pierre. La victime est quasiment immobilisée : elle ne peut se déplacer que d'1 mètre (3') par round au prix d'une Action de Mouvement Simple, et ne peut plus entreprendre d'Action de Mouvement Gratuite. Elle peut se libérer par une Action Complexe en réussissant un jet brut de Force contre un ND égal à (5 × Anneau de Terre du lanceur)."
   },
   {
     id: "earth-2-hands-clay",
@@ -205,7 +232,7 @@ const SORTS_TERRE = [
     duration: "10 Minutes",
     raises: "Durée (+5 minutes)",
     source: "Livre de Base (p. 176)",
-    desc: "Insuffle des esprits telluriques dans vos mains et vos pieds pour fusionner avec la matière du bois, de la terre et de la roche. Vous pouvez marcher et grimper sur des parois verticales (murs, falaises) à la moitié de votre vitesse de déplacement normale. Vous pouvez également vous suspendre aux plafonds, votre déplacement y étant alors limité à 1 mètre (3') par Action Simple."
+    desc: "Infuse des esprits de Terre dans vos mains et vos pieds, leur permettant de fusionner avec la Terre contenue dans le bois, le sol et la pierre. Vous pouvez marcher et escalader des parois abruptes (murs, falaises) à la moitié de votre vitesse de déplacement normale (arrondie à l'entier supérieur). Vous pouvez même vous suspendre aux plafonds et vous y déplacer, bien qu'à une vitesse limitée à 1 mètre (3') par Action Simple. Lorsque le sort prend fin, l'effet cesse sans avertissement, ce qui peut provoquer une chute douloureuse."
   },
   {
     id: "earth-2-jurojins-curse",
@@ -213,12 +240,12 @@ const SORTS_TERRE = [
     element: "Terre",
     mastery: 2,
     keywords: [],
-    range: "Contact",
+    range: "9 mètres (30')",
     area: "Une créature ciblée",
-    duration: "1 Heure",
-    raises: "Durée (+30 minutes), Portée (passe à 9 m / 30' pour 3 Augmentations)",
+    duration: "1 Jour",
+    raises: "Portée (+3 m / +10'), Cibles (+1 créature par 2 Augmentations), Durée (+1 jour par 2 Augmentations)",
     source: "The Book of Earth (p. 198)",
-    desc: "Perturbe les défenses telluriques naturelles de la cible. Tout jet de Constitution effectué par la cible pour résister aux poisons, drogues, toxines ou maladies subit une pénalité de -2g0 pour toute la durée du sort."
+    desc: "Demande aux kami de Terre de retirer à la cible toute protection de Jurojin, la Fortune de la Santé et de la Longévité. Pour la durée du sort, l'Anneau de Terre de la cible est considéré comme inférieur de 3 Rangs (avec un minimum de 1) pour soigner ses blessures et pour résister aux maladies ou aux poisons."
   },
   {
     id: "earth-2-mountains-feet",
@@ -231,7 +258,33 @@ const SORTS_TERRE = [
     duration: "1 Heure",
     raises: "Durée (+30 minutes), Cibles (+1 par 2 Augmentations)",
     source: "Livre de Base (p. 176)",
-    desc: "Enracine fermement les pieds du sujet dans la pierre et l'humus. Il gagne un bonus de +3g0 pour résister à toutes les manœuvres de Renversement (Knockdown). Tout sort tentant de renverser la cible, de la soulever dans les airs ou de rompre son lien au sol doit remporter un jet opposé de l'Élément du sort contre l'Anneau de Terre du lanceur."
+    desc: "Enracine les pieds de la cible dans la pierre et la terre sous elle. La cible gagne un bonus de +3g0 pour résister à toutes les manœuvres de Renversement (Knockdown), et tout sort cherchant à la renverser, la soulever dans les airs ou rompre son contact avec le sol doit remporter un jet opposé de son Élément contre l'Anneau de Terre du lanceur."
+  },
+  {
+    id: "earth-2-rites-preservation",
+    name: "Rites de Préservation (Rites of Preservation)",
+    element: "Terre",
+    mastery: 2,
+    keywords: ["Impérial"],
+    range: "3 mètres (10')",
+    area: "Un cadavre humain",
+    duration: "1 Jour",
+    raises: "Durée (+1 jour par 3 Augmentations)",
+    source: "The Book of Earth (p. 198)",
+    desc: "Sort rituel exigeant une heure d'incantation, destiné à préserver dignement les dépouilles avant leur crémation ou à protéger les morts des Terres d'Ombre. Un corps béni par ce rite ne se putréfie pas pendant toute la durée du sort ; de plus, la bénédiction repoussant l'attention des kansen, le cadavre est totalement immunisé contre l'animation par la Mahō ou par la Souillure jusqu'à l'expiration du sort."
+  },
+  {
+    id: "earth-2-taming-beast",
+    name: "Apprivoiser la Bête (Taming the Beast)",
+    element: "Terre",
+    mastery: 2,
+    keywords: [],
+    range: "15 mètres (50')",
+    area: "Une créature naturelle ciblée",
+    duration: "1 Heure",
+    raises: "Cibles (+1 créature par 2 Augmentations), Durée (+30 minutes)",
+    source: "The Book of Earth (p. 200)",
+    desc: "Secret jalousement gardé de la famille Kitsune. Après l'incantation, vous effectuez un jet opposé de Terre en Action Gratuite contre la créature naturelle ciblée. En cas de succès, elle cesse toute activité hostile pendant la durée du sort, et vous pouvez la persuader d'obéir à des ordres simples grâce à la compétence Dressage (Animal Handling). Des lancers répétés sur un même animal peuvent finir par l'apprivoiser durablement (à la discrétion du MJ). Sans effet sur les esprits, les créatures surnaturelles ou les créatures Souillées."
   },
   {
     id: "earth-2-whispers-land",
@@ -242,9 +295,9 @@ const SORTS_TERRE = [
     range: "Centré sur le lanceur",
     area: "Rayon de 15 mètres (50')",
     duration: "10 Minutes",
-    raises: "Zone (+15 m / +50' de rayon), Durée (+5 min), Période sonder (+1 jour de traces par 2 Augmentations)",
+    raises: "Zone (+15 m / +50' de rayon), Durée (+5 minutes), Spéciale (+1 jour d'ancienneté de traces par 2 Augmentations)",
     source: "The Book of Earth (p. 201)",
-    desc: "Développé par les Kitsune. Les esprits de la Terre révèlent l'empreinte et le passage récent de toute créature ayant foulé le sol dans la zone au cours des dernières 24 heures, indiquant son espèce, sa direction et le moment de son passage."
+    desc: "Développé à l'origine par les Kitsune du Clan du Renard. Les esprits de Terre révèlent les traces de toute personne ayant marché sur la zone au cours des trois derniers jours. La surface — pierre, terre ou bois — se soulève littéralement pour former le relief exact des pas, créant une piste claire et aisée à suivre. Contrairement aux sorts d'Air comme À la Lumière de la Lune, ce sort révèle aussi les traces ordinaires non dissimulées mais trop faibles ou anciennes pour être vues."
   },
   {
     id: "earth-2-wholeness-world",
@@ -257,11 +310,11 @@ const SORTS_TERRE = [
     duration: "10 Minutes",
     raises: "Durée (+1 minute), Portée (+1,5 m / +5'), Cibles (+1 par 2 Augmentations)",
     source: "Livre de Base (p. 177)",
-    desc: "Rend les Anneaux et Traits de la cible immuables face aux altérations extérieures. Tout effet physique ou magique (sorts, poisons, capacités surnaturelles) tentant d'augmenter ou de diminuer ses Traits ou ses Anneaux élémentaires échoue automatiquement tant que le sort demeure actif."
+    desc: "Infuse la cible de la force de la Terre à un tel degré que ses Anneaux et Traits deviennent totalement réfractaires au changement. Tout effet physique ou magique qui augmenterait ou diminuerait ses Traits ou ses Anneaux demeure sans effet pendant toute la durée du sort."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 3
+  // NIVEAU DE MAÎTRISE 3 (12 sorts : 7 Livre de Base + 4 Book of Earth + 1 IH2)
   // =========================================================================
   {
     id: "earth-3-bonds-ningendo",
@@ -274,20 +327,7 @@ const SORTS_TERRE = [
     duration: "30 Jours",
     raises: "Durée (+1 jour), Portée (+3 m / +10'), Cibles (+1 par 2 Augmentations)",
     source: "Livre de Base (p. 177)",
-    desc: "Rituel destiné à bannir ou emprisonner des entités extra-planaires issues des Royaumes de Sakkaku, Chikushudō, Gaki-dō, Toshigoku ou Yume-dō. L'incantation de base requiert 10 minutes. Chaque shugenja additionnel participant au rituel réduit ce temps de 1 minute (avec un temps incompressible minimum de 1 minute)."
-  },
-  {
-    id: "earth-3-earth-dragon-ward",
-    name: "Garde du Dragon de Terre (Earth Dragon's Ward)",
-    element: "Terre",
-    mastery: 3,
-    keywords: ["Sceau"],
-    range: "Contact",
-    area: "Une cible vivante",
-    duration: "24 Heures",
-    raises: "Durée (+12 heures), Cibles (+1 par 2 Augmentations)",
-    source: "The Book of Earth (p. 197)",
-    desc: "Protège l'esprit du sujet contre toute possession spirituelle ou démoniaque. Tant que le sort est actif, aucune entité spirituelle, fantôme ou démon ne peut posséder le corps ou l'esprit de la cible."
+    desc: "Rituel requérant 10 minutes d'incantation (-1 minute par shugenja connaissant le sort qui vous assiste, minimum 1 minute), ciblant toute créature issue de Sakkaku, Chikushudō, Gaki-dō, Toshigoku ou Yume-dō. Si la créature est à portée à l'achèvement du rituel, vous pouvez au choix la lier ou la bannir : liée, elle doit obéir à vos ordres pendant la durée du sort (des ordres suicidaires rompent le lien) ; bannie, elle retourne immédiatement dans son royaume spirituel et ne peut revenir tant que le sort dure. Dans les deux cas, l'esprit vous considérera ensuite comme un ennemi et cherchera vengeance s'il le peut."
   },
   {
     id: "earth-3-earth-kami-blessing",
@@ -300,7 +340,7 @@ const SORTS_TERRE = [
     duration: "10 Minutes",
     raises: "Durée (+1 minute)",
     source: "Livre de Base (p. 177)",
-    desc: "Fortifie la structure corporelle et la résolution du sujet. Il gagne +2 Blessures supplémentaires sur chaque Rang de Blessure (augmentant d'autant sa réserve vitale totale), et reçoit un bonus de +1g1 sur tous ses jets basés sur l'Anneau de Terre et ses Traits associés. À l'expiration du sort, les Blessures subies demeurent et peuvent précipiter la cible dans un Rang critique ou la tuer sur le coup."
+    desc: "Fortifie la cible (vous-même ou un allié) avec la résilience de la Terre. Pour la durée du sort, le sujet gagne +2 Blessures par Rang de Blessure, ainsi qu'un bonus de +1g1 sur tous ses jets impliquant l'Anneau de Terre et ses Traits associés. Lorsque le sort expire, les Blessures subies demeurent, ce qui peut précipiter la cible dans un Rang critique ou la tuer sur-le-champ."
   },
   {
     id: "earth-3-earths-protection",
@@ -309,11 +349,24 @@ const SORTS_TERRE = [
     mastery: 3,
     keywords: ["Défense", "Sceau"],
     range: "Personnelle",
-    area: "Rayon de 3 mètres (10') autour du shugenja",
+    area: "Rayon de 3 mètres (10') autour du lanceur",
     duration: "Concentration",
-    raises: "Zone (+1,5 m de rayon par 2 Augmentations, max 9 m / 30'), Dégâts absorbés (+1g1 supplémentaire pour 2 Augmentations)",
+    raises: "Zone (+1,5 m de rayon par 2 Augmentations, max 9 m / 30'), Spéciale (+1g1 d'atténuation de dégâts supplémentaire pour 2 Augmentations)",
     source: "Livre de Base (p. 177)",
-    desc: "Bouclier protecteur atténuant les effets des trois autres Éléments (Air, Feu, Eau). Tout sort hostile de ces trois éléments incanté dans la zone ou y projetant ses effets subit un malus de +10 au ND de son jet d'incantation. De plus, les dégâts infligés par ces sorts aux créatures situées dans l'aire d'effet sont réduits de 1g1 (avec un minimum de 1g1 infligé)."
+    desc: "Protège la zone autour du lanceur contre les trois autres Éléments (Air, Feu et Eau). Tout sort hostile d'Air, de Feu ou d'Eau incanté dans la zone de Protection de la Terre, ou y étendant ses effets, subit une pénalité de +10 au ND de son jet d'incantation. De plus, tous les dégâts infligés par ces sorts aux créatures à l'intérieur de la zone sont réduits de 1g1 (avec un minimum de 1g1)."
+  },
+  {
+    id: "earth-3-earthen-wave",
+    name: "Vague Tellurique (Earthen Wave)",
+    element: "Terre",
+    mastery: 3,
+    keywords: [],
+    range: "Personnelle",
+    area: "Zone de 3 mètres × 15 mètres (10' × 50')",
+    duration: "Instantanée",
+    raises: "Zone (+1,5 m / +5' à l'une des deux dimensions par Augmentation)",
+    source: "Imperial Histories 2 (p. 52)",
+    desc: "Développé par les Kuni durant les débuts de l'Empire pour repousser les nuées de créatures de l'Outremonde. Vous choisissez une direction et envoyez une onde de choc roulante dans la zone indiquée. Toutes les créatures prises dans la zone doivent réussir un jet opposé de Force contre l'Anneau de Terre du lanceur ou tomber à terre (Prone), comme frappées par une manœuvre de Renversement. Les créatures possédant plus de deux pattes gagnent 2 Augmentations Gratuites sur ce jet."
   },
   {
     id: "earth-3-groves-stone",
@@ -324,9 +377,9 @@ const SORTS_TERRE = [
     range: "Centré sur le lanceur",
     area: "Barrière circulaire de 4,5 mètres (15') de rayon",
     duration: "10 Rounds",
-    raises: "Zone (+1,5 m de rayon par 2 Augmentations), Durée (+2 rounds), Escalade (+5 au ND pour franchir par Augmentation)",
+    raises: "Zone (+1,5 m de rayon par 2 Augmentations), Durée (+2 rounds), Spéciale (+5 au ND d'escalade par Augmentation)",
     source: "The Book of Earth (p. 198)",
-    desc: "Fait jaillir instantanément du sol un anneau circulaire de monolithes massifs autour du shugenja, brisant planchers et obstacles. Ces pierres ont 500 Blessures et Réduction 15 contre les engins de siège. Escalader la barrière requiert une Action Complexe et un jet d'Athlétisme / Force contre un ND égal à (Terre du lanceur × 5)."
+    desc: "Fait jaillir instantanément du sol une ceinture circulaire de monolithes massifs autour du lanceur, brisant les obstacles intermédiaires (tels que le plancher d'une maison). Les pierres sont trop solides pour être détruites autrement que par un engin de siège (contre lequel elles possèdent 500 Blessures et Réduction 15), mais peuvent être escaladées via une Action Complexe et un jet d'Athlétisme / Force contre un ND égal à (Terre du lanceur × 5). S'effrite en terre meuble à l'expiration."
   },
   {
     id: "earth-3-murmur-earth",
@@ -337,9 +390,22 @@ const SORTS_TERRE = [
     range: "Contact",
     area: "Rayon de 30 mètres (100') autour du lanceur",
     duration: "1 Round",
-    raises: "Zone (+15 m / +50' de rayon), ND (+5 au ND par 2 Augmentations)",
+    raises: "Zone (+15 m / +50' de rayon), Spéciale (+5 au ND par 2 Augmentations)",
     source: "The Book of Earth (p. 199)",
-    desc: "Déclenche une secousse sismique brutale dans toute la zone (le lanceur restant sur un socle stable). Quiconque s'y trouve doit réussir un jet d'Agilité ND 20 ou tomber À Terre (Prone), subir 1g1 Blessures et être Étourdi (Dazed) pour 1 round. En règles de siège, inflige 4g2 dégâts aux structures en ignorant leur Réduction."
+    desc: "Secoue brutalement le sol autour du lanceur tout en l'épargnant directement. Toutes les personnes dans la zone doivent réussir un jet d'Agilité ND 20 ou être jetées à terre (Prone), subir 1g1 Blessures et être Étourdis (Dazed) pour 1 round. Mobilier et objets non arrimés sont renversés. Avec les règles de Siège (The Great Clans), inflige 4g2 dégâts aux structures en ignorant leur Réduction."
+  },
+  {
+    id: "earth-3-purge-taint",
+    name: "Purger la Souillure (Purge the Taint)",
+    element: "Terre",
+    mastery: 3,
+    keywords: ["Jade"],
+    range: "Personnelle",
+    area: "Rayon de 15 mètres (50') autour du lanceur",
+    duration: "Permanente",
+    raises: "Zone (+3 m / +10' de rayon)",
+    source: "Livre de Base (p. 177)",
+    desc: "Rituel élaboré créé par la famille Kuni, requérant une heure d'incantation pour chasser tous les kansen d'une zone. Supprime toute Souillure de la terre, de la végétation et des objets inanimés dans la zone d'effet (ne retire pas la Souillure des créatures vivantes et n'affecte ni les artefacts puissants souillés ni les objets en obsidienne). Contrecoup : les kami élémentaires locaux sont épuisés et dispersés, infligeant un malus de +15 au ND de tous les jets d'incantation dans la zone. Sur une région entière telle que les Terres Dévastées Kuni, les kami quittent définitivement les lieux, laissant une étendue grise et sans vie."
   },
   {
     id: "earth-3-sharing-strength",
@@ -348,11 +414,24 @@ const SORTS_TERRE = [
     mastery: 3,
     keywords: [],
     range: "9 mètres (30')",
-    area: "1 à 6 personnes désignées à portée (peut inclure le lanceur)",
+    area: "1 à 6 personnes ciblées à portée (peut inclure le lanceur)",
     duration: "5 Rounds",
     raises: "Durée (+1 round), Portée (+1,5 m / +5')",
     source: "Livre de Base (p. 177)",
-    desc: "Relie mystiquement l'endurance d'un groupe. Pour la durée du sort, le score de l'Anneau de Terre le plus bas parmi tous les bénéficiaires est ajouté en bonus numérique au total de tous leurs jets d'Anneaux, de Traits et de Compétences (ce bonus ne s'applique pas aux jets d'incantation de sorts)."
+    desc: "Permet à un groupe (jusqu'à six personnes) de puiser dans la Terre de leurs compagnons. Pour toute la durée du sort, le score d'Anneau de Terre le plus bas parmi toutes les cibles est ajouté en bonus numérique au total de tous leurs jets d'Anneaux, de Traits et de Compétences (à l'exception des jets d'incantation de sorts)."
+  },
+  {
+    id: "earth-3-shelter-earth",
+    name: "Refuge de la Terre (Shelter of the Earth)",
+    element: "Terre",
+    mastery: 3,
+    keywords: ["Artisanat", "Illusion"],
+    range: "Contact",
+    area: "Une créature ciblée (peut être le lanceur)",
+    duration: "30 Minutes",
+    raises: "Durée (+10 minutes)",
+    source: "The Book of Earth (p. 199)",
+    desc: "La terre s'élève pour recouvrir la cible d'un fac-similé réaliste d'objet naturel adapté au lieu (arbre, rocher — jamais un objet manufacturé). La cible respire et entend normalement mais n'a aucune autre interaction avec l'extérieur : si elle parle, bouge ou est touchée par une attaque, le sort cesse immédiatement et la coquille s'effrite en terre meuble. De l'extérieur, le faux objet paraît parfaitement réel et résiste aux chocs comme s'il était authentique."
   },
   {
     id: "earth-3-strength-crow",
@@ -362,10 +441,10 @@ const SORTS_TERRE = [
     keywords: ["Jade"],
     range: "Contact",
     area: "Une cible (peut être le lanceur)",
-    duration: "Nombre d'heures égal au Rang d'École du lanceur",
+    duration: "Nombre d'heures égal au Rang d'École de shugenja du lanceur",
     raises: "Durée (+1 heure), Cibles (+1)",
     source: "Livre de Base (p. 178)",
-    desc: "Repousse la corruption de Jigoku par la pureté de la Terre. La cible bénéficie d'un bonus exceptionnel de +5g5 à tous ses jets effectués pour résister à l'acquisition de la Souillure des Terres d'Ombre (n'aide pas à purger une Souillure déjà existante, ni à se protéger du contrecoup du lancement de sorts de Mahō). De plus, tout sort de Mahō ciblant le sujet subit un malus de +10 à son ND d'incantation."
+    desc: "Infuse la cible d'une puissante résistance contre les kansen et la Souillure de l'Outremonde. La cible gagne +5g5 à tout jet effectué pour résister à l'acquisition de la Souillure, et tout sort de Mahō la ciblant subit +10 au ND. Ce bonus ne s'applique ni aux jets visant à résister à la progression d'une Souillure déjà acquise, ni à la protection contre la Souillure reçue en lançant soi-même de la Mahō."
   },
   {
     id: "earth-3-strike-stone",
@@ -374,11 +453,11 @@ const SORTS_TERRE = [
     mastery: 3,
     keywords: ["Bataille"],
     range: "Personnelle ou Contact",
-    area: "Une cible (peut être le lanceur)",
+    area: "Une personne ciblée (peut être le lanceur)",
     duration: "5 Minutes",
     raises: "Durée (+1 minute)",
     source: "The Book of Earth (p. 200)",
-    desc: "Rend les mains et avant-bras de la cible aussi durs que du granit. Ses mains sont immunisées aux blessures physiques directes (permettant par exemple de forcer une serrure ou de briser du métal à mains nues), et sa VD de dégâts à mains nues augmente de +2g0."
+    desc: "Durcit les mains et les avant-bras de la cible jusqu'à leur donner la dureté de la pierre. Ses mains ne peuvent subir aucun dégât physique pendant la durée du sort (permettant par exemple de forcer une serrure à mains nues), et sa VD à mains nues augmente de +2g0."
   },
   {
     id: "earth-3-time-deadly-hand",
@@ -391,7 +470,7 @@ const SORTS_TERRE = [
     duration: "Permanente",
     raises: "Portée (passe de Contact à 15 m / 50' avec 3 Augmentations)",
     source: "The Book of Earth (p. 201)",
-    desc: "Les esprits de Terre désertent l'objet touché, provoquant son vieillissement accéléré : le bois se fêle, la pierre et le fer deviennent friables et cassants, les étoffes tombent en lambeaux. Sans effet sur les objets éveillés (nemuranai)."
+    desc: "Fait déserter les esprits de Terre d'un objet physique, affaiblissant définitivement sa solidité : le bois pourrit et se fend, la pierre et le métal deviennent cassants, le tissu se déchire à la moindre tension. Mécaniquement, toute arme affectée perd 2g1 à sa VD, et toute armure perd 5 à son bonus de ND d'Armure et 3 à sa Réduction. Sans effet sur les objets éveillés (nemuranai)."
   },
   {
     id: "earth-3-wolfs-mercy",
@@ -404,11 +483,24 @@ const SORTS_TERRE = [
     duration: "10 Rounds",
     raises: "Portée (+3 m / +10'), Cibles (+1)",
     source: "Livre de Base (p. 178)",
-    desc: "Sort célèbre employé par Toturi Sezaru. Alourdit les membres et la vitalité tellurique de la cible : son Anneau de Terre est réduit de 1 Rang et ses Rangs de Blessures diminuent en conséquence (pouvant entraîner une mort immédiate si elle est déjà gravement touchée). De plus, son Trait de Force est également diminué de 1. Si la victime possède au moins 1 plein Rang de Souillure, la punition des esprits est plus sévère : son Anneau de Terre est réduit de 2 Rangs (minimum 1)."
+    desc: "Sort rendu célèbre par Toturi Sezaru (« le Loup ») lors de sa traque des Adeptes du Sang. L'Anneau de Terre de la cible est réduit de 1 Rang et ses Rangs de Blessures diminuent en conséquence (pouvant entraîner la mort immédiate si la cible était déjà blessée). Son Trait Force est également diminué de 1 pour la durée du sort. Si la cible possède au moins un plein Rang de Souillure de l'Outremonde, les esprits de Terre punissent plus sévèrement l'impur et réduisent son Anneau de Terre de 2 Rangs (minimum 1)."
+  },
+  {
+    id: "earth-3-wooden-prison",
+    name: "Prison de Bois (Wooden Prison)",
+    element: "Terre",
+    mastery: 3,
+    keywords: ["Défense"],
+    range: "15 mètres (50')",
+    area: "Une créature ciblée",
+    duration: "5 Rounds",
+    raises: "Portée (+3 m / +10'), Durée (+1 round), Spéciale (+1g0 à la Force des plantes par Augmentation)",
+    source: "The Book of Earth (p. 201)",
+    desc: "Stimule les plantes et arbres vivants afin qu'ils croissent brusquement et enlacent la cible de lianes, ronces et branches. La cible est automatiquement Enchevêtrée (Entangled). Aux tours suivants, elle peut tenter de s'échapper par une Action Simple via un jet opposé de Force contre la Force des plantes (4). Des alliés peuvent aussi la trancher pour la libérer en 2 tours d'efforts. Ne fonctionne qu'en présence de plantes vivantes (inopérant en bâtiment ou désert) et ne peut cibler de créature volante."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 4
+  // NIVEAU DE MAÎTRISE 4 (9 sorts : 4 Livre de Base + 5 Book of Earth)
   // =========================================================================
   {
     id: "earth-4-armor-emperor",
@@ -421,7 +513,20 @@ const SORTS_TERRE = [
     duration: "5 Rounds",
     raises: "Durée (+2 rounds)",
     source: "Livre de Base (p. 178)",
-    desc: "Enveloppe le shugenja d'un blindage d'esprits de terre résistant à tout préjudice. Chaque fois que le lanceur subit des dégâts provenant d'une attaque ennemie (physique ou magique), le total de chaque dé individuel de dégâts est diminué de la valeur de son Rang d'École de Shugenja. Aucun dé ne peut être réduit en deçà de 0."
+    desc: "Couvre le lanceur d'une épaisse couche d'esprits de Terre résilients qui repoussent tout dommage physique ou magique. Chaque fois que vous subissez des dégâts d'une attaque ou d'un sort ennemi, le résultat de chaque dé de dégâts individuel est réduit d'une valeur égale à votre Rang d'École de Shugenja (sans qu'un dé ne puisse descendre sous 0)."
+  },
+  {
+    id: "earth-4-earth-dragon-ward",
+    name: "Garde du Dragon de Terre (Earth Dragon's Ward)",
+    element: "Terre",
+    mastery: 4,
+    keywords: ["Sceau", "Jade"],
+    range: "Contact",
+    area: "Rayon de 6 mètres (20')",
+    duration: "10 Minutes",
+    raises: "Durée (+5 minutes), Spéciale (+1g1 au jet de Volonté du lanceur par 2 Augmentations)",
+    source: "The Book of Earth (p. 197)",
+    desc: "Requiert 5 minutes pour inscrire un glyphe de garde sur une surface solide avant l'incantation. Protège la zone contre toute tentative de possession spirituelle ou démoniaque (fantôme, gaki, oni, sort ou autre). Toute entité tentant une possession dans la zone doit d'abord remporter un jet opposé de Volonté contre le lanceur (le shugenja sait que quelque chose a tenté de pénétrer le sceau et si la tentative a échoué ou réussi, sans connaître la nature de l'entité). Ne chasse pas un esprit possédant déjà un hôte."
   },
   {
     id: "earth-4-earth-flows",
@@ -432,9 +537,9 @@ const SORTS_TERRE = [
     range: "Centré sur le lanceur",
     area: "2,5 km² (1 square mile)",
     duration: "1 Heure (ou 2 rounds de Bataille de Masse)",
-    raises: "Durée (+30 min ou +1 tour de bataille par 2 Augmentations)",
+    raises: "Durée (+30 min ou +1 tour de bataille de masse par 2 Augmentations)",
     source: "The Book of Earth (p. 200)",
-    desc: "Développé par la famille Kitsu. Réorganise la topographie du champ de bataille à l'avantage des troupes du shugenja (pentes favorables pour charger, goulets protecteurs). Confère un bonus de +3g2 au jet de commandement de votre général en Bataille de Masse, et +1g1 sur le Tableau de Bataille pour chaque samouraï de votre camp."
+    desc: "Développé à l'origine par les Kitsu du Clan du Lion. Réorganise le relief du champ de bataille à l'avantage de votre armée (pente favorable à la charge, falaise aplanie en pente douce). Confère +3g2 à tous les jets du commandant de votre camp pour déterminer qui l'emporte en Bataille de Masse, et +1g1 sur tous les jets du Tableau de Bataille effectués par les samouraïs de votre camp. Si les deux armées lancent ce sort dans la même bataille, un contrecoup spirituel violent déclenche un séisme massif équivalent à Tremblement de Terre (Rang 5)."
   },
   {
     id: "earth-4-essence-earth",
@@ -445,9 +550,9 @@ const SORTS_TERRE = [
     range: "Personnelle ou 6 mètres (20')",
     area: "Une créature ciblée (le lanceur ou autrui)",
     duration: "10 Rounds",
-    raises: "Durée (+1 round), Portée (+1,5 m / +5'), Cibles (+1 par 2 Augmentations), Spéciale (+1 Rang de Terre par 2 Augmentations, max +3 Rangs)",
+    raises: "Durée (+1 round), Portée (+1,5 m / +5'), Cibles (+1 par 2 Augmentations), Spéciale (+1 Rang de Terre par 2 Augmentations, max +3 Rangs de Terre)",
     source: "Livre de Base (p. 178)",
-    desc: "Insuffle la véritable stature tellurique à la cible. Pour toute la durée, l'Anneau de Terre de la cible est augmenté de +1 Rang effectif, et ses Rangs de Blessures sont recalculés à la hausse. À l'expiration du sort, les esprits quittent le corps et les jauges de Blessures reviennent à la normale, ce qui peut provoquer la mort immédiate si la cible a essuyé de lourdes attaques."
+    desc: "Infuse la cible de la véritable force de la Terre. Pour la durée du sort, l'Anneau de Terre de la cible est considéré comme supérieur de +1 Rang, et ses Rangs de Blessures augmentent en conséquence. À l'expiration du sort, les esprits de Terre repartent aussitôt et les jauges de Blessures reviennent à la normale — pouvant provoquer la mort immédiate si la cible a subi suffisamment de dégâts."
   },
   {
     id: "earth-4-maw-earth",
@@ -456,11 +561,11 @@ const SORTS_TERRE = [
     mastery: 4,
     keywords: ["Bataille"],
     range: "12 mètres (40')",
-    area: "Rayon de 3 mètres (10')",
+    area: "Rayon d'environ 3 mètres (10')",
     duration: "Permanente",
-    raises: "Portée (+6 m / +20'), Profondeur et dégâts (+3 m de profondeur et +1g1 dégâts par 2 Augmentations)",
+    raises: "Portée (+6 m / +20'), Spéciale/Dégâts (+3 m / +10' de profondeur et +1g1 dégâts par 2 Augmentations)",
     source: "The Book of Earth (p. 199)",
-    desc: "La terre s'ouvre d'un coup sec sous forme d'une fosse de 6 mètres de profondeur (20'). Quiconque est dans la zone doit réussir un jet de Réflexes opposé à la Terre du lanceur ou tomber dans la fosse en subissant 3g2 dégâts d'impact. En escalader les parois requiert une Action Complexe et un jet d'Athlétisme / Force contre un ND égal à la profondeur en pieds (ND 20 de base)."
+    desc: "Les esprits de Terre fendent brutalement le sol en une fosse de 6 mètres (20') de profondeur. Quiconque se trouve dans un rayon de 3 m (10') de la fosse doit réussir un jet de Réflexes opposé à la Terre du lanceur ou tomber dedans en subissant 3g2 dégâts et rester piégé jusqu'à ce qu'il soit secouru ou en sorte (Action Complexe, Athlétisme / Force contre un ND égal à la profondeur en pieds, soit ND 20 de base)."
   },
   {
     id: "earth-4-sapphire-strike",
@@ -471,9 +576,9 @@ const SORTS_TERRE = [
     range: "15 mètres (50')",
     area: "Une créature ciblée",
     duration: "Instantanée",
-    raises: "Portée (+6 m / +20'), Cibles (+1), Dégâts (+1g1)",
+    raises: "Portée (+6 m / +20'), Cibles (+1 cible), Dégâts (+1g1)",
     source: "The Book of Earth (p. 199)",
-    desc: "Créé par les Kuni lors de la Guerre contre l'Ombre. Projette un éclat aveuglant d'énergie cristalline bleue. Inflige 4g3 Blessures ignorant la Réduction contre les serviteurs de l'Ombre Rampante (Lying Darkness), les ninjas de l'Ombre et les créatures de l'Outremonde souillées."
+    desc: "Créé par la famille Kuni durant la Guerre contre l'Ombre en étudiant le pouvoir du cristal. Projette un éclat d'énergie bleu-vert issu de l'essence des larmes de Dame Soleil. La Frappe de Saphir inflige une VD de 4g4, mais uniquement contre les cibles spécifiquement vulnérables au Jade ou au Cristal. Elle compte à la fois comme Jade et comme Cristal pour contourner l'Invulnérabilité ou la Réduction."
   },
   {
     id: "earth-4-symbol-earth",
@@ -482,11 +587,11 @@ const SORTS_TERRE = [
     mastery: 4,
     keywords: ["Sceau"],
     range: "Contact",
-    area: "Spéciale (un passage, porte, fenêtre ou portail)",
+    area: "Spéciale",
     duration: "Permanente",
     raises: "Dégâts (+1g0)",
     source: "Livre de Base (p. 179)",
-    desc: "Grave un glyphe de garde sur un passage. Quiconque le franchit sans autorisation subit un jet opposé de son Air contre la Terre du lanceur. En cas d'échec, une onde de choc tellurique frappe l'intrus qui doit réussir un jet de Force contre le total du jet d'incantation initial du symbole ou se retrouver Renversé (Prone) et Assommé (Stunned). Si l'intrus possède au moins un plein Rang de Souillure, il subit de surcroît 2g2 Blessures. Un seul Symbole de Terre actif par shugenja à la fois."
+    desc: "Grave un symbole de garde sur un objet solide (porte, fenêtre, portail ou passage). Quiconque tente de le franchir doit remporter un jet opposé d'Air contre la Terre du lanceur. En cas d'échec, l'intrus est frappé par une puissante onde de choc et doit réussir un jet de Force contre le total du jet d'incantation du symbole ou être projeté À Terre (Prone) et Assommé (Stunned). S'il possède au moins un plein Rang de Souillure, il subit de plus 2g2 Blessures. Un seul Symbole de Terre actif par shugenja, et deux Symboles d'Éléments différents ne peuvent affecter la même zone. Dissipable par un autre Symbole de Terre ou en détruisant la surface gravée."
   },
   {
     id: "earth-4-tomb-jade",
@@ -497,9 +602,9 @@ const SORTS_TERRE = [
     range: "15 mètres (50')",
     area: "Une créature ciblée",
     duration: "Concentration",
-    raises: "Portée (+3 m / +10'), Spéciale (+1g1 au jet opposé par Augmentation)",
+    raises: "Portée (+3 m / +10'), Spéciale (+1g1 au jet opposé pour le lanceur par Augmentation)",
     source: "Livre de Base (p. 179)",
-    desc: "Arme suprême contre les créatures de l'Outremonde ayant au moins un plein Rang de Souillure (sans effet sur les êtres purs). À chaque round au tour du shugenja, un jet opposé de Terre est réalisé contre la cible. Si le shugenja l'emporte, la corruption de la victime commence à se cristalliser en jade : elle subit 3g3 Blessures ignorant la Réduction et reste immobilisée. Si la cible succombe à ces blessures, son corps est définitivement pétrifié en une statue de jade pur."
+    desc: "Ne peut affecter qu'une cible possédant au moins un plein Rang de Souillure de l'Outremonde (en cas d'échec, le lanceur ignore s'il s'agit d'une cible pure ou ayant résisté). À l'incantation, la cible est brièvement immobilisée tandis que les esprits de jade pénètrent son corps. Chaque round (dès le premier), le lanceur effectue un jet opposé de Terre contre la cible : si la cible gagne, le sort cesse ; si le lanceur gagne, la victime subit 2g2 Blessures tandis que sa chair commence à se muer en jade. Cet effet se répète chaque round jusqu'à résistance, fin de concentration ou mort de la cible. Les victimes tuées deviennent des statues de jade pur qui s'effritent en poussière ordinaire au bout de 24 heures."
   },
   {
     id: "earth-4-wall-earth",
@@ -508,15 +613,15 @@ const SORTS_TERRE = [
     mastery: 4,
     keywords: ["Défense"],
     range: "30 mètres (100')",
-    area: "Mur atteignant jusqu'à 3 m (10') de haut et 30 m (100') de long",
+    area: "Mur mesurant au maximum 3 mètres (10') de haut et 30 mètres (100') de large",
     duration: "10 Minutes",
-    raises: "Dimensions (+30 cm en hauteur ou +3 m en longueur par Augmentation), Durée (+1 minute), Portée (+3 m / +10')",
+    raises: "Zone (+30 cm / +1' en hauteur ou +3 m / +10' en largeur par Augmentation), Durée (+1 minute), Portée (+3 m / +10')",
     source: "Livre de Base (p. 179)",
-    desc: "Fait jaillir du sol un puissant rempart de roche et d'humus compacté dont vous choisissez la configuration (linéaire, incurvée ou circulaire). Le mur est capable de retenir une inondation, de la lave ou des vents de tempête. Pour y percer une brèche physique, un assaillant doit réussir un test de Force brute contre un ND égal à [(Anneau de Terre + Rang d'École) × 5]. Le mur s'effondre en poussière dès expiration du sort."
+    desc: "Érige un épais rempart de terre dure comme la pierre, configurable selon le désir du lanceur (courbé, sur un flanc de colline, ou en cercle). Assez robuste pour contenir une crue, une coulée de lave ou des vents d'ouragan. Enfoncer ce mur requiert un jet de Force contre un ND égal à [(Terre + Rang d'École) × 5]. À l'expiration, le mur s'effrite en instants."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 5
+  // NIVEAU DE MAÎTRISE 5 (7 sorts : 5 Livre de Base + 2 Book of Earth)
   // =========================================================================
   {
     id: "earth-5-drawing-mountain",
@@ -525,11 +630,11 @@ const SORTS_TERRE = [
     mastery: 5,
     keywords: ["Bataille", "Défense"],
     range: "90 mètres (300')",
-    area: "Une structure ciblée (jusqu'à la taille d'un petit château)",
+    area: "Une structure ciblée (jusqu'à un petit château)",
     duration: "1 Jour",
-    raises: "Portée (+45 m par Augmentation), Zone (+1 structure pour 3 Augmentations), Durée (+1 jour pour 3 Augmentations)",
+    raises: "Portée (+45 m / +150' par Augmentation), Zone (+1 structure supplémentaire pour 3 Augmentations), Durée (+1 jour pour 3 Augmentations)",
     source: "The Book of Earth (p. 197)",
-    desc: "Infuse l'essence indestructible des montagnes dans une forteresse ou un rempart. La structure devient totalement insensible aux inondations, séismes et tirs d'engins de siège conventionnels."
+    desc: "Infuse le bois et la pierre d'une structure (pouvant atteindre la taille d'un petit château) de la force des montagnes afin de résister aux crues, séismes et engins de siège. En appliquant les règles de Siège du supplément The Great Clans, les Blessures et la Réduction de la structure ciblée sont doublées pour la durée du sort. À l'expiration du sort, ces Blessures supplémentaires disparaissent — si cela réduit la structure à 0 Blessure, elle s'effondre immédiatement en ruines."
   },
   {
     id: "earth-5-earthquake",
@@ -538,11 +643,11 @@ const SORTS_TERRE = [
     mastery: 5,
     keywords: [],
     range: "Personnelle",
-    area: "Rayon d'1,5 km (1 mile) centré sur le lanceur",
+    area: "Rayon d'1,6 km (1 mile) centré sur le lanceur",
     duration: "1 Minute",
-    raises: "Zone (+450 m / +500 yards de rayon), Durée (+1 minute par 2 Augmentations)",
+    raises: "Zone (+450 m / +500 yards), Durée (+1 minute par 2 Augmentations)",
     source: "Livre de Base (p. 180)",
-    desc: "Déchaîne un séisme terrifiant dont le lanceur est le seul épargné. Le séisme détruit totalement tous les édifices en bois de la zone et inflige d'immenses dégâts aux structures en pierre. Toutes les personnes dans l'aire d'effet sont projetées à terre, restent Renversées (Prone) et Assommées (Stunned) pour toute la durée, et subissent 2g1 Blessures. Les individus se trouvant à l'intérieur de bâtiments subissent 6g6 Blessures dues aux chutes de gravats et effondrements. Lancer ce sort près d'une zone habitée est considéré comme un acte de guerre."
+    desc: "Déclenche un violent séisme centré sur le lanceur, seul à ne pas en souffrir à l'extérieur. Détruit intégralement tous les bâtiments en bois dans la zone et endommage gravement les structures en pierre. Toute personne dans la zone est projetée au sol, reste À Terre (Prone) et Assommée (Stunned) pendant la durée du sort, et subit 2g1 Blessures. Quiconque se trouve à l'intérieur d'un bâtiment (y compris le lanceur) subit 6g6 dégâts dus aux chutes de débris et toits qui s'effondrent. Lancer ce sort près d'une grande zone habitée est généralement considéré comme un acte de guerre."
   },
   {
     id: "earth-5-grounding-energy",
@@ -555,7 +660,20 @@ const SORTS_TERRE = [
     duration: "3 Rounds",
     raises: "Durée (+1 round par 2 Augmentations)",
     source: "The Book of Earth (p. 198)",
-    desc: "Créé par les Yogo. Ancre fermement le groupe dans les flux telluriques purs : tout sort de magie du sang (Mahō) ciblant le lanceur ou un allié protégé dans la zone voit son ND de lancement augmenter d'un montant égal à (Terre de la cible × 10)."
+    desc: "Mis au point par la famille Yogo. Tout sort de Mahō ciblant le lanceur ou l'un de ses alliés présents dans la zone d'effet voit son ND d'incantation augmenté d'un montant égal à (10 × Terre de la cible)."
+  },
+  {
+    id: "earth-5-major-binding",
+    name: "Lien Majeur (Major Binding)",
+    element: "Terre",
+    mastery: 5,
+    keywords: ["Jade", "Sceau"],
+    range: "30 mètres (100')",
+    area: "Une créature de l'Outremonde ciblée",
+    duration: "12 Heures",
+    raises: "Durée (+1 heure), Portée (+15 m / +50')",
+    source: "Livre de Base (p. 179)",
+    desc: "Version plus puissante du Lien Mineur des Kuni, employée pour capturer et interroger de redoutables créatures de l'Outremonde, des Perdus (Lost) ou d'autres créatures spirituelles Souillées (inopérant sur tout autre être). Rituel nécessitant 10 minutes d'incantation (-1 minute par shugenja supplémentaire participant au rituel, minimum 1 minute). Une fois incanté, les lanceurs effectuent un jet opposé de leurs Anneaux de Terre combinés contre l'Anneau de Terre de la cible. En cas de victoire, des menottes de jade élémentaire pur entravent la créature et la rendent impuissante dans d'atroces souffrances pour la durée du sort, avant de tomber en poussière à son terme."
   },
   {
     id: "earth-5-kamis-strength",
@@ -567,8 +685,8 @@ const SORTS_TERRE = [
     area: "Une créature ciblée",
     duration: "5 Rounds",
     raises: "Durée (+1 round), Portée (+3 m / +10')",
-    source: "Livre de Base (p. 180)",
-    desc: "Renforce considérablement la résistance physique d'un individu. Le sujet gagne une Réduction de dégâts fixe de 20. De plus, son Trait de Force ainsi qu'un autre Trait physique au choix du lanceur sont augmentés d'une valeur égale à l'Anneau de Terre du shugenja. En contrepartie, le sujet est si lourdement ancré qu'il ne peut entreprendre aucune Action de Mouvement Simple (les Actions Gratuites de mouvement restent permises)."
+    source: "Livre de Base (p. 179)",
+    desc: "La cible gagne une Réduction de 20, et augmente sa Force ainsi qu'un autre Trait physique de son choix d'un montant égal à l'Anneau de Terre du lanceur. En contrepartie, alourdie par le poids de la Terre, la cible ne peut entreprendre aucune Action de Mouvement Simple (elle conserve la possibilité d'effectuer une Action de Mouvement Gratuite)."
   },
   {
     id: "earth-5-kamis-will",
@@ -580,8 +698,8 @@ const SORTS_TERRE = [
     area: "Une créature ciblée",
     duration: "10 Rounds",
     raises: "Durée (+1 round), Portée (+3 m / +10')",
-    source: "Livre de Base (p. 180)",
-    desc: "Miroir spirituel de La Force des Kami : le sujet est imprégné de l'obstination absolue de la Terre. Son Trait de Volonté augmente d'une valeur égale à l'Anneau de Terre du lanceur. Tout sort élémentaire (ami ou hostile, à l'exception des sorts de Mahō) le ciblant subit un malus de -XgX à son jet d'incantation (où X est l'Anneau de Terre du lanceur). En contrepartie, son intransigeance lui inflige une pénalité de -Xg0 à tous ses jets de Compétences Sociales."
+    source: "Livre de Base (p. 179)",
+    desc: "Contrepartie spirituelle de La Force des Kami. La cible augmente sa Volonté d'un montant égal à l'Anneau de Terre du lanceur, et tout sort (amical ou hostile, à l'exception des sorts de Mahō) qui la cible subit une pénalité de -XgX à son jet d'incantation (où X est l'Anneau de Terre du lanceur). En contrepartie, son obstination la rend incapable d'évoluer en société : elle subit une pénalité de -Xg0 à tous ses jets de Compétences Sociales (où X est l'Anneau de Terre du lanceur)."
   },
   {
     id: "earth-5-strike-roots",
@@ -592,13 +710,13 @@ const SORTS_TERRE = [
     range: "15 mètres (50')",
     area: "Une créature ciblée",
     duration: "3 Rounds",
-    raises: "Durée (+1 round), Portée (+3 m / +10'), Cibles (+1 par 2 Augmentations), Spéciale (+1g1 au jet opposé par Augmentation)",
-    source: "Livre de Base (p. 180)",
-    desc: "Forme suprême de La Miséricorde du Loup qui siphonne l'essence vitale de la cible. Après l'incantation, vous effectuez un jet opposé de Terre contre chaque cible. Si la cible échoue, son Anneau de Terre est immédiatement réduit à 1 pour toute la durée du sort. Ses Rangs de Blessures s'effondrent immédiatement au prorata de cette nouvelle valeur, ce qui peut provoquer sa mort instantanée si elle a déjà essuyé des blessures."
+    raises: "Durée (+1 round), Portée (+3 m / +10'), Cibles (+1 cible par 2 Augmentations), Spéciale (+1g1 au jet opposé pour le lanceur par Augmentation)",
+    source: "Livre de Base (p. 179)",
+    desc: "Forme dévastatrice de La Miséricorde du Loup. Après l'incantation, le lanceur doit remporter un jet opposé de Terre contre chaque cible (un jet distinct par cible). Si la cible perd ce jet, son Anneau de Terre est immédiatement réduit à 1 pour la durée du sort. Cela réduit ses Rangs de Blessures en conséquence et peut provoquer sa mort immédiate si elle avait déjà subi des blessures."
   },
 
   // =========================================================================
-  // NIVEAU DE MAÎTRISE 6
+  // NIVEAU DE MAÎTRISE 6 (5 sorts : 4 Livre de Base + 1 Book of Earth)
   // =========================================================================
   {
     id: "earth-6-essence-jade",
@@ -609,9 +727,9 @@ const SORTS_TERRE = [
     range: "9 mètres (30')",
     area: "Une créature ciblée",
     duration: "10 Rounds",
-    raises: "Durée (+1 round), Portée (+1,5 m / +5'), Cibles (+1 par 2 Augmentations, max 3 cibles au total)",
+    raises: "Durée (+1 round), Portée (+1,5 m / +5'), Cibles (+1 cible pour 2 Augmentations, max 3 cibles au total)",
     source: "Livre de Base (p. 180)",
-    desc: "Appelle la pureté sacrée du jade pour repousser les tares de Jigoku. Le sujet irradie d'une lueur d'émeraude : il ne peut contracter le moindre point de Souillure et devient intégralement immunisé à tous les sorts et effets issus de la magie du sang (Mahō). Ce sort ne peut jamais cibler un individu portant un plein Rang de Souillure ou plus (les kami de jade se détournent avec horreur, révélant instantanément sa corruption au lanceur)."
+    desc: "Fait rayonner la cible d'une lumière verte sacrée de jade. Pour la durée du sort, elle ne peut contracter la Souillure de l'Outremonde et est totalement immunisée aux effets de tous les sorts de Mahō. Ce sort ne peut être lancé sur quelqu'un possédant au moins un plein Rang de Souillure : les purs esprits de jade reculent aussitôt avec horreur devant un être si corrompu, révélant instantanément sa nature Souillée au lanceur."
   },
   {
     id: "earth-6-power-earth-dragon",
@@ -622,9 +740,9 @@ const SORTS_TERRE = [
     range: "15 mètres (50')",
     area: "Une créature ciblée",
     duration: "10 Minutes",
-    raises: "Durée (+1 minute), Portée (+3 m / +10'), Cibles (+1), Spéciale (capacité d'absorption +10 Blessures par Augmentation)",
+    raises: "Durée (+1 minute), Portée (+3 m / +10'), Cibles (+1), Spéciale (+10 Blessures d'absorption par Augmentation)",
     source: "Livre de Base (p. 180)",
-    desc: "Le summum des protections physiques de la Terre : place le sujet sous la tutelle directe du Dragon Élémentaire de la Terre. Les kami absorbent l'intégralité des dommages physiques ou magiques subis par le bénéficiaire. Les armes éveillées (nemuranai) peuvent toutefois contourner cette protection. Si les esprits absorbent un total cumulé de 100 Blessures sur une cible donnée, leur pouvoir s'épuise et le sort prend fin prématurément pour cette cible."
+    desc: "Le sort de Terre défensif ultime, invoquant la faveur du Dragon de la Terre. Les esprits de Terre absorbent intégralement tous les dommages physiques ou magiques subis par la cible pendant la durée du sort. Les nemuranai peuvent toutefois contourner cette protection. De plus, si les esprits protégeant une cible donnée absorbent un total de 100 Blessures de dégâts, ils s'épuisent et les effets du sort sur cette cible prennent fin."
   },
   {
     id: "earth-6-prison-earth",
@@ -635,9 +753,9 @@ const SORTS_TERRE = [
     range: "9 mètres (30')",
     area: "Une créature ciblée",
     duration: "Permanente",
-    raises: "Portée (+1,5 m / +5'), Spéciale (+1g1 au jet opposé par Augmentation)",
+    raises: "Portée (+1,5 m / +5'), Spéciale (+1g1 au jet opposé pour le lanceur par Augmentation)",
     source: "Livre de Base (p. 180)",
-    desc: "Le sort de scellement ultime des shugenja de la Terre. Permet d'emprisonner définitivement l'essence d'une entité spirituelle hostile au sein d'une gemme ou d'une perle tenue en main par le shugenja (à la discrétion du MJ, une boîte à secret ou un pendentif de cristal taillé peuvent servir de réceptacle). Le sort peut cibler n'importe quel être originaire de Jigoku, Gaki-dō ou Toshigoku, ou toute créature non humaine possédant au moins 1 plein Rang de Souillure. Nécessite de remporter un jet opposé de Volonté contre l'entité."
+    desc: "Le plus puissant sort de scellement des shugenja de Terre. Nécessite que le lanceur possède une gemme ou une perle (ou autre objet précieux rare comme une boîte à secret ou un pendentif en cristal, à la discrétion du MJ). Peut cibler toute créature native des royaumes de Jigoku, Gaki-dō ou Toshigoku, ou toute autre créature non humaine ayant au moins 1 plein Rang de Souillure. Le lanceur effectue un jet opposé de Volonté contre la cible : en cas de succès, le corps physique de la créature disparaît et son essence est emprisonnée dans l'objet indéfiniment, sauf si l'objet est physiquement détruit (auquel cas la créature reprend instantanément sa forme physique)."
   },
   {
     id: "earth-6-rise-earth",
@@ -650,7 +768,7 @@ const SORTS_TERRE = [
     duration: "Concentration",
     raises: "Aucune",
     source: "Livre de Base (p. 180)",
-    desc: "Invoque un colosse de terre et de roc haut de 3 mètres qui obéit à vos ordres mentaux. Il se déplace d'une distance de (Terre × 3 m) par round. Il possède tous ses Traits physiques égaux à votre Anneau de Terre, attaque en Jiujutsu avec un rang égal à la moitié de votre Anneau de Terre et inflige des dégâts d'une VD de Terre g Terre. Il possède une Réduction de 15, est Invulnérable et encaisse les Blessures comme un humain dont l'Anneau de Terre équivaudrait au vôtre (sans subir aucune pénalité de blessure). Il est banni s'il est réduit à 0 Blessure. Ne peut être invoqué au même endroit plus d'une fois par mois."
+    desc: "Accomplissement suprême du sort Invocation, appelant un massif kami de pure Terre d'apparence vaguement humanoïde d'environ 3 mètres (10') de haut pour vous servir. Il se déplace jusqu'à (1,5 m / 5' × votre Anneau de Terre) par round et ses pas ébranlent le sol dans un rayon de 6 m (20'), empêchant quiconque dans la zone d'effectuer des Actions de Mouvement Simples. Tous ses Traits Physiques sont égaux à votre Anneau de Terre, il attaque avec un rang de Jiujutsu égal à la moitié de votre Anneau de Terre et inflige une VD égale à votre Anneau de Terre (en dés lancés et gardés, Terre g Terre). Il peut porter jusqu'à 450 kg (1 000 livres), détruire toute structure en bois et briser des murs de pierre épais d'un pied (30 cm). Il encaisse les dégâts comme un humain ayant une Terre égale à votre Anneau de Terre (sans malus de Blessures), est Invulnérable et est dissipé s'il est réduit à 0 Blessure."
   },
   {
     id: "earth-6-soldiers-clay",
@@ -661,9 +779,9 @@ const SORTS_TERRE = [
     range: "30 mètres (100')",
     area: "Spéciale",
     duration: "1 Heure",
-    raises: "Durée (+30 minutes), Soldats (+2 soldats créés par Augmentation)",
+    raises: "Durée (+30 minutes), Spéciale (+2 soldats supplémentaires par Augmentation)",
     source: "The Book of Earth (p. 200)",
-    desc: "Invoque une troupe de 10 guerriers d'argile animés armés de lances et de boucliers de terre cuite. Chaque soldat a Terre 4, Réduction 10, attaque à 6g3 et inflige 4g2 dégâts de Jade. Ils obéissent aux ordres mentaux du lanceur sur le champ de bataille."
+    desc: "Puissante variante d'Éveil de la Terre jalousement conservée dans les bibliothèques Phénix. Crée dix guerriers à taille humaine faits de terre et de pierre, animés par les kami de Terre pour obéir sans peur ni faiblesse aux ordres du lanceur. Ils possèdent tous des Traits et Anneaux égaux à votre Anneau de Terre, attaquent (avec des épées de pierre considérées comme ayant la propriété Jade) comme s'ils possédaient Kenjutsu 4, et bénéficient d'une Réduction égale au double de votre Anneau de Terre. Lorsqu'ils sont détruits ou que le sort expire, ils s'effondrent en tas de terre meuble."
   }
 ];
 

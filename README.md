@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.13.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.14.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -49,14 +49,14 @@ Un atelier complet de création et d'évolution de samouraï en **6 étapes guid
   - Calcul de la **Réputation (*Insight*)** (`(Somme des Anneaux × 10) + Somme des Compétences` + bonus d'équipement) et détermination du **Rang de Réputation** (Rangs 1 à 5+).
   - Calcul du **ND d'Armure** (`5 + (5 × Réflexes) + Bonus d'Armure`), de l'**Initiative** (`[Rang de Réputation + Réflexes] g Réflexes`), des **8 Paliers de Blessures** et du taux de récupération nocturne (`(Constitution × 2) + Rang de Réputation`).
 - **Moteur de Budget d'Expérience (XP) :**
-  - Base de 40 XP personnalisable et contrôle strict du plafond de **15 XP maximum de Désavantages**.
+  - Base de 40 XP personnalisable et contrôle strict du plafond de **10 XP maximum de Désavantages** (*Livre de Base 4ᵉ Éd.*, p. 145).
   - Prise en compte automatique des réductions de coûts et modificateurs d'avantages/désavantages : *Illuminé*, *Bénédiction Élémentaire*, *Prodige*, *Esprit Obtus*, *Ami de la Confrérie*, *Ami des Éléments*, *Écoles Multiples* et *Études dans une Autre École*.
 - **Paliers de Maîtrise des Compétences :** Déblocage visuel automatique des dons de maîtrise aux **Rangs 3, 5 et 7** (Kenjutsu, Iaijutsu, Kyujutsu, Armes Lourdes, Jiujutsu, Défense, Courtisan, Enquête, Athlétisme, Armes d'Hast, Lances...).
 - **Panneaux d'Archétypes Dynamiques :**
   - **Voie des Kamis (Shugenja) :** Sélection des sorts, suivi des emplacements quotidiens (*slots*) par élément, gestion des Affinités/Déficiences (+1/-1 au Rang d'École effectif) et bouton de jet d'incantation direct.
   - **Voie Martiale (Bushi) :** Catalogue des Katas martiaux (`data/katas-data.js`), vérification automatique du prérequis d'Anneau et activation d'un Kata en combat.
   - **Voie de la Confrérie (Moine) :** Accès aux Kihos mystiques, martiaux, internes et karmiques.
-  - **Chair Tatouée (*Ise Zumi* Togashi) :** Sélection et gestion des Tatouages sacrés selon le quota autorisé par le Rang d'École (`1 + Rang`).
+  - **Chair Tatouée (*Ise Zumi* Togashi) :** Sélection et gestion des Tatouages sacrés selon le quota officiel par Rang d'École (`2` aux Rangs 1–2, `4` aux Rangs 3–4, `6` au Rang 5).
 - **Générateur Procédural de Légende :** Rédaction automatique d'une biographie en 3 actes et remplissage contextuel du questionnaire officiel des **20 Questions de Rokugan** selon le clan, la famille, l'école, l'arme et les avantages/désavantages choisis.
 - **Plateau de Dés « Roll & Keep » ($X\text{g}Y$) :** Lanceur de dés D10 intégré avec explosion automatique des 10, relance des 1 (spécialisations) et historique détaillé des dés gardés.
 - **Sauvegarde, Partage & Impression A4 :**
@@ -65,13 +65,13 @@ Un atelier complet de création et d'évolution de samouraï en **6 étapes guid
   - **Dossier d'Impression Officiel A4** vectoriel prêt pour l'impression papier ou PDF (`@media print`).
 
 ### 3. Le Grimoire des Éléments & Kihos (`grimoire.html`)
-- **Base de Données Modulaire (`data/sorts-data.js` & `data/sorts/`) :** Prières universelles (Communion, Sentir, Invoquer), sorts des 5 Éléments (Terre, Eau, Feu, Air, Vide) de Maîtrise 1 à 6, Kihos de la Confrérie de Shinsei et sortilèges de Mahō.
+- **Base de Données Modulaire (`data/sorts-data.js` & `data/sorts/`) :** Prières universelles (5 sorts : *Sentir*, *Communier*, *Invoquer*, *Commandement*, *Transmutation*), sorts des 5 Éléments (Terre, Eau, Feu, Air, Vide) de Maîtrise 1 à 6, Kihos de la Confrérie (Maîtrises 1 à 8) et sortilèges de Mahō (avec coût de sang et Souillure exacts).
 - **Filtrage Instantané & Permaliens :** Recherche par nom, mot-clé ou effet, filtrage combiné par Élément/Voie et Rang de Maîtrise, et ciblage direct d'un sort par ancre URL (`grimoire.html#sort-<id>`) avec animation de mise en évidence.
 - **Aide de Jeu Tactique Intégrée :** Mémento complet sur le lancement des sorts (formule, ND, slots, affinités) et sur l'acquisition des Kihos par archétype selon les règles du *Livre de l'Eau* (p. 266).
 - **Sceau Interdit de Mahō :** Verrouillage par mot de passe des parchemins de magie du sang afin de préserver le secret du MJ autour de la table.
 
 ### 4. Le Codex des Tatouages Sacrés (`tatouages.html`)
-- **Référentiel de l'Ordre Togashi (`data/tatouages-data.js`) :** Règles officielles des moines tatoués *Ise Zumi* (progression aux Rangs 1, 3 et 5, activation en Action Libre, durée `2 × Rang d'École` rounds, tatouages fusionnés).
+- **Référentiel de l'Ordre Togashi (`data/tatouages-data.js`) :** Règles officielles des moines tatoués *Ise Zumi* (progression aux Rangs 1, 3 et 5, activation en Action Gratuite, durée `2 × Rang d'École` rounds, tatouages fusionnés).
 - **Explorateur Interactif :** Recherche instantanée par nom, kanji, effet mécanique ou ouvrage source, et fenêtre modale de consultation détaillée.
 
 ### 5. Les Chroniques de Campagne & Narration Vocale (`campagne.html`)
@@ -121,7 +121,7 @@ L5R/
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
 ├── campagne.html                       # Hub des 10 scénarios de la campagne du MJ David
 ├── campagne-ajouter.html               # Studio d'import et générateur de pages de scénarios HTML
-├── version.json                        # Source unique de vérité pour la version du site (v1.13.0)
+├── version.json                        # Source unique de vérité pour la version du site (v1.14.0)
 ├── manifest.webmanifest                # Manifeste PWA installable sur Android & iPhone (mode autonome)
 ├── sw.js                               # Service Worker hors-ligne pré-cachant Forge, Dojo & données L5R 4e
 ├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
