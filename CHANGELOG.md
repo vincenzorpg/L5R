@@ -15,8 +15,9 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
   - Création d'une page dédiée **`kihos.html`** et de son moteur **`js/kihos.js`** regroupant les 64 Kihos officiels avec filtres par Anneau, Catégorie (*Interne*, *Martial*, *Kharmique*, *Mystique*, *Atemi uniquement*) et Maîtrise (1 à 8), ainsi que le mémento officiel (*Livre de Base* pp. 231, 261–262 & 266).
   - Recentration de `grimoire.html` exclusivement sur les 308 sorts élémentaires, universels et de Mahō (avec redirection automatique de `grimoire.html?el=kiho` vers `kihos.html` pour préserver les anciens liens).
   - Mise à jour des menus bureau et mobile (`js/navbar.js`) et du pré-cache hors-ligne PWA (`sw.js`).
-- **Identité « Campagne de la Chronique de Rokugan »** :
+- **Identité & Protection (« Campagne de la Chronique de Rokugan »)** :
   - Remplacement homogène des mentions « Campagne MJ David » / « MJ David » dans les titres, bandeaux, menus et pieds de page par **« Campagne de la Chronique de Rokugan »** (en préservant les URLs externes d'archive).
+  - Ajout du fichier **`LICENSE`** (*Tous droits réservés* sur le code, les récits et les illustrations de campagne) et application d'un **filigrane visuel & métadonnée EXIF** (`Les Chroniques de Rokugan • © Campagne L5R`) sur les 33 illustrations `assets/images/scenarios/*.jpg`.
 - **Tests Unitaires (`tests/unit-tests.js`, `tests/unit-tests.html`)** :
   - Ajout de la Suite 7 validant le filtrage exact de `js/kihos.js` (64 Kihos par Anneau, Type, Maîtrise et *Atemi*).
 

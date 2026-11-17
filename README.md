@@ -5,7 +5,7 @@
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
-[![Licence](https://img.shields.io/badge/License-Non--commercial%20Fan%20Content-lightgrey?style=flat-square)](#)
+[![Licence](https://img.shields.io/badge/Licence-Tous%20droits%20r%C3%A9serv%C3%A9s-991b1b?style=flat-square)](LICENSE)
 
 Portail numérique interactif, boîte à outils d'arbitrage et annales officielles de jeu de rôle sur table pour **La Légende des Cinq Anneaux (4ᵉ Édition)**, consacré à la **Campagne de la Chronique de Rokugan**.
 
@@ -126,6 +126,7 @@ L5R/
 ├── sw.js                               # Service Worker hors-ligne pré-cachant Forge, Dojo & données L5R 4e
 ├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
 ├── GEMINI.md                           # Directives strictes de développement et workflow Git/PR
+├── LICENSE                             # Licence Tous droits réservés (code, récits & illustrations)
 ├── README.md                           # Documentation générale du projet
 ├── .nojekyll                           # Désactivation du traitement Jekyll sur GitHub Pages
 │
@@ -273,6 +274,6 @@ Conformément aux directives du projet ([`GEMINI.md`](GEMINI.md)) :
 
 ## 📜 Crédits & Mentions Légales
 
-- **Maître de Jeu & Direction de Campagne :** **Campagne de la Chronique de Rokugan** (table active depuis 2015 — [Archive WordPress](https://campagnel5rdavid2015.wordpress.com/)).
+- **Campagne & Chronique :** **Campagne de la Chronique de Rokugan** (table active depuis 2015 — [Archive WordPress](https://campagnel5rdavid2015.wordpress.com/)).
 - **Chroniqueurs & Personnages de la Table :** *Tsuruchi Akira*, *Okado Hiruma*, *Hida Samui*, *Isawa Ryumitaka*, *Kakita Sutokhu*, *Mirumoto Mansouri*.
-- **Mentions Légales :** *La Légende des Cinq Anneaux* (*Legend of the Five Rings* / L5R) est une marque déposée d'Alderac Entertainment Group (AEG) et Fantasy Flight Games / Edge Studio. Ce dépôt est un projet amateur à but strictement récréatif et non commercial.
+- **Droits d'Auteur & Mentions Légales :** Le code source, les récits et les illustrations originales de la campagne sont protégés sous régime **Tous droits réservés** ([`LICENSE`](LICENSE)). *La Légende des Cinq Anneaux* (*Legend of the Five Rings* / L5R) est une marque déposée d'Alderac Entertainment Group (AEG) et Fantasy Flight Games / Edge Studio ; ce projet est une réalisation de fan à but strictement récréatif et non commercial.
