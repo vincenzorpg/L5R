@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.21.0] — 2026-11-17
+
+### ✨ Ajouté & Corrigé
+- **Système d'Importation Complet dans la Forge (`Le Carnet de Rokugan` JSON v1/v2 & Forge JSON)** (`js/export-carnet.js`, `js/character-generator.js`, `js/forge-ui.js`, `createcharacter.html`) :
+  - Ajout d'une modale dédiée **« 📥 Importer »** (`#forge-import-modal`) accessible depuis la barre d'actions bureau, le tiroir **Mon Dojo** et le menu mobile : sélection de fichier `.json`, glisser-déposer, ou collage direct de JSON brut.
+  - **Convertisseur bidirectionnel `convertCarnetToForgeData`** traduisant fidèlement les fiches du **Carnet de Rokugan (`schemaVersion: 2`)** : Clans (FR/EN & Clans Mineurs), Familles, Écoles (`schoolId` & libellés via `CARNET_SCHOOL_CATALOG`), Traits + Vide, Compétences (alias FR/EN & remplissage automatique des créneaux `[Choix]` de l'école), Avantages/Désavantages, Sorts & Affinité, Armures/Armes et Budget XP — tout en conservant le verrouillage strict des secrets MJ (`gmOnly`).
+  - **Aperçu interactif avant import** : détection automatique du format (*Carnet v1/v2* ou *Forge L5R 4e*), prise en charge des fichiers multi-personnages (`characters[]`), et choix entre *Charger sur la fiche active* ou *Importer & Sauver dans Mon Dojo*.
+- **Correction de persistance Forge & Tests (`js/character-generator.js`, `tests/unit-tests.js`)** :
+  - Correction de la sauvegarde et restauration des Sorts (`window.charSpellsList`), Katas (`window.charKatasList`), Tatouages (`window.charTattoosList`), de la Chronique Biographique et des Vingt Questions lors de l'export/import JSON Forge et dans Mon Dojo.
+  - Ajout de la **Suite 11** de tests unitaires couvrant `isCarnetRokuganPayload`, `extractCarnetCandidates`, `resolveForgeSkillName` et `convertCarnetToForgeData`.
+
+---
+
 ## [1.20.0] — 2026-11-17
 
 ### ✨ Ajouté & Amélioré

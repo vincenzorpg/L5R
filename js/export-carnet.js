@@ -857,10 +857,766 @@ function exportToCarnetRokugan() {
   }
 }
 
+// =============================================================================
+// 8. IMPORT DEPUIS LE CARNET DE ROKUGAN (schemaVersion: 1 / 2 -> FORGE)
+// =============================================================================
+const CARNET_CLAN_ALIASES = {
+  "crabe": "crabe", "crab": "crabe", "clan du crabe": "crabe", "crab clan": "crabe",
+  "grue": "grue", "crane": "grue", "clan de la grue": "grue", "crane clan": "grue",
+  "dragon": "dragon", "clan du dragon": "dragon", "dragon clan": "dragon",
+  "lion": "lion", "clan du lion": "lion", "lion clan": "lion",
+  "mante": "mante", "mantis": "mante", "clan de la mante": "mante", "mantis clan": "mante",
+  "phenix": "phenix", "phoenix": "phenix", "clan du phenix": "phenix", "phoenix clan": "phenix",
+  "scorpion": "scorpion", "clan du scorpion": "scorpion", "scorpion clan": "scorpion",
+  "licorne": "licorne", "unicorn": "licorne", "clan de la licorne": "licorne", "unicorn clan": "licorne",
+  "imperial": "imperial", "familles imperiales": "imperial", "empereur": "imperial", "seppun": "imperial", "otomo": "imperial", "miya": "imperial",
+  "araignee": "araignee", "spider": "araignee", "clan de l'araignee": "araignee", "spider clan": "araignee",
+  "confrerie": "confrerie", "confrerie de shinsei": "confrerie", "brotherhood": "confrerie", "brotherhood of shinsei": "confrerie", "shinsei": "confrerie", "moine": "confrerie",
+  "mineurs": "mineurs", "mineur": "mineurs", "minor": "mineurs", "clans mineurs": "mineurs",
+  "faucon": "mineurs", "falcon": "mineurs", "toritaka": "mineurs",
+  "tortue": "mineurs", "tortoise": "mineurs", "kasuga": "mineurs",
+  "renard": "mineurs", "fox": "mineurs", "kitsune": "mineurs",
+  "blaireau": "mineurs", "badger": "mineurs", "ichiryu": "mineurs",
+  "libellule": "mineurs", "dragonfly": "mineurs", "tonbo": "mineurs",
+  "lievre": "mineurs", "hare": "mineurs", "usagi": "mineurs",
+  "moineau": "mineurs", "sparrow": "mineurs", "suzume": "mineurs",
+  "mille-pattes": "mineurs", "centipede": "mineurs", "moshi": "mineurs",
+  "guepe": "mineurs", "wasp": "mineurs",
+  "singe": "mineurs", "monkey": "mineurs", "toku": "mineurs",
+  "boeuf": "mineurs", "ox": "mineurs", "morito": "mineurs",
+  "oriole": "mineurs", "oriol": "mineurs", "turi": "mineurs",
+  "sanglier": "mineurs", "boar": "mineurs", "heichi": "mineurs",
+  "ronin": "ronin", "sans clan": "ronin"
+};
+
+const CARNET_SKILL_TO_FORGE = {
+  "investigation": "Enquête (Investigation)",
+  "enquete": "Enquête (Investigation)",
+  "spellcraft": "Art de la Magie (Spellcraft)",
+  "sortileges": "Art de la Magie (Spellcraft)",
+  "theurgie": "Art de la Magie (Spellcraft)",
+  "horsemanship": "Équitation",
+  "equitation": "Équitation",
+  "tea ceremony": "Cérémonie du Thé (Tea Ceremony)",
+  "ceremonie du the": "Cérémonie du Thé (Tea Ceremony)",
+  "battle": "Art de la Guerre (Bataille)",
+  "bataille": "Art de la Guerre (Bataille)",
+  "war": "Art de la Guerre (Bataille)",
+  "art de la guerre": "Art de la Guerre (Bataille)",
+  "heavy weapons": "Armes Lourdes",
+  "armes lourdes": "Armes Lourdes",
+  "polearms": "Armes d'Hast",
+  "armes d'hast": "Armes d'Hast",
+  "armes d hast": "Armes d'Hast",
+  "spears": "Lances",
+  "lances": "Lances",
+  "yarijutsu": "Lances",
+  "staves": "Bâtons",
+  "batons": "Bâtons",
+  "bojutsu": "Bâtons",
+  "knives": "Couteaux",
+  "couteaux": "Couteaux",
+  "tantojutsu": "Couteaux",
+  "peasant weapons": "Armes de Paysan",
+  "armes de paysan": "Armes de Paysan",
+  "chain weapons": "Armes à Chaîne",
+  "armes a chaine": "Armes à Chaîne",
+  "war fan": "Éventail de Guerre",
+  "eventail de guerre": "Éventail de Guerre",
+  "tessenjutsu": "Éventail de Guerre",
+  "firearms": "Armes à Feu",
+  "armes a feu": "Armes à Feu",
+  "courtier": "Courtisan",
+  "courtisan": "Courtisan",
+  "sincerity": "Sincérité",
+  "sincerite": "Sincérité",
+  "acting": "Comédie (Acting)",
+  "comedie": "Comédie (Acting)",
+  "perform": "Art de la Scène (Perform)",
+  "representation": "Art de la Scène (Perform)",
+  "representation : conte": "Art de la Scène (Perform)",
+  "athletics": "Athlétisme",
+  "athletisme": "Athlétisme",
+  "hunting": "Chasse",
+  "chasse": "Chasse",
+  "stealth": "Discrétion",
+  "discretion": "Discrétion",
+  "sleight of hand": "Passe-Passe",
+  "passe-passe": "Passe-Passe",
+  "forgery": "Contrefaçon",
+  "contrefacon": "Contrefaçon",
+  "deceit": "Tromperie",
+  "tromperie": "Tromperie",
+  "temptation": "Tentation",
+  "tentation": "Tentation",
+  "animal handling": "Dressage & Élevage",
+  "dressage": "Dressage & Élevage",
+  "medicine": "Médecine",
+  "medecine": "Médecine",
+  "soins": "Médecine",
+  "divination": "Divination",
+  "games": "Jeux (Games)",
+  "jeux": "Jeux (Games)",
+  "jeux de societe": "Jeux (Games)",
+  "calligraphy": "Calligraphie (Calligraphy)",
+  "calligraphie": "Calligraphie (Calligraphy)",
+  "artisan": "Artisanat (Artisan)",
+  "artisanat": "Artisanat (Artisan)",
+  "craft": "Artisanat Pratique (Craft)",
+  "artisanat pratique": "Artisanat Pratique (Craft)",
+  "defense": "Défense",
+  "etiquette": "Étiquette",
+  "meditation": "Méditation",
+  "sailing": "Navigation",
+  "navigation": "Navigation",
+  "engineering": "Ingénierie",
+  "ingenierie": "Ingénierie",
+  "commerce": "Commerce",
+  "intimidation": "Intimidation",
+  "kenjutsu": "Kenjutsu",
+  "kyujutsu": "Kyujutsu",
+  "tir a l'arc": "Kyujutsu",
+  "iaijutsu": "Iaijutsu",
+  "jiujutsu": "Jiujutsu",
+  "ninjutsu": "Ninjutsu",
+  "poison": "Poisons",
+  "poisons": "Poisons",
+  "lore: theology": "Connaissance : Théologie",
+  "lore : theology": "Connaissance : Théologie",
+  "connaissance : theologie": "Connaissance : Théologie",
+  "lore: history": "Connaissance : Histoire",
+  "lore : history": "Connaissance : Histoire",
+  "connaissance : histoire": "Connaissance : Histoire",
+  "lore: heraldry": "Connaissance : Héraldique",
+  "lore : heraldry": "Connaissance : Héraldique",
+  "connaissance : heraldique": "Connaissance : Héraldique",
+  "lore: law": "Connaissance : Droit",
+  "lore : law": "Connaissance : Droit",
+  "droit": "Connaissance : Droit",
+  "connaissance : droit": "Connaissance : Droit",
+  "lore: bushido": "Connaissance : Bushido",
+  "lore : bushido": "Connaissance : Bushido",
+  "connaissance : bushido": "Connaissance : Bushido",
+  "lore: shadowlands": "Connaissance : Outremonde",
+  "lore : shadowlands": "Connaissance : Outremonde",
+  "connaissance : outremonde": "Connaissance : Outremonde",
+  "lore: war": "Connaissance : Art de la Guerre",
+  "lore : war": "Connaissance : Art de la Guerre",
+  "connaissance : art de la guerre": "Connaissance : Art de la Guerre",
+  "lore: elements": "Connaissance : Éléments",
+  "connaissance : elements": "Connaissance : Éléments",
+  "lore: shugenja": "Connaissance : Esprits & Magie",
+  "lore: spirit realms": "Connaissance : Esprits & Magie"
+};
+
+const CARNET_ELEMENT_TO_FORGE = {
+  "earth": "terre", "terre": "terre",
+  "water": "eau", "eau": "eau",
+  "fire": "feu", "feu": "feu",
+  "air": "air",
+  "void": "vide", "vide": "vide"
+};
+
+function isCarnetRokuganPayload(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return false;
+  if (raw.schemaVersion !== undefined && raw.schemaVersion !== null) return true;
+  if (raw.voidRing !== undefined || raw.voidPoints !== undefined || raw.schoolId !== undefined) return true;
+  if (raw.traits && typeof raw.traits === "object") {
+    if (
+      raw.traits.stamina !== undefined ||
+      raw.traits.willpower !== undefined ||
+      raw.traits.reflexes !== undefined ||
+      raw.traits.agility !== undefined ||
+      raw.traits.intelligence !== undefined
+    ) {
+      return true;
+    }
+  }
+  if (Array.isArray(raw.weapons) || typeof raw.advantages === "string") return true;
+  return false;
+}
+
+function extractCarnetCandidates(parsed) {
+  if (!parsed || typeof parsed !== "object") {
+    throw new Error("Le fichier JSON ne contient pas d'objet personnage valide.");
+  }
+  if (Array.isArray(parsed)) {
+    const valid = parsed.filter(item => item && typeof item === "object" && !Array.isArray(item));
+    if (!valid.length) throw new Error("La liste JSON ne contient aucun personnage.");
+    return valid;
+  }
+  if (Array.isArray(parsed.characters)) {
+    const valid = parsed.characters.filter(item => item && typeof item === "object");
+    if (!valid.length) throw new Error("Le champ 'characters' est vide.");
+    return valid;
+  }
+  if (parsed.character && typeof parsed.character === "object") {
+    return [parsed.character];
+  }
+  return [parsed];
+}
+
+function resolveForgeClanKey(rawClan, clansData = {}, fallbackClanKey = "", includeSecrets = false) {
+  const isClanVisible = (k) => Boolean(clansData[k]) && (includeSecrets || !clansData[k]?.gmOnly);
+  const norm = sanitizeNorm(rawClan);
+  if (norm && isClanVisible(norm)) return norm;
+  if (norm && CARNET_CLAN_ALIASES[norm]) {
+    const mapped = CARNET_CLAN_ALIASES[norm];
+    if (isClanVisible(mapped)) return mapped;
+  }
+  if (norm) {
+    for (const [alias, target] of Object.entries(CARNET_CLAN_ALIASES)) {
+      if (norm.includes(alias) && isClanVisible(target)) return target;
+    }
+    for (const key of Object.keys(clansData)) {
+      if (isClanVisible(key) && sanitizeNorm(clansData[key]?.name).includes(norm)) return key;
+    }
+  }
+  if (fallbackClanKey && isClanVisible(fallbackClanKey)) return fallbackClanKey;
+  if (isClanVisible("crabe")) return "crabe";
+  return Object.keys(clansData).find(k => isClanVisible(k)) || "crabe";
+}
+
+function resolveForgeSchoolMatch(raw, clansData = {}, includeSecrets = false) {
+  const rawSchoolId = String(raw?.schoolId || raw?.school || "").trim();
+  const rawSchoolName = String(raw?.school || raw?.schoolName || "").trim();
+  const normId = sanitizeNorm(rawSchoolId);
+  const normName = sanitizeNorm(rawSchoolName)
+    .replace(/^(ecole\s+de\s+|ecole\s+d'|ecole\s+des\s+|ecole\s+)/, "")
+    .replace(/\(.*?\)/g, "")
+    .trim();
+
+  // Identifiants internes qui pointent vers un canonSchoolId Carnet
+  const reverseForgeIds = [];
+  if (rawSchoolId) {
+    for (const [alias, canonId] of Object.entries(CARNET_SCHOOL_CATALOG)) {
+      if (canonId === rawSchoolId || sanitizeNorm(canonId) === normId) {
+        reverseForgeIds.push(sanitizeNorm(alias));
+      }
+    }
+  }
+
+  const normalizedTokens = normName ? normName.split(/\s+/).filter(Boolean).sort().join(" ") : "";
+  const candidates = [];
+
+  for (const clanKey of Object.keys(clansData)) {
+    const clan = clansData[clanKey];
+    if (!clan || !Array.isArray(clan.schools)) continue;
+    const isClanSecret = !!clan.gmOnly;
+
+    clan.schools.forEach(s => {
+      const isSecret = isClanSecret || !!s.gmOnly;
+      const sIdNorm = sanitizeNorm(s.id);
+      const sNameRaw = String(s.name || "");
+      const sNameClean = sanitizeNorm(sNameRaw.replace(/\(.*?\)/g, "").trim())
+        .replace(/^(ecole\s+de\s+|ecole\s+d'|ecole\s+des\s+|ecole\s+)/, "")
+        .trim();
+      const sTokens = sNameClean ? sNameClean.split(/\s+/).filter(Boolean).sort().join(" ") : "";
+      const mappedCarnetId = resolveSchoolIdFromText(sNameRaw, s.id);
+
+      let score = 0;
+      if (rawSchoolId && (s.id === rawSchoolId || sIdNorm === normId)) score = 100;
+      else if (rawSchoolId && mappedCarnetId && mappedCarnetId === rawSchoolId) score = 95;
+      else if (reverseForgeIds.includes(sIdNorm) || reverseForgeIds.includes(sNameClean)) score = 90;
+      else if (normName && sNameClean === normName) score = 85;
+      else if (normalizedTokens && sTokens && normalizedTokens === sTokens) score = 80;
+      else if (normName && sNameClean && (sNameClean.includes(normName) || normName.includes(sNameClean))) score = 60;
+
+      if (score > 0) {
+        candidates.push({ clanKey, clan, school: s, isSecret, score });
+      }
+    });
+  }
+
+  candidates.sort((a, b) => b.score - a.score);
+  if (!candidates.length) return { match: null, lockedMatch: null };
+
+  const visible = candidates.find(c => includeSecrets || !c.isSecret);
+  if (visible) return { match: visible, lockedMatch: null };
+  return { match: null, lockedMatch: candidates[0] };
+}
+
+function resolveForgeSkillName(rawSkillName, catalogSkills = []) {
+  const input = String(rawSkillName || "").trim();
+  if (!input) return "";
+
+  const base = input.split("(")[0].trim();
+  const normFull = sanitizeNorm(input);
+  const normBase = sanitizeNorm(base);
+
+  const aliasTarget = CARNET_SKILL_TO_FORGE[normFull] || CARNET_SKILL_TO_FORGE[normBase];
+  if (aliasTarget) {
+    const foundAlias = catalogSkills.find(c => sanitizeNorm(c.name) === sanitizeNorm(aliasTarget));
+    return foundAlias ? foundAlias.name : aliasTarget;
+  }
+
+  for (const cat of catalogSkills) {
+    const cName = String(cat.name || "");
+    const cNorm = sanitizeNorm(cName);
+    const cBase = sanitizeNorm(cName.split("(")[0].trim());
+    if (cNorm === normFull || cBase === normBase) return cName;
+    const parenMatch = cName.match(/\(([^)]+)\)/);
+    if (parenMatch && sanitizeNorm(parenMatch[1]) === normBase) return cName;
+  }
+
+  // Capitalisation propre par défaut si compétence personnalisée / étendue
+  return input.charAt(0).toUpperCase() + input.slice(1);
+}
+
+function resolveAdvDisadvItemsFromCarnet(rawVal, isDisadv = false, advCatalog = null) {
+  const cat = advCatalog || (typeof window !== "undefined" ? window.AVANTAGES_DESAVANTAGES : null) || {};
+  const list = isDisadv ? (cat.desavantages || []) : (cat.avantages || []);
+
+  let items = [];
+  if (Array.isArray(rawVal)) {
+    items = rawVal.map(item => (typeof item === "object" && item !== null ? item.name || item.id : String(item || ""))).filter(Boolean);
+  } else if (typeof rawVal === "string") {
+    items = rawVal
+      .split(/\r?\n|;/)
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
+  return items.map(rawLabel => {
+    const cleaned = rawLabel.replace(/\s*\(\s*[+-]?\d+\s*XP\s*\)\s*$/i, "").trim();
+    const normQuery = sanitizeNorm(cleaned);
+    const normQueryBase = sanitizeNorm(cleaned.split("(")[0].trim());
+
+    const found = list.find(entry => {
+      const eId = sanitizeNorm(entry.id);
+      const eName = sanitizeNorm(entry.name);
+      const eBase = sanitizeNorm(String(entry.name || "").split("(")[0].trim());
+      if (eId === normQuery || eName === normQuery || eBase === normQueryBase) return true;
+      const parenMatch = String(entry.name || "").match(/\(([^)]+)\)/);
+      if (parenMatch && sanitizeNorm(parenMatch[1]) === normQueryBase) return true;
+      return normQueryBase.length >= 4 && (eName.includes(normQueryBase) || eBase.includes(normQueryBase));
+    });
+
+    if (found) {
+      if (isDisadv) {
+        const g = parseInt(found.gain ?? found.cost, 10) || 0;
+        return {
+          id: found.id || "",
+          name: found.name,
+          baseGain: g,
+          gain: g,
+          impact: found.impact || "",
+          desc: found.desc || "",
+          rule: found.rule || ""
+        };
+      }
+      const c = parseInt(found.cost, 10) || 0;
+      return {
+        id: found.id || "",
+        name: found.name,
+        baseCost: c,
+        cost: c,
+        impact: found.impact || "",
+        desc: found.desc || "",
+        rule: found.rule || ""
+      };
+    }
+
+    return isDisadv
+      ? { id: `import_${sanitizeNorm(cleaned)}`, name: cleaned, baseGain: 0, gain: 0, impact: "", desc: "Importé depuis Le Carnet de Rokugan.", rule: "" }
+      : { id: `import_${sanitizeNorm(cleaned)}`, name: cleaned, baseCost: 0, cost: 0, impact: "", desc: "Importé depuis Le Carnet de Rokugan.", rule: "" };
+  });
+}
+
+function resolveForgeEquipmentFromCarnet(rawArmor, rawWeapons, equipData = null) {
+  const eq = equipData || (typeof window !== "undefined" ? window.EQUIPEMENT_DATA : null) || { armures: [], armes: [] };
+
+  let armorVal = "0";
+  if (rawArmor !== undefined && rawArmor !== null) {
+    if (typeof rawArmor === "string" && /^\d+$/.test(rawArmor.trim())) {
+      armorVal = rawArmor.trim();
+    } else {
+      const bonus = typeof rawArmor === "object" ? (rawArmor.tnBonus ?? rawArmor.bonus) : undefined;
+      const armorNameNorm = sanitizeNorm(typeof rawArmor === "object" ? rawArmor.name : String(rawArmor));
+      if (bonus !== undefined && bonus !== null && !isNaN(parseInt(bonus, 10))) {
+        armorVal = String(parseInt(bonus, 10));
+      } else if (armorNameNorm.includes("lourde") || armorNameNorm.includes("heavy")) {
+        armorVal = "10";
+      } else if (armorNameNorm.includes("legere") || armorNameNorm.includes("light")) {
+        armorVal = "5";
+      } else if (armorNameNorm.includes("cavalerie") || armorNameNorm.includes("riding") || armorNameNorm.includes("tatami")) {
+        armorVal = "4";
+      } else if (armorNameNorm.includes("ashigaru") || armorNameNorm.includes("ceremon")) {
+        armorVal = "3";
+      } else if (armorNameNorm.includes("kaiu") || armorNameNorm.includes("tetsu")) {
+        armorVal = "13";
+      }
+    }
+  }
+
+  const matchWeaponName = (rawW) => {
+    const wText = typeof rawW === "object" && rawW !== null ? (rawW.name || "") : String(rawW || "");
+    const wNorm = sanitizeNorm(wText);
+    if (!wNorm || wNorm === "aucune") return "";
+    const exact = (eq.armes || []).find(a => sanitizeNorm(a.name) === wNorm || sanitizeNorm(a.name.split("(")[0].trim()) === wNorm);
+    if (exact) return exact.name;
+    const partial = (eq.armes || []).find(a => wNorm.includes(sanitizeNorm(a.name.split("(")[0].trim())) || sanitizeNorm(a.name).includes(wNorm));
+    return partial ? partial.name : "";
+  };
+
+  const weaponsArr = Array.isArray(rawWeapons) ? rawWeapons : [];
+  const weapon1 = matchWeaponName(weaponsArr[0]) || "Katana";
+  const weapon2 = matchWeaponName(weaponsArr[1]) || "Aucune";
+
+  return { armor: armorVal, weapon1, weapon2 };
+}
+
+function resolveImportedSpellsList(rawSpells, spellsCatalog = [], includeSecrets = false) {
+  if (!Array.isArray(rawSpells) || !rawSpells.length) return [];
+  const out = [];
+  rawSpells.forEach(sp => {
+    const rawName = typeof sp === "string" ? sp : String(sp?.name || "");
+    const rawId = typeof sp === "object" && sp !== null ? String(sp.id || "") : "";
+    if (!rawName && !rawId) return;
+
+    const normN = sanitizeNorm(rawName.split("(")[0].trim());
+    const found = spellsCatalog.find(entry => {
+      if (!includeSecrets && (entry.gmOnly || sanitizeNorm(entry.element) === "maho")) return false;
+      if (rawId && entry.id === rawId) return true;
+      const eName = sanitizeNorm(String(entry.name || entry.nom || "").split("(")[0].trim());
+      return normN && eName === normN;
+    });
+
+    if (found) {
+      if (!out.some(x => x.id === found.id)) {
+        out.push({
+          id: found.id,
+          name: found.name || found.nom,
+          element: found.isKiho ? "kiho" : (found.element || "Universel"),
+          ring: found.ring || found.element || "Vide",
+          mastery: Number(found.mastery) || 0,
+          range: found.range || "Personnelle",
+          area: found.area || "Spéciale",
+          duration: found.duration || "Instantanée",
+          raises: found.raises || "Aucune",
+          desc: found.desc || "",
+          isKiho: !!found.isKiho,
+          xpCost: Number(sp?.xpCost) || (found.isKiho ? Number(found.mastery) || 1 : 0)
+        });
+      }
+    } else if (rawName) {
+      const elemNorm = CARNET_ELEMENT_TO_FORGE[sanitizeNorm(sp?.element)] || "Universel";
+      out.push({
+        id: rawId || `import_${sanitizeNorm(rawName)}`,
+        name: rawName,
+        element: elemNorm,
+        ring: elemNorm,
+        mastery: Number(sp?.mastery) || 1,
+        range: sp?.range || "Personnelle",
+        area: sp?.area || "Spéciale",
+        duration: sp?.duration || "Instantanée",
+        raises: sp?.raises || "Aucune",
+        desc: sp?.effect || sp?.desc || "Sort importé.",
+        isKiho: elemNorm === "kiho",
+        xpCost: 0
+      });
+    }
+  });
+  return out;
+}
+
+function convertCarnetToForgeData(rawInput, options = {}) {
+  if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) {
+    throw new Error("Objet personnage JSON invalide.");
+  }
+
+  const clansData = options.clansData || (typeof window !== "undefined" ? window.CLANS_DATA : null) || {};
+  const catalogSkills = options.skillsCatalog || (typeof window !== "undefined" ? window.COMPETENCES_DATA : null) || [];
+  const advCatalog = options.advCatalog || (typeof window !== "undefined" ? window.AVANTAGES_DESAVANTAGES : null) || {};
+  const equipData = options.equipData || (typeof window !== "undefined" ? window.EQUIPEMENT_DATA : null) || { armures: [], armes: [] };
+  const spellsCatalog = options.spellsCatalog || (typeof window !== "undefined" ? (window.SORTS_DATA || []) : []);
+  const includeSecrets = Boolean(options.includeSecrets);
+  const warnings = [];
+
+  // Format natif de la Forge
+  if (!isCarnetRokuganPayload(rawInput)) {
+    const forgeClone = Object.assign({}, rawInput);
+    const clanObj = clansData[forgeClone.clan];
+    const famObj = clanObj?.families?.[parseInt(forgeClone.family, 10) || 0];
+    const schObj = clanObj?.schools?.find(s => s.id === forgeClone.school);
+    return {
+      forgeData: forgeClone,
+      warnings,
+      summary: {
+        sourceFormat: "forge",
+        name: forgeClone.name || "Samouraï",
+        clanLabel: clanObj?.name || forgeClone.clan || "Crabe",
+        familyLabel: famObj?.name || "",
+        schoolLabel: schObj?.name || forgeClone.school || "",
+        insightRank: Number(forgeClone.insightRank) || 1,
+        xpTotal: parseInt(forgeClone.baseXP, 10) || 40,
+        skillsCount: Array.isArray(forgeClone.skills) ? forgeClone.skills.length : 0,
+        advantagesCount: Array.isArray(forgeClone.advantages) ? forgeClone.advantages.length : 0,
+        spellsCount: Array.isArray(forgeClone.spells) ? forgeClone.spells.length : 0,
+        traits: forgeClone.traits || {}
+      }
+    };
+  }
+
+  // Format Le Carnet de Rokugan (schemaVersion 1 / 2)
+  const { match: schoolMatch, lockedMatch } = resolveForgeSchoolMatch(rawInput, clansData, includeSecrets);
+  if (lockedMatch && !schoolMatch) {
+    warnings.push(`École ou clan secret du MJ (« ${lockedMatch.school?.name || rawInput.school} ») verrouillé : repli sur une lignée publique.`);
+  }
+
+  const clanKey = resolveForgeClanKey(rawInput.clan, clansData, schoolMatch?.clanKey, includeSecrets);
+  if (!includeSecrets && !lockedMatch && rawInput.clan) {
+    const rawAnyClan = resolveForgeClanKey(rawInput.clan, clansData, "", true);
+    if (clansData[rawAnyClan]?.gmOnly) {
+      warnings.push(`Clan secret du MJ (« ${clansData[rawAnyClan].name} ») verrouillé : repli sur une faction publique.`);
+    }
+  }
+  const clanObj = clansData[clanKey] || {};
+  const visibleFamilies = (clanObj.families || []).map((f, idx) => ({ f, idx })).filter(x => includeSecrets || !x.f?.gmOnly);
+
+  let familyIdx = "0";
+  let familyName = "";
+  const rawFamNorm = sanitizeNorm(rawInput.family);
+  const targetSchoolFamNorm = sanitizeNorm(schoolMatch?.school?.family);
+
+  if (rawFamNorm && visibleFamilies.length) {
+    const byName = visibleFamilies.find(x => sanitizeNorm(x.f.name) === rawFamNorm || rawFamNorm.includes(sanitizeNorm(x.f.name)));
+    if (byName) {
+      familyIdx = String(byName.idx);
+      familyName = byName.f.name;
+    }
+  }
+  if (!familyName && targetSchoolFamNorm && visibleFamilies.length) {
+    const bySchoolFam = visibleFamilies.find(x => sanitizeNorm(x.f.name) === targetSchoolFamNorm);
+    if (bySchoolFam) {
+      familyIdx = String(bySchoolFam.idx);
+      familyName = bySchoolFam.f.name;
+    }
+  }
+  if (!familyName && visibleFamilies[0]) {
+    familyIdx = String(visibleFamilies[0].idx);
+    familyName = visibleFamilies[0].f.name;
+  }
+
+  const schoolObj = schoolMatch?.school || clanObj.schools?.find(s => includeSecrets || !s.gmOnly) || null;
+  const schoolId = schoolObj?.id || "";
+
+  // Traits (English Carnet keys -> Forge short keys)
+  const rt = rawInput.traits && typeof rawInput.traits === "object" ? rawInput.traits : {};
+  const clampTrait = (val) => Math.max(1, Math.min(10, parseInt(val, 10) || 2));
+  const traits = {
+    sta: clampTrait(rt.stamina ?? rt.sta ?? rawInput.stamina ?? 2),
+    wil: clampTrait(rt.willpower ?? rt.wil ?? rawInput.willpower ?? 2),
+    str: clampTrait(rt.strength ?? rt.str ?? rawInput.strength ?? 2),
+    per: clampTrait(rt.perception ?? rt.per ?? rawInput.perception ?? 2),
+    ref: clampTrait(rt.reflexes ?? rt.ref ?? rawInput.reflexes ?? 2),
+    awa: clampTrait(rt.awareness ?? rt.awa ?? rawInput.awareness ?? 2),
+    agi: clampTrait(rt.agility ?? rt.agi ?? rawInput.agility ?? 2),
+    int: clampTrait(rt.intelligence ?? rt.int ?? rawInput.intelligence ?? 2),
+    voi: clampTrait(rawInput.voidRing ?? rawInput.voidPoints ?? rawInput.void ?? rt.void ?? rt.voi ?? 2)
+  };
+
+  // Avantages & Désavantages
+  const advantages = resolveAdvDisadvItemsFromCarnet(rawInput.advantages, false, advCatalog);
+  const disadvantages = resolveAdvDisadvItemsFromCarnet(rawInput.disadvantages, true, advCatalog);
+
+  // Si l'école appartient à un autre clan, activer automatiquement 'Études dans une Autre École' si absent
+  if (schoolMatch && schoolMatch.clanKey !== clanKey && schoolObj) {
+    const existingDiff = advantages.find(a => sanitizeNorm(a.name).includes("autre ecole") || sanitizeNorm(a.name).includes("different school"));
+    if (existingDiff) {
+      existingDiff.differentSchoolId = schoolObj.id;
+      existingDiff.differentSchoolName = `${schoolObj.name} (${schoolMatch.clan.name})`;
+    } else {
+      warnings.push(`L'école « ${schoolObj.name} » appartient au ${schoolMatch.clan.name} (clan choisi : ${clanObj.name || clanKey}).`);
+    }
+  }
+
+  // Compétences : fusion fidèle avec les emplacements d'école
+  const rawSkills = Array.isArray(rawInput.skills) ? rawInput.skills : [];
+  const normalizedImportedSkills = rawSkills
+    .map(s => {
+      if (!s || !s.name) return null;
+      const emphases = Array.isArray(s.emphases) ? s.emphases : (Array.isArray(s.emphasis) ? s.emphasis : (s.emphasis ? [s.emphasis] : []));
+      return {
+        name: resolveForgeSkillName(s.name, catalogSkills),
+        rank: Math.max(0, Math.min(10, parseInt(s.rank, 10) || 0)),
+        spec: Boolean(s.spec || emphases.some(e => String(e || "").trim() !== "")),
+        consumed: false
+      };
+    })
+    .filter(s => s && s.name && s.rank > 0);
+
+  const mergedSkills = [];
+  if (schoolObj && Array.isArray(schoolObj.skills)) {
+    schoolObj.skills.forEach(rawSchoolSkill => {
+      let rawSlotName = String(rawSchoolSkill || "").trim();
+      let baseRank = 1;
+      const rankTwoMatch = rawSlotName.match(/^(.*?)\s+2(\s*\(.*\))?$/);
+      if (rankTwoMatch && !rawSlotName.toLowerCase().includes("compétence") && !rawSlotName.toLowerCase().includes("any")) {
+        rawSlotName = (rankTwoMatch[1].trim() + (rankTwoMatch[2] ? " " + rankTwoMatch[2].trim() : "")).trim();
+        baseRank = 2;
+      } else if (/deux rangs|two ranks/i.test(rawSlotName)) {
+        baseRank = 2;
+      }
+
+      const sLower = rawSlotName.toLowerCase();
+      const isChoice = sLower.includes("compétence") || sLower.includes("choix") || sLower.includes("any");
+      let filterType = null;
+      if (sLower.includes("bugei")) filterType = "Bugei";
+      else if (sLower.includes("noble") || sLower.includes("haute") || sLower.includes("high")) filterType = "Noble";
+      else if (sLower.includes("marchande") || sLower.includes("merchant")) filterType = "Marchande";
+      else if (sLower.includes("artisan")) filterType = "Noble";
+
+      if (!isChoice) {
+        const slotNorm = sanitizeNorm(rawSlotName.split("(")[0].trim());
+        const matchedImp = normalizedImportedSkills.find(imp => {
+          if (imp.consumed) return false;
+          const impNorm = sanitizeNorm(imp.name.split("(")[0].trim());
+          return impNorm === slotNorm || impNorm.includes(slotNorm) || slotNorm.includes(impNorm);
+        });
+        if (matchedImp) {
+          matchedImp.consumed = true;
+          mergedSkills.push({
+            name: rawSlotName,
+            rank: Math.max(baseRank, matchedImp.rank),
+            baseRank,
+            spec: matchedImp.spec,
+            isSchool: true,
+            isChoice: false,
+            chosen: false,
+            choiceFilter: null,
+            originalPlaceholder: null
+          });
+        } else {
+          mergedSkills.push({
+            name: rawSlotName,
+            rank: baseRank,
+            baseRank,
+            spec: false,
+            isSchool: true,
+            isChoice: false,
+            chosen: false,
+            choiceFilter: null,
+            originalPlaceholder: null
+          });
+        }
+      } else {
+        // Chercher plus tard un skill non consommé compatible pour remplir le choix
+        mergedSkills.push({
+          name: rawSlotName,
+          rank: baseRank,
+          baseRank,
+          spec: false,
+          isSchool: true,
+          isChoice: true,
+          chosen: false,
+          choiceFilter: filterType,
+          originalPlaceholder: rawSlotName
+        });
+      }
+    });
+
+    // Remplissage des créneaux [Choix] avec les compétences importées restantes compatibles
+    mergedSkills.forEach(slot => {
+      if (!slot.isChoice || slot.chosen) return;
+      const candidate = normalizedImportedSkills.find(imp => {
+        if (imp.consumed) return false;
+        if (mergedSkills.some(existing => !existing.isChoice && sanitizeNorm(existing.name.split("(")[0]) === sanitizeNorm(imp.name.split("(")[0]))) {
+          return false;
+        }
+        if (!slot.choiceFilter) return true;
+        const cat = catalogSkills.find(c => sanitizeNorm(c.name) === sanitizeNorm(imp.name));
+        if (!cat) return true;
+        return sanitizeNorm(cat.type) === sanitizeNorm(slot.choiceFilter);
+      });
+      if (candidate) {
+        candidate.consumed = true;
+        slot.name = candidate.name;
+        slot.rank = Math.max(slot.baseRank, candidate.rank);
+        slot.spec = candidate.spec;
+        slot.chosen = true;
+      }
+    });
+  }
+
+  normalizedImportedSkills.forEach(imp => {
+    if (imp.consumed) return;
+    mergedSkills.push({
+      name: imp.name,
+      rank: imp.rank,
+      baseRank: 0,
+      spec: imp.spec,
+      isSchool: false,
+      isChoice: false,
+      chosen: false,
+      choiceFilter: null,
+      originalPlaceholder: null
+    });
+  });
+
+  // Sorts, Affinité, Équipement, Notes
+  const spells = resolveImportedSpellsList(rawInput.spells, spellsCatalog, includeSecrets);
+  const affinity = CARNET_ELEMENT_TO_FORGE[sanitizeNorm(rawInput.affinity)] || "aucune";
+  const deficiency = CARNET_ELEMENT_TO_FORGE[sanitizeNorm(rawInput.deficiency)] || "aucune";
+  const gear = resolveForgeEquipmentFromCarnet(rawInput.armor, rawInput.weapons, equipData);
+  const xpTotal = parseInt(rawInput.xp?.total ?? rawInput.baseXP ?? 40, 10) || 40;
+  const outfitVal = String(rawInput.outfit || rawInput.notes || schoolObj?.outfit || "").trim();
+
+  const forgeData = {
+    id: `samurai_${Date.now()}`,
+    updatedAt: new Date().toISOString(),
+    name: String(rawInput.name || "Samouraï importé").trim().substring(0, 80),
+    baseXP: String(Math.max(40, xpTotal)),
+    clan: clanKey,
+    family: familyIdx,
+    school: schoolId,
+    traits,
+    skills: mergedSkills,
+    advantages,
+    disadvantages,
+    spells,
+    katas: Array.isArray(rawInput.katas) ? rawInput.katas : [],
+    tattoos: Array.isArray(rawInput.tattoos) ? rawInput.tattoos : [],
+    affinity,
+    deficiency,
+    armor: gear.armor,
+    weapon1: gear.weapon1,
+    weapon2: gear.weapon2,
+    outfit: outfitVal,
+    backgroundStory: typeof rawInput.backgroundStory === "string"
+      ? rawInput.backgroundStory
+      : (rawInput.notes && rawInput.outfit ? String(rawInput.notes) : "")
+  };
+
+  return {
+    forgeData,
+    warnings,
+    summary: {
+      sourceFormat: "carnet-v2",
+      name: forgeData.name,
+      clanLabel: clanObj?.name || clanKey,
+      familyLabel: familyName,
+      schoolLabel: schoolObj?.name || rawInput.school || schoolId || "—",
+      insightRank: Number(rawInput.insightRank) || 1,
+      xpTotal: Math.max(40, xpTotal),
+      skillsCount: mergedSkills.filter(s => !s.isChoice || s.chosen).length,
+      advantagesCount: advantages.length + disadvantages.length,
+      spellsCount: spells.length,
+      traits
+    }
+  };
+}
+
 // Exposition globale (Navigateur & Node.js)
 if (typeof window !== "undefined") {
   window.exportToCarnetRokugan = exportToCarnetRokugan;
   window.generateCarnetJSON = generateCarnetJSON;
+  window.isCarnetRokuganPayload = isCarnetRokuganPayload;
+  window.extractCarnetCandidates = extractCarnetCandidates;
+  window.resolveForgeClanKey = resolveForgeClanKey;
+  window.resolveForgeSchoolMatch = resolveForgeSchoolMatch;
+  window.resolveForgeSkillName = resolveForgeSkillName;
+  window.convertCarnetToForgeData = convertCarnetToForgeData;
   window.sanitizeNorm = sanitizeNorm;
   window.resolveCanonClan = resolveCanonClan;
   window.resolveSchoolIdFromText = resolveSchoolIdFromText;
@@ -886,6 +1642,12 @@ if (typeof module !== "undefined" && module.exports) {
     buildCarnetModifiers,
     generateCarnetJSON,
     exportToCarnetRokugan,
+    isCarnetRokuganPayload,
+    extractCarnetCandidates,
+    resolveForgeClanKey,
+    resolveForgeSchoolMatch,
+    resolveForgeSkillName,
+    convertCarnetToForgeData,
     CARNET_SCHOOL_CATALOG,
     CARNET_WEAPONS_REF,
     SKILL_TRAIT_MAP,

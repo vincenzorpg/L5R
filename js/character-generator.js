@@ -2903,6 +2903,23 @@ function updateAll() {
 // 6. PERSISTANCE : BROUILLON AUTO, DOJO LOCAL & EXPORT/IMPORT JSON (TICKET 1)
 // =============================================================================
 function collectCharacterData() {
+  const q20 = {};
+  if (typeof document !== "undefined") {
+    for (let i = 1; i <= 20; i++) {
+      const qEl = document.getElementById(`q20-${i}`);
+      if (qEl) q20[i] = qEl.value || "";
+    }
+  }
+  const spellsArr = (typeof window !== "undefined" && Array.isArray(window.charSpellsList))
+    ? window.charSpellsList
+    : (typeof window !== "undefined" && Array.isArray(window.characterSpells) ? window.characterSpells : []);
+  const katasArr = (typeof window !== "undefined" && Array.isArray(window.charKatasList))
+    ? window.charKatasList
+    : (typeof window !== "undefined" && Array.isArray(window.characterKatas) ? window.characterKatas : []);
+  const tattoosArr = (typeof window !== "undefined" && Array.isArray(window.charTattoosList))
+    ? window.charTattoosList
+    : [];
+
   return {
     id: window.currentCharacterId || ('samurai_' + Date.now()),
     updatedAt: new Date().toISOString(),
@@ -2925,14 +2942,17 @@ function collectCharacterData() {
     skills: currentSkills || [],
     advantages: advantagesList || [],
     disadvantages: disadvantagesList || [],
-    spells: (typeof window.characterSpells !== 'undefined') ? window.characterSpells : [],
-    katas: (typeof window.characterKatas !== 'undefined') ? window.characterKatas : [],
+    spells: spellsArr,
+    katas: katasArr,
+    tattoos: tattoosArr,
     affinity: document.getElementById('shugenja-affinity')?.value || "aucune",
     deficiency: document.getElementById('shugenja-deficiency')?.value || "aucune",
     armor: document.getElementById('pc-armor')?.value || "10",
     weapon1: document.getElementById('pc-weapon-1')?.value || "Katana",
     weapon2: document.getElementById('pc-weapon-2')?.value || "Aucune",
-    outfit: document.getElementById('pc-outfit')?.value || ""
+    outfit: document.getElementById('pc-outfit')?.value || "",
+    backgroundStory: document.getElementById('pc-background-story')?.value || "",
+    twentyQuestions: q20
   };
 }
 
@@ -2970,8 +2990,21 @@ if (typeof window !== "undefined") {
   });
 }
 
-function applyCharacterDataToSheet(d) {
-  if (!d) return;
+function applyCharacterDataToSheet(rawInput) {
+  if (!rawInput || typeof rawInput !== "object") return;
+  let d = rawInput;
+  if (typeof window !== "undefined" && typeof window.isCarnetRokuganPayload === "function" && window.isCarnetRokuganPayload(rawInput) && typeof window.convertCarnetToForgeData === "function") {
+    const converted = window.convertCarnetToForgeData(rawInput, {
+      clansData: getClans(),
+      skillsCatalog: getSkills(),
+      advCatalog: getAdvCatalog(),
+      equipData: getEquipment(),
+      spellsCatalog: window.SORTS_DATA || [],
+      includeSecrets: isGmSecretsUnlocked()
+    });
+    d = converted.forgeData;
+  }
+
   window.isRestoringCharacter = true;
   try {
     window.currentCharacterId = d.id || ('samurai_' + Date.now());
@@ -2980,22 +3013,34 @@ function applyCharacterDataToSheet(d) {
       if (baseInput) baseInput.value = d.baseXP;
     }
 
-    advantagesList = d.advantages || [];
-    disadvantagesList = d.disadvantages || [];
+    advantagesList = Array.isArray(d.advantages) ? d.advantages : [];
+    disadvantagesList = Array.isArray(d.disadvantages) ? d.disadvantages : [];
 
     if (d.clan && document.getElementById('sel-clan')) {
       document.getElementById('sel-clan').value = d.clan;
       onClanChange();
     }
     if (d.family !== undefined && document.getElementById('sel-family')) {
-      document.getElementById('sel-family').value = d.family;
+      const famSel = document.getElementById('sel-family');
+      if (famSel.querySelector(`option[value="${d.family}"]`)) {
+        famSel.value = d.family;
+      }
     }
 
     const resolved = resolveSchoolByRef(d.school, d.clan);
     const targetSchoolId = resolved?.school?.id || d.school;
     updateSchoolOptions(targetSchoolId);
-    if (targetSchoolId && document.getElementById('sel-school')) {
-      document.getElementById('sel-school').value = targetSchoolId;
+    const schSel = document.getElementById('sel-school');
+    if (targetSchoolId && schSel) {
+      if (!schSel.querySelector(`option[value="${targetSchoolId}"]`) && resolved?.school) {
+        const opt = document.createElement('option');
+        opt.value = resolved.school.id;
+        opt.textContent = `${resolved.school.name} [${resolved.clanName}] (${resolved.school.bonus})`;
+        schSel.appendChild(opt);
+      }
+      if (schSel.querySelector(`option[value="${targetSchoolId}"]`)) {
+        schSel.value = targetSchoolId;
+      }
     }
     resetSheetToNewSelection(true);
 
@@ -3016,12 +3061,22 @@ function applyCharacterDataToSheet(d) {
       document.getElementById('trait-void').value = d.traits.voi ?? 2;
     }
 
-    currentSkills = d.skills || [];
-    advantagesList = d.advantages || [];
-    disadvantagesList = d.disadvantages || [];
+    currentSkills = Array.isArray(d.skills) ? d.skills : [];
+    advantagesList = Array.isArray(d.advantages) ? d.advantages : [];
+    disadvantagesList = Array.isArray(d.disadvantages) ? d.disadvantages : [];
 
-    if (typeof window.characterSpells !== 'undefined') window.characterSpells = d.spells || [];
-    if (typeof window.characterKatas !== 'undefined') window.characterKatas = d.katas || [];
+    const restoredSpells = Array.isArray(d.spells) ? d.spells : [];
+    const restoredKatas = Array.isArray(d.katas) ? d.katas : [];
+    const restoredTattoos = Array.isArray(d.tattoos) ? d.tattoos : [];
+
+    if (typeof window !== "undefined") {
+      window.characterSpells = restoredSpells;
+      window.characterKatas = restoredKatas;
+      window.charSpellsList = restoredSpells;
+      window.charKatasList = restoredKatas;
+      window.charTattoosList = restoredTattoos;
+    }
+
     if (d.affinity && document.getElementById('shugenja-affinity')) {
       document.getElementById('shugenja-affinity').value = d.affinity;
     }
@@ -3029,15 +3084,38 @@ function applyCharacterDataToSheet(d) {
       document.getElementById('shugenja-deficiency').value = d.deficiency;
     }
 
-    if (d.armor && document.getElementById('pc-armor')) document.getElementById('pc-armor').value = d.armor;
-    if (d.weapon1 && document.getElementById('pc-weapon-1')) document.getElementById('pc-weapon-1').value = d.weapon1;
-    if (d.weapon2 && document.getElementById('pc-weapon-2')) document.getElementById('pc-weapon-2').value = d.weapon2;
-    if (d.outfit && document.getElementById('pc-outfit')) document.getElementById('pc-outfit').value = d.outfit;
+    if (d.armor !== undefined && document.getElementById('pc-armor')) {
+      const armSel = document.getElementById('pc-armor');
+      if (armSel.querySelector(`option[value="${d.armor}"]`)) armSel.value = d.armor;
+    }
+    if (d.weapon1 && document.getElementById('pc-weapon-1')) {
+      const w1Sel = document.getElementById('pc-weapon-1');
+      if (w1Sel.querySelector(`option[value="${d.weapon1}"]`)) w1Sel.value = d.weapon1;
+    }
+    if (d.weapon2 && document.getElementById('pc-weapon-2')) {
+      const w2Sel = document.getElementById('pc-weapon-2');
+      if (w2Sel.querySelector(`option[value="${d.weapon2}"]`)) w2Sel.value = d.weapon2;
+    }
+    if (d.outfit !== undefined && document.getElementById('pc-outfit')) {
+      document.getElementById('pc-outfit').value = d.outfit;
+    }
+    if (d.backgroundStory !== undefined && document.getElementById('pc-background-story')) {
+      document.getElementById('pc-background-story').value = d.backgroundStory;
+    }
+    if (d.twentyQuestions && typeof d.twentyQuestions === "object") {
+      for (let i = 1; i <= 20; i++) {
+        const qEl = document.getElementById(`q20-${i}`);
+        if (qEl && d.twentyQuestions[i] !== undefined) qEl.value = d.twentyQuestions[i];
+      }
+      if (typeof window.updateTwentyQuestionsProgress === "function") window.updateTwentyQuestionsProgress();
+    }
 
     renderSkills();
     renderAdvDisadv();
     if (typeof window.renderCharacterSpells === 'function') window.renderCharacterSpells();
     if (typeof window.renderCharacterKatas === 'function') window.renderCharacterKatas();
+    if (typeof window.renderCharacterTattoos === 'function') window.renderCharacterTattoos();
+    if (typeof window.updateArchetypePanels === 'function') window.updateArchetypePanels();
     initCatalogSelectors();
   } finally {
     window.isRestoringCharacter = false;
@@ -3255,16 +3333,26 @@ function exportJSON() {
 }
 
 function importJSON(event) {
-  const file = event.target.files[0];
+  const input = event?.target;
+  const file = input?.files?.[0];
   if (!file) return;
 
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
-      const d = JSON.parse(e.target.result);
-      applyCharacterDataToSheet(d);
+      const text = String(e.target.result || "");
+      if (typeof window.openImportCharacterModalWithJson === "function") {
+        window.openImportCharacterModalWithJson(text, file.name);
+      } else {
+        const parsed = JSON.parse(text);
+        const candidates = typeof window.extractCarnetCandidates === "function" ? window.extractCarnetCandidates(parsed) : [parsed];
+        applyCharacterDataToSheet(candidates[0]);
+        notifyForgeUser(`« ${candidates[0]?.name || 'Samouraï'} » importé avec succès !`, 'success');
+      }
     } catch (err) {
-      alert("Erreur de format JSON.");
+      notifyForgeUser(err?.message || "Erreur de format JSON.", 'error');
+    } finally {
+      if (input) input.value = "";
     }
   };
   reader.readAsText(file);

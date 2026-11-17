@@ -37,13 +37,13 @@
   <script src="data/sorts-data.js" defer></script>
   <script src="data/katas-data.js" defer></script>
   <script src="data/tatouages-data.js" defer></script>
-  <script src="js/export-carnet.js" defer></script>
+  <script src="js/export-carnet.js?v=2" defer></script>
 
   <!-- MOTEUR LOGIQUE & MENU CENTRALISÉ -->
   <script src="js/pwa.js?v=3" defer></script>
   <script src="js/navbar.js?v=4" defer></script>
-  <script src="js/forge-ui.js?v=26" defer></script>
-  <script src="js/character-generator.js?v=22" defer></script>
+  <script src="js/forge-ui.js?v=27" defer></script>
+  <script src="js/character-generator.js?v=23" defer></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
@@ -112,15 +112,15 @@
           <button type="button" id="btn-export-carnet" onclick="exportToCarnetRokugan()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-[#1f1510] text-amber-300 border border-amber-500/50 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer" title="Exporter au format Le Carnet de Rokugan (v2)">
             <span>📖</span> <span>Carnet</span>
           </button>
+          <button type="button" id="btn-open-import" onclick="openImportCharacterModal()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 text-emerald-300 border border-emerald-500/45 font-bold text-xs transition flex items-center gap-1 shadow cursor-pointer" title="Importer un personnage depuis Le Carnet de Rokugan (v1/v2) ou une sauvegarde Forge JSON">
+            <span>📥</span> <span>Importer</span>
+          </button>
           <button type="button" id="btn-open-print-preview" onclick="prepareAndPrintPDF()" class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/40 font-bold transition cursor-pointer shadow" title="Voir la feuille officielle L5R 4e en couleur et imprimer en PDF">📄 Fiche / PDF</button>
           <button type="button" onclick="shareCharacterUrl()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/40 font-bold transition cursor-pointer" title="Copier le lien de partage direct">
             🔗 Lien
           </button>
-          <button type="button" onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer" title="Télécharger la sauvegarde JSON">💾 JSON</button>
-          <label class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 cursor-pointer" title="Importer un fichier JSON">
-            📂 Load
-            <input type="file" id="json-input" onchange="importJSONWithMystic(event)" class="hidden" accept=".json">
-          </label>
+          <button type="button" onclick="exportJSONWithMystic()" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 cursor-pointer" title="Télécharger la sauvegarde JSON Forge">💾 JSON</button>
+          <input type="file" id="json-input" onchange="importJSONWithMystic(event)" class="hidden" accept=".json,application/json">
           <button type="button" onclick="resetCharacterWithMystic()" class="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 cursor-pointer" title="Réinitialiser la fiche">Reset</button>
         </div>
       </div>
@@ -183,6 +183,9 @@
           </button>
           <button type="button" onclick="saveCharacterToDojo(true)" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 border border-amber-500/40 font-bold text-xs cursor-pointer">
             📑 Nouvelle copie
+          </button>
+          <button type="button" onclick="openImportCharacterModal()" class="px-3 py-1.5 rounded bg-emerald-950/70 hover:bg-emerald-900/70 text-emerald-200 border border-emerald-500/40 font-bold text-xs cursor-pointer">
+            📥 Importer (Carnet / JSON)
           </button>
           <button type="button" onclick="startNewCharacter()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold text-xs cursor-pointer">
             ➕ Nouveau samouraï
@@ -1207,7 +1210,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 pb-24 md:pb-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne de la Chronique de Rokugan • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.20.0</span>
+      <span id="site-version-label">v1.21.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
       <span>•</span>
