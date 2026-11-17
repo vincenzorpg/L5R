@@ -296,6 +296,17 @@
         canUseTattoos: false
       });
 
+      // Moine Togashi (tatoué) : Tatouages + Kihos (coût 1,5× XP p. 266)
+      const togashiMonk = cg.getCharacterArchetypePermissions({ id: "moine-togashi", name: "Ordre Tatoué Togashi (Ise Zumi)", type: "Moine" }, null, true);
+      assertDeepEqual(togashiMonk, {
+        primaryType: "moine",
+        secondaryType: null,
+        canCastSpells: false,
+        canUseKatas: false,
+        canUseKihos: true,
+        canUseTattoos: true
+      });
+
       // Courtisan + Écoles Multiples (Bushi) -> débloque Katas
       const courtierBushi = cg.getCharacterArchetypePermissions(courtisan, bushi, false);
       assertTrue(courtierBushi.canUseKatas && !courtierBushi.canCastSpells && !courtierBushi.canUseKihos);

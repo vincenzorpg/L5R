@@ -209,7 +209,7 @@
           <button type="button" onclick="saveCharacterToDojo(false)" class="px-2 py-0.5 rounded bg-amber-600 text-black font-extrabold cursor-pointer" title="Sauvegarder dans le Dojo">💾</button>
         </div>
       </div>
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+      <div class="flex flex-wrap items-center gap-1.5">
         <button type="button" data-step-btn="identity" onclick="setForgeStep('identity')" class="forge-step-btn active">
           <span>1. Identité</span>
           <span id="step-pill-identity" class="forge-step-pill">Crabe</span>
@@ -859,7 +859,9 @@
                 <option value="3">Maîtrise 3</option>
                 <option value="4">Maîtrise 4</option>
                 <option value="5">Maîtrise 5</option>
-                <option value="6">Maîtrise 6+</option>
+                <option value="6">Maîtrise 6</option>
+                <option value="7">Maîtrise 7 (Kihos)</option>
+                <option value="8">Maîtrise 8 (Kihos)</option>
               </select>
             </div>
 
@@ -1202,7 +1204,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 pb-24 md:pb-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne de la Chronique de Rokugan • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.15.0</span>
+      <span id="site-version-label">v1.15.1</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

@@ -6,6 +6,20 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.15.1] — 2026-11-17
+
+### 🐛 Corrigé & Ajusté
+- **Ergonomie & Barres de Défilement de la Forge (`createcharacter.html`, `css/main.css`)** :
+  - Passage de la barre d'étapes `#forge-stepper-bar` en `flex-wrap` compact afin de supprimer la barre de défilement horizontale disgracieuse et la troncature du bouton « Tout voir ».
+  - Intégration de barres de défilement fines et stylisées aux couleurs *Laque & Or* (et *Parchemin* en mode clair).
+- **Accès & Filtrage des Kihos pour Tous les Moines dans la Forge (`js/character-generator.js`, `js/forge-ui.js`, `createcharacter.html`)** :
+  - Correction de `getCharacterArchetypePermissions` pour que les moines tatoués (*Ordre Tatoué Togashi*) conservent l'accès aux **Kihos** en plus des **Tatouages Togashi** (règle L5R 4e p. 266, coût 1,5× XP arrondi au supérieur), au même titre que les moines de la Confrérie de Shinsei (`1×` XP) et les Henshin Asako (`1,5×` XP).
+  - Permet aux moines de filtrer leurs Kihos par Anneau (`Air`, `Terre`, `Eau`, `Feu`, `Vide`) et Maîtrises `6`, `7`, `8` directement dans le panneau 5A, étendu sur toute la largeur (`col-span-full`) lorsque les Katas sont masqués, avec lien direct vers `kihos.html#<id>`.
+- **Tests Unitaires (`tests/unit-tests.js`)** :
+  - Vérification de l'accès simultané `Tatouages + Kihos` pour `Ordre Tatoué Togashi` dans `getCharacterArchetypePermissions`.
+
+---
+
 ## [1.15.0] — 2026-11-17
 
 ### ✨ Ajouté & Refondu

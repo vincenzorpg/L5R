@@ -306,7 +306,7 @@ function getCharacterArchetypePermissions(primarySchool, secondarySchool, isToga
   const canCastSpells = isPrimaryShugenja || isSecondaryShugenja;
   const canUseKatas = isPrimaryMartial || (!isPrimaryShugenja && isSecondaryMartial);
   const canUseTattoos = !!isTogashiTattooed;
-  const canUseKihos = (pType === "moine" && !canUseTattoos) || sType === "moine" || canCastSpells;
+  const canUseKihos = (pType === "moine") || sType === "moine" || canCastSpells;
 
   return {
     primaryType: pType,
