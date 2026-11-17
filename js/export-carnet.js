@@ -169,8 +169,34 @@ const CARNET_WEAPONS_REF = {
   "bo":         { skill: "Bâtons",        dr: "1g2", keywords: ["grande", "deux-mains"] },
   "kama":       { skill: "Couteaux",      dr: "0g2", keywords: ["paysan", "petite"] },
   "ninja-to":   { skill: "Ninjutsu",      dr: "2g2", keywords: ["ninja", "moyenne"] },
-  "yumi":       { skill: "Kyujutsu",      dr: "2g2", keywords: ["arc", "distance", "grande"], bowStrength: 3 },
-  "dai-kyu":    { skill: "Kyujutsu",      dr: "2g2", keywords: ["arc", "distance", "grande"], bowStrength: 4 }
+  "yumi":           { skill: "Kyujutsu",      dr: "2g2", keywords: ["arc", "distance", "grande"], bowStrength: 3 },
+  "dai-kyu":        { skill: "Kyujutsu",      dr: "2g2", keywords: ["arc", "distance", "grande"], bowStrength: 4 },
+  "han-kyu":        { skill: "Kyujutsu",      dr: "2g2", keywords: ["arc", "distance", "petite"], bowStrength: 1 },
+  "parangu":        { skill: "Kenjutsu",      dr: "2g2", keywords: ["moyenne", "paysan"] },
+  "bokken":         { skill: "Kenjutsu",      dr: "0g2", keywords: ["samourai", "moyenne"] },
+  "shinai":         { skill: "Kenjutsu",      dr: "0g1", keywords: ["samourai", "moyenne"] },
+  "jitte":          { skill: "Couteaux",      dr: "1g1", keywords: ["petite"] },
+  "bisento":        { skill: "Armes d'hast",  dr: "3g3", keywords: ["hast", "grande", "deux-mains"] },
+  "nagamaki":       { skill: "Armes d'hast",  dr: "2g3", keywords: ["hast", "grande", "deux-mains"] },
+  "sasumata":       { skill: "Armes d'hast",  dr: "0g2", keywords: ["hast", "grande"] },
+  "sodegarami":     { skill: "Armes d'hast",  dr: "1g1", keywords: ["hast", "grande"] },
+  "nage-yari":      { skill: "Lances",        dr: "1g2", keywords: ["lance", "moyenne"] },
+  "mai chong":      { skill: "Lances",        dr: "0g3", keywords: ["lance", "grande"] },
+  "kumade":         { skill: "Lances",        dr: "1g1", keywords: ["lance", "paysan", "grande"] },
+  "magari-yari":    { skill: "Lances",        dr: "3g2", keywords: ["lance", "grande"] },
+  "lance de cavalerie": { skill: "Lances",    dr: "3g4", keywords: ["lance", "grande"] },
+  "nunchaku":       { skill: "Bâtons",        dr: "1g2", keywords: ["paysan", "petite"] },
+  "tonfa":          { skill: "Bâtons",        dr: "0g3", keywords: ["paysan", "moyenne"] },
+  "machi-kanshisha":{ skill: "Bâtons",        dr: "0g2", keywords: ["moyenne"] },
+  "sang kauw":      { skill: "Bâtons",        dr: "1g2", keywords: ["moyenne"] },
+  "kusarigama":     { skill: "Armes à chaîne",dr: "0g2", keywords: ["grande"] },
+  "kyoketsu-shogi": { skill: "Armes à chaîne",dr: "0g1", keywords: ["grande"] },
+  "manrikikusari":  { skill: "Armes à chaîne",dr: "1g1", keywords: ["grande"] },
+  "tessen":         { skill: "Éventail de guerre", dr: "0g1", keywords: ["petite"] },
+  "shuriken":       { skill: "Ninjutsu",      dr: "1g1", keywords: ["ninja", "petite", "distance"] },
+  "tsubute":        { skill: "Ninjutsu",      dr: "1g1", keywords: ["ninja", "petite", "distance"] },
+  "sarbacane":      { skill: "Ninjutsu",      dr: "0g1", keywords: ["ninja", "moyenne", "distance"] },
+  "mains nues":     { skill: "Jiujutsu",      dr: "0g1", keywords: ["petite"] }
 };
 
 // =============================================================================
@@ -215,12 +241,17 @@ const SKILL_TRAIT_MAP = {
   "theurgie": "intelligence",
   "tentation": "awareness",
   "tromperie": "awareness",
+  "armes à chaine": "agility",
+  "armes a chaine": "agility",
   "armes lourdes": "agility",
   "armes d'hast": "agility",
   "armes de paysan": "agility",
+  "armes a feu": "intelligence",
+  "batons": "agility",
   "eventail de guerre": "agility",
   "dressage": "awareness",
-  "artisanat": "intelligence"
+  "artisanat": "intelligence",
+  "artisanat pratique": "intelligence"
 };
 
 const SKILL_TRAIT = Object.fromEntries(

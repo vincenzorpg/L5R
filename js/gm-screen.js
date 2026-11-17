@@ -29,17 +29,19 @@
     attaque: { label: 'Attaque', tnDelta: 0 },
     assaut: { label: 'Assaut (-10 ND, +2g1)', tnDelta: -10 },
     defense: { label: 'Défense (+Air+Déf)', tnDelta: 5 },
-    esquive: { label: 'Défense Totale (+10+)', tnDelta: 10 },
-    centre: { label: 'Centre (Préparation)', tnDelta: 0 }
+    esquive: { label: 'Défense Totale (Déf/Réf ÷2)', tnDelta: 10 },
+    centre: { label: 'Centre (0 action ; +1g1+Vide & +10 Init tour suiv.)', tnDelta: 0 }
   };
 
   const STATUS_FLAGS = [
-    { id: 'prone', label: 'À terre', desc: '-10 ND mêlée (+5 distance), -1g0 attaque, Simple pour se relever' },
-    { id: 'stunned', label: 'Étourdi', desc: 'Pas d\'action, ND = 5 + bonus d\'Armure uniquement' },
-    { id: 'blinded', label: 'Aveuglé', desc: '-3g3 attaque/vue, -10 ND d\'Armure, vitesse ÷ 2' },
-    { id: 'entangled', label: 'Enchevêtré', desc: 'Déplacement nul, -2g1 attaque/défense' },
-    { id: 'surprised', label: 'Surpris', desc: '-5 ND d\'Armure, agit en dernier au Round 1' },
-    { id: 'feared', label: 'Effrayé', desc: '-Xk0 aux jets contre la source de Peur X' }
+    { id: 'prone', label: 'À terre', desc: '-10 ND d\'Armure en mêlée, pas d\'arme lourde/Déplacement, -2g0 petites/moyennes, Simple pour se relever' },
+    { id: 'stunned', label: 'Étourdi', desc: 'Aucune action, ND = 5 + bonus d\'Armure. Récup. Terre ND 20 (Réaction), sinon fin du Round suivant' },
+    { id: 'blinded', label: 'Aveuglé', desc: 'ND base = Réflexes + 5 (+ armure) ; -3g3 attaque à distance, -1g1 mêlée ; Eau -2 (mvt), Athl./Agilité ND 20 si Simple mvt' },
+    { id: 'entangled', label: 'Enchevêtré', desc: 'Aucune action sauf se libérer (Force vs ND ou Opposé 1/Round) ; saisie ennemie sans jet d\'attaque' },
+    { id: 'dazed', label: 'Hébété', desc: '-3g0 à toutes actions ; Défense/Défense Totale seuls, pas de duel ; Terre ND 20 (-5/échec)' },
+    { id: 'grappled', label: 'En lutte', desc: 'ND = 5 + bonus d\'Armure ; contrôle par Lutte/Force opposé au début du Tour' },
+    { id: 'surprised', label: 'Embuscade', desc: 'Embuscade réussie : cible -10 à l\'Initiative pour toute l\'escarmouche (LdB p.82)' },
+    { id: 'feared', label: 'Effrayé', desc: '-Xg0 à tous les jets pour la rencontre si échec Volonté + Honneur vs ND 5 + 5×X (fuite si échec ≥ 15)' }
   ];
 
   const ENEMY_PRESETS = [
@@ -242,12 +244,13 @@
     const statuses = Array.isArray(combatant && combatant.statuses) ? combatant.statuses : [];
     const armorBonus = linkedPc && linkedPc.armorBonus != null
       ? Number(linkedPc.armorBonus) || 0
-      : Math.max(0, baseTN - 15);
+      : 0;
 
-    if (statuses.includes('stunned')) {
+    if (statuses.includes('stunned') || statuses.includes('grappled')) {
+      const lbl = statuses.includes('stunned') ? 'Étourdi' : 'En lutte';
       return {
         effectiveTN: 5 + armorBonus,
-        note: `Étourdi (5 + armure ${armorBonus})`
+        note: `${lbl} (5 + armure ${armorBonus})`
       };
     }
 
@@ -257,14 +260,22 @@
       stanceDelta = linkedPc.defenseBonus;
     }
 
-    let statusDelta = 0;
-    if (statuses.includes('surprised')) statusDelta -= 5;
-    if (statuses.includes('blinded')) statusDelta -= 10;
-    if (statuses.includes('prone')) statusDelta -= 10;
+    let currentBase = baseTN;
+    if (statuses.includes('blinded')) {
+      const reflexes = linkedPc && linkedPc.traits && linkedPc.traits.reflexes != null
+        ? Number(linkedPc.traits.reflexes) || 2
+        : Math.max(1, Math.round((baseTN - armorBonus - 5) / 5));
+      currentBase = reflexes + 5 + armorBonus;
+    }
+
+    const proneDelta = statuses.includes('prone') ? -10 : 0;
+    const notes = [];
+    if (statuses.includes('blinded')) notes.push(`Aveuglé (base Réfl.+5+${armorBonus})`);
+    if (statuses.includes('prone')) notes.push('Mêlée (-10 À terre)');
 
     return {
-      effectiveTN: Math.max(5, baseTN + stanceDelta + statusDelta),
-      note: statuses.includes('prone') ? 'Mêlée (-10 À terre, +5 à distance)' : ''
+      effectiveTN: Math.max(5, currentBase + stanceDelta + proneDelta),
+      note: notes.join(' • ')
     };
   }
 
@@ -305,19 +316,25 @@
     const aug = Math.max(0, Math.min(10, parseInt(raises, 10) || 0));
 
     let effectiveRank = sr;
-    let tnMod = 0;
     if (affinityMode === 'affinity') effectiveRank += 1;
-    if (affinityMode === 'deficiency') {
-      effectiveRank = Math.max(1, effectiveRank - 1);
-      tnMod = 5;
+    if (affinityMode === 'deficiency') effectiveRank = Math.max(0, effectiveRank - 1);
+
+    const tn = 5 + m * 5 + aug * 5;
+    if (effectiveRank <= 0) {
+      return {
+        formula: 'Impossible (Rang effectif 0)',
+        tn,
+        effectiveRank: 0,
+        cannotCast: true
+      };
     }
     const capped = applyTenDiceRule(r + effectiveRank, r, 0);
-    const tn = 5 + m * 5 + aug * 5 + tnMod;
     const bonusStr = capped.bonus ? (capped.bonus > 0 ? `+${capped.bonus}` : String(capped.bonus)) : '';
     return {
       formula: `${capped.rolled}g${capped.kept}${bonusStr}`,
       tn,
-      effectiveRank
+      effectiveRank,
+      cannotCast: false
     };
   }
 
@@ -952,7 +969,7 @@
             </div>
 
             <div class="flex items-center justify-between text-[11px] bg-black/30 rounded px-2 py-1 border border-stone-800/80">
-              <span title="ND Assaut : ${Math.max(5, pc.armorTN - 10)} • ND Surpris : ${Math.max(5, pc.armorTN - 5)}">ND <b class="text-amber-300">${pc.armorTN}</b> <span class="text-stone-500">(Réd ${pc.reduction})</span></span>
+              <span title="ND Assaut : ${Math.max(5, pc.armorTN - 10)} • ND Défense : ${pc.armorTN + pc.defenseBonus}">ND <b class="text-amber-300">${pc.armorTN}</b> <span class="text-stone-500">(Réd ${pc.reduction})</span></span>
               <button type="button" data-action="roll-formula" data-formula="${escapeHtml(pc.initFormula)}" data-roll-label="Initiative ${escapeHtml(pc.name)}" class="hover:underline cursor-pointer" title="Lancer l'initiative de ${escapeHtml(pc.name)}">
                 Init <b class="font-mono text-amber-200">${escapeHtml(pc.initFormula)} 🎲</b>
               </button>
@@ -1335,7 +1352,11 @@
     const affinity = document.getElementById('magic-calc-affinity')?.value || 'normal';
     const mRes = computeMagicCastParams(ring, school, mastery, raises, affinity);
     const mOut = document.getElementById('magic-calc-result');
-    if (mOut) mOut.textContent = `Jet ${mRes.formula} • ND ${mRes.tn}`;
+    if (mOut) {
+      mOut.textContent = mRes.cannotCast
+        ? `Sort impossible (Rang effectif 0 par Déficience) • ND ${mRes.tn}`
+        : `Jet ${mRes.formula} • ND ${mRes.tn}`;
+    }
 
     const fearLvl = Math.max(1, parseInt(document.getElementById('fear-calc-level')?.value, 10) || 1);
     const fearWill = Math.max(1, parseInt(document.getElementById('fear-calc-will')?.value, 10) || 2);
@@ -1720,6 +1741,7 @@
     });
     document.getElementById('magic-calc-roll')?.addEventListener('click', () => {
       const { magic } = updateMagicAndFearCalculators();
+      if (magic.cannotCast) return;
       executeGmDiceRoll(magic.formula, `Incantation (ND ${magic.tn})`, 0);
     });
     document.getElementById('fear-calc-roll')?.addEventListener('click', () => {

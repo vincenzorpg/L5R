@@ -72,30 +72,29 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
       <div class="p-4 rounded-xl bg-stone-950/90 border border-amber-500/25 space-y-3">
         <h3 class="font-bold font-imperial text-amber-300 text-sm border-b border-stone-800 pb-1.5">
-          📜 1. Lancement des Sorts (Shugenja)
+          📜 1. Lancement des Sorts (Shugenja — Livre de Base, pp. 163–165)
         </h3>
         <ul class="space-y-2 text-stone-300 leading-relaxed">
           <li>
-            <b class="text-amber-200">Jet d'Invocation :</b>
-            <span class="font-mono text-amber-300">(Anneau de l'Élément + Rang d'École de Shugenja) g (Anneau de l'Élément)</span>.
+            <b class="text-amber-200">Jet d'Invocation &amp; ND :</b>
+            <span class="font-mono text-amber-300">(Anneau de l'Élément + Rang d'École effectif) g (Anneau de l'Élément)</span> contre
+            <span class="font-mono text-amber-300">ND = 5 + (5 × Niveau de Maîtrise)</span>. Un shugenja ne peut pas lancer un sort dont le Niveau de Maîtrise dépasse son Rang d'École effectif.
           </li>
           <li>
-            <b class="text-amber-200">Niveau de Difficulté (ND) :</b>
-            <span class="font-mono text-amber-300">ND = 5 + (5 × Niveau de Maîtrise du sort)</span>
-            (Ex : Maîtrise 1 → ND 10 ; Maîtrise 3 → ND 20).
+            <b class="text-amber-200">Temps d'Incantation &amp; Interruption :</b>
+            Lancer un sort requiert un nombre d'<b>Actions Complexes égal au Niveau de Maîtrise</b> (réductible jusqu'à <b>1 Action Complexe</b> minimum via des Augmentations). Si l'incantateur subit des dégâts pendant l'incantation, il doit réussir un jet de <b>Volonté</b> contre <b>ND 10</b> ou <b>(5 + dégâts subis)</b> (le plus élevé) sous peine d'être interrompu. Un sort interrompu ne consomme <b>pas</b> d'emplacement, alors qu'un jet d'invocation échoué dépense l'emplacement.
+          </li>
+          <li>
+            <b class="text-amber-200">Parchemins &amp; Mémorisation :</b>
+            Un sort requiert normalement la lecture de son parchemin en main. Il peut être mémorisé (lancé sans parchemin) en dépensant un coût en <b>XP égal au Niveau de Maîtrise</b> du sort. Il est possible de dissimuler une incantation à voix basse via la compétence <i>Discrétion</i>.
           </li>
           <li>
             <b class="text-amber-200">Emplacements Quotidiens (Slots) :</b>
-            Un shugenja dispose chaque jour d'un nombre de sorts par Élément égal à son <b>Rang dans l'Anneau correspondant</b>.
-            Les emplacements du <b>Vide</b> peuvent être dépensés pour lancer un sort de <i>n'importe quel élément</i> (ou un sort du Vide si le shugenja possède l'avantage <b>Ishiken-dō</b>).
+            Nombre de sorts par Élément égal au <b>Rang dans l'Anneau correspondant</b>. Les emplacements du <b>Vide</b> servent à lancer un sort de <i>n'importe quel élément</i> (ou un sort du Vide avec <b>Ishiken-dō</b>).
           </li>
           <li>
-            <b class="text-amber-200">Affinité & Déficience :</b>
-            Avec une <b>Affinité</b>, votre Rang d'École est considéré comme supérieur de <b>+1</b> (pour le jet de lancement et le Niveau de Maîtrise accessible). Avec une <b>Déficience</b>, votre Rang d'École est réduit de <b>-1</b> (si ce rang tombe à 0, vous ne pouvez lancer aucun sort de cet élément).
-          </li>
-          <li>
-            <b class="text-amber-200">Progression :</b>
-            À chaque nouveau Rang d'École, un shugenja apprend gratuitement <b>3 nouveaux sorts</b> d'un Niveau de Maîtrise qu'il est capable de lancer.
+            <b class="text-amber-200">Affinité, Déficience &amp; Progression :</b>
+            <b>Affinité : +1</b> au Rang d'École effectif ; <b>Déficience : -1</b> (si réduit à 0, cet élément est inaccessible). Chaque Rang d'École de Shugenja octroie <b>3 nouveaux sorts</b> gratuits (1<sup>re</sup> Voie Alternative : <b>+1 sort</b> ; suivantes : 0).
           </li>
         </ul>
       </div>
@@ -103,38 +102,37 @@
       <!-- 2. VOIE DES MOINES (KIHOS) -->
       <div class="p-4 rounded-xl bg-stone-950/90 border border-emerald-500/25 space-y-3">
         <h3 class="font-bold font-imperial text-emerald-300 text-sm border-b border-stone-800 pb-1.5">
-          🥋 2. Activation & Types de Kihos
+          🥋 2. Activation &amp; Types de Kihos (Livre de Base, pp. 261–262)
         </h3>
         <ul class="space-y-2 text-stone-300 leading-relaxed">
           <li>
-            <b class="text-emerald-200">Prérequis de Maîtrise (Moines) :</b>
-            Pour apprendre un Kihō, la somme <span class="font-mono text-emerald-300">(Anneau de l'Élément + Rang d'École de Moine)</span> doit être supérieure ou égale au <b>Niveau de Maîtrise</b> du Kihō.
+            <b class="text-emerald-200">Prérequis &amp; Coût d'Acquisition :</b>
+            Un moine compare <span class="font-mono text-emerald-300">(Anneau de l'Élément + Rang d'École) ≥ Maîtrise</span> (coût en XP = <b>Maîtrise</b> pour la Confrérie, <b>×1,5 arrondi au supérieur</b> pour les autres moines).
           </li>
           <li>
-            <b class="text-emerald-200">Les 4 Catégories de Kihos :</b>
-            <ul class="list-disc list-inside pl-2 mt-1 space-y-1 text-[11px] text-stone-400">
-              <li><b class="text-stone-200">Interne :</b> Harmonise le chi interne du moine (un seul Kihō Interne actif à la fois).</li>
-              <li><b class="text-stone-200">Martial :</b> Sublime le combat à mains nues (Jiujutsu) et les postures offensives.</li>
-              <li><b class="text-stone-200">Mystique :</b> Produit des manifestations surnaturelles visibles par canalisation élémentaire.</li>
-              <li><b class="text-stone-200">Karmique :</b> Modifie l'équilibre du destin, du Vide ou du flux vital des alliés et ennemis.</li>
-            </ul>
+            <b class="text-emerald-200">Activation (hors mention contraire) :</b>
+            Soit en dépensant <b>1 Point de Vide</b> (<b>Action Gratuite</b> ; considérée comme Technique d'École pour la Confrérie, hors limite d'1 PV/round), soit via un jet de <b>Méditation / Vide ND 15</b> (<b>Action Complexe</b>) ou <b>ND 30</b> (<b>Action Simple</b>). Pour un Kihō <i>Atemi</i>, la dépense de PV ou le jet ND 15 s'effectue en <b>Action Gratuite</b> avec l'attaque.
           </li>
           <li>
-            <b class="text-emerald-200">Mot-clé « Atemi » :</b>
-            Les Kihos dotés de la mention <b>(Atemi)</b> nécessitent de réussir une attaque à mains nues (Jiujutsu) ciblant les points de pression vitaux pour libérer leur effet sur l'adversaire.
+            <b class="text-emerald-200">Les 4 Catégories &amp; Cumul :</b>
+            Un moine ne peut avoir actifs simultanément qu'<b>1 Kihō Interne</b>, <b>1 Karmique</b> et <b>1 Mystique</b>. Plusieurs Kihō <b>Martiaux</b> peuvent être actifs ensemble, mais un seul effet Kihō peut être délivré par frappe à mains nues.
+          </li>
+          <li>
+            <b class="text-emerald-200">Attaques Atemi « (Atemi) » :</b>
+            Frappes précises sur les centres nerveux devant toucher la <b>peau nue</b> : toute armure <b>double son bonus au ND d'Armure</b> contre ces attaques. Elles n'infligent <b>aucun dégât normal</b> (sauf précision contraire), déclenchant uniquement l'effet du Kihō (spécialisation optionnelle : <i>Jiujutsu (Atemi)</i>).
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- 3. TABLEAU DES RÈGLES : KIHOS HORS-CONFRÉRIE (LIVRE DE L'EAU p. 266) -->
+    <!-- 3. TABLEAU DES RÈGLES : KIHOS HORS-CONFRÉRIE (LIVRE DE BASE p. 266) -->
     <div class="p-4 rounded-xl bg-stone-950/90 border border-stone-800 space-y-2.5">
       <div class="flex flex-wrap justify-between items-center gap-2">
         <h3 class="font-bold font-imperial text-amber-200 text-sm">
-          ⚖️ 3. Acquisition des Kihos selon la Voie du Personnage (Livre de l'Eau)
+          ⚖️ 3. Acquisition des Kihos selon la Voie du Personnage (Livre de Base, p. 266)
         </h3>
         <span class="text-[10px] text-amber-400">
-          💡 L'Avantage « Ami de la Confrérie » (5 XP / 4 XP Dragon) permet d'acheter les Kihos au tarif normal de la Confrérie.
+          💡 L'Avantage « Ami de la Confrérie » (5 XP / 4 XP Dragon) autorise les Moine/Shugenja à acheter des Kihos via leur Anneau.
         </span>
       </div>
 
@@ -152,7 +150,7 @@
             <tr>
               <td class="py-2 pr-3 font-bold text-emerald-300">Moine de la Confrérie de Shinsei</td>
               <td class="py-2 px-3 font-mono">Anneau + Rang d'École ≥ Maîtrise</td>
-              <td class="py-2 px-3">Coût normal (1 XP × Maîtrise)</td>
+              <td class="py-2 px-3">Coût normal (Maîtrise en XP)</td>
               <td class="py-2 pl-3">Aucune limite fixe (+ Kihos gratuits par Rang)</td>
             </tr>
             <tr>
@@ -162,7 +160,7 @@
               <td class="py-2 pl-3">Maximum égal au Rang d'École de Moine</td>
             </tr>
             <tr>
-              <td class="py-2 pr-3 font-bold text-blue-300">Shugenja (sans Ami de la Confrérie)</td>
+              <td class="py-2 pr-3 font-bold text-blue-300">Shugenja (règle optionnelle, p. 266)</td>
               <td class="py-2 px-3 font-mono">Anneau seul ≥ Maîtrise</td>
               <td class="py-2 px-3">2 × le coût normal</td>
               <td class="py-2 pl-3">Maximum égal au Rang d'École de Shugenja</td>
@@ -176,6 +174,27 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- 4. MAGIE DU SANG (MAHŌ — LIVRE DE BASE pp. 267-269) -->
+    <div class="p-4 rounded-xl bg-red-950/20 border border-red-900/40 space-y-2">
+      <h3 class="font-bold font-imperial text-red-300 text-sm border-b border-red-900/40 pb-1">
+        🩸 4. Magie du Sang — Mahō (Livre de Base, pp. 267–269)
+      </h3>
+      <ul class="space-y-1.5 text-stone-300 leading-relaxed text-[11px]">
+        <li>
+          <b class="text-red-200">Accès &amp; Jet d'Invocation :</b>
+          Quiconque connaît l'incantation peut lancer de la Mahō sans restriction de Rang d'École (exception optionnelle MJ pour l'école Chuda). Le jet d'invocation utilise le <b>Rang de Réputation (Insight Rank) + Anneau de l'Élément g Anneau de l'Élément</b> contre <b>ND = 5 + (5 × Niveau de Maîtrise)</b>, en dépensant <b>Maîtrise Actions Complexes</b> (min 1 via Augmentations).
+        </li>
+        <li>
+          <b class="text-red-200">Prix du Sang :</b>
+          Le lanceur doit verser un total de Blessures égal à <b>2 × Niveau de Maîtrise</b> (sur lui-même ou sur une cible intelligente <i>consentante</i> ou <i>sans défense</i> — jamais en attaquant durant l'incantation), payées <b>que le jet réussisse ou échoue</b>. Chaque tranche supplémentaire de <b>2 × Niveau de Maîtrise</b> Blessures versées confère <b>+1 Augmentation Gratuite</b> au jet de lancement.
+        </li>
+        <li>
+          <b class="text-red-200">Souillure de l'Outremonde :</b>
+          Chaque réussite d'un sort de Mahō inflige immédiatement au lanceur <b>(Niveau de Maîtrise − 1) points de Souillure</b> (minimum <b>1 point</b>).
+        </li>
+      </ul>
     </div>
   </div>
 </section>
@@ -231,6 +250,8 @@
             <option value="4">Rang 4</option>
             <option value="5">Rang 5</option>
             <option value="6">Rang 6</option>
+            <option value="7">Rang 7 (Kihos)</option>
+            <option value="8">Rang 8 (Kihos)</option>
           </select>
         </div>
 
@@ -320,7 +341,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60">
     <div>Campagne L5R – Grimoire Shugenja & Moines • Liaison dynamique avec le Carnet de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.13.0</span>
+      <span id="site-version-label">v1.14.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

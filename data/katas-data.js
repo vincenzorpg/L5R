@@ -1,13 +1,19 @@
 /**
- * js/katas-data.js — Catalogue exhaustif des Katas de Rokugan (L5R 4e Édition)
- * Sources officielles : Livre de Base, Les Grands Clans, Livre de la Terre, Livre de l'Eau,
- * Livre de l'Air, Livre du Feu, Livre du Vide, Secrets de l'Empire et Le Sabre & l'Éventail.
+ * data/katas-data.js — Catalogue officiel exact des Katas de Rokugan (L5R 4e Édition — 40 Katas)
+ * Sources : Livre de Base (pp. 259–260), The Book of Air (p. 175), The Book of Earth (pp. 194–195),
+ *           The Book of Fire (pp. 179–180) et The Great Clans.
+ *
+ * RÈGLES OFFICIELLES (Livre de Base, p. 259) :
+ * - Coût d'apprentissage : Nombre de Points d'Expérience égal au Niveau de Maîtrise du Kata (si votre École figure dans la liste autorisée et que votre Anneau atteint au moins le Niveau de Maîtrise).
+ * - Autres Écoles d'un Clan spécifié : Les autres écoles de bushi affiliées au clan indiqué (ex. suppléments) peuvent acheter ces Katas, mais leurs Anneaux sont considérés comme inférieurs de 1 Rang pour satisfaire le Niveau de Maîtrise requis.
+ * - Exécution : Action Simple (Simple Action). Reste actif jusqu'à expiration (si durée indiquée) ou abandon volontaire (Action Gratuite).
+ * - Limite : 1 seul Kata actif à la fois.
  */
 
 (function () {
   const KATAS_DATA = [
     // =========================================================================
-    // --- KATAS DE TERRE (EARTH) ---
+    // --- KATAS DE TERRE (EARTH : 3 Livre de Base + 5 Book of Earth + 2 Great Clans) ---
     // =========================================================================
     {
       id: "kata-terre-frapper-terre",
@@ -15,8 +21,29 @@
       element: "Terre",
       mastery: 3,
       cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Tant que ce Kata est actif et que vous adoptez la Posture d'Attaque ou d'Attaque Totale, vous bénéficiez d'une Réduction de dégâts égale à votre valeur d'Anneau de Terre."
+      schools: "Toutes (Any)",
+      source: "Livre de Base (p. 259)",
+      desc: "Lorsque vous êtes en Posture de Défense Totale (Full Defense), vous bénéficiez d'une Réduction égale à votre Anneau de Terre. Cette Réduction se cumule avec toute autre forme de Réduction."
+    },
+    {
+      id: "kata-terre-guerrier-indomptable",
+      name: "Style du Guerrier Indomptable (Indomitable Warrior Style)",
+      element: "Terre",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Daigotsu, Bushi Hida, Bushi Ichiro, Bushi Moto",
+      source: "Livre de Base (p. 260)",
+      desc: "Réduit toutes vos pénalités de ND dues aux Rangs de Blessures d'un montant égal à votre Anneau de Terre."
+    },
+    {
+      id: "kata-terre-fer-montagnes",
+      name: "Style du Fer dans les Montagnes (Iron in the Mountains Style)",
+      element: "Terre",
+      mastery: 3,
+      cost: 3,
+      schools: "Guerrier de Fer Daidoji, Bushi Hida",
+      source: "Livre de Base (p. 260)",
+      desc: "Vous pouvez utiliser votre Anneau de Terre à la place de votre Anneau d'Air pour le bonus accordé par la Posture de Défense (Defense Stance)."
     },
     {
       id: "kata-terre-force-crabe",
@@ -24,102 +51,113 @@
       element: "Terre",
       mastery: 3,
       cost: 3,
-      schools: "Bushi du Clan du Crabe (Hida, Hiruma) & Guerriers Daidoji",
-      desc: "Lorsque vous maniez une Arme Lourde ou un Bâton, vous êtes totalement immunisé aux manœuvres de Désarmement et gagnez un bonus de +1g0 à tous vos jets de dégâts."
+      schools: "Tout Bushi du Clan du Crabe",
+      source: "The Great Clans",
+      desc: "Tant que vous portez une armure et êtes en Posture d'Attaque (Attack Stance), votre armure confère un bonus supplémentaire de +2 en Réduction."
     },
     {
-      id: "kata-terre-montagne-ne-bouge-pas",
-      name: "La Montagne ne Bouge Pas (The Mountain Does Not Move)",
-      element: "Terre",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Vous pouvez ignorer l'ensemble des pénalités imposées par vos Rangs de Blessures jusqu'à concurrence d'une valeur totale égale à votre Anneau de Terre × 2."
-    },
-    {
-      id: "kata-terre-fer-montagnes",
-      name: "Le Fer dans les Montagnes (Iron in the Mountains)",
-      element: "Terre",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Toutes les pénalités de Blessures subies sont réduites d'une valeur fixe égale à votre Rang d'École × 2."
-    },
-    {
-      id: "kata-terre-posture-rocher",
-      name: "L'Inébranlable Posture du Rocher (Immovable Stone Posture)",
-      element: "Terre",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Vous gagnez +3g0 à tous vos jets pour résister aux manœuvres de Renversement (Knockdown) et aux effets de Peur. Votre ND d'Armure augmente de +3 tant que vous ne vous déplacez pas de plus de 1,5 m par round."
-    },
-    {
-      id: "kata-terre-volonte-indomptable",
-      name: "Volonté Indomptable (Indomitable Will)",
-      element: "Terre",
-      mastery: 4,
-      cost: 4,
-      schools: "Bushi du Clan du Crabe",
-      desc: "Une fois par escarmouche, vous pouvez dépenser 1 point de Vide en Action Gratuite pour annuler immédiatement l'état Assommé (Stunned) ou Étourdi (Dazed)."
-    },
-    {
-      id: "kata-terre-mur-acier",
-      name: "Le Mur d'Acier (Wall of Iron)",
-      element: "Terre",
-      mastery: 4,
-      cost: 4,
-      schools: "Hida Bushi, Daidoji & Praticiens d'Armes d'Hast / Lourdes",
-      desc: "En posture de Défense ou Défense Totale, les ennemis adjacents subissent un malus de -1g0 à toutes leurs attaques contre vos alliés que vous protégez."
-    },
-    {
-      id: "kata-terre-broyé-debout",
-      name: "Broyé mais Debout (Bloodied But Unbowed)",
-      element: "Terre",
-      mastery: 5,
-      cost: 5,
-      schools: "Bushi du Clan du Crabe",
-      desc: "Lorsque vous atteignez les Rangs de Blessure À Terre (Down) ou Hors de Combat (Out), vous conservez la possibilité d'effectuer une Action Simple par round au lieu d'être neutralisé."
-    },
-    {
-      id: "kata-terre-frappe-avalanche",
-      name: "Frappe de l'Avalanche (Strike as the Avalanche)",
-      element: "Terre",
-      mastery: 5,
-      cost: 5,
-      schools: "Toute école de Bushi",
-      desc: "Vos attaques de mêlée ignorent un montant de Réduction adverse égal au double de votre Anneau de Terre (2 × Terre)."
-    },
-    {
-      id: "kata-terre-force-blaireau",
-      name: "La Force du Blaireau (Strength of the Badger)",
+      id: "kata-terre-force-araignee",
+      name: "La Force de l'Araignée (Strength of the Spider)",
       element: "Terre",
       mastery: 3,
       cost: 3,
-      schools: "Ichiro Bushi & Clans Mineurs",
-      desc: "Vos attaques à mains nues et en Lutte (Grapple) infligent +1g1 Blessures supplémentaires."
+      schools: "Tout Bushi du Clan de l'Araignée",
+      source: "The Great Clans (p. 282)",
+      desc: "Une fois par Round, si vous infligez au moins 15 Blessures à votre adversaire, celui-ci subit une pénalité de -3 au total de tous ses jets lors de son prochain Tour."
     },
     {
-      id: "kata-terre-force-sanglier",
-      name: "La Force du Sanglier (Strength of the Boar)",
+      id: "kata-terre-puissance-montagne",
+      name: "La Puissance de la Montagne (The Power of the Mountain)",
+      element: "Terre",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Hida, Bushi Hiruma, Berserker Matsu, Bushi Ichiro",
+      source: "The Book of Earth (p. 194)",
+      desc: "À l'activation, vous réduisez votre ND d'Armure d'un montant allant jusqu'à votre Anneau de Terre jusqu'à ce que vous désactiviez ce Kata. Tous vos jets de dégâts effectués tant que ce Kata est actif voient leur total augmenté du même montant."
+    },
+    {
+      id: "kata-terre-force-montagne",
+      name: "La Force de la Montagne (The Strength of the Mountain)",
+      element: "Terre",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Hida, Éclaireur Hiruma, Bushi Shiba, Guerrier de Fer Daidoji",
+      source: "The Book of Earth (p. 194)",
+      desc: "À l'activation, vous réduisez votre Score d'Initiative d'un montant allant jusqu'à votre Anneau de Terre (sans descendre sous 0) jusqu'à ce que vous désactiviez ce Kata. Tant que ce Kata est actif, votre ND d'Armure augmente du même montant."
+    },
+    {
+      id: "kata-terre-abri-roche",
+      name: "L'Abri de la Roche (Lee of the Stone)",
       element: "Terre",
       mastery: 4,
       cost: 4,
-      schools: "Heichi Bushi & Guerriers de l'Extrême",
-      desc: "Vous êtes insensible aux effets de poison non magiques et bénéficiez d'une Réduction de dégâts de 3 contre les créatures de l'Outremonde."
+      schools: "Bushi Hida, Pragmatique Hida, Bushi Shiba, Guerrier de Fer Daidoji",
+      source: "The Book of Earth (p. 195)",
+      desc: "Tant que vous êtes en Posture de Défense ou de Défense Totale, votre ND d'Armure est augmenté d'un montant supplémentaire égal à votre Anneau de Terre."
+    },
+    {
+      id: "kata-terre-frappe-avalanche",
+      name: "Frapper comme l'Avalanche (Strike as the Avalanche)",
+      element: "Terre",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Hida, Bushi Hiruma, Bushi Ichiro, Bushi Moto, Vengeur Moto",
+      source: "The Book of Earth (p. 195)",
+      desc: "Lorsque vous utilisez la compétence Armes Lourdes (Heavy Weapons), votre Force est considérée comme supérieure de 1 Rang pour calculer les dégâts."
+    },
+    {
+      id: "kata-terre-batu-mais-intact",
+      name: "Érodé mais Intact (Weathered and Unbroken)",
+      element: "Terre",
+      mastery: 5,
+      cost: 5,
+      schools: "Bushi Hida, Bushi Hiruma, Éclaireur Hiruma, Bushi Ichiro",
+      source: "The Book of Earth (p. 195)",
+      desc: "Votre Anneau d'Eau est considéré comme inférieur de deux Rangs (minimum 1) pour le déplacement. Tous vos jets d'attaque effectués avec la compétence Armes Lourdes (Heavy Weapons) bénéficient d'une Augmentation Gratuite utilisable uniquement pour la manœuvre Renversement (Knockdown)."
     },
 
     // =========================================================================
-    // --- KATAS D'EAU (WATER) ---
+    // --- KATAS D'EAU (WATER : 2 Livre de Base + 5 Great Clans) ---
     // =========================================================================
     {
       id: "kata-eau-frapper-eau",
       name: "Frapper comme l'Eau (Striking as Water)",
       element: "Eau",
+      mastery: 4,
+      cost: 4,
+      schools: "Toutes (Any)",
+      source: "Livre de Base (p. 259)",
+      desc: "Lorsque vous êtes en Posture d'Attaque (Attack Stance), vous pouvez vous déplacer de 1,5 mètre (5') supplémentaires en tant qu'Action Gratuite."
+    },
+    {
+      id: "kata-eau-force-dans-bras",
+      name: "Style de la Force dans les Bras (Strength in Arms Style)",
+      element: "Eau",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Hida, Bushi Ichiro, Bushi Moto",
+      source: "Livre de Base (p. 260)",
+      desc: "Une fois par Tour lorsque vous maniez une Arme Lourde, vous pouvez utiliser votre Trait Force à la place de votre Agilité pour un jet d'attaque."
+    },
+    {
+      id: "kata-eau-force-lion",
+      name: "La Force du Lion (Strength of the Lion)",
+      element: "Eau",
       mastery: 3,
       cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Une fois par round, immédiatement après avoir réussi une attaque de mêlée, vous pouvez effectuer un déplacement de 1,5 mètre en tant qu'Action Gratuite sans désorganiser votre garde."
+      schools: "Tout Bushi du Clan du Lion",
+      source: "The Great Clans",
+      desc: "Une fois par Round durant l'Étape des Réactions, vous pouvez ajouter +3 au Score d'Initiative d'un allié dans une escarmouche. Cet effet est cumulatif, mais ses bénéfices disparaissent aussitôt si le Kata cesse d'être actif."
+    },
+    {
+      id: "kata-eau-fils-tempetes",
+      name: "Fils des Tempêtes (Son of Storms)",
+      element: "Eau",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Akodo, Infiltrateur Shosuro, Bushi Yoritomo",
+      source: "The Great Clans",
+      desc: "Lorsque vous attaquez avec une arme de mêlée Petite (Small), toute Réduction possédée par votre adversaire est réduite de 1."
     },
     {
       id: "kata-eau-force-licorne",
@@ -127,84 +165,93 @@
       element: "Eau",
       mastery: 3,
       cost: 3,
-      schools: "Bushi du Clan de la Licorne (Shinjo, Moto, Utaku)",
-      desc: "En selle sur une monture, celle-ci et vous gagnez +3 mètres à toutes vos Actions de Mouvement et +1g0 à tous vos jets d'attaque de mêlée en charge."
+      schools: "Tout Bushi du Clan de la Licorne",
+      source: "The Great Clans",
+      desc: "Lorsque vous êtes à cheval, votre monture gagne un bonus de +3 à son ND d'Armure ainsi qu'une Réduction supplémentaire de 3."
     },
     {
-      id: "kata-eau-force-mante",
-      name: "La Force de la Mante (Strength of the Mantis)",
+      id: "kata-eau-art-ninjutsu",
+      name: "L'Art du Ninjutsu (Art of Ninjutsu)",
       element: "Eau",
-      mastery: 3,
-      cost: 3,
-      schools: "Bushi du Clan de la Mante (Yoritomo, Tsuruchi)",
-      desc: "Vous ignorez les pénalités de terrain instable (ponts oscillants, pont de navire par tempête, vase) et gagnez +1g0 aux jets d'attaque avec armes paysannes, petites armes ou arcs."
-    },
-    {
-      id: "kata-eau-maree-incessante",
-      name: "La Marée Incessante (Relentless Tide)",
-      element: "Eau",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Durant l'Étape des Réactions de n'importe quel round d'escarmouche, vous pouvez échanger votre score d'Initiative avec celui d'un allié volontaire situé à 6 mètres ou moins."
-    },
-    {
-      id: "kata-eau-flux-riviere",
-      name: "Le Flux de la Rivière (The Flow of the River)",
-      element: "Eau",
-      mastery: 3,
-      cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Lorsque vous combattez en Posture de Défense, vous conservez votre pleine valeur de Mouvement Simple au lieu d'être limité."
-    },
-    {
-      id: "kata-eau-vague-fracassante",
-      name: "Vague Fracassante (Crashing Wave)",
-      element: "Eau",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Lorsque vous réussissez une manœuvre de Renversement (Knockdown), la cible subit immédiatement un nombre de Blessures égal à votre Anneau d'Eau en plus des effets normaux."
-    },
-    {
-      id: "kata-eau-chevaucher-eclair",
-      name: "Chevaucher l'Éclair (Ride the Lightning)",
-      element: "Eau",
-      mastery: 4,
-      cost: 4,
-      schools: "Moto Bushi & Shinjo Bushi",
-      desc: "Après une attaque de charge montée réussie, votre monture peut immédiatement effectuer une attaque de piétinement en Action Gratuite."
-    },
-    {
-      id: "kata-eau-tonnerre-sabots",
-      name: "Le Tonnerre des Sabots (Thunder of Hooves)",
-      element: "Eau",
-      mastery: 3,
-      cost: 3,
-      schools: "Bushi Licorne montés",
-      desc: "Tous les adversaires non montés situés à portée de mêlée lors d'un passage en charge subissent un malus de -5 à leur ND d'Armure jusqu'à la fin du round."
-    },
-    {
-      id: "kata-eau-force-singe",
-      name: "La Force du Singe (Strength of the Monkey)",
-      element: "Eau",
-      mastery: 3,
-      cost: 3,
-      schools: "Toku Bushi & Clans Mineurs",
-      desc: "Vous gagnez +1g0 à tous vos jets d'Athlétisme et d'Escalade, et pouvez vous relever d'un état Renversé sans dépenser d'action."
+      mastery: 5,
+      cost: 5,
+      schools: "Bushi Daigotsu, Bushi Bayushi, Éclaireur Daidoji, Acteur Shosuro, Infiltrateur Shosuro, Ninja Goju",
+      source: "The Great Clans (p. 282)",
+      desc: "Une fois par Round, vous pouvez calculer la distance d'une Action de Mouvement comme si votre Anneau d'Eau était égal à votre Rang de Compétence Discrétion (Stealth). Cela ne modifie pas la distance maximale franchissable en un Round."
     },
 
     // =========================================================================
-    // --- KATAS D'AIR (AIR) ---
+    // --- KATAS D'AIR (AIR : 4 Livre de Base + 2 Book of Air + 3 Great Clans) ---
     // =========================================================================
     {
       id: "kata-air-frapper-vent",
-      name: "Frapper comme le Vent (Striking as Wind)",
+      name: "Frapper comme le Vent (Striking as Air)",
       element: "Air",
       mastery: 3,
       cost: 3,
+      schools: "Toutes (Any)",
+      source: "Livre de Base (p. 259)",
+      desc: "Lorsque vous êtes en Posture de Défense (Defense Stance), votre ND d'Armure est augmenté de votre Anneau d'Air."
+    },
+    {
+      id: "kata-air-souffle-vent",
+      name: "Style du Souffle du Vent (Breath of Wind Style)",
+      element: "Air",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Kakita, Bushi Bayushi",
+      source: "Livre de Base (p. 259)",
+      desc: "Votre Score d'Initiative augmente de +2 durant l'Étape des Réactions de chaque Round de Combat. Cet effet se cumule au fil des rounds mais disparaît immédiatement si le Kata cesse d'être actif."
+    },
+    {
+      id: "kata-air-lame-cachee",
+      name: "Style de la Lame Cachée (Hidden Blade Style)",
+      element: "Air",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Bayushi, Bushi Yoritomo",
+      source: "Livre de Base (p. 259)",
+      desc: "Vos attaques de Désarmement (Disarm) infligent les dégâts normaux au lieu de 2g1. Vous ne pouvez pas augmenter vos dégâts sur ces attaques via des Augmentations (y compris celles issues de la manœuvre Feinte)."
+    },
+    {
+      id: "kata-air-foret-fer",
+      name: "Style de la Forêt de Fer (Iron Forest Style)",
+      element: "Air",
+      mastery: 4,
+      cost: 4,
+      schools: "Guerrier de Fer Daidoji, Bushi Heichi, Bushi Shiba",
+      source: "Livre de Base (p. 260)",
+      desc: "Lorsque vous maniez une lance ou une arme d'hast, vous pouvez utiliser votre Anneau d'Air à la place de votre Agilité pour vos jets d'attaque."
+    },
+    {
+      id: "kata-air-menace-voilee",
+      name: "Style de la Menace Voilée (Veiled Menace Style)",
+      element: "Air",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Bayushi, Bushi Hiruma, Archer Tsuruchi, Bushi Yoritomo",
+      source: "Livre de Base (p. 260)",
+      desc: "Une fois par Tour, vous pouvez ajouter votre Rang de Compétence Discrétion (Stealth) à votre ND d'Armure contre une unique attaque."
+    },
+    {
+      id: "kata-air-vent-nord",
+      name: "Style du Vent du Nord (North Wind Style)",
+      element: "Air",
+      mastery: 4,
+      cost: 4,
       schools: "Toute école de Bushi",
-      desc: "En Posture de Défense ou Défense Totale, vous ajoutez votre valeur d'Anneau d'Air en bonus numérique direct à votre ND d'Armure."
+      source: "The Book of Air (p. 175)",
+      desc: "Vous pouvez ajouter votre Anneau d'Air au total de tout jet d'attaque effectué tout en tentant la manœuvre Dégâts Accrus (Increased Damage)."
+    },
+    {
+      id: "kata-air-vent-sud",
+      name: "Style du Vent du Sud (South Wind Style)",
+      element: "Air",
+      mastery: 4,
+      cost: 4,
+      schools: "Toute école de Bushi",
+      source: "The Book of Air (p. 175)",
+      desc: "Vous pouvez ajouter votre Anneau d'Air au total de tout jet d'attaque effectué tout en tentant les manœuvres Coup Précis (Called Shot) ou Renversement (Knockdown)."
     },
     {
       id: "kata-air-force-grue",
@@ -212,93 +259,33 @@
       element: "Air",
       mastery: 3,
       cost: 3,
-      schools: "Bushi du Clan de la Grue (Kakita, Daidoji)",
-      desc: "Lorsque vous maniez un katana ou une lame d'Iaijutsu, vous gagnez +2 permanent à votre Initiative et +2 à votre ND d'Armure contre toutes les attaques de mêlée."
+      schools: "Tout Bushi du Clan de la Grue",
+      source: "The Great Clans",
+      desc: "Lorsque vous combattez à l'épée ou à la lance, vous ajoutez un montant égal à (votre Rang d'Honneur − 3, minimum 1) à votre ND d'Armure."
     },
     {
-      id: "kata-air-force-scorpion",
-      name: "La Force du Scorpion (Strength of the Scorpion)",
+      id: "kata-air-force-mante",
+      name: "La Force de la Mante (Strength of the Mantis)",
       element: "Air",
       mastery: 3,
       cost: 3,
-      schools: "Bushi du Clan du Scorpion (Bayushi)",
-      desc: "Lorsque vous déclarez la manœuvre Feinte en combat d'escarmouche, vous bénéficiez d'une Augmentation Gratuite."
+      schools: "Tout Bushi du Clan de la Mante",
+      source: "The Great Clans",
+      desc: "La pénalité aux jets d'attaque à distance tirés contre des adversaires actuellement engagés à portée de mêlée est réduite de 3."
     },
     {
-      id: "kata-air-oeil-tempete",
-      name: "Dans l'Œil de la Tempête (Eye of the Storm)",
-      element: "Air",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi & Archers",
-      desc: "Vos attaques à distance ou de mêlée réduisent de 5 points les bonus conférés au ND d'Armure de la cible par les couverts ou la Posture de Défense."
-    },
-    {
-      id: "kata-air-danse-feuille",
-      name: "La Danse de la Feuille (Dance of the Leaf)",
+      id: "kata-air-danse-vents",
+      name: "La Danse des Vents (Dance of the Winds)",
       element: "Air",
       mastery: 3,
       cost: 3,
-      schools: "Kakita Bushi & Daidoji",
-      desc: "Chaque fois qu'une attaque ennemie rate votre ND d'Armure de 5 points ou plus, vous pouvez effectuer un pas de 1,5 mètre dans la direction de votre choix."
-    },
-    {
-      id: "kata-air-lame-murmurante",
-      name: "La Lame Murmurante (Whispering Blade)",
-      element: "Air",
-      mastery: 4,
-      cost: 4,
-      schools: "Kakita Bushi",
-      desc: "Lors d'un duel d'Iaijutsu, vous pouvez déclarer 1 Augmentation pour augmenter votre score d'Initiative lors du premier round d'escarmouche suivant le duel de +5."
-    },
-    {
-      id: "kata-air-menace-voilee",
-      name: "Menace Voilée (Veiled Menace)",
-      element: "Air",
-      mastery: 3,
-      cost: 3,
-      schools: "Bayushi Bushi",
-      desc: "Tant que vous êtes en posture d'Attaque, vous pouvez feindre une posture de Défense Totale pour tromper les spectateurs et désorienter l'adversaire."
-    },
-    {
-      id: "kata-air-dard-guepe",
-      name: "Style du Dard de Guêpe (Stinging Wasp Style)",
-      element: "Air",
-      mastery: 4,
-      cost: 4,
-      schools: "Bayushi Bushi & Daidoji",
-      desc: "Vos attaques avec des armes de poing ou des dagues (tanto, aiguchi, jitte) bénéficient d'une Augmentation Gratuite pour la manœuvre Attaque Suppléante."
-    },
-    {
-      id: "kata-air-vent-qui-disparait",
-      name: "Le Vent qui Disparaît (Disappearing Wind)",
-      element: "Air",
-      mastery: 3,
-      cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Vos jets de Discrétion (Stealth) bénéficient d'un bonus égal à votre Anneau d'Air × 2."
-    },
-    {
-      id: "kata-air-tourbillon-acier",
-      name: "Tourbillon d'Acier (Whirling Steel)",
-      element: "Air",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Lorsque vous affrontez trois adversaires ou plus simultanément au corps-à-corps, votre ND d'Armure augmente de +5."
-    },
-    {
-      id: "kata-air-regard-faucon",
-      name: "Le Regard du Faucon (The Falcon's Gaze)",
-      element: "Air",
-      mastery: 3,
-      cost: 3,
-      schools: "Archers Tsuruchi & Spécialistes du Kyujutsu",
-      desc: "La portée efficace maximale de vos tirs d'arc augmente de 50 % et vous ignorez le malus de vent violent modéré."
+      schools: "Bushi Daidoji, Bushi Shiba",
+      source: "The Great Clans",
+      desc: "Lorsque vous maniez une arme d'hast ou une lance, votre Score d'Initiative est augmenté de +3."
     },
 
     // =========================================================================
-    // --- KATAS DE FEU (FIRE) ---
+    // --- KATAS DE FEU (FIRE : 4 Livre de Base + 2 Great Clans + 4 Mixtes Air/Feu Book of Fire) ---
     // =========================================================================
     {
       id: "kata-feu-frapper-feu",
@@ -306,17 +293,39 @@
       element: "Feu",
       mastery: 3,
       cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Lorsque vous combattez en Posture d'Attaque Totale, vous ajoutez votre valeur d'Anneau de Feu en bonus numérique direct au total de tous vos jets de dégâts de mêlée."
+      schools: "Toutes (Any)",
+      source: "Livre de Base (p. 259)",
+      desc: "Lorsque vous êtes en Posture d'Attaque Totale (Full Attack Stance), vous pouvez ajouter votre Anneau de Feu au total d'un seul jet d'attaque effectué par round."
     },
     {
-      id: "kata-feu-force-lion",
-      name: "La Force du Lion (Strength of the Lion)",
+      id: "kata-feu-monde-disparait",
+      name: "Style du Monde qui Disparaît (Disappearing World Style)",
       element: "Feu",
-      mastery: 3,
-      cost: 3,
-      schools: "Bushi du Clan du Lion (Akodo, Matsu)",
-      desc: "Vous devenez totalement immunisé aux effets de Peur d'un Rang inférieur ou égal à votre Rang d'École. Lors d'une charge en Attaque Totale, vous gagnez +1g0 à votre jet d'attaque."
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Akodo, Bushi Kakita",
+      source: "Livre de Base (p. 259)",
+      desc: "Choisissez un adversaire. Une fois par tour contre cet adversaire, vous pouvez utiliser votre Trait Agilité à la place de votre Trait Force pour vos jets de dégâts."
+    },
+    {
+      id: "kata-feu-abandon-temeraire",
+      name: "Style de l'Abandon Téméraire (Reckless Abandon Style)",
+      element: "Feu",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Daigotsu, Berserker Matsu, Bushi Usagi",
+      source: "Livre de Base (p. 260)",
+      desc: "Vous pouvez ajouter votre Anneau de Feu à votre ND d'Armure tant que vous êtes en Posture d'Attaque Totale (Full Attack Stance)."
+    },
+    {
+      id: "kata-feu-lames-tournoyantes",
+      name: "Style des Lames Tournoyantes (Spinning Blades Style)",
+      element: "Feu",
+      mastery: 5,
+      cost: 5,
+      schools: "Bushi Mirumoto, Bushi Yoritomo",
+      source: "Livre de Base (p. 260)",
+      desc: "Une fois par tour tant que vous maniez une arme dans chaque main, vous pouvez utiliser la manœuvre Attaque Supplémentaire (Extra Attack) pour 3 Augmentations au lieu de 5. La seconde attaque provient de votre arme en main non directrice et inflige ses dégâts normaux. Vous ne pouvez augmenter vos dégâts sur aucune des deux attaques via des Augmentations."
     },
     {
       id: "kata-feu-force-dragon",
@@ -324,84 +333,63 @@
       element: "Feu",
       mastery: 3,
       cost: 3,
-      schools: "Bushi du Clan du Dragon (Mirumoto)",
-      desc: "En combattant dans le style Niten (deux sabres), le bonus accordé à votre ND d'Armure augmente de +2 et vous ignorez le malus de main non directrice."
+      schools: "Tout Bushi du Clan du Dragon",
+      source: "The Great Clans",
+      desc: "Lorsque vous maniez un katana dans votre main directrice et un wakizashi dans votre main non directrice, vous gagnez un bonus de +3 à votre ND d'Armure."
     },
     {
-      id: "kata-feu-danse-lames",
-      name: "La Danse des Lames Ardentes (Blazing Blade Dance)",
-      element: "Feu",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Une fois par escarmouche, vous pouvez déclarer une Augmentation Gratuite pour la manœuvre Dégâts Accrus (+1g0)."
-    },
-    {
-      id: "kata-feu-lames-tournoyantes",
-      name: "Lames Tournoyantes (Spinning Blades)",
+      id: "kata-feu-force-scorpion",
+      name: "La Force du Scorpion (Strength of the Scorpion)",
       element: "Feu",
       mastery: 3,
       cost: 3,
-      schools: "Mirumoto Bushi",
-      desc: "Chaque fois que vous touchez un adversaire avec votre arme principale, votre attaque secondaire portée dans le même round gagne +1g1 aux dégâts."
+      schools: "Tout Bushi du Clan du Scorpion",
+      source: "The Great Clans",
+      desc: "Une fois par Tour après avoir réussi la manœuvre Feinte (Feint), le total de vos dégâts est augmenté de +3 Blessures."
     },
     {
-      id: "kata-feu-deux-ciels",
-      name: "Deux Ciels ne Font Qu'Un (Two Heavens as One)",
-      element: "Feu",
-      mastery: 4,
-      cost: 4,
-      schools: "Mirumoto Bushi",
-      desc: "Tant que vous tenez votre Daishō dégainé, votre ND d'Armure augmente d'un montant égal à votre score d'Agilité."
-    },
-    {
-      id: "kata-feu-rugissement-lion",
-      name: "Rugissement du Lion (Roar of the Lion)",
-      element: "Feu",
+      id: "kata-acier-empire-sur-fil",
+      name: "L'Empire Repose sur son Fil (The Empire Rests on Its Edge)",
+      element: "Air / Feu",
       mastery: 3,
       cost: 3,
-      schools: "Lion Bushi",
-      desc: "Votre premier jet d'attaque lors d'une escarmouche provoque un test de Peur (Rang 2) chez l'adversaire ciblé."
+      schools: "Toutes — Bushi Mirumoto & Kakita réduisent l'Anneau requis de 1 (Air 2 ou Feu 2) — Katana ou Daishō uniquement",
+      source: "The Book of Fire (p. 179 — 1 000 Ans d'Acier)",
+      desc: "À l'apprentissage de ce Kata, choisissez une Compétence Noble (High Skill) non martiale (augmenter son Rang coûte désormais +2 XP à chaque rang). Lorsque ce Kata est actif, vous ajoutez votre Rang dans cette Compétence Noble au total de vos jets de Kenjutsu ou d'Iaijutsu."
     },
     {
-      id: "kata-feu-victoire-avant-flechir",
-      name: "Victoire Avant de Fléchir (Victory Before Turning)",
-      element: "Feu",
+      id: "kata-acier-monde-est-vide",
+      name: "Le Monde est Vide (The World is Empty)",
+      element: "Air / Feu",
       mastery: 4,
       cost: 4,
-      schools: "Matsu Berserker & Akodo Bushi",
-      desc: "Chaque fois que vous perdez un Rang de Blessure, vous gagnez un bonus cumulatif de +1g0 à votre prochain jet d'attaque."
+      schools: "Toutes — Bushi Mirumoto & Kakita réduisent l'Anneau requis de 1 (Air 3 ou Feu 3) — Katana ou Daishō uniquement",
+      source: "The Book of Fire (p. 180 — 1 000 Ans d'Acier)",
+      desc: "À l'activation, vous gagnez un bonus de +Xg0 à vos jets d'attaque en Kenjutsu ou Iaijutsu (où X est votre nombre actuel de points de Vide) pendant X Rounds (jusqu'à l'Étape des Réactions du dernier Round). Lorsque le Kata prend fin, vous perdez 1 point de Vide."
     },
     {
-      id: "kata-feu-acier-eclair",
-      name: "L'Acier Éclair (Flashing Steel)",
-      element: "Feu",
-      mastery: 3,
-      cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Si vous agissez avant votre adversaire dans l'ordre d'Initiative, votre jet d'attaque contre lui gagne +1g0."
+      id: "kata-acier-victoire-riviere",
+      name: "La Victoire du Fleuve (Victory of the River)",
+      element: "Air / Feu",
+      mastery: 5,
+      cost: 5,
+      schools: "Toutes — Bushi Mirumoto & Kakita réduisent l'Anneau requis de 1 (Air 4 ou Feu 4) — Katana ou Daishō uniquement",
+      source: "The Book of Fire (p. 180 — 1 000 Ans d'Acier)",
+      desc: "Lorsque vous touchez un adversaire tant que ce Kata est actif, son ND d'Armure diminue de 10 contre vos attaques suivantes pendant 3 Rounds, mais votre propre ND d'Armure diminue également de 10 tant que ce bénéfice est actif (un seul adversaire affecté à la fois, non cumulatif ; les coups suivants réinitialisent la durée de 3 Rounds)."
     },
     {
-      id: "kata-feu-tonnerre-roulant",
-      name: "Tonnerre Roulant (Rolling Thunder)",
-      element: "Feu",
-      mastery: 4,
-      cost: 4,
-      schools: "Spécialistes des Armes Lourdes & Tetsubō",
-      desc: "Lorsque votre attaque avec une arme lourde touche avec 2 Augmentations ou plus, la cible doit réussir un jet de Terre (ND 20) ou être Assommée (Stunned) pour 1 round."
-    },
-    {
-      id: "kata-feu-commandement-general",
-      name: "Commandement du Général (General's Command)",
-      element: "Feu",
-      mastery: 4,
-      cost: 4,
-      schools: "Commandants & Officiers militaires",
-      desc: "Tous vos alliés à portée de voix bénéficient d'un bonus de +2 à leur score d'Initiative au début de chaque round."
+      id: "kata-acier-debout-sur-cieux",
+      name: "Debout sur les Cieux (Standing on the Heavens)",
+      element: "Air / Feu",
+      mastery: 6,
+      cost: 6,
+      schools: "Toutes — Bushi Mirumoto & Kakita réduisent l'Anneau requis de 1 (Air 5 ou Feu 5) — Katana ou Daishō uniquement",
+      source: "The Book of Fire (p. 180 — 1 000 Ans d'Acier)",
+      desc: "Une fois par Round, lorsque vous êtes touché par un jet d'attaque réussi au combat, vous pouvez dépenser 1 point de Vide en Action Gratuite pour forcer votre adversaire à relancer immédiatement son jet d'attaque."
     },
 
     // =========================================================================
-    // --- KATAS DU VIDE (VOID) ---
+    // --- KATAS DU VIDE (VOID : 3 Livre de Base + 1 Great Clans) ---
     // =========================================================================
     {
       id: "kata-vide-frapper-vide",
@@ -409,8 +397,29 @@
       element: "Vide",
       mastery: 3,
       cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Lorsque vous adoptez la Posture du Centre, le bonus accordé à votre prochain jet passe de +1g1 à +2g1 (et votre bonus d'Initiative en sortant du Centre augmente de +3)."
+      schools: "Toutes (Any)",
+      source: "Livre de Base (p. 259)",
+      desc: "Lorsque vous êtes en Posture du Centre (Center Stance), votre ND d'Armure est augmenté de votre Anneau de Vide."
+    },
+    {
+      id: "kata-vide-equilibrer-elements",
+      name: "Style de l'Équilibre des Éléments (Balance the Elements Style)",
+      element: "Vide",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Mirumoto, Bushi Shiba",
+      source: "Livre de Base (p. 259)",
+      desc: "Vous pouvez utiliser votre Anneau de Vide à la place de vos Réflexes pour votre Jet d'Initiative."
+    },
+    {
+      id: "kata-vide-force-purete",
+      name: "Style de la Force de la Pureté (Strength of Purity Style)",
+      element: "Vide",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Akodo, Bushi Kakita, Berserker Matsu, Vierge de Bataille Utaku",
+      source: "Livre de Base (p. 260)",
+      desc: "Une fois par tour lors d'un jet de dégâts, vous pouvez lancer votre Rang d'Honneur à la place de votre Force normale + VD de l'arme (vous gardez normalement un nombre de dés égal à la VD de l'arme)."
     },
     {
       id: "kata-vide-force-phenix",
@@ -418,71 +427,9 @@
       element: "Vide",
       mastery: 3,
       cost: 3,
-      schools: "Bushi du Clan du Phénix (Shiba)",
-      desc: "Lorsque vous utilisez la manœuvre Garde (Guard) pour protéger un allié, le bonus conféré au ND d'Armure de votre protégé augmente de +3 supplémentaires."
-    },
-    {
-      id: "kata-vide-harmonie-cinq-anneaux",
-      name: "Harmonie des Cinq Anneaux (Harmony of the Five Rings)",
-      element: "Vide",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi",
-      desc: "Chaque fois que vous dépensez 1 point de Vide pour augmenter un jet d'attaque ou de défense, vous ajoutez également votre valeur d'Anneau du Vide au résultat numérique final du jet."
-    },
-    {
-      id: "kata-vide-bouclier-phenix",
-      name: "Le Bouclier du Phénix (Shield of the Phoenix)",
-      element: "Vide",
-      mastery: 3,
-      cost: 3,
-      schools: "Shiba Bushi",
-      desc: "Vous pouvez dépenser 1 point de Vide pour encaisser une attaque magique ciblée dirigée contre un allié adjacent."
-    },
-    {
-      id: "kata-vide-ame-katana",
-      name: "L'Âme du Katana (Soul of the Katana)",
-      element: "Vide",
-      mastery: 4,
-      cost: 4,
-      schools: "Toute école de Bushi maniant un Katana",
-      desc: "Votre sabre résonne avec votre chi intérieur : les dégâts de votre katana explosent sur les résultats de 9 et 10 quel que soit votre rang de compétence."
-    },
-    {
-      id: "kata-vide-voie-paix",
-      name: "La Voie de la Paix (Path of Peace)",
-      element: "Vide",
-      mastery: 3,
-      cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Tant que vous n'infligez aucun dégât létal et cherchez à désarmer ou maîtriser pacifiquement l'adversaire, vous gagnez +5 à votre ND d'Armure."
-    },
-    {
-      id: "kata-vide-recentrer-esprit",
-      name: "Recentrer l'Esprit (Center the Mind)",
-      element: "Vide",
-      mastery: 3,
-      cost: 3,
-      schools: "Toute école de Bushi",
-      desc: "Adopter la Posture du Centre vous permet de regagner immédiatement 1 point de Vide si votre réserve est vide (limité à une fois par jour)."
-    },
-    {
-      id: "kata-vide-bouclier-honneur",
-      name: "Le Bouclier de l'Honneur (The Shield of Honor)",
-      element: "Vide",
-      mastery: 4,
-      cost: 4,
-      schools: "Samouraïs d'Honneur 4.0 ou supérieur",
-      desc: "Vous ajoutez votre Rang d'Honneur (arrondi à l'entier inférieur) à votre ND d'Armure contre toutes les attaques provenant d'ennemis de déshonneur ou de l'Outremonde."
-    },
-    {
-      id: "kata-vide-voie-vague",
-      name: "La Voie de la Vague (Way of the Wave)",
-      element: "Vide",
-      mastery: 3,
-      cost: 3,
-      schools: "Rōnin & Samouraïs sans maître",
-      desc: "Une fois par combat, lorsque vous êtes confronté à un samouraï d'école de clan prestigieuse, vous gagnez +1g1 à votre premier jet d'attaque pour compenser le désavantage d'école."
+      schools: "Tout Bushi du Clan du Phénix",
+      source: "The Great Clans",
+      desc: "Une fois par Tour, lorsque vous déclarez une Action Garde (Guard), vous pouvez augmenter le ND d'Armure de la personne que vous protégez d'un bonus supplémentaire de +3."
     }
   ];
 

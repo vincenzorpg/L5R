@@ -253,13 +253,13 @@
               <input id="duel-a-name" type="text" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200" placeholder="Nom du PJ" />
               <div class="grid grid-cols-5 gap-2 text-center text-[10px]">
                 <label class="block"><span class="text-stone-400">Iaijutsu</span><input id="duel-a-iai" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-200" /></label>
-                <label class="block"><span class="text-stone-400">Intuition/Per</span><input id="duel-a-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+                <label class="block"><span class="text-stone-400">Intuition</span><input id="duel-a-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
                 <label class="block"><span class="text-stone-400">Vide</span><input id="duel-a-void" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-purple-300" /></label>
-                <label class="block"><span class="text-stone-400">Réf/Agi</span><input id="duel-a-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+                <label class="block"><span class="text-stone-400">Réflexes</span><input id="duel-a-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
                 <label class="block"><span class="text-stone-400">ND Armure</span><input id="duel-a-tn" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-300" /></label>
               </div>
               <div class="flex items-center justify-between bg-black/40 p-2.5 rounded border border-stone-800">
-                <span>Focus : <b id="duel-a-focus" class="text-amber-300">0</b> • ND Frappe : <b id="duel-a-tn-eff" class="text-sky-300">20</b></span>
+                <span>Aug. Frappe : <b id="duel-a-focus" class="text-amber-300">0</b> • ND Frappe (Armure +5×Aug.) : <b id="duel-a-tn-eff" class="text-sky-300">20</b></span>
                 <div class="flex gap-1">
                   <button type="button" data-action="duel-focus" data-side="a" data-delta="-1" class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 cursor-pointer">-1</button>
                   <button type="button" data-action="duel-focus" data-side="a" data-delta="1" class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-600/50 text-amber-200 cursor-pointer">+1</button>
@@ -281,13 +281,13 @@
               <input id="duel-b-name" type="text" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-stone-200" placeholder="Nom de l'adversaire" />
               <div class="grid grid-cols-5 gap-2 text-center text-[10px]">
                 <label class="block"><span class="text-stone-400">Iaijutsu</span><input id="duel-b-iai" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-200" /></label>
-                <label class="block"><span class="text-stone-400">Intuition/Per</span><input id="duel-b-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+                <label class="block"><span class="text-stone-400">Intuition</span><input id="duel-b-per" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
                 <label class="block"><span class="text-stone-400">Vide</span><input id="duel-b-void" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-purple-300" /></label>
-                <label class="block"><span class="text-stone-400">Réf/Agi</span><input id="duel-b-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
+                <label class="block"><span class="text-stone-400">Réflexes</span><input id="duel-b-agi" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-stone-200" /></label>
                 <label class="block"><span class="text-stone-400">ND Armure</span><input id="duel-b-tn" type="number" class="w-full mt-0.5 text-center rounded bg-[#0d0b0b] border border-stone-700 py-1 text-amber-300" /></label>
               </div>
               <div class="flex items-center justify-between bg-black/40 p-2.5 rounded border border-stone-800">
-                <span>Focus : <b id="duel-b-focus" class="text-amber-300">0</b> • ND Frappe : <b id="duel-b-tn-eff" class="text-red-300">18</b></span>
+                <span>Aug. Frappe : <b id="duel-b-focus" class="text-amber-300">0</b> • ND Frappe (Armure +5×Aug.) : <b id="duel-b-tn-eff" class="text-red-300">18</b></span>
                 <div class="flex gap-1">
                   <button type="button" data-action="duel-focus" data-side="b" data-delta="-1" class="px-2 py-0.5 rounded bg-stone-900 border border-stone-700 cursor-pointer">-1</button>
                   <button type="button" data-action="duel-focus" data-side="b" data-delta="1" class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-600/50 text-amber-200 cursor-pointer">+1</button>
@@ -323,9 +323,9 @@
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] text-stone-300">
-              <div class="p-2 rounded bg-black/35 border border-stone-800"><b class="text-amber-300">1. Évaluation :</b> Iaijutsu/Intuition vs ND 10 + 5×Rép. adverse (écart 10+ = +1g1 au Focus).</div>
-              <div class="p-2 rounded bg-black/35 border border-stone-800"><b class="text-purple-300">2. Concentration :</b> Iaijutsu/Vide opposé. Écart ≥ 5 = frappe en premier (+1 Aug. gratuite / 5 pts au-delà).</div>
-              <div class="p-2 rounded bg-black/35 border border-stone-800"><b class="text-red-300">3. Frappe :</b> Iaijutsu/Réflexes vs ND Armure + (5×Focus). Écart &lt; 5 = Frappe Karmique simultanée !</div>
+              <div class="p-2 rounded bg-black/35 border border-stone-800"><b class="text-amber-300">1. Évaluation :</b> Iaijutsu (Évaluation) / Intuition vs ND 10 + 5×Rang Rép. adverse (1 info + 1/Aug. ; écart ≥ 10 = +1g1 au Focus).</div>
+              <div class="p-2 rounded bg-black/35 border border-stone-800"><b class="text-purple-300">2. Concentration :</b> Iaijutsu (Concentration) / Vide opposé (les deux en Posture Centre). Écart ≥ 5 = 1<sup>re</sup> frappe (+1 Aug. gratuite / 5 pts au-delà).</div>
+              <div class="p-2 rounded bg-black/35 border border-stone-800"><b class="text-red-300">3. Frappe :</b> Iaijutsu / Réflexes vs ND Armure normal adverse (pas de +5×Focus en 4e ; Augmentations de Focus applicables). Écart &lt; 5 = Frappe Karmique simultanée (cause abandonnée).</div>
             </div>
           </div>
         </div>
@@ -423,8 +423,8 @@
               <div class="flex flex-wrap items-center justify-between gap-2 text-[11px]">
                 <select id="magic-calc-affinity" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200">
                   <option value="normal">Élément normal</option>
-                  <option value="affinity">Affinité (+1 Rang)</option>
-                  <option value="deficiency">Déficience (-1 Rang, +5 ND)</option>
+                  <option value="affinity">Affinité (+1 Rang d'École effectif)</option>
+                  <option value="deficiency">Déficience (-1 Rang d'École ; Rang 0 = impossible)</option>
                 </select>
                 <span id="magic-calc-result" class="font-mono text-sky-200 font-bold">Jet 5g3 • ND 15</span>
               </div>
@@ -449,16 +449,16 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-stone-300">
             <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
               <b class="text-sky-300 font-imperial block">Lancement &amp; Emplacements</b>
-              <p><b>Emplacements / jour :</b> égaux à chaque Anneau (Universels utilisables sur n'importe quel Anneau).</p>
-              <p><b>Contre-sort :</b> Art de la Magie + Anneau vs jet du lanceur (coûte 1 emplacement).</p>
+              <p><b>Emplacements / jour :</b> égaux à chaque Anneau élémentaire + emplacements bonus égaux au <b>Vide</b> (tout élément). Échec = emplacement consommé ; interruption (Volonté ND 10 ou 5 + dégâts) = sort annulé, emplacement préservé.</p>
+              <p><b>Contre-sort (option, <i>Book of Fire</i> p.182) :</b> Art de la Magie ≥ 5 ; Action Complexe + 1 emplacement de l'élément opposé ; Jet d'Incantation opposé &gt; jet du lanceur (portée 15 m × Rang ; jamais contre Maho/Meishodo/sceaux).</p>
             </div>
             <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
-              <b class="text-amber-300 font-imperial block">Doigts de Jade</b>
-              <p><b>Durée :</b> 1 doigt = 7 jours, 2 = 13 jours, 3 = 16 jours (+10 aux jets de Terre) avant de fondre en boue noire.</p>
+              <b class="text-amber-300 font-imperial block">Doigts de Jade (Table 4.3)</b>
+              <p><b>Durée :</b> 1 = 7 j • 2 = 13 j • 3 = 16 j • 4 = 19 j • 5 = 21 j • 6+ = 22 j (+10 aux jets de Terre) avant de fondre en boue noire.</p>
             </div>
             <div class="p-3 rounded-xl bg-black/35 border border-stone-800 space-y-1">
               <b class="text-rose-400 font-imperial block">Souillure de l'Outremonde</b>
-              <p><b>Résister :</b> Terre g Terre vs ND 10–25. <b>0.1–1.9 :</b> taches/cauchemars • <b>2.0–4.9 :</b> peau grise • <b>5.0+ ou ≥ Terre :</b> perte de contrôle / PNJ.</p>
+              <p><b>Résister :</b> Terre g Terre vs ND 10–25 (sauf Vide). <b>Niveaux 0–5 :</b> 0 (&lt;1 : indétectable) • 1 (brûlé par jade) • 2 (+1 Pouvoir) • 3 (-1g0 Social, +Mutation/Pouvoir) • 4 (-2g0 Social, -1 Vide max, Volonté 15 ou violence) • <b>5+ (7+ si Anneau ≥ 6) :</b> Perdu (PNJ).</p>
             </div>
           </div>
         </div>
@@ -516,13 +516,15 @@
             <label class="block">
               <span class="text-stone-400">ND de base</span>
               <select id="gm-tn-base" class="w-full mt-0.5 rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono">
-                <option value="5">5 — Trivial</option>
+                <option value="0">0 — Anodin (Aucun jet)</option>
+                <option value="5">5 — Très facile</option>
                 <option value="10">10 — Facile</option>
                 <option value="15" selected>15 — Moyen</option>
-                <option value="20">20 — Difficile</option>
-                <option value="25">25 — Très difficile</option>
-                <option value="30">30 — Héroïque</option>
-                <option value="35">35 — Légendaire</option>
+                <option value="20">20 — Modéré</option>
+                <option value="25">25 — Difficile</option>
+                <option value="30">30 — Très difficile</option>
+                <option value="40">40 — Héroïque</option>
+                <option value="60">60 — Impossible</option>
               </select>
             </label>
             <label class="block">
@@ -570,7 +572,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.13.0</span>
+      <span id="site-version-label">v1.14.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

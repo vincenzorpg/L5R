@@ -6,6 +6,26 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.14.0] — 2026-11-17
+
+### ✨ Ajouté, Complété & Corrigé (Audit Intégral L5R 4ᵉ Édition)
+- **Révision littérale de l'ensemble des règles et catalogues contre les livres officiels L5R 4e Édition (*Core Rulebook*, *Enemies of the Empire*, *Emerald Empire*, *The Great Clans*, *Book of Air/Earth/Fire*, *Imperial Histories 1 & 2*, *Secrets of the Empire*)** — suppression des entrées inventées ou issues de la 3ᵉ édition et alignement mot pour mot des valeurs, prérequis, coûts, durées, portées, zones et Augmentations :
+- **Grimoire, Sorts, Kihos & Mahō (`grimoire.html`, `js/grimoire.js`, `data/sorts/*.js`)** :
+  - Mise à jour complète de la base modulaire (372 entrées au total, sans doublon) : 5 Sorts Universels (`sorts-universels.js` dont *Commandement* et *Transmutation*), 68 Sorts d'Air (`sorts-air.js`), 58 Sorts de Terre (`sorts-terre.js` avec ajout de *Âme de Pierre*, *Purifier la Souillure*, *Lien Majeur* et *Vague de Terre*), 59 Sorts de Feu (`sorts-feu.js` avec *Protection du Tonnerre*), 41 Sorts d'Eau (`sorts-eau.js`), 31 Sorts du Vide (`sorts-vide.js` avec texte exact de *Faux Murmures* sans augmentations), 64 Kihos (`sorts-kiho.js` de Maîtrise 1 à 8 dont *Marque sur l'Âme*, *Brise-Os*, *Toucher de la Mort*, *Bannir Toutes les Ombres*) et 46 sortilèges de Mahō (`sorts-maho.js` avec coût de sang `2 × Maîtrise`, Souillure exacte et badge `MAHŌ (ÉLÉMENT)` dans `js/grimoire.js`).
+  - Ajout des options `Rang 7` et `Rang 8` dans `#rank-select` et mise à jour des règles officielles d'incantation, Kihos et Mahō dans `grimoire.html`.
+- **Katas Martiaux & Tatouages Togashi (`data/katas-data.js`, `data/tatouages-data.js`, `tatouages.html`, `js/forge-ui.js`)** :
+  - Réécriture de `KATAS_DATA` avec les 40 Katas officiels 4e édition (dont le kata bi-élémentaire `"Air / Feu"` et gestion `Math.max` des anneaux multiples dans `getRingValueForElement`), et purge des entrées apocryphes.
+  - Réécriture de `TATOUAGES_DATA` avec les 24 Tatouages officiels (*Livre de Base* dont *Araignée*, *Dragon* avec cône de feu, et suppléments *Nuage*, *Murmure*, *Ours*, *Volcan*), intégration de la règle officielle *Tatouages Fusionnés* (`tatouages.html`) et correction du quota dans `getTattooAllowedQuota` (`2` aux Rangs 1–2, `4` aux Rangs 3–4, `6` au Rang 5).
+- **Forge de Personnage, Clans, Compétences, Équipement, Avantages & Export (`createcharacter.html`, `js/character-generator.js`, `js/forge-ui.js`, `js/export-carnet.js`, `data/{clans,competences,equipement,avantages-desavantages}-data.js`, `clans/*.html`, `index.html`)** :
+  - Audit complet des 8 pages de Grands Clans (`clans/*.html`), des familles, écoles, techniques Rangs 1–5 (`clans-data.js`), des compétences et paliers Rangs 3/5/7 (`competences-data.js`), de l'équipement (`equipement-data.js`) et des avantages/désavantages (`avantages-desavantages-data.js`, ex. *Nom Gaijin*, *Téméraire*).
+  - Correction des mémentos officiels dans `createcharacter.html` (Exécution de Kata en *Action Simple* / abandon en *Action Gratuite*, quota exact des Tatouages 2/2/4/4/6, règles d'Affinité/Déficience sur le *Rang d'École effectif*, règles Kihos Confrérie/hors-Confrérie/Shugenja) et ciblage exact des 3 Universels de départ (`univ-sense`, `univ-commune`, `univ-summon`) dans `addUniversalSpells`.
+- **Écran du MJ & Aides de Jeu (`ecran-mj.html`, `js/gm-screen.js`, `data/gm-rules-data.js`, `aides/*.html`)** :
+  - Alignement complet des fiches du Paravent, postures, duels Iaijutsu, Table 2.3 d'Honneur, Doigts de Jade, Ordre Céleste et protocoles d'étiquette.
+- **Tests Unitaires & Cohérence (`tests/unit-tests.js`, `tests/unit-tests.html`, `README.md`, `sw.js`)** :
+  - Ajout de la Suite 6 vérifiant les effectifs exacts et l'absence de doublons de tous les catalogues (`SORTS_DATA`, `KATAS_DATA`, `TATOUAGES_DATA`, `L5R_DATA`), correction de la documentation dans `README.md` (plafond de 10 XP de Désavantages, quota des Tatouages) et mise à jour du Service Worker (`v1.14.0`).
+
+---
+
 ## [1.13.0] — 2026-11-17
 
 ### ✨ Ajouté & Complété

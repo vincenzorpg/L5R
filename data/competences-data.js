@@ -1,390 +1,466 @@
 /**
- * COMPETENCES_DATA — Catalogue officiel complet L5R 4e Édition (Livre de Base p. 133-145)
- * Compétences Nobles (High), Guerrières (Bugei), Marchandes (Merchant) et Dégradantes (Low)
+ * Base de données complète des Compétences L5R 4e Édition — Les Chroniques de Rokugan
+ * Exactement conforme au Livre de Base (pp. 133–145) et compléments officiels (Book of Air, Imperial Histories 1).
+ * Note : Toutes les Compétences confèrent au Rang 10 une Augmentation Gratuite sur tous leurs jets (LdB p. 133).
  */
+
 const COMPETENCES_DATA = [
-
-  // =========================================================================
-  // 1. COMPÉTENCES NOBLES (HIGH SKILLS) — EXCLUSIVES À LA CASTE SAMOURAÏ
-  // =========================================================================
-  { 
-    id: "art-de-la-scene", 
-    name: "Art de la Scène (Perform)", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "Musique (Biwa, Flûte, Shamisen, Tambour), Chant, Danse, Conteur (Storytelling), Marionnettes." 
+  // ==========================================
+  // COMPÉTENCES NOBLES (HIGH SKILLS — pp. 135–139)
+  // ==========================================
+  {
+    name: "Artisanat (Artisan)",
+    trait: "Intuition",
+    type: "Noble",
+    emphases: "Variable selon la sous-compétence (Bonsaï, Jardinage, Ikebana, Origami, Peinture, Poésie, Sculpture, Tatouage, Constructions de papier [Book of Air], Cerfs-volants décoratifs [Book of Air]...)",
+    desc: "Macro-compétence regroupant les beaux-arts et disciplines nobles de Rokugan. Chaque spécialité est une compétence distincte.",
+    masteries: "Aucune (R10 : 1 Augmentation Gratuite sur tous les jets)."
   },
-  { 
-    id: "art-dramatique", 
-    name: "Comédie (Art Dramatique / Acting)", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "Interprétation théâtrale (Kabuki, Noh) et maintien des faux-semblants nobles." 
+  {
+    name: "Calligraphie (Calligraphy)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Chiffre (Cipher), Haut Rokugani (High Rokugani)",
+    desc: "Considérée comme Compétence d'Artisanat pour les effets visant l'Artisanat. Permet de tracer et déchiffrer des codes secrets (Chiffre) et d'utiliser la langue classique de la Cour Impériale (Haut Rokugani).",
+    masteries: "R5 : +10 pour percer un code ou un chiffre. (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "artisanat", 
-    name: "Artisanat (Artisan)", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "Beaux-arts nobles : Peinture, Poésie, Bonsaï, Ikebana, Origami, Sculpture, Tatouage." 
+  {
+    name: "Cérémonie du Thé (Tea Ceremony)",
+    trait: "Vide",
+    type: "Noble",
+    emphases: "Aucune",
+    desc: "Dure 30 min dans un lieu calme (1 à 5 participants). Jet de Cérémonie du Thé / Vide (ND 15 + 5 par convive au-delà du 2e) : en cas de succès, tous les participants regagnent 1 Point de Vide dépensé.",
+    masteries: "R5 : Tous les participants regagnent 2 Points de Vide au lieu d'1. (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "calligraphie", 
-    name: "Calligraphie", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Rédaction soignée des rouleaux de sorts, décrets officiels et chiffrement des messages (Ciphers)." 
+  {
+    name: "Comédie (Acting)",
+    trait: "Intuition",
+    type: "Noble",
+    emphases: "Clan, Genre, Profession",
+    desc: "Compétence Sociale (compte aussi comme Art de la Scène / Perform). Se déguiser en anonyme de même Clan/genre/rôle = ND 15 (+5 par trait différent : Clan, genre, profession ; +15 supplémentaires pour imiter une personne précise ; Augmentations possibles). Percer le déguisement : Enquête/Perception ND 15 (+5 par Aug. du comédien).",
+    masteries: "R3 : -5 au ND de déguisement • R5 : -10 (total) • R7 : -15 (total)."
   },
-  { 
-    id: "ceremonie-du-the", 
-    name: "Cérémonie du Thé (Cha-no-yu)", 
-    trait: "Vide", 
-    type: "Noble", 
-    desc: "Harmonie spirituelle, méditation partagée et récupération de points de Vide." 
+  {
+    name: "Connaissance (Lore)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Variable selon la sous-compétence (Anatomie*, Architecture, Bushido, Clan Majeur [au choix], Éléments, Culture Gaijin [au choix], Fantômes, Héraldique, Histoire, Maho*, Nature, Culture Non-humaine [au choix], Présages, Outremonde*, Shugenja, Royaumes Spirituels, Théologie, Pègre*, Guerre... — * = Dégradante)",
+    desc: "Macro-compétence regroupant l'érudition rokuganie (Héraldique pour reconnaître la Gloire, Bushido ND 30 pour discerner l'Honneur, Histoire, Théologie, etc.). Les sous-compétences marquées d'un astérisque (*) sont des Compétences Dégradantes.",
+    masteries: "Aucune (R10 : 1 Augmentation Gratuite sur tous les jets)."
   },
-  { 
-    id: "courtisan", 
-    name: "Courtisan", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "Manœuvres politiques, rhétorique de cour, manipulation, commérages et étiquette d'influence." 
+  {
+    name: "Connaissance : Art de la Guerre (Lore: War)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Stratégie, Tactique, Logistique",
+    desc: "Sous-compétence d'érudition : histoire militaire, grands généraux, traités stratégiques (ex. Voie de l'Épée) et manœuvres de campagne.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "divination", 
-    name: "Divination", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Lecture des présages célestes, astrologie et tirage des hexagrammes sacrés (Kawaru)." 
+  {
+    name: "Connaissance : Bushido (Lore: Bushido)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Code, Vertus",
+    desc: "Sous-compétence d'érudition : préceptes du Bushido et détection du Rang d'Honneur d'un individu via Connaissance : Bushido / Intuition (ND 30, LdB p. 92).",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "droit", 
-    name: "Droit (Législation Impériale)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Connaissance des décrets de l'Empereur, chartes des clans et jurisprudence des magistrats." 
+  {
+    name: "Connaissance : Esprits & Magie (Lore: Shugenja / Spirit Realms)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Kamis, Royaumes Spirituels, Traditions",
+    desc: "Sous-compétence d'érudition : connaissance des traditions shugenja, rituels, kami et Royaumes Spirituels (Ningen-do, Tengoku, Yomi, etc.).",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "enquete", 
-    name: "Enquête (Investigation)", 
-    trait: "Perception", 
-    type: "Noble", 
-    desc: "Observation des scènes de crime, recherche méthodique d'indices matériels et interrogatoires." 
+  {
+    name: "Connaissance : Héraldique (Lore: Heraldry)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Mon, Lignée",
+    desc: "Sous-compétence d'érudition : identification des familles, lignées et mon des Clans ; utilisée avec l'Intelligence (ND 50 − 5×Gloire) pour reconnaître un samouraï célèbre.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "etiquette", 
-    name: "Étiquette", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "Respect scrupuleux des préséances, protocole des saluts, conversation de salon et courtoisie." 
+  {
+    name: "Connaissance : Histoire (Lore: History)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Époques, Lignée Impériale",
+    desc: "Sous-compétence d'érudition : histoire officielle et secrète de l'Empire d'Émeraude, batailles passées et traités.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "histoire", 
-    name: "Connaissance : Histoire", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Annales impériales, généalogie des familles, guerres anciennes et exploits des ancêtres." 
+  {
+    name: "Connaissance : Théologie (Lore: Theology)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Fortunes, Tao de Shinsei",
+    desc: "Sous-compétence d'érudition : culte des Fortunes, des Sept Tonnerres, du Tao de Shinsei et des ordres monastiques.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "heraldique", 
-    name: "Connaissance : Héraldique (Heraldry)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Identification immédiate des bannières, mon de familles, rangs de Gloire et lignées de samouraïs." 
+  {
+    name: "Connaissance : Droit (Lore: Law)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Loi Impériale, Charte d'Émeraude",
+    desc: "Sous-compétence d'érudition (Law sous Lore en L5R 4e) : édits impériaux, droits et devoirs des Magistrats d'Émeraude ou de Clan.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "bushido", 
-    name: "Connaissance : Bushido", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Compréhension des 7 vertus cardinales, jurisprudence martiale et évaluation de l'Honneur." 
+  {
+    name: "Courtisan (Courtier)",
+    trait: "Intuition",
+    type: "Noble",
+    emphases: "Commérages (Gossip), Manipulation, Rhétorique",
+    desc: "Compétence Sociale (« attaque sociale ») : persuasion, joutes oratoires et rumeurs (Commérages : ND suggéré 10 + 5×Gloire cible − 5×votre Gloire ; Augmentations pour cacher la source).",
+    masteries: "R3 : +3 Points de Réputation • R5 : +1g0 aux jets Opposés de Courtisan • R7 : +7 Points de Réputation supplémentaires (+10 total)."
   },
-  { 
-    id: "guerre-theorie", 
-    name: "Connaissance : Art de la Guerre (War)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Théorie militaire, lecture des traités de stratégie (Commandement d'Akodo) et sièges." 
+  {
+    name: "Divination",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Astrologie, Kawaru",
+    desc: "1 tentative par jour (ND 15 de base, présages vagues). Relance immédiate possible le même jour en dépensant 1 Point de Vide (+10 au ND).",
+    masteries: "R5 : Une 2e tentative le même jour est possible sans dépenser de Point de Vide (+10 ND s'applique toujours)."
   },
-  { 
-    id: "theologie", 
-    name: "Connaissance : Théologie (Shintao & Fortunes)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Panthéon des Sept Grandes Fortunes, kamis ancestraux et enseignements du Petit Maître Shinsei." 
+  {
+    name: "Enquête (Investigation)",
+    trait: "Perception",
+    type: "Noble",
+    emphases: "Interrogatoire (Interrogation), Vigilance (Notice), Fouille (Search)",
+    desc: "Indices, détection d'embuscades (Vigilance), déceler un mensonge (Interrogatoire vs Sincérité) et fouille. Un jet raté peut être retenté après au moins 1 heure (+15 au ND).",
+    masteries: "R3 : 2e tentative de Fouille sans +15 ND • R5 : +5 au total des jets Opposés d'Enquête • R7 : 3e tentative de Fouille même après échec de la 2e."
   },
-  { 
-    id: "shugenja-lore", 
-    name: "Connaissance : Esprits & Magie (Shugenja)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Règles de communion avec les cinq éléments et reconnaissance des rites sacrés." 
+  {
+    name: "Étiquette (Etiquette)",
+    trait: "Intuition",
+    type: "Noble",
+    emphases: "Bureaucratie (Bureaucracy), Conversation, Politesse (Courtesy)",
+    desc: "Compétence Sociale (« défense sociale ») : protocole, navigation administrative (Bureaucratie), sujets acceptables (Conversation ND 15+) et résistance à l'Intimidation, Tentation ou Courtisan (Politesse).",
+    masteries: "R3 : +3 Points de Réputation • R5 : +1g0 aux jets Opposés d'Étiquette • R7 : +7 Points de Réputation supplémentaires (+10 total)."
   },
-  { 
-    id: "jeux", 
-    name: "Jeux de Société (Games)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Go (Intelligence), Shōgi (Intelligence), Sadane (Intuition), Fortunes & Vents (Intuition), Kemari (Agilité)." 
+  {
+    name: "Jeux de Société (Games)",
+    trait: "Variable",
+    type: "Noble",
+    emphases: "Variable selon le jeu : Fortunes & Vents (Intuition), Go (Intelligence), Kemari (Agilité), Lettres (Intuition), Sadane (Intuition), Shogi (Intelligence)",
+    desc: "Macro-compétence regroupant les passe-temps et jeux intellectuels/athlétiques de la noblesse. Chaque jeu constitue une compétence distincte associée à son Trait propre.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "medecine", 
-    name: "Médecine (Soins & Herboristerie)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Diagnostic, traitement des blessures, chirurgie traditionnelle, pharmacopée et antidotes." 
+  {
+    name: "Médecine (Medicine)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Antidotes, Maladies (Disease), Herboristerie (Herbalism), Non-Humains (par race), Soins des Blessures (Wound Treatment)",
+    desc: "Soins (Wound Treatment / Intelligence ND 15 avec Trousse de Médecine à 10 charges) : guérit 1g1 Blessures (+1g0 lancé par Augmentation, 1 seul dé gardé max) ; 1 seul jet par jour et par patient.",
+    masteries: "R5 : Les Blessures soignées sur un jet réussi augmentent de +1g0."
   },
-  { 
-    id: "meditation", 
-    name: "Méditation", 
-    trait: "Vide", 
-    type: "Noble", 
-    desc: "Recueillement intérieur, jeûne rituel et régénération accélérée des points de Vide." 
+  {
+    name: "Méditation (Meditation)",
+    trait: "Vide",
+    type: "Noble",
+    emphases: "Jeûne (Fasting), Récupération du Vide (Void Recovery)",
+    desc: "Récupération du Vide : 30 min ininterrompues (Méditation / Vide ND 20) restaurent 1 Point de Vide. Jeûne : Méditation / Constitution (ND 15 + 5/jour de jeûne) pour ignorer faim/soif.",
+    masteries: "R3 : Restaure jusqu'à 2 Points de Vide • R5 : -5 au ND de Jeûne • R7 : Restaure jusqu'à 3 Points de Vide."
   },
-  { 
-    id: "oratoire", 
-    name: "Oratoire (Art du Discours)", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "Harangues solennelles, éloquence publique et persuasion des assemblées." 
+  {
+    name: "Art de la Scène / Représentation (Perform)",
+    trait: "Variable",
+    type: "Noble",
+    emphases: "Macro-compétence Sociale : Biwa (Agilité), Danse (Agilité), Tambours (Agilité), Flûte (Agilité), Art Oratoire (Oratory — Intuition), Marionnettes (Agilité), Shamisen (Agilité), Chant (Intuition), Conte (Storytelling — Intuition)",
+    desc: "Macro-compétence Sociale regroupant les arts du spectacle, de la musique et du discours (y compris l'Art Oratoire / Perform: Oratory). Chaque art s'achète séparément.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "sincerite", 
-    name: "Sincérité", 
-    trait: "Intuition", 
-    type: "Noble", 
-    desc: "L'art de convaincre autrui de sa droiture et de préserver la face (On) en toute circonstance." 
+  {
+    name: "Oratoire (Perform: Oratory)",
+    trait: "Intuition",
+    type: "Noble",
+    emphases: "Discours de bataille, Plaidoirie",
+    desc: "Sous-compétence d'Art de la Scène (Perform: Oratory, Intuition) : discours enflammés, ralliement des troupes (Opportunité Héroïque ND 20) et éloquence publique.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "theurgie", 
-    name: "Théurgie (Spellcraft)", 
-    trait: "Intelligence", 
-    type: "Noble", 
-    desc: "Compréhension technique des invocations élémentaires, contre-sorts et parchemins sacrés." 
+  {
+    name: "Sincérité (Sincerity)",
+    trait: "Intuition",
+    type: "Noble",
+    emphases: "Honnêteté (Honesty), Tromperie* (Deceit*)",
+    desc: "Compétence Sociale. Honnêteté : convaincre de la vérité sans offenser. Tromperie* (marquée d'un astérisque = Compétence Dégradante) : mentir sciemment sans se trahir (opposé à Enquête).",
+    masteries: "R5 : +5 au total de tous les jets Opposés de Sincérité."
   },
-
-  // =========================================================================
-  // 2. COMPÉTENCES MARTIALES (BUGEI SKILLS) — L'ART DU GUERRIER
-  // =========================================================================
-  { 
-    id: "armes-de-hast", 
-    name: "Armes d'Hast (Naginata)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement des naginata, bisento et nagamaki." 
-  },
-  { 
-    id: "armes-lourdes", 
-    name: "Armes Lourdes", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement des tetsubo, dai-tsuchi, ono et masakari." 
-  },
-  { 
-    id: "athletisme", 
-    name: "Athlétisme", 
-    trait: "Force", 
-    type: "Bugei", 
-    desc: "Course, escalade, saut, natation et condition physique générale." 
-  },
-  { 
-    id: "bataille", 
-    name: "Art de la Guerre (Bataille)", 
-    trait: "Perception", 
-    type: "Bugei", 
-    desc: "Commandement d'escouade, manœuvres d'escarmouche et batailles de masse." 
-  },
-  { 
-    id: "chasse", 
-    name: "Chasse (Pistage & Survie)", 
-    trait: "Perception", 
-    type: "Bugei", 
-    desc: "Traque, orientation en milieu sauvage, pièges naturels et survie forestière." 
-  },
-  { 
-    id: "couteaux", 
-    name: "Couteaux (Tantojutsu)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Combat rapproché au tanto, aiguchi et dagues de parade." 
-  },
-  { 
-    id: "defense", 
-    name: "Défense", 
-    trait: "Réflexes", 
-    type: "Bugei", 
-    desc: "Posture de Défense et Défense Totale pour augmenter son ND d'Armure." 
-  },
-  { 
-    id: "equitation", 
-    name: "Équitation (Horsemanship)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Monte de guerre, contrôle du destrier sous les flèches et combat en selle." 
-  },
-  { 
-    id: "eventail-guerre", 
-    name: "Éventail de Guerre (Tessenjutsu)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement martial de l'éventail d'acier pour parer et transmettre les ordres." 
-  },
-  { 
-    id: "iaijutsu", 
-    name: "Iaijutsu", 
-    trait: "Réflexes", 
-    type: "Bugei", 
-    desc: "L'art sacré du dégainé rapide et du duel judiciaire formel au sabre." 
-  },
-  { 
-    id: "jiujutsu", 
-    name: "Jiujutsu", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Combat à mains nues, clés articulaires, projections et lutte au corps-à-corps." 
-  },
-  { 
-    id: "kenjutsu", 
-    name: "Kenjutsu", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement de la lame du samouraï : Katana, Wakizashi, No-Dachi, Cimeterre." 
-  },
-  { 
-    id: "kyujutsu", 
-    name: "Kyujutsu (Tir à l'Arc)", 
-    trait: "Réflexes", 
-    type: "Bugei", 
-    desc: "Pratique martiale de l'arc classique Yumi et du grand arc Daikyū." 
-  },
-  { 
-    id: "lances", 
-    name: "Lances (Yarijutsu)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement des lances d'infanterie Yari et javelines de jet Nage-yari." 
-  },
-  { 
-    id: "batons", 
-    name: "Bâtons (Bojutsu)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement des bâtons longs Bō et bâtons courts Jō des pèlerins." 
-  },
-  { 
-    id: "armes-de-paysan", 
-    name: "Armes de Paysan (Peasant Weapons)", 
-    trait: "Agilité", 
-    type: "Bugei", 
-    desc: "Maniement des faucilles Kama, fléaux Nunchaku, Tonfa et outils roturiers." 
+  {
+    name: "Théurgie / Art de la Magie (Spellcraft)",
+    trait: "Intelligence",
+    type: "Noble",
+    emphases: "Importuner (Importune), Recherche de Sorts (Spell Research)",
+    desc: "Importuner compte comme Compétence Sociale lors du sort Communier. Recherche de Sorts : ND 10 + 10×Maîtrise (semaines d'étude = Maîtrise). Permet aussi le Contre-sort optionnel au rang 5+ (Book of Fire p. 182).",
+    masteries: "R5 : +1g0 sur tous les Jets d'Incantation."
   },
 
-  // =========================================================================
-  // 3. COMPÉTENCES MARCHANDES (MERCHANT SKILLS)
-  // =========================================================================
-  { 
-    id: "commerce", 
-    name: "Commerce (Évaluation & Négociation)", 
-    trait: "Intelligence", 
-    type: "Marchande", 
-    desc: "Achat, vente de riz ou de jade, évaluation des biens précieux et contrats." 
+  // ==========================================
+  // COMPÉTENCES DE GUERRE (BUGEI SKILLS — pp. 139–143)
+  // ==========================================
+  {
+    name: "Athlétisme (Athletics)",
+    trait: "Force",
+    type: "Bugei",
+    emphases: "Escalade (Climbing), Course (Running), Natation (Swimming), Lancer (Throwing — Agilité)",
+    desc: "Exploits physiques (Force) ou lancers d'armes/objets (Lancer utilise Agilité et compte comme attaque).",
+    masteries: "R3 : Aucune pénalité en terrain Modéré ; en terrain Difficile Eau réduite de 1 (au lieu de 2) • R5 : Aucune pénalité de terrain • R7 : +1,5 m (5') à une Action de Déplacement par Round (max/Round inchangé)."
   },
-  { 
-    id: "ingenierie", 
-    name: "Ingénierie (Siège & Bâtiment)", 
-    trait: "Intelligence", 
-    type: "Marchande", 
-    desc: "Construction et entretien des engins de siège, catapultes, ponts et fortins." 
+  {
+    name: "Art de la Guerre / Bataille (Battle)",
+    trait: "Perception",
+    type: "Bugei",
+    emphases: "Combat de Masse (Mass Combat), Escarmouche (Skirmish)",
+    desc: "Direction d'armées dans le système de Batailles Rangées (1d10 + Eau + Art de la Guerre ; généraux : Art de la Guerre [Combat de Masse] / Perception).",
+    masteries: "R5 : Ajoute le rang d'Art de la Guerre au score d'Initiative en escarmouche."
   },
-  { 
-    id: "navigation", 
-    name: "Navigation", 
-    trait: "Intelligence", 
-    type: "Marchande", 
-    desc: "Lecture des cartes côtières, manœuvres des navires Kobune et courants marins." 
+  {
+    name: "Défense (Defense)",
+    trait: "Réflexes",
+    type: "Bugei",
+    emphases: "Aucune",
+    desc: "S'ajoute à l'Anneau d'Air au ND d'Armure en Posture Défense, et sert au jet Défense / Réflexes en Posture Défense Totale (moitié arrondie au supérieur).",
+    masteries: "R3 : Peut conserver le résultat précédent de Défense/Réflexes si Défense Totale est maintenue • R5 : ND d'Armure augmenté de +3 en Postures Défense et Défense Totale • R7 : 1 Action Simple autorisée en Posture Défense Totale (aucune attaque)."
   },
-  { 
-    id: "dressage", 
-    name: "Dressage & Élevage (Animal Handling)", 
-    trait: "Intuition", 
-    type: "Marchande", 
-    desc: "Soin et dressage des destriers de clan, faucons de chasse et chiens de guerre." 
+  {
+    name: "Équitation (Horsemanship)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Cheval de selle Gaijin (Gaijin Riding Horse), Poney Rokugani (Rokugani Pony), Destrier Utaku (Utaku Steed)",
+    desc: "Contrôle d'une monture en terrain difficile, orage ou combat.",
+    masteries: "R3 : Autorise la Posture Assaut à cheval • R5 : Monter = Action Simple (au lieu de Complexe), descendre = Gratuite (au lieu de Simple) • R7 : Monter = Action Gratuite."
   },
-  { 
-    id: "metiers-forge", 
-    name: "Artisanat Pratique (Forge & Armurerie)", 
-    trait: "Agilité", 
-    type: "Marchande", 
-    desc: "Réparation des lames, fabrication de pointes de flèches et révision des cuirasses." 
+  {
+    name: "Chasse (Hunting)",
+    trait: "Perception",
+    type: "Bugei",
+    emphases: "Survie (Survival), Pistage (Tracking), Éclaireur / Balisage (Trailblazing)",
+    desc: "Trouver vivres/abris (Survie), suivre des traces (Pistage) et tracer un chemin rapide en nature (Balisage). Chasse toujours à l'arc ou à la lance (jamais au daisho).",
+    masteries: "R5 : +1g0 au total de tous les jets de Discrétion en milieu sauvage."
+  },
+  {
+    name: "Iaijutsu",
+    trait: "Réflexes",
+    type: "Bugei",
+    emphases: "Évaluation (Assessment), Concentration (Focus)",
+    desc: "Art rituel du duel au sabre en 3 phases : Évaluation (Intuition vs 10 + 5×Rép. adverse), Concentration (Vide opposé) et Frappe (Réflexes vs ND Armure normal).",
+    masteries: "R3 : Dégainer un katana est une Action Gratuite (au lieu de Simple) • R5 : +1 Augmentation Gratuite au jet d'Iaijutsu (Concentration) / Vide • R7 : +2g2 (au lieu de +1g1) au Focus si l'Évaluation dépasse l'adversaire de 10+."
+  },
+  {
+    name: "Jiujutsu",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Lutte (Grappling), Armes Improvisées (Improvised Weapons), Arts Martiaux (Martial Arts)",
+    desc: "Combat à mains nues (dégâts de base = Force g 1 ; Jiujutsu / Agilité pour toucher et initier une Lutte ; Force pour contrôler la Lutte).",
+    masteries: "R3 : +1g0 aux dégâts à mains nues • R5 : +1 Augmentation Gratuite pour initier une Lutte • R7 : +0g1 supplémentaire (+1g1 total) aux dégâts à mains nues."
+  },
+  {
+    name: "Armes (Macro-compétence)",
+    trait: "Variable",
+    type: "Bugei",
+    emphases: "Toute arme hors catégories listées (ex. Arbalète gaijin Yobanjin)",
+    desc: "Macro-compétence regroupant les compétences d'armes et toute arme exotique non couverte par les 9 compétences d'armes de base.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
+  },
+  {
+    name: "Armes à Chaîne (Chain Weapons)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Kusarigama, Kyoketsu-shogi, Manrikikusari",
+    desc: "Maniement des armes à chaîne ou lestées (très répandu chez les Mantes).",
+    masteries: "R3 : Permet d'initier une Lutte avec l'arme (LdB p. 89) • R5 : +1g0 aux jets Opposés contre cibles enchevêtrées ou en Lutte via l'arme • R7 : +1 Augmentation Gratuite pour Désarmement et Renversement."
+  },
+  {
+    name: "Armes Lourdes (Heavy Weapons)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Dai Tsuchi, Masakari, Ono, Tetsubo",
+    desc: "Tsubojutsu : armes à deux mains massives (emblématiques du Clan du Crabe).",
+    masteries: "R3 : Réduit la Réduction de l'adversaire de 2 points • R5 : +1 Augmentation Gratuite pour Renversement • R7 : Les dés de dégâts explosent sur 9 et 10."
+  },
+  {
+    name: "Kenjutsu",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Katana, Ninja-to, No-dachi, Parangu, Cimeterre (Scimitar), Wakizashi",
+    desc: "Voie du sabre (katana, wakizashi et lames associées).",
+    masteries: "R3 : +1g0 au total des dégâts avec un sabre • R5 : Dégainer un sabre est une Action Gratuite (au lieu de Simple) • R7 : Les dés de dégâts explosent sur 9 et 10."
+  },
+  {
+    name: "Couteaux (Knives)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Aiguchi, Jitte, Kama, Sai, Tanto",
+    desc: "Tantojutsu : dagues, couteaux et petites armes de parade.",
+    masteries: "R3 : Ignore les malus d'arme en main secondaire • R5 : +1 Augmentation Gratuite pour Désarmement avec un saï ou jitte • R7 : +1 Augmentation Gratuite pour Attaque Supplémentaire avec tout couteau."
+  },
+  {
+    name: "Kyujutsu (Tir à l'Arc)",
+    trait: "Réflexes",
+    type: "Bugei",
+    emphases: "Dai-kyu, Han-kyu, Yumi",
+    desc: "Tir à l'arc traditionnel (toutes flèches). Tirer sur une cible à portée de mêlée inflige -10 au total du jet d'attaque.",
+    masteries: "R3 : Bander un arc devient une Action Simple (au lieu de Complexe) • R5 : Portée maximale de tout arc +50 % • R7 : Force de l'arc augmentée de +1."
+  },
+  {
+    name: "Ninjutsu",
+    trait: "Agilité ou Réflexes",
+    type: "Bugei (Considérée Dégradante)",
+    emphases: "Sarbacane (Blowgun), Shuriken, Tsubute",
+    desc: "Compétence d'Arme considérée comme Dégradante (Low Skill) : armes dissimulées de shinobi (leurs dés de dégâts n'explosent pas par défaut).",
+    masteries: "R3 : +1g0 dégâts • R5 : Les dés de dégâts explosent normalement sur 10 • R7 : +0g1 supplémentaire (+1g1 total) aux dégâts."
+  },
+  {
+    name: "Armes d'Hast (Polearms)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Bisento, Nagamaki, Naginata, Sasumata, Sodegarami",
+    desc: "Umayarijutsu : longues armes tranchantes montées sur hampe.",
+    masteries: "R3 : +5 à l'Initiative au 1er Round d'escarmouche • R5 : +1g0 aux dégâts contre cibles montées ou nettement plus grandes • R7 : Dégainer/préparer devient une Action Gratuite."
+  },
+  {
+    name: "Lances (Spears)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Mai Chong, Kumade, Lance de cavalerie (Lance), Nage-yari, Yari",
+    desc: "Yarijutsu : armes d'estoc montées sur hampe (efficaces contre cavalerie et armures).",
+    masteries: "R3 : Au 1er Round d'escarmouche, ignore 3 points de Réduction en mêlée • R5 : Portée max des attaques de lance à distance +1,5 m (5') • R7 : Dégainer/préparer devient une Action Gratuite."
+  },
+  {
+    name: "Bâtons (Staves)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Bo, Jo, Machi-kanshisha, Nunchaku, Sang Kauw, Tonfa",
+    desc: "Bojutsu : armes contondantes de bois ou moines. Les bonus d'armure au ND de la cible sont doublés contre les bâtons.",
+    masteries: "R3 : Les bonus d'armure adverses ne sont plus doublés • R5 : +1 Augmentation Gratuite pour Renversement • R7 : Préparer un grand bâton = Action Gratuite ; petits bâtons gagnent +1g0 aux dégâts."
+  },
+  {
+    name: "Éventail de Guerre (War Fan)",
+    trait: "Agilité",
+    type: "Bugei",
+    emphases: "Aucune",
+    desc: "Tessen : éventail de fer utilisé pour la signalisation et l'autodéfense.",
+    masteries: "R3 : Aucun malus de main secondaire • R5 : +1 au ND d'Armure quand manié • R7 : +3 au ND d'Armure quand manié (total)."
+  },
+  {
+    name: "Armes à feu (Firearms — Option Imperial Histories 1)",
+    trait: "Intelligence",
+    type: "Bugei (Considérée Dégradante)",
+    emphases: "Pistolet (Pistol), Mousquet (Musket)",
+    desc: "Optionnel (Ère du Cerf Blanc, réservé aux gaijin sauf accord MJ) : Compétence Dégradante pour tout Rokugani. Rechargement = 3 Actions Complexes.",
+    masteries: "R5 : Recharger prend 1 Action Complexe en moins."
   },
 
-  // =========================================================================
-  // 4. COMPÉTENCES DÉGRADANTES (LOW SKILLS) — INTERDITES AU BUSHIDO
-  // =========================================================================
-  { 
-    id: "discretion", 
-    name: "Discrétion (Stealth)", 
-    trait: "Agilité", 
-    type: "Dégradante", 
-    desc: "Se déplacer sans bruit, se dissimuler dans les ombres et embuscades." 
+  // ==========================================
+  // COMPÉTENCES MARCHANDES (MERCHANT SKILLS — pp. 143–144)
+  // ==========================================
+  {
+    name: "Dressage & Élevage (Animal Handling)",
+    trait: "Intuition",
+    type: "Marchande",
+    emphases: "Par espèce (Chiens, Chevaux, Faucons...)",
+    desc: "Domestiquer et entraîner des animaux (chiens de guerre Licorne, faucons, pigeons voyageurs, etc.). Entraîner pour voler/espionner peut compter comme Dégradante (Book of Air).",
+    masteries: "R3 : Peut dresser des animaux pour autrui • R5 : Peut ordonner à son animal d'attaquer une cible (fuit si gravement blessé) • R7 : Ordres non verbaux."
   },
-  { 
-    id: "intimidation", 
-    name: "Intimidation", 
-    trait: "Volonté", 
-    type: "Dégradante", 
-    desc: "Menaces verbales ou physiques, coercition et imposition de la terreur." 
+  {
+    name: "Commerce",
+    trait: "Intelligence",
+    type: "Marchande",
+    emphases: "Évaluation (Appraisal), Mathématiques (Mathematics)",
+    desc: "Estimer la valeur d'objets et gérer impôts, tarifs douaniers et négoce.",
+    masteries: "R5 : Peut augmenter ou diminuer le prix d'achat ou de vente d'un objet jusqu'à 20 %."
   },
-  { 
-    id: "contrefacon", 
-    name: "Contrefaçon (Forgery)", 
-    trait: "Agilité", 
-    type: "Dégradante", 
-    desc: "Imitation illégale de sceaux officiels de clan, signatures et faux permis." 
+  {
+    name: "Artisanat Pratique (Craft)",
+    trait: "Variable",
+    type: "Marchande",
+    emphases: "Macro-compétence : Armurerie# (Armorsmithing#), Forge (Blacksmithing), Facture d'arcs# (Bowyer#), Brassage, Charpenterie, Cartographie, Cordonnerie, Cuisine, Agriculture, Pêche, Maçonnerie, Mine, Poison*, Poterie, Construction navale, Couture, Forge d'armes# (Weaponsmithing#), Tissage, Cerfs-volants [Book of Air], Explosifs [Imperial Histories 1]...",
+    desc: "Macro-compétence utilitaire. Les sous-compétences # sont aussi Nobles ; celles marquées * (comme Poison*) sont Dégradantes. Armurerie/Forge d'armes sont cruciales chez les Tsi, Kaiu et Agasha.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   },
-  { 
-    id: "escamotage", 
-    name: "Escamotage (Sleight of Hand)", 
-    trait: "Agilité", 
-    type: "Dégradante", 
-    desc: "Vol à la tire, dissimulation de petits objets et tours de passe-passe." 
+  {
+    name: "Ingénierie (Engineering)",
+    trait: "Intelligence",
+    type: "Marchande",
+    emphases: "Construction, Siège (Siege)",
+    desc: "Compte comme Compétence d'Artisanat Pratique (Craft). Architecture défensive et engins de siège (spécialité des ingénieurs Kaiu).",
+    masteries: "R5 : +5 au total des jets d'Ingénierie Coopératifs ou Cumulatifs."
   },
-  { 
-    id: "tromperie", 
-    name: "Tromperie (Deceit)", 
-    trait: "Intuition", 
-    type: "Dégradante", 
-    desc: "Mensonge effronté, faux témoignage délibéré et création d'alibis." 
+  {
+    name: "Navigation (Sailing)",
+    trait: "Agilité ou Intelligence",
+    type: "Marchande",
+    emphases: "Matelotage (Knot-work), Navigation astronomique (Navigation)",
+    desc: "Compte comme Compétence d'Artisanat Pratique (Craft). Manœuvre des navires et repérage en mer (sur terre : +10 ND).",
+    masteries: "R5 : +5 au total des jets de Navigation Coopératifs ou Cumulatifs."
   },
-  { 
-    id: "seducion-venale", 
-    name: "Tentation (Corruption & Séduction)", 
-    trait: "Intuition", 
-    type: "Dégradante", 
-    desc: "Soudoyer des fonctionnaires avec du koku ou exploiter les désirs charnels." 
+
+  // ==========================================
+  // COMPÉTENCES DÉGRADANTES (LOW SKILLS — pp. 144–145)
+  // ==========================================
+  {
+    name: "Contrefaçon (Forgery)",
+    trait: "Agilité",
+    type: "Dégradante",
+    emphases: "Par type d'objet (Œuvres d'art, Documents, Sceaux personnels...)",
+    desc: "Compte comme Craft. Le résultat du jet fixe le ND d'Enquête / Perception pour détecter le faux.",
+    masteries: "R3 : +1g0 à votre jet pour fixer le ND de détection • R5 : +1g0 aux jets pour détecter un faux d'autrui • R7 : +0g1 supplémentaire (+1g1 total) pour fixer le ND."
   },
-  { 
-    id: "poisons", 
-    name: "Poisons", 
-    trait: "Intelligence", 
-    type: "Dégradante", 
-    desc: "Fabrication de venins mortels, somnifères et toxines indétectables." 
+  {
+    name: "Intimidation",
+    trait: "Intuition",
+    type: "Dégradante",
+    emphases: "Brutalité (Bullying), Contrôle (Control), Torture",
+    desc: "Compétence Sociale. Jet Opposé contre Étiquette (Politesse) / Volonté de la cible (qui ajoute son Rang d'Honneur au total de son jet).",
+    masteries: "R5 : +5 au total de tous les jets Opposés d'Intimidation."
   },
-  { 
-    id: "outremonde", 
-    name: "Connaissance : Outremonde (Shadowlands)", 
-    trait: "Intelligence", 
-    type: "Dégradante", 
-    desc: "Étude des Onis, gobelins et des ravages de la Souillure (considéré tabou)." 
+  {
+    name: "Escamotage (Sleight of Hand)",
+    trait: "Agilité",
+    type: "Dégradante",
+    emphases: "Dissimulation (Conceal), Évasion (Escape), Vol à la tire (Pick Pocket), Prestidigitation",
+    desc: "Dissimuler/voler de petits objets (opposé à Enquête / Perception) ou se libérer de liens (ND 15–30 ou vs Navigation [Matelotage]).",
+    masteries: "R5 : Peut utiliser Dissimulation pour cacher de petites armes."
   },
-  { 
-    id: "pègre", 
-    name: "Connaissance : Pègre (Underworld)", 
-    trait: "Intelligence", 
-    type: "Dégradante", 
-    desc: "Réseaux de trafiquants de saké, maisons de jeu clandestines et cartels d'opium." 
+  {
+    name: "Discrétion (Stealth)",
+    trait: "Agilité",
+    type: "Dégradante",
+    emphases: "Embuscade (Ambush), Filature (Shadowing), Furtivité* (Sneaking*), Incantation discrète (Spell Casting)",
+    desc: "Simple Move Action limitée à Eau pieds (×1 ou ×2/×3 avec Maîtrises). Furtivité (Sneaking) ne fait pas perdre d'Honneur (les autres Spécialisations si !). Embuscade : opposé à Enquête (Vigilance).",
+    masteries: "R3 : Simple Move Action dissimulée = Eau × 1,5 m (5') • R5 : Simple Move Action dissimulée = Eau × 3 m (10') • R7 : Actions de Déplacement Gratuites normales tout en restant dissimulé."
+  },
+  {
+    name: "Tentation (Temptation)",
+    trait: "Intuition",
+    type: "Dégradante",
+    emphases: "Corruption (Bribery), Séduction",
+    desc: "Compétence Sociale : exploiter vices, avidité ou désirs (opposé à Étiquette [Politesse] / Volonté).",
+    masteries: "R5 : +5 au total de tous les jets Opposés de Tentation."
+  },
+  {
+    name: "Poisons (Craft: Poison*)",
+    trait: "Intelligence",
+    type: "Dégradante",
+    emphases: "Fabrication, Détection",
+    desc: "Sous-compétence de Craft marquée Dégradante : préparation et dosage de toxines végétales, venins et poudres (LdB pp. 332–333).",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
+  },
+  {
+    name: "Connaissance : Outremonde (Lore: Shadowlands*)",
+    trait: "Intelligence",
+    type: "Dégradante",
+    emphases: "Oni, Souillure, Territoires Maudits",
+    desc: "Sous-compétence de Lore marquée Dégradante (exception pour les Kuni et chasseurs de sorcières) : créatures de Jigoku et effets de la Souillure.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
+  },
+  {
+    name: "Connaissance : Pègre (Lore: Underworld*)",
+    trait: "Intelligence",
+    type: "Dégradante",
+    emphases: "Syndicats, Contrebande",
+    desc: "Sous-compétence de Lore marquée Dégradante : réseaux criminels, receleurs et quartiers interdits.",
+    masteries: "Aucune (R10 : +1 Aug. Gratuite)."
   }
 ];
-
 if (typeof window !== "undefined") {
   window.COMPETENCES_DATA = COMPETENCES_DATA;
 }

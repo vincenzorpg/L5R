@@ -347,7 +347,7 @@ function injectForgeTemplates() {
               <div id="p-adv-list" class="p-2 space-y-1 text-[8.5px] leading-snug"></div>
             </div>
             <div class="l5r-box overflow-hidden">
-              <div class="l5r-bar l5r-bar-crimson"><span>Désavantages</span><span id="p-disadv-total">0 / 15 XP</span></div>
+              <div class="l5r-bar l5r-bar-crimson"><span>Désavantages</span><span id="p-disadv-total">0 / 10 XP</span></div>
               <div id="p-disadv-list" class="p-2 space-y-1 text-[8.5px] leading-snug"></div>
             </div>
           </div>
@@ -496,11 +496,13 @@ function getElementBadgeClass(elem) {
 
 function getRingValueForElement(elem) {
   const e = (elem || "").toString().toLowerCase();
-  if (e.includes("terre") || e.includes("earth")) return parseInt(document.getElementById('ring-earth')?.textContent) || 2;
-  if (e.includes("eau") || e.includes("water")) return parseInt(document.getElementById('ring-water')?.textContent) || 2;
-  if (e.includes("air")) return parseInt(document.getElementById('ring-air')?.textContent) || 2;
-  if (e.includes("feu") || e.includes("fire")) return parseInt(document.getElementById('ring-fire')?.textContent) || 2;
-  if (e.includes("vide") || e.includes("void")) return parseInt(document.getElementById('ring-void')?.textContent) || 2;
+  const vals = [];
+  if (e.includes("terre") || e.includes("earth")) vals.push(parseInt(document.getElementById('ring-earth')?.textContent) || 2);
+  if (e.includes("eau") || e.includes("water")) vals.push(parseInt(document.getElementById('ring-water')?.textContent) || 2);
+  if (e.includes("air")) vals.push(parseInt(document.getElementById('ring-air')?.textContent) || 2);
+  if (e.includes("feu") || e.includes("fire")) vals.push(parseInt(document.getElementById('ring-fire')?.textContent) || 2);
+  if (e.includes("vide") || e.includes("void")) vals.push(parseInt(document.getElementById('ring-void')?.textContent) || 2);
+  if (vals.length > 0) return Math.max(...vals);
   return parseInt(document.getElementById('ring-void')?.textContent) || 2;
 }
 
@@ -864,7 +866,8 @@ function addUniversalSpells() {
     return;
   }
   const allSpells = window.SORTS_DATA || [];
-  const univs = allSpells.filter(s => (s.element || "").toLowerCase() === "universel" || s.mastery === 0);
+  const coreUniversalIds = new Set(['univ-sense', 'univ-commune', 'univ-summon']);
+  const univs = allSpells.filter(s => coreUniversalIds.has(s.id));
   univs.forEach(u => {
     if (!window.charSpellsList.some(existing => existing.id === u.id)) {
       window.charSpellsList.push({
@@ -1003,10 +1006,10 @@ function populateKataCatalogSelect(autoSelectFirst = false) {
   const allKatas = window.KATAS_DATA || [];
 
   const filtered = allKatas.filter(k => {
-    const matchElem = rawFilter === "tous" || (k.element || "").toLowerCase() === rawFilter;
+    const matchElem = rawFilter === "tous" || (k.element || "").toLowerCase().includes(rawFilter);
     if (!matchElem) return false;
     if (!searchFilter) return true;
-    const hay = foldForgeSearch(`${k.name || ''} ${k.element || ''} ${k.schools || ''} ${k.effect || ''}`);
+    const hay = foldForgeSearch(`${k.name || ''} ${k.element || ''} ${k.schools || ''} ${k.desc || k.effect || ''}`);
     return hay.includes(searchFilter);
   });
 
@@ -1934,7 +1937,7 @@ function isCharacterTogashiTattooed() {
 
 function getTattooAllowedQuota() {
   const rank = typeof getCurrentSchoolRank === 'function' ? getCurrentSchoolRank() : 1;
-  return 1 + rank;
+  return rank >= 5 ? 6 : (rank >= 3 ? 4 : 2);
 }
 
 function getSafeElementBadgeClass(elem) {
@@ -2470,11 +2473,15 @@ function updateArmorWeaponSummary() {
   const box = document.getElementById('gear-weapon-summary');
   if (!box || typeof window.getEquipment !== 'function') return;
   const eq = window.getEquipment();
-  const armorVal = document.getElementById('pc-armor')?.value || '0';
+  const armorSel = document.getElementById('pc-armor');
+  const armorVal = armorSel?.value || '0';
+  const armorSelectedText = armorSel?.options?.[armorSel.selectedIndex]?.text || '';
   const w1Name = document.getElementById('pc-weapon-1')?.value || 'Katana';
   const w2Name = document.getElementById('pc-weapon-2')?.value || 'Aucune';
 
-  const armorObj = (eq.armures || []).find(a => String(a.tnBonus) === String(armorVal)) || { name: 'Vêtements simples', tnBonus: 0, reduction: 0, note: 'Aucun malus de mouvement' };
+  const armorObj = (eq.armures || []).find(a => a.name === armorSelectedText)
+    || (eq.armures || []).find(a => String(a.tnBonus ?? a.tn) === String(armorVal))
+    || { name: 'Vêtements simples', tnBonus: 0, reduction: 0, note: 'Aucun malus de mouvement' };
   const w1Obj = (eq.armes || []).find(w => w.name === w1Name) || { name: w1Name, vd: '—', skill: '—', type: '—' };
   const w2Obj = w2Name !== 'Aucune' ? ((eq.armes || []).find(w => w.name === w2Name) || { name: w2Name, vd: '—', skill: '—', type: '—' }) : null;
 
@@ -2592,11 +2599,11 @@ function updateForgeUXDashboard(detail) {
     strip.textContent = `Traits ${tXp} • Comp ${sXp} • Av ${aXp}${artXp > 0 ? ` • Arts ${artXp}` : ''}`;
   }
 
-  // Disadvantage progress bar (0..15 XP)
+  // Disadvantage progress bar (0..10 XP — Livre de Base p. 145)
   const disadvGain = parseInt(document.getElementById('disadv-gain-total')?.textContent, 10) || 0;
   const disBar = document.getElementById('disadv-progress-bar');
   if (disBar) {
-    disBar.style.width = `${Math.min(100, Math.round((disadvGain / 15) * 100))}%`;
+    disBar.style.width = `${Math.min(100, Math.round((disadvGain / 10) * 100))}%`;
   }
 
   // Skills cards live pools, next-rank XP & pending school choice banner

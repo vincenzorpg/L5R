@@ -7,11 +7,11 @@
  * - Affichage complet des descriptions et règles des Avantages & Désavantages + Sorts/Kihos/Katas (Ticket #21)
  * - Gestion complète des avantages « Études dans une Autre École » & « Écoles Multiples »
  * - Paliers de Maîtrise des compétences (Rangs 3, 5 et 7)
- * - Plafond de 15 XP maximum pour les Désavantages
+ * - Plafond de 10 XP maximum pour les Désavantages (Livre de Base, p. 145)
  * - Exportation vers fiche officielle A4 vectorielle & Carnet de Rokugan
  */
 
-const MAX_DISADVANTAGE_XP = 15;
+const MAX_DISADVANTAGE_XP = 10;
 const DOJO_STORAGE_KEY = 'l5r_dojo_characters_v4';
 const DRAFT_STORAGE_KEY = 'l5r_current_character_draft_v4';
 
@@ -40,62 +40,170 @@ const _catalogIndexCache = {
 // 1. PALIERS DE MAÎTRISE OFFICIELS (LIVRE DE BASE 4E ÉDITION)
 // =============================================================================
 const SKILL_MASTERIES = {
-  "kenjutsu": [
-    { rank: 3, label: "Dégainé Éclair", desc: "Dégainer un sabre devient une Action Gratuite." },
-    { rank: 5, label: "Tranchant Affûté", desc: "Les dés de dégâts avec un sabre explosent sur 9 et 10." },
-    { rank: 7, label: "Frappe Fluide", desc: "Porter une attaque de mêlée devient une Action Simple au lieu d'une Action Complexe." }
+  "comédie": [
+    { rank: 3, label: "Maquillage Naturel", desc: "ND pour créer un déguisement réduit de 5." },
+    { rank: 5, label: "Double Identité", desc: "ND pour créer un déguisement réduit de 10 (total)." },
+    { rank: 7, label: "Caméléon Impérial", desc: "ND pour créer un déguisement réduit de 15 (total)." }
   ],
-  "iaijutsu": [
-    { rank: 3, label: "Dégainé Réflexe", desc: "Dégainer un sabre devient une Action Gratuite." },
-    { rank: 5, label: "Focalisation", desc: "+1g0 sur les jets de Concentration (Focus) en duel." },
-    { rank: 7, label: "Frappe Ultime", desc: "Les dés de frappe d'Iaijutsu (Strike) explosent sur 9 et 10." }
-  ],
-  "kyujutsu": [
-    { rank: 3, label: "Encoche Rapide", desc: "Encocher et viser devient une Action Gratuite." },
-    { rank: 5, label: "Tir à Bout Portant", desc: "Aucun malus pour tirer sur une cible engagée en mêlée." },
-    { rank: 7, label: "Flèche Éclair", desc: "Les attaques à l'arc deviennent des Actions Simples." }
-  ],
-  "armes lourdes": [
-    { rank: 3, label: "Impact Brutal", desc: "Ignore 3 points de Réduction d'armure adverse." },
-    { rank: 5, label: "Renversement", desc: "1 Augmentation Gratuite pour la manœuvre Renversement (Knockdown)." },
-    { rank: 7, label: "Broyeur", desc: "Les attaques avec armes lourdes deviennent des Actions Simples." }
-  ],
-  "jiujutsu": [
-    { rank: 3, label: "Prise Solide", desc: "+1g0 pour prendre ou maintenir le contrôle d'une Lutte." },
-    { rank: 5, label: "Poings d'Acier", desc: "Dégâts à mains nues augmentés à 0g2 (au lieu de 0g1) + Force." },
-    { rank: 7, label: "Enchaînement", desc: "Les attaques à mains nues deviennent des Actions Simples." }
-  ],
-  "defense": [
-    { rank: 3, label: "Garde Souple", desc: "Ajoute +3 supplémentaire au ND d'Armure en posture Défense." },
-    { rank: 5, label: "Esquive Totale", desc: "Conserve la totalité (au lieu de la moitié) du jet de Défense en Défense Totale." },
-    { rank: 7, label: "Mur Infranchissable", desc: "+5 permanent au ND d'Armure quelle que soit la posture." }
+  "calligraphie": [
+    { rank: 5, label: "Cryptographe", desc: "+10 pour percer un code ou un chiffre." }
   ],
   "courtisan": [
-    { rank: 3, label: "Étiquette Aiguisée", desc: "Gain de +1g0 sur les jets de commérage et d'observation en cour." },
-    { rank: 5, label: "Réseau d'Indiscrétions", desc: "Dépenser 1 point de Vide confère +2g1 (au lieu de +1g1) sur les jets de Cour." },
-    { rank: 7, label: "Maître des Salons", desc: "Immunité contre les pénalités sociales infligées par autrui." }
+    { rank: 3, label: "Esprit de Cour", desc: "+3 Points de Réputation supplémentaires." },
+    { rank: 5, label: "Joute Verbale", desc: "+1g0 au total des jets Opposés de Courtisan." },
+    { rank: 7, label: "Maître du Protocole", desc: "+7 Points de Réputation supplémentaires (+10 total)." }
   ],
-  "enquete": [
-    { rank: 3, label: "Coup d'Œil", desc: "Augmentation Gratuite sur la recherche d'indices matériels." },
-    { rank: 5, label: "Déduction Pure", desc: "Permet de déceler immédiatement les mensonges flagrants." },
-    { rank: 7, label: "Infaillible", desc: "Les indices et énigmes évidents sont résolus sans jet de dé." }
+  "divination": [
+    { rank: 5, label: "Seconde Vision", desc: "2e jet de Divination le même jour sans dépenser de Point de Vide (+10 ND s'applique)." }
   ],
-  "athletisme": [
-    { rank: 3, label: "Bond Aérien", desc: "Distance de saut augmentée de 50 %." },
-    { rank: 5, label: "Course Endurante", desc: "Mouvement gratuit par tour augmenté de +1,5 mètre." },
-    { rank: 7, label: "Agilité Suprême", desc: "Se relever de terre (Prone) est désormais une Action Gratuite." }
+  "étiquette": [
+    { rank: 3, label: "Grâce Noble", desc: "+3 Points de Réputation supplémentaires." },
+    { rank: 5, label: "Bouclier Social", desc: "+1g0 au total des jets Opposés d'Étiquette." },
+    { rank: 7, label: "Parangon Impérial", desc: "+7 Points de Réputation supplémentaires (+10 total)." }
+  ],
+  "enquête": [
+    { rank: 3, label: "Œil Aiguisé", desc: "2e tentative de Fouille (Search) sans le malus de +15 ND." },
+    { rank: 5, label: "Interrogateur", desc: "+5 au total des jets Opposés d'Enquête." },
+    { rank: 7, label: "Ténacité du Magistrat", desc: "3e tentative de Fouille autorisée même après l'échec de la 2e." }
+  ],
+  "médecine": [
+    { rank: 5, label: "Mains Guérisseuses", desc: "+1g0 aux Blessures soignées sur un jet réussi de Médecine." }
+  ],
+  "méditation": [
+    { rank: 3, label: "Vide Profond", desc: "Un jet de Méditation réussi restaure jusqu'à 2 Points de Vide." },
+    { rank: 5, label: "Ascèse", desc: "ND réduit de 5 pour les jets de Méditation (Jeûne)." },
+    { rank: 7, label: "Éveil Intérieur", desc: "Un jet de Méditation réussi restaure jusqu'à 3 Points de Vide." }
+  ],
+  "sincérité": [
+    { rank: 5, label: "Masque de Vérité", desc: "+5 au total de tous les jets Opposés de Sincérité." }
+  ],
+  "théurgie": [
+    { rank: 5, label: "Voix des Kamis", desc: "+1g0 à tous les Jets d'Incantation." }
+  ],
+  "cérémonie du thé": [
+    { rank: 5, label: "Harmonie Parfaite", desc: "Tous les participants regagnent 2 Points de Vide au lieu d'1." }
+  ],
+  "athlétisme": [
+    { rank: 3, label: "Foulée Agile", desc: "Terrain Modéré sans pénalité ; terrain Difficile réduit Eau de 1 (au lieu de 2)." },
+    { rank: 5, label: "Course Sans Entrave", desc: "Aucune pénalité de mouvement quel que soit le terrain." },
+    { rank: 7, label: "Élan Fulguant", desc: "+1,5 m (5') à une Action de Déplacement par Round (max/Round inchangé)." }
+  ],
+  "art de la guerre": [
+    { rank: 5, label: "Sens Tactique", desc: "Ajoute le rang d'Art de la Guerre au score d'Initiative en escarmouche." }
+  ],
+  "défense": [
+    { rank: 3, label: "Posture Ancrée", desc: "Conserve le résultat précédent de Défense/Réflexes en maintenant Défense Totale." },
+    { rank: 5, label: "Garde Solide", desc: "ND d'Armure augmenté de +3 en Postures Défense et Défense Totale." },
+    { rank: 7, label: "Vigilance Active", desc: "1 Action Simple autorisée en Posture Défense Totale (aucune attaque)." }
+  ],
+  "équitation": [
+    { rank: 3, label: "Charge Équestre", desc: "Autorise la Posture Assaut à cheval." },
+    { rank: 5, label: "Cavalier Émérite", desc: "Monter = Action Simple (au lieu de Complexe) ; descendre = Gratuite." },
+    { rank: 7, label: "Ne Faire Qu'Un", desc: "Monter = Action Gratuite (au lieu de Simple)." }
+  ],
+  "chasse": [
+    { rank: 5, label: "Ombre des Bois", desc: "+1g0 au total de tous les jets de Discrétion en milieu sauvage." }
+  ],
+  "iaijutsu": [
+    { rank: 3, label: "Dégainé Fulgurant", desc: "Dégainer un katana est une Action Gratuite (au lieu de Simple)." },
+    { rank: 5, label: "Maîtrise du Focus", desc: "1 Augmentation Gratuite sur les jets d'Iaijutsu (Concentration) / Vide." },
+    { rank: 7, label: "Lame Sereine", desc: "+2g2 (au lieu de +1g1) au Focus si l'Évaluation dépasse l'adversaire de 10+." }
+  ],
+  "jiujutsu": [
+    { rank: 3, label: "Frappe Dure", desc: "+1g0 aux dégâts à mains nues." },
+    { rank: 5, label: "Saisie Experte", desc: "1 Augmentation Gratuite pour initier une Lutte." },
+    { rank: 7, label: "Poing de Fer", desc: "+0g1 supplémentaire (+1g1 total) aux dégâts à mains nues." }
+  ],
+  "armes à chaîne": [
+    { rank: 3, label: "Chaîne Captive", desc: "Permet d'initier une Lutte avec l'arme (LdB p. 89)." },
+    { rank: 5, label: "Étau d'Acier", desc: "+1g0 aux jets Opposés contre cibles enchevêtrées ou en Lutte via l'arme." },
+    { rank: 7, label: "Maître de la Chaîne", desc: "+1 Augmentation Gratuite pour Désarmement et Renversement." }
+  ],
+  "armes lourdes": [
+    { rank: 3, label: "Coup Écrasant", desc: "Réduit la Réduction de l'adversaire de 2 points." },
+    { rank: 5, label: "Impact Dévastateur", desc: "+1 Augmentation Gratuite pour la manœuvre Renversement." },
+    { rank: 7, label: "Force Destructrice", desc: "Les dés de dégâts explosent sur 9 et 10 avec une arme lourde." }
+  ],
+  "kenjutsu": [
+    { rank: 3, label: "Frappe Tranchante", desc: "+1g0 au total de tous les jets de dégâts avec un sabre." },
+    { rank: 5, label: "Dégainé Éclair", desc: "Dégainer un sabre est une Action Gratuite (au lieu de Simple)." },
+    { rank: 7, label: "Acier Impitoyable", desc: "Les dés de dégâts explosent sur 9 et 10 avec un sabre." }
+  ],
+  "couteaux": [
+    { rank: 3, label: "Main Habile", desc: "Ignore les malus de main secondaire lors de l'usage d'un couteau." },
+    { rank: 5, label: "Crochet de Parade", desc: "+1 Augmentation Gratuite pour Désarmement avec un saï ou un jitte." },
+    { rank: 7, label: "Lame Rapide", desc: "+1 Augmentation Gratuite pour Attaque Supplémentaire avec tout couteau." }
+  ],
+  "kyujutsu": [
+    { rank: 3, label: "Cordage Rapide", desc: "Bander un arc est une Action Simple (au lieu de Complexe)." },
+    { rank: 5, label: "Longue Portée", desc: "Portée maximale de tout arc augmentée de +50 %." },
+    { rank: 7, label: "Tir Puissant", desc: "Force de tout arc augmentée de +1." }
+  ],
+  "ninjutsu": [
+    { rank: 3, label: "Coup Sournois", desc: "+1g0 aux dégâts des armes de Ninjutsu." },
+    { rank: 5, label: "Frappe Mortelle", desc: "Les dés de dégâts des armes de Ninjutsu explosent normalement." },
+    { rank: 7, label: "Lame de l'Ombre", desc: "+0g1 supplémentaire (+1g1 total) aux dégâts des armes de Ninjutsu." }
   ],
   "armes d'hast": [
-    { rank: 3, label: "Allonge Supérieure", desc: "+5 à l'Initiative au premier round d'escarmouche." },
-    { rank: 5, label: "Faucheur", desc: "+1g0 aux dégâts contre cibles montées ou de grande taille." },
-    { rank: 7, label: "Manieuse d'Hast", desc: "Dégainer/armer une arme d'hast est une Action Gratuite." }
+    { rank: 3, label: "Allonge Supérieure", desc: "+5 à l'Initiative au 1er Round d'escarmouche." },
+    { rank: 5, label: "Faucheur", desc: "+1g0 aux dégâts contre cibles montées ou nettement plus grandes." },
+    { rank: 7, label: "Garde Longue", desc: "Dégainer/préparer une arme d'hast devient une Action Gratuite." }
   ],
   "lances": [
-    { rank: 3, label: "Percée", desc: "Ignore 3 points de Réduction au premier round d'escarmouche." },
-    { rank: 5, label: "Pointe Précise", desc: "Portée de jet de lance augmentée de +1,5 mètre." },
-    { rank: 7, label: "Garde de Pique", desc: "Dégainer/armer une lance est une Action Gratuite." }
+    { rank: 3, label: "Pointe Perçante", desc: "Au 1er Round d'escarmouche, ignore 3 pts de Réduction en mêlée." },
+    { rank: 5, label: "Jet Lointain", desc: "Portée maximale des attaques à distance à la lance +1,5 m (5')." },
+    { rank: 7, label: "Lance Vive", desc: "Dégainer/préparer une lance devient une Action Gratuite." }
+  ],
+  "bâtons": [
+    { rank: 3, label: "Impact Contondant", desc: "Les bonus d'armure adverses au ND ne sont plus doublés contre les bâtons." },
+    { rank: 5, label: "Balayage", desc: "+1 Augmentation Gratuite pour la manœuvre Renversement." },
+    { rank: 7, label: "Maître du Bo", desc: "Grands bâtons dégainés en Action Gratuite ; petits bâtons gagnent +1g0 aux dégâts." }
+  ],
+  "éventail de guerre": [
+    { rank: 3, label: "Garde au Tessen", desc: "Ignore les malus d'arme en main secondaire avec un éventail de guerre." },
+    { rank: 5, label: "Parade de Fer", desc: "+1 au ND d'Armure tant qu'un éventail de guerre est manié." },
+    { rank: 7, label: "Danse d'Acier", desc: "+3 au ND d'Armure tant qu'un éventail de guerre est manié (total)." }
+  ],
+  "armes à feu": [
+    { rank: 5, label: "Rechargement Rapide", desc: "Recharger une arme à feu prend 1 Action Complexe en moins." }
+  ],
+  "dressage & élevage": [
+    { rank: 3, label: "Maître Dresseur", desc: "Peut dresser chiens, chevaux ou faucons pour d'autres personnes." },
+    { rank: 5, label: "Ordre d'Attaque", desc: "Peut commander à son animal d'attaquer une cible." },
+    { rank: 7, label: "Lien Silencieux", desc: "Ordres donnés de manière non verbale." }
+  ],
+  "commerce": [
+    { rank: 5, label: "Négociateur", desc: "Peut faire varier le prix d'achat ou de vente jusqu'à ±20 %." }
+  ],
+  "ingénierie": [
+    { rank: 5, label: "Maître Bâtisseur", desc: "+5 au total des jets d'Ingénierie Coopératifs ou Cumulatifs." }
+  ],
+  "navigation": [
+    { rank: 5, label: "Capitaine", desc: "+5 au total des jets de Navigation Coopératifs ou Cumulatifs." }
+  ],
+  "contrefaçon": [
+    { rank: 3, label: "Trait Parfait", desc: "+1g0 au jet de Contrefaçon fixant le ND de détection." },
+    { rank: 5, label: "Œil de Faussaire", desc: "+1g0 aux jets pour détecter les faux d'autrui." },
+    { rank: 7, label: "Sceau Indétectable", desc: "+0g1 supplémentaire (+1g1 total) au ND de détection." }
+  ],
+  "intimidation": [
+    { rank: 5, label: "Regard Glaçant", desc: "+5 au total des jets Opposés d'Intimidation." }
+  ],
+  "escamotage": [
+    { rank: 5, label: "Lame Cachée", desc: "Dissimulation permet de cacher de petites armes sur soi." }
+  ],
+  "discrétion": [
+    { rank: 3, label: "Pas Silencieux", desc: "Action Simple de Déplacement dissimulé = Eau × 1,5 m (5')." },
+    { rank: 5, label: "Ombre Glissante", desc: "Action Simple de Déplacement dissimulé = Eau × 3 m (10')." },
+    { rank: 7, label: "Fantôme", desc: "Actions de Déplacement Gratuites normales tout en restant dissimulé." }
+  ],
+  "tentation": [
+    { rank: 5, label: "Voix de Soie", desc: "+5 au total des jets Opposés de Tentation." }
   ]
 };
+SKILL_MASTERIES["art de la magie"] = SKILL_MASTERIES["théurgie"];
+SKILL_MASTERIES["bataille"] = SKILL_MASTERIES["art de la guerre"];
+SKILL_MASTERIES["dressage"] = SKILL_MASTERIES["dressage & élevage"];
 
 function getMasteriesHtml(skillName, currentRank) {
   const normKey = (skillName || "").split('(')[0].trim().toLowerCase();
@@ -393,6 +501,9 @@ function buildCharacterContextFromInputs(clanVal = "", famName = "", schName = "
     isUnicorn: cVal.includes("licorne") || cVal.includes("unicorn"),
     isSpider: cVal.includes("araignee") || cVal.includes("araignée") || cVal.includes("spider"),
     isImperial: cVal.includes("imperial") || cVal.includes("impérial") || fName.includes("miya") || fName.includes("otomo") || fName.includes("seppun"),
+    isDaidoji: fName.includes("daidoji") || sName.includes("daidoji"),
+    isToritaka: fName.includes("toritaka") || sName.includes("toritaka"),
+    isNinja: sType.includes("ninja") || sName.includes("ninja") || sName.includes("infiltrat") || sName.includes("acteur") || sName.includes("saboteur"),
     isBushi: sType.includes("bushi") || sName.includes("bushi") || sName.includes("guerrier") || sName.includes("éclaireur") || sName.includes("archer") || sName.includes("duelliste"),
     isShugenja: sType.includes("shugenja") || sName.includes("shugenja"),
     isCourtier: sType.includes("courtisan") || sType.includes("courtier") || sName.includes("courtisan") || sName.includes("magistrat") || sName.includes("diplomate"),
@@ -437,8 +548,10 @@ function getEffectiveAdvCost(adv, contextOverride) {
 
   let discount = 0;
 
-  if ((imp === "clear_thinker" || nameNorm.includes("esprit clair")) && ctx.isDragon) discount += 1;
-  if ((imp === "dark_paragon" || nameNorm.includes("sombre parangon")) && ctx.isSpider) discount += 1;
+  if ((imp === "clear_thinker" || nameNorm.includes("pensee claire") || nameNorm.includes("esprit clair")) && ctx.isDragon) discount += 1;
+  if ((imp === "crafty" || nameNorm.includes("astucieux")) && (ctx.isScorpion || ctx.isSpider || ctx.isNinja)) discount += 1;
+  if ((imp === "daredevil" || nameNorm.includes("casse-cou")) && ctx.isMantis) discount += 1;
+  if ((imp === "dark_paragon" || nameNorm.includes("parangon sombre") || nameNorm.includes("sombre parangon")) && ctx.isSpider) discount += 1;
   if ((imp === "elemental_blessing" || imp.startsWith("elemental_blessing_") || nameNorm.includes("benediction elementaire")) && ctx.isPhoenix) discount += 1;
   if (imp === "enlightened" || nameNorm.includes("illumine")) {
     if (ctx.isDragon || ctx.isMonk) discount += 1;
@@ -447,20 +560,39 @@ function getEffectiveAdvCost(adv, contextOverride) {
   if ((imp === "friend_of_the_brotherhood" || nameNorm.includes("ami de la confrerie")) && ctx.isDragon) discount += 1;
   if ((imp === "gaijin_gear" || nameNorm.includes("equipement gaijin")) && (ctx.isMantis || ctx.isUnicorn)) discount += 1;
   if ((imp === "hands_of_stone" || nameNorm.includes("mains de pierre")) && ctx.isMonk) discount += 1;
+  if ((imp === "heart_of_vengeance" || nameNorm.includes("coeur vengeur")) && ctx.isSpider) discount += 1;
   if ((imp === "irreproachable" || nameNorm.includes("irreprochable")) && ctx.isImperial) discount += 1;
   if ((imp === "ishiken_do" || nameNorm.includes("ishiken")) && ctx.isPhoenix) discount += 2;
   if ((imp === "large" || nameNorm.includes("grand (large)")) && ctx.isCrab) discount += 1;
-  if ((imp === "crab_hands" || nameNorm.includes("mains du crabe")) && ctx.isCrab) discount += 1;
+  if ((imp === "crab_hands" || nameNorm.includes("mains de crabe") || nameNorm.includes("mains du crabe")) && (ctx.isCrab || ctx.isBushi)) discount += 1;
+  if ((imp === "quick" || nameNorm.includes("vif (quick)")) && ctx.isNinja) discount += 1;
+  if ((imp === "read_lips" || nameNorm.includes("lire sur les levres")) && ctx.isCourtier) discount += 1;
+  if ((imp === "sacrosanct" || nameNorm.includes("sacro-saint")) && ctx.isImperial) discount += 1;
+  if ((imp === "silent" || nameNorm.includes("silencieux")) && ctx.isNinja) discount += 1;
   if ((imp === "strength_earth" || nameNorm.includes("force de la terre")) && ctx.isBushi) discount += 1;
   if ((imp === "dangerous_beauty" || nameNorm.includes("beaute dangereuse")) && ctx.isScorpion) discount += 1;
   if ((imp === "leadership" || nameNorm.includes("commandement")) && ctx.isLion) discount += 1;
-  if ((imp === "paragon_bushido" || nameNorm.includes("parangon")) && ctx.isLion) discount += 1;
+  if ((imp === "paragon_bushido" || nameNorm.includes("modele de bushid") || nameNorm.includes("paragon)")) && ctx.isLion) discount += 1;
   if ((imp === "tactician" || nameNorm.includes("tacticien")) && (ctx.isLion || ctx.isBushi)) discount += 1;
   if ((imp === "soul_artistry" || nameNorm.includes("ame d'artiste")) && (ctx.isCrane || ctx.isCourtier)) discount += 1;
-  if ((imp === "ally" || nameNorm.includes("allies")) && ctx.isCrane) discount += 1;
+  if ((imp === "ally" || nameNorm.includes("allie")) && ctx.isCrane) discount += 1;
+  if ((imp === "blackmail" || nameNorm.includes("chantage (blackmail)")) && ctx.isScorpion) discount += 1;
+  if ((imp === "blood_osano_wo" || nameNorm.includes("osano-wo")) && (ctx.isCrab || ctx.isMantis)) discount += 1;
   if ((imp === "darling_of_the_court" || nameNorm.includes("favori de la cour")) && ctx.isCourtier) discount += 1;
+  if ((imp === "way_of_the_land" || nameNorm.includes("connaissance du terrain") || nameNorm.includes("sens du terrain")) && ctx.isUnicorn) discount += 1;
   if ((imp === "wealthy" || nameNorm.includes("riche")) && (ctx.isCrane || ctx.isUnicorn || ctx.isImperial)) discount += 1;
-  if ((imp === "sage" || nameNorm.includes("erudit")) && (ctx.isPhoenix || ctx.isMonk)) discount += 1;
+  if ((imp === "sage" || nameNorm.includes("erudit")) && (ctx.isPhoenix || ctx.isMonk || ctx.isShugenja)) discount += 1;
+  if ((imp === "touch_spirit_realms" || nameNorm.includes("royaumes spirituels")) && ctx.isShugenja) discount += 1;
+  if ((imp === "bentens_blessing" || nameNorm.includes("benten")) && ctx.isCrane) discount += 1;
+  if ((imp === "bishamons_blessing" || nameNorm.includes("bishamon")) && (ctx.isCrab || ctx.isLion)) discount += 1;
+  if ((imp === "daikokus_blessing" || nameNorm.includes("daikoku")) && ctx.isMantis) discount += 1;
+  if ((imp === "ebisus_blessing" || nameNorm.includes("ebisu")) && ctx.isUnicorn) discount += 1;
+  if ((imp === "fukurokujins_blessing" || nameNorm.includes("fukurokujin")) && (ctx.isDragon || ctx.isPhoenix)) discount += 1;
+  if ((imp === "jurojins_blessing" || nameNorm.includes("jurojin")) && ctx.isScorpion) discount += 1;
+  if ((imp === "trained_falcon" || nameNorm.includes("faucon dresse")) && ctx.isToritaka) discount += 1;
+  if ((imp === "spy_network" || nameNorm.includes("reseau d'espions")) && ctx.isScorpion) discount += 2;
+  else if ((imp === "spy_network" || nameNorm.includes("reseau d'espions")) && ctx.isDaidoji) discount += 1;
+  if ((imp === "stolen_identity" || nameNorm.includes("identite volee")) && ctx.isSpider) discount += 1;
 
   return Math.max(1, baseCost - discount);
 }
@@ -479,16 +611,23 @@ function getEffectiveDisadvGain(dis, contextOverride) {
   if ((imp === "bitter_betrothal" || nameNorm.includes("fiancailles ameres")) && ctx.isImperial) bonus += 1;
   if ((imp.startsWith("consumed") || nameNorm.includes("consume")) && ctx.isSpider) bonus += 1;
   if ((imp === "consumed_perfection" || nameNorm.includes("consume : perfection")) && ctx.isCrane && !ctx.isSpider) bonus += 1;
-  if ((imp === "cursed_by_the_realm" || nameNorm.includes("maudit par le royaume")) && ctx.isShugenja) bonus += 1;
+  if ((imp === "contrary" || nameNorm.includes("contrariant")) && (ctx.isImperial || ctx.isCourtier)) bonus += 1;
+  if ((imp === "cursed_by_the_realm" || imp === "cursed_by_realm" || nameNorm.includes("maudit par un royaume") || nameNorm.includes("maudit par le royaume")) && ctx.isShugenja) bonus += 1;
+  if ((imp === "dark_secret" || nameNorm.includes("sombre secret")) && ctx.isNinja) bonus += 1;
+  if ((imp === "disturbing_countenance" || nameNorm.includes("aspect troublant")) && ctx.isSpider) bonus += 1;
+  if ((imp === "epilepsy" || nameNorm.includes("epilepsie")) && ctx.isCrane) bonus += 1;
+  if ((imp === "failure_bushido" || nameNorm.includes("echec du bushid")) && ctx.isNinja) bonus += 1;
   if ((imp === "forced_retirement" || nameNorm.includes("retraite forcee")) && ctx.isMonk) bonus += 1;
   if ((imp === "gaijin_name" || nameNorm.includes("nom gaijin")) && ctx.isUnicorn) bonus += 1;
+  if ((imp === "insensitive" || nameNorm.includes("insensible")) && ctx.isScorpion) bonus += 1;
   if ((imp === "obtuse" || nameNorm.includes("esprit obtus")) && (ctx.isCrab || ctx.isBushi)) bonus += 1;
-  if ((imp === "overconfident" || nameNorm.includes("trop confiant") || nameNorm.includes("presomptueux")) && (ctx.isLion || ctx.isMantis)) bonus += 1;
+  if ((imp === "overconfident" || nameNorm.includes("exces de confiance") || nameNorm.includes("presomptueux")) && (ctx.isLion || ctx.isMantis)) bonus += 1;
   if ((imp === "rumormonger" || nameNorm.includes("colporteur") || nameNorm.includes("commere")) && ctx.isCourtier) bonus += 1;
+  if ((imp === "soft_hearted" || nameNorm.includes("coeur tendre")) && ctx.isPhoenix) bonus += 1;
   if ((imp === "touch_of_the_void" || nameNorm.includes("touche par le vide")) && ctx.isPhoenix) bonus += 1;
   if ((imp === "wrath_of_the_kami" || nameNorm.includes("courroux des kami")) && ctx.isShugenja) bonus += 1;
   if ((imp === "permanent_wound" || nameNorm.includes("blessure permanente")) && ctx.isBushi) bonus += 1;
-  if ((imp === "brash" || nameNorm.includes("impulsif") || nameNorm.includes("temeraire")) && ctx.isLion) bonus += 1;
+  if ((imp === "brash" || nameNorm.includes("temeraire") || nameNorm.includes("impulsif")) && ctx.isLion) bonus += 1;
   if ((imp === "greedy" || nameNorm.includes("cupide")) && ctx.isMantis) bonus += 1;
   if ((imp === "idealistic" || nameNorm.includes("idealiste")) && ctx.isLion) bonus += 1;
 
@@ -701,6 +840,9 @@ const getAdvantages = () => window.AVANTAGES_DATA || {
 };
 
 function bootstrap() {
+  if (typeof document === 'undefined' || !document.getElementById('sel-clan') || !document.getElementById('ring-earth')) {
+    return;
+  }
   if (!window.CLANS_DATA && !window.CLANS_CORE) {
     setTimeout(bootstrap, 50);
     return;
@@ -1284,7 +1426,7 @@ function resetSheetToNewSelection(preserveAdvDisadv = true) {
     const input = document.getElementById(inputId);
     if (!input) continue;
 
-    let baseVal = 2;
+    let baseVal = (traitName === "Vide" && sch?.baseVoid) ? sch.baseVoid : 2;
     if (fam && fam.trait === traitName) baseVal += 1;
     if (sch && sch.trait === traitName) baseVal += 1;
 
@@ -1292,23 +1434,36 @@ function resetSheetToNewSelection(preserveAdvDisadv = true) {
     input.value = baseVal;
   }
 
-  currentSkills = sch.skills.map(s => {
-    const sLower = s.toLowerCase();
+  currentSkills = (sch.skills || []).map(s => {
+    let rawName = String(s || "").trim();
+    let baseRank = 1;
+    // Support des compétences d'école commençant au Rang 2 (ex. "Défense 2", "Connaissance : Outremonde 2", "Discrétion 2 (Furtivité)")
+    const rankTwoMatch = rawName.match(/^(.*?)\s+2(\s*\(.*\))?$/);
+    if (rankTwoMatch && !rawName.toLowerCase().includes("compétence") && !rawName.toLowerCase().includes("any")) {
+      rawName = (rankTwoMatch[1].trim() + (rankTwoMatch[2] ? " " + rankTwoMatch[2].trim() : "")).trim();
+      baseRank = 2;
+    } else if (/deux rangs|two ranks/i.test(rawName)) {
+      baseRank = 2;
+    }
+
+    const sLower = rawName.toLowerCase();
     const isChoice = sLower.includes("compétence") || sLower.includes("choix") || sLower.includes("any");
     let filterType = null;
     if (sLower.includes("bugei")) filterType = "Bugei";
     else if (sLower.includes("noble") || sLower.includes("haute") || sLower.includes("high")) filterType = "Noble";
     else if (sLower.includes("marchande") || sLower.includes("merchant")) filterType = "Marchande";
+    else if (sLower.includes("artisan")) filterType = "Noble";
 
     return {
-      name: s,
-      rank: 1,
+      name: rawName,
+      rank: baseRank,
+      baseRank: baseRank,
       spec: false,
       isSchool: true,
       isChoice: isChoice,
       chosen: false,
       choiceFilter: filterType,
-      originalPlaceholder: isChoice ? s : null
+      originalPlaceholder: isChoice ? rawName : null
     };
   });
   renderSkills();
@@ -1593,7 +1748,7 @@ function addDisadvFromCatalog() {
   const effectiveGain = getEffectiveDisadvGain(item);
   const currentTotalGain = disadvantagesList.reduce((acc, d) => acc + (parseInt(d.gain) || 0), 0);
   if (currentTotalGain + effectiveGain > MAX_DISADVANTAGE_XP) {
-    notifyForgeUser(`Plafond de 15 XP atteint (${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP). « ${item.name} » (+${effectiveGain} XP) dépasserait la limite.`, 'error');
+    notifyForgeUser(`Plafond officiel de ${MAX_DISADVANTAGE_XP} XP atteint (${currentTotalGain} / ${MAX_DISADVANTAGE_XP} XP). « ${item.name} » (+${effectiveGain} XP) dépasserait la limite.`, 'error');
     return;
   }
 
@@ -1862,7 +2017,7 @@ function renderSkills() {
 
             <div class="flex items-center gap-1 ml-1">
               <button type="button" onclick="adjustSkillRank(${idx}, -1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
-              <input type="number" min="${sk.isSchool ? '1' : '0'}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
+              <input type="number" min="${sk.baseRank || (sk.isSchool ? 1 : 0)}" max="10" value="${sk.rank}" oninput="changeSkillRank(${idx}, this.value)" class="w-10 p-1 rounded text-center font-bold text-amber-300 text-xs">
               <button type="button" onclick="adjustSkillRank(${idx}, 1)" class="w-6 h-6 bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-800 rounded font-bold flex items-center justify-center text-xs cursor-pointer">+</button>
             </div>
 
@@ -1879,7 +2034,7 @@ function renderSkills() {
 function adjustSkillRank(idx, delta) {
   const sk = currentSkills[idx];
   if (!sk) return;
-  const minRank = sk.isSchool ? 1 : 0;
+  const minRank = sk.baseRank || (sk.isSchool ? 1 : 0);
   let newRank = (parseInt(sk.rank) || 0) + delta;
   if (newRank < minRank) newRank = minRank;
   if (newRank > 10) newRank = 10;
@@ -1990,7 +2145,7 @@ function removeSkill(idx) {
 function changeSkillRank(idx, val) {
   const sk = currentSkills[idx];
   if (!sk) return;
-  const minRank = sk.isSchool ? 1 : 0;
+  const minRank = sk.baseRank || (sk.isSchool ? 1 : 0);
   sk.rank = Math.max(minRank, parseInt(val) || minRank);
   renderSkills();
   updateAll();
@@ -2109,12 +2264,13 @@ function calculateSkillXpCost(rankVal, options = {}) {
   const isHighSkill = Boolean(options.isHighSkill);
   const isExemptHigh = Boolean(options.isExemptHigh);
 
-  const start = isSchool ? 1 : 0;
+  const explicitBase = parseInt(options.baseRank, 10);
+  const start = !isNaN(explicitBase) ? Math.max(isSchool ? 1 : 0, explicitBase) : (isSchool ? 1 : 0);
   let xp = 0;
 
   if (rank > start) {
     for (let r = start + 1; r <= rank; r++) {
-      let stepCost = (isSchool && isProdigy) ? Math.max(1, r - 1) : r;
+      let stepCost = r;
       if (isObtuse && isHighSkill && !isExemptHigh) {
         stepCost *= 2;
       }
@@ -2161,15 +2317,12 @@ function calculateWoundThresholds(earthRing, options = {}) {
   const isDaidoji = Boolean(options.isDaidoji);
   const honorScore = parseFloat(options.honorScore ?? 0) || 0;
 
-  let multiplier = earth;
-  if (isDaidoji && Math.floor(honorScore) > earth) {
-    multiplier = Math.floor(honorScore);
-  }
+  // Daidoji Iron Warrior Rang 1 (Core p.111) : +(Math.max(1, floor(Honneur) - 4)) PV à chaque palier de blessure
+  const daidojiBonus = isDaidoji ? Math.max(1, Math.floor(honorScore) - 4) : 0;
+  const healthy = Math.max(1, (earth * 5) + daidojiBonus);
+  const step = Math.max(1, (earth * 2) + daidojiBonus);
 
-  const healthy = Math.max(1, multiplier * 5);
-  const step = Math.max(1, multiplier * 2);
-
-  return { multiplier, healthy, step };
+  return { multiplier: earth, bonusPerRank: daidojiBonus, healthy, step };
 }
 
 function parseRollKeepFormula(formulaStr) {
@@ -2343,7 +2496,7 @@ function updateAll() {
   });
 
   const voidBonus = (fam?.trait === "Vide" ? 1 : 0) + (sch?.trait === "Vide" ? 1 : 0);
-  const baseVoid = 2 + voidBonus;
+  const baseVoid = (sch?.baseVoid || 2) + voidBonus;
   traitsXp += calculateVoidXpCost(voi, baseVoid, hasAdv("enlightened"));
   xpSpent += traitsXp;
 
@@ -2363,6 +2516,7 @@ function updateAll() {
 
     skillsXp += calculateSkillXpCost(sk.rank, {
       isSchool: sk.isSchool,
+      baseRank: sk.baseRank,
       spec: sk.spec,
       isProdigy,
       isObtuse,
@@ -2440,9 +2594,12 @@ function updateAll() {
     type: "Médium"
   };
 
-  const isRanged = (weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu");
-  const atkTraitName = isRanged ? "Réflexes" : (weaponData.trait || "Agilité");
-  const atkTraitVal = (atkTraitName === "Réflexes") ? ref : agi;
+  const isRanged = (weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu" || weaponData.skill === "Armes à feu");
+  const atkTraitName = weaponData.trait || (isRanged ? "Réflexes" : "Agilité");
+  const atkTraitVal = (atkTraitName === "Réflexes") ? ref
+    : (atkTraitName === "Intelligence") ? int
+    : (atkTraitName === "Perception") ? per
+    : agi;
   const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
 
   const skillObj = currentSkills.find(s => {
@@ -2489,20 +2646,27 @@ function updateAll() {
 
   // 5. Jet de Dégâts
   const vdParts = (weaponData.vd || "3g2").split('g');
-  let dmgBaseRoll = parseInt(vdParts[0]) || 3;
-  let dmgBaseKeep = parseInt(vdParts[1]) || 2;
+  const parsedRoll = parseInt(vdParts[0], 10);
+  const parsedKeep = parseInt(vdParts[1], 10);
+  let dmgBaseRoll = Number.isNaN(parsedRoll) ? 3 : parsedRoll;
+  let dmgBaseKeep = Number.isNaN(parsedKeep) ? 2 : parsedKeep;
 
   let dmgRoll = dmgBaseRoll;
   let dmgKeep = dmgBaseKeep;
   let dmgBonusStatic = 0;
   let dmgDetails = [`Arme (${weaponData.vd})`];
 
-  if (!isRanged) {
+  if (weaponData.fixedDamage) {
+    dmgDetails = [weaponData.fixedDamage];
+  } else if (weaponData.noStrength) {
+    dmgDetails.push("Sans Force");
+  } else if (weaponData.bowStrength != null) {
+    const effBowStr = Math.min(str, weaponData.bowStrength);
+    dmgRoll += effBowStr;
+    dmgDetails.push(`Force d'Arc (+${effBowStr}g0)`);
+  } else {
     dmgRoll += str;
     dmgDetails.push(`Force (+${str}g0)`);
-  } else {
-    dmgRoll += 3;
-    dmgDetails.push("Force d'Arc (+3g0)");
   }
 
   if ((sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) && weaponData.type?.includes("Lourde")) {
@@ -2520,7 +2684,7 @@ function updateAll() {
     dmgDetails.push("Petit (-1g0)");
   }
 
-  const dmgStr = dmgBonusStatic > 0 ? `${dmgRoll}g${dmgKeep} + ${dmgBonusStatic}` : `${dmgRoll}g${dmgKeep}`;
+  const dmgStr = weaponData.fixedDamage ? weaponData.fixedDamage : (dmgBonusStatic > 0 ? `${dmgRoll}g${dmgKeep} + ${dmgBonusStatic}` : `${dmgRoll}g${dmgKeep}`);
   const dmgDetailStr = dmgDetails.join(' + ');
   const stickyDmg = document.getElementById('sticky-dmg');
   const stickyDmgDetail = document.getElementById('sticky-dmg-detail');
@@ -2605,14 +2769,12 @@ function updateAll() {
   if (hasAdv("quick_healer")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
 
-  let woundBaseMultiplier = rEarth;
   const honorScore = parseFloat(document.getElementById('stat-honor')?.textContent || "4.5");
-  if ((sch?.id === "guerrier-daidoji" || sch?.name?.includes("Daidoji")) && Math.floor(honorScore) > rEarth) {
-    woundBaseMultiplier = Math.floor(honorScore);
-  }
-
-  const healthyWounds = Math.max(1, (woundBaseMultiplier * 5));
-  const stepWounds = Math.max(1, (woundBaseMultiplier * 2));
+  const isDaidojiIronWarrior = (sch?.id === "guerrier-daidoji" || sch?.name?.includes("Guerrier de Fer"));
+  const { healthy: healthyWounds, step: stepWounds } = calculateWoundThresholds(rEarth, {
+    isDaidoji: isDaidojiIronWarrior,
+    honorScore
+  });
 
   document.getElementById('w-0').textContent = `${healthyWounds} PV`;
   for (let i = 1; i <= 7; i++) {
@@ -3441,7 +3603,7 @@ function populateOfficialPrintSheet() {
     }).join('') : '<div class="text-[#6a5d47] italic">Aucun avantage sélectionné.</div>';
   }
 
-  setTxt('p-disadv-total', `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 15 XP`);
+  setTxt('p-disadv-total', `${document.getElementById('disadv-gain-total')?.textContent || '0'} / 10 XP`);
   const disadvListEl = document.getElementById('p-disadv-list');
   if (disadvListEl) {
     disadvListEl.innerHTML = disadvantagesList.length ? disadvantagesList.map(d => {
@@ -3492,6 +3654,7 @@ function exportOfficialPDF() {
 
 // Exposition globale pour createcharacter.html, export-carnet.js et Node.js
 if (typeof window !== "undefined") {
+  window.MAX_DISADVANTAGE_XP = MAX_DISADVANTAGE_XP;
   window.currentSkills = currentSkills;
   window.advantagesList = advantagesList;
   window.disadvantagesList = disadvantagesList;
