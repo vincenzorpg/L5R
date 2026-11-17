@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.19.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.20.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -115,13 +115,15 @@ Trois guides de référence rapide optimisés pour la consultation en séance et
 L5R/
 ├── index.html                          # Portail d'accueil, Dojo local et navigation rapide
 ├── createcharacter.html                # Forge de Personnage L5R 4e, lanceur de dés XgY et impression A4
+├── ecoles.html                         # Explorateur, tableau triable et comparateur des 88 écoles publiques
+├── carte.html                          # Carte interactive de Rokugan et itinéraire des PJs
 ├── ecran-mj.html                       # Écran interactif du Maître du Jeu (PJs, Escarmouche, Paravent, Duel, Dés)
 ├── grimoire.html                       # Grimoire interactif des sorts élémentaires, prières et mahō
 ├── kihos.html                          # Recueil interactif des 64 Kihos des moines & règles Atemi
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
 ├── campagne.html                       # Hub des 10 scénarios de la Campagne de la Chronique de Rokugan
 ├── campagne-ajouter.html               # Studio d'import et générateur de pages de scénarios HTML
-├── version.json                        # Source unique de vérité pour la version du site (v1.19.0)
+├── version.json                        # Source unique de vérité pour la version du site (v1.20.0)
 ├── manifest.webmanifest                # Manifeste PWA installable sur Android & iPhone (mode autonome)
 ├── sw.js                               # Service Worker hors-ligne pré-cachant Forge, Dojo & données L5R 4e
 ├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
@@ -164,6 +166,9 @@ L5R/
 │   ├── pwa.js                          # Gestionnaire PWA (Service Worker, install Android/iOS, mode hors-ligne)
 │   ├── navbar.js                       # Barre de navigation responsive, sélecteur de thème, version & CSS
 │   ├── index-ui.js                     # Rendu déclaratif des Clans, de la frise des scénarios & du Dojo d'accueil
+│   ├── clans-ui.js                     # Filtres par lignée & accordéons ergonomiques des pages de clans
+│   ├── ecoles.js                       # Moteur de filtrage, tri multi-colonnes & comparateur d'écoles
+│   ├── carte-rokugan.js                # Moteur interactif zoom/pan et tracé PJ de la carte de Rokugan
 │   ├── character-generator.js          # Moteur de règles L5R 4e, calculs d'XP, paliers, dés et Dojo
 │   ├── forge-ui.js                     # UI étendue de la Forge (Sorts, Katas, Tatouages, 20 Questions & Print A4)
 │   ├── export-carnet.js                # Moteur d'export JSON conforme au Carnet de Rokugan (schemaVersion: 2)

@@ -2805,6 +2805,31 @@ function initForgeUIWhenReady() {
     if (typeof onClanChange === 'function') onClanChange();
   }
 
+  const schoolParam = params.get("school");
+  if (schoolParam && typeof window.resolveSchoolByRef === 'function') {
+    const resolved = window.resolveSchoolByRef(schoolParam, clanParam || document.getElementById("sel-clan")?.value);
+    if (resolved && resolved.school) {
+      const clanSel = document.getElementById("sel-clan");
+      if (clanSel && clanSel.querySelector(`option[value="${resolved.clanKey}"]`)) {
+        clanSel.value = resolved.clanKey;
+        if (typeof onClanChange === 'function') onClanChange();
+      }
+      const famSel = document.getElementById("sel-family");
+      const clansMap = typeof window.getClans === 'function' ? window.getClans() : (window.CLANS_DATA || {});
+      const fams = (clansMap[resolved.clanKey]?.families) || [];
+      const famIdx = fams.findIndex(f => f.name === resolved.school.family);
+      if (famSel && famIdx !== -1 && famSel.querySelector(`option[value="${famIdx}"]`)) {
+        famSel.value = String(famIdx);
+        if (typeof onFamilyChange === 'function') onFamilyChange();
+      }
+      const schSel = document.getElementById("sel-school");
+      if (schSel && schSel.querySelector(`option[value="${schoolParam}"]`)) {
+        schSel.value = schoolParam;
+        if (typeof onSchoolChange === 'function') onSchoolChange();
+      }
+    }
+  }
+
   updateArchetypePanelsWithTattoos(true);
   filterPerksCatalog('adv', false);
   filterPerksCatalog('disadv', false);

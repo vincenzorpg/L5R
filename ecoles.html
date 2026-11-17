@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorateur &amp; Comparateur des Écoles — L5R 4e Édition | Campagne de la Chronique de Rokugan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/main.css?v=14">
+
+  <script src="data/clans-data.js" defer></script>
+  <script src="js/navbar.js?v=4" defer></script>
+  <script src="js/ecoles.js?v=1" defer></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-16">
+
+  <header id="site-header"></header>
+
+  <main class="max-w-7xl w-full mx-auto p-3 sm:p-6 space-y-5">
+
+    <!-- HERO -->
+    <section class="card-clean rounded-2xl p-5 sm:p-7 border-amber-500/35 relative overflow-hidden">
+      <div class="absolute -right-6 -bottom-8 text-[130px] font-black text-amber-500/5 select-none pointer-events-none font-imperial">
+        道
+      </div>
+      <div class="max-w-4xl space-y-2 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-950/70 border border-amber-500/35 text-[10px] uppercase tracking-widest text-amber-300 font-bold">
+          <span>道場</span> Guide Interactif de Création • L5R 4e Édition
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black font-imperial gold-gradient tracking-wide">
+          EXPLORATEUR &amp; COMPARATEUR DES ÉCOLES
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+          Triez, filtrez et comparez toutes les écoles accessibles de Rokugan par Clan, archétype, bonus de Trait, Honneur, compétences ou pouvoir technique. Comparez jusqu'à <b>3 écoles côte à côte</b> puis ouvrez directement la Forge avec votre choix !
+        </p>
+      </div>
+
+      <!-- ASSISTANT STYLE DE JEU EN 1 CLIC -->
+      <div class="mt-4 pt-4 border-t border-amber-500/15 space-y-2 relative z-10">
+        <div class="text-[10px] uppercase tracking-widest text-amber-400 font-bold">
+          🎯 Quel rôle souhaitez-vous incarner ? (Raccourcis en 1 clic)
+        </div>
+        <div id="schools-presets-bar" class="flex flex-wrap items-center gap-1.5">
+          <button type="button" data-preset="all" class="clan-lineage-pill is-active">Toutes</button>
+          <button type="button" data-preset="duelist" class="clan-lineage-pill">⚔️ Duelliste &amp; Sabre</button>
+          <button type="button" data-preset="bulwark" class="clan-lineage-pill">🛡️ Colosse &amp; Réduction</button>
+          <button type="button" data-preset="archer" class="clan-lineage-pill">🏹 Archer d'Élite</button>
+          <button type="button" data-preset="rider" class="clan-lineage-pill">🐎 Cavalier &amp; Éclaireur</button>
+          <button type="button" data-preset="courtier" class="clan-lineage-pill">🌸 Courtisan &amp; Intrigue</button>
+          <button type="button" data-preset="investigator" class="clan-lineage-pill">🔍 Magistrat &amp; Enquête</button>
+          <button type="button" data-preset="shugenja" class="clan-lineage-pill">🌀 Prêtre Shugenja</button>
+          <button type="button" data-preset="monk" class="clan-lineage-pill">🥋 Moine &amp; Tatouages</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRE DE FILTRES MULTI-CRITÈRES -->
+    <section class="card-clean rounded-xl p-3.5 space-y-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2.5 text-xs">
+        <input
+          id="filter-school-search"
+          type="search"
+          placeholder="🔍 Nom, technique, arme, mot-clé (ex. Vide, Katana...)"
+          class="lg:col-span-2 w-full px-3 py-2 rounded-lg bg-black/60 border border-stone-700 text-xs text-amber-100 focus:border-amber-500 focus:outline-none"
+        />
+        <select id="filter-school-clan" class="w-full p-2 rounded-lg bg-black/60 border border-stone-700 text-xs text-stone-200"></select>
+        <select id="filter-school-type" class="w-full p-2 rounded-lg bg-black/60 border border-stone-700 text-xs text-stone-200">
+          <option value="all">Tous les Archétypes</option>
+          <option value="Bushi">⚔️ Bushi</option>
+          <option value="Shugenja">🌀 Shugenja</option>
+          <option value="Courtisan">🌸 Courtisan</option>
+          <option value="Moine">🥋 Moine</option>
+          <option value="Artisan">🎨 Artisan</option>
+          <option value="Ninja">🥷 Ombre / Ninja</option>
+        </select>
+        <select id="filter-school-trait" class="w-full p-2 rounded-lg bg-black/60 border border-stone-700 text-xs text-stone-200"></select>
+        <select id="filter-school-skill" class="w-full p-2 rounded-lg bg-black/60 border border-stone-700 text-xs text-stone-200"></select>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-stone-800/80 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="filter-school-honor" class="text-[11px] text-stone-400 font-bold">Honneur min. :</label>
+          <select id="filter-school-honor" class="px-2.5 py-1 rounded-lg bg-black/60 border border-stone-700 text-xs text-stone-200">
+            <option value="0">Tous</option>
+            <option value="2.5">≥ 2.5</option>
+            <option value="3.5">≥ 3.5</option>
+            <option value="4.5">≥ 4.5 (Honorable)</option>
+            <option value="5.5">≥ 5.5 (Très honorable)</option>
+          </select>
+          <button type="button" id="btn-reset-school-filters" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] text-stone-300 cursor-pointer">
+            ↺ Réinitialiser
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span id="schools-visible-count" class="text-[11px] font-mono text-amber-300 font-bold"></span>
+          <div class="inline-flex rounded-lg border border-stone-700 overflow-hidden">
+            <button type="button" id="btn-view-table" class="clan-lineage-pill is-active !rounded-none !border-0 text-[11px]">☰ Tableau</button>
+            <button type="button" id="btn-view-cards" class="clan-lineage-pill !rounded-none !border-0 text-[11px]">▦ Cartes</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLEAU TRIABLE -->
+    <section id="schools-table-wrap" class="card-clean rounded-2xl overflow-hidden border-amber-500/30">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-black/75 border-b border-amber-500/30 text-[10px] uppercase tracking-wider font-imperial text-stone-300 select-none">
+            <tr>
+              <th data-sort-col="name" class="p-3 cursor-pointer hover:text-amber-300 transition">École &amp; Famille <span class="sort-arrow opacity-35 ml-1">⇅</span></th>
+              <th data-sort-col="clan" class="p-3 cursor-pointer hover:text-amber-300 transition text-amber-300">Clan <span class="sort-arrow ml-1">▲</span></th>
+              <th data-sort-col="type" class="p-3 cursor-pointer hover:text-amber-300 transition">Archétype <span class="sort-arrow opacity-35 ml-1">⇅</span></th>
+              <th data-sort-col="trait" class="p-3 cursor-pointer hover:text-amber-300 transition">Bonus <span class="sort-arrow opacity-35 ml-1">⇅</span></th>
+              <th data-sort-col="honor" class="p-3 cursor-pointer hover:text-amber-300 transition text-center">Honneur <span class="sort-arrow opacity-35 ml-1">⇅</span></th>
+              <th data-sort-col="skills" class="p-3 cursor-pointer hover:text-amber-300 transition">Compétences d'École <span class="sort-arrow opacity-35 ml-1">⇅</span></th>
+              <th data-sort-col="rank1" class="p-3 cursor-pointer hover:text-amber-300 transition">Technique Rang 1 <span class="sort-arrow opacity-35 ml-1">⇅</span></th>
+              <th class="p-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="schools-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- GRILLE DE CARTES ALTERNATIVE -->
+    <section id="schools-cards-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+
+    <!-- ÉTAT VIDE -->
+    <section id="schools-empty-state" class="hidden card-clean rounded-2xl p-10 text-center space-y-2">
+      <div class="text-2xl">🔎</div>
+      <div class="text-sm font-imperial font-bold text-amber-300">Aucune école ne correspond à vos critères</div>
+      <p class="text-xs text-stone-400">Essayez d'élargir vos filtres ou réinitialisez la recherche.</p>
+    </section>
+
+  </main>
+
+  <!-- BARRE FLOTTANTE COMPARATEUR (JUSQU'À 3 ÉCOLES) -->
+  <div id="schools-compare-dock" class="hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-3xl rounded-xl bg-[#120d0c]/95 backdrop-blur-md border border-amber-500/60 px-4 py-2.5 shadow-2xl flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="text-base">⚖️</span>
+      <span id="compare-dock-label" class="text-xs font-bold text-amber-200 truncate">0 / 3 sélectionnée(s)</span>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button type="button" id="btn-clear-compare" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] text-stone-300 cursor-pointer">Vider</button>
+      <button type="button" id="btn-open-compare" class="px-3.5 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-extrabold text-xs font-imperial cursor-pointer">Comparer côte à côte</button>
+    </div>
+  </div>
+
+  <!-- MODALE FICHE DÉTAILLÉE D'UNE ÉCOLE (RANGS 1 À 5) -->
+  <div id="school-detail-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+    <div class="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border border-amber-500/50 bg-[#120d0c] p-5 shadow-2xl relative">
+      <button type="button" data-close-modal="school-detail-modal" class="absolute top-3 right-3 px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 text-xs font-bold cursor-pointer">✕ Fermer</button>
+      <div id="school-detail-modal-body" class="pt-1"></div>
+    </div>
+  </div>
+
+  <!-- MODALE COMPARATEUR CÔTE-À-CÔTE -->
+  <div id="school-compare-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+    <div class="w-full max-w-6xl max-h-[92vh] overflow-y-auto rounded-2xl border border-amber-500/50 bg-[#120d0c] p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-stone-800 pb-2">
+        <h3 class="font-imperial font-bold text-base text-amber-300">⚖️ Comparateur d'Écoles Côte à Côte</h3>
+        <button type="button" data-close-modal="school-compare-modal" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 text-xs font-bold cursor-pointer">✕ Fermer</button>
+      </div>
+      <div id="school-compare-modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    <div>Campagne de la Chronique de Rokugan — Explorateur &amp; Comparateur des Écoles L5R 4e Édition</div>
+    <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
+      <span id="site-version-label">v1.20.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+      <span>•</span>
+      <button type="button" id="btn-toggle-gm-secrets" onclick="toggleGmSecretsModal()" title="Accès MJ : déverrouiller les écoles secrètes" class="px-1.5 py-0.5 rounded bg-stone-900/90 hover:bg-stone-800 border border-stone-800 text-stone-500 hover:text-amber-300 transition cursor-pointer">🔒 MJ</button>
+    </div>
+  </footer>
+
+  <!-- MODAL DISCRET ACCÈS MJ -->
+  <div id="gm-secrets-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+    <div class="w-full max-w-sm rounded-xl border border-stone-700 bg-[#120d0c] p-5 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+        <h3 class="font-imperial text-sm font-bold text-amber-300 tracking-wide">🔒 Archives Réservées au MJ</h3>
+        <button type="button" onclick="toggleGmSecretsModal(false)" class="text-stone-400 hover:text-white text-sm font-bold cursor-pointer">✕</button>
+      </div>
+      <div id="gm-secrets-locked-panel" class="space-y-3">
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Entrez le mot de passe du Maître de Jeu pour afficher les écoles confidentielles dans le tableau.
+        </p>
+        <input type="password" id="gm-secrets-password-input" placeholder="Mot de passe MJ..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); unlockGmSecretsWithPassword(); }" class="w-full px-3 py-2 rounded-lg bg-black/70 border border-stone-700 text-xs text-amber-100 focus:border-amber-500 focus:outline-none">
+        <p id="gm-secrets-error" class="hidden text-[11px] text-red-400 font-bold">Mot de passe incorrect.</p>
+        <div class="flex justify-end gap-2 pt-1">
+          <button type="button" onclick="toggleGmSecretsModal(false)" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs cursor-pointer">Annuler</button>
+          <button type="button" onclick="unlockGmSecretsWithPassword()" class="px-3 py-1.5 rounded bg-amber-700 hover:bg-amber-600 text-black font-bold text-xs cursor-pointer">Déverrouiller</button>
+        </div>
+      </div>
+      <div id="gm-secrets-unlocked-panel" class="hidden space-y-3">
+        <p class="text-xs text-stone-300 leading-relaxed">Les écoles confidentielles du MJ sont actuellement visibles pour cette session.</p>
+        <div class="flex justify-end gap-2 pt-1">
+          <button type="button" onclick="toggleGmSecretsModal(false)" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs cursor-pointer">Fermer</button>
+          <button type="button" onclick="lockGmSecrets()" class="px-3 py-1.5 rounded bg-red-900 hover:bg-red-800 text-red-100 font-bold text-xs cursor-pointer">Verrouiller à nouveau</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

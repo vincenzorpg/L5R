@@ -239,6 +239,15 @@
                   </div>
                 </a>
 
+                <!-- Explorateur des Écoles -->
+                <a href="${rootPrefix}ecoles.html" class="px-2.5 py-2 rounded-lg hover:bg-amber-950/40 text-stone-200 hover:text-amber-200 flex items-center gap-3 text-xs transition">
+                  <span class="w-7 h-7 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">道</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-amber-300">Explorateur des Écoles</span>
+                    <span class="text-[10px] text-stone-400 font-sans">Tableau triable &amp; comparateur PJ</span>
+                  </div>
+                </a>
+
                 <!-- Grimoire des Sorts -->
                 <a href="${rootPrefix}grimoire.html" class="px-2.5 py-2 rounded-lg hover:bg-sky-950/40 text-stone-200 hover:text-sky-200 flex items-center gap-3 text-xs transition">
                   <span class="w-7 h-7 rounded border bg-sky-950/80 text-sky-300 border-sky-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">法</span>
@@ -395,9 +404,13 @@
                 <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">幕</span>
                 <span>Écran du MJ</span>
               </a>
-              <a href="${rootPrefix}carte.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-yellow-300 flex items-center gap-2 col-span-2">
+              <a href="${rootPrefix}carte.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-yellow-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-yellow-950/80 text-yellow-300 border-yellow-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">地</span>
-                <span>Carte de Rokugan &amp; Chemin PJs</span>
+                <span>Carte de Rokugan</span>
+              </a>
+              <a href="${rootPrefix}ecoles.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-200 flex items-center gap-2">
+                <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">道</span>
+                <span>Tableau des Écoles</span>
               </a>
               <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/45 text-emerald-200 hover:bg-emerald-900/50 flex items-center gap-2 col-span-2 cursor-pointer text-left">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-bold text-xs shrink-0">📲</span>

@@ -6,6 +6,22 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.20.0] — 2026-11-17
+
+### ✨ Ajouté & Amélioré
+- **Explorateur & Tableau Comparateur des Écoles de Rokugan (`ecoles.html`, `js/ecoles.js`)** :
+  - Catalogue interactif et triable de toutes les **88 écoles publiques** issues de `CLANS_DATA` (*Livre de Base* et suppléments officiels : 42 Bushi, 17 Shugenja, 11 Courtisans, 13 Moines, 3 Artisans, 2 Ninjas), tout en masquant strictement par défaut les **7 écoles secrètes réservées au MJ** (*Clan de l'Araignée* et *Shugenja Chuda originelle*).
+  - **Modes de jeu rapides (« En un clic »)** : 9 profils préconfigurés (*Duelliste d'Élite*, *Rempart & Tank*, *Maître de Guerre*, *Lanceur de Sorts*, *Voix de la Cour*, *Ombre & Furtivité*, *Haute Honneur*, *Économie d'Actions*, *Voie des Éléments*) plus filtres combinables par Clan, Archétype, Bonus de Trait, Compétence enseignée, Honneur minimum et recherche plein texte (y compris sur les techniques Rangs 1 à 5).
+  - **Tableau Multi-Colonnes & Vue Cartes** : Tri ascendant/descendant par École, Clan, Archétype, Bonus de Trait, Honneur, Nombre de Compétences ou Technique Rang 1, bascule instantanée entre Tableau et Cartes, et étiquettes mécaniques détectées automatiquement (*Action Simple*, *Synergie Vide*, *Réduction*, *Duel Iaijutsu*, *Dégâts*, *Soins / Soutien*...).
+  - **Inspecteur Rangs 1–5 & Comparateur Côte à Côte** : Modale détaillée affichant l'héritage complet de l'école (Trait, Compétences, Honneur, Équipement, Technique spéciale / Affinité / Dévotion) et un comparateur jusqu'à **3 écoles côte à côte** mettant en évidence les compétences partagées et la progression Rangs 1 à 5.
+  - **Passage Direct vers la Forge (`js/forge-ui.js`, `createcharacter.html`)** : Boutons *« ⚒️ Forger »* ouvrant directement `createcharacter.html?clan=<id>&school=<id>` avec pré-sélection automatique du Clan, de la Famille recommandée et de l'École ; ajout d'un lien *« ⚖️ Comparer toutes les écoles ↗ »* dans la Forge.
+  - **Verrou MJ (`#btn-toggle-gm-secrets`)** : Partage l'état d'ouverture `sessionStorage` existant des secrets du MJ (mot de passe `araignee`) pour révéler temporairement les 7 écoles interdites aux côtés des 88 publiques (total : 95) ou les re-verrouiller en un clic.
+- **Navigation, PWA & Tests (`js/navbar.js`, `index.html`, `sw.js`, `tests/unit-tests.js`, `tests/unit-tests.html`)** :
+  - Ajout de l'Explorateur des Écoles dans le menu *Outils* (bureau & mobile), dans les boutons d'action et le compteur de l'accueil (`88 Écoles / Tableau & Comparateur`), et dans le cache Service Worker (`l5r-forge-v1.20.0`).
+  - Ajout de la Suite 10 de tests unitaires couvrant `buildSchoolsCatalogEntries`, `filterSchoolsEntries`, `sortSchoolsEntries` et la non-fuite des écoles `gmOnly`.
+
+---
+
 ## [1.19.0] — 2026-11-17
 
 ### ✨ Ajouté & Complété
