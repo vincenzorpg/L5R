@@ -596,6 +596,9 @@ function applySpellsFilterConstraints(perms) {
         const allowKihoOpt = perms.canUseKihos;
         opt.hidden = !allowKihoOpt;
         opt.disabled = !allowKihoOpt;
+        opt.textContent = (!perms.canCastSpells && perms.canUseKihos)
+          ? '🥋 Tous les Kihos (64)'
+          : '🥋 Kihos (Moines)';
       } else if (opt.value === 'tous') {
         const allowAll = perms.canCastSpells;
         opt.hidden = !allowAll;
@@ -603,15 +606,21 @@ function applySpellsFilterConstraints(perms) {
         opt.textContent = (perms.canCastSpells && perms.canUseKihos)
           ? 'Tous les Éléments & Kihos'
           : 'Tous les Éléments (Sorts)';
+      } else if (opt.value === 'universel') {
+        const allowUniv = perms.canCastSpells;
+        opt.hidden = !allowUniv;
+        opt.disabled = !allowUniv;
       } else {
-        const allowElem = perms.canCastSpells;
+        const allowElem = perms.canCastSpells || perms.canUseKihos;
         opt.hidden = !allowElem;
         opt.disabled = !allowElem;
       }
     });
 
     if (!perms.canCastSpells && perms.canUseKihos) {
-      elemSel.value = 'kiho';
+      if (elemSel.value === 'tous' || elemSel.value === 'universel') {
+        elemSel.value = 'kiho';
+      }
     } else if (perms.canCastSpells && !perms.canUseKihos && elemSel.value === 'kiho') {
       elemSel.value = 'tous';
     }
@@ -630,12 +639,15 @@ function applySpellsFilterConstraints(perms) {
   }
 
   if (hintEl) {
+    const clanVal = document.getElementById('sel-clan')?.value || '';
     if (perms.canCastSpells && perms.canUseKihos) {
-      hintEl.textContent = 'Parchemins : 0 XP • Kihos : Maîtrise en XP.';
+      hintEl.textContent = 'Parchemins : 0 XP • Kihos (Shugenja) : 2× Maîtrise en XP.';
     } else if (perms.canCastSpells) {
       hintEl.textContent = 'Parchemins de sorts : 0 XP (Sorts de départ & parchemins).';
+    } else if (clanVal === 'confrerie') {
+      hintEl.textContent = 'Confrérie : 3 gratuits + 2/Rang • Bonus : Maîtrise en XP.';
     } else {
-      hintEl.textContent = 'Kihos (Confrérie de Shinsei) : Maîtrise en XP.';
+      hintEl.textContent = 'Autre Ordre de Moine (p. 266) : 1,5× Maîtrise en XP (max = Rang d\'École).';
     }
   }
 }
@@ -669,8 +681,10 @@ function updateArchetypePanels(notifySanitize = false, forceCatalogRefresh = fal
     const allowedCount = (allowSpellsOrKihos ? 1 : 0) + (allowKatas ? 1 : 0) + (allowTattoos ? 1 : 0);
 
     spellsPanel.classList.toggle('hidden', !allowSpellsOrKihos);
+    spellsPanel.classList.toggle('col-span-full', !allowKatas);
     if (slotsBar) slotsBar.classList.toggle('hidden', !perms.canCastSpells);
     katasPanel.classList.toggle('hidden', !allowKatas);
+    katasPanel.classList.toggle('col-span-full', !allowSpellsOrKihos);
     if (tattoosPanel) tattoosPanel.classList.toggle('hidden', !allowTattoos);
     if (courtierNote) courtierNote.classList.toggle('hidden', allowedCount > 0);
 
@@ -690,7 +704,9 @@ function updateArchetypePanels(notifySanitize = false, forceCatalogRefresh = fal
 
     if (archetypeBadge) {
       let badgeHtml = '';
-      if (perms.canUseTattoos && !allowKatas && !allowSpellsOrKihos) {
+      if (perms.canUseTattoos && perms.canUseKihos && !allowKatas && !perms.canCastSpells) {
+        badgeHtml = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold font-imperial">Chair Tatouée &amp; Kihos (Ise Zumi)</span>`;
+      } else if (perms.canUseTattoos && !allowKatas && !allowSpellsOrKihos) {
         badgeHtml = `<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold font-imperial">Chair Tatouée (Ise Zumi)</span>`;
       } else if (perms.primaryType === 'shugenja') {
         badgeHtml = `<span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-500/40 font-bold">Voie des Kamis (Shugenja)</span>`;
@@ -744,12 +760,13 @@ function populateSpellCatalogSelect(autoSelectFirst = false) {
     if (!perms.canCastSpells && !isKiho) return false;
     if (!perms.canUseKihos && isKiho) return false;
     const sElem = (isKiho ? "kiho" : (s.element || "universel")).toLowerCase();
-    const matchElem = elemFilter === "tous" || sElem === elemFilter;
+    const sRing = (s.ring || s.element || "").toLowerCase();
+    const matchElem = elemFilter === "tous" || sElem === elemFilter || (isKiho && sRing.includes(elemFilter));
     const sRank = Number(s.mastery) || 0;
-    const matchRank = rankFilter === "tous" || (rankFilter === "6" ? sRank >= 6 : sRank === parseInt(rankFilter, 10));
+    const matchRank = rankFilter === "tous" || sRank === parseInt(rankFilter, 10);
     if (!matchElem || !matchRank) return false;
     if (!searchFilter) return true;
-    const hay = foldForgeSearch(`${s.name || s.nom || ''} ${s.element || ''} ${(s.keywords || []).join(' ')} ${s.description || ''}`);
+    const hay = foldForgeSearch(`${s.name || s.nom || ''} ${s.element || ''} ${s.ring || ''} ${(s.keywords || []).join(' ')} ${s.desc || s.description || ''}`);
     return hay.includes(searchFilter);
   });
 
@@ -838,7 +855,18 @@ function addSpellFromCatalog() {
     alert("Ce sort ou kiho figure déjà dans votre grimoire personnel.");
     return;
   }
-  const defaultXp = found.isKiho ? (Number(found.mastery) || 3) : 0;
+  const mastery = Number(found.mastery) || 0;
+  let defaultXp = 0;
+  if (isKiho) {
+    const clanVal = document.getElementById('sel-clan')?.value || '';
+    if (!perms.canCastSpells && clanVal === 'confrerie') {
+      defaultXp = mastery;
+    } else if (perms.primaryType === 'moine' || perms.secondaryType === 'moine') {
+      defaultXp = Math.ceil(mastery * 1.5);
+    } else {
+      defaultXp = mastery * 2;
+    }
+  }
   window.charSpellsList.push({
     id: found.id,
     name: found.name || found.nom,
@@ -970,7 +998,7 @@ function renderCharacterSpells() {
               <span class="text-[9px] font-bold font-imperial px-1.5 py-0.5 rounded ${badgeCls}">
                 ${elemLabel} • M${s.mastery}
               </span>
-              <a href="grimoire.html#sort-${s.id}" target="_blank" class="font-bold font-imperial text-amber-200 hover:text-amber-300 text-xs truncate">
+              <a href="${s.isKiho ? `kihos.html#${s.id}` : `grimoire.html#sort-${s.id}`}" target="_blank" class="font-bold font-imperial text-amber-200 hover:text-amber-300 text-xs truncate">
                 ${s.name} ↗
               </a>
             </div>

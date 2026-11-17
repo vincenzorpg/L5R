@@ -674,6 +674,30 @@ select {
   border-color: #f3e5ab !important;
 }
 
+/* Scrollbars fines & thématiques (Laque & Or / Parchemin) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.35) rgba(15, 11, 10, 0.4);
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 11, 10, 0.45);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.6);
+}
+[data-theme="light"] * {
+  scrollbar-color: rgba(140, 94, 11, 0.45) rgba(235, 224, 200, 0.5);
+}
+
 /* ==========================================================================
    FORGE DE PERSONNAGE : STUDIO PAR ÉTAPES, FILTRES & NOTIFICATIONS
    ========================================================================== */
@@ -684,14 +708,14 @@ select {
 .forge-step-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.75rem;
-  border-radius: 0.65rem;
+  gap: 0.35rem;
+  padding: 0.38rem 0.62rem;
+  border-radius: 0.6rem;
   border: 1px solid rgba(212, 175, 55, 0.22);
   background: rgba(15, 11, 10, 0.78);
   color: #c8beb2;
   font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
+  font-size: 0.69rem;
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
