@@ -1,6 +1,6 @@
 {
-  "version": "1.23.0",
-  "tag": "v1.23.0",
+  "version": "1.23.1",
+  "tag": "v1.23.1",
   "date": "2026-11-18",
-  "notes": "Carte interactive de Rokugan HD enluminée avec territoires de clans clairement apparents"
+  "notes": "Correction du tracé du chemin des PJs sur la Carte de Rokugan (suppression des traits pleins et allers-retours superposés)"
 }

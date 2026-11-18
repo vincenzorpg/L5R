@@ -576,7 +576,7 @@
       placeLabel: 'Kyuden Shinjo & lisière des Terres Brûlées',
       author: 'Ryûmitaka Isawa & Tsuruchi Akira',
       file: 'campagne/scenario-3.html',
-      way: [[60.5, 21.5], [52.5, 26.5], [33.5, 23.0], [23.5, 21.5], [16.0, 6.5], [23.5, 21.5]],
+      way: [[60.5, 21.5], [52.5, 26.5], [33.5, 23.0], [23.5, 21.5]],
       summary: "Missionnés par Doji Satsume sur les traces du légendaire étalon Xian et de Shinjo Shimura jusqu'à Kyuden Shinjo et aux confins septentrionaux."
     },
     {
@@ -631,7 +631,7 @@
       placeLabel: 'Ryoko Owari → Shiro Kaiu → Ashinagabachi → Shiro Matsu → Kyuden Hida',
       author: 'Tsuruchi Akira (avec Okado, Shinta, Samui & Gutmahïdo)',
       file: 'campagne/scenario-8.html',
-      way: [[37.0, 41.5], [25.0, 57.5], [50.5, 65.5], [48.0, 29.5], [50.5, 65.5], [29.5, 71.0]],
+      way: [[37.0, 41.5], [48.0, 29.5], [50.5, 65.5], [29.5, 71.0]],
       summary: "Long périple mouvementé à travers l'Empire (Shiro Kaiu, Ashinagabachi, Shiro Matsu) menant finalement le groupe vers Kyuden Hida sous l'orage."
     },
     {

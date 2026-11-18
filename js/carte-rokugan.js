@@ -250,6 +250,31 @@
       `).join('');
     }
 
+    function buildSmoothPathD(points) {
+      if (!Array.isArray(points) || points.length < 2) return '';
+      if (points.length === 2) {
+        const [p0, p1] = points;
+        const mx = (p0[0] + p1[0]) / 2;
+        const my = (p0[1] + p1[1]) / 2;
+        const dx = p1[0] - p0[0];
+        const dy = p1[1] - p0[1];
+        const cx = mx - dy * 0.1;
+        const cy = my + dx * 0.1;
+        return `M ${p0[0]},${p0[1]} Q ${cx.toFixed(2)},${cy.toFixed(2)} ${p1[0]},${p1[1]}`;
+      }
+      let d = `M ${points[0][0]},${points[0][1]}`;
+      for (let i = 1; i < points.length - 1; i++) {
+        const curr = points[i];
+        const next = points[i + 1];
+        const midX = ((curr[0] + next[0]) / 2).toFixed(2);
+        const midY = ((curr[1] + next[1]) / 2).toFixed(2);
+        d += ` Q ${curr[0]},${curr[1]} ${midX},${midY}`;
+      }
+      const last = points[points.length - 1];
+      d += ` L ${last[0]},${last[1]}`;
+      return d;
+    }
+
     function renderRouteSvg() {
       if (!state.showRoute) {
         routeSvg.innerHTML = '';
@@ -257,12 +282,13 @@
       }
 
       const segments = buildRoutePointsUpToAct(route, state.maxAct);
+      const activeStep = state.selectedActStep || state.maxAct;
       const defs = `
         <defs>
           <filter id="routeGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="0" stdDeviation="0.45" flood-color="#000000" flood-opacity="0.95" />
+            <feDropShadow dx="0" dy="0" stdDeviation="0.35" flood-color="#000000" flood-opacity="0.95" />
           </filter>
-          <marker id="routeArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="2.8" markerHeight="2.8" orient="auto-start-reverse">
+          <marker id="routeArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse">
             <path d="M 1 1 L 9 5 L 1 9 z" fill="#fde047" />
           </marker>
         </defs>
@@ -271,14 +297,14 @@
       const pathsHtml = segments
         .map((seg) => {
           if (seg.points.length < 2) return '';
-          const ptsAttr = seg.points.map((p) => `${p[0]},${p[1]}`).join(' ');
-          const isCurrent = seg.step === state.maxAct || seg.step === state.selectedActStep;
-          const strokeCol = isCurrent ? '#facc15' : '#f59e0b';
-          const opacity = isCurrent ? '0.98' : '0.78';
-          const width = isCurrent ? '0.75' : '0.52';
+          const dAttr = buildSmoothPathD(seg.points);
+          const isCurrent = seg.step === activeStep;
+          const strokeCol = isCurrent ? '#fde047' : '#f59e0b';
+          const opacity = isCurrent ? '0.96' : '0.62';
+          const width = isCurrent ? '0.68' : '0.42';
+          const markerAttr = isCurrent ? 'marker-end="url(#routeArrow)"' : '';
           return `
-            <polyline points="${ptsAttr}" fill="none" stroke="#1c1917" stroke-width="${(Number(width) + 0.45).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round" opacity="0.65" />
-            <polyline points="${ptsAttr}" fill="none" stroke="${strokeCol}" stroke-width="${width}" stroke-dasharray="1.4 0.9" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}" filter="url(#routeGlow)" marker-end="url(#routeArrow)" class="${isCurrent ? 'map-route-animated' : ''}" />
+            <path d="${dAttr}" fill="none" stroke="${strokeCol}" stroke-width="${width}" stroke-dasharray="1.3 0.9" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}" filter="url(#routeGlow)" ${markerAttr} class="${isCurrent ? 'map-route-animated' : ''}" />
           `;
         })
         .join('');
