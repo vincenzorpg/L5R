@@ -251,6 +251,8 @@ def build_podcast_script(html_path: Path, scenario_num: int):
             for vkey, txt, pause_ms in segs:
                 chunks = chunk_long_text(txt)
                 for ci, ch in enumerate(chunks):
+                    if not re.search(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9]", ch):
+                        continue
                     p_ms = pause_ms if ci == len(chunks) - 1 else 140
                     segments.append((vkey, ch, p_ms))
 
@@ -258,24 +260,39 @@ def build_podcast_script(html_path: Path, scenario_num: int):
     return title, segments
 
 
-async def synth_segment(text: str, voice_cfg: dict, out_mp3: Path, retries: int = 3):
+async def synth_segment(text: str, voice_cfg: dict, out_mp3: Path, retries: int = 5) -> bool:
+    if not re.search(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9]", text):
+        return False
     last_err = None
     for attempt in range(retries):
         try:
-            voice_name = voice_cfg["voice"] if attempt < 2 else "fr-FR-HenriNeural"
+            if attempt < 2:
+                voice_name = voice_cfg["voice"]
+                rate = voice_cfg["rate"]
+                pitch = voice_cfg["pitch"]
+            elif attempt < 4:
+                voice_name = "fr-FR-HenriNeural"
+                rate = "-2%"
+                pitch = "+0Hz"
+            else:
+                voice_name = "fr-FR-DeniseNeural"
+                rate = "+0%"
+                pitch = "+0Hz"
+
             comm = edge_tts.Communicate(
                 text=text,
                 voice=voice_name,
-                rate=voice_cfg["rate"],
-                pitch=voice_cfg["pitch"],
+                rate=rate,
+                pitch=pitch,
             )
             await comm.save(str(out_mp3))
             if out_mp3.exists() and out_mp3.stat().st_size > 100:
-                return
+                return True
         except Exception as exc:
             last_err = exc
-            await asyncio.sleep(1.2 * (attempt + 1))
-    raise RuntimeError(f"Échec Edge TTS après {retries} tentatives : {last_err}")
+            await asyncio.sleep(1.5 * (attempt + 1))
+    print(f"[WARN] Segment ignoré après {retries} tentatives ({last_err}): {text[:80]!r}", flush=True)
+    return False
 
 
 def make_silence_wav(duration_ms: int, out_wav: Path):
@@ -355,15 +372,17 @@ async def generate_scenario_podcast(scenario_num: int, force: bool = False):
         make_japanese_chime_wav(intro_wav, 2.4)
         concat_list.append(intro_wav)
 
-        # Synthèse des segments (concurrence limitée à 3 pour rester respectueux du service)
-        sem = asyncio.Semaphore(3)
-        seg_files = []
+        # Synthèse des segments (concurrence limitée à 2 pour éviter tout rate-limit Edge TTS)
+        sem = asyncio.Semaphore(2)
 
         async def worker(idx, vkey, txt):
             seg_mp3 = tmp / f"seg_{idx:04d}.mp3"
             seg_wav = tmp / f"seg_{idx:04d}.wav"
             async with sem:
-                await synth_segment(txt, VOICES[vkey], seg_mp3)
+                ok = await synth_segment(txt, VOICES[vkey], seg_mp3)
+                await asyncio.sleep(0.12)
+            if not ok:
+                return None
             subprocess.run(
                 [
                     "ffmpeg", "-y", "-loglevel", "error",
@@ -380,6 +399,8 @@ async def generate_scenario_podcast(scenario_num: int, force: bool = False):
 
         silence_cache = {}
         for i, (_, _, pause_ms) in enumerate(segments):
+            if seg_wavs[i] is None:
+                continue
             concat_list.append(seg_wavs[i])
             if pause_ms > 0:
                 if pause_ms not in silence_cache:
@@ -454,11 +475,11 @@ async def main_async(args):
         info = await generate_scenario_podcast(n, force=args.force)
         if info:
             manifest["episodes"][str(n)] = info
+            manifest["generatedAt"] = datetime.now(timezone.utc).isoformat()
+            MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
+            MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    manifest["generatedAt"] = datetime.now(timezone.utc).isoformat()
-    MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"[MANIFEST] Mis à jour : {MANIFEST_PATH} ({len(manifest['episodes'])} épisodes)")
+    print(f"[MANIFEST] Mis à jour : {MANIFEST_PATH} ({len(manifest['episodes'])} épisodes)", flush=True)
 
 
 def main():
