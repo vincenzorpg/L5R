@@ -777,12 +777,12 @@
   // 9. CARTE INTERACTIVE DE ROKUGAN & CHEMIN DES PJS
   // ===========================================================================
   describe("9. Carte Interactive de Rokugan & Chemin de Campagne (data/carte-data.js & js/carte-rokugan.js)", function () {
-    it("ROKUGAN_LOCATIONS et CAMPAIGN_ROUTE couvrent toutes les capitales et les 10 Actes de campagne", function () {
+    it("ROKUGAN_LOCATIONS et CAMPAIGN_ROUTE couvrent toutes les capitales et les 11 Actes de campagne", function () {
       const locs = carteData.ROKUGAN_LOCATIONS || [];
       const route = carteData.CAMPAIGN_ROUTE || [];
       assertTrue(locs.length >= 40, "Au moins 40 lieux répertoriés sur Rokugan");
       assertTrue(locs.every(l => l.x >= 0 && l.x <= 100 && l.y >= 0 && l.y <= 100), "Toutes les coordonnées sont en 0..100 %");
-      assertEqual(route.length, 10, "10 Actes chronologiques dans CAMPAIGN_ROUTE");
+      assertEqual(route.length, 11, "11 Actes chronologiques dans CAMPAIGN_ROUTE");
       const locIds = new Set(locs.map(l => l.id));
       assertTrue(route.every(act => locIds.has(act.locationId)), "Chaque Acte référence un lieu existant de ROKUGAN_LOCATIONS");
 
