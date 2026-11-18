@@ -20,6 +20,7 @@
   const carteData = isNode ? require("../data/carte-data.js") : window;
   const carteUi = isNode ? require("../js/carte-rokugan.js") : window;
   const ecolesUi = isNode ? require("../js/ecoles.js") : window;
+  const globalSearch = isNode ? require("../js/global-search.js") : window;
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -931,6 +932,36 @@
         });
       });
       assertEqual(encounterCount, 2, "2 rencontres prêtes à lancer (Acte II et Acte IV)");
+    });
+  });
+
+  // ===========================================================================
+  // 13. RECHERCHE GLOBALE INSTANTANÉE (js/global-search.js)
+  // ===========================================================================
+  describe("13. Recherche Globale Instantanée (Ctrl+K) & Non-fuite Secrets MJ", () => {
+    it("buildGlobalSearchIndex indexe écoles, lieux et pages tout en masquant gmOnly", () => {
+      const clans = catalogScope.CLANS_DATA || {};
+      const locs = carteData.ROKUGAN_LOCATIONS || [];
+      const pubIndex = globalSearch.buildGlobalSearchIndex({
+        CLANS_DATA: clans,
+        ROKUGAN_LOCATIONS: locs,
+        includeSecrets: false
+      });
+      const gmIndex = globalSearch.buildGlobalSearchIndex({
+        CLANS_DATA: clans,
+        ROKUGAN_LOCATIONS: locs,
+        includeSecrets: true
+      });
+
+      assertTrue(pubIndex.length > 100, "Index public complet généré");
+      assertTrue(gmIndex.length > pubIndex.length, "Index MJ inclut les écoles secrètes");
+      assertTrue(!pubIndex.some(i => i.cat === "Écoles" && /daigotsu|chuda/i.test(i.title)), "Aucune école secrète dans l'index public");
+
+      const kakitaRes = globalSearch.searchGlobalIndex(pubIndex, "Kakita", "Écoles");
+      assertTrue(kakitaRes.length >= 1 && kakitaRes.some(r => /Kakita/i.test(r.title)), "Recherche école Kakita exacte");
+
+      const ryokoRes = globalSearch.searchGlobalIndex(pubIndex, "Ryoko Owari", "Lieux");
+      assertTrue(ryokoRes.length === 1 && ryokoRes[0].url.includes("ryoko-owari"), "Recherche lieu Ryoko Owari redirige vers carte.html?lieu=...");
     });
   });
 

@@ -1,6 +1,6 @@
 {
-  "version": "1.24.0",
-  "tag": "v1.24.0",
+  "version": "1.25.0",
+  "tag": "v1.25.0",
   "date": "2026-11-18",
-  "notes": "Embellissement des 8 pages de Grands Clans avec leurs mon officiels 4e édition et raccourcis Forge/Écoles/Carte"
+  "notes": "Recherche globale instantanée (Ctrl+K) dans la barre de navigation et fil d'Ariane automatique sur les pages internes"
 }
