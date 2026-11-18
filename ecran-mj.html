@@ -49,6 +49,9 @@
           + Importer PJ (.json)
         </label>
         <input id="gm-json-input" type="file" accept=".json,application/json" multiple class="hidden" />
+        <button id="gm-load-dojo" type="button" class="px-3 py-2 rounded-lg bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-500/40 text-emerald-200 font-imperial font-bold text-xs cursor-pointer transition" title="Importer automatiquement vos samouraïs sauvegardés dans La Forge">
+          🏯 Charger mon Dojo
+        </button>
         <button id="gm-load-sample" type="button" class="px-3 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/30 text-amber-200 font-imperial text-xs cursor-pointer transition">
           4 PJs d'exemple
         </button>
@@ -607,6 +610,32 @@
           </div>
         </section>
 
+        <!-- 5. GÉNÉRATEUR EXPRESS (NOMS & RENCONTRES) -->
+        <section id="gm-name-gen-card" class="card-clean rounded-xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-amber-500/20 pb-1.5">
+            <h2 class="font-imperial font-bold text-sm text-amber-300">🎲 Générateur Express MJ</h2>
+            <span class="text-[10px] text-stone-500 font-mono">Improvisation</span>
+          </div>
+          <div class="flex gap-1.5">
+            <select id="gm-name-clan" class="flex-1 rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-xs text-amber-200">
+              <option value="crabe">Clan du Crabe</option>
+              <option value="grue">Clan de la Grue</option>
+              <option value="dragon">Clan du Dragon</option>
+              <option value="lion">Clan du Lion</option>
+              <option value="phenix">Clan du Phénix</option>
+              <option value="scorpion">Clan du Scorpion</option>
+              <option value="licorne">Clan de la Licorne</option>
+              <option value="mante">Clan de la Mante</option>
+              <option value="heimin">Heimin / Roturier</option>
+            </select>
+            <button id="gm-name-gen-btn" type="button" class="px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs cursor-pointer transition shrink-0">Nom</button>
+            <button id="gm-hook-gen-btn" type="button" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-amber-200 font-bold text-xs cursor-pointer transition shrink-0">Rumeur</button>
+          </div>
+          <div id="gm-name-gen-out" class="p-2.5 rounded-lg bg-black/50 border border-stone-800 text-xs text-amber-100 min-h-[42px] flex items-center justify-center text-center italic">
+            Cliquez sur Nom ou Rumeur pour improviser en séance.
+          </div>
+        </section>
+
       </aside>
     </div>
 
@@ -625,7 +654,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.31.0</span>
+      <span id="site-version-label">v1.32.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

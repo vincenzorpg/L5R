@@ -1026,6 +1026,27 @@
   });
 
   // ===========================================================================
+  // 16. ÉCRAN MJ — PRÉRÉGLAGES ACTE 11 & GÉNÉRATEUR EXPRESS
+  // ===========================================================================
+  describe("16. Écran MJ — Préréglages Acte 11 & Générateur Express (Noms / Rumeurs)", function () {
+    it("ENEMY_PRESETS inclut les ennemis de l'Acte 11 et les générateurs produisent des résultats valides", function () {
+      const presets = gm.ENEMY_PRESETS || [];
+      assertTrue(presets.some(p => /Marionnette sans bouche/i.test(p.name)), "Marionnette sans bouche (Acte 11) présente");
+      assertTrue(presets.some(p => /Archer corrompu/i.test(p.name)), "Archer corrompu (Acte 11) présent");
+      assertTrue(presets.some(p => /Bunzo/i.test(p.name)), "Bunzo, Faux Moine (Acte 11) présent");
+
+      const scorpionName = gm.generateRokuganiName("scorpion", () => 0);
+      assertTrue(typeof scorpionName === "string" && scorpionName.startsWith("Bayushi "), "generateRokuganiName('scorpion') génère un nom de famille Scorpion");
+
+      const heiminName = gm.generateRokuganiName("heimin", () => 0);
+      assertTrue(typeof heiminName === "string" && !heiminName.includes(" "), "generateRokuganiName('heimin') génère un prénom simple sans nom de famille");
+
+      const hook = gm.generateGmEncounterHook(() => 0);
+      assertTrue(typeof hook === "string" && hook.length > 20, "generateGmEncounterHook retourne une accroche de rencontre");
+    });
+  });
+
+  // ===========================================================================
   // RAPPORT D'EXÉCUTION (NODE.JS & NAVIGATEUR)
   // ===========================================================================
   const totalPassed = suites.reduce((acc, s) => acc + s.passed, 0);

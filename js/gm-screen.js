@@ -57,7 +57,10 @@
     { name: 'Guerrier Tsuno (Sc.2)', gmOnly: true, initFormula: '5g4', armorTN: 30, reduction: 8, earth: 4, attack: '7g3', damage: '6g3', notes: 'Peur 2 (ND 15) • Invulnérabilité partielle (Réd 8 sauf Jade/Cristal) • +1g0 attaque vs cible souillée.' },
     { name: 'Shikageko / Murai (Sc.2 — Boss Acte II)', gmOnly: true, initFormula: '7g4', armorTN: 25, reduction: 4, earth: 3, attack: '8g4', damage: '4g3', notes: '2 att./round • Peur 3 (ND 20) • Poison (End. ND 15 ou -1g0) • ND chute à 15 si Murai reprend le contrôle.' },
     { name: 'Zombie de Sang (Sc.2)', gmOnly: true, initFormula: '2g1', armorTN: 10, reduction: 3, earth: 2, attack: '4g2', damage: '3g2', notes: '30 PV fixes • Insensible aux malus • Détruit instantanément si le brasero de Minerai de Sang est brisé.' },
-    { name: 'Éclaireur Kuroiban (Sc.2)', gmOnly: true, initFormula: '7g3', armorTN: 25, reduction: 3, earth: 3, attack: '7g4', damage: '5g2', notes: 'Shuriken empoisonnés 6g4 (Endurance ND 20 ou sommeil).' }
+    { name: 'Éclaireur Kuroiban (Sc.2)', gmOnly: true, initFormula: '7g3', armorTN: 25, reduction: 3, earth: 3, attack: '7g4', damage: '5g2', notes: 'Shuriken empoisonnés 6g4 (Endurance ND 20 ou sommeil).' },
+    { name: 'Marionnette sans bouche (Acte 11)', initFormula: '4g2', armorTN: 18, reduction: 4, earth: 3, attack: '6g3', damage: '5g2', notes: 'Armure rouillée, masque de porcelaine sans bouche. Démarche saccadée, ignore les malus jusqu\'à À terre.' },
+    { name: 'Archer corrompu (Acte 11)', initFormula: '5g3', armorTN: 16, reduction: 1, earth: 2, attack: '6g3', damage: '4g2', notes: 'Yeux injectés de sang, embusqué dans la canopée (couvert +5 ND). Flèches Yumi.' },
+    { name: 'Bunzo, Faux Moine (Acte 11)', initFormula: '6g3', armorTN: 20, reduction: 2, earth: 3, attack: '6g3', damage: '5g3', notes: 'Maho-tsukai de Yanagi Mura. Rituel sous les racines du saule pleureur, Peur 2 et sorts de sang.' }
   ];
 
   const DUEL_PRESETS = [
@@ -2123,6 +2126,70 @@
     renderAll();
   }
 
+  function loadDojoPcsToGm() {
+    let list = [];
+    try {
+      const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
+      list = raw ? JSON.parse(raw) : [];
+    } catch (_) {
+      list = [];
+    }
+    const statusEl = document.getElementById('gm-import-status');
+    if (!Array.isArray(list) || list.length === 0) {
+      if (statusEl) statusEl.textContent = 'Dojo vide (aucun PJ enregistré)';
+      return 0;
+    }
+    let added = 0;
+    const existingNames = new Set(state.pcs.map(p => String(p.name || '').toLowerCase()));
+    list.forEach((rawChar) => {
+      const pc = normalizeImportedCharacter(rawChar);
+      if (!existingNames.has(String(pc.name || '').toLowerCase())) {
+        state.pcs.push(pc);
+        existingNames.add(String(pc.name || '').toLowerCase());
+        added++;
+      }
+    });
+    saveState();
+    renderAll();
+    if (statusEl) {
+      statusEl.textContent = added > 0 ? `+${added} PJ importé(s) du Dojo` : 'PJs du Dojo déjà présents';
+    }
+    return added;
+  }
+
+  const ROKUGANI_CLAN_NAMES = {
+    crabe: { families: ['Hida', 'Hiruma', 'Kaiu', 'Kuni', 'Yasuki'], given: ['Kisada', 'Yakamo', 'Tadaka', 'Ryo', 'Kazuo', 'Tomoko', 'Matsu'] },
+    grue: { families: ['Doji', 'Kakita', 'Asahina', 'Daidoji'], given: ['Hotaru', 'Toshimoko', 'Satsume', 'Yori', 'Haruka', 'Aiko', 'Ren'] },
+    dragon: { families: ['Togashi', 'Mirumoto', 'Agasha', 'Kitsuki'], given: ['Mitsuo', 'Hitomi', 'Satsu', 'Ryuden', 'Chizu', 'Kaede', 'Jiro'] },
+    lion: { families: ['Akodo', 'Matsu', 'Ikoma', 'Kitsu'], given: ['Toturi', 'Tsuko', 'Kage', 'Kenjiro', 'Fumiko', 'Atsuko', 'Goro'] },
+    phenix: { families: ['Shiba', 'Isawa', 'Asako'], given: ['Ujimitsu', 'Tsukune', 'Kaede', 'Tadashi', 'Mariko', 'Noboru', 'Sora'] },
+    scorpion: { families: ['Bayushi', 'Soshi', 'Shosuro', 'Yogo'], given: ['Shoju', 'Kachiko', 'Takeda', 'Aramoro', 'Satsuki', 'Yori', 'Kuro'] },
+    licorne: { families: ['Shinjo', 'Moto', 'Ide', 'Iuchi', 'Utaku'], given: ['Yokatsu', 'Tsume', 'Tadaji', 'Nergui', 'Altansarnai', 'Batu', 'Hana'] },
+    mante: { families: ['Yoritomo', 'Tsuruchi', 'Moshi', 'Kitsune'], given: ['Kumiko', 'Akira', 'Kitao', 'Naizen', 'Wakiko', 'Kaito', 'Shin'] },
+    heimin: { families: [''], given: ['Taro', 'Jiro', 'Hana', 'Kiku', 'Momo', 'Saburo', 'Yuki', 'Kenji', 'Nori', 'Ume'] }
+  };
+
+  const GM_ENCOUNTER_HOOKS = [
+    "Un magistrat d'Émeraude ou de Jade réquisitionne discrètement les PJs pour escorter un prisonnier masqué.",
+    "Un pont effondré par les pluies d'automne force un détour par un village isolé où aucun moine ne répond.",
+    "Un marchand Yasuki propose un talisman en jade à prix cassé, mais il présente de fines veines noires.",
+    "À la maison de thé, deux duellistes Grue et Lion sont sur le point de dégainer pour une insulte mineure.",
+    "Un corbeau blessé porte un message scellé d'un mon inconnu mentionnant l'un des PJs par son nom.",
+    "Une patrouille de ronins affamés bloque le col et exige un droit de passage sous prétexte d'ordre seigneurial."
+  ];
+
+  function generateRokuganiName(clanKey = 'crabe', rng = Math.random) {
+    const key = String(clanKey || 'crabe').toLowerCase();
+    const pool = ROKUGANI_CLAN_NAMES[key] || ROKUGANI_CLAN_NAMES.crabe;
+    const fam = pool.families[Math.floor(rng() * pool.families.length)] || '';
+    const giv = pool.given[Math.floor(rng() * pool.given.length)] || 'Taro';
+    return fam ? `${fam} ${giv}` : giv;
+  }
+
+  function generateGmEncounterHook(rng = Math.random) {
+    return GM_ENCOUNTER_HOOKS[Math.floor(rng() * GM_ENCOUNTER_HOOKS.length)];
+  }
+
   function openQuickRulesSearch() {
     state.activeTab = 'rules';
     saveState();
@@ -2213,6 +2280,16 @@
     });
 
     document.getElementById('gm-load-sample')?.addEventListener('click', loadSamplePcs);
+    document.getElementById('gm-load-dojo')?.addEventListener('click', loadDojoPcsToGm);
+    document.getElementById('gm-name-gen-btn')?.addEventListener('click', () => {
+      const clan = document.getElementById('gm-name-clan')?.value || 'crabe';
+      const out = document.getElementById('gm-name-gen-out');
+      if (out) out.textContent = generateRokuganiName(clan);
+    });
+    document.getElementById('gm-hook-gen-btn')?.addEventListener('click', () => {
+      const out = document.getElementById('gm-name-gen-out');
+      if (out) out.textContent = generateGmEncounterHook();
+    });
     document.getElementById('gm-clear-pcs')?.addEventListener('click', () => {
       if (state.pcs.length === 0 || confirm('Retirer tous les PJs de la table ?')) {
         state.pcs = [];
@@ -2662,6 +2739,8 @@
     globalScope.formatRollResult = formatRollResult;
     globalScope.buildSkirmishCombatants = buildSkirmishCombatants;
     globalScope.rollFormula = rollFormula;
+    globalScope.generateRokuganiName = generateRokuganiName;
+    globalScope.generateGmEncounterHook = generateGmEncounterHook;
   }
 
   if (typeof module !== 'undefined' && module.exports) {
@@ -2683,7 +2762,9 @@
       sortCombatantsByInit,
       formatRollResult,
       buildSkirmishCombatants,
-      rollFormula
+      rollFormula,
+      generateRokuganiName,
+      generateGmEncounterHook
     };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
