@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.31.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Mode « Session de Jeu » dans La Forge (`createcharacter.html`, `js/forge-ui.js`, `js/character-generator.js`)** :
+  - Nouveau panneau dépliable **⚔️ Session** accessible depuis le cockpit de la Forge pour suivre en partie les **Blessures** (paliers et malus L5R 4e automatiques selon l'Anneau de Terre), les **Points de Vide**, les **Emplacements de Sorts lancés** par élément, la **Souillure** et les **Notes rapides de séance**, avec bouton **🌙 Repos complet** et sauvegarde automatique dans le brouillon et le Dojo (`sessionState`).
+- **Sauvegarde & Restauration complète du Dojo (`createcharacter.html`, `js/forge-ui.js`, `js/character-generator.js`)** :
+  - Ajout des boutons **📦 Sauver tout le Dojo** (export JSON unique de tous les personnages du `localStorage`) et **📂 Restaurer Dojo** (import et fusion intelligente sans doublons via `mergeDojoBackupLists`).
+
+### 🧪 Tests
+- Ajout de la **Suite 15** dans `tests/unit-tests.js` couvrant `computeForgeSessionWoundState`, `normalizeSessionState` et `mergeDojoBackupLists`.
+
+---
+
 ## [1.30.0] — 2026-11-18
 
 ### ✨ Ajouté

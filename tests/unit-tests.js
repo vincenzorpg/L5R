@@ -998,6 +998,34 @@
   });
 
   // ===========================================================================
+  // 15. FORGE — MODE SESSION DE JEU & SAUVEGARDE DOJO
+  // ===========================================================================
+  describe("15. Forge — Mode Session de Jeu & Sauvegarde complète du Dojo", function () {
+    it("computeForgeSessionWoundState et mergeDojoBackupLists respectent L5R 4e et fusionnent sans doublon", function () {
+      const w0 = cg.computeForgeSessionWoundState(0, 3);
+      assertEqual(w0.label, "Indemne", "0 blessure = Indemne");
+      assertEqual(w0.penalty, 0, "0 blessure = malus 0");
+      assertEqual(w0.maxWounds, 57, "Terre 3 -> max 57 blessures");
+
+      const w18 = cg.computeForgeSessionWoundState(18, 3);
+      assertEqual(w18.label, "Éraflé", "Terre 3, 18 blessures -> Éraflé (+3)");
+      assertEqual(w18.penalty, 3, "Malus +3 exact");
+
+      const norm = cg.normalizeSessionState({ wounds: -5, taint: 1.25 });
+      assertEqual(norm.wounds, 0, "Blessures négatives bornées à 0");
+      assertEqual(norm.taint, 1.3, "Souillure arrondie au dixième");
+
+      const merged = cg.mergeDojoBackupLists(
+        [{ id: "s1", name: "Akira", clan: "mante" }],
+        [{ id: "s1", name: "Akira v2", clan: "mante" }, { id: "s2", name: "Okado", clan: "crabe" }]
+      );
+      assertEqual(merged.added, 1, "1 nouveau samouraï ajouté");
+      assertEqual(merged.updated, 1, "1 samouraï existant mis à jour");
+      assertEqual(merged.list.length, 2, "Total 2 samouraïs dans le Dojo fusionné");
+    });
+  });
+
+  // ===========================================================================
   // RAPPORT D'EXÉCUTION (NODE.JS & NAVIGATEUR)
   // ===========================================================================
   const totalPassed = suites.reduce((acc, s) => acc + s.passed, 0);

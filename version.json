@@ -1,6 +1,6 @@
 {
-  "version": "1.30.0",
-  "tag": "v1.30.0",
+  "version": "1.31.0",
+  "tag": "v1.31.0",
   "date": "2026-11-18",
-  "notes": "Codex de Campagne (PNJ, Lieux & Reliques), Mode Lecture Audio Continue et Studio Carte Checklist"
+  "notes": "Forge : Mode Session de Jeu (Blessures, Vide, Sorts, Souillure) et Sauvegarde/Restauration complète du Dojo"
 }
