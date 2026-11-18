@@ -250,7 +250,7 @@ ${formattedBody}
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • ${escapeHtmlSafe(date)} : ${escapeHtmlSafe(title)} (par ${escapeHtmlSafe(author)})</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.32.1</span>
+      <span id="site-version-label">v1.33.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
@@ -309,6 +309,28 @@ if (typeof module !== "undefined" && module.exports) {
 // =============================================================================
 // FONCTIONS D'INTERFACE NAVIGATEUR (CAMPAGNE.HTML & CAMPAGNE-AJOUTER.HTML)
 // =============================================================================
+let _podcastsManifestCache = null;
+
+function formatDurationBadge(sec) {
+  const s = Math.max(0, Math.floor(Number(sec) || 0));
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+}
+
+function loadPodcastsManifestForCatalog() {
+  if (_podcastsManifestCache || typeof fetch !== "function") return;
+  fetch("data/podcasts-manifest.json", { cache: "no-cache" })
+    .then(r => (r.ok ? r.json() : null))
+    .then(data => {
+      if (data && data.episodes) {
+        _podcastsManifestCache = data.episodes;
+        renderCampagneCatalog();
+      }
+    })
+    .catch(() => {});
+}
+
 function renderCampagneCatalog() {
   const grid = document.getElementById("scenarios-grid");
   if (!grid) return;
@@ -319,7 +341,13 @@ function renderCampagneCatalog() {
   if (badge) badge.textContent = `${list.length} ACTES DISPONIBLES`;
   if (heading) heading.textContent = `Table des ${list.length} Scénarios Joués`;
 
-  grid.innerHTML = list.map(s => `
+  grid.innerHTML = list.map(s => {
+    const pod = _podcastsManifestCache && _podcastsManifestCache[String(s.id)];
+    const podBadge = pod
+      ? `<span class="px-2 py-0.5 rounded bg-amber-600/20 border border-amber-500/50 text-amber-300 text-[10px] font-mono font-bold">🎙️ Podcast ${formatDurationBadge(pod.durationSec)}</span>`
+      : "";
+    const ctaLabel = pod ? "<span>🎙️</span> Écouter le Podcast →" : "<span>🔊</span> Lire &amp; Écouter →";
+    return `
     <div class="card-clean card-hover rounded-xl overflow-hidden flex flex-col justify-between transition duration-200 group">
       ${s.cover ? `
         <a href="${escapeHtmlSafe(s.file)}" class="block relative aspect-[16/9] max-h-52 w-full overflow-hidden border-b border-amber-500/30 bg-black">
@@ -338,7 +366,10 @@ function renderCampagneCatalog() {
             <span class="px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 text-amber-300 font-bold font-mono">ACTE ${s.id}</span>
             <span class="text-stone-500">${escapeHtmlSafe(s.date)} • ${escapeHtmlSafe(s.place)}</span>
           </div>` : `
-          <div class="text-[10px] text-stone-400 font-mono">${escapeHtmlSafe(s.date)} • Illustration principale</div>
+          <div class="flex items-center justify-between gap-2 text-[10px] text-stone-400 font-mono">
+            <span>${escapeHtmlSafe(s.date)} • Illustration principale</span>
+            ${podBadge}
+          </div>
           `}
           <h3 class="text-base font-bold font-imperial text-amber-200">${escapeHtmlSafe(s.title)}</h3>
           <p class="text-[11px] text-amber-400/80 italic font-mono">Par : ${escapeHtmlSafe(s.author)}</p>
@@ -349,12 +380,13 @@ function renderCampagneCatalog() {
             <span>📖</span> Blog ↗
           </a>
           <a href="${escapeHtmlSafe(s.file)}" class="px-3.5 py-1.5 rounded bg-amber-600/90 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
-            <span>🔊</span> Lire & Écouter →
+            ${ctaLabel}
           </a>
         </div>
       </div>
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function collectStudioMeta() {
@@ -739,6 +771,7 @@ if (typeof document !== "undefined") {
 
   document.addEventListener("DOMContentLoaded", () => {
     renderCampagneCatalog();
+    loadPodcastsManifestForCatalog();
     initCampagneCodex();
     initCampagneContinuousButton();
 

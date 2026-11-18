@@ -1,6 +1,6 @@
 {
-  "version": "1.32.1",
-  "tag": "v1.32.1",
+  "version": "1.33.0",
+  "tag": "v1.33.0",
   "date": "2026-11-18",
-  "notes": "Contrôle CI automatique Scénarios ↔ Carte ↔ Accueil et audit du cache hors-ligne PWA (sw.js)"
+  "notes": "Mode Podcast Immersif Multi-Voix : Lecteur Podcast natif (seek, -15s/+15s, reprise, MP3) et workflow automatique Edge TTS"
 }

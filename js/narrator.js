@@ -584,73 +584,358 @@
     updateProgressUI();
   }
 
-  // Exposition globale pour les attributs onclick HTML
-  window.togglePlay = togglePlay;
-  window.stopAudio = stopAudio;
-  window.nextParagraph = nextParagraph;
-  window.prevParagraph = prevParagraph;
-  window.onVoiceChange = onVoiceChange;
-  window.switchVersion = switchVersion;
-  window.readText = playVersionAudio;
+  function formatPodcastTime(totalSeconds) {
+    const s = Math.max(0, Math.floor(Number(totalSeconds) || 0));
+    const mins = Math.floor(s / 60);
+    const secs = s % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const rateEl = document.getElementById('audio-rate');
-    if (rateEl) {
-      const savedRate = getSavedRate();
-      if (savedRate && Array.from(rateEl.options).some(o => o.value === savedRate)) {
-        rateEl.value = savedRate;
+  function resolvePodcastEntry(manifest, actNum) {
+    if (!manifest || !manifest.episodes || !actNum) return null;
+    const entry = manifest.episodes[String(actNum)];
+    if (!entry || !entry.file) return null;
+    return entry;
+  }
+
+  function mountPodcastPlayer(ttsSection, actNum, entry, shouldAutoplay) {
+    if (!ttsSection || document.getElementById('podcast-player-card')) return false;
+
+    const audioSrc = entry.file.startsWith('http') || entry.file.startsWith('../')
+      ? entry.file
+      : `../${entry.file}`;
+    const posKey = `l5r_podcast_pos_${actNum}`;
+    const savedRate = parseFloat(getSavedRate() || '1.0') || 1.0;
+    const nextHref = getNextScenarioHref();
+
+    const card = document.createElement('section');
+    card.id = 'podcast-player-card';
+    card.className = 'card-clean rounded-xl p-4 border-amber-500/50 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-[#0e0a09]/95 space-y-3';
+    card.innerHTML = `
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div id="pod-visualizer" class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-600/30 to-red-950 border border-amber-500/50 flex items-center justify-center text-amber-300 text-lg shrink-0">
+            🎙️
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-amber-600/20 border border-amber-500/50 text-amber-300 text-[9px] font-bold uppercase tracking-wider font-mono">Podcast Immersif</span>
+              <span id="pod-status" class="text-xs font-bold font-imperial text-amber-100 truncate">Prêt à l'écoute</span>
+            </div>
+            <div class="text-[10px] text-stone-400 font-mono">
+              <span id="pod-time-cur">00:00</span> / <span id="pod-time-tot">${formatPodcastTime(entry.durationSec || 0)}</span>
+              <span class="hidden sm:inline text-stone-500"> • Voix neuronales multi-personnages</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button type="button" id="pod-back-15" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs font-mono font-bold transition cursor-pointer" title="Reculer de 15 secondes">⏪ -15s</button>
+          <button type="button" id="pod-play-btn" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-extrabold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow cursor-pointer">
+            <span id="pod-play-icon">▶</span> <span id="pod-play-text">Écouter le Podcast</span>
+          </button>
+          <button type="button" id="pod-fwd-15" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs font-mono font-bold transition cursor-pointer" title="Avancer de 15 secondes">+15s ⏩</button>
+          <button type="button" id="pod-stop-btn" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs font-bold transition cursor-pointer" title="Arrêter et revenir au début">⏹</button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5 text-xs">
+          <select id="pod-rate" class="bg-black/70 border border-stone-700 rounded px-2 py-1 text-amber-300 text-xs font-mono" title="Vitesse de lecture">
+            <option value="0.85">0.85x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.15">1.15x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+          </select>
+          ${nextHref ? `<button type="button" id="pod-continuous-btn" class="px-2.5 py-1 rounded text-[11px] font-bold border transition cursor-pointer"></button>` : ''}
+          <a href="${audioSrc}" download="Chroniques-Rokugan-Acte-${actNum}.mp3" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 hover:text-amber-300 text-[11px] font-bold transition" title="Télécharger l'épisode MP3">⬇ MP3</a>
+          <button type="button" id="pod-switch-tts" class="px-2 py-1 rounded bg-black/50 hover:bg-stone-900 border border-stone-800 text-stone-500 hover:text-stone-200 text-[10px] cursor-pointer transition" title="Basculer vers l'ancien lecteur synthèse vocale">🗣️ Synthèse</button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input type="range" id="pod-seek" min="0" max="100" value="0" step="0.1" class="w-full accent-amber-500 h-1.5 bg-stone-800 rounded-lg cursor-pointer" aria-label="Progression du podcast" />
+      </div>
+    `;
+
+    const audio = document.createElement('audio');
+    audio.id = 'pod-audio-el';
+    audio.preload = 'metadata';
+    audio.src = audioSrc;
+    card.appendChild(audio);
+
+    ttsSection.parentNode.insertBefore(card, ttsSection);
+    ttsSection.classList.add('hidden');
+
+    const statusEl = card.querySelector('#pod-status');
+    const curEl = card.querySelector('#pod-time-cur');
+    const totEl = card.querySelector('#pod-time-tot');
+    const playIcon = card.querySelector('#pod-play-icon');
+    const playText = card.querySelector('#pod-play-text');
+    const seekEl = card.querySelector('#pod-seek');
+    const rateEl = card.querySelector('#pod-rate');
+    const visEl = card.querySelector('#pod-visualizer');
+    const contBtn = card.querySelector('#pod-continuous-btn');
+
+    let podCountdown = null;
+    const clearPodCountdown = () => {
+      if (podCountdown) {
+        clearInterval(podCountdown);
+        podCountdown = null;
       }
-      rateEl.addEventListener('change', () => {
-        saveRate(rateEl.value);
-        if (isPlaying && !isPaused) {
-          readCurrentParagraph(currentChunkIndex);
-        }
+    };
+
+    const syncContBtn = () => {
+      if (!contBtn) return;
+      const active = isContinuousEnabled();
+      contBtn.textContent = active ? '🔁 Continu : ON' : '🔁 Continu : OFF';
+      contBtn.className = active
+        ? 'px-2.5 py-1 rounded text-[11px] font-bold border transition cursor-pointer bg-amber-600/90 text-black border-amber-400 shadow'
+        : 'px-2.5 py-1 rounded text-[11px] font-bold border transition cursor-pointer bg-black/60 text-stone-400 border-stone-800 hover:text-amber-300';
+    };
+    syncContBtn();
+    if (contBtn) {
+      contBtn.addEventListener('click', () => {
+        setContinuousEnabled(!isContinuousEnabled());
+        syncContBtn();
       });
     }
 
-    const btnPlay = document.getElementById('btn-play');
-    const btnPause = document.getElementById('btn-pause');
-    const btnStop = document.getElementById('btn-stop');
-
-    if (isMultiVersionMode() && btnPlay && btnPause && btnStop) {
-      btnPlay.addEventListener('click', playVersionAudio);
-      btnPause.addEventListener('click', pauseVersionAudio);
-      btnStop.addEventListener('click', stopAudio);
-      collectParagraphs();
-    } else if (document.getElementById('story-content')) {
-      initParagraphNarrator();
+    if (rateEl) {
+      const rateStr = String(savedRate);
+      if (Array.from(rateEl.options).some(o => o.value === rateStr)) rateEl.value = rateStr;
+      audio.playbackRate = parseFloat(rateEl.value) || 1.0;
+      rateEl.addEventListener('change', () => {
+        const v = parseFloat(rateEl.value) || 1.0;
+        audio.playbackRate = v;
+        saveRate(v);
+      });
     }
 
-    if (synth) {
-      loadVoices();
-      synth.onvoiceschanged = loadVoices;
-    }
+    const syncPlayUI = () => {
+      const playing = !audio.paused && !audio.ended;
+      if (playIcon) playIcon.textContent = playing ? '⏸' : '▶';
+      if (playText) playText.textContent = playing ? 'Pause' : 'Écouter le Podcast';
+      if (visEl) visEl.classList.toggle('animate-pulse', playing);
+    };
 
-    const curAct = getCurrentScenarioActNumber();
-    if (curAct) {
-      try { localStorage.setItem(STORAGE_LAST_ACT_KEY, String(curAct)); } catch (_) {}
-      injectContinuousToggle();
-      let shouldAutoplay = false;
+    audio.addEventListener('loadedmetadata', () => {
+      if (totEl && isFinite(audio.duration)) totEl.textContent = formatPodcastTime(audio.duration);
       try {
-        shouldAutoplay = sessionStorage.getItem(SESSION_AUTOPLAY_KEY) === '1';
-        if (shouldAutoplay) sessionStorage.removeItem(SESSION_AUTOPLAY_KEY);
+        const savedPos = parseFloat(localStorage.getItem(posKey) || '0');
+        if (savedPos > 3 && isFinite(audio.duration) && savedPos < audio.duration - 5) {
+          audio.currentTime = savedPos;
+          if (statusEl) statusEl.textContent = `Reprise à ${formatPodcastTime(savedPos)}`;
+        }
       } catch (_) {}
-      if (shouldAutoplay && synth) {
-        setTimeout(() => {
-          if (isMultiVersionMode()) {
-            playVersionAudio();
-          } else {
-            togglePlay();
-          }
-        }, 350);
-      }
-    }
-  });
+    });
 
-  window.addEventListener('pagehide', () => {
-    if (synth && (isPlaying || synth.speaking)) {
-      speakGeneration++;
-      synth.cancel();
+    let lastSavedSec = 0;
+    audio.addEventListener('timeupdate', () => {
+      if (curEl) curEl.textContent = formatPodcastTime(audio.currentTime);
+      if (isFinite(audio.duration) && audio.duration > 0 && seekEl) {
+        seekEl.value = String((audio.currentTime / audio.duration) * 100);
+      }
+      if (Math.abs(audio.currentTime - lastSavedSec) >= 3) {
+        lastSavedSec = audio.currentTime;
+        try { localStorage.setItem(posKey, String(Math.floor(audio.currentTime))); } catch (_) {}
+      }
+    });
+
+    audio.addEventListener('play', () => {
+      clearPodCountdown();
+      if (statusEl) statusEl.textContent = 'Écoute en cours…';
+      syncPlayUI();
+    });
+    audio.addEventListener('pause', () => {
+      if (!audio.ended && statusEl) statusEl.textContent = 'En pause';
+      syncPlayUI();
+    });
+    audio.addEventListener('ended', () => {
+      try { localStorage.removeItem(posKey); } catch (_) {}
+      syncPlayUI();
+      if (isContinuousEnabled() && nextHref) {
+        clearPodCountdown();
+        let rem = 3;
+        if (statusEl) statusEl.textContent = `Fin Acte ${actNum} — Acte ${actNum + 1} dans ${rem}s… (⏹ annuler)`;
+        podCountdown = setInterval(() => {
+          rem--;
+          if (rem <= 0) {
+            clearPodCountdown();
+            try { sessionStorage.setItem(SESSION_AUTOPLAY_KEY, '1'); } catch (_) {}
+            window.location.href = nextHref;
+          } else if (statusEl) {
+            statusEl.textContent = `Fin Acte ${actNum} — Acte ${actNum + 1} dans ${rem}s… (⏹ annuler)`;
+          }
+        }, 1000);
+      } else if (statusEl) {
+        statusEl.textContent = 'Épisode terminé';
+      }
+    });
+
+    audio.addEventListener('error', () => {
+      // Si le MP3 est indisponible, bascule proprement sur le lecteur synthèse vocale
+      card.remove();
+      ttsSection.classList.remove('hidden');
+    });
+
+    card.querySelector('#pod-play-btn')?.addEventListener('click', () => {
+      clearPodCountdown();
+      if (audio.paused) {
+        audio.play().catch(() => {
+          if (statusEl) statusEl.textContent = 'Cliquez sur ▶ pour démarrer';
+        });
+      } else {
+        audio.pause();
+      }
+    });
+    card.querySelector('#pod-back-15')?.addEventListener('click', () => {
+      audio.currentTime = Math.max(0, audio.currentTime - 15);
+    });
+    card.querySelector('#pod-fwd-15')?.addEventListener('click', () => {
+      if (isFinite(audio.duration)) audio.currentTime = Math.min(audio.duration, audio.currentTime + 15);
+    });
+    card.querySelector('#pod-stop-btn')?.addEventListener('click', () => {
+      clearPodCountdown();
+      audio.pause();
+      audio.currentTime = 0;
+      try { localStorage.removeItem(posKey); } catch (_) {}
+      if (statusEl) statusEl.textContent = 'Prêt à l\'écoute';
+      syncPlayUI();
+    });
+    if (seekEl) {
+      seekEl.addEventListener('input', () => {
+        if (isFinite(audio.duration) && audio.duration > 0) {
+          audio.currentTime = (parseFloat(seekEl.value) / 100) * audio.duration;
+        }
+      });
     }
-  });
+    card.querySelector('#pod-switch-tts')?.addEventListener('click', () => {
+      clearPodCountdown();
+      audio.pause();
+      card.classList.add('hidden');
+      ttsSection.classList.remove('hidden');
+      if (!ttsSection.querySelector('#btn-back-to-podcast')) {
+        const backBtn = document.createElement('button');
+        backBtn.id = 'btn-back-to-podcast';
+        backBtn.type = 'button';
+        backBtn.className = 'px-2.5 py-1 rounded bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/50 text-amber-300 text-[11px] font-bold cursor-pointer transition';
+        backBtn.textContent = '🎙️ Revenir au Podcast';
+        backBtn.addEventListener('click', () => {
+          stopAudio();
+          ttsSection.classList.add('hidden');
+          card.classList.remove('hidden');
+        });
+        const rateParent = ttsSection.querySelector('#audio-rate')?.parentElement;
+        if (rateParent) rateParent.appendChild(backBtn);
+      }
+    });
+
+    if (shouldAutoplay) {
+      audio.play().catch(() => {
+        if (statusEl) statusEl.textContent = 'Prêt — cliquez ▶ pour lancer le Podcast';
+      });
+    }
+
+    return true;
+  }
+
+  // Exposition globale pour les attributs onclick HTML
+  if (typeof window !== 'undefined') {
+    window.togglePlay = togglePlay;
+    window.stopAudio = stopAudio;
+    window.nextParagraph = nextParagraph;
+    window.prevParagraph = prevParagraph;
+    window.onVoiceChange = onVoiceChange;
+    window.switchVersion = switchVersion;
+    window.readText = playVersionAudio;
+    window.formatPodcastTime = formatPodcastTime;
+    window.resolvePodcastEntry = resolvePodcastEntry;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const rateEl = document.getElementById('audio-rate');
+      if (rateEl) {
+        const savedRate = getSavedRate();
+        if (savedRate && Array.from(rateEl.options).some(o => o.value === savedRate)) {
+          rateEl.value = savedRate;
+        }
+        rateEl.addEventListener('change', () => {
+          saveRate(rateEl.value);
+          if (isPlaying && !isPaused) {
+            readCurrentParagraph(currentChunkIndex);
+          }
+        });
+      }
+
+      const btnPlay = document.getElementById('btn-play');
+      const btnPause = document.getElementById('btn-pause');
+      const btnStop = document.getElementById('btn-stop');
+
+      if (isMultiVersionMode() && btnPlay && btnPause && btnStop) {
+        btnPlay.addEventListener('click', playVersionAudio);
+        btnPause.addEventListener('click', pauseVersionAudio);
+        btnStop.addEventListener('click', stopAudio);
+        collectParagraphs();
+      } else if (document.getElementById('story-content')) {
+        initParagraphNarrator();
+      }
+
+      if (synth) {
+        loadVoices();
+        synth.onvoiceschanged = loadVoices;
+      }
+
+      const curAct = getCurrentScenarioActNumber();
+      if (curAct) {
+        try { localStorage.setItem(STORAGE_LAST_ACT_KEY, String(curAct)); } catch (_) {}
+        injectContinuousToggle();
+
+        let shouldAutoplay = false;
+        try {
+          shouldAutoplay = sessionStorage.getItem(SESSION_AUTOPLAY_KEY) === '1';
+          if (shouldAutoplay) sessionStorage.removeItem(SESSION_AUTOPLAY_KEY);
+        } catch (_) {}
+
+        const ttsSection = document.getElementById('audio-status')?.closest('section');
+        const launchTtsAutoplay = () => {
+          if (shouldAutoplay && synth) {
+            setTimeout(() => {
+              if (isMultiVersionMode()) playVersionAudio();
+              else togglePlay();
+            }, 350);
+          }
+        };
+
+        if (ttsSection && typeof fetch === 'function') {
+          fetch('../data/podcasts-manifest.json', { cache: 'no-cache' })
+            .then(r => (r.ok ? r.json() : null))
+            .then(manifest => {
+              const entry = resolvePodcastEntry(manifest, curAct);
+              if (entry) {
+                mountPodcastPlayer(ttsSection, curAct, entry, shouldAutoplay);
+              } else {
+                launchTtsAutoplay();
+              }
+            })
+            .catch(() => launchTtsAutoplay());
+        } else {
+          launchTtsAutoplay();
+        }
+      }
+    });
+
+    window.addEventListener('pagehide', () => {
+      if (synth && (isPlaying || synth.speaking)) {
+        speakGeneration++;
+        synth.cancel();
+      }
+    });
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      formatPodcastTime,
+      resolvePodcastEntry,
+      splitIntoSpeechChunks
+    };
+  }
 })();

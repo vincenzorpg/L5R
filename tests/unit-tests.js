@@ -23,6 +23,7 @@
   const globalSearch = isNode ? require("../js/global-search.js") : window;
   const codexData = isNode ? require("../data/campaign-codex-data.js") : window;
   const campagneStudio = isNode ? require("../js/campagne-studio.js") : window;
+  const narrator = isNode ? require("../js/narrator.js") : window;
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -1043,6 +1044,22 @@
 
       const hook = gm.generateGmEncounterHook(() => 0);
       assertTrue(typeof hook === "string" && hook.length > 20, "generateGmEncounterHook retourne une accroche de rencontre");
+    });
+  });
+
+  // ===========================================================================
+  // 17. LECTEUR PODCAST AUDIO & MANIFESTE (js/narrator.js)
+  // ===========================================================================
+  describe("17. Lecteur Podcast Immersif & Résolution du Manifeste", function () {
+    it("formatPodcastTime et resolvePodcastEntry formatent et résolvent les épisodes MP3", function () {
+      assertEqual(narrator.formatPodcastTime(0), "00:00", "0s -> 00:00");
+      assertEqual(narrator.formatPodcastTime(272), "04:32", "272s -> 04:32");
+      assertEqual(narrator.formatPodcastTime(-5), "00:00", "Temps négatif borné à 00:00");
+
+      const mockManifest = { episodes: { "11": { file: "assets/audio/scenario-11.mp3", durationSec: 310 } } };
+      const found = narrator.resolvePodcastEntry(mockManifest, 11);
+      assertTrue(found && found.file === "assets/audio/scenario-11.mp3", "Résolution de l'Acte 11 exacte");
+      assertEqual(narrator.resolvePodcastEntry(mockManifest, 99), null, "Acte absent retourne null");
     });
   });
 
