@@ -13,6 +13,7 @@
 
   <!-- DONNÉES CENTRALISÉES & MENU GLOBAL -->
   <script src="data/scenarios-data.js" defer></script>
+  <script src="data/campaign-codex-data.js" defer></script>
   <script src="js/navbar.js" defer></script>
   <script src="js/campagne-studio.js" defer></script>
 </head>
@@ -38,6 +39,12 @@
           Recueil des scénarios officiels de la Campagne de la Chronique de Rokugan. Chaque acte dispose de sa propre page de lecture détaillée avec synthèse vocale narrative HD, compte-rendu d'événements et illustrations de scène.
         </p>
         <div class="pt-2 flex flex-wrap gap-3">
+          <button type="button" onclick="startContinuousCampaignAudio(1)" class="px-4 py-2 rounded bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/50 font-bold font-imperial text-xs tracking-wider shadow flex items-center gap-2 transition cursor-pointer">
+            <span>🔊</span> Écoute Continue (Acte 1 → 11)
+          </button>
+          <button type="button" id="btn-resume-continuous-audio" onclick="startContinuousCampaignAudio(this.dataset.act || 1)" class="hidden px-4 py-2 rounded bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/50 font-bold font-imperial text-xs tracking-wider shadow flex items-center gap-2 transition cursor-pointer">
+            ▶ Reprendre l'écoute
+          </button>
           <a href="carte.html" class="px-4 py-2 rounded bg-stone-900 hover:bg-stone-800 text-amber-200 border border-amber-500/50 font-bold font-imperial text-xs tracking-wider shadow flex items-center gap-2 transition">
             <span>🗺️</span> Carte de Rokugan &amp; Chemin des PJs
           </a>
@@ -48,14 +55,50 @@
       </div>
     </section>
 
+    <!-- ONGLETS DE NAVIGATION : SCÉNARIOS vs CODEX PNJ/LIEUX/RELIQUES -->
+    <div class="flex flex-wrap items-center gap-2 border-b border-stone-800 pb-3">
+      <button type="button" id="tab-btn-scenarios" onclick="switchCampagneTab('scenarios')" class="px-4 py-2 rounded-lg bg-amber-600 text-black font-bold font-imperial text-xs tracking-wider shadow cursor-pointer transition">
+        📜 Table des Scénarios
+      </button>
+      <button type="button" id="tab-btn-codex" onclick="switchCampagneTab('codex')" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold font-imperial text-xs tracking-wider cursor-pointer transition">
+        🗂️ Codex : PNJ, Lieux &amp; Reliques
+      </button>
+    </div>
+
     <!-- GRILLE DES PAGES DE SCÉNARIOS -->
-    <section class="space-y-4">
+    <section id="section-scenarios" class="space-y-4">
       <div class="flex justify-between items-baseline border-b border-amber-500/20 pb-2">
         <h2 id="scenarios-heading" class="text-base md:text-lg font-bold font-imperial text-amber-200">Table des Scénarios Joués</h2>
-        <span id="scenarios-count-badge" class="text-xs text-stone-500 font-mono">10 ACTES DISPONIBLES</span>
+        <span id="scenarios-count-badge" class="text-xs text-stone-500 font-mono">11 ACTES DISPONIBLES</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="scenarios-grid"></div>
+    </section>
+
+    <!-- CODEX DE CAMPAGNE : PNJ, LIEUX & RELIQUES -->
+    <section id="section-codex" class="hidden space-y-5">
+      <div class="flex flex-wrap justify-between items-baseline border-b border-amber-500/20 pb-2 gap-2">
+        <h2 class="text-base md:text-lg font-bold font-imperial text-amber-200">Codex de la Chronique — PNJ, Lieux &amp; Reliques</h2>
+        <span id="codex-count-badge" class="text-xs text-stone-500 font-mono">0 ENTRÉES</span>
+      </div>
+
+      <div class="card-clean rounded-xl p-4 border-stone-800 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-codex-cat="all" onclick="setCodexCategory('all')" class="px-3 py-1.5 rounded-lg bg-amber-600 text-black font-bold text-xs cursor-pointer transition">Tous</button>
+          <button type="button" data-codex-cat="npc" onclick="setCodexCategory('npc')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">👤 PNJ</button>
+          <button type="button" data-codex-cat="place" onclick="setCodexCategory('place')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">🏯 Lieux</button>
+          <button type="button" data-codex-cat="relic" onclick="setCodexCategory('relic')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">🔮 Reliques &amp; Indices</button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+          <select id="codex-act-filter" class="bg-black/70 border border-stone-700 rounded-lg px-3 py-1.5 text-xs text-amber-200">
+            <option value="all">Tous les actes</option>
+          </select>
+          <input type="search" id="codex-search-input" placeholder="Rechercher un PNJ, lieu, relique..." class="bg-black/70 border border-stone-700 rounded-lg px-3 py-1.5 text-xs text-stone-200 placeholder-stone-500 min-w-[210px]">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="codex-grid"></div>
     </section>
 
   </main>
@@ -63,7 +106,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Portail de Campagne</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.29.1</span>
+      <span id="site-version-label">v1.30.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

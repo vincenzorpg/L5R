@@ -219,6 +219,19 @@
           <div id="live-scenario-preview" class="max-h-[420px] overflow-y-auto pr-1 space-y-4 text-xs"></div>
         </section>
 
+        <!-- BLOC CARTE DE ROKUGAN & CHECKLIST OBLIGATOIRE -->
+        <section class="card-clean rounded-2xl p-5 space-y-3 border-amber-500/30">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2 gap-2">
+            <span class="text-xs font-bold font-imperial text-amber-200 flex items-center gap-1.5">
+              <span>🗺️</span> Bloc Carte &amp; Checklist (<code>data/carte-data.js</code>)
+            </span>
+            <button type="button" id="btn-copy-carte-snippet" onclick="copyCarteSnippet()" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-[10px] font-bold text-amber-300 cursor-pointer transition">
+              📋 Copier le bloc Carte
+            </button>
+          </div>
+          <pre id="carte-snippet-preview" class="text-[10px] font-mono text-stone-300 bg-black/70 border border-stone-800 rounded-xl p-3 overflow-x-auto max-h-56 leading-relaxed"></pre>
+        </section>
+
       </div>
 
     </div>
@@ -228,7 +241,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Studio de Publication & Soumission GitHub</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.29.1</span>
+      <span id="site-version-label">v1.30.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

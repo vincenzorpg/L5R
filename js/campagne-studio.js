@@ -250,7 +250,7 @@ ${formattedBody}
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • ${escapeHtmlSafe(date)} : ${escapeHtmlSafe(title)} (par ${escapeHtmlSafe(author)})</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.29.1</span>
+      <span id="site-version-label">v1.30.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
@@ -410,6 +410,26 @@ function updateLivePreview() {
       ${bodyHtml}
     </div>
   `;
+
+  const cartePre = document.getElementById('carte-snippet-preview');
+  if (cartePre) {
+    cartePre.textContent = buildCarteDataSnippet(meta);
+  }
+}
+
+function copyCarteSnippet() {
+  const meta = collectStudioMeta();
+  const snippet = buildCarteDataSnippet(meta);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(snippet).then(() => {
+      const btn = document.getElementById('btn-copy-carte-snippet');
+      if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copié !';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      }
+    });
+  }
 }
 
 function handleFile(file) {
@@ -668,7 +688,8 @@ async function publishScenarioDirectViaAPI() {
 
     // 4. Open Pull Request
     setStatus("⏳ 4/4 — Ouverture de la Pull Request sur GitHub...");
-    const prBody = `## 🏯 Nouveau Scénario : Acte ${meta.id} — ${meta.title}\n\n- **Fichier généré** : \`campagne/scenario-${meta.id}.html\`\n- **Narrateur** : ${meta.author}\n- **Lieu** : ${meta.place}\n- **Résumé** : ${meta.summary}\n\n---\n\n## 📦 Release Notes — Prêtes à publier\n\n\`\`\`markdown\n### ✨ Ajouté\n- **Campagne (\`campagne/scenario-${meta.id}.html\`)** : Ajout de l'Acte ${meta.id} — *${meta.title}* (raconté par ${meta.author}) avec synthèse vocale HD.\n\`\`\``;
+    const carteSnippet = buildCarteDataSnippet(meta);
+    const prBody = `## 🏯 Nouveau Scénario : Acte ${meta.id} — ${meta.title}\n\n- **Fichier généré** : \`campagne/scenario-${meta.id}.html\`\n- **Narrateur** : ${meta.author}\n- **Lieu** : ${meta.place}\n- **Résumé** : ${meta.summary}\n\n### 🗺️ Checklist Carte & Accueil (à intégrer)\n\`\`\`js\n${carteSnippet}\n\`\`\`\n\n---\n\n## 📦 Release Notes — Prêtes à publier\n\n\`\`\`markdown\n### ✨ Ajouté\n- **Campagne (\`campagne/scenario-${meta.id}.html\`)** : Ajout de l'Acte ${meta.id} — *${meta.title}* (raconté par ${meta.author}) avec synthèse vocale HD.\n\`\`\``;
 
     const prRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/pulls`, {
       method: "POST",
@@ -718,6 +739,8 @@ if (typeof document !== "undefined") {
 
   document.addEventListener("DOMContentLoaded", () => {
     renderCampagneCatalog();
+    initCampagneCodex();
+    initCampagneContinuousButton();
 
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
@@ -762,10 +785,225 @@ if (typeof document !== "undefined") {
   });
 }
 
+const codexState = {
+  category: "all",
+  act: "all",
+  query: ""
+};
+
+function switchCampagneTab(tabName) {
+  const secScenarios = document.getElementById("section-scenarios");
+  const secCodex = document.getElementById("section-codex");
+  const btnScenarios = document.getElementById("tab-btn-scenarios");
+  const btnCodex = document.getElementById("tab-btn-codex");
+  if (!secScenarios || !secCodex) return;
+
+  const isCodex = tabName === "codex";
+  secScenarios.classList.toggle("hidden", isCodex);
+  secCodex.classList.toggle("hidden", !isCodex);
+
+  if (btnScenarios) {
+    btnScenarios.className = !isCodex
+      ? "px-4 py-2 rounded-lg bg-amber-600 text-black font-bold font-imperial text-xs tracking-wider shadow cursor-pointer transition"
+      : "px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold font-imperial text-xs tracking-wider cursor-pointer transition";
+  }
+  if (btnCodex) {
+    btnCodex.className = isCodex
+      ? "px-4 py-2 rounded-lg bg-amber-600 text-black font-bold font-imperial text-xs tracking-wider shadow cursor-pointer transition"
+      : "px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold font-imperial text-xs tracking-wider cursor-pointer transition";
+  }
+}
+
+function setCodexCategory(cat) {
+  codexState.category = cat || "all";
+  document.querySelectorAll("[data-codex-cat]").forEach((btn) => {
+    const active = btn.getAttribute("data-codex-cat") === codexState.category;
+    btn.className = active
+      ? "px-3 py-1.5 rounded-lg bg-amber-600 text-black font-bold text-xs cursor-pointer transition"
+      : "px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition";
+  });
+  renderCampaignCodex();
+}
+
+function renderCampaignCodex() {
+  const grid = document.getElementById("codex-grid");
+  if (!grid) return;
+  const all = window.CAMPAIGN_CODEX_DATA || [];
+  const filtered = filterCodexEntries(all, codexState);
+
+  const countEl = document.getElementById("codex-count-badge");
+  if (countEl) countEl.textContent = `${filtered.length} / ${all.length} ENTRÉES`;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-stone-400 italic border border-stone-800 rounded-xl bg-black/40">Aucune entrée ne correspond à votre recherche dans le Codex.</div>`;
+    return;
+  }
+
+  const catBadge = {
+    npc: { label: "👤 PNJ", cls: "bg-amber-950/90 text-amber-300 border-amber-500/40" },
+    place: { label: "🏯 Lieu", cls: "bg-emerald-950/90 text-emerald-300 border-emerald-500/40" },
+    relic: { label: "🔮 Relique / Indice", cls: "bg-red-950/90 text-red-300 border-red-500/40" }
+  };
+
+  grid.innerHTML = filtered.map((item) => {
+    const badge = catBadge[item.category] || catBadge.npc;
+    const actLinks = (item.acts || []).map((a) =>
+      `<a href="campagne/scenario-${a}.html" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-amber-600 hover:text-black border border-stone-700 hover:border-amber-400 text-[10px] font-mono text-amber-300 transition">Acte ${a}</a>`
+    ).join("");
+
+    return `
+      <article class="card-clean rounded-xl p-4 flex flex-col justify-between space-y-3 border-stone-800/90 hover:border-amber-500/40 transition">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2 py-0.5 rounded border text-[10px] font-bold ${badge.cls}">${badge.label}</span>
+            <span class="text-[10px] font-mono uppercase text-stone-500">${escapeHtmlSafe(item.faction || "rokugan")}</span>
+          </div>
+          <h3 class="text-sm font-bold font-imperial text-amber-200">${escapeHtmlSafe(item.name)}</h3>
+          <p class="text-[11px] text-amber-400/80 font-mono">${escapeHtmlSafe(item.role)}</p>
+          <p class="text-xs text-stone-300 leading-relaxed">${escapeHtmlSafe(item.summary)}</p>
+        </div>
+        <div class="pt-2.5 border-t border-stone-800/80 flex flex-wrap items-center gap-1.5">
+          <span class="text-[10px] text-stone-500 mr-1">Apparaît :</span>
+          ${actLinks}
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function initCampagneCodex() {
+  const grid = document.getElementById("codex-grid");
+  if (!grid) return;
+
+  const actSelect = document.getElementById("codex-act-filter");
+  if (actSelect && Array.isArray(window.SCENARIOS_DATA)) {
+    const opts = window.SCENARIOS_DATA.map((s) =>
+      `<option value="${s.id}">Acte ${s.id} — ${escapeHtmlSafe(s.shortTitle || s.title)}</option>`
+    ).join("");
+    actSelect.innerHTML = `<option value="all">Tous les actes</option>${opts}`;
+    actSelect.addEventListener("change", () => {
+      codexState.act = actSelect.value;
+      renderCampaignCodex();
+    });
+  }
+
+  const searchInput = document.getElementById("codex-search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      codexState.query = searchInput.value;
+      renderCampaignCodex();
+    });
+  }
+
+  renderCampaignCodex();
+}
+
+function startContinuousCampaignAudio(actNumber) {
+  const act = parseInt(actNumber, 10) || 1;
+  try {
+    localStorage.setItem("l5r_narrator_continuous", "1");
+    sessionStorage.setItem("l5r_narrator_autoplay_next", "1");
+  } catch (_) {}
+  window.location.href = `campagne/scenario-${act}.html`;
+}
+
+function initCampagneContinuousButton() {
+  const resumeBtn = document.getElementById("btn-resume-continuous-audio");
+  if (!resumeBtn) return;
+  let lastAct = null;
+  try {
+    lastAct = parseInt(localStorage.getItem("l5r_narrator_last_act"), 10);
+  } catch (_) {}
+  if (lastAct && lastAct >= 1) {
+    resumeBtn.classList.remove("hidden");
+    resumeBtn.dataset.act = String(lastAct);
+    resumeBtn.textContent = `▶ Reprendre l'écoute (Acte ${lastAct})`;
+  }
+}
+
+function slugifyLocationId(place) {
+  return String(place || "lieu-rokugan")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "lieu-rokugan";
+}
+
+/**
+ * Génère le bloc prêt à copier pour data/carte-data.js + la checklist carte.html / index.html
+ * conformément à la règle obligatoire d'ajout de scénario (GEMINI.md Section 6).
+ */
+function buildCarteDataSnippet(meta) {
+  const id = parseInt(meta.id || meta.num, 10) || 11;
+  const title = (meta.title || `Acte ${id}`).trim();
+  const place = (meta.place || "Terres de Rokugan").trim();
+  const author = (meta.author || "Tsuruchi Akira").trim();
+  const date = (meta.date || `Acte ${id}`).trim();
+  const summary = (meta.summary || meta.desc || "Chronique officielle de la Campagne de la Chronique de Rokugan.").trim();
+  const locationId = slugifyLocationId(place);
+
+  return `// 1) Dans data/carte-data.js -> ROKUGAN_LOCATIONS (si nouveau lieu) :
+{
+  id: '${locationId}',
+  name: '${place.replace(/'/g, "\\'")}',
+  subtitle: 'Étape Acte ${id}',
+  faction: 'neutre', // crabe | grue | dragon | lion | phenix | scorpion | licorne | mante | neutre
+  kind: 'Lieu de Campagne',
+  major: true,
+  x: 50.0,
+  y: 50.0,
+  desc: "${summary.replace(/"/g, '\\"')}"
+}
+
+// 2) Dans data/carte-data.js -> CAMPAIGN_ROUTE :
+{
+  step: ${id},
+  actLabel: '${date.replace(/'/g, "\\'")}',
+  title: '${title.replace(/'/g, "\\'")}',
+  locationId: '${locationId}',
+  placeLabel: '${place.replace(/'/g, "\\'")}',
+  author: '${author.replace(/'/g, "\\'")}',
+  file: 'campagne/scenario-${id}.html',
+  way: [[50.0, 50.0]],
+  summary: "${summary.replace(/"/g, '\\"')}"
+}
+
+// 3) Penser aussi à mettre à jour :
+// - carte.html : max="${id}" value="${id}", "Actes 1 à ${id} / ${id}", "Étapes PJs (${id})"
+// - index.html : "${id} actes de la chronique", "VITRINE DES ${id} SCÉNARIOS", "${id} / ${id} Récits Complets"
+// - tests/unit-tests.js : assertEqual(route.length, ${id}, ...)`;
+}
+
+function filterCodexEntries(entries, { category = "all", act = "all", query = "" } = {}) {
+  const list = Array.isArray(entries) ? entries : [];
+  const q = String(query || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+  return list.filter((item) => {
+    if (category && category !== "all" && item.category !== category) return false;
+    if (act && act !== "all") {
+      const actNum = parseInt(act, 10);
+      if (!Array.isArray(item.acts) || !item.acts.includes(actNum)) return false;
+    }
+    if (!q) return true;
+    const hay = `${item.name} ${item.role || ""} ${item.faction || ""} ${item.summary || ""}`
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+    return hay.includes(q);
+  });
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     formatScenarioBodyToHTML,
     buildScenarioHTML,
-    buildUpdatedScenariosDataJS
+    buildUpdatedScenariosDataJS,
+    buildCarteDataSnippet,
+    filterCodexEntries
   };
 }

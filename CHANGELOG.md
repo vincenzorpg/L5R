@@ -6,6 +6,23 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.30.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Codex de Campagne : PNJ, Lieux & Reliques (`data/campaign-codex-data.js`, `campagne.html`, `js/campagne-studio.js`)** :
+  - Ajout d'un onglet dédié dans `campagne.html` répertoriant les **PNJ majeurs** (*Soshi Takeda*, *Hida Kisada*, *Kuni Yuriko*, *Chuda Tenkasu*, *Bunzo*, etc.), les **lieux emblématiques** et les **reliques/indices** sur l'ensemble des 11 actes, avec filtres par catégorie, par acte et recherche instantanée, et liens directs vers chaque scénario.
+- **Mode « Lecture Audio Continue » (`js/narrator.js`, `campagne.html`)** :
+  - Ajout du bouton **« Écoute Continue (Acte 1 → 11) »** et du bouton **« Reprendre l'écoute »** dans `campagne.html`.
+  - Ajout d'un sélecteur `🔁 Continu : ON/OFF` dans la barre audio des scénarios permettant d'enchaîner automatiquement l'acte suivant après un compte à rebours de 3 secondes.
+- **Studio de Campagne aligné sur la Checklist Carte (`campagne-ajouter.html`, `js/campagne-studio.js`)** :
+  - Génération en direct du bloc `data/carte-data.js` (`ROKUGAN_LOCATIONS` + `CAMPAIGN_ROUTE`) et de la checklist `carte.html` / `index.html` avec copie en 1 clic et inclusion dans les Pull Requests générées.
+
+### 🧪 Tests & Cache
+- Ajout de la **Suite 14** dans `tests/unit-tests.js` couvrant `CAMPAIGN_CODEX_DATA`, `filterCodexEntries` et `buildCarteDataSnippet`.
+- Mise en cache de `data/campaign-codex-data.js` dans `sw.js` (`l5r-forge-v1.30.0`).
+
+---
+
 ## [1.29.1] — 2026-11-18
 
 ### 🔄 Modifié
