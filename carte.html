@@ -38,12 +38,9 @@
 
       <!-- CONTRÔLES RAPIDES DU CHEMIN DES PJs -->
       <div class="p-3 rounded-xl bg-black/50 border border-amber-500/30 space-y-2.5 shrink-0 lg:min-w-[340px]">
-        <div class="flex items-center justify-between gap-2 flex-wrap">
+        <div class="flex items-center justify-between gap-2">
           <button type="button" id="btn-toggle-route" class="clan-lineage-pill is-active">
             🗺️ Chemin des PJs : Visible
-          </button>
-          <button type="button" id="btn-toggle-clans-mon" class="clan-lineage-pill is-active">
-            🏯 Blasons : Visible
           </button>
           <span id="map-act-badge" class="text-[11px] font-mono font-bold text-amber-300">Actes 1 à 10 / 10</span>
         </div>
@@ -98,7 +95,6 @@
               draggable="false"
               class="w-full h-full object-fill block pointer-events-none select-none"
             />
-            <div id="map-clans-watermarks" class="absolute inset-0 pointer-events-none z-[5]"></div>
             <svg id="map-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
             <div id="map-markers-layer" class="absolute inset-0 z-20"></div>
           </div>
