@@ -6,6 +6,21 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.33.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Lecteur Podcast Natif sur les Scénarios (`js/narrator.js`, `js/campagne-studio.js`, `data/podcasts-manifest.json`)** :
+  - Détection automatique des épisodes MP3 générés dans `data/podcasts-manifest.json` pour afficher un lecteur Podcast complet : barre de progression interactive, avance/recul `-15s / +15s`, vitesse `0.85x` à `1.5x`, reprise automatique à la seconde près, mode continu `🔁 Continu : ON/OFF`, téléchargement direct `.mp3` et bascule vers la synthèse vocale de secours.
+  - Affichage du badge **🎙️ Podcast MM:SS** sur chaque carte de scénario dans `campagne.html`.
+- **Générateur Automatique de Podcasts Multi-Voix (`scripts/generate_podcasts.py`, `.github/workflows/generate-podcasts.yml`)** :
+  - Synthèse vocale neuronale gratuite (Edge TTS) en mode **Conteur immersif** : narration principale, voix distinctes pour les dialogues masculins/féminins et pensées intérieures, micro-pauses dramatiques et carillon pentatonique japonais en intro/outro assemblé via `ffmpeg`.
+  - Workflow GitHub Actions (`generate-podcasts.yml`) déclenchable à la demande pour générer tous les épisodes ou un acte spécifique sans clé API.
+
+### 🧪 Tests
+- Ajout de la **Suite 17** dans `tests/unit-tests.js` couvrant `formatPodcastTime` et `resolvePodcastEntry`.
+
+---
+
 ## [1.32.1] — 2026-11-18
 
 ### 🔧 Technique & Hygiène
