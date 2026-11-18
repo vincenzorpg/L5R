@@ -21,6 +21,8 @@
   const carteUi = isNode ? require("../js/carte-rokugan.js") : window;
   const ecolesUi = isNode ? require("../js/ecoles.js") : window;
   const globalSearch = isNode ? require("../js/global-search.js") : window;
+  const codexData = isNode ? require("../data/campaign-codex-data.js") : window;
+  const campagneStudio = isNode ? require("../js/campagne-studio.js") : window;
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -962,6 +964,36 @@
 
       const ryokoRes = globalSearch.searchGlobalIndex(pubIndex, "Ryoko Owari", "Lieux");
       assertTrue(ryokoRes.length === 1 && ryokoRes[0].url.includes("ryoko-owari"), "Recherche lieu Ryoko Owari redirige vers carte.html?lieu=...");
+    });
+  });
+
+  // ===========================================================================
+  // 14. CODEX DE CAMPAGNE & STUDIO CARTE SNIPPET
+  // ===========================================================================
+  describe("14. Codex de Campagne (PNJ, Lieux, Reliques) & Studio Carte Snippet", function () {
+    it("CAMPAIGN_CODEX_DATA couvre PNJ, Lieux et Reliques jusqu'à l'Acte 11 et filterCodexEntries filtre fidèlement", function () {
+      const entries = codexData.CAMPAIGN_CODEX_DATA || [];
+      assertTrue(entries.length >= 20, "Au moins 20 entrées dans le Codex de Campagne");
+      assertTrue(entries.some(e => e.category === "npc"), "Contient des PNJ");
+      assertTrue(entries.some(e => e.category === "place"), "Contient des Lieux");
+      assertTrue(entries.some(e => e.category === "relic"), "Contient des Reliques");
+      assertTrue(entries.some(e => Array.isArray(e.acts) && e.acts.includes(11)), "Contient des entrées liées à l'Acte 11");
+
+      const act11Npcs = campagneStudio.filterCodexEntries(entries, { category: "npc", act: "11" });
+      assertTrue(act11Npcs.length >= 4 && act11Npcs.every(e => e.category === "npc" && e.acts.includes(11)), "Filtre PNJ + Acte 11 exact");
+
+      const takeda = campagneStudio.filterCodexEntries(entries, { category: "npc", query: "Takeda" });
+      assertEqual(takeda.length, 1, "Recherche Soshi Takeda (PNJ) exacte");
+
+      const snippet = campagneStudio.buildCarteDataSnippet({
+        id: 12,
+        title: "Les Ombres de Kyuden",
+        place: "Kyuden Bayushi",
+        author: "Tsuruchi Akira",
+        date: "Acte 12",
+        summary: "Nouvelle intrigue."
+      });
+      assertTrue(snippet.includes("ROKUGAN_LOCATIONS") && snippet.includes("CAMPAIGN_ROUTE") && snippet.includes("step: 12") && snippet.includes("campagne/scenario-12.html"), "buildCarteDataSnippet génère les blocs Carte & Checklist");
     });
   });
 

@@ -8,6 +8,9 @@
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
   const STORAGE_VOICE_KEY = 'l5r_narrator_voice';
   const STORAGE_RATE_KEY = 'l5r_narrator_rate';
+  const STORAGE_CONTINUOUS_KEY = 'l5r_narrator_continuous';
+  const STORAGE_LAST_ACT_KEY = 'l5r_narrator_last_act';
+  const SESSION_AUTOPLAY_KEY = 'l5r_narrator_autoplay_next';
 
   let paragraphs = [];
   let currentIndex = 0;
@@ -18,6 +21,73 @@
   let selectedVoice = null;
   let activeVersion = 'v1';
   let speakGeneration = 0;
+  let continuousTimerId = null;
+
+  function getCurrentScenarioActNumber() {
+    if (typeof window === 'undefined') return null;
+    const m = String(window.location.pathname || '').match(/scenario-(\d+)\.html/i);
+    return m ? parseInt(m[1], 10) : null;
+  }
+
+  function getNextScenarioHref() {
+    const act = getCurrentScenarioActNumber();
+    if (!act) return null;
+    const nextNum = act + 1;
+    const explicitLink = document.querySelector(`a[href*="scenario-${nextNum}.html"]`);
+    if (explicitLink) return `scenario-${nextNum}.html`;
+    if (Array.isArray(window.SCENARIOS_DATA)) {
+      const found = window.SCENARIOS_DATA.find(s => Number(s.id) === nextNum);
+      if (found) return `scenario-${nextNum}.html`;
+    }
+    return null;
+  }
+
+  function isContinuousEnabled() {
+    try {
+      return localStorage.getItem(STORAGE_CONTINUOUS_KEY) === '1';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function setContinuousEnabled(val) {
+    try {
+      localStorage.setItem(STORAGE_CONTINUOUS_KEY, val ? '1' : '0');
+    } catch (_) {}
+    updateContinuousToggleUI();
+  }
+
+  function clearContinuousCountdown() {
+    if (continuousTimerId) {
+      clearInterval(continuousTimerId);
+      continuousTimerId = null;
+    }
+  }
+
+  function updateContinuousToggleUI() {
+    const btn = document.getElementById('btn-continuous-audio');
+    if (!btn) return;
+    const active = isContinuousEnabled();
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btn.className = active
+      ? 'px-2.5 py-1 rounded text-[11px] font-bold border transition cursor-pointer bg-amber-600/90 text-black border-amber-400 shadow'
+      : 'px-2.5 py-1 rounded text-[11px] font-bold border transition cursor-pointer bg-black/60 text-stone-400 border-stone-800 hover:text-amber-300 hover:border-amber-500/40';
+    btn.textContent = active ? '🔁 Continu : ON' : '🔁 Continu : OFF';
+  }
+
+  function injectContinuousToggle() {
+    if (!getNextScenarioHref() || document.getElementById('btn-continuous-audio')) return;
+    const rateEl = document.getElementById('audio-rate');
+    const host = rateEl ? rateEl.parentElement : null;
+    if (!host) return;
+    const btn = document.createElement('button');
+    btn.id = 'btn-continuous-audio';
+    btn.type = 'button';
+    btn.title = "Enchaîner automatiquement l'acte suivant à la fin du récit";
+    btn.addEventListener('click', () => setContinuousEnabled(!isContinuousEnabled()));
+    host.appendChild(btn);
+    updateContinuousToggleUI();
+  }
 
   function isMultiVersionMode() {
     return !!document.getElementById('content-v1');
@@ -250,9 +320,29 @@
       el.classList.remove('reading-active');
     });
     const statusEl = document.getElementById('audio-status');
-    if (statusEl) statusEl.textContent = 'Lecture terminée';
     updatePlayButton();
     updateProgressUI();
+
+    const nextHref = getNextScenarioHref();
+    if (isContinuousEnabled() && nextHref) {
+      clearContinuousCountdown();
+      let remaining = 3;
+      const curAct = getCurrentScenarioActNumber();
+      if (statusEl) statusEl.textContent = `Fin de l'Acte ${curAct} — Acte ${curAct + 1} dans ${remaining}s… (⏹ pour annuler)`;
+      continuousTimerId = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearContinuousCountdown();
+          try { sessionStorage.setItem(SESSION_AUTOPLAY_KEY, '1'); } catch (_) {}
+          window.location.href = nextHref;
+        } else if (statusEl) {
+          statusEl.textContent = `Fin de l'Acte ${curAct} — Acte ${curAct + 1} dans ${remaining}s… (⏹ pour annuler)`;
+        }
+      }, 1000);
+      return;
+    }
+
+    if (statusEl) statusEl.textContent = 'Lecture terminée';
   }
 
   function speakCurrentChunk(gen) {
@@ -478,6 +568,7 @@
   }
 
   function stopAudio() {
+    clearContinuousCountdown();
     speakGeneration++;
     if (synth) synth.cancel();
     isPlaying = false;
@@ -533,6 +624,26 @@
     if (synth) {
       loadVoices();
       synth.onvoiceschanged = loadVoices;
+    }
+
+    const curAct = getCurrentScenarioActNumber();
+    if (curAct) {
+      try { localStorage.setItem(STORAGE_LAST_ACT_KEY, String(curAct)); } catch (_) {}
+      injectContinuousToggle();
+      let shouldAutoplay = false;
+      try {
+        shouldAutoplay = sessionStorage.getItem(SESSION_AUTOPLAY_KEY) === '1';
+        if (shouldAutoplay) sessionStorage.removeItem(SESSION_AUTOPLAY_KEY);
+      } catch (_) {}
+      if (shouldAutoplay && synth) {
+        setTimeout(() => {
+          if (isMultiVersionMode()) {
+            playVersionAudio();
+          } else {
+            togglePlay();
+          }
+        }, 350);
+      }
     }
   });
 

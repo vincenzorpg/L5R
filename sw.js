@@ -3,8 +3,8 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.29.1';
-const RUNTIME_CACHE = 'l5r-runtime-v1.29.1';
+const CACHE_VERSION = 'l5r-forge-v1.30.0';
+const RUNTIME_CACHE = 'l5r-runtime-v1.30.0';
 
 const CORE_ASSETS = [
   './',
@@ -17,6 +17,7 @@ const CORE_ASSETS = [
   './ecran-mj.html',
   './data/gm-scenarios-data.js',
   './campagne.html',
+  './data/campaign-codex-data.js',
   './carte.html',
   './manifest.webmanifest',
   './version.json',
