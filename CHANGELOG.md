@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.23.0] — 2026-11-18
+
+### 🎨 Amélioré
+- **Carte de Rokugan HD Enluminée** (`assets/images/carte_rokugan.jpg`, `carte.html`, `sw.js`) :
+  - Remplacement de la carte par une nouvelle version haute définition en style parchemin impérial japonais *ukiyo-e / sumi-e* conservant la géographie canonique exacte (côtes, îles de la Mante, forêt de Shinomen, rivières, Mur des Kaiu).
+  - **Territoires des Clans clairement apparents & *Mon* officiels en filigrane** (`assets/images/carte_rokugan.jpg`) : chaque grand clan (*Licorne, Dragon, Phénix, Lion, Grue, Scorpion, Crabe, Mante*) ainsi que l'*Outremonde* est visuellement identifié par un lavis de couleur distinct, des frontières dorées finement encrées et son **blason (*mon*) officiel de la 4ᵉ édition** intégré en filigrane sur son territoire, avec vagues *seigaiha* et rose des vents impériale.
+  - Ajustement du ratio d'affichage (`aspect-square`) dans `carte.html` pour préserver la netteté HD sans aucune déformation et mise à jour du cache Service Worker (`l5r-forge-v1.23.0`).
+
+---
+
 ## [1.22.0] — 2026-11-18
 
 ### ✨ Ajouté
