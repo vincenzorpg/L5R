@@ -3355,3 +3355,234 @@ function jumpToTwentyQuestions() {
   }, 60);
 }
 window.jumpToTwentyQuestions = jumpToTwentyQuestions;
+
+// =============================================================================
+// MODE SESSION DE JEU & SAUVEGARDE COMPLÈTE DU DOJO
+// =============================================================================
+function getSessionStateRef() {
+  if (!window.charSessionState || typeof window.charSessionState !== 'object') {
+    window.charSessionState = typeof window.normalizeSessionState === 'function'
+      ? window.normalizeSessionState({})
+      : { wounds: 0, voidSpent: 0, spellsSpent: { air: 0, terre: 0, feu: 0, eau: 0, vide: 0 }, taint: 0, notes: '' };
+  }
+  return window.charSessionState;
+}
+
+function getCurrentForgeRings() {
+  const val = (id) => Math.max(1, parseInt(document.getElementById(id)?.value, 10) || 2);
+  if (typeof window.calculateRings === 'function') {
+    return window.calculateRings({
+      sta: val('trait-stamina'), wil: val('trait-willpower'),
+      str: val('trait-strength'), per: val('trait-perception'),
+      ref: val('trait-reflexes'), awa: val('trait-awareness'),
+      agi: val('trait-agility'), int: val('trait-intelligence'),
+      voi: val('trait-void')
+    });
+  }
+  return {
+    terre: Math.min(val('trait-stamina'), val('trait-willpower')),
+    eau: Math.min(val('trait-strength'), val('trait-perception')),
+    air: Math.min(val('trait-reflexes'), val('trait-awareness')),
+    feu: Math.min(val('trait-agility'), val('trait-intelligence')),
+    vide: val('trait-void')
+  };
+}
+
+function toggleSessionModeDrawer(forceOpen) {
+  const sec = document.getElementById('session-mode-drawer');
+  if (!sec) return;
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : sec.classList.contains('hidden');
+  sec.classList.toggle('hidden', !shouldOpen);
+  if (shouldOpen) syncSessionTrackerUI();
+}
+
+function syncSessionTrackerUI() {
+  const state = getSessionStateRef();
+  const rings = getCurrentForgeRings();
+  const woundInfo = typeof window.computeForgeSessionWoundState === 'function'
+    ? window.computeForgeSessionWoundState(state.wounds, rings.terre)
+    : { wounds: state.wounds, maxWounds: rings.terre * 19, label: 'Indemne', penalty: 0 };
+
+  const wVal = document.getElementById('session-wounds-val');
+  const wMax = document.getElementById('session-wounds-max');
+  const wTier = document.getElementById('session-wounds-tier');
+  if (wVal) wVal.textContent = String(woundInfo.wounds);
+  if (wMax) wMax.textContent = String(woundInfo.maxWounds);
+  if (wTier) {
+    const penText = typeof woundInfo.penalty === 'number' ? `+${woundInfo.penalty}` : woundInfo.penalty;
+    wTier.textContent = `${woundInfo.label} (${penText})`;
+    wTier.className = woundInfo.wounds === 0
+      ? 'px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-200 font-bold text-[10px]'
+      : (woundInfo.isDead
+        ? 'px-2 py-0.5 rounded bg-red-950 border border-red-500 text-red-200 font-bold text-[10px]'
+        : 'px-2 py-0.5 rounded bg-amber-950 border border-amber-500/50 text-amber-200 font-bold text-[10px]');
+  }
+
+  const voidMax = rings.vide;
+  const voidSpent = Math.min(voidMax, Math.max(0, state.voidSpent || 0));
+  const voidLabel = document.getElementById('session-void-label');
+  if (voidLabel) voidLabel.textContent = `${voidMax - voidSpent} / ${voidMax}`;
+  const pipsHost = document.getElementById('session-void-pips');
+  if (pipsHost) {
+    let html = '';
+    for (let i = 0; i < voidMax; i++) {
+      const avail = i < (voidMax - voidSpent);
+      html += `<button type="button" onclick="toggleSessionVoidPip(${i})" class="w-6 h-6 rounded-full border text-[10px] font-bold cursor-pointer transition ${avail ? 'bg-purple-600/80 border-purple-300 text-white shadow' : 'bg-stone-900 border-stone-700 text-stone-600'}" title="Cliquer pour dépenser / récupérer un Point de Vide">${avail ? '●' : '○'}</button>`;
+    }
+    pipsHost.innerHTML = html;
+  }
+
+  const slotsHost = document.getElementById('session-spell-slots');
+  if (slotsHost) {
+    const elems = [
+      { key: 'air', label: 'Air', max: rings.air },
+      { key: 'terre', label: 'Terre', max: rings.terre },
+      { key: 'feu', label: 'Feu', max: rings.feu },
+      { key: 'eau', label: 'Eau', max: rings.eau },
+      { key: 'vide', label: 'Vide', max: rings.vide }
+    ];
+    slotsHost.innerHTML = elems.map(el => {
+      const spent = Math.min(el.max, Math.max(0, (state.spellsSpent && state.spellsSpent[el.key]) || 0));
+      const rem = el.max - spent;
+      return `
+        <div class="p-1 rounded bg-black/60 border border-stone-800 space-y-1">
+          <div class="text-[9px] text-stone-400 uppercase">${el.label}</div>
+          <div class="text-xs font-mono font-bold text-amber-200">${rem}/${el.max}</div>
+          <div class="flex justify-center gap-1">
+            <button type="button" onclick="adjustSessionSpellSlot('${el.key}', 1)" class="px-1.5 rounded bg-stone-900 hover:bg-stone-800 text-[10px] text-amber-300 cursor-pointer" title="Lancer un sort (-1)">-</button>
+            <button type="button" onclick="adjustSessionSpellSlot('${el.key}', -1)" class="px-1.5 rounded bg-stone-900 hover:bg-stone-800 text-[10px] text-emerald-300 cursor-pointer" title="Récupérer (+1)">+</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const taintEl = document.getElementById('session-taint-val');
+  if (taintEl) taintEl.textContent = (Number(state.taint) || 0).toFixed(1);
+
+  const notesEl = document.getElementById('session-notes-input');
+  if (notesEl && notesEl.value !== (state.notes || '')) notesEl.value = state.notes || '';
+}
+
+function triggerSessionAutoSave() {
+  syncSessionTrackerUI();
+  if (typeof window.autoSaveCharacterDraft === 'function') window.autoSaveCharacterDraft();
+}
+
+function adjustSessionWounds(delta) {
+  const s = getSessionStateRef();
+  s.wounds = Math.max(0, (parseInt(s.wounds, 10) || 0) + delta);
+  triggerSessionAutoSave();
+}
+
+function toggleSessionVoidPip(index) {
+  const s = getSessionStateRef();
+  const voidMax = getCurrentForgeRings().vide;
+  const avail = voidMax - (s.voidSpent || 0);
+  if (index < avail) {
+    s.voidSpent = Math.min(voidMax, (s.voidSpent || 0) + 1);
+  } else {
+    s.voidSpent = Math.max(0, (s.voidSpent || 0) - 1);
+  }
+  triggerSessionAutoSave();
+}
+
+function adjustSessionSpellSlot(elem, delta) {
+  const s = getSessionStateRef();
+  if (!s.spellsSpent) s.spellsSpent = { air: 0, terre: 0, feu: 0, eau: 0, vide: 0 };
+  const maxVal = getCurrentForgeRings()[elem] || 2;
+  s.spellsSpent[elem] = Math.min(maxVal, Math.max(0, (s.spellsSpent[elem] || 0) + delta));
+  triggerSessionAutoSave();
+}
+
+function adjustSessionTaint(delta) {
+  const s = getSessionStateRef();
+  s.taint = Math.max(0, Math.min(10, Math.round(((parseFloat(s.taint) || 0) + delta) * 10) / 10));
+  triggerSessionAutoSave();
+}
+
+function onSessionNotesInput(val) {
+  const s = getSessionStateRef();
+  s.notes = String(val || '');
+  if (typeof window.autoSaveCharacterDraft === 'function') window.autoSaveCharacterDraft();
+}
+
+function restSessionCharacter(fullHeal) {
+  const s = getSessionStateRef();
+  s.voidSpent = 0;
+  s.spellsSpent = { air: 0, terre: 0, feu: 0, eau: 0, vide: 0 };
+  if (fullHeal) s.wounds = 0;
+  triggerSessionAutoSave();
+  if (typeof showForgeToast === 'function') showForgeToast('Repos complet appliqué (Vide, Sorts et Blessures réinitialisés).', 'success');
+}
+
+function exportFullDojoBackup() {
+  const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
+  const list = raw ? JSON.parse(raw) : [];
+  if (!Array.isArray(list) || list.length === 0) {
+    if (typeof showForgeToast === 'function') showForgeToast('Votre Dojo est vide : rien à sauvegarder.', 'info');
+    return;
+  }
+  const payload = {
+    format: 'l5r-forge-dojo-backup',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    characters: list
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `dojo-l5r-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  if (typeof showForgeToast === 'function') showForgeToast(`Sauvegarde complète du Dojo (${list.length} samouraïs) téléchargée.`, 'success');
+}
+
+function triggerDojoBackupImport() {
+  document.getElementById('dojo-backup-input')?.click();
+}
+
+function handleDojoBackupFile(file) {
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const parsed = JSON.parse(String(ev.target.result || '{}'));
+      const incoming = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.characters) ? parsed.characters : null);
+      if (!incoming) throw new Error('Format de sauvegarde Dojo invalide.');
+      const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
+      const existing = raw ? JSON.parse(raw) : [];
+      const res = typeof window.mergeDojoBackupLists === 'function'
+        ? window.mergeDojoBackupLists(existing, incoming)
+        : { list: incoming, added: incoming.length, updated: 0 };
+      const serialized = JSON.stringify(res.list);
+      localStorage.setItem('l5r_dojo_characters_v4', serialized);
+      localStorage.setItem('l5r_saved_characters', serialized);
+      renderDojoRoster();
+      if (typeof window.renderDojoList === 'function') window.renderDojoList();
+      if (typeof showForgeToast === 'function') {
+        showForgeToast(`Dojo restauré : ${res.added} ajouté(s), ${res.updated} mis à jour.`, 'success');
+      }
+    } catch (err) {
+      if (typeof showForgeToast === 'function') showForgeToast(`Erreur d'import Dojo : ${err.message}`, 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+window.toggleSessionModeDrawer = toggleSessionModeDrawer;
+window.syncSessionTrackerUI = syncSessionTrackerUI;
+window.adjustSessionWounds = adjustSessionWounds;
+window.toggleSessionVoidPip = toggleSessionVoidPip;
+window.adjustSessionSpellSlot = adjustSessionSpellSlot;
+window.adjustSessionTaint = adjustSessionTaint;
+window.onSessionNotesInput = onSessionNotesInput;
+window.restSessionCharacter = restSessionCharacter;
+window.exportFullDojoBackup = exportFullDojoBackup;
+window.triggerDojoBackupImport = triggerDojoBackupImport;
+window.handleDojoBackupFile = handleDojoBackupFile;
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('l5r-forge-selection-changed', syncSessionTrackerUI);
+  window.addEventListener('DOMContentLoaded', () => setTimeout(syncSessionTrackerUI, 100));
+}

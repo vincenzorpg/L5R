@@ -65,6 +65,9 @@
             <span id="cockpit-dojo-count" class="px-1 rounded bg-black/50 text-amber-300 font-mono">0</span>
             <span id="dojo-toggle-chevron" class="text-[9px]">▾</span>
           </button>
+          <button type="button" id="btn-toggle-session" onclick="toggleSessionModeDrawer()" class="text-[10px] px-2 py-0.5 rounded bg-red-950/60 hover:bg-red-900/70 border border-red-500/40 text-red-200 font-bold transition cursor-pointer flex items-center gap-1" title="Basculer en mode Session de jeu (Blessures, Vide, Sorts)">
+            <span>⚔️ Session</span>
+          </button>
           <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden text-[10px] px-2 py-0.5 rounded bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-500/45 text-emerald-200 font-bold transition cursor-pointer flex items-center gap-1" title="Installer l'application mobile sur votre téléphone">
             <span>📲</span>
             <span>Installer App</span>
@@ -187,6 +190,13 @@
           <button type="button" onclick="openImportCharacterModal()" class="px-3 py-1.5 rounded bg-emerald-950/70 hover:bg-emerald-900/70 text-emerald-200 border border-emerald-500/40 font-bold text-xs cursor-pointer">
             📥 Importer (Carnet / JSON)
           </button>
+          <button type="button" onclick="exportFullDojoBackup()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-200 border border-amber-500/30 font-bold text-xs cursor-pointer" title="Exporter tous les samouraïs du Dojo en un seul fichier .json">
+            📦 Sauver tout le Dojo
+          </button>
+          <button type="button" onclick="triggerDojoBackupImport()" class="px-3 py-1.5 rounded bg-stone-800 hover:bg-stone-700 text-emerald-200 border border-emerald-500/30 font-bold text-xs cursor-pointer" title="Restaurer/fusionner une sauvegarde complète du Dojo">
+            📂 Restaurer Dojo
+          </button>
+          <input type="file" id="dojo-backup-input" accept=".json,application/json" class="hidden" onchange="if(this.files[0]) handleDojoBackupFile(this.files[0]); this.value='';">
           <button type="button" onclick="startNewCharacter()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 font-bold text-xs cursor-pointer">
             ➕ Nouveau samouraï
           </button>
@@ -196,6 +206,72 @@
         </div>
       </div>
       <div id="dojo-roster-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 text-xs"></div>
+    </section>
+
+    <!-- 0b. MODE SESSION DE JEU (BLESSURES, VIDE, SORTS, SOUILLURE & NOTES) -->
+    <section id="session-mode-drawer" class="hidden card-clean rounded-xl p-4 border-red-500/40 bg-gradient-to-r from-[#1a0d0d] via-[#120b0b] to-[#1a0d0d] space-y-4 no-print">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-red-500/20 pb-2.5">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">⚔️</span>
+          <div>
+            <h2 class="text-xs md:text-sm font-bold font-imperial text-amber-200 uppercase tracking-wider">
+              Mode Session de Jeu — Suivi en Séance
+            </h2>
+            <p class="text-[11px] text-stone-400">Suivez vos blessures, Points de Vide, sorts lancés et notes sans quitter votre fiche.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="restSessionCharacter(true)" class="px-3 py-1.5 rounded bg-emerald-900/70 hover:bg-emerald-800 text-emerald-100 border border-emerald-500/40 font-bold text-xs cursor-pointer">
+            🌙 Repos complet
+          </button>
+          <button type="button" onclick="toggleSessionModeDrawer(false)" class="px-2 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-400 hover:text-white border border-stone-800 text-xs cursor-pointer" title="Fermer le mode Session">✕</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+        <!-- Blessures -->
+        <div class="p-3 rounded-xl bg-black/50 border border-stone-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold font-imperial text-amber-200">🩸 Blessures</span>
+            <span id="session-wounds-tier" class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-200 font-bold text-[10px]">Indemne (+0)</span>
+          </div>
+          <div class="text-lg font-mono font-bold text-stone-100">
+            <span id="session-wounds-val">0</span> <span class="text-xs text-stone-500">/ <span id="session-wounds-max">38</span></span>
+          </div>
+          <div class="flex flex-wrap gap-1">
+            <button type="button" onclick="adjustSessionWounds(-5)" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-emerald-300 font-mono cursor-pointer">-5</button>
+            <button type="button" onclick="adjustSessionWounds(-1)" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-emerald-300 font-mono cursor-pointer">-1</button>
+            <button type="button" onclick="adjustSessionWounds(1)" class="px-2 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/60 text-red-200 font-mono cursor-pointer">+1</button>
+            <button type="button" onclick="adjustSessionWounds(5)" class="px-2 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/60 text-red-200 font-mono cursor-pointer">+5</button>
+            <button type="button" onclick="adjustSessionWounds(10)" class="px-2 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/60 text-red-200 font-mono cursor-pointer">+10</button>
+            <button type="button" onclick="adjustSessionWounds(-9999)" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-400 cursor-pointer" title="Remettre à 0">↺</button>
+          </div>
+        </div>
+
+        <!-- Points de Vide & Souillure -->
+        <div class="p-3 rounded-xl bg-black/50 border border-stone-800 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold font-imperial text-amber-200">🟣 Points de Vide</span>
+            <span id="session-void-label" class="text-[11px] font-mono text-purple-300">2 / 2</span>
+          </div>
+          <div id="session-void-pips" class="flex flex-wrap gap-1.5"></div>
+          <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between gap-2">
+            <span class="font-bold text-rose-300">🩸 Souillure : <span id="session-taint-val" class="font-mono">0.0</span></span>
+            <div class="flex gap-1">
+              <button type="button" onclick="adjustSessionTaint(-0.1)" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 font-mono cursor-pointer">-0.1</button>
+              <button type="button" onclick="adjustSessionTaint(0.1)" class="px-2 py-0.5 rounded bg-rose-950/70 hover:bg-rose-900 border border-rose-700/60 text-rose-200 font-mono cursor-pointer">+0.1</button>
+              <button type="button" onclick="adjustSessionTaint(0.5)" class="px-2 py-0.5 rounded bg-rose-950/70 hover:bg-rose-900 border border-rose-700/60 text-rose-200 font-mono cursor-pointer">+0.5</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emplacements de Sorts & Notes -->
+        <div class="p-3 rounded-xl bg-black/50 border border-stone-800 space-y-2">
+          <span class="font-bold font-imperial text-amber-200 block">✨ Emplacements de Sorts Lancés</span>
+          <div id="session-spell-slots" class="grid grid-cols-5 gap-1 text-center"></div>
+          <textarea id="session-notes-input" rows="2" oninput="onSessionNotesInput(this.value)" placeholder="Notes rapides de séance (effets actifs, koku, faveurs...)" class="w-full p-2 rounded-lg bg-black/70 border border-stone-800 text-[11px] text-stone-200 placeholder-stone-500"></textarea>
+        </div>
+      </div>
     </section>
 
     <!-- BARRE DE NAVIGATION PAR ATELIERS (STEPPER STUDIO + STICKY MOBILE) -->
@@ -1227,7 +1303,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 pb-24 md:pb-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne de la Chronique de Rokugan • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.30.0</span>
+      <span id="site-version-label">v1.31.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
       <span>•</span>

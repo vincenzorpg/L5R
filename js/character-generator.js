@@ -2952,7 +2952,8 @@ function collectCharacterData() {
     weapon2: document.getElementById('pc-weapon-2')?.value || "Aucune",
     outfit: document.getElementById('pc-outfit')?.value || "",
     backgroundStory: document.getElementById('pc-background-story')?.value || "",
-    twentyQuestions: q20
+    twentyQuestions: q20,
+    sessionState: (typeof window !== "undefined" && window.charSessionState) ? window.charSessionState : null
   };
 }
 
@@ -3108,6 +3109,13 @@ function applyCharacterDataToSheet(rawInput) {
         if (qEl && d.twentyQuestions[i] !== undefined) qEl.value = d.twentyQuestions[i];
       }
       if (typeof window.updateTwentyQuestionsProgress === "function") window.updateTwentyQuestionsProgress();
+    }
+
+    if (typeof window !== "undefined") {
+      window.charSessionState = (d.sessionState && typeof d.sessionState === "object")
+        ? d.sessionState
+        : { wounds: 0, voidSpent: 0, spellsSpent: { air: 0, terre: 0, feu: 0, eau: 0, vide: 0 }, taint: 0, notes: "" };
+      if (typeof window.syncSessionTrackerUI === "function") window.syncSessionTrackerUI();
     }
 
     renderSkills();
@@ -3850,11 +3858,82 @@ if (typeof window !== "undefined") {
   window.calculateInsightAndRank = calculateInsightAndRank;
   window.calculateArmorTN = calculateArmorTN;
   window.calculateWoundThresholds = calculateWoundThresholds;
+  window.computeForgeSessionWoundState = computeForgeSessionWoundState;
+  window.normalizeSessionState = normalizeSessionState;
+  window.mergeDojoBackupLists = mergeDojoBackupLists;
   window.parseRollKeepFormula = parseRollKeepFormula;
   window.applyTenDiceRule = applyTenDiceRule;
   window.simulateRollAndKeep = simulateRollAndKeep;
 
   window.addEventListener('DOMContentLoaded', bootstrap);
+}
+
+function normalizeSessionState(raw) {
+  const s = (raw && typeof raw === "object") ? raw : {};
+  const sp = (s.spellsSpent && typeof s.spellsSpent === "object") ? s.spellsSpent : {};
+  return {
+    wounds: Math.max(0, parseInt(s.wounds, 10) || 0),
+    voidSpent: Math.max(0, parseInt(s.voidSpent, 10) || 0),
+    spellsSpent: {
+      air: Math.max(0, parseInt(sp.air, 10) || 0),
+      terre: Math.max(0, parseInt(sp.terre, 10) || 0),
+      feu: Math.max(0, parseInt(sp.feu, 10) || 0),
+      eau: Math.max(0, parseInt(sp.eau, 10) || 0),
+      vide: Math.max(0, parseInt(sp.vide, 10) || 0)
+    },
+    taint: Math.max(0, Math.min(10, Math.round((parseFloat(s.taint) || 0) * 10) / 10)),
+    notes: String(s.notes || "")
+  };
+}
+
+function computeForgeSessionWoundState(wounds, earthRing) {
+  const earth = Math.max(1, parseInt(earthRing, 10) || 2);
+  const w = Math.max(0, parseInt(wounds, 10) || 0);
+  const step = earth * 2;
+  const tiers = [
+    { label: "Indemne", penalty: 0, limit: earth * 5 },
+    { label: "Éraflé", penalty: 3, limit: earth * 5 + step },
+    { label: "Légèrement blessé", penalty: 5, limit: earth * 5 + step * 2 },
+    { label: "Blessé", penalty: 10, limit: earth * 5 + step * 3 },
+    { label: "Gravement blessé", penalty: 15, limit: earth * 5 + step * 4 },
+    { label: "À terre", penalty: 20, limit: earth * 5 + step * 5 },
+    { label: "Inconscient", penalty: "Inconscient", limit: earth * 5 + step * 6 },
+    { label: "Mort", penalty: "Mort", limit: earth * 5 + step * 7 }
+  ];
+  const maxWounds = earth * 19;
+  const active = tiers.find(t => w <= t.limit) || tiers[tiers.length - 1];
+  return {
+    wounds: w,
+    earth,
+    maxWounds,
+    label: active.label,
+    penalty: active.penalty,
+    isDead: w > earth * 17
+  };
+}
+
+function mergeDojoBackupLists(existingList, importedList) {
+  const base = Array.isArray(existingList) ? existingList.map(c => ({ ...c })) : [];
+  const incoming = Array.isArray(importedList) ? importedList : [];
+  let added = 0;
+  let updated = 0;
+
+  incoming.forEach((char) => {
+    if (!char || typeof char !== "object" || !char.name) return;
+    const id = char.id ? String(char.id) : null;
+    const idx = id ? base.findIndex(x => String(x.id) === id) : -1;
+    if (idx >= 0) {
+      base[idx] = { ...base[idx], ...char };
+      updated++;
+    } else {
+      const clone = { ...char };
+      if (!clone.id) clone.id = `samurai_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      base.unshift(clone);
+      added++;
+    }
+  });
+
+  return { list: base, added, updated };
 }
 
 if (typeof module !== "undefined" && module.exports) {
@@ -3885,6 +3964,9 @@ if (typeof module !== "undefined" && module.exports) {
     calculateInsightAndRank,
     calculateArmorTN,
     calculateWoundThresholds,
+    computeForgeSessionWoundState,
+    normalizeSessionState,
+    mergeDojoBackupLists,
     parseRollKeepFormula,
     applyTenDiceRule,
     simulateRollAndKeep
