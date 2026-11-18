@@ -1,6 +1,6 @@
 {
-  "version": "1.31.0",
-  "tag": "v1.31.0",
+  "version": "1.32.0",
+  "tag": "v1.32.0",
   "date": "2026-11-18",
-  "notes": "Forge : Mode Session de Jeu (Blessures, Vide, Sorts, Souillure) et Sauvegarde/Restauration complète du Dojo"
+  "notes": "Écran MJ : Préréglages Acte 11 (Yanagi Mura), import direct du Dojo et Générateur Express (Noms & Rumeurs)"
 }

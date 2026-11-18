@@ -6,6 +6,21 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.32.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Écran MJ — Ennemis de l'Acte 11 (`js/gm-screen.js`)** :
+  - Ajout de 3 préréglages dans `ENEMY_PRESETS` : *Marionnette sans bouche (Acte 11)*, *Archer corrompu (Acte 11)* et *Bunzo, Faux Moine (Acte 11)*.
+- **Liaison directe Dojo → Écran MJ (`ecran-mj.html`, `js/gm-screen.js`)** :
+  - Ajout du bouton **🏯 Charger mon Dojo** important d'un clic les personnages sauvegardés dans La Forge (`l5r_dojo_characters_v4`) vers la table des PJs et le tracker d'Escarmouche.
+- **Générateur Express MJ (`ecran-mj.html`, `js/gm-screen.js`)** :
+  - Nouveau panneau d'improvisation générant instantanément des noms rokuganis par clan (ou roturier *Heimin*) ainsi que des rumeurs et complications de voyage.
+
+### 🧪 Tests
+- Ajout de la **Suite 16** dans `tests/unit-tests.js` couvrant les préréglages Acte 11, `generateRokuganiName` et `generateGmEncounterHook`.
+
+---
+
 ## [1.31.0] — 2026-11-18
 
 ### ✨ Ajouté
