@@ -6,6 +6,21 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.26.0] — 2026-11-18
+
+### ✨ Ajouté & Amélioré
+- **Carte de Rokugan (`carte.html`, `js/carte-rokugan.js`, `css/main.css`)** :
+  - Désencombrement automatique à 100 % de zoom : seules la capitale, les étapes PJs et les sélections affichent leur étiquette par défaut ; les villes secondaires se révèlent au survol, via un filtre de clan, ou dès que le zoom atteint `135%`.
+  - Ajout du bouton **« ⛶ Plein écran »** (`#btn-map-fullscreen`) pour projeter la carte et le chemin des PJs sur un second écran.
+- **La Forge (`createcharacter.html`, `js/forge-ui.js`)** :
+  - Mise en avant dès l'Atelier 1 de l'assistant **« 📜 Vingt Questions »** (`jumpToTwentyQuestions()`), du **Comparateur d'Écoles** et de l'**Import JSON**.
+- **Écran du MJ (`ecran-mj.html`, `js/gm-screen.js`)** :
+  - Ajout d'un **Historique de l'Escarmouche rétractable** (`#gm-combat-log-details`) enregistrant les tours, renforts et dégâts appliqués.
+  - Ajout d'un lecteur d'**Ambiance Sonore MJ** autonome (Web Audio API : *Pluie & Marais*, *Vent des Pics*, *Brasero / Maho*, *Tambour de Guerre*) avec contrôle de volume.
+  - Ajout d'une barre de raccourcis **« 🖼️ Visuels PJs »** en tête du Scénario II pour projeter instantanément chacune des 4 illustrations sans spoiler.
+
+---
+
 ## [1.25.0] — 2026-11-18
 
 ### ✨ Ajouté

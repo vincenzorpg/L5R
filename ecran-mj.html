@@ -201,6 +201,20 @@
             </table>
           </div>
 
+          <!-- HISTORIQUE DE COMBAT RÉTRACTABLE -->
+          <details id="gm-combat-log-details" class="rounded-xl border border-stone-800 bg-black/30 p-3 text-xs">
+            <summary class="cursor-pointer font-imperial font-bold text-amber-300 flex items-center justify-between select-none">
+              <span>📜 Historique de l'Escarmouche (<span id="gm-combat-log-count">0</span>)</span>
+              <span class="text-[10px] text-stone-400 font-sans font-normal">Cliquer pour déplier / replier</span>
+            </summary>
+            <div class="mt-2.5 space-y-2">
+              <div class="flex justify-end">
+                <button type="button" data-action="clear-combat-log" class="text-[10px] text-stone-400 hover:text-red-300 cursor-pointer">Vider l'historique</button>
+              </div>
+              <ul id="gm-combat-log-list" class="space-y-1 max-h-40 overflow-y-auto text-[11px] text-stone-300 font-mono"></ul>
+            </div>
+          </details>
+
           <!-- MÉMO COMBAT ULTRA-RAPIDE EN PIED D'ESCARMOUCHE -->
           <div class="p-2.5 rounded-lg bg-black/35 border border-stone-800/80 text-[11px] text-stone-300 flex flex-wrap items-center justify-between gap-2">
             <span><b>Actions/tour :</b> 1 Complexe OU 2 Simples + Gratuites • <b>Dépl. :</b> Eau × 1,5m (Grat.), × 3m (Simp.), × 6m (Course) • <b>Assaut :</b> +2g1 / -10 ND • <b>Garder :</b> +10 ND allié / -5 ND gardien</span>
@@ -572,6 +586,27 @@
           </div>
         </section>
 
+        <!-- 4. AMBIANCE SONORE DE SÉANCE (WEB AUDIO AUTONOME) -->
+        <section id="gm-ambience-card" class="card-clean rounded-xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-amber-500/20 pb-1.5">
+            <h2 class="font-imperial font-bold text-sm text-amber-300">🎧 Ambiance Sonore MJ</h2>
+            <span id="gm-ambience-status" class="text-[10px] font-mono text-stone-400">Silence</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+            <button type="button" data-action="ambience-play" data-ambience="rain" class="px-2 py-1.5 rounded bg-stone-900 hover:bg-sky-950/60 border border-stone-700 hover:border-sky-500/50 text-stone-200 cursor-pointer transition text-left">🌧️ Pluie &amp; Marais</button>
+            <button type="button" data-action="ambience-play" data-ambience="wind" class="px-2 py-1.5 rounded bg-stone-900 hover:bg-emerald-950/60 border border-stone-700 hover:border-emerald-500/50 text-stone-200 cursor-pointer transition text-left">🌬️ Vent des Pics</button>
+            <button type="button" data-action="ambience-play" data-ambience="fire" class="px-2 py-1.5 rounded bg-stone-900 hover:bg-red-950/60 border border-stone-700 hover:border-red-500/50 text-stone-200 cursor-pointer transition text-left">🔥 Brasero / Maho</button>
+            <button type="button" data-action="ambience-play" data-ambience="drum" class="px-2 py-1.5 rounded bg-stone-900 hover:bg-amber-950/60 border border-stone-700 hover:border-amber-500/50 text-stone-200 cursor-pointer transition text-left">🥁 Tambour Guerre</button>
+          </div>
+          <div class="flex items-center justify-between gap-2 pt-1 text-[10px]">
+            <label class="flex items-center gap-1.5 flex-1 text-stone-400">
+              <span>Vol.</span>
+              <input id="gm-ambience-volume" type="range" min="0" max="100" value="35" class="flex-1 accent-amber-500 cursor-pointer" />
+            </label>
+            <button type="button" data-action="ambience-stop" class="px-2.5 py-1 rounded bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-200 font-bold cursor-pointer">⏹️ Silence</button>
+          </div>
+        </section>
+
       </aside>
     </div>
 
@@ -590,7 +625,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.25.0</span>
+      <span id="site-version-label">v1.26.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

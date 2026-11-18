@@ -251,6 +251,23 @@
         <h2 class="text-base md:text-lg font-bold gold-text font-imperial">1. Allégeance, Identité &amp; Lignée</h2>
         <span class="text-[11px] text-stone-400">Étape 1/6 • Choisissez votre Clan, Famille et École d'origine</span>
       </div>
+      <div class="p-3 rounded-xl bg-amber-950/20 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+        <div class="space-y-0.5">
+          <span class="font-imperial font-bold text-amber-300">✨ Nouveau Samouraï ?</span>
+          <p class="text-[11px] text-stone-300">Construisez votre histoire avec les <b>Vingt Questions</b>, comparez les 88 écoles ou importez une fiche existante.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+          <button type="button" onclick="jumpToTwentyQuestions()" class="px-2.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-[11px] cursor-pointer transition shadow">
+            📜 Vingt Questions
+          </button>
+          <a href="ecoles.html" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-amber-200 font-imperial font-bold text-[11px] transition">
+            ⚖️ Comparateur d'Écoles
+          </a>
+          <button type="button" onclick="openImportCharacterModal()" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-500/40 text-emerald-200 font-imperial font-bold text-[11px] cursor-pointer transition">
+            📥 Importer JSON
+          </button>
+        </div>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
         <div>
           <label class="block text-stone-400 mb-1">Grand Clan de Rokugan</label>
@@ -1099,7 +1116,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
     </section>
 
     <!-- 8. LES VINGT QUESTIONS DE ROKUGAN -->
-    <section class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
+    <section id="sec-vingt-questions" class="card-clean rounded-xl p-5 md:p-6 space-y-4 border-amber-500/40 bg-gradient-to-b from-[#140e0c] to-[#0a0808]">
       <div class="border-b border-amber-500/20 pb-3 flex flex-wrap justify-between items-center gap-2">
         <div>
           <h2 class="text-base md:text-lg font-bold gold-text font-imperial flex items-center gap-2">
@@ -1210,7 +1227,7 @@ Distingué lors de son Gempukku par sa communion avec les bêtes sauvages et son
   <footer class="py-6 pb-24 md:pb-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 no-print mt-10">
     <div>Campagne de la Chronique de Rokugan • Fiche Interactive avec Sorts, Kihos, Katas, Dojo & Vingt Questions</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.25.0</span>
+      <span id="site-version-label">v1.26.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
       <span>•</span>
