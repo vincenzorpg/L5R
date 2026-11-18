@@ -313,8 +313,22 @@
 
           </div>
 
-          <!-- Actions Droite : Thème + Burger Mobile -->
+          <!-- Actions Droite : Recherche Globale + Thème + Burger Mobile -->
           <div class="flex items-center gap-2">
+            <!-- Bouton Recherche Globale (Ctrl+K) -->
+            <button
+              type="button"
+              id="btn-global-search"
+              data-action="open-global-search"
+              title="Recherche globale (Ctrl + K)"
+              class="px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center gap-1.5 transition cursor-pointer"
+              aria-label="Ouvrir la recherche globale"
+            >
+              <span>🔍</span>
+              <span class="hidden md:inline text-[11px]">Rechercher</span>
+              <kbd class="hidden xl:inline px-1.5 py-0.2 rounded bg-stone-900 border border-stone-700 text-[9px] font-mono text-stone-400">Ctrl K</kbd>
+            </button>
+
             <!-- Bascule Thème Clair/Sombre (Kanjis 月 / 陽) -->
             <button
               type="button"
@@ -447,6 +461,15 @@
       </nav>
     `;
 
+    // Événement Recherche Globale
+    header.querySelectorAll('[data-action="open-global-search"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (typeof window.openL5rGlobalSearch === 'function') {
+          window.openL5rGlobalSearch();
+        }
+      });
+    });
+
     // Événement Bascule Thème
     header.querySelectorAll('[data-action="toggle-theme"]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -569,9 +592,96 @@
     document.head.appendChild(sc);
   }
 
+  function ensureGlobalSearchScript() {
+    if (window.openL5rGlobalSearch) return;
+    const already = Array.from(document.querySelectorAll('script[src]')).some(
+      (s) => (s.getAttribute('src') || '').includes('global-search.js')
+    );
+    if (already) return;
+    const sc = document.createElement('script');
+    sc.src = `${rootPrefix}js/global-search.js`;
+    sc.defer = true;
+    document.head.appendChild(sc);
+  }
+
+  function renderBreadcrumb() {
+    if (document.getElementById('l5r-breadcrumb')) return;
+    const path = window.location.pathname.replace(/\\/g, '/');
+    const file = path.split('/').pop() || 'index.html';
+    if (file === '' || file === 'index.html') return;
+
+    const crumbs = [{ label: '🏯 Accueil', href: `${rootPrefix}index.html` }];
+
+    if (/\/clans\//.test(path)) {
+      const clanNames = {
+        'crabe.html': 'Clan du Crabe',
+        'grue.html': 'Clan de la Grue',
+        'dragon.html': 'Clan du Dragon',
+        'lion.html': 'Clan du Lion',
+        'mante.html': 'Clan de la Mante',
+        'phenix.html': 'Clan du Phénix',
+        'scorpion.html': 'Clan du Scorpion',
+        'licorne.html': 'Clan de la Licorne'
+      };
+      crumbs.push({ label: 'Clans Majeurs', href: `${rootPrefix}index.html#clans` });
+      crumbs.push({ label: clanNames[file] || file.replace('.html', '') });
+    } else if (/\/campagne\//.test(path)) {
+      const numMatch = file.match(/scenario-(\d+)/);
+      crumbs.push({ label: 'Campagne', href: `${rootPrefix}campagne.html` });
+      crumbs.push({ label: numMatch ? `Scénario ${numMatch[1]}` : file.replace('.html', '') });
+    } else if (/\/aides\//.test(path)) {
+      const aideNames = {
+        'combat-memento.html': 'Mémento Combat',
+        'bushido-honneur.html': 'Code du Bushido',
+        'etiquette-coutumes.html': 'Étiquette & Coutumes'
+      };
+      crumbs.push({ label: 'Aides de Jeu', href: `${rootPrefix}index.html#aides` });
+      crumbs.push({ label: aideNames[file] || file.replace('.html', '') });
+    } else {
+      const pageMap = {
+        'createcharacter.html': ['Outils', 'La Forge'],
+        'ecoles.html': ['Outils', 'Explorateur des Écoles'],
+        'grimoire.html': ['Outils', 'Grimoire des Sorts'],
+        'kihos.html': ['Outils', 'Recueil des Kihos'],
+        'tatouages.html': ['Outils', 'Tatouages Togashi'],
+        'carte.html': ['Outils', 'Carte de Rokugan'],
+        'ecran-mj.html': ['Outils', 'Écran du MJ'],
+        'campagne.html': [null, 'Chroniques de Campagne'],
+        'campagne-ajouter.html': ['Campagne', 'Déposer un Récit']
+      };
+      const entry = pageMap[file];
+      if (!entry) return;
+      if (entry[0] === 'Campagne') {
+        crumbs.push({ label: 'Campagne', href: `${rootPrefix}campagne.html` });
+      } else if (entry[0]) {
+        crumbs.push({ label: entry[0], href: `${rootPrefix}index.html#outils` });
+      }
+      crumbs.push({ label: entry[1] });
+    }
+
+    const nav = document.createElement('nav');
+    nav.id = 'l5r-breadcrumb';
+    nav.setAttribute('aria-label', 'Fil d\'Ariane');
+    nav.className = 'no-print max-w-7xl w-full mx-auto px-4 pt-3 pb-0 text-[11px] font-imperial text-stone-400 flex flex-wrap items-center gap-1.5';
+    nav.innerHTML = crumbs.map((c, idx) => {
+      const sep = idx > 0 ? '<span class="text-amber-500/45 mx-0.5">›</span>' : '';
+      if (c.href && idx < crumbs.length - 1) {
+        return `${sep}<a href="${c.href}" class="hover:text-amber-300 transition">${c.label}</a>`;
+      }
+      return `${sep}<span class="text-amber-300 font-bold">${c.label}</span>`;
+    }).join('');
+
+    const header = document.getElementById('site-header');
+    if (header && header.parentNode) {
+      header.parentNode.insertBefore(nav, header.nextSibling);
+    }
+  }
+
   function initGlobalUI() {
     ensurePwaScript();
+    ensureGlobalSearchScript();
     renderNavbar();
+    renderBreadcrumb();
     syncFooterVersion();
   }
 

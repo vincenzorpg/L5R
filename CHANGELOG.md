@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.25.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Recherche Globale Instantanée (`Ctrl + K` / `Cmd + K`)** (`js/global-search.js`, `js/navbar.js`) :
+  - Ajout d'un bouton **« 🔍 Rechercher »** dans la barre de navigation globale ouvrant une palette de recherche instantanée avec navigation clavier (`↑`/`↓`/`Entrée`/`Échap`) et filtres par catégorie (*Pages, Clans, Écoles, Sorts, Kihos, Tatouages, Lieux, Scénarios, Règles*).
+  - Chargement paresseux (*lazy-loading*) des bases de données uniquement à l'ouverture de la modale, et respect strict du verrou MJ (`gmOnly` masqué par défaut).
+- **Fil d'Ariane Automatique (`renderBreadcrumb`)** (`js/navbar.js`) :
+  - Injection automatique d'un fil d'Ariane cliquable sous l'en-tête sur toutes les pages secondaires (clans, scénarios, aides de jeu, outils et campagne).
+- **PWA & Tests (`sw.js`, `tests/unit-tests.html`, `tests/unit-tests.js`)** :
+  - Mise à jour du cache Service Worker (`l5r-forge-v1.25.0`) avec `js/global-search.js` et ajout de la **Suite 13** de tests unitaires.
+
+---
+
 ## [1.24.0] — 2026-11-18
 
 ### ✨ Ajouté & Amélioré
