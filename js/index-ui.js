@@ -105,10 +105,8 @@ function renderHomeSections() {
       <div class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 bg-gradient-to-br ${c.gradient}">
         <a href="clans/${c.id}.html" class="space-y-2 block group">
           <div class="flex items-center justify-between">
-            <span class="w-9 h-9 rounded-full flex items-center justify-center font-serif font-bold text-lg bg-black/80 border border-stone-800" style="color: ${c.color}; text-shadow: 0 0 8px ${c.shadow};">
-              ${c.kanji}
-            </span>
-            <span class="text-[10px] text-stone-400 transition font-imperial font-bold">LORE & ÉCOLES →</span>
+            <img src="assets/images/clans/mon-${c.id}.png" alt="Mon ${c.name}" class="w-11 h-11 rounded-full object-cover border border-amber-500/45 shadow-md bg-black/80" style="box-shadow: 0 0 12px ${c.shadow};" />
+            <span class="text-[10px] text-stone-400 transition font-imperial font-bold">LORE &amp; ÉCOLES →</span>
           </div>
           <h3 class="font-bold font-imperial text-sm group-hover:text-amber-200 transition" style="color: ${c.color};">
             ${c.name}
@@ -161,24 +159,47 @@ function renderHomeSections() {
     const grid = document.getElementById("home-saved-grid");
     if (!roster.length || !wrapper || !grid) return;
 
+    const latestThree = roster.slice(0, 3);
     wrapper.classList.remove("hidden");
-    grid.innerHTML = roster.map(c => `
-      <a href="createcharacter.html?load=${encodeURIComponent(c.id)}" class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-2 border-emerald-500/40 bg-gradient-to-br from-[#0e1914] to-[#0a0808] group">
+    grid.innerHTML = latestThree.map((c, idx) => `
+      <article class="card-clean card-hover rounded-xl p-4 flex flex-col justify-between space-y-3 border-emerald-500/40 bg-gradient-to-br from-[#0e1914] to-[#0a0808]">
         <div>
           <div class="flex justify-between items-center text-[10px] text-emerald-400 font-mono">
             <span>${c.clanLabel || c.clan || "Samouraï"}</span>
             <span>Honneur ${c.honor || "4.5"}</span>
           </div>
-          <h3 class="text-sm font-bold font-imperial text-amber-200 group-hover:text-amber-300 mt-0.5">${c.name || "Samouraï"}</h3>
+          <h3 class="text-sm font-bold font-imperial text-amber-200 mt-0.5">${c.name || "Samouraï"}</h3>
           <div class="text-[11px] text-stone-400">${c.schoolLabel || c.school || "École"} • ${c.insightText || "Rang 1"}</div>
           ${c.backgroundStory ? `<p class="text-[10px] text-stone-500 italic line-clamp-2 mt-1.5">« ${c.backgroundStory} »</p>` : ""}
         </div>
-        <div class="pt-2 border-t border-stone-800/80 flex justify-between items-center text-[10px] text-amber-300 font-imperial font-bold">
-          <span>Toucher ${c.atk || "3g2"} • ND ${c.armorTn || "20"}</span>
-          <span>Ouvrir dans la Forge →</span>
+        <div class="pt-2 border-t border-stone-800/80 flex flex-wrap justify-between items-center gap-2 text-[10px]">
+          <a href="createcharacter.html?load=${encodeURIComponent(c.id)}" class="px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold transition">
+            ⚔️ Reprendre
+          </a>
+          <button type="button" data-home-export-idx="${idx}" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-emerald-500/40 text-emerald-200 font-bold cursor-pointer transition">
+            📥 Exporter JSON
+          </button>
         </div>
-      </a>
+      </article>
     `).join("");
+
+    grid.querySelectorAll("[data-home-export-idx]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const idx = parseInt(btn.getAttribute("data-home-export-idx"), 10);
+        const charObj = latestThree[idx];
+        if (!charObj) return;
+        const slug = String(charObj.name || "samourai").toLowerCase().replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "");
+        const blob = new Blob([JSON.stringify(charObj, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${slug || "samourai"}-l5r.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+    });
   } catch (e) {}
 }
 

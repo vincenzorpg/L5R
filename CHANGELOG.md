@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.27.0] — 2026-11-18
+
+### ✨ Ajouté & Amélioré
+- **Parcours Joueur « Premier Lancement » & Accueil (`index.html`, `js/index-ui.js`, `sw.js`)** :
+  - Restructuration du Hero d'accueil en deux parcours clairs côte à côte : **🎴 Je suis Joueur** (*Forger mon Samouraï, Écoles, Clans*) et **幕 Je suis Maître du Jeu** (*Écran du MJ, Carte, Campagne*).
+  - Ajout de la section **« 🏯 Mes Personnages (Mon Dojo) »** (`#home-saved-roster`) directement sous le Hero, affichant jusqu'aux 3 derniers samouraïs sauvegardés dans `localStorage` avec boutons directs **« ⚔️ Reprendre »** et **« 📥 Exporter JSON »**.
+  - Remplacement des pastilles kanji sur les 8 cartes des Grands Clans de l'accueil par les **8 médaillons *mon* officiels** (`assets/images/clans/mon-*.png`).
+
+---
+
 ## [1.26.0] — 2026-11-18
 
 ### ✨ Ajouté & Amélioré
