@@ -6,6 +6,14 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.28.0] — 2026-11-18
+
+### 🎨 Amélioré
+- **8 *Mon* Officiels HD des Grands Clans (`assets/images/clans/mon-*.png`)** :
+  - Remplacement des découpes de carte par **8 médaillons haute définition (`512×512`, PNG détouré)** en style orfèvrerie dorée et laque japonaise fidèles aux emblèmes de la 4ᵉ édition (*Crabe, Grue, Dragon, Lion, Mante, Phénix, Scorpion, Licorne*), utilisés sur la page d'accueil et les 8 pages de Clans.
+
+---
+
 ## [1.27.0] — 2026-11-18
 
 ### ✨ Ajouté & Amélioré
