@@ -1398,6 +1398,7 @@ select {
   text-shadow: 0 1px 2px #000;
 }
 .map-pin-label.is-visible,
+.map-markers-zoomed .map-pin-label.is-zoom-reveal,
 .map-pin:hover .map-pin-label,
 .map-pin.is-selected .map-pin-label {
   opacity: 1;

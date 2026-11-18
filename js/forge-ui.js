@@ -3339,3 +3339,19 @@ window.openImportCharacterModalWithJson = openImportCharacterModalWithJson;
 window.closeImportCharacterModal = closeImportCharacterModal;
 window.previewImportJsonText = previewImportJsonText;
 window.confirmImportCharacter = confirmImportCharacter;
+
+function jumpToTwentyQuestions() {
+  if (typeof window.setForgeStep === 'function') {
+    window.setForgeStep('gear');
+  }
+  if (typeof window.toggleAllTwentyQuestionsChapters === 'function') {
+    window.toggleAllTwentyQuestionsChapters(true);
+  }
+  setTimeout(() => {
+    const sec = document.getElementById('sec-vingt-questions');
+    if (sec && typeof sec.scrollIntoView === 'function') {
+      sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 60);
+}
+window.jumpToTwentyQuestions = jumpToTwentyQuestions;

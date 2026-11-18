@@ -76,14 +76,15 @@
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
       <!-- CARTE ZOOMABLE / DÉPLAÇABLE -->
-      <div class="lg:col-span-8 card-clean rounded-2xl p-2.5 sm:p-3 border-amber-500/35 space-y-2">
+      <div id="map-card-container" class="lg:col-span-8 card-clean rounded-2xl p-2.5 sm:p-3 border-amber-500/35 space-y-2">
         <div class="flex flex-wrap items-center justify-between gap-2 px-1 text-[11px]">
           <span class="text-stone-400">Molette pour zoomer • Glisser pour déplacer • Cliquer un repère pour les détails</span>
-          <div class="flex items-center gap-1.5">
+          <div class="flex flex-wrap items-center gap-1.5">
             <button type="button" id="btn-zoom-out" class="w-7 h-7 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-bold text-stone-200 cursor-pointer" title="Dézoomer">−</button>
             <span id="map-zoom-label" class="px-2 py-0.5 rounded bg-black/60 border border-stone-800 font-mono text-amber-300 min-w-[48px] text-center">100%</span>
             <button type="button" id="btn-zoom-in" class="w-7 h-7 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 font-bold text-stone-200 cursor-pointer" title="Zoomer">+</button>
             <button type="button" id="btn-zoom-reset" class="px-2.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-amber-300 font-bold cursor-pointer">Réinitialiser</button>
+            <button type="button" id="btn-map-fullscreen" class="px-2.5 py-1 rounded bg-amber-950/60 hover:bg-amber-900/70 border border-amber-500/40 text-amber-200 font-bold cursor-pointer" title="Projeter la carte en plein écran">⛶ Plein écran</button>
           </div>
         </div>
 
@@ -141,7 +142,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — Atlas Géographique &amp; Chemin des PJs</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.25.0</span>
+      <span id="site-version-label">v1.26.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

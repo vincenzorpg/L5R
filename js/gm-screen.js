@@ -585,6 +585,7 @@
       scoreB: ''
     },
     diceHistory: [],
+    combatLog: [],
     gmScratchpad: '',
     scenario: {
       selectedId: 'scenario-2-jouets',
@@ -624,6 +625,7 @@
             : { round: 1, activeIndex: 0, combatants: [] },
           duel: parsed.duel && typeof parsed.duel === 'object' ? { ...state.duel, ...parsed.duel } : state.duel,
           diceHistory: Array.isArray(parsed.diceHistory) ? parsed.diceHistory.slice(0, 8) : [],
+          combatLog: Array.isArray(parsed.combatLog) ? parsed.combatLog.slice(0, 40) : [],
           gmScratchpad: String(parsed.gmScratchpad || ''),
           scenario: parsed.scenario && typeof parsed.scenario === 'object'
             ? {
@@ -755,6 +757,9 @@
       } else {
         c.wounds = val;
       }
+      if (delta !== 0) {
+        pushCombatLog(`${c.name} : ${delta > 0 ? '+' + delta : delta} Blessures (total ${c.wounds})`);
+      }
     }
     saveState();
     renderAll();
@@ -810,6 +815,7 @@
       activeIndex: 0,
       combatants
     };
+    pushCombatLog(`Escarmouche générée (${combatants.length} combattant(s))`);
     saveState();
     renderAll();
   }
@@ -821,6 +827,7 @@
     const existingEnemies = state.combat.combatants.filter((c) => c.type === 'enemy').length;
     const reinforcements = createEnemyCombatants(npcCount, npcTemplate, existingEnemies);
     state.combat.combatants = sortCombatantsByInit([...state.combat.combatants, ...reinforcements]);
+    pushCombatLog(`+${reinforcements.length} renfort(s) : ${npcTemplate.name}`);
     saveState();
     renderCombat();
   }
@@ -1431,6 +1438,135 @@
     ).join('') + '<option value="custom">— PNJ Personnalisé —</option>';
   }
 
+  function pushCombatLog(entryText) {
+    if (!entryText) return;
+    if (!Array.isArray(state.combatLog)) state.combatLog = [];
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    state.combatLog.unshift({ time: `${hh}:${mm}`, round: (state.combat && state.combat.round) || 1, text: String(entryText) });
+    if (state.combatLog.length > 40) state.combatLog = state.combatLog.slice(0, 40);
+  }
+
+  function renderCombatLog() {
+    const listEl = document.getElementById('gm-combat-log-list');
+    const countEl = document.getElementById('gm-combat-log-count');
+    const logs = Array.isArray(state.combatLog) ? state.combatLog : [];
+    if (countEl) countEl.textContent = String(logs.length);
+    if (!listEl) return;
+    if (logs.length === 0) {
+      listEl.innerHTML = '<li class="text-stone-500 italic">Aucun événement enregistré pour ce combat.</li>';
+      return;
+    }
+    listEl.innerHTML = logs.map((l) => `
+      <li class="px-2 py-1 rounded bg-black/40 border border-stone-800/80 flex items-center justify-between gap-2">
+        <span><b class="text-amber-300">[R${l.round}]</b> ${escapeHtml(l.text)}</span>
+        <span class="text-[10px] text-stone-500 shrink-0">${escapeHtml(l.time)}</span>
+      </li>
+    `).join('');
+  }
+
+  // Moteur Web Audio autonome pour Ambiances Sonores MJ
+  let _ambienceCtx = null;
+  let _ambienceGain = null;
+  let _ambienceNodes = [];
+  let _ambienceTimer = null;
+  let _activeAmbience = null;
+
+  function stopGmAmbience() {
+    if (_ambienceTimer) {
+      clearInterval(_ambienceTimer);
+      _ambienceTimer = null;
+    }
+    _ambienceNodes.forEach((n) => {
+      try { if (typeof n.stop === 'function') n.stop(); } catch (_) {}
+      try { if (typeof n.disconnect === 'function') n.disconnect(); } catch (_) {}
+    });
+    _ambienceNodes = [];
+    _activeAmbience = null;
+    const statusEl = document.getElementById('gm-ambience-status');
+    if (statusEl) statusEl.textContent = 'Silence';
+    document.querySelectorAll('[data-action="ambience-play"]').forEach((b) => {
+      b.classList.remove('border-amber-400', 'bg-amber-950/50', 'text-amber-200');
+    });
+  }
+
+  function startGmAmbience(mode) {
+    if (typeof window === 'undefined') return;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    if (_activeAmbience === mode) {
+      stopGmAmbience();
+      return;
+    }
+    stopGmAmbience();
+    if (!_ambienceCtx) _ambienceCtx = new AudioCtx();
+    if (_ambienceCtx.state === 'suspended') _ambienceCtx.resume().catch(() => {});
+
+    const volSlider = document.getElementById('gm-ambience-volume');
+    const vol = (volSlider ? Number(volSlider.value) : 35) / 100;
+    _ambienceGain = _ambienceCtx.createGain();
+    _ambienceGain.gain.value = Math.max(0.01, vol * 0.35);
+    _ambienceGain.connect(_ambienceCtx.destination);
+    _ambienceNodes.push(_ambienceGain);
+
+    const makeNoise = () => {
+      const len = _ambienceCtx.sampleRate * 2;
+      const buf = _ambienceCtx.createBuffer(1, len, _ambienceCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      let lastOut = 0;
+      for (let i = 0; i < len; i++) {
+        const white = Math.random() * 2 - 1;
+        data[i] = (lastOut + 0.04 * white) / 1.04;
+        lastOut = data[i];
+      }
+      const src = _ambienceCtx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+      return src;
+    };
+
+    const labels = { rain: 'Pluie & Marais', wind: 'Vent des Pics', fire: 'Brasero / Maho', drum: 'Tambour Guerre' };
+    if (mode === 'rain' || mode === 'wind' || mode === 'fire') {
+      const src = makeNoise();
+      const filter = _ambienceCtx.createBiquadFilter();
+      filter.type = mode === 'rain' ? 'bandpass' : 'lowpass';
+      filter.frequency.value = mode === 'rain' ? 1100 : mode === 'wind' ? 420 : 260;
+      filter.Q.value = mode === 'wind' ? 3.5 : 0.9;
+      src.connect(filter);
+      filter.connect(_ambienceGain);
+      src.start();
+      _ambienceNodes.push(src, filter);
+    } else if (mode === 'drum') {
+      const triggerBeat = () => {
+        if (!_ambienceCtx || !_ambienceGain) return;
+        const osc = _ambienceCtx.createOscillator();
+        const g = _ambienceCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(110, _ambienceCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(42, _ambienceCtx.currentTime + 0.35);
+        g.gain.setValueAtTime(0.9, _ambienceCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, _ambienceCtx.currentTime + 0.45);
+        osc.connect(g);
+        g.connect(_ambienceGain);
+        osc.start();
+        osc.stop(_ambienceCtx.currentTime + 0.46);
+      };
+      triggerBeat();
+      _ambienceTimer = setInterval(triggerBeat, 950);
+    }
+
+    _activeAmbience = mode;
+    const statusEl = document.getElementById('gm-ambience-status');
+    if (statusEl) statusEl.textContent = labels[mode] || mode;
+    document.querySelectorAll('[data-action="ambience-play"]').forEach((b) => {
+      const active = b.getAttribute('data-ambience') === mode;
+      b.classList.toggle('border-amber-400', active);
+      b.classList.toggle('bg-amber-950/50', active);
+      b.classList.toggle('text-amber-200', active);
+    });
+  }
+
   function getGmScenariosList() {
     if (typeof GM_SCENARIOS_DATA !== 'undefined' && Array.isArray(GM_SCENARIOS_DATA)) {
       return GM_SCENARIOS_DATA;
@@ -1563,6 +1699,13 @@
       { target: 'sc-npcs', label: '👹 Annexe PNJs' }
     ];
 
+    const galleryIllustrations = [];
+    (activeScenario.acts || []).forEach((a) => {
+      (a.scenes || []).forEach((s) => {
+        if (s.illustration) galleryIllustrations.push(s.illustration);
+      });
+    });
+
     root.innerHTML = `
       <!-- EN-TÊTE SCÉNARIO -->
       <div class="p-4 rounded-xl bg-gradient-to-br from-amber-950/30 via-black/60 to-red-950/20 border border-amber-500/35 space-y-3">
@@ -1599,6 +1742,17 @@
             </button>
           `).join('')}
         </div>
+
+        ${galleryIllustrations.length > 0 ? `
+          <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-amber-500/15">
+            <span class="text-[10px] font-imperial uppercase tracking-wider text-amber-400 mr-1">🖼️ Visuels PJs :</span>
+            ${galleryIllustrations.map((ill) => `
+              <button type="button" data-action="scenario-show-image" data-img-src="${escapeHtml(ill.src)}" data-img-title="${escapeHtml(ill.title)}" class="px-2 py-0.5 rounded bg-amber-950/50 hover:bg-amber-900/70 border border-amber-500/35 text-[10px] text-amber-200 cursor-pointer transition">
+                ${escapeHtml(ill.title)}
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
       </div>
 
       <!-- CHECKLIST JOUR J & RÈGLES CRITIQUES -->
@@ -1837,6 +1991,7 @@
     renderTabs();
     renderPcs();
     renderCombat();
+    renderCombatLog();
     renderScenarioPanel();
     renderRulesPanel();
     renderDuel();
@@ -2374,6 +2529,21 @@
           if (title) title.textContent = btn.getAttribute('data-img-title') || '';
           modal.classList.remove('hidden');
         }
+      } else if (action === 'clear-combat-log') {
+        state.combatLog = [];
+        saveState();
+        renderCombatLog();
+      } else if (action === 'ambience-play') {
+        startGmAmbience(btn.getAttribute('data-ambience'));
+      } else if (action === 'ambience-stop') {
+        stopGmAmbience();
+      }
+    });
+
+    document.getElementById('gm-ambience-volume')?.addEventListener('input', (e) => {
+      if (_ambienceGain) {
+        const vol = (Number(e.target.value) || 0) / 100;
+        _ambienceGain.gain.value = Math.max(0.005, vol * 0.35);
       }
     });
 

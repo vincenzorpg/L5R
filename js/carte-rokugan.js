@@ -204,6 +204,7 @@
       // Keep marker visual size comfortable when zooming deeply
       const inv = 1 / Math.pow(state.scale, 0.55);
       markersLayer.style.setProperty('--pin-scale', inv.toFixed(3));
+      markersLayer.classList.toggle('map-markers-zoomed', state.scale >= 1.35);
     }
 
     function focusOnCoords(xPct, yPct, targetScale = 1.9) {
@@ -341,13 +342,18 @@
         btn.setAttribute('aria-label', `${loc.name} (${meta.label})`);
 
         const badgeNums = isCampaignVisible ? activeActs.map((a) => a.step).join('·') : '';
-        const showPermanentLabel = loc.major || isCampaignVisible || isSelected;
+        const hasSpecificFilter = (state.faction !== 'all' && state.faction !== 'campaign') || Boolean(state.query);
+        const showPermanentLabel = loc.id === 'otosan-uchi' || isCampaignVisible || isSelected || hasSpecificFilter;
+        const labelClasses = [
+          'map-pin-label',
+          showPermanentLabel ? 'is-visible' : 'is-zoom-reveal'
+        ].join(' ');
 
         btn.innerHTML = `
           <span class="map-pin-dot ${loc.major ? 'is-major' : ''}">
             ${isCampaignVisible ? `<span class="map-pin-step">${badgeNums}</span>` : `<span class="map-pin-kanji">${loc.kanji}</span>`}
           </span>
-          <span class="map-pin-label ${showPermanentLabel ? 'is-visible' : ''}">${loc.name}</span>
+          <span class="${labelClasses}">${loc.name}</span>
         `;
 
         btn.addEventListener('click', (e) => {
@@ -622,12 +628,46 @@
     const zoomInBtn = document.getElementById('btn-zoom-in');
     const zoomOutBtn = document.getElementById('btn-zoom-out');
     const zoomResetBtn = document.getElementById('btn-zoom-reset');
+    const fullscreenBtn = document.getElementById('btn-map-fullscreen');
+    const mapCardContainer = document.getElementById('map-card-container');
     if (zoomInBtn) zoomInBtn.addEventListener('click', () => { state.scale = Math.min(3.5, state.scale + 0.35); applyTransform(true); });
     if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => { state.scale = Math.max(1, state.scale - 0.35); applyTransform(true); });
     if (zoomResetBtn) {
       zoomResetBtn.addEventListener('click', () => {
         state.scale = 1; state.tx = 0; state.ty = 0;
         applyTransform(true);
+      });
+    }
+    if (fullscreenBtn && mapCardContainer) {
+      let fallbackFullscreen = false;
+      const syncFsBtn = (isFs) => {
+        fullscreenBtn.textContent = isFs ? '✕ Quitter plein écran' : '⛶ Plein écran';
+      };
+      fullscreenBtn.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+          return;
+        }
+        if (fallbackFullscreen) {
+          fallbackFullscreen = false;
+          mapCardContainer.classList.remove('fixed', 'inset-0', 'z-[90]', 'bg-[#0d0907]', 'overflow-auto', 'rounded-none');
+          syncFsBtn(false);
+          return;
+        }
+        if (typeof mapCardContainer.requestFullscreen === 'function') {
+          mapCardContainer.requestFullscreen().catch(() => {
+            fallbackFullscreen = true;
+            mapCardContainer.classList.add('fixed', 'inset-0', 'z-[90]', 'bg-[#0d0907]', 'overflow-auto', 'rounded-none');
+            syncFsBtn(true);
+          });
+        } else {
+          fallbackFullscreen = true;
+          mapCardContainer.classList.add('fixed', 'inset-0', 'z-[90]', 'bg-[#0d0907]', 'overflow-auto', 'rounded-none');
+          syncFsBtn(true);
+        }
+      });
+      document.addEventListener('fullscreenchange', () => {
+        syncFsBtn(Boolean(document.fullscreenElement));
       });
     }
 
