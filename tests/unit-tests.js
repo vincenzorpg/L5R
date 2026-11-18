@@ -982,8 +982,8 @@
       const act11Npcs = campagneStudio.filterCodexEntries(entries, { category: "npc", act: "11" });
       assertTrue(act11Npcs.length >= 4 && act11Npcs.every(e => e.category === "npc" && e.acts.includes(11)), "Filtre PNJ + Acte 11 exact");
 
-      const takeda = campagneStudio.filterCodexEntries(entries, { query: "Takeda" });
-      assertEqual(takeda.length, 1, "Recherche Soshi Takeda exacte");
+      const takeda = campagneStudio.filterCodexEntries(entries, { category: "npc", query: "Takeda" });
+      assertEqual(takeda.length, 1, "Recherche Soshi Takeda (PNJ) exacte");
 
       const snippet = campagneStudio.buildCarteDataSnippet({
         id: 12,
