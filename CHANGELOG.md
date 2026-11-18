@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.24.0] — 2026-11-18
+
+### ✨ Ajouté & Amélioré
+- **Embellissement des 8 Pages de Grands Clans (`clans/*.html`, `assets/images/clans/mon-*.png`)** :
+  - Extraction et intégration des **8 *mon* officiels de la 4ᵉ édition** en médaillons dorés haute définition dans une nouvelle carte héraldique dédiée sur chaque page (*Crabe, Grue, Dragon, Lion, Mante, Phénix, Scorpion, Licorne*), affichant le Kami fondateur, les vertus et les couleurs traditionnelles.
+  - Restructuration du Hero de chaque clan en 2 colonnes avec boutons d'action directs vers la **Forge** (`createcharacter.html?clan=...`), le **Comparateur d'Écoles** (`ecoles.html?clan=...`) et la **Carte de Rokugan** (`carte.html`).
+
+---
+
 ## [1.23.1] — 2026-11-18
 
 ### 🐛 Corrigé
