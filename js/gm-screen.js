@@ -53,11 +53,11 @@
     { name: 'Bakemono (Gobelin)', initFormula: '4g2', armorTN: 15, reduction: 1, earth: 2, attack: '4g2', damage: '3g2', notes: 'Souillure 1+, fuit si isolé.' },
     { name: 'Oni Mineur', initFormula: '5g3', armorTN: 20, reduction: 6, earth: 4, attack: '7g3', damage: '7g3', notes: 'Peur 3, Carapace, vulnérable au Jade.' },
     { name: 'Kansen / Mort-vivant', initFormula: '3g2', armorTN: 14, reduction: 4, earth: 3, attack: '5g2', damage: '5g2', notes: 'Ignore les malus de blessures (sauf Mort).' },
-    { name: 'Chuda Tenkazu (Sc.2 — Boss)', initFormula: '6g3', armorTN: 20, reduction: 0, earth: 3, attack: '6g3', damage: '6g3', notes: 'Shugenja Chuda R3 • Jadoku (ignore Réd., Terre ND 15 Souillure, +3 PV) • Maho Outremonde 7g4 • Armure d\'Obsidienne (Réd. 6 vs Jade).' },
-    { name: 'Guerrier Tsuno (Sc.2)', initFormula: '5g4', armorTN: 30, reduction: 8, earth: 4, attack: '7g3', damage: '6g3', notes: 'Peur 2 (ND 15) • Invulnérabilité partielle (Réd 8 sauf Jade/Cristal) • +1g0 attaque vs cible souillée.' },
-    { name: 'Shikageko / Murai (Sc.2 — Boss Acte II)', initFormula: '7g4', armorTN: 25, reduction: 4, earth: 3, attack: '8g4', damage: '4g3', notes: '2 att./round • Peur 3 (ND 20) • Poison (End. ND 15 ou -1g0) • ND chute à 15 si Murai reprend le contrôle.' },
-    { name: 'Zombie de Sang (Sc.2)', initFormula: '2g1', armorTN: 10, reduction: 3, earth: 2, attack: '4g2', damage: '3g2', notes: '30 PV fixes • Insensible aux malus • Détruit instantanément si le brasero de Minerai de Sang est brisé.' },
-    { name: 'Éclaireur Kuroiban (Sc.2)', initFormula: '7g3', armorTN: 25, reduction: 3, earth: 3, attack: '7g4', damage: '5g2', notes: 'Shuriken empoisonnés 6g4 (Endurance ND 20 ou sommeil).' }
+    { name: 'Chuda Tenkazu (Sc.2 — Boss)', gmOnly: true, initFormula: '6g3', armorTN: 20, reduction: 0, earth: 3, attack: '6g3', damage: '6g3', notes: 'Shugenja Chuda R3 • Jadoku (ignore Réd., Terre ND 15 Souillure, +3 PV) • Maho Outremonde 7g4 • Armure d\'Obsidienne (Réd. 6 vs Jade).' },
+    { name: 'Guerrier Tsuno (Sc.2)', gmOnly: true, initFormula: '5g4', armorTN: 30, reduction: 8, earth: 4, attack: '7g3', damage: '6g3', notes: 'Peur 2 (ND 15) • Invulnérabilité partielle (Réd 8 sauf Jade/Cristal) • +1g0 attaque vs cible souillée.' },
+    { name: 'Shikageko / Murai (Sc.2 — Boss Acte II)', gmOnly: true, initFormula: '7g4', armorTN: 25, reduction: 4, earth: 3, attack: '8g4', damage: '4g3', notes: '2 att./round • Peur 3 (ND 20) • Poison (End. ND 15 ou -1g0) • ND chute à 15 si Murai reprend le contrôle.' },
+    { name: 'Zombie de Sang (Sc.2)', gmOnly: true, initFormula: '2g1', armorTN: 10, reduction: 3, earth: 2, attack: '4g2', damage: '3g2', notes: '30 PV fixes • Insensible aux malus • Détruit instantanément si le brasero de Minerai de Sang est brisé.' },
+    { name: 'Éclaireur Kuroiban (Sc.2)', gmOnly: true, initFormula: '7g3', armorTN: 25, reduction: 3, earth: 3, attack: '7g4', damage: '5g2', notes: 'Shuriken empoisonnés 6g4 (Endurance ND 20 ou sommeil).' }
   ];
 
   const DUEL_PRESETS = [
@@ -1396,6 +1396,41 @@
     if (out) out.textContent = `ND ${total}`;
   }
 
+  function isGmScenarioUnlocked() {
+    if (typeof globalScope.isGmSecretsUnlocked === 'function') {
+      return globalScope.isGmSecretsUnlocked();
+    }
+    if (typeof sessionStorage !== 'undefined') {
+      try {
+        return sessionStorage.getItem('l5r_maho_unlocked') === 'true';
+      } catch (_) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  function isValidGmScenarioPassword(pwd) {
+    if (typeof globalScope.isValidGmSecretPassword === 'function') {
+      return globalScope.isValidGmSecretPassword(pwd);
+    }
+    const p = String(pwd || '').trim().toLowerCase();
+    return ['iuchiban', 'maho', 'jigoku', 'outremonde', 'araignee', 'araignée', 'kolat', 'daigotsu'].includes(p);
+  }
+
+  function populateSkirmishNpcPresetSelect() {
+    const presetSelect = document.getElementById('gm-skirmish-npc-preset');
+    if (!presetSelect) return;
+    const unlocked = isGmScenarioUnlocked();
+    const visiblePresets = ENEMY_PRESETS
+      .map((p, idx) => ({ p, idx }))
+      .filter(({ p }) => unlocked || !p.gmOnly);
+
+    presetSelect.innerHTML = visiblePresets.map(({ p, idx }) =>
+      `<option value="${idx}">${escapeHtml(p.name)} (Init ${p.initFormula}, ND ${p.armorTN}, Toucher ${p.attack}, Dégâts ${p.damage})</option>`
+    ).join('') + '<option value="custom">— PNJ Personnalisé —</option>';
+  }
+
   function getGmScenariosList() {
     if (typeof GM_SCENARIOS_DATA !== 'undefined' && Array.isArray(GM_SCENARIOS_DATA)) {
       return GM_SCENARIOS_DATA;
@@ -1470,6 +1505,40 @@
   function renderScenarioPanel() {
     const root = document.getElementById('gm-scenario-root');
     if (!root) return;
+
+    if (!isGmScenarioUnlocked()) {
+      root.innerHTML = `
+        <div class="p-6 md:p-8 rounded-xl bg-gradient-to-br from-red-950/30 via-black/70 to-amber-950/20 border border-red-700/40 text-center space-y-4 max-w-xl mx-auto my-4">
+          <div class="text-3xl">🔒</div>
+          <div class="space-y-1">
+            <h3 class="font-imperial font-bold text-base md:text-lg text-amber-300">Contenu Réservé au Maître du Jeu</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">
+              Les scénarios préparés, indices d'enquête, profils de boss et rencontres sont masqués afin d'éviter tout spoiler aux joueurs.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-2 pt-1">
+            <input
+              id="gm-scenario-pwd"
+              type="password"
+              placeholder="Sceau secret du MJ..."
+              autocomplete="off"
+              class="w-full sm:w-56 rounded-lg bg-[#0d0b0b] border border-amber-500/40 focus:border-amber-400 px-3 py-2 text-xs text-amber-200 placeholder-stone-500 focus:outline-none text-center"
+            />
+            <button
+              type="button"
+              data-action="scenario-unlock"
+              class="w-full sm:w-auto px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow"
+            >
+              🔓 Déverrouiller
+            </button>
+          </div>
+          <p id="gm-scenario-pwd-error" class="hidden text-[11px] text-red-400 font-bold">Sceau incorrect. Accès refusé.</p>
+          <p class="text-[10px] text-stone-500 italic">Partage le même verrou MJ que les secrets d'Écoles et de la Forge.</p>
+        </div>
+      `;
+      return;
+    }
+
     const scenarios = getGmScenariosList();
     if (scenarios.length === 0) {
       root.innerHTML = '<p class="text-xs text-stone-400 italic">Aucun scénario chargé.</p>';
@@ -1506,7 +1575,12 @@
             <h3 class="text-lg md:text-xl font-imperial font-bold text-amber-200">${escapeHtml(activeScenario.title)}</h3>
             <p class="text-[11px] text-stone-400">${escapeHtml(activeScenario.pcsLine)} • Départ : <b class="text-stone-200">${escapeHtml(activeScenario.startPlace)}</b> • Durée : <b class="text-stone-200">${escapeHtml(activeScenario.duration)}</b></p>
           </div>
-          ${scenarioSelector}
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            ${scenarioSelector}
+            <button type="button" data-action="scenario-lock" title="Masquer le scénario aux joueurs" class="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900/80 border border-red-700/50 text-[11px] font-imperial text-red-200 cursor-pointer transition">
+              🔒 Verrouiller (Masquer)
+            </button>
+          </div>
         </div>
 
         <div class="flex flex-wrap gap-1.5">
@@ -1638,6 +1712,19 @@
                           <span class="italic"> ${escapeHtml(d.text)}</span>
                         </div>
                       `).join('')}
+                    </div>
+                  ` : ''}
+
+                  ${scene.illustration ? `
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-2.5 rounded-lg bg-black/45 border border-amber-500/25">
+                      <img src="${escapeHtml(scene.illustration.src)}" alt="${escapeHtml(scene.illustration.title)}" class="w-full sm:w-40 h-24 object-cover rounded border border-amber-500/30 cursor-pointer hover:opacity-90 transition" data-action="scenario-show-image" data-img-src="${escapeHtml(scene.illustration.src)}" data-img-title="${escapeHtml(scene.illustration.title)}" />
+                      <div class="flex-1 space-y-1.5">
+                        <div class="font-imperial font-bold text-xs text-amber-200">${escapeHtml(scene.illustration.title)}</div>
+                        <p class="text-[10px] text-stone-400">Illustration sans spoiler prête à être affichée en plein écran aux joueurs.</p>
+                        <button type="button" data-action="scenario-show-image" data-img-src="${escapeHtml(scene.illustration.src)}" data-img-title="${escapeHtml(scene.illustration.title)}" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-[11px] cursor-pointer transition shadow">
+                          🖼️ Montrer aux PJs (Plein écran)
+                        </button>
+                      </div>
                     </div>
                   ` : ''}
 
@@ -1899,9 +1986,7 @@
     // Modèles PNJ pour l'escarmouche
     const presetSelect = document.getElementById('gm-skirmish-npc-preset');
     if (presetSelect) {
-      presetSelect.innerHTML = ENEMY_PRESETS.map((p, idx) =>
-        `<option value="${idx}">${escapeHtml(p.name)} (Init ${p.initFormula}, ND ${p.armorTN}, Toucher ${p.attack}, Dégâts ${p.damage})</option>`
-      ).join('') + '<option value="custom">— PNJ Personnalisé —</option>';
+      populateSkirmishNpcPresetSelect();
 
       const fillCustomFields = (p) => {
         if (!p) return;
@@ -2264,6 +2349,54 @@
       } else if (action === 'scenario-add-npc') {
         const presetName = btn.getAttribute('data-preset-name');
         addScenarioNpcToCombat(presetName);
+      } else if (action === 'scenario-unlock') {
+        const pwdEl = document.getElementById('gm-scenario-pwd');
+        const errEl = document.getElementById('gm-scenario-pwd-error');
+        const val = pwdEl ? pwdEl.value : '';
+        if (isValidGmScenarioPassword(val)) {
+          try { sessionStorage.setItem('l5r_maho_unlocked', 'true'); } catch (_) {}
+          populateSkirmishNpcPresetSelect();
+          renderScenarioPanel();
+        } else if (errEl) {
+          errEl.classList.remove('hidden');
+        }
+      } else if (action === 'scenario-lock') {
+        try { sessionStorage.removeItem('l5r_maho_unlocked'); } catch (_) {}
+        populateSkirmishNpcPresetSelect();
+        renderScenarioPanel();
+      } else if (action === 'scenario-show-image') {
+        const modal = document.getElementById('gm-lightbox-modal');
+        const img = document.getElementById('gm-lightbox-img');
+        const title = document.getElementById('gm-lightbox-title');
+        if (modal && img) {
+          img.src = btn.getAttribute('data-img-src') || '';
+          img.alt = btn.getAttribute('data-img-title') || '';
+          if (title) title.textContent = btn.getAttribute('data-img-title') || '';
+          modal.classList.remove('hidden');
+        }
+      }
+    });
+
+    const lightboxClose = document.getElementById('gm-lightbox-close');
+    const lightboxModal = document.getElementById('gm-lightbox-modal');
+    if (lightboxClose && lightboxModal) {
+      lightboxClose.addEventListener('click', () => lightboxModal.classList.add('hidden'));
+      lightboxModal.addEventListener('click', (e) => {
+        if (e.target === lightboxModal) lightboxModal.classList.add('hidden');
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('gm-lightbox-modal');
+        if (modal && !modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+        }
+      }
+      if (e.key === 'Enter' && e.target && e.target.id === 'gm-scenario-pwd') {
+        e.preventDefault();
+        const unlockBtn = document.querySelector('[data-action="scenario-unlock"]');
+        if (unlockBtn) unlockBtn.click();
       }
     });
 

@@ -146,6 +146,10 @@
               id: 'scene-1-2',
               title: 'Scène 1.2 : Le Sillage des Jouets Brisés',
               meta: 'Lieu : Route commerciale vers Taiyo One Toshi (Terres du Scorpion) • Moment : Jours 1 et 2',
+              illustration: {
+                src: 'assets/images/scenarios/sc2-jouets-maudits.jpg',
+                title: 'Le Netsuke du Serpent & la Toupie Maudite'
+              },
               intro: "En remontant la piste de Gorobei Tenkazu vers le nord-ouest, les PJ constatent que le « marchand » sème une horreur silencieuse derrière lui sous couvert de générosité envers les plus pauvres.",
               bullets: [
                 {
@@ -261,6 +265,10 @@
               id: 'scene-2-2',
               title: "Scène 2.2 : L'Embuscade de Shikageko",
               meta: "Lieu : Clairière engloutie du Temple de l'Eau Stagnante • Terrain Difficile",
+              illustration: {
+                src: 'assets/images/scenarios/sc2-shikageko-murai.jpg',
+                title: 'Le Sanctuaire Englouti des Marais'
+              },
               readAloud: "La brume s'écarte devant un pavillon de bois effondré. Agenouillé sur un îlot de pierre au centre de l'eau noire, un vieux moine aux robes élimées égrène un chapelet de bois, le dos tourné. Sa voix, douce et sereine, résonne sur l'onde : « Les voyageurs perdus dans le brouillard cherchent toujours la lumière... mais la boue garde tout ce qu'elle touche. » Lorsqu'il tourne la tête vers vous, un frisson glacé vous parcourt l'échine. La peau de son visage pend légèrement au niveau de la mâchoire et des poignets, comme un vêtement trop grand cousu avec du fil de tendon noir. Ses yeux, d'un jaune reptilien, clignent latéralement. « Tenkazu m'a promis de chasser le vieux fou qui prie dans ma tête... si je lui offre vos cœurs encore chauds ! » Dans un bruit de succion écœurant, les coutures de son cou se déchirent tandis que quatre cadavres gonflés d'eau émergent de la vase autour de vous !",
               specialBox: {
                 title: 'MÉCANIQUE SPÉCIALE : LE DÉDOUBLEMENT DE SHIKAGEKO / MURAI',
@@ -326,6 +334,10 @@
               id: 'scene-3-2',
               title: "Scène 3.2 : Le Terrier de Ch'tppu'kich (Tribu Nezumi de la Patte Crochue)",
               meta: "Lieu : Contreforts sud-ouest des Montagnes du Crépuscule • Moment : Fin d'après-midi du Jour 4",
+              illustration: {
+                src: 'assets/images/scenarios/sc2-nezumi-patte-crochue.jpg',
+                title: 'La Tribu de la Patte Crochue'
+              },
               readAloud: "Alors que vous contournez un éboulement piégé, une douzaine de silhouettes basses, couvertes de fourrure grise rapiécée et armées de lances d'os et de sarbacanes, surgissent des fissures de la roche. Leurs moustaches frémissent à toute vitesse. Celui qui semble être leur chef — un vieux mâle à l'oreille fendue portant un collier de dents d'oni et un lambeau de soie verte arraché à la tunique de Tenkazu — frappe le sol de son bâton d'os. « Chik-chik ! Hommes-grands-chapeaux ! Pas un pas-pas ! Odeur de sang-noir devant ! Odeur de pierre-qui-bat derrière vous ! Pourquoi hommes-grands-chapeaux viennent mourir ici-ici ? »",
               specialBox: {
                 title: "DIPLOMATIE CULTURELLE & DILEMME D'HONNEUR CHEZ LES NEZUMI",
@@ -389,6 +401,10 @@
               id: 'scene-4-2',
               title: "Scène 4.2 : La Fonderie de Sang d'Agasha Ryuden (Climax Mortel)",
               meta: "Lieu : Cratère d'obsidienne en Outremonde • Affrontement Final",
+              illustration: {
+                src: 'assets/images/scenarios/sc2-fonderie-tenkazu.jpg',
+                title: 'La Fonderie de Sang'
+              },
               readAloud: "Au fond d'un cratère d'obsidienne entouré d'échafaudages calcifiés, un brasero titanesque alimenté par des veines de Minerai de Sang brûle d'une flamme noire sans chaleur. Devant l'autel de pierre fissuré se tient Chuda Tenkazu. Il a jeté ses haillons de marchand. Vêtu d'une robe de cérémonie pourpre brodée du serpent enroulé sur un lotus, il tient dans sa main gauche le journal ouvert d'Asahina Yajinden, et dans sa main droite une lame d'acier noir aux reflets huileux qui semble vibrer d'une faim vorace : Jadoku, le katana maudit du Clan du Serpent. Deux paysans capturés sur la route gisent ligotés au pied du brasero, leur sang s'écoulant lentement dans les rigoles de pierre pour nourrir les flammes noires. À mesure que le sang grésille, des caractères lumineux s'élèvent des pages du journal de Yajinden dans une fumée écarlate. À droite de Tenkazu se dresse un colosse cuirassé de plus de deux mètres, coiffé d'un casque d'os cornu et serrant une lame dentelée dégoulinante de pus — un Tsuno issu des Royaumes de Massacre. Autour du cratère, quatre cadavres écorchés maintenus debout par des filaments de sang coagulé se tournent lentement vers vous.",
               dialogues: [
                 {
