@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.33.1] — 2026-11-18
+
+### 🐛 Corrigé
+- **Générateur Podcast Edge TTS (`scripts/generate_podcasts.py`, `.github/workflows/generate-podcasts.yml`)** :
+  - Filtrage des segments sans caractère alphanumérique (qui provoquaient `NoAudioReceived` sur Edge TTS).
+  - Passage à 5 tentatives avec backoff et repli automatique (`fr-FR-HenriNeural` / `fr-FR-DeniseNeural`), concurrence réduite à 2 avec délai de courtoisie et sauvegarde incrémentale de `data/podcasts-manifest.json` après chaque acte.
+
+---
+
 ## [1.33.0] — 2026-11-18
 
 ### ✨ Ajouté

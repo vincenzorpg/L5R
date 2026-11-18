@@ -1,6 +1,6 @@
 {
-  "version": "1.33.0",
-  "tag": "v1.33.0",
+  "version": "1.33.1",
+  "tag": "v1.33.1",
   "date": "2026-11-18",
-  "notes": "Mode Podcast Immersif Multi-Voix : Lecteur Podcast natif (seek, -15s/+15s, reprise, MP3) et workflow automatique Edge TTS"
+  "notes": "Fiabilisation du générateur Podcast Edge TTS (filtrage segments non parlés, 5 retries + fallback, sauvegarde incrémentale)"
 }
