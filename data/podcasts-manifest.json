@@ -1,4 +1,71 @@
 {
-  "generatedAt": null,
-  "episodes": {}
+  "generatedAt": "2026-11-18T23:31:12.420200+00:00",
+  "episodes": {
+    "1": {
+      "file": "assets/audio/scenario-1.mp3",
+      "durationSec": 714,
+      "sizeBytes": 5708780,
+      "mode": "conteur-immersif"
+    },
+    "2": {
+      "file": "assets/audio/scenario-2.mp3",
+      "durationSec": 1708,
+      "sizeBytes": 13664684,
+      "mode": "conteur-immersif"
+    },
+    "3": {
+      "file": "assets/audio/scenario-3.mp3",
+      "durationSec": 984,
+      "sizeBytes": 7875692,
+      "mode": "conteur-immersif"
+    },
+    "4": {
+      "file": "assets/audio/scenario-4.mp3",
+      "durationSec": 697,
+      "sizeBytes": 5573420,
+      "mode": "conteur-immersif"
+    },
+    "5": {
+      "file": "assets/audio/scenario-5.mp3",
+      "durationSec": 356,
+      "sizeBytes": 2852012,
+      "mode": "conteur-immersif"
+    },
+    "6": {
+      "file": "assets/audio/scenario-6.mp3",
+      "durationSec": 232,
+      "sizeBytes": 1854572,
+      "mode": "conteur-immersif"
+    },
+    "7": {
+      "file": "assets/audio/scenario-7.mp3",
+      "durationSec": 1401,
+      "sizeBytes": 11207084,
+      "mode": "conteur-immersif"
+    },
+    "8": {
+      "file": "assets/audio/scenario-8.mp3",
+      "durationSec": 1683,
+      "sizeBytes": 13465580,
+      "mode": "conteur-immersif"
+    },
+    "9": {
+      "file": "assets/audio/scenario-9.mp3",
+      "durationSec": 766,
+      "sizeBytes": 6130220,
+      "mode": "conteur-immersif"
+    },
+    "10": {
+      "file": "assets/audio/scenario-10.mp3",
+      "durationSec": 715,
+      "sizeBytes": 5720492,
+      "mode": "conteur-immersif"
+    },
+    "11": {
+      "file": "assets/audio/scenario-11.mp3",
+      "durationSec": 1003,
+      "sizeBytes": 8025452,
+      "mode": "conteur-immersif"
+    }
+  }
 }
