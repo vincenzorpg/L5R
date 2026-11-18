@@ -16,6 +16,7 @@
   const ec = isNode ? require("../js/export-carnet.js") : window;
   const gm = isNode ? require("../js/gm-screen.js") : window;
   const gmRules = isNode ? require("../data/gm-rules-data.js") : window;
+  const gmScenarios = isNode ? require("../data/gm-scenarios-data.js") : window;
   const carteData = isNode ? require("../data/carte-data.js") : window;
   const carteUi = isNode ? require("../js/carte-rokugan.js") : window;
   const ecolesUi = isNode ? require("../js/ecoles.js") : window;
@@ -895,6 +896,41 @@
       assertTrue(lockedRes.warnings.length > 0 && lockedRes.forgeData.clan !== "araignee", "Clan secret MJ bloqué par défaut");
       const unlockedRes = ec.convertCarnetToForgeData(spiderSample, { clansData: clans, skillsCatalog: skillsCat, includeSecrets: true });
       assertEqual(unlockedRes.forgeData.clan, "araignee", "Clan secret résolu si secrets MJ déverrouillés");
+    });
+  });
+
+  // ===========================================================================
+  // 12. COIN MJ — SCÉNARIO II : LES JOUETS DE CENDRE ET DE SANG
+  // ===========================================================================
+  describe("12. Coin MJ — Scénario II : Les Jouets de Cendre et de Sang", () => {
+    it("GM_SCENARIOS_DATA contient le Scénario II complet et ses 4 actes", () => {
+      const list = gmScenarios.GM_SCENARIOS_DATA || [];
+      assertTrue(Array.isArray(list) && list.length >= 1, "Liste de scénarios chargée");
+      const sc2 = list.find(s => s.id === "scenario-2-jouets");
+      assertTrue(Boolean(sc2), "Scénario II présent");
+      assertEqual(sc2.acts.length, 4, "4 actes structurés");
+      assertEqual(sc2.checklist.length, 10, "10 étapes de suivi Jour J");
+      assertEqual(sc2.npcs.length, 5, "5 profils techniques en annexe");
+    });
+
+    it("Toutes les rencontres du Scénario II correspondent à des ENEMY_PRESETS valides", () => {
+      const list = gmScenarios.GM_SCENARIOS_DATA || [];
+      const sc2 = list.find(s => s.id === "scenario-2-jouets");
+      const presets = (gm.ENEMY_PRESETS || []);
+      const presetNames = new Set(presets.map(p => p.name));
+      let encounterCount = 0;
+
+      sc2.acts.forEach(act => {
+        (act.scenes || []).forEach(scene => {
+          if (scene.encounter) {
+            encounterCount++;
+            scene.encounter.enemies.forEach(e => {
+              assertTrue(presetNames.has(e.presetName), `Preset présent pour "${e.presetName}"`);
+            });
+          }
+        });
+      });
+      assertEqual(encounterCount, 2, "2 rencontres prêtes à lancer (Acte II et Acte IV)");
     });
   });
 
