@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scénario 11 : Écho du sang — Campagne de la Chronique de Rokugan</title>
+  <meta name="l5r-scenario-title" content="Écho du sang">
+  <meta name="l5r-scenario-short-title" content="Écho du sang">
+  <meta name="l5r-scenario-author" content="Tsuruchi Akira">
+  <meta name="l5r-scenario-date" content="Acte 11">
+  <meta name="l5r-scenario-place" content="Terres du Scorpion • Yanagi Mura">
+  <meta name="l5r-scenario-desc" content="Rongés par un mal obscur depuis le Tombeau de Iuchiban, les héros sont convoqués par le magistrat Soshi Takeda et remontent la piste d'une cellule du Clan du Serpent jusqu'au village maudit de Yanagi Mura.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- SCRIPT DU MENU GLOBAL -->
+  <script src="../js/navbar.js" defer></script>
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/narrator.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- EN-TÊTE DU SITE -->
+  <header id="site-header"></header>
+
+  <main class="max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- FIL D'ARIANE & LIENS RAPIDES -->
+    <div class="flex items-center justify-between text-xs">
+      <a href="../campagne.html" class="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-imperial font-bold">
+        ← Retour au Journal de Campagne
+      </a>
+      <div class="flex items-center gap-3 text-stone-500 font-mono text-[11px]">
+        <a href="scenario-10.html" class="text-amber-400 hover:text-amber-200">◄ Acte 10 : La tombe de Iuchiban</a>
+        <span class="text-amber-300 font-bold px-2 py-0.5 rounded bg-black/60 border border-stone-800">ACTE 11 / 11</span>
+        <span class="text-stone-600">À suivre… ►</span>
+      </div>
+    </div>
+
+    <!-- EN-TÊTE DE L'ÉPISODE -->
+    <header class="card-clean rounded-2xl p-6 md:p-8 border-amber-500/40 space-y-3 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="px-2.5 py-0.5 rounded bg-red-950/80 border border-red-800/40 text-[10px] text-red-300 font-bold font-mono">
+          ACTE 11 • CYCLE DE L'OMBRE ET DU SANG (YANAGI MURA)
+        </span>
+        <span class="text-xs text-stone-400">Récit de : <b>Tsuruchi Akira</b> (avec Okado, Hiro-Hito &amp; Ryujin) • Publié le 18 novembre 2026</span>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-bold font-imperial gold-gradient" id="story-title">
+        Scénario 11 : Écho du sang
+      </h1>
+      <p class="text-xs md:text-sm text-amber-200/90 italic font-imperial" id="story-motto">
+        « L'homme à la robe de paille et au sourire doux a chanté les mots rouges. Il a ouvert les racines du grand arbre et le sang descend vers le cœur de pierre. »
+      </p>
+    </header>
+
+    <!-- BARRE DU LECTEUR AUDIO (VOICE SYNTHESIS) -->
+    <section class="card-clean rounded-xl p-4 border-amber-500/40 sticky top-16 z-30 shadow-2xl backdrop-blur-md bg-black/95 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="narrator-visualizer" class="w-10 h-10 rounded-full bg-amber-950/90 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg transition duration-300">
+            🔊
+          </div>
+          <div>
+            <div class="text-xs font-bold font-imperial text-amber-200" id="audio-status">Voix Narrative Prête</div>
+            <div class="text-[10px] text-stone-400" id="audio-progress">Paragraphe 0 / 0</div>
+          </div>
+        </div>
+
+        <!-- COMMANDES DE LECTURE -->
+        <div class="flex items-center gap-1.5">
+          <button id="btn-prev" onclick="prevParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe précédent">⏮</button>
+          <button id="btn-play" onclick="togglePlay()" class="px-4 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold font-imperial text-xs tracking-wider transition flex items-center gap-1.5 shadow">
+            <span id="play-icon">▶</span> <span id="play-text">Écouter le Récit</span>
+          </button>
+          <button id="btn-next" onclick="nextParagraph()" class="px-2.5 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition" title="Paragraphe suivant">⏭</button>
+          <button id="btn-stop" onclick="stopAudio()" class="px-3 py-1.5 rounded bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-800 text-xs font-bold transition">⏹ Arrêt</button>
+        </div>
+
+        <!-- SÉLECTION DE LA VOIX ET VITESSE -->
+        <div class="flex items-center gap-2 text-xs text-stone-400">
+          <select id="voice-select" onchange="onVoiceChange()" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs max-w-[150px] sm:max-w-[180px] truncate"></select>
+          <select id="audio-rate" class="bg-black/60 border border-stone-800 rounded px-2 py-1 text-amber-300 text-xs">
+            <option value="0.9">0.9x (Chronique posée)</option>
+            <option value="1.0" selected>1.0x (Standard)</option>
+            <option value="1.1">1.1x (Rythmé)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- BARRE DE PROGRESSION VISUELLE -->
+      <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden">
+        <div id="narrator-progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+    </section>
+
+    <!-- CORPS DU TEXTE INTÉGRAL -->
+    <article class="card-clean rounded-2xl p-6 md:p-10 space-y-6 text-xs md:text-sm text-stone-300 leading-relaxed" id="story-content">
+
+      <p>
+        Avec la participation d’<b>Okado</b>, de <b>Hiro-Hito</b> et de <b>Ryujin</b>.
+      </p>
+
+      <p>
+        Depuis notre dernière mission dans le tombeau de Iuchiban, malgré tous les honneurs que m’a offerts mon clan, je sens que mon corps est malade. Aucun des shugenja de mon clan n’a réussi à identifier l’infection qui me ronge et cela fait maintenant une dizaine de nuits que mes nuits ne sont que cauchemars. Lorsque je me regarde dans le <i>kagami</i> de ma chambre, mon teint blafard ne fait que souligner le poison qui affaiblit mon corps et, si mon esprit reste fort, je sens que mon âme s’efface petit à petit.
+      </p>
+
+      <p>
+        Un matin, un émissaire m’apporte une convocation de <b>Soshi Takeda</b> (magistrat du Clan du Scorpion) qui me demande de me rendre au <b>Pavillon des Murmures d’Automne</b> au sud des terres de leur clan. Pourquoi le Clan du Scorpion aurait-il besoin de moi ? Cela serait-il lié à notre dernière mission dont personne n’est au courant ?
+      </p>
+
+      <p>
+        Intrigué par le message, je me mets en route. La pluie d’octobre tombe en rideau serré sur les collines rocailleuses marquant la frontière entre les terres du Scorpion. Au loin, dans la plaine, j’aperçois ce qui doit être le Pavillon des Murmures d’Automne. En me rapprochant, je découvre une maison de thé sur pilotis située au-dessus d’un torrent bouillonnant. Deux imposants soldats au visage masqué en gardent l’entrée principale, main posée sur le katana. Je montre mon sauf-conduit et on me laisse pénétrer dans l’établissement.
+      </p>
+
+      <p>
+        Un autre soldat m’escorte jusqu’à une grande salle au centre de laquelle brûle un brasero. Je retrouve <b>Yuriko</b> et <b>Ryujin</b>. Après quelques échanges courtois avec mes comparses, nous sommes rejoints par <b>Okado</b> et <b>Hiro-Hito</b>. Le fait d’être de nouveau ensemble me confirme que le Clan du Scorpion sait déjà tout de notre dernière mission, mais nous limitons tous nos échanges, conscients que les murs ont des oreilles et qu’il n’est pas nécessaire de donner plus d’informations à notre hôte qu’il n’en sache déjà. En regardant mes compagnons d’armes, je constate que tous doivent être atteints du même mal que moi.
+      </p>
+
+      <p>
+        Après une bonne demi-heure à attendre dans le calme, un garde nous invite à le suivre dans une grande salle d’audience. En face de nous est posée une longue table derrière laquelle est assis un homme d’une quarantaine d’années. La moitié de son visage est recouverte d’un masque de démon, mais les traits de son visage sont tirés et il a l’air épuisé. Déposant mon daisho sur ma gauche, je m’assois sur un coussin à une extrémité de la table avec un salut de la tête. Mes compagnons font de même sur le restant des coussins. Le magistrat Scorpion ne semble pas armé et je m’étonne que nous n’ayons pas été fouillés avant d’entrer dans le bâtiment. Peut-être que, comme moi, il sait dissimuler ses armes dans les replis de ses habits pour les rendre indétectables et mortellement efficaces en cas de besoin.
+      </p>
+
+      <p>
+        Une fois les cinq invités assis, il nous salue de la tête et pose devant lui deux objets enveloppés dans un drap de soie blanc : un rouleau de parchemin enroulé dans ce qui semble être de la peau séchée et un médaillon de magistrat en jade fendu en deux avec des taches de sang noir. Puis il s’adresse à nous :
+      </p>
+
+      <blockquote class="p-4 rounded-xl bg-black/50 border-l-2 border-red-500/60 italic text-stone-200 space-y-2">
+        <p>
+          « Samouraïs, soyez les bienvenus sous mon toit. Je suis Soshi Takeda. Si j’ai usé de moyens détournés pour vous réunir loin des oreilles de la cour d’hiver, c’est parce que prononcer certaines vérités à voix haute suffirait à déclencher une panique ou à avertir nos ennemis. Il y a cinq jours, je devais rencontrer un magistrat de jade du Clan du Phénix, Asako Kenji, pour qu’il me fasse un rapport de sa mission d’infiltration dans la vallée de Mura Sabishii en lisière de la forêt de Shinomen, à deux jours de marche à l’ouest d’ici, mais il n’est jamais venu. »
+        </p>
+        <p>
+          « J’ai donc envoyé des bushis sur place pour enquêter, mais hier matin ils ont retrouvé son cadavre près d’un autel profané et dans sa main crispée il tenait ce parchemin. Vous connaissez tous les légendes sur Iuchiban qui prétendent que son esprit et son corps sont scellés à jamais, mais nous savons que les adeptes du sang ne dorment jamais. Ce parchemin est une carte stellaire et géomantique. Elle vient d’une cellule dirigée par un maho-tsukai nommé <b>Chuda Tenkazu</b>. Il cherche l’Ancre de Sang, une relique sacrée capable de libérer l’esprit de Iuchiban. Je sais que vous vous êtes rendus dans son tombeau récemment et je sais que vos corps n’en sont pas sortis indemnes. Si vous nous aidez à enquêter sur cette affaire, nous pourrons vous aider à guérir du mal qui vous ronge. Je ne puis envoyer des hommes de mon clan sans déclencher une guerre avec le Clan du Lion et de la Grue. »
+        </p>
+      </blockquote>
+
+      <p>
+        Les Crabes semblent quelque peu perplexes face à la proposition du Scorpion. Hiro-Hito demande au magistrat pourquoi, s’ils connaissent un soin pour soulager nos maux, leurs shugenja ne nous soignent pas dès maintenant. Mais l’anguilleux diplomate est rompu à l’art des négociations et maîtrise son sujet. Nous ne parvenons pas à négocier quoi que ce soit et nous sommes contraints d’accepter la proposition.
+      </p>
+
+      <p>
+        Bien plus loquace sur la mission, nous apprenons qu’<b>Asako Kenji</b> travaillait sous couverture pour enquêter sur la cellule de Chuda Tenkazu qui, selon leurs informations, opérait depuis le village perdu de <b>Yanagi Mura</b> (le village du Saule Pleureur). Il a été tué par de la magie car les gardes n’ont retrouvé nulle entaille sur son corps. Le parchemin a été retrouvé caché dans ses vêtements sous lui. À la lecture des symboles qu’il contient, Yuriko pâlit. Elle nous indique que la nuit de la lune de sang est prévue pour demain soir et que cet événement est capital pour les adeptes de Iuchiban.
+      </p>
+
+      <p>
+        Juste avant de partir, un shugenja Scorpion nous remet à chacun un petit sac dans lequel je trouve cinq doigts de jade ; mais au lieu d’avoir une belle couleur verte, ceux-ci sont striés de veines sombres comme si du sang noir y avait été injecté et j’ai l’impression que ces talismans sont atteints du même mal que moi. Sortant un doigt de jade, Yuriko remercie Takeda pour la qualité de ces présents qui limiteront à coup sûr la prolifération du mal qui nous ronge ces prochaines semaines. Nous enfourchons nos montures et partons vers l’ouest accomplir notre destin.
+      </p>
+
+      <p>
+        Cela fait maintenant six heures que nous chevauchons vers notre destination. Nous ne ménageons pas nos montures car nous savons que le temps presse et que nous n’aurons qu’une journée pour enquêter sur place afin d’empêcher les adeptes de Iuchiban de perpétrer leur rituel.
+      </p>
+
+      <p>
+        Alors que nous venons de traverser un pont, une volée de flèches venant de part et d’autre des bois bordant le chemin traverse notre groupe de part en part mais, par miracle, aucune d’entre elles ne nous touche. Mon cheval, terrorisé par l’attaque, se cabre mais je réussis à éviter la chute. Je vois alors des silhouettes vêtues d’armures rouillées émerger de la lisière embrumée, leur visage caché derrière des masques de porcelaine sans bouche. Ils s’approchent de notre groupe avec une démarche saccadée inquiétante, comme des marionnettes dont on tire les fils. Dans les arbres, des archers aux yeux injectés de sang préparent déjà une nouvelle flèche.
+      </p>
+
+      <p>
+        Regardant Ryujin, au sol après la chute de son cheval, se faire attaquer, je ne vois pas surgir devant moi un assaillant qui me désarçonne. Me relevant rapidement, je décoche une flèche vers l’archer ennemi le plus proche, qui va se planter dans sa main. De son côté, Hiro-Hito ne plaisante pas : à peine descendu de son cheval, il pulvérise un monstre qui part en poussière. Avant que le monstre proche de moi ne m’attaque, Ryujin le terrasse, puis se jette vers l’arbre où se trouve l’archer blessé à la main. Ce dernier est déstabilisé mais ne tombe pas. Afin de protéger mon compagnon d’une attaque venue du dessus, je décoche une flèche qui vient se figer dans l’œil du soldat ennemi qui s’effondre. Je reprends une flèche de mon carquois et abats un autre ennemi plus loin.
+      </p>
+
+      <p>
+        Il ne reste plus qu’un archer ennemi. Hiro-Hito s’approche de l’arbre et frappe le tronc de son tetsubō. L’impact est tel que le grand pin tremble jusqu’aux racines et se fend en deux sur toute sa longueur dans un craquement assourdissant. L’archer perché dans les branches perd l’équilibre, lâche son arc et s’effondre dans la boue au milieu des débris d’écorce. Avant qu’il ne puisse se relever et contre-attaquer, je l’achève d’une flèche qui vient se figer au milieu du front.
+      </p>
+
+      <p>
+        L’escarmouche achevée, nous nous regroupons pour analyser la situation pendant que Yuriko soigne une blessure de flèche et que nous enquêtons sur les cadavres. Ils n’ont aucun signe distinctif et nous ne trouvons aucune trace aux alentours qui pourrait nous donner un indice sur l’identité de nos adversaires. Échauffés par cette attaque sournoise, nous reprenons la route aux aguets. Le reste du voyage se passe sans encombre et nous arrivons enfin à <b>Yanagi Mura</b>, le village du Saule Pleureur, au petit matin.
+      </p>
+
+      <p>
+        Le hameau semble figé dans un silence de mort ; une bruine tiède et poisseuse tombe du ciel gris et laisse sur nos lèvres un arrière-goût métallique. Au centre de la bourgade se dresse un gigantesque saule pleureur dont la large ramure tombe jusqu’au sol boueux. Les paysans que nous croisons ont tous le teint cireux, les yeux creusés par l’insomnie et s’agenouillent dans la boue sans même oser lever le regard vers nous. Nous demandons à l’un d’eux de nous accompagner à la maison du chef de village.
+      </p>
+
+      <p>
+        Nous nous dirigeons vers ce qui semble être la plus grande bâtisse du village. Un vieillard tremblant de tous ses membres en nous voyant pénétrer dans son pavillon nous accueille humblement : « Bienvenue samouraïs-sama, je m’appelle Agoro ». Pendant que nous commençons à lui poser quelques questions, on nous apporte du thé et des serviettes chaudes. Ryujin montre au vieillard le passe-droit de Soshi Takeda et lui demande s’il n’a rien constaté d’anormal ces derniers temps. Le teint de notre hôte devient encore plus pâle. Il nous raconte que depuis deux semaines, tous les villageois sont en proie à des cauchemars et hantés par d’innombrables visions funestes : <i>« Celle d’une rivière de sang qui coule sous les maisons et d’une voix qui nous ordonne de donner nos vies. »</i> De plus, trois paysans ont disparu la nuit dernière et le moine du sanctuaire local, le <b>frère Bunzo</b>, s’est enfermé dans la vieille maison secondaire du magistrat Soshi Takeda au nord de la ville. Nous quittons le chef du village qui nous supplie de les aider pour rencontrer et poser des questions à frère Bunzo.
+      </p>
+
+      <p>
+        Sur le chemin, je remarque que les quelques heimins qui sont présents agissent de manière étrange, font des actions qui n’ont aucun sens ou répètent des gestes en boucle. Lorsqu’on s’adresse à eux, ils s’agenouillent face contre terre et tiennent des propos à moitié cohérents. Je n’arrive pas à déterminer si c’est juste leur capacité de réflexion qui est limitée ou si le problème vient d’ailleurs. En chemin, nous faisons un détour pour aller voir l’autel où Asako Kenji a été tué pour essayer de trouver des indices sur la folie qui semble s’être emparée de ce village.
+      </p>
+
+      <p>
+        Nous sommes accueillis par une odeur de mort émanant du cadavre d’Asako Kenji qui n’a même pas reçu de sépulture. Il ne fait aucun doute qu’un sinistre rituel a eu lieu car nous voyons clairement sur l’autel de longues traces de sang. Yuriko se concentre pour interroger les kamis de la terre. À la sortie de sa transe, elle nous annonce que les kamis lui ont transmis ce message : <i>« L’homme à la robe de paille et au sourire doux a chanté les mots rouges. Il a ouvert les racines du grand arbre et le sang descend vers le cœur de pierre. »</i>
+      </p>
+
+      <p>
+        Nous prenons la direction de la maison secondaire du magistrat pour essayer d’en apprendre plus auprès de Bunzo. En arrivant par le chemin menant à la bâtisse, nous apercevons sur le pas de la porte un moine en train de soigner un paysan. À peine nous a-t-il aperçus qu’il nous fait de grands gestes, visiblement très heureux de nous voir. Il nous exhorte à partir immédiatement vers l’ouest pour sauver ces terres souillées par la maho. Il nous confirme les visions cauchemardesques la nuit et le comportement étrange des habitants. Nous apprenons qu’il a côtoyé Asako Kenji pendant sa venue et qu’il est triste de ne pas pouvoir rendre un hommage posthume à son corps car il est souillé par la maho.
+      </p>
+
+      <p>
+        C’est lorsque Ryujin lui tend le parchemin pour lui demander de l’examiner que notre confiance commence à se fissurer. Au moment de saisir le vélin, des scarifications importantes apparaissent sur les deux avant-bras du frère Bunzo et, lorsqu’on lui demande des explications, ses réponses sont confuses. Mais Yuriko lève totalement le doute sur sa culpabilité en s’écriant : <b>« C’est un démon, attaquez-le ! »</b>
+      </p>
+
+      <p>
+        Ne sachant pas la nature du monstre qui nous fait face, je sors ma flèche spéciale obtenue dans le tombeau de Iuchiban ; je m’aperçois qu’elle brille d’une lueur verte, et je demande à frère Bunzo de se rendre. Hiro-Hito se veut plus direct et lui assène un coup de tetsubō. Mais au moment de l’impact, le corps explose dans une épaisse fumée rouge sang dans laquelle disparaît notre compagnon. Lorsque la fumée se dissipe, le moine a disparu. Nous nous tournons vers Yuriko pour en savoir plus. Elle nous explique que nous allons devoir affronter un maho-tsukai, qu’ils utilisent leur sang pour lancer des sorts et que celui qu’il vient de lancer lui a permis de s’échapper.
+      </p>
+
+      <p>
+        Ryujin pénètre dans la maison du magistrat en défonçant la porte pour la fouiller tandis que Hiro-Hito et moi-même recherchons des indices sur la fuite du moine à l’extérieur. À côté des traces de sang laissées par le moine, je découvre une trappe dissimulée sous le tatami sur lequel était assis le paysan blessé. Le tunnel étant très étroit, nous nous séparons. Okado et Ryujin descendent dans le souterrain et nous supposons avec Hiro-Hito que le tunnel mène au village. Nous reprenons donc le chemin avec Yuriko et, alors que nous étions presque arrivés, nous voyons le bras d’Okado sortir d’une trappe en bordure de route. Le groupe de nouveau réuni, nous suivons des traces de pas qui se dirigent vers le saule pleureur pour trouver la planque des maho-tsukai. Il ne nous faut que peu de temps pour en découvrir l’entrée sous les lianes du vénérable arbre.
+      </p>
+
+      <p>
+        Nous descendons des escaliers de pierre. À mesure que nous pénétrons dans les entrailles de la terre, l’air devient lourd, chaud et saturé d’une odeur de fer et d’encens corrompu. Les parois de pierre sont recouvertes d’une mousse rougeâtre et visqueuse qui semble palpiter au rythme des battements d’un cœur titanesque. Au bout du couloir, des chaînes de jade brisées et noircies pendent au mur et une lueur cramoisie émane d’un temple souterrain dans lequel nous pénétrons. En passant sous l’arche, je remarque des dessins au-dessus de moi représentant <b>Onnotangu</b> (le dieu Lune).
+      </p>
+
+      <p>
+        Au centre du temple se trouve un puits de pierre dans lequel bout un liquide sombre. Au-dessus du puits flotte un éclat de métal noir veiné de rouge. Trois heimins sont attachés autour du puits ; leurs poignets entaillés laissent couler un filet de sang dans un bassin qui se déverse dans le puits. Derrière le puits se trouve un autel où nous retrouvons Bunzo, qui affiche maintenant de manière ostentatoire ses tatouages du <b>Clan du Serpent</b>. Il est accompagné de ses sbires : deux immenses guerriers en armure lourde souillée et armés de nodachi, ainsi que six guerriers aux yeux brillants de flammes vertes.
+      </p>
+
+      <p>
+        En nous voyant entrer, il semble fortement contrarié et nous raille copieusement sur nos croyances, mais je sais qu’il est corrompu et perverti par Iuchiban. Je lance les hostilités en décochant une flèche précise qui se dirige droit vers le visage du maho-tsukai mais, au dernier moment, celle-ci se stoppe net et tombe au sol. Je décoche une nouvelle flèche vers un des géants cette fois-ci mais, probablement perturbé par ce qui vient de se passer, ma flèche passe juste à côté de sa joue. Mes compagnons semblent avancer prudemment et derrière moi Yuriko semble se concentrer. Nos adversaires, eux, se regroupent et prennent une posture défensive. Je décoche deux nouvelles flèches : le géant esquive la première mais se prend la seconde qui lui balafre salement le visage.
+      </p>
+
+      <p>
+        Mes compagnons arrivent au corps à corps et l’intensité du combat augmente encore d’un cran. Malgré les nombreuses blessures que nous leur infligeons, ces démons semblent insensibles et indestructibles. Un nodachi perce l’armure d’Okado qui se fait lacérer sur toute une partie du torse. Hiro-Hito persévère et assène des coups de tetsubō sur un des géants qui encaisse mais ne faiblit pas. Je tire sur l’objet métallique en lévitation pour voir s’il tire sa magie de là, mais cela n’a aucun effet. Je tire de nouveau sur un des géants en espérant l’achever, mais la flèche se plante au travers de son crâne sans plus d’effet qu’une piqûre d’insecte.
+      </p>
+
+      <p>
+        Ne se laissant pas abattre, Okado transperce une énième fois un monstre et enfin il part en poussière. Malgré ses blessures graves, Ryujin en tue deux autres juste après. Sachant qu’ils peuvent être battus, notre moral remonte en flèche et nous attaquons de plus belle. Okado arrive jusqu’à Bunzo et lui assène un magnifique coup de katana. Mais au lieu de pénétrer sa chair, une sorte de bouclier se crée devant lui et émet une boule de feu qui fuse vers Yuriko, qui s’effondre lourdement sur le sol.
+      </p>
+
+      <p>
+        Nous achevons le reste des sbires et, alors qu’il ne reste plus que Bunzo, Okado arrive à l’acculer dans un coin de la salle et le transperce cette fois définitivement de sa lame. Lorsque Bunzo s’effondre dans son propre sang, un hurlement traverse le temple et nous sommes tous éblouis par une explosion de lumière rouge sang. L’objet métallique qui lévitait encore quelques instants plus tôt se fissure et tombe lourdement sur les dalles de pierre.
+      </p>
+
+      <p>
+        Dans le silence qui suit, alors que notre vue revient, nous voyons sur les parois du temple des fresques fraîchement tracées au sang qui représentent une carte des terres centrales de l’Empire, où trois autres points sont marqués d’un lotus noir. Bunzo n’était qu’un pion et, avant de rendre son dernier souffle, l’hérétique crache un filet de sang noir et murmure dans un dernier sourire : <i>« Trop tard, le marchand aux jouets de bois a déjà pris la route du nord, le cœur battra à nouveau… »</i>
+      </p>
+
+      <p>
+        En fouillant Bunzo, je trouve un <b>netsuke</b> (petite sculpture japonaise qui servait de contrepoids et de fermoir pour suspendre de petits objets à la ceinture d’un kimono). Il représente un serpent entouré d’un lotus et je me rappelle avoir déjà vu ce type de netsuke sur les terres de mon clan. Aucun doute qu’il a été fabriqué par <b>Chuda Tenkazu</b> du Clan de la Mante. Je trouve également une lettre dans les replis de son obi qui demande de lancer les recherches des descendants de la lignée d’<b>Asahina Yajinden</b> pour localiser les clés de la tombe de Iuchiban.
+      </p>
+
+      <div class="p-4 rounded-xl bg-amber-950/20 border border-amber-500/35 space-y-2 text-xs">
+        <div class="font-imperial font-bold text-amber-300">🎒 Objets Récupérés &amp; Pistes pour la Suite</div>
+        <ul class="list-disc list-inside space-y-1 text-stone-300">
+          <li><b>Lettre de mission</b> : ordonne la recherche des descendants d’Asahina Yajinden pour localiser les clés de la tombe de Iuchiban.</li>
+          <li><b>Netsuke d’ivoire</b> : serpent entouré d’un lotus, attribué à Chuda Tenkazu.</li>
+          <li><b>Faveur mineure</b> auprès du Clan du Scorpion (Soshi Takeda).</li>
+          <li><b>Note d’Akira (À faire)</b> : transformer la flèche spéciale lumineuse du tombeau de Iuchiban en pendentif pour étudier ses propriétés.</li>
+        </ul>
+      </div>
+
+    </article>
+
+  </main>
+
+  <!-- PIED DE PAGE -->
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Acte 11 : Écho du sang (par Tsuruchi Akira)</div>
+    <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
+      <span id="site-version-label">v1.29.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+    </div>
+  </footer>
+</body>
+</html>

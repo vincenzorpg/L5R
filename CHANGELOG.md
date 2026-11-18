@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.29.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Scénario 11 : *Écho du sang* (`campagne/scenario-11.html`, `data/scenarios-data.js`, `js/index-ui.js`, `campagne/scenario-10.html`, `index.html`)** :
+  - Publication complète du récit de **Tsuruchi Akira** (avec *Okado, Hiro-Hito & Ryujin*) : convocation par le magistrat **Soshi Takeda** au Pavillon des Murmures d'Automne, embuscade des armures rouillées aux masques sans bouche, enquête à **Yanagi Mura**, affrontement contre le faux moine **Bunzo** sous les racines du saule pleureur et découverte des pistes vers **Chuda Tenkazu** et la lignée d'Asahina Yajinden.
+  - Intégration du lecteur audio (`js/narrator.js`), de l'encadré *Objets Récupérés & Pistes*, du chaînage depuis `scenario-10.html` et de la mise à jour du compteur de campagne (`11 Actes`).
+
+---
+
 ## [1.28.0] — 2026-11-18
 
 ### 🎨 Amélioré

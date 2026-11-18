@@ -134,7 +134,19 @@ const SCENARIOS_DATA = [
     date: "Acte 10",
     place: "Le Tombeau Maudit",
     cover: "assets/images/scenarios/cover-10.jpg",
-    desc: "L'apogée héroïque de la campagne : l'exploration du repaire scellé du plus grand adepte du sang de Rokugan, Iuchiban.",
+    desc: "L'apogée héroïque de la campagne : l'exploration du repaire scellé du plus grand adepte du sang de Rokugan, Iuchiban."
+  },
+  {
+    id: 11,
+    num: "11",
+    shortTitle: "Écho du sang",
+    file: "campagne/scenario-11.html",
+    wpUrl: "https://campagnel5rdavid2015.wordpress.com/la-campagne/",
+    title: "Écho du sang",
+    author: "Tsuruchi Akira",
+    date: "Acte 11",
+    place: "Terres du Scorpion • Yanagi Mura",
+    desc: "Rongés par un mal obscur depuis le Tombeau de Iuchiban, les héros sont convoqués par le magistrat Soshi Takeda et remontent la piste d'une cellule du Serpent jusqu'à Yanagi Mura.",
     finale: true
   }
 ];
