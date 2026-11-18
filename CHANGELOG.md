@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.23.1] — 2026-11-18
+
+### 🐛 Corrigé
+- **Tracé du Chemin des PJs sur la Carte de Rokugan** (`data/carte-data.js`, `js/carte-rokugan.js`, `sw.js`) :
+  - Suppression des allers-retours superposés dans `CAMPAIGN_ROUTE` (Actes 3 et 8) qui créaient des traits en trop et se chevauchaient sur le même axe.
+  - Remplacement des polylignes à double bordure pleine par des courbes quadratiques fluides (`buildSmoothPathD`) en pointillés nets sans aucun trait plein sous-jacent, avec mise en valeur exclusive de l'étape active.
+
+---
+
 ## [1.23.0] — 2026-11-18
 
 ### 🎨 Amélioré
