@@ -1,6 +1,6 @@
 {
-  "version": "1.32.0",
-  "tag": "v1.32.0",
+  "version": "1.32.1",
+  "tag": "v1.32.1",
   "date": "2026-11-18",
-  "notes": "Écran MJ : Préréglages Acte 11 (Yanagi Mura), import direct du Dojo et Générateur Express (Noms & Rumeurs)"
+  "notes": "Contrôle CI automatique Scénarios ↔ Carte ↔ Accueil et audit du cache hors-ligne PWA (sw.js)"
 }

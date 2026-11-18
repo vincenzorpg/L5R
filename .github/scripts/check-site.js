@@ -165,6 +165,42 @@ if (!fs.existsSync(swPath)) {
   }
 }
 
+// 5. Cohérence Scénarios <-> Carte de Rokugan <-> Page d'accueil (GEMINI.md Section 6)
+try {
+  const { SCENARIOS_DATA } = require(path.join(ROOT, 'data', 'scenarios-data.js'));
+  const { CAMPAIGN_ROUTE, ROKUGAN_LOCATIONS } = require(path.join(ROOT, 'data', 'carte-data.js'));
+  const nScenarios = Array.isArray(SCENARIOS_DATA) ? SCENARIOS_DATA.length : 0;
+  const nRoute = Array.isArray(CAMPAIGN_ROUTE) ? CAMPAIGN_ROUTE.length : 0;
+
+  if (nScenarios === 0 || nScenarios !== nRoute) {
+    addError(`Désynchronisation Scénarios/Carte : SCENARIOS_DATA (${nScenarios}) != CAMPAIGN_ROUTE (${nRoute})`);
+  } else {
+    const locIds = new Set((ROKUGAN_LOCATIONS || []).map(l => l.id));
+    for (const s of SCENARIOS_DATA) {
+      if (s.file && !fs.existsSync(path.join(ROOT, s.file))) {
+        addError(`data/scenarios-data.js : fichier scénario introuvable -> "${s.file}"`);
+      }
+    }
+    for (const act of CAMPAIGN_ROUTE) {
+      if (!locIds.has(act.locationId)) {
+        addError(`data/carte-data.js : l'Acte ${act.step} référence un lieu inconnu "${act.locationId}"`);
+      }
+    }
+
+    const carteHtml = fs.readFileSync(path.join(ROOT, 'carte.html'), 'utf8');
+    if (!carteHtml.includes(`max="${nScenarios}"`) || !carteHtml.includes(`Actes 1 à ${nScenarios} / ${nScenarios}`)) {
+      addError(`carte.html : le curseur ou le badge n'est pas synchronisé sur ${nScenarios} actes`);
+    }
+
+    const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+    if (!indexHtml.includes(`${nScenarios} actes de la chronique`) || !indexHtml.includes(`${nScenarios} / ${nScenarios} Récits Complets`)) {
+      addError(`index.html : les compteurs d'accueil ne sont pas synchronisés sur ${nScenarios} actes`);
+    }
+  }
+} catch (err) {
+  addError(`Impossible de vérifier la cohérence Scénarios/Carte : ${err.message}`);
+}
+
 if (warnings.length > 0) {
   console.warn(`⚠️  ${warnings.length} avertissement(s) (illustrations de scénarios à venir) :`);
   for (const warn of warnings) {

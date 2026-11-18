@@ -3,8 +3,8 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.32.0';
-const RUNTIME_CACHE = 'l5r-runtime-v1.32.0';
+const CACHE_VERSION = 'l5r-forge-v1.32.1';
+const RUNTIME_CACHE = 'l5r-runtime-v1.32.1';
 
 const CORE_ASSETS = [
   './',
@@ -38,6 +38,8 @@ const CORE_ASSETS = [
   './js/tatouages.js',
   './js/gm-screen.js',
   './js/index-ui.js',
+  './js/campagne-studio.js',
+  './js/narrator.js',
   './data/clans-data.js',
   './data/competences-data.js',
   './data/equipement-data.js',
@@ -61,7 +63,15 @@ const CORE_ASSETS = [
   './assets/icons/icon-maskable-512.png',
   './assets/images/favicon_cinq_anneaux.png',
   './assets/images/cinq_anneaux.jpg',
-  './assets/images/logo_carnet_rokugan.png'
+  './assets/images/logo_carnet_rokugan.png',
+  './assets/images/clans/mon-crabe.png',
+  './assets/images/clans/mon-dragon.png',
+  './assets/images/clans/mon-grue.png',
+  './assets/images/clans/mon-licorne.png',
+  './assets/images/clans/mon-lion.png',
+  './assets/images/clans/mon-mante.png',
+  './assets/images/clans/mon-phenix.png',
+  './assets/images/clans/mon-scorpion.png'
 ];
 
 self.addEventListener('install', (event) => {

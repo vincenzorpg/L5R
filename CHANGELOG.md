@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.32.1] — 2026-11-18
+
+### 🔧 Technique & Hygiène
+- **Contrôle CI automatique Scénarios ↔ Carte ↔ Accueil (`.github/scripts/check-site.js`)** :
+  - Vérification systématique à chaque Pull Request que `SCENARIOS_DATA.length === CAMPAIGN_ROUTE.length`, que chaque fichier de scénario et chaque `locationId` existent, et que les compteurs de `carte.html` et `index.html` sont synchronisés.
+- **Audit du cache hors-ligne PWA (`sw.js`)** :
+  - Ajout des 8 médaillons de Clans (`assets/images/clans/mon-*.png`), de `js/campagne-studio.js` et de `js/narrator.js` dans `CORE_ASSETS` pour une disponibilité hors-ligne complète.
+
+---
+
 ## [1.32.0] — 2026-11-18
 
 ### ✨ Ajouté
