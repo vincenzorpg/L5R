@@ -1,6 +1,6 @@
 {
-  "version": "1.26.0",
-  "tag": "v1.26.0",
+  "version": "1.27.0",
+  "tag": "v1.27.0",
   "date": "2026-11-18",
-  "notes": "Confort en séance (Table & Mobile) : carte épurée avec plein écran, raccourci Vingt Questions dans la Forge, ambiance sonore MJ et historique de combat rétractable"
+  "notes": "Refonte du Hero d'accueil en parcours Joueur / MJ, tableau de bord Mon Dojo en tête de page et vrais mon sur les 8 cartes de Clans"
 }
