@@ -27,7 +27,8 @@
   }
 
   function buildRoutePointsUpToAct(route, maxAct) {
-    const limit = Math.max(1, Number(maxAct) || 10);
+    const fallback = (Array.isArray(route) && route.length) || 11;
+    const limit = Math.max(1, Number(maxAct) || fallback);
     const segments = [];
     (route || []).forEach((act) => {
       if (act.step <= limit && Array.isArray(act.way) && act.way.length > 0) {
@@ -152,7 +153,7 @@
       ty: 0,
       showRoute: true,
       showMons: true,
-      maxAct: route.length || 10,
+      maxAct: route.length || 11,
       selectedLocId: 'otosan-uchi',
       selectedActStep: null,
       faction: 'all',

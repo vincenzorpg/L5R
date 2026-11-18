@@ -541,6 +541,18 @@
       y: 72.0,
       major: true,
       desc: "Nécropole labyrinthique truffée de pièges mortels où fut emprisonné le plus redoutable adepte du sang de l'histoire de Rokugan."
+    },
+    {
+      id: 'yanagi-mura',
+      name: 'Yanagi Mura',
+      kanji: '柳',
+      subtitle: 'Village du Saule Pleureur',
+      faction: 'scorpion',
+      kind: 'Village Frontière',
+      x: 31.5,
+      y: 47.0,
+      major: true,
+      desc: "Hameau isolé de la vallée de Mura Sabishii en lisière de la forêt de Shinomen. Sous les racines de son gigantesque saule pleureur se dissimulait un temple souterrain de la cellule de Chuda Bunzo."
     }
   ];
 
@@ -655,6 +667,17 @@
       file: 'campagne/scenario-10.html',
       way: [[37.5, 63.0], [42.5, 72.0]],
       summary: "L'assaut final de la Chronique dans le labyrinthe maudit de Iuchiban pour déjouer le réveil du plus terrible sorcier de l'histoire rokuganie."
+    },
+    {
+      step: 11,
+      actLabel: 'Acte 11',
+      title: 'Écho du sang',
+      locationId: 'yanagi-mura',
+      placeLabel: 'Yanagi Mura (Lisière du Shinomen)',
+      author: 'Tsuruchi Akira (avec Okado, Hiro-Hito & Ryujin)',
+      file: 'campagne/scenario-11.html',
+      way: [[42.5, 72.0], [34.0, 56.0], [31.5, 47.0]],
+      summary: "Convoqués par le magistrat Scorpion Soshi Takeda au Pavillon des Murmures d'Automne pour contrer le maho-tsukai Shuda Tenkasu à Yanagi Mura avant la Nuit de la Lune de Sang."
     }
   ];
 

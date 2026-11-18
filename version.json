@@ -1,6 +1,6 @@
 {
-  "version": "1.29.0",
-  "tag": "v1.29.0",
+  "version": "1.29.1",
+  "tag": "v1.29.1",
   "date": "2026-11-18",
-  "notes": "Ajout du Scénario 11 : Écho du sang (Yanagi Mura) au Journal de Campagne avec lecteur audio"
+  "notes": "Ajout de l'Acte 11 (Yanagi Mura) sur la Carte de Rokugan, mise à jour des compteurs de l'accueil et checklist obligatoire dans GEMINI.md"
 }

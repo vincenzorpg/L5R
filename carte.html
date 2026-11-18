@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -32,7 +32,7 @@
           CARTE INTERACTIVE DE ROKUGAN
         </h1>
         <p class="text-xs text-stone-300 max-w-2xl leading-relaxed">
-          Explorez les cités impériales, forteresses des 8 Grands Clans, cols et territoires périlleux, et tracez pas à pas le périple des PJ du <b>Championnat de Topaze (Acte 1)</b> jusqu'à <b>La tombe de Iuchiban (Acte 10)</b>.
+          Explorez les cités impériales, forteresses des 8 Grands Clans, cols et territoires périlleux, et tracez pas à pas le périple des PJ du <b>Championnat de Topaze (Acte 1)</b> jusqu'à <b>Écho du sang (Acte 11)</b>.
         </p>
       </div>
 
@@ -42,11 +42,11 @@
           <button type="button" id="btn-toggle-route" class="clan-lineage-pill is-active">
             🗺️ Chemin des PJs : Visible
           </button>
-          <span id="map-act-badge" class="text-[11px] font-mono font-bold text-amber-300">Actes 1 à 10 / 10</span>
+          <span id="map-act-badge" class="text-[11px] font-mono font-bold text-amber-300">Actes 1 à 11 / 11</span>
         </div>
         <div class="flex items-center gap-2">
           <button type="button" id="btn-act-prev" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-xs font-bold text-stone-200 cursor-pointer" title="Acte précédent">◀</button>
-          <input id="map-act-slider" type="range" min="1" max="10" value="10" aria-label="Progression chronologique des Actes" class="flex-1 accent-amber-500 cursor-pointer">
+          <input id="map-act-slider" type="range" min="1" max="11" value="11" aria-label="Progression chronologique des Actes" class="flex-1 accent-amber-500 cursor-pointer">
           <button type="button" id="btn-act-next" class="px-2 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-xs font-bold text-stone-200 cursor-pointer" title="Acte suivant">▶</button>
           <button type="button" id="btn-act-all" class="px-2.5 py-1 rounded bg-amber-600/85 hover:bg-amber-500 text-black text-[11px] font-bold cursor-pointer">Tout</button>
         </div>
@@ -57,7 +57,7 @@
     <section class="card-clean rounded-xl p-3 flex flex-wrap items-center justify-between gap-2">
       <div id="map-faction-filters" class="flex flex-wrap items-center gap-1.5">
         <button type="button" data-map-faction="all" class="clan-lineage-pill is-active">Tout Rokugan</button>
-        <button type="button" data-map-faction="campaign" class="clan-lineage-pill">🧭 Étapes PJs (10)</button>
+        <button type="button" data-map-faction="campaign" class="clan-lineage-pill">🧭 Étapes PJs (11)</button>
         <button type="button" data-map-faction="imperial" class="clan-lineage-pill">Impérial</button>
         <button type="button" data-map-faction="crabe" class="clan-lineage-pill">Crabe</button>
         <button type="button" data-map-faction="grue" class="clan-lineage-pill">Grue</button>
@@ -112,7 +112,7 @@
         <div class="card-clean rounded-2xl p-3.5 space-y-3">
           <div class="grid grid-cols-2 gap-1.5">
             <button type="button" id="tab-btn-details" class="clan-lineage-pill is-active text-center">🏛️ Villes &amp; Lieux</button>
-            <button type="button" id="tab-btn-route" class="clan-lineage-pill text-center">🧭 Périple PJs (10)</button>
+            <button type="button" id="tab-btn-route" class="clan-lineage-pill text-center">🧭 Périple PJs (11)</button>
           </div>
 
           <div id="tab-pane-details" class="space-y-2.5">
@@ -142,7 +142,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — Atlas Géographique &amp; Chemin des PJs</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.29.0</span>
+      <span id="site-version-label">v1.29.1</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

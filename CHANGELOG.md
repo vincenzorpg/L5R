@@ -6,6 +6,19 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.29.1] — 2026-11-18
+
+### 🔄 Modifié
+- **Carte de Rokugan (`data/carte-data.js`, `carte.html`, `js/carte-rokugan.js`)** :
+  - Ajout du village de **Yanagi Mura** (`yanagi-mura`, lisière de la forêt de Shinomen) à `ROKUGAN_LOCATIONS` et de l'**Acte 11 : *Écho du sang*** (`step: 11`) à `CAMPAIGN_ROUTE`.
+  - Mise à jour du curseur chronologique (`max="11"`, `value="11"`), du badge (`Actes 1 à 11 / 11`), du sous-titre, des libellés d'étapes et de la valeur de repli `maxAct`.
+- **Page d'accueil (`index.html`)** :
+  - Mise à jour des compteurs d'actes et de scénarios (`11 actes de la chronique`, `VITRINE DES 11 SCÉNARIOS DE LA CAMPAGNE`, `FRISE DES 11 SCÉNARIOS`, `11 / 11 Récits Complets`).
+- **Directives projet (`GEMINI.md`)** :
+  - Ajout de la **Section 6 : Ajout d'un Nouveau Scénario de Campagne (Checklist Obligatoire)** imposant la mise à jour systématique de la Carte de Rokugan et de la page d'accueil à chaque nouveau scénario.
+
+---
+
 ## [1.29.0] — 2026-11-18
 
 ### ✨ Ajouté
