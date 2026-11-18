@@ -95,7 +95,8 @@ const HOME_SCENARIOS_STRIP = [
   { num: "07", label: "Ryoko Owari", href: "campagne/scenario-7.html" },
   { num: "08", label: "Crépuscule", href: "campagne/scenario-8.html" },
   { num: "09", label: "Ne meurt pas", href: "campagne/scenario-9.html" },
-  { num: "10", label: "Tombe Iuchiban", href: "campagne/scenario-10.html", finale: true }
+  { num: "10", label: "Tombe Iuchiban", href: "campagne/scenario-10.html" },
+  { num: "11", label: "Écho du sang", href: "campagne/scenario-11.html", finale: true }
 ];
 
 function renderHomeSections() {
