@@ -43,10 +43,94 @@
     return segments;
   }
 
+  const CLAN_TERRITORY_MONS = [
+    {
+      id: 'licorne',
+      label: 'Licorne',
+      kanji: '麒',
+      x: 20,
+      y: 23,
+      stroke: '#f3e8ff',
+      fill: 'rgba(88, 28, 135, 0.35)',
+      iconPath: 'M50 22 C44 26,42 33,44 38 L34 44 L40 50 L36 68 L44 68 L47 55 L53 55 L56 68 L64 68 L60 50 L68 42 L57 38 C59 32,57 26,50 22 Z M50 15 L52 24 L48 24 Z'
+    },
+    {
+      id: 'dragon',
+      label: 'Dragon',
+      kanji: '龍',
+      x: 43,
+      y: 17,
+      stroke: '#d1fae5',
+      fill: 'rgba(6, 78, 59, 0.35)',
+      iconPath: 'M50 22 A28 28 0 1 1 22 50 A14 14 0 0 1 50 50 A14 14 0 0 0 78 50 A28 28 0 0 0 50 22 Z M36 42 A4 4 0 1 0 36 50 A4 4 0 1 0 36 42 Z M64 50 A4 4 0 1 0 64 58 A4 4 0 1 0 64 50 Z'
+    },
+    {
+      id: 'phenix',
+      label: 'Phénix',
+      kanji: '鳳',
+      x: 74,
+      y: 17,
+      stroke: '#ffedd5',
+      fill: 'rgba(154, 52, 18, 0.35)',
+      iconPath: 'M50 20 C44 28,45 36,50 42 C55 36,56 28,50 20 Z M24 34 C32 34,42 40,46 50 C36 48,28 43,24 34 Z M76 34 C72 43,64 48,54 50 C58 40,68 34,76 34 Z M34 68 C40 56,45 52,50 52 C55 52,60 56,66 68 C56 63,44 63,34 68 Z'
+    },
+    {
+      id: 'lion',
+      label: 'Lion',
+      kanji: '獅',
+      x: 53,
+      y: 38,
+      stroke: '#fef9c3',
+      fill: 'rgba(133, 77, 14, 0.35)',
+      iconPath: 'M50 24 L56 32 L66 30 L62 40 L70 48 L60 54 L64 66 L50 61 L36 66 L40 54 L30 48 L38 40 L34 30 L44 32 Z M44 43 A3 3 0 1 0 44 49 A3 3 0 1 0 44 43 Z M56 43 A3 3 0 1 0 56 49 A3 3 0 1 0 56 43 Z'
+    },
+    {
+      id: 'scorpion',
+      label: 'Scorpion',
+      kanji: '蠍',
+      x: 38,
+      y: 49,
+      stroke: '#fee2e2',
+      fill: 'rgba(127, 29, 29, 0.35)',
+      iconPath: 'M50 22 C62 22,68 30,64 38 C60 32,54 30,50 35 L50 58 C56 58,62 63,60 69 C54 66,46 66,40 69 C38 63,44 58,50 58 L50 42 C42 44,34 40,32 33 C37 36,44 36,50 35 Z'
+    },
+    {
+      id: 'grue',
+      label: 'Grue',
+      kanji: '鶴',
+      x: 63,
+      y: 55,
+      stroke: '#e0f2fe',
+      fill: 'rgba(7, 89, 133, 0.35)',
+      iconPath: 'M50 23 L54 36 L75 44 L58 50 L64 68 L50 57 L36 68 L42 50 L25 44 L46 36 Z'
+    },
+    {
+      id: 'crabe',
+      label: 'Crabe',
+      kanji: '蟹',
+      x: 26,
+      y: 69,
+      stroke: '#dbeafe',
+      fill: 'rgba(30, 58, 138, 0.35)',
+      iconPath: 'M32 34 C28 26,34 21,40 26 L44 36 C48 34,52 34,56 36 L60 26 C66 21,72 26,68 34 L62 42 C68 48,68 58,60 64 L66 70 L58 72 L54 64 L46 64 L42 72 L34 70 L40 64 C32 58,32 48,38 42 Z'
+    },
+    {
+      id: 'mante',
+      label: 'Mante',
+      kanji: '螳',
+      x: 75,
+      y: 80,
+      stroke: '#ccfbf1',
+      fill: 'rgba(17, 94, 89, 0.4)',
+      iconPath: 'M50 22 L54 36 L70 30 L60 44 L66 64 L50 56 L34 64 L40 44 L30 30 L46 36 Z'
+    }
+  ];
+
   function initInteractiveMap() {
     if (typeof document === 'undefined') return;
     const viewport = document.getElementById('map-viewport');
     const transformLayer = document.getElementById('map-transform-layer');
+    const watermarksLayer = document.getElementById('map-clans-watermarks');
     const routeSvg = document.getElementById('map-route-svg');
     const markersLayer = document.getElementById('map-markers-layer');
     if (!viewport || !transformLayer || !routeSvg || !markersLayer) return;
@@ -67,6 +151,7 @@
       tx: 0,
       ty: 0,
       showRoute: true,
+      showMons: true,
       maxAct: route.length || 10,
       selectedLocId: 'otosan-uchi',
       selectedActStep: null,
@@ -79,6 +164,7 @@
     const searchInput = document.getElementById('map-search-input');
     const factionFilterBar = document.getElementById('map-faction-filters');
     const toggleRouteBtn = document.getElementById('btn-toggle-route');
+    const toggleMonsBtn = document.getElementById('btn-toggle-clans-mon');
     const actSlider = document.getElementById('map-act-slider');
     const actBadge = document.getElementById('map-act-badge');
     const actPrevBtn = document.getElementById('btn-act-prev');
@@ -139,6 +225,29 @@
       if (tabRoutePane) tabRoutePane.classList.toggle('hidden', isDetails);
       if (tabDetailsBtn) tabDetailsBtn.classList.toggle('is-active', isDetails);
       if (tabRouteBtn) tabRouteBtn.classList.toggle('is-active', !isDetails);
+    }
+
+    function renderClanWatermarks() {
+      if (!watermarksLayer) return;
+      if (!state.showMons) {
+        watermarksLayer.innerHTML = '';
+        return;
+      }
+      watermarksLayer.innerHTML = CLAN_TERRITORY_MONS.map((mon) => `
+        <div
+          class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none select-none opacity-65"
+          style="left: ${mon.x}%; top: ${mon.y}%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8));"
+        >
+          <svg viewBox="0 0 100 100" class="w-11 h-11 sm:w-14 sm:h-14">
+            <circle cx="50" cy="50" r="44" fill="${mon.fill}" stroke="${mon.stroke}" stroke-width="3.5" stroke-opacity="0.85" />
+            <circle cx="50" cy="50" r="37" fill="none" stroke="${mon.stroke}" stroke-width="1.2" stroke-opacity="0.6" />
+            <path d="${mon.iconPath}" fill="${mon.stroke}" fill-opacity="0.88" />
+          </svg>
+          <span class="mt-0.5 px-1.5 py-0.2 rounded bg-black/45 border border-amber-500/25 font-imperial font-bold text-[8px] sm:text-[9px] uppercase tracking-widest" style="color: ${mon.stroke};">
+            ${mon.kanji} ${mon.label}
+          </span>
+        </div>
+      `).join('');
     }
 
     function renderRouteSvg() {
@@ -404,6 +513,15 @@
     }
 
     // Bind controls
+    if (toggleMonsBtn) {
+      toggleMonsBtn.addEventListener('click', () => {
+        state.showMons = !state.showMons;
+        toggleMonsBtn.textContent = state.showMons ? '🏯 Blasons : Visible' : '🏯 Blasons : Masqué';
+        toggleMonsBtn.classList.toggle('is-active', state.showMons);
+        renderClanWatermarks();
+      });
+    }
+
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         state.query = e.target.value || '';
@@ -529,6 +647,7 @@
     viewport.addEventListener('pointercancel', () => { dragging = false; });
 
     // Support URL param ?acte=7 or ?lieu=ryoko-owari
+    renderClanWatermarks();
     const params = new URLSearchParams(window.location.search);
     const actParam = parseInt(params.get('acte') || '', 10);
     const lieuParam = params.get('lieu');

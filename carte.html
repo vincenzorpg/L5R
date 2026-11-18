@@ -38,9 +38,12 @@
 
       <!-- CONTRÔLES RAPIDES DU CHEMIN DES PJs -->
       <div class="p-3 rounded-xl bg-black/50 border border-amber-500/30 space-y-2.5 shrink-0 lg:min-w-[340px]">
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
           <button type="button" id="btn-toggle-route" class="clan-lineage-pill is-active">
             🗺️ Chemin des PJs : Visible
+          </button>
+          <button type="button" id="btn-toggle-clans-mon" class="clan-lineage-pill is-active">
+            🏯 Blasons : Visible
           </button>
           <span id="map-act-badge" class="text-[11px] font-mono font-bold text-amber-300">Actes 1 à 10 / 10</span>
         </div>
@@ -88,13 +91,14 @@
         </div>
 
         <div id="map-viewport" class="relative w-full overflow-hidden rounded-xl border border-amber-600/40 bg-[#0d0907] shadow-2xl select-none cursor-grab active:cursor-grabbing">
-          <div id="map-transform-layer" class="relative w-full aspect-[1024/1094] origin-center">
+          <div id="map-transform-layer" class="relative w-full aspect-square origin-center">
             <img
               src="assets/images/carte_rokugan.jpg"
               alt="Carte de Rokugan — L'Empire d'Émeraude"
               draggable="false"
               class="w-full h-full object-fill block pointer-events-none select-none"
             />
+            <div id="map-clans-watermarks" class="absolute inset-0 pointer-events-none z-[5]"></div>
             <svg id="map-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
             <div id="map-markers-layer" class="absolute inset-0 z-20"></div>
           </div>
@@ -141,7 +145,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
     <div>Campagne de la Chronique de Rokugan — Atlas Géographique &amp; Chemin des PJs</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.22.0</span>
+      <span id="site-version-label">v1.23.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>
