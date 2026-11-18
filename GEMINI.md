@@ -64,3 +64,17 @@ Ce fichier définit les règles strictes et obligatoires à respecter pour toute
   - Respect strict du schéma `schemaVersion: 2` (standard v2.18.0+).
   - Maintien des clés de traits en anglais (`stamina`, `willpower`, `strength`, `perception`, `reflexes`, `awareness`, `agility`, `intelligence`) et du calcul des Anneaux.
   - Maintien de la normalisation des noms de compétences, de la résolution des identifiants d'école canoniques (`schoolId` dans `CARNET_SCHOOL_CATALOG`) et du mapping normalisé des armes (`bowStrength`, mots-clés d'armes).
+
+## 6. Ajout d'un Nouveau Scénario de Campagne (Checklist Obligatoire)
+
+Lorsqu'un nouveau scénario (Acte `N`) est ajouté à la chronique, il est **obligatoire** de mettre à jour l'ensemble des points d'entrée suivants :
+
+1. **Page du scénario & illustrations** : Créer `campagne/scenario-N.html` (et ses illustrations dans `assets/images/campagne/`), puis l'enregistrer dans `data/scenarios-data.js` et `campagne.html`.
+2. **Carte de Rokugan (`data/carte-data.js`, `carte.html`, `js/carte-rokugan.js`)** :
+   - Ajouter le(s) lieu(x) clé(s) manquants dans `ROKUGAN_LOCATIONS` et l'étape correspondante (`step: N`) dans `CAMPAIGN_ROUTE` (`data/carte-data.js`).
+   - Mettre à jour le curseur chronologique (`max="N" value="N"`), le badge (`Actes 1 à N / N`), le sous-titre et les libellés d'étapes dans `carte.html`.
+   - Vérifier que la valeur par défaut de `maxAct` dans `js/carte-rokugan.js` suit `route.length`.
+3. **Page d'accueil (`index.html`, `js/index-ui.js`)** :
+   - Mettre à jour les compteurs et libellés d'actes/scénarios dans `index.html` (`N actes de la chronique`, `VITRINE DES N SCÉNARIOS DE LA CAMPAGNE`, `FRISE DES N SCÉNARIOS`, `N / N Récits Complets`).
+   - Vérifier que la frise dynamique (`HOME_SCENARIOS_STRIP`) affiche bien le nouvel acte.
+4. **Tests & Hygiène** : Vérifier que `tests/unit-tests.js` (notamment la suite Carte / Scénarios) et `.github/scripts/check-site.js` restent 100 % valides.

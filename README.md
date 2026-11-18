@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.29.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.29.1-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -9,7 +9,7 @@
 
 Portail numérique interactif, boîte à outils d'arbitrage et annales officielles de jeu de rôle sur table pour **La Légende des Cinq Anneaux (4ᵉ Édition)**, consacré à la **Campagne de la Chronique de Rokugan**.
 
-Le site réunit une **Forge de Samouraïs** automatisée, un **Grimoire** des prières et sortilèges, un **Recueil dédié des Kihos**, un **Codex des Tatouages Togashi**, l'**Encyclopédie des Huit Grands Clans**, l'**Écran du Maître du Jeu**, des **Mémentos d'Arbitrage Tactique** et nos **10 Scénarios de Campagne** illustrés et narrés vocalement.
+Le site réunit une **Forge de Samouraïs** automatisée, un **Grimoire** des prières et sortilèges, un **Recueil dédié des Kihos**, un **Codex des Tatouages Togashi**, l'**Encyclopédie des Huit Grands Clans**, l'**Écran du Maître du Jeu**, des **Mémentos d'Arbitrage Tactique** et nos **11 Scénarios de Campagne** illustrés et narrés vocalement.
 
 🌐 **Site officiel en ligne :** [https://vincenzorpg.github.io/L5R/](https://vincenzorpg.github.io/L5R/)  
 📦 **Releases & Versions :** [https://github.com/vincenzorpg/L5R/releases](https://github.com/vincenzorpg/L5R/releases)
