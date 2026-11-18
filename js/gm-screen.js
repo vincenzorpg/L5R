@@ -52,7 +52,12 @@
     { name: 'Ninja / Assassin', initFormula: '7g4', armorTN: 23, reduction: 0, earth: 2, attack: '7g4', damage: '5g2', notes: 'Furtivité, poison ou armes dissimulées.' },
     { name: 'Bakemono (Gobelin)', initFormula: '4g2', armorTN: 15, reduction: 1, earth: 2, attack: '4g2', damage: '3g2', notes: 'Souillure 1+, fuit si isolé.' },
     { name: 'Oni Mineur', initFormula: '5g3', armorTN: 20, reduction: 6, earth: 4, attack: '7g3', damage: '7g3', notes: 'Peur 3, Carapace, vulnérable au Jade.' },
-    { name: 'Kansen / Mort-vivant', initFormula: '3g2', armorTN: 14, reduction: 4, earth: 3, attack: '5g2', damage: '5g2', notes: 'Ignore les malus de blessures (sauf Mort).' }
+    { name: 'Kansen / Mort-vivant', initFormula: '3g2', armorTN: 14, reduction: 4, earth: 3, attack: '5g2', damage: '5g2', notes: 'Ignore les malus de blessures (sauf Mort).' },
+    { name: 'Chuda Tenkazu (Sc.2 — Boss)', initFormula: '6g3', armorTN: 20, reduction: 0, earth: 3, attack: '6g3', damage: '6g3', notes: 'Shugenja Chuda R3 • Jadoku (ignore Réd., Terre ND 15 Souillure, +3 PV) • Maho Outremonde 7g4 • Armure d\'Obsidienne (Réd. 6 vs Jade).' },
+    { name: 'Guerrier Tsuno (Sc.2)', initFormula: '5g4', armorTN: 30, reduction: 8, earth: 4, attack: '7g3', damage: '6g3', notes: 'Peur 2 (ND 15) • Invulnérabilité partielle (Réd 8 sauf Jade/Cristal) • +1g0 attaque vs cible souillée.' },
+    { name: 'Shikageko / Murai (Sc.2 — Boss Acte II)', initFormula: '7g4', armorTN: 25, reduction: 4, earth: 3, attack: '8g4', damage: '4g3', notes: '2 att./round • Peur 3 (ND 20) • Poison (End. ND 15 ou -1g0) • ND chute à 15 si Murai reprend le contrôle.' },
+    { name: 'Zombie de Sang (Sc.2)', initFormula: '2g1', armorTN: 10, reduction: 3, earth: 2, attack: '4g2', damage: '3g2', notes: '30 PV fixes • Insensible aux malus • Détruit instantanément si le brasero de Minerai de Sang est brisé.' },
+    { name: 'Éclaireur Kuroiban (Sc.2)', initFormula: '7g3', armorTN: 25, reduction: 3, earth: 3, attack: '7g4', damage: '5g2', notes: 'Shuriken empoisonnés 6g4 (Endurance ND 20 ou sommeil).' }
   ];
 
   const DUEL_PRESETS = [
@@ -580,7 +585,11 @@
       scoreB: ''
     },
     diceHistory: [],
-    gmScratchpad: ''
+    gmScratchpad: '',
+    scenario: {
+      selectedId: 'scenario-2-jouets',
+      checked: {}
+    }
   };
 
   function saveState() {
@@ -615,7 +624,13 @@
             : { round: 1, activeIndex: 0, combatants: [] },
           duel: parsed.duel && typeof parsed.duel === 'object' ? { ...state.duel, ...parsed.duel } : state.duel,
           diceHistory: Array.isArray(parsed.diceHistory) ? parsed.diceHistory.slice(0, 8) : [],
-          gmScratchpad: String(parsed.gmScratchpad || '')
+          gmScratchpad: String(parsed.gmScratchpad || ''),
+          scenario: parsed.scenario && typeof parsed.scenario === 'object'
+            ? {
+                selectedId: String(parsed.scenario.selectedId || 'scenario-2-jouets'),
+                checked: parsed.scenario.checked && typeof parsed.scenario.checked === 'object' ? parsed.scenario.checked : {}
+              }
+            : state.scenario
         };
       }
     } catch (e) {
@@ -1381,10 +1396,361 @@
     if (out) out.textContent = `ND ${total}`;
   }
 
+  function getGmScenariosList() {
+    if (typeof GM_SCENARIOS_DATA !== 'undefined' && Array.isArray(GM_SCENARIOS_DATA)) {
+      return GM_SCENARIOS_DATA;
+    }
+    if (typeof globalScope !== 'undefined' && Array.isArray(globalScope.GM_SCENARIOS_DATA)) {
+      return globalScope.GM_SCENARIOS_DATA;
+    }
+    return [];
+  }
+
+  function findEncounterInScenario(scenario, encounterId) {
+    if (!scenario || !Array.isArray(scenario.acts)) return null;
+    for (const act of scenario.acts) {
+      for (const scene of act.scenes || []) {
+        if (scene.encounter && scene.encounter.id === encounterId) {
+          return scene.encounter;
+        }
+      }
+    }
+    return null;
+  }
+
+  function launchScenarioEncounter(scenarioId, encounterId) {
+    const scenarios = getGmScenariosList();
+    const sc = scenarios.find((s) => s.id === scenarioId) || scenarios[0];
+    const enc = findEncounterInScenario(sc, encounterId);
+    if (!enc) return;
+
+    const combatants = buildSkirmishCombatants(state.pcs, { npcCount: 0 });
+    (enc.enemies || []).forEach((spec) => {
+      const preset = ENEMY_PRESETS.find((p) => p.name === spec.presetName);
+      if (!preset) return;
+      const existingOfType = combatants.filter((c) => c.type === 'enemy' && c.name.startsWith(preset.name)).length;
+      const created = createEnemyCombatants(spec.count || 1, preset, existingOfType);
+      combatants.push(...created);
+    });
+
+    state.combat = {
+      round: 1,
+      activeIndex: 0,
+      combatants: sortCombatantsByInit(combatants)
+    };
+    state.activeTab = 'skirmish';
+    saveState();
+    renderAll();
+  }
+
+  function addScenarioNpcToCombat(presetName) {
+    const preset = ENEMY_PRESETS.find((p) => p.name === presetName);
+    if (!preset) return;
+    const existingEnemies = state.combat.combatants.filter((c) => c.type === 'enemy').length;
+    const created = createEnemyCombatants(1, preset, existingEnemies);
+    state.combat.combatants = sortCombatantsByInit([...state.combat.combatants, ...created]);
+    state.activeTab = 'skirmish';
+    saveState();
+    renderAll();
+  }
+
+  function renderScenarioRolls(rolls, contextLabel = '') {
+    if (!Array.isArray(rolls) || rolls.length === 0) return '';
+    return `
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        ${rolls.map((r) => `
+          <button type="button" data-action="roll-formula" data-formula="${escapeHtml(r.formula)}" data-roll-label="${escapeHtml(contextLabel ? contextLabel + ' — ' + r.label : r.label)}" class="px-2 py-1 rounded bg-amber-950/60 hover:bg-amber-900/80 border border-amber-500/40 text-[10px] font-mono text-amber-200 cursor-pointer transition">
+            🎲 ${escapeHtml(r.label)}
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderScenarioPanel() {
+    const root = document.getElementById('gm-scenario-root');
+    if (!root) return;
+    const scenarios = getGmScenariosList();
+    if (scenarios.length === 0) {
+      root.innerHTML = '<p class="text-xs text-stone-400 italic">Aucun scénario chargé.</p>';
+      return;
+    }
+
+    const activeScenario = scenarios.find((s) => s.id === (state.scenario && state.scenario.selectedId)) || scenarios[0];
+    const checkedMap = (state.scenario && state.scenario.checked && state.scenario.checked[activeScenario.id]) || {};
+    const totalChecks = (activeScenario.checklist || []).length;
+    const doneChecks = (activeScenario.checklist || []).filter((item) => Boolean(checkedMap[item.id])).length;
+
+    const scenarioSelector = scenarios.length > 1
+      ? `<select id="gm-scenario-select" data-action="scenario-select" class="rounded bg-[#0d0b0b] border border-amber-500/40 px-2.5 py-1 text-xs text-amber-200">
+          ${scenarios.map((s) => `<option value="${escapeHtml(s.id)}" ${s.id === activeScenario.id ? 'selected' : ''}>Scénario ${escapeHtml(s.num)} — ${escapeHtml(s.title)}</option>`).join('')}
+        </select>`
+      : '';
+
+    const navButtons = [
+      { target: 'sc-briefing', label: '📋 Briefing & PJs' },
+      ...(activeScenario.acts || []).map((a) => ({ target: `sc-${a.id}`, label: a.num })),
+      { target: 'sc-epilogue', label: '🏁 Épilogue & XP' },
+      { target: 'sc-npcs', label: '👹 Annexe PNJs' }
+    ];
+
+    root.innerHTML = `
+      <!-- EN-TÊTE SCÉNARIO -->
+      <div class="p-4 rounded-xl bg-gradient-to-br from-amber-950/30 via-black/60 to-red-950/20 border border-amber-500/35 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-2">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-amber-600 text-black font-imperial font-bold text-[10px] uppercase">Scénario ${escapeHtml(activeScenario.num)}</span>
+              <span class="text-[11px] text-amber-300/90 font-imperial">${escapeHtml(activeScenario.campaign)}</span>
+            </div>
+            <h3 class="text-lg md:text-xl font-imperial font-bold text-amber-200">${escapeHtml(activeScenario.title)}</h3>
+            <p class="text-[11px] text-stone-400">${escapeHtml(activeScenario.pcsLine)} • Départ : <b class="text-stone-200">${escapeHtml(activeScenario.startPlace)}</b> • Durée : <b class="text-stone-200">${escapeHtml(activeScenario.duration)}</b></p>
+          </div>
+          ${scenarioSelector}
+        </div>
+
+        <div class="flex flex-wrap gap-1.5">
+          ${(activeScenario.tags || []).map((t) => `<span class="px-2 py-0.5 rounded-full bg-black/50 border border-stone-700 text-[10px] text-stone-300">${escapeHtml(t)}</span>`).join('')}
+        </div>
+
+        <blockquote class="p-3 rounded-lg bg-black/45 border-l-2 border-amber-500/70 text-[11px] italic text-amber-100/90 leading-relaxed">
+          ${escapeHtml(activeScenario.epigraph)}
+        </blockquote>
+
+        <!-- NAVIGATION RAPIDE -->
+        <div class="flex flex-wrap gap-1.5 pt-1 border-t border-amber-500/20">
+          ${navButtons.map((n) => `
+            <button type="button" data-action="scenario-jump" data-target="${escapeHtml(n.target)}" class="px-2.5 py-1 rounded bg-stone-900/90 hover:bg-amber-950/60 border border-stone-700 hover:border-amber-500/50 text-[11px] font-imperial text-amber-200 cursor-pointer transition">
+              ${escapeHtml(n.label)}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- CHECKLIST JOUR J & RÈGLES CRITIQUES -->
+      <div id="sc-briefing" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-7 p-3.5 rounded-xl bg-black/35 border border-stone-800 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-1.5">
+            <h4 class="font-imperial font-bold text-xs text-amber-300">✅ Suivi de Progression Jour J (${doneChecks}/${totalChecks})</h4>
+            <button type="button" data-action="scenario-reset-checks" data-scenario-id="${escapeHtml(activeScenario.id)}" class="text-[10px] text-stone-400 hover:text-amber-300 cursor-pointer">Réinitialiser</button>
+          </div>
+          <div class="space-y-1.5 text-[11px]">
+            ${(activeScenario.checklist || []).map((item) => {
+              const isChecked = Boolean(checkedMap[item.id]);
+              return `
+                <label class="flex items-start gap-2 p-1.5 rounded hover:bg-black/40 cursor-pointer transition ${isChecked ? 'opacity-60 line-through text-stone-400' : 'text-stone-200'}">
+                  <input type="checkbox" data-action="scenario-toggle-check" data-scenario-id="${escapeHtml(activeScenario.id)}" data-check-id="${escapeHtml(item.id)}" ${isChecked ? 'checked' : ''} class="mt-0.5 accent-amber-500 rounded cursor-pointer" />
+                  <span>${escapeHtml(item.label)}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 p-3.5 rounded-xl bg-red-950/15 border border-red-800/35 space-y-2">
+          <h4 class="font-imperial font-bold text-xs text-red-300 border-b border-red-900/40 pb-1.5">⚠️ Rappel des Règles Critiques (L5R 4e)</h4>
+          <div class="space-y-2 text-[11px] text-stone-300">
+            ${(activeScenario.criticalRules || []).map((r) => `
+              <div class="p-2 rounded bg-black/40 border border-stone-800/80">
+                <b class="text-amber-300">${escapeHtml(r.title)} :</b> ${escapeHtml(r.text)}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- BRIEFING & ARCHITECTURE -->
+      <details open class="p-3.5 rounded-xl bg-black/30 border border-stone-800 space-y-2.5 text-xs">
+        <summary class="font-imperial font-bold text-amber-300 cursor-pointer select-none">📜 Briefing de Maîtrise &amp; Structure en Quatre Actes</summary>
+        <div class="space-y-2 text-stone-300 leading-relaxed pt-1">
+          ${(activeScenario.briefing || []).map((p) => `<p>${escapeHtml(p)}</p>`).join('')}
+        </div>
+        <div class="overflow-x-auto rounded-lg border border-stone-800 mt-2">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="bg-black/60 border-b border-amber-500/20 font-imperial text-amber-300 text-[10px] uppercase">
+                <th class="p-2">Acte &amp; Lieu</th>
+                <th class="p-2">Enjeux Principaux</th>
+                <th class="p-2">Défis Dominants</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-800/80 text-stone-300">
+              ${(activeScenario.structure || []).map((row) => `
+                <tr>
+                  <td class="p-2 font-bold text-amber-200 align-top">${escapeHtml(row.act)}</td>
+                  <td class="p-2 align-top">${escapeHtml(row.stakes)}</td>
+                  <td class="p-2 align-top text-stone-400">${escapeHtml(row.challenges)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- SUIVI PSYCHOLOGIQUE DES PJS -->
+      <details open class="p-3.5 rounded-xl bg-black/30 border border-purple-800/30 space-y-2.5 text-xs">
+        <summary class="font-imperial font-bold text-purple-300 cursor-pointer select-none">🧠 Suivi Psychologique &amp; Exploitation Personnalisée des PJs</summary>
+        <p class="text-[11px] text-stone-300 bg-purple-950/20 border border-purple-800/30 p-2.5 rounded-lg">${escapeHtml(activeScenario.psychIntro)}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          ${(activeScenario.pcTracking || []).map((p) => `
+            <div class="p-2.5 rounded-lg bg-black/45 border border-stone-800 space-y-1 text-[11px]">
+              <div class="font-imperial font-bold text-amber-300">${escapeHtml(p.name)}</div>
+              <div class="text-stone-300"><b class="text-purple-300">Pression :</b> ${escapeHtml(p.hallucination)}</div>
+              <div class="text-stone-400"><b class="text-sky-300">Leviers MJ :</b> ${escapeHtml(p.levers)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </details>
+
+      <!-- ACTES I À IV -->
+      <div class="space-y-4">
+        ${(activeScenario.acts || []).map((act) => `
+          <section id="sc-${escapeHtml(act.id)}" class="p-4 rounded-xl bg-black/35 border border-amber-500/25 space-y-4">
+            <div class="border-b border-amber-500/20 pb-2">
+              <span class="text-[10px] font-imperial uppercase tracking-widest text-amber-400">${escapeHtml(act.num)}</span>
+              <h4 class="font-imperial font-bold text-base text-amber-200">${escapeHtml(act.title)}</h4>
+              <p class="text-[11px] italic text-stone-400">${escapeHtml(act.tagline)}</p>
+            </div>
+
+            <div class="space-y-4">
+              ${(act.scenes || []).map((scene) => `
+                <article class="p-3.5 rounded-xl bg-[#0d0a0a]/90 border border-stone-800 space-y-2.5 text-xs">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-stone-800/80 pb-1.5">
+                    <h5 class="font-imperial font-bold text-sm text-amber-300">${escapeHtml(scene.title)}</h5>
+                    <span class="text-[10px] text-stone-400">${escapeHtml(scene.meta)}</span>
+                  </div>
+
+                  ${scene.intro ? `<p class="text-stone-300 leading-relaxed">${escapeHtml(scene.intro)}</p>` : ''}
+
+                  ${scene.readAloud ? `
+                    <div class="p-3 rounded-lg bg-amber-950/20 border border-amber-500/35 text-amber-100/95 leading-relaxed space-y-1">
+                      <div class="text-[10px] font-imperial uppercase tracking-wider text-amber-400">📖 À lire ou paraphraser aux joueurs</div>
+                      <p>${escapeHtml(scene.readAloud)}</p>
+                    </div>
+                  ` : ''}
+
+                  ${Array.isArray(scene.dialogues) && scene.dialogues.length > 0 ? `
+                    <div class="space-y-1.5">
+                      ${scene.dialogues.map((d) => `
+                        <div class="p-2.5 rounded-lg bg-black/50 border-l-2 border-sky-500/60 text-stone-200">
+                          <span class="font-bold text-sky-300">${escapeHtml(d.speaker)}</span>
+                          <span class="text-[10px] italic text-stone-400"> (${escapeHtml(d.tone)})</span> :
+                          <span class="italic"> ${escapeHtml(d.text)}</span>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+
+                  ${scene.specialBox ? `
+                    <div class="p-3 rounded-lg bg-red-950/20 border border-red-700/40 space-y-2">
+                      <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="font-imperial font-bold text-[11px] text-red-300">⚡ ${escapeHtml(scene.specialBox.title)}</span>
+                        ${renderScenarioRolls(scene.specialBox.rolls, scene.title)}
+                      </div>
+                      <ul class="space-y-1.5 text-[11px] text-stone-200">
+                        ${(scene.specialBox.items || []).map((it) => `
+                          <li><b class="text-amber-300">${escapeHtml(it.label)} :</b> ${escapeHtml(it.text)}</li>
+                        `).join('')}
+                      </ul>
+                    </div>
+                  ` : ''}
+
+                  ${scene.subsectionTitle ? `<h6 class="font-imperial font-bold text-[11px] text-amber-200 pt-1">${escapeHtml(scene.subsectionTitle)}</h6>` : ''}
+                  ${renderScenarioRolls(scene.rolls, scene.title)}
+
+                  ${Array.isArray(scene.bullets) && scene.bullets.length > 0 ? `
+                    <ul class="space-y-1.5 text-[11px] text-stone-300 list-disc list-inside">
+                      ${scene.bullets.map((b) => `
+                        <li><b class="text-stone-100">${escapeHtml(b.label)} :</b> ${escapeHtml(b.text)}</li>
+                      `).join('')}
+                    </ul>
+                  ` : ''}
+
+                  ${scene.encounter ? `
+                    <div class="pt-1">
+                      <button type="button" data-action="scenario-launch-encounter" data-scenario-id="${escapeHtml(activeScenario.id)}" data-encounter-id="${escapeHtml(scene.encounter.id)}" class="px-3.5 py-2 rounded-lg bg-red-700 hover:bg-red-600 text-white font-imperial font-bold text-xs cursor-pointer transition shadow">
+                        ${escapeHtml(scene.encounter.label)}
+                      </button>
+                    </div>
+                  ` : ''}
+
+                  ${scene.outro ? `<p class="text-[11px] italic text-emerald-200/90 bg-emerald-950/15 border border-emerald-800/30 p-2.5 rounded-lg">${escapeHtml(scene.outro)}</p>` : ''}
+                </article>
+              `).join('')}
+            </div>
+          </section>
+        `).join('')}
+      </div>
+
+      <!-- ÉPILOGUE & RÉCOMPENSES -->
+      ${activeScenario.epilogue ? `
+        <section id="sc-epilogue" class="p-4 rounded-xl bg-black/35 border border-emerald-700/35 space-y-3 text-xs">
+          <div>
+            <h4 class="font-imperial font-bold text-base text-emerald-300">🏁 ${escapeHtml(activeScenario.epilogue.title)}</h4>
+            <p class="text-[11px] text-amber-300 font-imperial">${escapeHtml(activeScenario.epilogue.transition)}</p>
+          </div>
+          ${(activeScenario.epilogue.paragraphs || []).map((p) => `<p class="text-stone-300 leading-relaxed">${escapeHtml(p)}</p>`).join('')}
+          <div class="overflow-x-auto rounded-lg border border-stone-800">
+            <table class="w-full text-left border-collapse text-[11px]">
+              <thead>
+                <tr class="bg-black/60 border-b border-emerald-500/20 font-imperial text-emerald-300 text-[10px] uppercase">
+                  <th class="p-2">Catégorie</th>
+                  <th class="p-2">Attribution &amp; Conséquences</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-800/80 text-stone-300">
+                ${(activeScenario.epilogue.rewards || []).map((r) => `
+                  <tr>
+                    <td class="p-2 font-bold text-amber-200 align-top whitespace-nowrap">${escapeHtml(r.category)}</td>
+                    <td class="p-2 align-top">${escapeHtml(r.details)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ` : ''}
+
+      <!-- ANNEXE TECHNIQUE : PROFILS PNJS & ADVERSAIRES -->
+      <section id="sc-npcs" class="p-4 rounded-xl bg-black/35 border border-red-800/35 space-y-3 text-xs">
+        <h4 class="font-imperial font-bold text-base text-red-300">👹 Annexe Technique — Profils Complets des Adversaires &amp; Alliés</h4>
+        <div class="space-y-3">
+          ${(activeScenario.npcs || []).map((npc) => `
+            <article class="p-3.5 rounded-xl bg-[#0d0a0a] border ${npc.isAlly ? 'border-emerald-700/40' : 'border-red-800/40'} space-y-2">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-1.5">
+                <div>
+                  <h5 class="font-imperial font-bold text-sm ${npc.isAlly ? 'text-emerald-300' : 'text-amber-300'}">${escapeHtml(npc.name)}</h5>
+                  <p class="text-[10px] text-stone-400">${escapeHtml(npc.role)}</p>
+                </div>
+                ${npc.presetName ? `
+                  <button type="button" data-action="scenario-add-npc" data-preset-name="${escapeHtml(npc.presetName)}" class="px-2.5 py-1 rounded bg-red-950/70 hover:bg-red-900 border border-red-600/50 text-[11px] font-imperial text-red-200 cursor-pointer transition shrink-0">
+                    + Ajouter à l'Escarmouche
+                  </button>
+                ` : ''}
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-[11px] text-stone-300">
+                <div><b class="text-stone-400">Anneaux :</b> ${escapeHtml(npc.rings)}</div>
+                <div><b class="text-stone-400">Statuts :</b> ${escapeHtml(npc.status)}</div>
+                <div class="md:col-span-2"><b class="text-amber-200">Combat :</b> ${escapeHtml(npc.combat)}</div>
+                <div class="md:col-span-2 text-[10px] font-mono text-stone-400"><b class="text-stone-300">Seuils :</b> ${escapeHtml(npc.wounds)}</div>
+                <div class="md:col-span-2"><b class="text-stone-400">Compétences / Équipement :</b> ${escapeHtml(npc.skills)}</div>
+              </div>
+              <ul class="space-y-1 text-[11px] text-stone-300 border-t border-stone-800/70 pt-1.5">
+                ${(npc.specials || []).map((sp) => `<li>• ${escapeHtml(sp)}</li>`).join('')}
+              </ul>
+              ${renderScenarioRolls(npc.rolls, npc.name)}
+            </article>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
   function renderAll() {
     renderTabs();
     renderPcs();
     renderCombat();
+    renderScenarioPanel();
     renderRulesPanel();
     renderDuel();
     renderHonorPanel();
@@ -1878,6 +2244,26 @@
         state.rulesCategory = btn.getAttribute('data-cat-id') || 'all';
         saveState();
         renderRulesPanel();
+      } else if (action === 'scenario-jump') {
+        const targetId = btn.getAttribute('data-target');
+        const targetEl = targetId ? document.getElementById(targetId) : null;
+        if (targetEl && typeof targetEl.scrollIntoView === 'function') {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else if (action === 'scenario-reset-checks') {
+        const scId = btn.getAttribute('data-scenario-id');
+        if (scId && state.scenario && state.scenario.checked) {
+          state.scenario.checked[scId] = {};
+          saveState();
+          renderScenarioPanel();
+        }
+      } else if (action === 'scenario-launch-encounter') {
+        const scId = btn.getAttribute('data-scenario-id');
+        const encId = btn.getAttribute('data-encounter-id');
+        launchScenarioEncounter(scId, encId);
+      } else if (action === 'scenario-add-npc') {
+        const presetName = btn.getAttribute('data-preset-name');
+        addScenarioNpcToCombat(presetName);
       }
     });
 
@@ -1911,6 +2297,22 @@
           saveState();
           renderSkirmishSetup();
         }
+      } else if (action === 'scenario-toggle-check') {
+        const scId = el.getAttribute('data-scenario-id');
+        const checkId = el.getAttribute('data-check-id');
+        if (scId && checkId) {
+          if (!state.scenario) state.scenario = { selectedId: scId, checked: {} };
+          if (!state.scenario.checked) state.scenario.checked = {};
+          if (!state.scenario.checked[scId]) state.scenario.checked[scId] = {};
+          state.scenario.checked[scId][checkId] = Boolean(el.checked);
+          saveState();
+          renderScenarioPanel();
+        }
+      } else if (action === 'scenario-select') {
+        if (!state.scenario) state.scenario = { selectedId: el.value, checked: {} };
+        state.scenario.selectedId = el.value;
+        saveState();
+        renderScenarioPanel();
       }
     });
 
@@ -1945,6 +2347,7 @@
   }
 
   if (typeof globalScope !== 'undefined') {
+    globalScope.ENEMY_PRESETS = ENEMY_PRESETS;
     globalScope.computeL5RWoundState = computeL5RWoundState;
     globalScope.computeEffectiveCombatantTN = computeEffectiveCombatantTN;
     globalScope.computeIaijutsuFocusVerdict = computeIaijutsuFocusVerdict;

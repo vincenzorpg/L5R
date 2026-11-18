@@ -6,6 +6,21 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.22.0] — 2026-11-18
+
+### ✨ Ajouté
+- **Coin MJ Prêt-à-Jouer — Scénario II : *Les Jouets de Cendre et de Sang*** (`ecran-mj.html`, `data/gm-scenarios-data.js`, `js/gm-screen.js`) :
+  - Ajout d'un nouvel onglet dédié **« 🎭 Scénario Jour J »** dans le Poste de Commandement Principal de l'Écran du MJ, avec navigation rapide par section (*Briefing & PJs*, *Actes I à IV*, *Épilogue & XP*, *Annexe PNJs*).
+  - **Suivi de Progression Jour J** : checklist interactive de 10 étapes clés persistée automatiquement dans `localStorage`, accompagnée du rappel des règles critiques (*Peur*, *Souillure*, *Poudre de Jade*, *Maho*).
+  - **Suivi Psychologique des PJs** : fiches dédiées pour *Okado*, *Hiro-Hito*, *Ryujin*, *Akira* et *Yuriko* détaillant les hallucinations et leviers narratifs/mécaniques.
+  - **Textes d'Ambiance, Dialogues & Jets Cliquables** : intégration complète des 4 actes, de l'épilogue et des 5 profils de l'annexe technique (*Chuda Tenkazu*, *Guerrier Tsuno*, *Shikageko / Murai*, *Zombies de Sang & Kuroiban*, *Chuda Reikado*), avec boutons de jets `🎲` reliés directement au Lanceur Roll & Keep du dock MJ.
+  - **Lancement Direct en Escarmouche** : boutons d'action générant instantanément les combats clés du scénario (*Acte II : Shikageko + 4 Zombies de Sang* et *Acte IV : Chuda Tenkazu + Guerrier Tsuno + 4 Zombies de Sang*) avec les PJs cochés, plus ajout des 5 adversaires dans `ENEMY_PRESETS`.
+- **PWA & Tests (`sw.js`, `tests/unit-tests.html`, `tests/unit-tests.js`)** :
+  - Mise à jour du cache Service Worker (`l5r-forge-v1.22.0`) incluant `data/gm-scenarios-data.js`.
+  - Ajout de la **Suite 12** de tests unitaires vérifiant l'intégrité de `GM_SCENARIOS_DATA` et la correspondance des rencontres avec `ENEMY_PRESETS`.
+
+---
+
 ## [1.21.0] — 2026-11-17
 
 ### ✨ Ajouté & Corrigé
