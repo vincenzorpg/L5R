@@ -2547,11 +2547,14 @@ function updateArmorWeaponSummary() {
   const cm1 = window.currentChar?.combatMetrics?.primary || null;
   const cm2 = window.currentChar?.combatMetrics?.secondary || null;
 
+  const effectiveReduc = window.currentChar?.armor?.reduction ?? (armorObj.reduction || 0);
+  const schoolReduc = window.currentChar?.armor?.schoolReduction || 0;
+
   box.innerHTML = `
     <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
       <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">🛡️ Armure équipée</div>
       <div class="font-bold text-amber-200">${armorObj.name}</div>
-      <div class="text-stone-400">Bonus ND : <b>+${armorObj.tnBonus || 0}</b> • Réduction : <b>${armorObj.reduction || 0}</b></div>
+      <div class="text-stone-400">Bonus ND : <b>+${armorObj.tnBonus ?? armorObj.tn ?? 0}</b> • Réduction : <b>${effectiveReduc}</b>${schoolReduc > 0 ? ` <span class="text-emerald-400">(dont +${schoolReduc} École)</span>` : ''}</div>
     </div>
     <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5" title="${cm1?.attackDetail || ''}">
       <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">⚔️ Arme Principale</div>

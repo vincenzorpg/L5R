@@ -2372,13 +2372,18 @@ function calculateWoundThresholds(earthRing, options = {}) {
   const earth = parseInt(earthRing, 10) || 2;
   const isDaidoji = Boolean(options.isDaidoji);
   const honorScore = parseFloat(options.honorScore ?? 0) || 0;
+  const isForestKillers = Boolean(options.isForestKillers);
+  const stamina = Math.max(0, parseInt(options.stamina ?? 0, 10) || 0);
 
   // Daidoji Iron Warrior Rang 1 (Core p.111) : +(Math.max(1, floor(Honneur) - 4)) PV à chaque palier de blessure
   const daidojiBonus = isDaidoji ? Math.max(1, Math.floor(honorScore) - 4) : 0;
-  const healthy = Math.max(1, (earth * 5) + daidojiBonus);
-  const step = Math.max(1, (earth * 2) + daidojiBonus);
+  // Tueurs des Forêts Rang 1 (Core p.235) : +Constitution PV à chaque palier de blessure
+  const forestKillersBonus = isForestKillers ? stamina : 0;
+  const totalBonusPerRank = daidojiBonus + forestKillersBonus;
+  const healthy = Math.max(1, (earth * 5) + totalBonusPerRank);
+  const step = Math.max(1, (earth * 2) + totalBonusPerRank);
 
-  return { multiplier: earth, bonusPerRank: daidojiBonus, healthy, step };
+  return { multiplier: earth, bonusPerRank: totalBonusPerRank, healthy, step };
 }
 
 function parseRollKeepFormula(formulaStr) {
@@ -2642,6 +2647,12 @@ function updateAll() {
 
   // 4. Jet pour Toucher & 5. Jet de Dégâts (moteur unifié avec bonus d'école Rang 1/2)
   const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
+  const armorSelect = document.getElementById('pc-armor');
+  const armorBonus = parseInt(armorSelect?.value, 10) || 0;
+  const armorOptionText = armorSelect?.options?.[armorSelect.selectedIndex]?.text || "";
+  const armorName = armorOptionText.split('(')[0]?.trim() || "Armure";
+  const honorScore = parseFloat(document.getElementById('stat-honor')?.textContent || "4.5");
+
   const weaponData = resolveCatalogWeaponData(weapon1Name) || {
     name: weapon1Name,
     vd: "3g2",
@@ -2653,7 +2664,9 @@ function updateAll() {
   const primaryCombat = computeWeaponCombatMetrics(weapon1Name, traitsObj, sch, hasAdv, hasDisadv, {
     skillsList: currentSkills,
     insightRank,
-    advantagesList
+    advantagesList,
+    honorScore,
+    armorBonus
   });
 
   const stickyAtk = document.getElementById('sticky-atk');
@@ -2693,35 +2706,34 @@ function updateAll() {
   }
   document.getElementById('stat-init').textContent = initStr;
 
-  // 7. ND d'Armure
-  const armorSelect = document.getElementById('pc-armor');
-  const armorBonus = parseInt(armorSelect?.value) || 0;
-  const armorName = armorSelect?.options[armorSelect.selectedIndex]?.text?.split('(')[0]?.trim() || "Armure";
-
-  let baseArmor = 5 + (5 * ref);
-  let armorDetails = [`Base (5)`, `Réfl. (+${5 * ref})`];
-
-  if (armorBonus > 0) {
-    armorDetails.push(`${armorName} (+${armorBonus})`);
-  }
-
+  // 7. ND d'Armure & Réduction de Dégâts
   const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
   const secondaryCombat = (weapon2Name && weapon2Name !== "Aucune")
     ? computeWeaponCombatMetrics(weapon2Name, traitsObj, sch, hasAdv, hasDisadv, {
         skillsList: currentSkills,
         insightRank,
-        advantagesList
+        advantagesList,
+        honorScore,
+        armorBonus
       })
     : null;
-  let nitenBonus = 0;
-  if ((sch?.id === "bushi-mirumoto" || sch?.name?.includes("Mirumoto")) && (weapon1Name.includes("Katana") || weapon2Name.includes("Wakizashi"))) {
-    const kenSkill = currentSkills.find(s => s.name.toLowerCase().includes("kenjutsu"));
-    nitenBonus = kenSkill ? kenSkill.rank : 1;
-    armorDetails.push(`Niten (+${nitenBonus})`);
-  }
 
-  const finalArmorTN = baseArmor + armorBonus + nitenBonus;
-  const armorDetailStr = armorDetails.join(' + ');
+  const armorDefense = computeArmorDefenseMetrics({
+    ref,
+    rAir,
+    rEarth,
+    traits: traitsObj,
+    sch,
+    insightRank,
+    armorBonus,
+    armorName: armorOptionText || armorName,
+    weapon1Name,
+    weapon2Name,
+    skillsList: currentSkills,
+    advantagesList
+  });
+  const finalArmorTN = armorDefense.armorTN;
+  const armorDetailStr = armorDefense.detailStr;
   const stickyArmor = document.getElementById('sticky-armor-tn');
   const stickyArmorDetail = document.getElementById('sticky-armor-detail');
   if (stickyArmor) stickyArmor.textContent = finalArmorTN;
@@ -2736,11 +2748,14 @@ function updateAll() {
   if (hasAdv("quick_healer")) effSta += 2;
   document.getElementById('stat-heal').textContent = `${(effSta * 2) + insightRank} PV`;
 
-  const honorScore = parseFloat(document.getElementById('stat-honor')?.textContent || "4.5");
-  const isDaidojiIronWarrior = (sch?.id === "guerrier-daidoji" || sch?.name?.includes("Guerrier de Fer"));
+  const isDaidojiIronWarrior = getEffectiveSchoolRank("guerrier-daidoji", /guerrier\s+de\s+fer|daidoji.*guerrier/i, sch, insightRank, advantagesList) >= 1
+    || (sch?.id === "guerrier-daidoji" || sch?.name?.includes("Guerrier de Fer"));
+  const isForestKillers = getEffectiveSchoolRank("forest-killers", /tueurs?\s+des\s+for[eê]ts/i, sch, insightRank, advantagesList) >= 1;
   const { healthy: healthyWounds, step: stepWounds } = calculateWoundThresholds(rEarth, {
     isDaidoji: isDaidojiIronWarrior,
-    honorScore
+    honorScore,
+    isForestKillers,
+    stamina: sta
   });
 
   document.getElementById('w-0').textContent = `${healthyWounds} PV`;
@@ -2768,7 +2783,8 @@ function updateAll() {
       combatMetrics: {
         primary: primaryCombat,
         secondary: secondaryCombat,
-        initiative: initMetrics
+        initiative: initMetrics,
+        defense: armorDefense
       },
       schoolClanName: schObj?.clanName || "",
       isExternalSchool: !!schObj?.isExternalClan,
@@ -2789,8 +2805,10 @@ function updateAll() {
       armor: {
         name: armorName,
         bonus: armorBonus,
-        reduction: armorBonus === 10 ? 5 : (armorBonus === 5 ? 3 : 0),
-        catalogId: armorBonus === 10 ? "heavy" : (armorBonus === 5 ? "light" : "none")
+        reduction: armorDefense.totalReduction,
+        baseReduction: armorDefense.baseReduction,
+        schoolReduction: armorDefense.schoolReduction,
+        catalogId: armorDefense.catalogId || (armorBonus === 10 ? "heavy" : (armorBonus === 5 ? "light" : "none"))
       },
       weapons: [
         { name: weapon1Name, skill: weaponData.skill, dr: weaponData.vd },
@@ -3355,11 +3373,253 @@ function getEffectiveSchoolRank(schoolId, nameRegex, primarySch, primaryRank = 1
 }
 
 /**
+ * Résout une armure du catalogue à partir de son nom, id ou bonus de ND.
+ */
+function resolveCatalogArmorData(armorNameOrBonus, equipCatalog) {
+  const eq = equipCatalog || (typeof getEquipment === "function" ? getEquipment() : null) || { armures: [] };
+  const list = Array.isArray(eq.armures) ? eq.armures : [];
+  if (armorNameOrBonus == null || armorNameOrBonus === "") return null;
+  const queryStr = String(armorNameOrBonus).trim();
+  const queryLower = queryStr.toLowerCase();
+  const exact = list.find(a =>
+    String(a.name || "").toLowerCase() === queryLower
+    || String(a.id || "").toLowerCase() === queryLower
+    || String(a.name || "").split('(')[0].trim().toLowerCase() === queryLower
+  );
+  if (exact) return exact;
+  return list.find(a => String(a.tnBonus ?? a.tn ?? "") === queryStr) || null;
+}
+
+/**
+ * Règles passives d'écoles applicables aux jets d'Initiative, ND d'Armure, Réduction, Compétences et Armes.
+ */
+function getSkillRankByRegex(skillsList, regex) {
+  const skills = Array.isArray(skillsList) ? skillsList : [];
+  const sk = skills.find(s => (!s.isChoice || s.chosen) && regex.test(s.name || ""));
+  return sk ? Math.max(0, parseInt(sk.rank, 10) || 0) : 0;
+}
+
+function isSwordWeaponData(weaponData) {
+  if (!weaponData) return false;
+  const nameLower = String(weaponData.name || "").toLowerCase();
+  const typeLower = String(weaponData.type || "").toLowerCase();
+  const skillLower = String(weaponData.skill || "").toLowerCase();
+  return typeLower.includes("sabre")
+    || skillLower === "kenjutsu"
+    || nameLower.includes("katana")
+    || nameLower.includes("wakizashi")
+    || nameLower.includes("no-dachi")
+    || nameLower.includes("cimeterre")
+    || nameLower.includes("ninja-t");
+}
+
+function isWarFanWeaponData(weaponData) {
+  if (!weaponData) return false;
+  const nameLower = String(weaponData.name || "").toLowerCase();
+  const typeLower = String(weaponData.type || "").toLowerCase();
+  const skillLower = String(weaponData.skill || "").toLowerCase();
+  return typeLower.includes("éventail")
+    || skillLower.includes("éventail")
+    || nameLower.includes("tessen");
+}
+
+/**
+ * Calcule le ND d'Armure et la Réduction de Dégâts complets (Armure + Techniques d'École).
+ */
+function computeArmorDefenseMetrics({
+  ref = 2,
+  rAir = 2,
+  rEarth = 2,
+  traits = {},
+  sch = null,
+  insightRank = 1,
+  armorBonus = 0,
+  armorName = "",
+  armorReduction = null,
+  weapon1Name = "",
+  weapon2Name = "Aucune",
+  skillsList = [],
+  advantagesList: advList = [],
+  equipCatalog = null
+} = {}) {
+  const safeRef = parseInt(ref, 10) || 2;
+  const safeAir = parseInt(rAir, 10) || Math.min(safeRef, parseInt(traits.awa, 10) || 2);
+  const safeEarth = parseInt(rEarth, 10) || Math.min(parseInt(traits.sta, 10) || 2, parseInt(traits.wil, 10) || 2);
+  const perVal = parseInt(traits.per, 10) || 2;
+  const effectiveRank = Math.max(1, parseInt(insightRank, 10) || 1);
+
+  const catalogArmor = resolveCatalogArmorData(armorName || armorBonus, equipCatalog);
+  const resolvedArmorBonus = Number.isFinite(parseInt(armorBonus, 10))
+    ? parseInt(armorBonus, 10)
+    : (parseInt(catalogArmor?.tnBonus ?? catalogArmor?.tn, 10) || 0);
+  const baseArmor = 5 + (5 * safeRef);
+  const armorLabel = (armorName ? String(armorName).split('(')[0].trim() : "")
+    || (catalogArmor?.name ? String(catalogArmor.name).split('(')[0].trim() : "Armure");
+  const details = [`Base (5)`, `Réfl. (+${5 * safeRef})`];
+
+  if (resolvedArmorBonus > 0) {
+    details.push(`${armorLabel} (+${resolvedArmorBonus})`);
+  }
+
+  const w1Data = weapon1Name && weapon1Name !== "Aucune" ? (resolveCatalogWeaponData(weapon1Name, equipCatalog) || { name: weapon1Name }) : null;
+  const w2Data = weapon2Name && weapon2Name !== "Aucune" ? (resolveCatalogWeaponData(weapon2Name, equipCatalog) || { name: weapon2Name }) : null;
+  const equippedWeapons = [w1Data, w2Data].filter(Boolean);
+
+  let schoolTnBonus = 0;
+  const addTnBonus = (val, label) => {
+    if (!val) return;
+    schoolTnBonus += val;
+    details.push(`${label} (+${val})`);
+  };
+
+  // Bushi Mirumoto R1 : +Kenjutsu au ND d'Armure avec Katana / Wakizashi
+  const hasKatanaOrWakizashi = equippedWeapons.some(w => /katana|wakizashi/i.test(w.name || ""));
+  if (getEffectiveSchoolRank("bushi-mirumoto", /bushi\s+mirumoto/i, sch, effectiveRank, advList) >= 1 && hasKatanaOrWakizashi) {
+    const kenRank = getSkillRankByRegex(skillsList, /kenjutsu/i) || 1;
+    addTnBonus(kenRank, "Niten");
+  }
+
+  // Enquêteur Kitsuki R1 : +Perception au ND d'Armure
+  if (getEffectiveSchoolRank("magistrat-kitsuki", /enqu[eê]teur\s+kitsuki|magistrat\s+kitsuki/i, sch, effectiveRank, advList) >= 1) {
+    addTnBonus(perVal, "Méthode Kitsuki");
+  }
+
+  // Hitomi Kikage Zumi R1 : +Réflexes au ND d'Armure
+  if (getEffectiveSchoolRank("hitomi-kikage-zumi", /hitomi\s+kikage/i, sch, effectiveRank, advList) >= 1) {
+    addTnBonus(safeRef, "Don de la Dame");
+  }
+
+  // Magistrat Doji R1 : +Anneau d'Air au ND d'Armure
+  if (getEffectiveSchoolRank("doji-magistrate", /magistrat\s+doji/i, sch, effectiveRank, advList) >= 1) {
+    addTnBonus(safeAir, "Magistrat Doji");
+  }
+
+  // Bushi Usagi R1 : +Athlétisme au ND d'Armure
+  if (getEffectiveSchoolRank("usagi-bushi", /bushi\s+usagi/i, sch, effectiveRank, advList) >= 1) {
+    const athRank = getSkillRankByRegex(skillsList, /athl[eé]tisme|athletics/i);
+    addTnBonus(athRank, "Vitesse du Lièvre");
+  }
+
+  // Ordre des Moines de l'Araignée R1 : +(2 × Rang d'École) au ND d'Armure en mêlée
+  const spiderRank = getEffectiveSchoolRank("spider-monk", /moines?\s+de\s+l['’]araign[eé]e/i, sch, effectiveRank, advList);
+  if (spiderRank >= 1) {
+    addTnBonus(spiderRank * 2, "Voie Sombre");
+  }
+
+  // Le Tessen (Voie R1) : +Éventail de Guerre au ND d'Armure tant qu'on manie un éventail de guerre
+  const hasWarFan = equippedWeapons.some(isWarFanWeaponData);
+  if (getEffectiveSchoolRank("the-tessen", /\ble\s+tessen\b/i, sch, effectiveRank, advList) >= 1 && hasWarFan) {
+    const fanRank = getSkillRankByRegex(skillsList, /[eé]ventail|war\s*fan/i);
+    addTnBonus(fanRank, "Plis du Tessen");
+  }
+
+  // Réduction de Dégâts (Catalogue d'armure + Écoles)
+  const baseReduction = armorReduction != null
+    ? (parseInt(armorReduction, 10) || 0)
+    : (catalogArmor?.reduction != null
+      ? (parseInt(catalogArmor.reduction, 10) || 0)
+      : (resolvedArmorBonus >= 10 ? 5 : (resolvedArmorBonus >= 5 ? 3 : 0)));
+
+  let schoolReduction = 0;
+  const reductionDetails = baseReduction > 0 ? [`${armorLabel} (${baseReduction})`] : [];
+
+  // Bushi Hida R2 : Réduction de dégâts égale à l'Anneau de Terre
+  if (getEffectiveSchoolRank("bushi-hida", /\bbushi\s+hida\b/i, sch, effectiveRank, advList) >= 2) {
+    schoolReduction += safeEarth;
+    reductionDetails.push(`Bushi Hida R2 (+${safeEarth})`);
+  }
+
+  // Épéiste Taoïste Mirumoto R1 : Sans armure et armé d'un sabre -> Réduction +(Rang + 2)
+  const taoistRank = getEffectiveSchoolRank("mirumoto-taoist", /tao[iï]ste\s+mirumoto/i, sch, effectiveRank, advList);
+  const hasEquippedSword = equippedWeapons.some(isSwordWeaponData);
+  if (taoistRank >= 1 && resolvedArmorBonus === 0 && hasEquippedSword) {
+    const bonusReduc = taoistRank + 2;
+    schoolReduction += bonusReduc;
+    reductionDetails.push(`Épéiste Taoïste (+${bonusReduc})`);
+  }
+
+  return {
+    armorTN: baseArmor + resolvedArmorBonus + schoolTnBonus,
+    baseArmor,
+    armorBonus: resolvedArmorBonus,
+    schoolTnBonus,
+    baseReduction,
+    schoolReduction,
+    totalReduction: baseReduction + schoolReduction,
+    catalogId: catalogArmor?.id || null,
+    detailStr: details.join(' + '),
+    reductionDetailStr: reductionDetails.join(' + ')
+  };
+}
+
+/**
+ * Calcule les bonus passifs d'école sur un jet de Compétence (Fiche / Impression).
+ */
+function computeSkillRollBonus(skillObj, traitLabel, sch, insightRank = 1, advList = []) {
+  if (!skillObj || (skillObj.isChoice && !skillObj.chosen)) {
+    return { bonusRoll: 0, bonusKeep: 0, notes: [] };
+  }
+  const effectiveRank = Math.max(1, parseInt(insightRank, 10) || 1);
+  const skName = String(skillObj.name || "");
+  let bonusRoll = 0;
+  let bonusKeep = 0;
+  const notes = [];
+
+  // Ingénieur Kaiu R1 : +1g0 sur toutes ses Compétences d'École
+  if (skillObj.isSchool && getEffectiveSchoolRank("ingenieur-kaiu", /ing[eé]nieur\s+kaiu/i, sch, effectiveRank, advList) >= 1) {
+    bonusRoll += 1;
+    notes.push("Méthode Kaiu (+1g0)");
+  }
+
+  // Ombre du Lion Ikoma R2 : +1g0 sur toutes ses Compétences d'École
+  if (skillObj.isSchool && getEffectiveSchoolRank("ikoma-lions-shadow", /ombre\s+du\s+lion/i, sch, effectiveRank, advList) >= 2) {
+    bonusRoll += 1;
+    notes.push("Ombre du Lion R2 (+1g0)");
+  }
+
+  // Bushi Toritaka R1 : +1g0 sur tout jet de Compétence ou Trait basé sur Perception
+  if (traitLabel === "Perception" && getEffectiveSchoolRank("toritaka-bushi", /bushi\s+toritaka/i, sch, effectiveRank, advList) >= 1) {
+    bonusRoll += 1;
+    notes.push("Yeux du Faucon (+1g0)");
+  }
+
+  // Éclaireur Daidoji R1 : +1g0 en Discrétion et en Chasse
+  if (/(discr[eé]tion|stealth|chasse|hunting)/i.test(skName)
+    && getEffectiveSchoolRank("daidoji-scout", /[eé]claireur\s+daidoji/i, sch, effectiveRank, advList) >= 1) {
+    bonusRoll += 1;
+    notes.push("Éclaireur Daidoji (+1g0)");
+  }
+
+  // Infiltrateur Shosuro R1 : +2g0 en Discrétion
+  if (/(discr[eé]tion|stealth)/i.test(skName)
+    && getEffectiveSchoolRank("infiltrateur-shosuro", /infiltrateur\s+shosuro/i, sch, effectiveRank, advList) >= 1) {
+    bonusRoll += 2;
+    notes.push("Voie des Ombres (+2g0)");
+  }
+
+  // Érudit Asako R5 : +5g0 sur tout jet de Connaissance (Lore)
+  if (/^connaissance\b|\blore\b/i.test(skName)
+    && getEffectiveSchoolRank("erudit-asako", /[eé]rudit\s+asako/i, sch, effectiveRank, advList) >= 5) {
+    bonusRoll += 5;
+    notes.push("Sagesse des Âges R5 (+5g0)");
+  }
+
+  // Vengeur Moto R2 : +2g0 aux jets d'Enquête
+  if (/(enqu[eê]te|investigation)/i.test(skName)
+    && getEffectiveSchoolRank("moto-vindicator", /vengeur\s+moto/i, sch, effectiveRank, advList) >= 2) {
+    bonusRoll += 2;
+    notes.push("Vengeur Moto R2 (+2g0)");
+  }
+
+  return { bonusRoll, bonusKeep, notes };
+}
+
+/**
  * Calcule le jet d'Initiative complet (dés + bonus statiques d'Avantages et d'École).
  */
 function computeInitiativeMetrics({ insightRank = 1, ref = 2, rAir = 2, sch = null, skillsList = [], hasAdv = () => false, advantagesList: advList = [] } = {}) {
   let initRoll = insightRank + ref;
-  const initKeep = ref;
+  let initKeep = ref;
   let initStatic = 0;
   const initDetails = [`Insight ${insightRank} + Réfl. ${ref} (${insightRank + ref}g${ref})`];
 
@@ -3373,22 +3633,35 @@ function computeInitiativeMetrics({ insightRank = 1, ref = 2, rAir = 2, sch = nu
     initDetails.push(`Vif (+${rAir})`);
   }
 
-  const skills = Array.isArray(skillsList) ? skillsList : [];
-  const iaiSkill = skills.find(s => (s.name || "").toLowerCase().includes("iaijutsu"));
-  const iaiRank = iaiSkill ? (iaiSkill.rank || 0) : 0;
-  if (getEffectiveSchoolRank("duelliste-kakita", /kakita/i, sch, insightRank, advList) >= 1 && iaiRank > 0) {
+  const iaiRank = getSkillRankByRegex(skillsList, /iaijutsu/i);
+  if (getEffectiveSchoolRank("duelliste-kakita", /duelliste|bushi\s+kakita/i, sch, insightRank, advList) >= 1 && iaiRank > 0) {
     initStatic += (iaiRank * 2);
     initDetails.push(`Voie de la Grue (+${iaiRank * 2})`);
   }
 
-  if (getEffectiveSchoolRank("bushi-bayushi", /bayushi/i, sch, insightRank, advList) >= 1 && iaiRank > 0) {
-    initStatic += iaiRank;
-    initDetails.push(`Voie du Scorpion (+${iaiRank})`);
+  // Bushi Bayushi R1 (L5R 4e Core p.123) : +1g1 à tous les jets d'Initiative
+  if (getEffectiveSchoolRank("bushi-bayushi", /bushi\s+bayushi/i, sch, insightRank, advList) >= 1) {
+    initRoll += 1;
+    initKeep += 1;
+    initDetails.push("Voie du Scorpion (+1g1)");
   }
 
   if (getEffectiveSchoolRank("archer-tsuruchi", /\barcher\s+tsuruchi\b/i, sch, insightRank, advList) >= 1) {
     initStatic += 3;
     initDetails.push("Toujours Prêt (+3)");
+  }
+
+  // Éclaireur Hiruma R1 (Imperial Histories I p.147) : +rang en Discrétion à l'Initiative
+  const stealthRank = getSkillRankByRegex(skillsList, /discr[eé]tion|stealth/i);
+  if (getEffectiveSchoolRank("hiruma-scout", /[eé]claireur\s+hiruma/i, sch, insightRank, advList) >= 1 && stealthRank > 0) {
+    initStatic += stealthRank;
+    initDetails.push(`Éclaireur Hiruma (+${stealthRank})`);
+  }
+
+  // Infanterie Montée Utaku R2 (Imperial Histories II p.168) : +1g0 en Initiative
+  if (getEffectiveSchoolRank("utaku-mounted-infantry", /infanterie\s+mont[eé]e\s+utaku/i, sch, insightRank, advList) >= 2) {
+    initRoll += 1;
+    initDetails.push("Vitesse de mes Sœurs R2 (+1g0)");
   }
 
   return {
@@ -3399,6 +3672,36 @@ function computeInitiativeMetrics({ insightRank = 1, ref = 2, rAir = 2, sch = nu
     detailStr: initDetails.join(' + ')
   };
 }
+
+const SCHOOL_ATTACK_RULES = [
+  { id: "bushi-hiruma", re: /\bbushi\s+hiruma\b/i, minRank: 1, when: w => !w.isRanged, r: 1, k: 0, label: "Hiruma (+1g0)" },
+  { id: "archer-tsuruchi", re: /\barcher\s+tsuruchi\b/i, minRank: 1, when: w => w.isBow, r: 1, k: 0, label: "Toujours Prêt : Tsuruchi (+1g0)" },
+  { id: "bushi-yoritomo", re: /bushi\s+yoritomo/i, minRank: 1, when: () => true, r: 1, k: 0, label: "Voie de la Mante (+1g0)" },
+  { id: "doji-magistrate", re: /magistrat\s+doji/i, minRank: 1, when: w => w.isJitteOrSasumata, r: 1, k: 0, label: "Magistrat Doji (+1g0)" },
+  { id: "shosuro-actor", re: /acteur\s+shosuro/i, minRank: 2, when: w => w.isSmall && !w.isUnarmed, r: 2, k: 0, label: "Piqûre Subtile R2 (+2g0)" },
+  { id: "moine-togashi", re: /togashi|ise\s+zumi/i, minRank: 2, when: w => w.isUnarmed, r: 1, k: 1, label: "Corps de Pierre R2 (+1g1)" },
+  { id: "spider-monk", re: /moines?\s+de\s+l['’]araign[eé]e/i, minRank: 1, when: w => w.isUnarmed || w.isPolearm, r: 1, k: 0, label: "La Voie Sombre (+1g0)" },
+  { id: "ingenieur-kaiu", re: /ing[eé]nieur\s+kaiu/i, minRank: 1, when: w => !!w.skillObj?.isSchool, r: 1, k: 0, label: "Méthode Kaiu (+1g0)" },
+  { id: "ikoma-lions-shadow", re: /ombre\s+du\s+lion/i, minRank: 2, when: w => !!w.skillObj?.isSchool, r: 1, k: 0, label: "Ombre du Lion R2 (+1g0)" },
+  { id: "toritaka-bushi", re: /bushi\s+toritaka/i, minRank: 1, when: w => w.atkTraitName === "Perception", r: 1, k: 0, label: "Yeux du Faucon (+1g0)" },
+  { id: "hida-pragmatist", re: /pragmatiste\s+hida/i, minRank: 1, when: w => w.isUnarmed, r: 1, k: 0, label: "Pragmatiste Hida (+1g0)" }
+];
+
+const SCHOOL_DAMAGE_RULES = [
+  { id: "bushi-hida", re: /\bbushi\s+hida\b/i, minRank: 1, when: w => w.isHeavy, r: 1, k: 0, flat: () => 0, label: "Voie du Crabe (+1g0)" },
+  { id: "archer-tsuruchi", re: /\barcher\s+tsuruchi\b/i, minRank: 2, when: w => w.isBow, r: 2, k: 0, flat: () => 0, label: "Archer Tsuruchi R2 (+2g0)" },
+  { id: "bushi-matsu", re: /berserker\s+matsu|bushi\s+matsu/i, minRank: 1, when: () => true, r: 0, k: 0, flat: w => w.honorRank, label: w => `Rugissement du Lion (+${w.honorRank})` },
+  { id: "forest-killers", re: /tueurs?\s+des\s+for[eê]ts/i, minRank: 1, when: w => !w.isRanged, r: 0, k: 0, flat: w => w.stamina, label: w => `Tueurs des Forêts (+${w.stamina})` },
+  { id: "soshi-magistrate", re: /magistrat\s+soshi/i, minRank: 1, when: w => !w.isRanged, r: 1, k: 0, flat: () => 0, label: "Magistrat Soshi (+1g0)" },
+  { id: "heichi-bushi", re: /bushi\s+heichi/i, minRank: 1, when: w => w.isSpear, r: 0, k: 1, flat: () => 0, label: "Charge du Sanglier (+0g1)" },
+  { id: "bushi-moto", re: /bushi\s+moto/i, minRank: 1, when: w => w.isScimitar || w.isTwoHandedOrLargeMelee, r: 1, k: 0, flat: () => 0, label: "Voie de la Licorne (+1g0)" },
+  { id: "mirumoto-taoist", re: /tao[iï]ste\s+mirumoto/i, minRank: 1, when: w => w.isSword && w.armorBonus === 0, r: 1, k: 0, flat: () => 0, label: "Épéiste Taoïste (+1g0)" },
+  { id: "moine-togashi", re: /togashi|ise\s+zumi/i, minRank: 2, when: w => w.isUnarmed, r: 1, k: 1, flat: () => 0, label: "Corps de Pierre R2 (+1g1)" },
+  { id: "hitomi-kikage-zumi", re: /hitomi\s+kikage/i, minRank: 4, when: w => w.isUnarmed, r: 1, k: 1, flat: () => 0, label: "Frapper le Centre R4 (+1g1)" },
+  { id: "osano-wo-monk", re: /osano-?wo/i, minRank: 1, when: w => w.isUnarmed, r: 0, k: 1, flat: () => 0, label: "Main du Tonnerre (+0g1)" },
+  { id: "mantis-brawler", re: /bagarreur\s+mante/i, minRank: 1, when: w => w.isUnarmed || (!w.isRanged && w.isSmall), r: 1, k: 0, flat: () => 0, label: "Poings Ivres (+1g0)" },
+  { id: "hida-pragmatist", re: /pragmatiste\s+hida/i, minRank: 1, when: w => w.isUnarmed, r: 1, k: 0, flat: () => 0, label: "Pragmatiste Hida (+1g0)" }
+];
 
 function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisadv, ctx = {}) {
   const safeName = weaponName || "Katana";
@@ -3416,8 +3719,22 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
   const safeHasAdv = typeof checkAdv === "function" ? checkAdv : () => false;
   const safeHasDisadv = typeof checkDisadv === "function" ? checkDisadv : () => false;
 
+  const wNameLower = String(weaponData.name || "").toLowerCase();
+  const wTypeLower = String(weaponData.type || "").toLowerCase();
+  const wSkillLower = String(weaponData.skill || "").toLowerCase();
+
   const isBow = isBowWeapon(weaponData);
-  const isRanged = !!(weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu" || weaponData.skill === "Armes à feu" || isBow);
+  const isRanged = !!(wTypeLower.includes("distance") || wSkillLower.includes("arc") || wSkillLower === "kyujutsu" || wSkillLower === "armes à feu" || isBow);
+  const isUnarmed = wTypeLower.includes("mains nues") || wSkillLower.includes("jiujutsu") || wNameLower.includes("mains nues");
+  const isPolearm = wTypeLower.includes("hast") || wSkillLower.includes("hast");
+  const isSpear = wTypeLower.includes("lance") || wSkillLower === "lances";
+  const isSword = isSwordWeaponData(weaponData);
+  const isSmall = wTypeLower.includes("petit");
+  const isHeavy = wTypeLower.includes("lourde");
+  const isTwoHandedOrLargeMelee = !isRanged && (wTypeLower.includes("2 mains") || wTypeLower.includes("deux mains") || wTypeLower.includes("grand"));
+  const isScimitar = wNameLower.includes("cimeterre") || wNameLower.includes("scimitar");
+  const isJitteOrSasumata = wNameLower.includes("jitte") || wNameLower.includes("sasumata");
+
   const atkTraitName = weaponData.trait || (isRanged ? "Réflexes" : "Agilité");
   const atkTraitVal = (atkTraitName === "Réflexes") ? traits.ref
     : (atkTraitName === "Intelligence") ? traits.int
@@ -3428,30 +3745,45 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
   const skillObj = skillsList.find(s => {
     if (s.isChoice && !s.chosen) return false;
     const sName = (s.name || "").toLowerCase();
-    const wSkill = atkSkillName.toLowerCase();
-    const wName = weaponData.name.toLowerCase();
-    return sName.includes(wSkill) || wSkill.includes(sName) || sName.includes(wName);
+    return sName.includes(wSkillLower) || wSkillLower.includes(sName) || sName.includes(wNameLower);
   });
 
   const skillRank = skillObj ? (skillObj.rank || 0) : 0;
   const hasSpec = skillObj ? !!skillObj.spec : false;
   let atkRoll = skillRank > 0 ? (skillRank + atkTraitVal) : atkTraitVal;
-  const atkKeep = atkTraitVal;
+  let atkKeep = atkTraitVal;
   const atkDetails = skillRank > 0
     ? [`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`]
     : [`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`];
 
-  const hirumaRank = getEffectiveSchoolRank("bushi-hiruma", /hiruma/i, sch, effectiveRank, advList);
-  if (hirumaRank >= 1 && !isRanged) {
-    atkRoll += 1;
-    atkDetails.push("Hiruma (+1g0)");
-  }
+  const honorRank = Math.max(0, Math.floor(parseFloat(ctx.honorScore ?? 0) || 0));
+  const armorBonus = parseInt(ctx.armorBonus, 10) || 0;
+  const weaponFlags = {
+    isBow,
+    isRanged,
+    isUnarmed,
+    isPolearm,
+    isSpear,
+    isSword,
+    isSmall,
+    isHeavy,
+    isTwoHandedOrLargeMelee,
+    isScimitar,
+    isJitteOrSasumata,
+    atkTraitName,
+    skillObj,
+    honorRank,
+    stamina: parseInt(traits.sta, 10) || 2,
+    armorBonus
+  };
 
-  const tsuruchiRank = getEffectiveSchoolRank("archer-tsuruchi", /\barcher\s+tsuruchi\b/i, sch, effectiveRank, advList);
-  if (tsuruchiRank >= 1 && isBow) {
-    atkRoll += 1;
-    atkDetails.push("Toujours Prêt : Tsuruchi (+1g0)");
-  }
+  SCHOOL_ATTACK_RULES.forEach(rule => {
+    if (getEffectiveSchoolRank(rule.id, rule.re, sch, effectiveRank, advList) >= rule.minRank && rule.when(weaponFlags)) {
+      atkRoll += rule.r;
+      atkKeep += rule.k;
+      atkDetails.push(rule.label);
+    }
+  });
 
   if (hasSpec) atkDetails.push("Spé : relance les 1");
 
@@ -3459,7 +3791,8 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
   const parsedRoll = parseInt(vdParts[0], 10);
   const parsedKeep = parseInt(vdParts[1], 10);
   let dmgRoll = Number.isNaN(parsedRoll) ? 3 : parsedRoll;
-  const dmgKeep = Number.isNaN(parsedKeep) ? 2 : parsedKeep;
+  let dmgKeep = Number.isNaN(parsedKeep) ? 2 : parsedKeep;
+  let dmgStatic = 0;
   let dmgDetails = [`Arme (${weaponData.vd || "3g2"})`];
 
   if (weaponData.fixedDamage) {
@@ -3478,25 +3811,32 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
     dmgDetails.push("Force d'Arc (+3g0)");
   }
 
-  const hidaRank = getEffectiveSchoolRank("bushi-hida", /hida/i, sch, effectiveRank, advList);
-  if (hidaRank >= 1 && weaponData.type?.includes("Lourde") && !weaponData.fixedDamage) {
-    dmgRoll += 1;
-    dmgDetails.push("Voie du Crabe (+1g0)");
+  if (!weaponData.fixedDamage) {
+    SCHOOL_DAMAGE_RULES.forEach(rule => {
+      if (getEffectiveSchoolRank(rule.id, rule.re, sch, effectiveRank, advList) >= rule.minRank && rule.when(weaponFlags)) {
+        const flatVal = typeof rule.flat === "function" ? rule.flat(weaponFlags) : 0;
+        if (rule.r || rule.k || flatVal > 0) {
+          dmgRoll += rule.r;
+          dmgKeep += rule.k;
+          dmgStatic += flatVal;
+          dmgDetails.push(typeof rule.label === "function" ? rule.label(weaponFlags) : rule.label);
+        }
+      }
+    });
+
+    if (safeHasAdv("large") && (wTypeLower.includes("grand") || wTypeLower.includes("lourd") || wTypeLower.includes("2 mains"))) {
+      dmgRoll += 1;
+      dmgDetails.push("Grand (+1g0)");
+    }
+    if (safeHasDisadv("small") && !isRanged) {
+      dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
+      dmgDetails.push("Petit (-1g0)");
+    }
   }
 
-  if (tsuruchiRank >= 2 && isBow && !weaponData.fixedDamage) {
-    dmgRoll += 2;
-    dmgDetails.push("Archer Tsuruchi R2 (+2g0)");
-  }
-
-  if (safeHasAdv("large") && (weaponData.type?.includes("Grand") || weaponData.type?.includes("Lourd") || weaponData.type?.includes("2 mains")) && !weaponData.fixedDamage) {
-    dmgRoll += 1;
-    dmgDetails.push("Grand (+1g0)");
-  }
-  if (safeHasDisadv("small") && !isRanged && !weaponData.fixedDamage) {
-    dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
-    dmgDetails.push("Petit (-1g0)");
-  }
+  const formattedDamage = weaponData.fixedDamage
+    ? weaponData.fixedDamage
+    : (dmgStatic > 0 ? `${dmgRoll}g${dmgKeep} + ${dmgStatic}` : `${dmgRoll}g${dmgKeep}`);
 
   return {
     name: weaponData.name,
@@ -3506,7 +3846,7 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
     isBow,
     attackRoll: `${atkRoll}g${atkKeep}`,
     attackDetail: `${weaponData.name} : ${atkDetails.join(' + ')}`,
-    damageRoll: weaponData.fixedDamage ? weaponData.fixedDamage : `${dmgRoll}g${dmgKeep}`,
+    damageRoll: formattedDamage,
     damageDetail: dmgDetails.join(' + ')
   };
 }
@@ -3670,19 +4010,40 @@ function populateOfficialPrintSheet() {
   setTxt('p-heal', document.getElementById('stat-heal')?.textContent || "5 PV");
 
   const armorSel = document.getElementById('pc-armor');
-  setTxt('p-armor-name', armorSel?.options[armorSel.selectedIndex]?.text?.split('(')[0]?.trim() || "Aucune");
-  setTxt('p-armor-reduc', armorSel?.value === "10" ? "Réduction : 5" : (armorSel?.value === "5" ? "Réduction : 3" : "Réduction : 0"));
+  const printArmorBonus = parseInt(armorSel?.value, 10) || 0;
+  const printArmorLabel = armorSel?.options[armorSel.selectedIndex]?.text || "Aucune";
+  const printRank = parseInt(document.getElementById('insight-display')?.textContent.match(/Rang\s*(\d+)/i)?.[1], 10) || 1;
+  const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
+  const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  const printArmorDefense = computeArmorDefenseMetrics({
+    ref,
+    rAir: Math.min(ref, awa),
+    rEarth: Math.min(sta, wil),
+    traits: traitsMap,
+    sch,
+    insightRank: printRank,
+    armorBonus: printArmorBonus,
+    armorName: printArmorLabel,
+    weapon1Name: w1,
+    weapon2Name: w2,
+    skillsList: currentSkills,
+    advantagesList
+  });
+  setTxt('p-armor-name', printArmorLabel.split('(')[0]?.trim() || "Aucune");
+  setTxt('p-armor-reduc', `Réduction : ${printArmorDefense.totalReduction}`);
 
-  // Compétences (avec résolution exacte du Trait associé)
+  // Compétences (avec résolution exacte du Trait associé et bonus passifs d'école)
   const skillsBody = document.getElementById('p-skills-body');
   if (skillsBody) {
     const rowsHtml = currentSkills.map(sk => {
       const displayName = (sk.isChoice && !sk.chosen) ? `[À choisir : ${sk.name}]` : sk.name;
       const tMeta = resolvePrintSkillTrait(sk, traitsMap);
-      const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + tMeta.val}g${tMeta.val}`;
+      const skBonus = computeSkillRollBonus(sk, tMeta.label, sch, printRank, advantagesList);
+      const roll = (sk.isChoice && !sk.chosen) ? "—" : `${sk.rank + tMeta.val + skBonus.bonusRoll}g${tMeta.val + skBonus.bonusKeep}`;
       const masteriesSummary = getMasteriesSummary(sk.name, sk.rank);
       const notesParts = [];
       if (sk.spec) notesParts.push("Spé : relance les 1");
+      if (skBonus.notes.length > 0) notesParts.push(...skBonus.notes);
       if (masteriesSummary) notesParts.push(masteriesSummary);
 
       return `
@@ -3716,18 +4077,20 @@ function populateOfficialPrintSheet() {
   const checkDisadv = (key) => disadvantagesList.some(d =>
     (d.id && d.id === key) || d.name.toLowerCase().includes(key) || (key === 'small' && d.name.toLowerCase().includes('petit'))
   );
-  const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
-  const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
-  const printRank = parseInt(document.getElementById('insight-display')?.textContent.match(/Rang\s*(\d+)/i)?.[1], 10) || 1;
+  const printHonor = parseFloat(honorVal) || 0;
   const m1 = computeWeaponCombatMetrics(w1, traitsMap, sch, checkAdv, checkDisadv, {
     skillsList: currentSkills,
     insightRank: printRank,
-    advantagesList
+    advantagesList,
+    honorScore: printHonor,
+    armorBonus: printArmorBonus
   });
   const m2 = (w2 && w2 !== "Aucune") ? computeWeaponCombatMetrics(w2, traitsMap, sch, checkAdv, checkDisadv, {
     skillsList: currentSkills,
     insightRank: printRank,
-    advantagesList
+    advantagesList,
+    honorScore: printHonor,
+    armorBonus: printArmorBonus
   }) : null;
 
   const wBox = document.getElementById('p-weapons-box');
@@ -3925,7 +4288,10 @@ if (typeof window !== "undefined") {
   window.calculateWoundThresholds = calculateWoundThresholds;
   window.isBowWeapon = isBowWeapon;
   window.resolveCatalogWeaponData = resolveCatalogWeaponData;
+  window.resolveCatalogArmorData = resolveCatalogArmorData;
   window.getEffectiveSchoolRank = getEffectiveSchoolRank;
+  window.computeArmorDefenseMetrics = computeArmorDefenseMetrics;
+  window.computeSkillRollBonus = computeSkillRollBonus;
   window.computeInitiativeMetrics = computeInitiativeMetrics;
   window.computeWeaponCombatMetrics = computeWeaponCombatMetrics;
   window.computeForgeSessionWoundState = computeForgeSessionWoundState;
@@ -4036,7 +4402,10 @@ if (typeof module !== "undefined" && module.exports) {
     calculateWoundThresholds,
     isBowWeapon,
     resolveCatalogWeaponData,
+    resolveCatalogArmorData,
     getEffectiveSchoolRank,
+    computeArmorDefenseMetrics,
+    computeSkillRollBonus,
     computeInitiativeMetrics,
     computeWeaponCombatMetrics,
     computeForgeSessionWoundState,

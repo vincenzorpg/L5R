@@ -1,6 +1,6 @@
 {
-  "version": "1.35.2",
-  "tag": "v1.35.2",
+  "version": "1.36.0",
+  "tag": "v1.36.0",
   "date": "2026-11-20",
-  "notes": "Prise en compte du Rang 1 d'Archer Tsuruchi (+1g0 au toucher à l'arc et +3 Initiative), du Rang 2 (+2g0 dégâts à l'arc) et de la sélection automatique du Yumi dans la Forge (Issue #93)"
+  "notes": "Audit et intégration complète de toutes les techniques passives des 95 écoles L5R 4e (Attaque, Dégâts, Initiative, ND d'Armure, Réduction de dégâts, Seuils de Blessures et Compétences) et correction du bonus d'Initiative Bushi Bayushi (+1g1)"
 }

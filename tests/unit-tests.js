@@ -281,6 +281,165 @@
       assertEqual(initMulti.rollStr, "5g3 + 3", "Archer Tsuruchi R1 ajoute +3 à l'Initiative");
     });
 
+    it("Initiative, Attaque, Dégâts, ND Armure, Réduction, Blessures & Compétences couvrent toutes les techniques passives d'écoles L5R 4e", function () {
+      const equipData = catalogScope.EQUIPEMENT_DATA;
+      const baseTraits = { sta: 3, wil: 3, str: 3, per: 4, ref: 3, awa: 2, agi: 3, int: 2, voi: 2 };
+      const noop = () => false;
+
+      // 1. Initiative : Bushi Bayushi R1 (+1g1 L5R 4e), Éclaireur Hiruma R1 (+Discrétion), Infanterie Montée Utaku R2 (+1g0)
+      const bayushiInit = cg.computeInitiativeMetrics({
+        insightRank: 1, ref: 3, rAir: 2,
+        sch: { id: "bushi-bayushi", name: "Bushi Bayushi", type: "Bushi" },
+        skillsList: [{ name: "Iaijutsu", rank: 3 }]
+      });
+      assertEqual(bayushiInit.rollStr, "5g4", "Bushi Bayushi R1 confère +1g1 à l'Initiative (L5R 4e)");
+
+      const hirumaScoutInit = cg.computeInitiativeMetrics({
+        insightRank: 1, ref: 3, rAir: 2,
+        sch: { id: "hiruma-scout", name: "Éclaireur Hiruma", type: "Bushi" },
+        skillsList: [{ name: "Discrétion (Stealth)", rank: 3 }]
+      });
+      assertEqual(hirumaScoutInit.rollStr, "4g3 + 3", "Éclaireur Hiruma R1 ajoute Discrétion (+3) à l'Initiative");
+
+      const utakuR2Init = cg.computeInitiativeMetrics({
+        insightRank: 2, ref: 3, rAir: 2,
+        sch: { id: "utaku-mounted-infantry", name: "Infanterie Montée Utaku", type: "Bushi" }
+      });
+      assertEqual(utakuR2Init.rollStr, "6g3", "Infanterie Montée Utaku R2 ajoute +1g0 à l'Initiative");
+
+      // 2. Toujours + Dégâts : Bushi Yoritomo, Magistrat Doji, Acteur Shosuro R2, Berserker Matsu R1 (+Honneur), Tueurs des Forêts (+Constitution)
+      const yoriAtk = cg.computeWeaponCombatMetrics("Katana", baseTraits, { id: "bushi-yoritomo", name: "Bushi Yoritomo" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1
+      });
+      assertEqual(yoriAtk.attackRoll, "6g3", "Bushi Yoritomo R1 ajoute +1g0 au toucher");
+
+      const dojiJitte = cg.computeWeaponCombatMetrics("Jitte", baseTraits, { id: "doji-magistrate", name: "Magistrat Doji" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Couteaux", rank: 2 }], insightRank: 1
+      });
+      assertEqual(dojiJitte.attackRoll, "6g3", "Magistrat Doji R1 ajoute +1g0 avec un Jitte");
+      const dojiKatana = cg.computeWeaponCombatMetrics("Katana", baseTraits, { id: "doji-magistrate", name: "Magistrat Doji" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1
+      });
+      assertEqual(dojiKatana.attackRoll, "5g3", "Magistrat Doji R1 n'ajoute pas +1g0 au Katana");
+
+      const shosuroTanto = cg.computeWeaponCombatMetrics("Tantō", baseTraits, { id: "shosuro-actor", name: "Acteur Shosuro" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Couteaux", rank: 2 }], insightRank: 2
+      });
+      assertEqual(shosuroTanto.attackRoll, "7g3", "Acteur Shosuro R2 ajoute +2g0 avec une arme Petite");
+
+      const matsuDmg = cg.computeWeaponCombatMetrics("Katana", baseTraits, { id: "bushi-matsu", name: "Berserker Matsu" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1, honorScore: 6.5
+      });
+      assertEqual(matsuDmg.damageRoll, "6g2 + 6", "Berserker Matsu R1 ajoute le Rang d'Honneur aux dégâts");
+
+      const forestDmg = cg.computeWeaponCombatMetrics("Yari", baseTraits, { id: "forest-killers", name: "Tueurs des Forêts" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Lances", rank: 2 }], insightRank: 1
+      });
+      assertEqual(forestDmg.damageRoll, "5g2 + 3", "Tueurs des Forêts R1 ajoute Constitution aux dégâts de mêlée");
+      assertDeepEqual(cg.calculateWoundThresholds(3, { isForestKillers: true, stamina: 3 }), {
+        multiplier: 3, bonusPerRank: 3, healthy: 18, step: 9
+      });
+
+      // 3. Soshi (+1g0 mêlée), Heichi (+0g1 Lance), Moto (+1g0 Cimeterre), Pragmatiste Hida (+1g0/+1g0 Mains nues sans collision Hida)
+      const soshiDmg = cg.computeWeaponCombatMetrics("Katana", baseTraits, { id: "soshi-magistrate", name: "Magistrat Soshi" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1
+      });
+      assertEqual(soshiDmg.damageRoll, "7g2", "Magistrat Soshi R1 ajoute +1g0 aux dégâts en mêlée");
+
+      const heichiSpear = cg.computeWeaponCombatMetrics("Yari", baseTraits, { id: "heichi-bushi", name: "Bushi Heichi" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Lances", rank: 2 }], insightRank: 1
+      });
+      assertEqual(heichiSpear.damageRoll, "5g3", "Bushi Heichi R1 ajoute +0g1 aux dégâts avec une Lance");
+
+      const motoScimitar = cg.computeWeaponCombatMetrics("Cimeterre (Scimitar)", baseTraits, { id: "bushi-moto", name: "Bushi Moto" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1
+      });
+      assertEqual(motoScimitar.damageRoll, "6g3", "Bushi Moto R1 ajoute +1g0 aux dégâts avec un Cimeterre");
+
+      const hidaPrag = cg.computeWeaponCombatMetrics("Mains Nues (Jiujutsu)", baseTraits, { id: "hida-pragmatist", name: "Pragmatiste Hida" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Jiujutsu", rank: 2 }], insightRank: 1
+      });
+      assertEqual(hidaPrag.attackRoll, "6g3", "Pragmatiste Hida R1 ajoute +1g0 au toucher à mains nues");
+      assertEqual(hidaPrag.damageRoll, "4g1", "Pragmatiste Hida R1 ajoute +1g0 aux dégâts à mains nues");
+
+      const togashiR2 = cg.computeWeaponCombatMetrics("Mains Nues (Jiujutsu)", baseTraits, { id: "moine-togashi", name: "Ordre Tatoué Togashi (Ise Zumi)" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Jiujutsu", rank: 2 }], insightRank: 2
+      });
+      assertEqual(togashiR2.attackRoll, "6g4", "Ordre Tatoué Togashi R2 ajoute +1g1 au toucher à mains nues");
+      assertEqual(togashiR2.damageRoll, "4g2", "Ordre Tatoué Togashi R2 ajoute +1g1 aux dégâts à mains nues");
+
+      const hitomiR4 = cg.computeWeaponCombatMetrics("Mains Nues (Jiujutsu)", baseTraits, { id: "hitomi-kikage-zumi", name: "Hitomi Kikage Zumi" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Jiujutsu", rank: 2 }], insightRank: 4
+      });
+      assertEqual(hitomiR4.damageRoll, "4g2", "Hitomi Kikage Zumi R4 ajoute +1g1 aux dégâts à mains nues");
+
+      const osano = cg.computeWeaponCombatMetrics("Mains Nues (Jiujutsu)", baseTraits, { id: "osano-wo-monk", name: "Moine du Temple d'Osano-Wo" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Jiujutsu", rank: 2 }], insightRank: 1
+      });
+      assertEqual(osano.damageRoll, "3g2", "Temple d'Osano-Wo R1 ajoute +0g1 aux dégâts à mains nues");
+
+      const mantis = cg.computeWeaponCombatMetrics("Tantō", baseTraits, { id: "mantis-brawler", name: "Bagarreur Mante" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Couteaux", rank: 2 }], insightRank: 1
+      });
+      assertEqual(mantis.damageRoll, "5g1", "Bagarreur Mante R1 ajoute +1g0 aux dégâts avec arme Petite");
+
+      // 4. Épéiste Taoïste Mirumoto (sans armure vs avec armure) + ND d'Armure & Réduction (Kitsuki, Doji, Usagi, Spider Monk, Tessen, Hida R2)
+      const taoistUnarmored = cg.computeWeaponCombatMetrics("Katana", baseTraits, { id: "mirumoto-taoist", name: "Épéiste Taoïste Mirumoto" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1, armorBonus: 0
+      });
+      assertEqual(taoistUnarmored.damageRoll, "7g2", "Épéiste Taoïste R1 sans armure ajoute +1g0 aux dégâts d'un sabre");
+      const taoistArmored = cg.computeWeaponCombatMetrics("Katana", baseTraits, { id: "mirumoto-taoist", name: "Épéiste Taoïste Mirumoto" }, noop, noop, {
+        equipCatalog: equipData, skillsList: [{ name: "Kenjutsu", rank: 2 }], insightRank: 1, armorBonus: 5
+      });
+      assertEqual(taoistArmored.damageRoll, "6g2", "Épéiste Taoïste R1 en armure n'ajoute pas +1g0 aux dégâts");
+
+      const taoistDef = cg.computeArmorDefenseMetrics({
+        ref: 3, rAir: 2, rEarth: 3, traits: baseTraits,
+        sch: { id: "mirumoto-taoist", name: "Épéiste Taoïste Mirumoto" }, insightRank: 2,
+        armorBonus: 0, weapon1Name: "Katana", skillsList: [{ name: "Kenjutsu", rank: 3 }], equipCatalog: equipData
+      });
+      assertEqual(taoistDef.armorTN, 20, "Épéiste Taoïste ne déclenche pas Niten de Bushi Mirumoto");
+      assertEqual(taoistDef.totalReduction, 4, "Épéiste Taoïste R2 sans armure + sabre gagne Réduction Rang+2 = 4");
+
+      const kitsukiDef = cg.computeArmorDefenseMetrics({
+        ref: 3, rAir: 2, rEarth: 3, traits: baseTraits,
+        sch: { id: "magistrat-kitsuki", name: "Enquêteur Kitsuki" }, insightRank: 1,
+        armorBonus: 5, equipCatalog: equipData
+      });
+      assertEqual(kitsukiDef.armorTN, 29, "Enquêteur Kitsuki ajoute Perception (+4) au ND d'Armure");
+      assertEqual(kitsukiDef.totalReduction, 3, "Armure légère donne Réduction 3");
+
+      const hidaR2Def = cg.computeArmorDefenseMetrics({
+        ref: 3, rAir: 2, rEarth: 4, traits: baseTraits,
+        sch: { id: "bushi-hida", name: "Bushi Hida" }, insightRank: 2,
+        armorBonus: 10, equipCatalog: equipData
+      });
+      assertEqual(hidaR2Def.totalReduction, 9, "Bushi Hida R2 ajoute Anneau de Terre (4) à la Réduction d'armure lourde (5) = 9");
+
+      const tessenDef = cg.computeArmorDefenseMetrics({
+        ref: 3, rAir: 2, rEarth: 2, traits: baseTraits,
+        sch: { id: "the-tessen", name: "Le Tessen" }, insightRank: 1,
+        armorBonus: 0, weapon1Name: "Katana", weapon2Name: "Tessen (Éventail de Guerre)",
+        skillsList: [{ name: "Éventail de Guerre (War Fan)", rank: 4 }], equipCatalog: equipData
+      });
+      assertEqual(tessenDef.armorTN, 24, "Le Tessen ajoute le rang en Éventail de Guerre (+4) au ND d'Armure");
+
+      const spiderDef = cg.computeArmorDefenseMetrics({
+        ref: 3, rAir: 2, rEarth: 3, traits: baseTraits,
+        sch: { id: "spider-monk", name: "Ordre des Moines de l'Araignée" }, insightRank: 2,
+        armorBonus: 0, equipCatalog: equipData
+      });
+      assertEqual(spiderDef.armorTN, 24, "Ordre des Moines de l'Araignée ajoute 2 × Rang (+4) au ND d'Armure");
+
+      // 5. Bonus passifs de Compétences (Kaiu, Toritaka, Daidoji Scout, Infiltrateur Shosuro, Érudit Asako R5, Vengeur Moto R2)
+      assertEqual(cg.computeSkillRollBonus({ name: "Ingénierie", isSchool: true }, "Intelligence", { id: "ingenieur-kaiu" }, 1).bonusRoll, 1);
+      assertEqual(cg.computeSkillRollBonus({ name: "Enquête", isSchool: true }, "Perception", { id: "toritaka-bushi" }, 1).bonusRoll, 1);
+      assertEqual(cg.computeSkillRollBonus({ name: "Chasse (Hunting)" }, "Perception", { id: "daidoji-scout" }, 1).bonusRoll, 1);
+      assertEqual(cg.computeSkillRollBonus({ name: "Discrétion (Stealth)" }, "Agilité", { id: "infiltrateur-shosuro" }, 1).bonusRoll, 2);
+      assertEqual(cg.computeSkillRollBonus({ name: "Connaissance : Histoire" }, "Intelligence", { id: "erudit-asako" }, 5).bonusRoll, 5);
+      assertEqual(cg.computeSkillRollBonus({ name: "Enquête (Investigation)" }, "Perception", { id: "moto-vindicator" }, 2).bonusRoll, 2);
+    });
+
     it("getMasteriesSummary retourne les maîtrises débloquées aux rangs 3, 5 et 7", function () {
       assertEqual(cg.getMasteriesSummary("Kenjutsu", 2), "");
       assertEqual(cg.getMasteriesSummary("Kenjutsu", 3), "[R3: Frappe Tranchante]");
