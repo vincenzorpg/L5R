@@ -2544,6 +2544,8 @@ function updateArmorWeaponSummary() {
     || { name: 'Vêtements simples', tnBonus: 0, reduction: 0, note: 'Aucun malus de mouvement' };
   const w1Obj = (eq.armes || []).find(w => w.name === w1Name) || { name: w1Name, vd: '—', skill: '—', type: '—' };
   const w2Obj = w2Name !== 'Aucune' ? ((eq.armes || []).find(w => w.name === w2Name) || { name: w2Name, vd: '—', skill: '—', type: '—' }) : null;
+  const cm1 = window.currentChar?.combatMetrics?.primary || null;
+  const cm2 = window.currentChar?.combatMetrics?.secondary || null;
 
   box.innerHTML = `
     <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
@@ -2551,15 +2553,15 @@ function updateArmorWeaponSummary() {
       <div class="font-bold text-amber-200">${armorObj.name}</div>
       <div class="text-stone-400">Bonus ND : <b>+${armorObj.tnBonus || 0}</b> • Réduction : <b>${armorObj.reduction || 0}</b></div>
     </div>
-    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
+    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5" title="${cm1?.attackDetail || ''}">
       <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">⚔️ Arme Principale</div>
       <div class="font-bold text-amber-200">${w1Obj.name}</div>
-      <div class="text-stone-400">VD : <b>${w1Obj.vd || '—'}</b> • Comp. : <b>${w1Obj.skill || '—'}</b></div>
+      <div class="text-stone-400">${cm1 ? `Toucher : <b class="text-amber-300">${cm1.attackRoll}</b> • ` : ''}Dégâts : <b>${cm1 ? cm1.damageRoll : (w1Obj.vd || '—')}</b> • Comp. : <b>${w1Obj.skill || '—'}</b></div>
     </div>
-    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5">
+    <div class="p-2.5 rounded-lg bg-black/50 border border-stone-800 space-y-0.5" title="${cm2?.attackDetail || ''}">
       <div class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">🏹 Arme Secondaire</div>
       <div class="font-bold text-stone-200">${w2Obj ? w2Obj.name : 'Aucune'}</div>
-      <div class="text-stone-400">${w2Obj ? `VD : <b>${w2Obj.vd || '—'}</b> • Comp. : <b>${w2Obj.skill || '—'}</b>` : 'Emplacement libre'}</div>
+      <div class="text-stone-400">${w2Obj ? `${cm2 ? `Toucher : <b class="text-amber-300">${cm2.attackRoll}</b> • ` : ''}Dégâts : <b>${cm2 ? cm2.damageRoll : (w2Obj.vd || '—')}</b> • Comp. : <b>${w2Obj.skill || '—'}</b>` : 'Emplacement libre'}</div>
     </div>
   `;
 }
