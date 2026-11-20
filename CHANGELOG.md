@@ -6,6 +6,15 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.35.1] — 2026-11-20
+
+### 🐛 Corrigé
+- **Carte de Rokugan — Recalibrage des emplacements (`data/carte-data.js`)** :
+  - Correction de la position du **Mur Kaiu** (désormais placé directement sur la muraille sud-ouest), des **Terres de l'Outremonde** (bien au-delà du Mur), de **Kyuden Hida** (citadelle côtière au bout du Mur), de **Shiro Kaiu**, **Shiro Hiruma**, **Shiro Kuni** et **Shiro Kaotsuki No Higashi**.
+  - Réalignement sur les châteaux dessinés et les frontières de clans pour **Kyoteï**, **Kyuden Seppun**, **Kyuden Kakita**, **Kyuden Doji**, **Shiro Daidoji**, **Source de Mémoire**, **Ryoko Owari**, **Shiro Shosuro**, **Kyuden Bayushi**, **Shiro Yogo**, **Forêt de Shinomen**, **Yanagi Mura**, **Kyuden Ashinagabachi**, **Kyuden Yoritomo** et les segments `CAMPAIGN_ROUTE` associés.
+
+---
+
 ## [1.35.0] — 2026-11-20
 
 ### ✨ Ajouté

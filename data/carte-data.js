@@ -39,8 +39,8 @@
       subtitle: 'Cité de la Rizière aux Mûriers',
       faction: 'imperial',
       kind: 'Forteresse Stratégique',
-      x: 52.5,
-      y: 26.5,
+      x: 53.5,
+      y: 25.5,
       major: true,
       desc: "Carrefour contesté entre le Lion, la Grue et le Dragon au bord du fleuve Noyé. Ancien théâtre de guerres acharnées avant de devenir cité impériale."
     },
@@ -51,8 +51,8 @@
       subtitle: 'Palais des Familles Impériales',
       faction: 'imperial',
       kind: 'Palais Impérial',
-      x: 64.5,
-      y: 27.5,
+      x: 65.0,
+      y: 35.5,
       major: false,
       desc: "Domaine traditionnel des Seppun, gardes dévoués de l'Empereur, ainsi que des Miya et des Otomo veillant sur la diplomatie impériale."
     },
@@ -65,8 +65,8 @@
       subtitle: 'Siège du Championnat de Topaze',
       faction: 'grue',
       kind: 'Bourgade & Dojo',
-      x: 63.0,
-      y: 38.0,
+      x: 62.0,
+      y: 40.5,
       major: true,
       desc: "Bourgade paisible des terres Doji renommée dans tout l'Empire pour accueillir chaque printemps les épreuves du prestigieux Championnat de Topaze, cérémonie de passage à l'âge adulte (gempukku) des meilleurs jeunes samouraïs."
     },
@@ -77,8 +77,8 @@
       subtitle: 'Forteresse de la Vallée de Kintani',
       faction: 'grue',
       kind: 'Forteresse Frontalière',
-      x: 60.5,
-      y: 21.5,
+      x: 61.5,
+      y: 30.5,
       major: true,
       desc: "Bastion stratégique surplombant la vallée de Kintani au carrefour des terres Grue, Lion et Phénix. Reprise au Lion par Tsume Retsu, elle fut le théâtre d'un meurtre retentissant lors du Festival des Morts."
     },
@@ -89,8 +89,8 @@
       subtitle: 'Académies de Duellistes & Artisans',
       faction: 'grue',
       kind: 'Palais de Famille',
-      x: 67.5,
-      y: 31.0,
+      x: 65.5,
+      y: 47.0,
       major: false,
       desc: "Cœur artistique et martial de la famille Kakita, abritant la prestigieuse Académie d'Iaijutsu et les écoles d'artisans impériaux."
     },
@@ -101,8 +101,8 @@
       subtitle: 'Bastion des Grues de Fer',
       faction: 'grue',
       kind: 'Forteresse',
-      x: 65.5,
-      y: 47.0,
+      x: 52.5,
+      y: 62.5,
       major: false,
       desc: "Citadelle des défenseurs Daidoji protégeant les routes côtières et la frontière sud du Clan de la Grue."
     },
@@ -113,8 +113,8 @@
       subtitle: 'Palais d’Honneur de la Grue',
       faction: 'grue',
       kind: 'Capitale Clanique',
-      x: 65.5,
-      y: 53.5,
+      x: 66.0,
+      y: 55.5,
       major: true,
       desc: "Résidence ancestrale du Champion du Clan de la Grue dominant les falaises océaniques, réputée pour ses cours d'hiver raffinées."
     },
@@ -127,8 +127,8 @@
       subtitle: 'Grand Campement de la Licorne',
       faction: 'licorne',
       kind: 'Capitale Clanique',
-      x: 23.5,
-      y: 21.5,
+      x: 24.5,
+      y: 22.5,
       major: true,
       desc: "Bastion septentrional et centre névralgique du Clan de la Licorne, mêlant architecture rokugani et vastes pâturages pour les destriers des steppes."
     },
@@ -139,8 +139,8 @@
       subtitle: 'Haras des Vierges Guerrières',
       faction: 'licorne',
       kind: 'Forteresse',
-      x: 20.5,
-      y: 29.0,
+      x: 20.0,
+      y: 31.5,
       major: false,
       desc: "Forteresse matriarcale des Utaku où sont élevés et dressés les légendaires destriers de guerre du clan."
     },
@@ -151,8 +151,8 @@
       subtitle: 'Cité des Négociants Licorne',
       faction: 'licorne',
       kind: 'Forteresse',
-      x: 33.5,
-      y: 23.0,
+      x: 31.0,
+      y: 20.5,
       major: false,
       desc: "Carrefour caravanier ouvrant les routes commerciales entre les plaines de la Licorne et les cols du Dragon et du Lion."
     },
@@ -163,8 +163,8 @@
       subtitle: 'Bastion de la Cavalerie Lourde',
       faction: 'licorne',
       kind: 'Forteresse',
-      x: 27.5,
-      y: 31.0,
+      x: 25.5,
+      y: 34.0,
       major: false,
       desc: "Base des escadrons Moto veillant sur la lisière nord de la forêt de Shinomen."
     },
@@ -251,8 +251,8 @@
       subtitle: 'Bastion des Yojimbo Shiba',
       faction: 'phenix',
       kind: 'Forteresse',
-      x: 73.0,
-      y: 13.5,
+      x: 74.0,
+      y: 11.5,
       major: false,
       desc: "Forteresse protectrice gardant l'accès aux provinces du Phénix face aux ambitions du Lion et de la Grue."
     },
@@ -301,8 +301,8 @@
       subtitle: 'Grande Bibliothèque des Annales',
       faction: 'lion',
       kind: 'Palais & Archives',
-      x: 52.0,
-      y: 42.5,
+      x: 50.0,
+      y: 44.0,
       major: true,
       desc: "Demeure des chroniqueurs, bardes et espions Ikoma préservant l'histoire héroïque et militaire de l'Empire d'Émeraude."
     },
@@ -314,7 +314,7 @@
       faction: 'lion',
       kind: 'Forteresse',
       x: 57.5,
-      y: 38.0,
+      y: 37.5,
       major: false,
       desc: "Lieu saint où les shugenja Kitsu perpétuent la communion avec les ancêtres glorieux du Yomi."
     },
@@ -325,8 +325,8 @@
       subtitle: 'Sanctuaire & Arbre de Vie',
       faction: 'lion',
       kind: 'Hameau & Sanctuaire',
-      x: 44.0,
-      y: 60.5,
+      x: 51.5,
+      y: 47.0,
       major: false,
       desc: "Village isolé lié aux souvenirs de la Bataille de l'Arbre de Vie et aux esprits des frères d'armes tombés au champ d'honneur."
     },
@@ -339,8 +339,8 @@
       subtitle: 'La Cité des Histoires Vertes',
       faction: 'scorpion',
       kind: 'Métropole Marchande',
-      x: 37.0,
-      y: 41.5,
+      x: 39.0,
+      y: 36.5,
       major: true,
       desc: "Deuxième plus grande cité de l'Empire, bâtie sur la Baie de l'Honneur Noyé. Carrefour du commerce légal d'opium médicinale, d'intrigues feutrées, de maisons de geisha et de complots du Scorpion."
     },
@@ -351,8 +351,8 @@
       subtitle: 'Palais du Champion Scorpion',
       faction: 'scorpion',
       kind: 'Capitale Clanique',
-      x: 44.0,
-      y: 46.0,
+      x: 44.5,
+      y: 55.5,
       major: true,
       desc: "Demeure raffinée et impénétrable des seigneurs Bayushi dissimulant les secrets politiques les mieux gardés de Rokugan."
     },
@@ -363,8 +363,8 @@
       subtitle: 'Verrou stratégique des Montagnes',
       faction: 'scorpion',
       kind: 'Col & Passe',
-      x: 48.5,
-      y: 44.5,
+      x: 47.0,
+      y: 46.0,
       major: false,
       desc: "Col vital reliant les plaines du Lion aux terres du Scorpion, perpétuellement fortifié et gardé."
     },
@@ -375,8 +375,8 @@
       subtitle: 'Théâtres & Jardins Vénéneux',
       faction: 'scorpion',
       kind: 'Forteresse',
-      x: 43.5,
-      y: 54.0,
+      x: 32.0,
+      y: 47.5,
       major: false,
       desc: "Citadelle des comédiens et ombres Shosuro abritant les célèbres jardins de plantes toxiques entretenus par les Tokagure."
     },
@@ -387,8 +387,8 @@
       subtitle: 'Bastion des Sceaux & Kuroiban',
       faction: 'scorpion',
       kind: 'Forteresse',
-      x: 49.5,
-      y: 53.0,
+      x: 40.5,
+      y: 61.5,
       major: false,
       desc: "Forteresse austère surplombant les cols du sud où les Yogo gravent leurs sceaux de garde contre les forces occultes."
     },
@@ -401,8 +401,8 @@
       subtitle: 'Citadelle du Champion du Crabe',
       faction: 'crabe',
       kind: 'Capitale Clanique',
-      x: 29.5,
-      y: 71.0,
+      x: 34.0,
+      y: 82.5,
       major: true,
       desc: "Massive forteresse côtière de granit noir d'où Hida Kisada coordonne la défense éternelle de l'Empire face aux hordes de l'Outremonde."
     },
@@ -413,8 +413,8 @@
       subtitle: 'Grandes Forges & Génie de Siège',
       faction: 'crabe',
       kind: 'Forteresse',
-      x: 25.0,
-      y: 57.5,
+      x: 18.0,
+      y: 65.5,
       major: true,
       desc: "Centre sidérurgique des ingénieurs Kaiu où sont forgés armes lourdes, armures de siège et balistes du Mur."
     },
@@ -425,8 +425,8 @@
       subtitle: 'Monastère & Sanctuaire des Kuni',
       faction: 'crabe',
       kind: 'Sanctuaire & Forteresse',
-      x: 37.5,
-      y: 63.0,
+      x: 30.5,
+      y: 72.0,
       major: true,
       desc: "Sombre forteresse d'étude et de purification où les shugenja et chasseurs de sorciers Kuni analysent et endiguent la Souillure."
     },
@@ -437,8 +437,8 @@
       subtitle: 'Château des Émissaires de l’Est',
       faction: 'crabe',
       kind: 'Forteresse Frontalière',
-      x: 35.5,
-      y: 71.5,
+      x: 44.5,
+      y: 78.0,
       major: true,
       desc: "Imposante forteresse côtière du Clan du Crabe accueillant les cérémonies solennelles des forgerons Kaiu et les délégations des clans."
     },
@@ -449,8 +449,8 @@
       subtitle: 'Avant-poste Reconquis des Éclaireurs',
       faction: 'crabe',
       kind: 'Forteresse en Ruine / Reprise',
-      x: 18.5,
-      y: 63.5,
+      x: 11.5,
+      y: 70.0,
       major: false,
       desc: "Bastion ancestral des Hiruma sur le front sud, relevé de ses ruines après des siècles d'occupation par l'Outremonde."
     },
@@ -461,8 +461,8 @@
       subtitle: 'Le Grand Rempart des Bâtisseurs',
       faction: 'crabe',
       kind: 'Ligne Fortifiée',
-      x: 21.5,
-      y: 67.5,
+      x: 18.5,
+      y: 75.5,
       major: true,
       desc: "Rempart cyclopéen de plus de cent lieues combinant pierre enchantée, pièges d'huile et garnisons permanentes pour contenir Jigoku."
     },
@@ -475,8 +475,8 @@
       subtitle: 'Forteresse de la Guêpe (Tsuruchi)',
       faction: 'mante',
       kind: 'Forteresse & Port',
-      x: 50.5,
-      y: 65.5,
+      x: 48.5,
+      y: 67.5,
       major: true,
       desc: "Fief continental du célèbre dojo des archers et chasseurs de primes Tsuruchi, surplombant la Baie de la Mante."
     },
@@ -487,8 +487,8 @@
       subtitle: 'Île de la Soie (Shima no Kinu)',
       faction: 'mante',
       kind: 'Capitale Insulaire',
-      x: 72.5,
-      y: 76.5,
+      x: 75.5,
+      y: 74.0,
       major: true,
       desc: "Siège maritime du Clan de la Mante au cœur des Îles de la Soie et des Épices, protégé par la flotte de guerre des kobune."
     },
@@ -499,8 +499,8 @@
       subtitle: 'Île des Épices & Temples Moshi',
       faction: 'mante',
       kind: 'Archipel',
-      x: 76.5,
-      y: 82.5,
+      x: 73.5,
+      y: 86.5,
       major: false,
       desc: "Île prospère abritant comptoirs maritimes, chantiers navals Watanabe et sanctuaires solaires Moshi."
     },
@@ -513,8 +513,8 @@
       subtitle: 'Bois Millénaire des Anciens Secrets',
       faction: 'peril',
       kind: 'Forêt Sauvage',
-      x: 25.5,
-      y: 44.5,
+      x: 19.5,
+      y: 45.0,
       major: false,
       desc: "Immense forêt vierge et mystique s'étendant des terres Licorne aux frontières Scorpion, hantée par d'antiques ruines oubliées."
     },
@@ -525,8 +525,8 @@
       subtitle: 'Domaine Corrompu de Jigoku',
       faction: 'peril',
       kind: 'Zone Maudite',
-      x: 15.5,
-      y: 73.5,
+      x: 13.0,
+      y: 86.5,
       major: true,
       desc: "Désert de cendres toxiques, marais putrides et terres maudites s'étendant au sud du Mur Kaiu jusqu'à la Fosse Suppurante de Fu Leng."
     },
@@ -537,8 +537,8 @@
       subtitle: 'Sanctuaire Scellé du Sang',
       faction: 'peril',
       kind: 'Tombeau Maudit',
-      x: 42.5,
-      y: 72.0,
+      x: 36.0,
+      y: 75.0,
       major: true,
       desc: "Nécropole labyrinthique truffée de pièges mortels où fut emprisonné le plus redoutable adepte du sang de l'histoire de Rokugan."
     },
@@ -549,14 +549,14 @@
       subtitle: 'Village du Saule Pleureur',
       faction: 'scorpion',
       kind: 'Village Frontière',
-      x: 31.5,
-      y: 47.0,
+      x: 29.0,
+      y: 52.5,
       major: true,
       desc: "Hameau isolé de la vallée de Mura Sabishii en lisière de la forêt de Shinomen. Sous les racines de son gigantesque saule pleureur se dissimulait un temple souterrain de la cellule de Chuda Bunzo."
     }
   ];
 
-  // Itinéraire chronologique exact des PJs sur les 10 Actes de la Campagne
+  // Itinéraire chronologique exact des PJs sur les 11 Actes de la Campagne
   const CAMPAIGN_ROUTE = [
     {
       step: 1,
@@ -566,7 +566,7 @@
       placeLabel: 'Village de Tsuma (Terres Grue)',
       author: 'Tsuruchi Akira',
       file: 'campagne/scenario-1.html',
-      way: [[63.0, 38.0]],
+      way: [[62.0, 40.5]],
       summary: "Départ de la Chronique : les jeunes samouraïs convergent vers Tsuma pour passer leur gempukku lors du centenaire du tournoi de Topaze."
     },
     {
@@ -577,7 +577,7 @@
       placeLabel: 'Forteresse de Kyoteï (Vallée de Kintani)',
       author: 'Okado Hiruma / Tsuruchi Akira / Hida Samui',
       file: 'campagne/scenario-2.html',
-      way: [[63.0, 38.0], [64.5, 27.5], [60.5, 21.5]],
+      way: [[62.0, 40.5], [65.0, 35.5], [61.5, 30.5]],
       summary: "Invités par Tsume Retsu après le tournoi pour le Festival des Morts, les héros enquêtent sur un assassinat politique dans la forteresse frontalière."
     },
     {
@@ -588,7 +588,7 @@
       placeLabel: 'Kyuden Shinjo & lisière des Terres Brûlées',
       author: 'Ryûmitaka Isawa & Tsuruchi Akira',
       file: 'campagne/scenario-3.html',
-      way: [[60.5, 21.5], [52.5, 26.5], [33.5, 23.0], [23.5, 21.5]],
+      way: [[61.5, 30.5], [53.5, 25.5], [31.0, 20.5], [24.5, 22.5]],
       summary: "Missionnés par Doji Satsume sur les traces du légendaire étalon Xian et de Shinjo Shimura jusqu'à Kyuden Shinjo et aux confins septentrionaux."
     },
     {
@@ -599,7 +599,7 @@
       placeLabel: 'Kyuden Ikoma → Source de Mémoire',
       author: 'Tsuruchi Akira (avec Ryûmitaka, Sutokhu & Samui)',
       file: 'campagne/scenario-4.html',
-      way: [[23.5, 21.5], [47.0, 37.0], [52.0, 42.5], [44.0, 60.5]],
+      way: [[24.5, 22.5], [47.0, 37.0], [50.0, 44.0], [51.5, 47.0]],
       summary: "Guidés par un origami de Megumi à travers les terres du Lion, passage par la bibliothèque de Kyuden Ikoma puis le village de la Source de Mémoire."
     },
     {
@@ -610,7 +610,7 @@
       placeLabel: 'Kyuden Ashinagabachi → Shiro Kaotsuki No Higashi',
       author: 'Tsuruchi Akira (avec Samui, Ryûmitaka & Okado)',
       file: 'campagne/scenario-5.html',
-      way: [[44.0, 60.5], [50.5, 65.5], [35.5, 71.5]],
+      way: [[51.5, 47.0], [48.5, 67.5], [44.5, 78.0]],
       summary: "Après six mois de retraite chez les Tsuruchi à Ashinagabachi, route vers la forteresse Crabe des émissaires de l'Est pour la cérémonie des forges Kaiu."
     },
     {
@@ -621,7 +621,7 @@
       placeLabel: 'Terres Crabe / Mur Kaiu → Outremonde',
       author: 'Tsuruchi Akira (avec Okado, Toma & Samui)',
       file: 'campagne/scenario-6.html',
-      way: [[35.5, 71.5], [29.5, 71.0], [21.5, 67.5], [15.5, 73.5]],
+      way: [[44.5, 78.0], [34.0, 82.5], [18.5, 75.5], [13.0, 86.5]],
       summary: "Les noces d'Okado Hiruma basculent lors de l'enlèvement de son épouse : équipement de jade et première traversée du Mur Kaiu vers l'Outremonde."
     },
     {
@@ -632,7 +632,7 @@
       placeLabel: 'Ryoko Owari Toshi (Cité des Histoires Vertes)',
       author: 'Tsuruchi Akira (avec Samui & Shinta)',
       file: 'campagne/scenario-7.html',
-      way: [[15.5, 73.5], [25.0, 57.5], [37.0, 41.5]],
+      way: [[13.0, 86.5], [18.0, 65.5], [39.0, 36.5]],
       summary: "Enquête sombre dans les quartiers nobles et interlopes de Ryoko Owari Toshi au cœur des intrigues du Scorpion et de la Voie des Dompteurs."
     },
     {
@@ -643,7 +643,7 @@
       placeLabel: 'Ryoko Owari → Shiro Kaiu → Ashinagabachi → Shiro Matsu → Kyuden Hida',
       author: 'Tsuruchi Akira (avec Okado, Shinta, Samui & Gutmahïdo)',
       file: 'campagne/scenario-8.html',
-      way: [[37.0, 41.5], [48.0, 29.5], [50.5, 65.5], [29.5, 71.0]],
+      way: [[39.0, 36.5], [48.0, 29.5], [48.5, 67.5], [34.0, 82.5]],
       summary: "Long périple mouvementé à travers l'Empire (Shiro Kaiu, Ashinagabachi, Shiro Matsu) menant finalement le groupe vers Kyuden Hida sous l'orage."
     },
     {
@@ -654,7 +654,7 @@
       placeLabel: 'Kyuden Hida → Shiro Kuni',
       author: 'Tsuruchi Akira (avec Okado & HiroHito)',
       file: 'campagne/scenario-9.html',
-      way: [[29.5, 71.0], [37.5, 63.0]],
+      way: [[34.0, 82.5], [30.5, 72.0]],
       summary: "Mandatés par le Champion du Crabe Hida Kisada en personne pour escorter secrètement la shugenja Yuriko Kuni jusqu'au temple fortifié de Shiro Kuni."
     },
     {
@@ -665,7 +665,7 @@
       placeLabel: 'La Tombe Secrète de Iuchiban',
       author: 'Tsuruchi Akira (avec Okado, HiroHito & Ryujin)',
       file: 'campagne/scenario-10.html',
-      way: [[37.5, 63.0], [42.5, 72.0]],
+      way: [[30.5, 72.0], [36.0, 75.0]],
       summary: "L'assaut final de la Chronique dans le labyrinthe maudit de Iuchiban pour déjouer le réveil du plus terrible sorcier de l'histoire rokuganie."
     },
     {
@@ -676,7 +676,7 @@
       placeLabel: 'Yanagi Mura (Lisière du Shinomen)',
       author: 'Tsuruchi Akira (avec Okado, Hiro-Hito & Ryujin)',
       file: 'campagne/scenario-11.html',
-      way: [[42.5, 72.0], [34.0, 56.0], [31.5, 47.0]],
+      way: [[36.0, 75.0], [40.5, 61.5], [29.0, 52.5]],
       summary: "Convoqués par le magistrat Scorpion Soshi Takeda au Pavillon des Murmures d'Automne pour contrer le maho-tsukai Shuda Tenkasu à Yanagi Mura avant la Nuit de la Lune de Sang."
     }
   ];
