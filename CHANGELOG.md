@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.34.0] — 2026-11-20
+
+### ✨ Ajouté
+- **Boutons « 🐛 Signaler un bug » et modale « ✉️ Contacter l'auteur » sur toutes les pages (`js/navbar.js`)** :
+  - Injection centralisée dans le pied de page `#site-version-footer` du lien *Signaler un bug* (vers `/issues/new/choose`) et du bouton *Contact* ouvrant une fenêtre modale complète (Nom/pseudo facultatif, Email facultatif, Sujet, Message 0/3000 caractères, envoi direct via FormSubmit avec repli `mailto:` hors-ligne et raccourci *Signaler sur GitHub*).
+- **Formulaires GitHub Issues catégorisés (`.github/ISSUE_TEMPLATE/`)** :
+  - Ajout de 4 formulaires YAML guidés : **Bug**, **Idée d'évolution**, **Règle à vérifier** (L5R 4e) et **Contenu, Scénario ou Podcast**, accompagnés de `config.yml` (`blank_issues_enabled: false`).
+
+---
+
 ## [1.33.1] — 2026-11-18
 
 ### 🐛 Corrigé

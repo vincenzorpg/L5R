@@ -1,0 +1,35 @@
+name: Idée d'évolution
+description: Un besoin en jeu que l'outil ne couvre pas encore.
+title: "[Idée] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Partagez votre idée pour améliorer le portail **Les Chroniques de Rokugan** en séance ou en préparation !
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module concerné
+      options:
+        - La Forge de Samouraïs
+        - Écran du Maître du Jeu (MJ)
+        - Carte de Rokugan
+        - Chroniques de Campagne, Codex & Podcasts
+        - Grimoire / Kihos / Tatouages / Écoles
+        - Navigation / Accueil / Mobile
+        - Nouveau module
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Quel est le besoin en jeu ?
+      description: Expliquez la situation en partie ou en préparation qui motive cette idée.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Solution ou fonctionnement imaginé (optionnel)
+      placeholder: Décrivez comment vous verriez cette fonctionnalité dans le site...

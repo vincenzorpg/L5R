@@ -1,0 +1,37 @@
+name: Règle à vérifier
+description: L'outil applique une règle différemment du livre de base 4e.
+title: "[Règle 4e] "
+labels: ["regle-4e"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Signalez ici tout écart constaté par rapport aux règles officielles de **La Légende des Cinq Anneaux (4e Édition)**.
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domaine de règle concerné
+      options:
+        - Création de personnage, Anneaux & Coûts XP
+        - Clan, Famille ou École (Techniques de rang)
+        - Compétences, Spécialisations & Maîtrises
+        - Avantages & Désavantages
+        - Sorts, Kihos, Katas, Mahō ou Tatouages
+        - Combat, Armes, Armures, Blessures ou Duel Iaijutsu
+        - Honneur, Gloire, Statut, Souillure ou Étiquette
+        - Autre
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Ce que fait ou affiche actuellement le site
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ce que dit la règle officielle L5R 4e
+      description: Précisez si possible l'ouvrage (Livre de Base, Secrets de l'Empire, etc.) et la page ou le nom exact de la règle.
+    validations:
+      required: true

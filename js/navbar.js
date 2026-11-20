@@ -564,7 +564,227 @@
   }
 
   // 3. Synchronisation centralisée de la version en pied de page (#site-version-footer)
+  //    + injection des boutons « Signaler un bug » (GitHub Issues) et « Contact » (modale).
+  const GITHUB_ISSUES_CHOOSE_URL = 'https://github.com/vincenzorpg/L5R/issues/new/choose';
+  const CONTACT_EMAIL = 'vincent.david.perso@gmail.com';
+  const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+
+  function openContactAuthorModal() {
+    let modal = document.getElementById('l5r-contact-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'l5r-contact-modal';
+      modal.className = 'fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 no-print';
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-labelledby', 'l5r-contact-modal-title');
+      modal.innerHTML = `
+        <div class="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl bg-[#1a1514] border border-amber-500/35 shadow-2xl p-5 sm:p-6 space-y-4 text-stone-200">
+          <div class="flex items-center justify-between gap-3">
+            <h2 id="l5r-contact-modal-title" class="font-imperial font-bold text-lg sm:text-xl text-amber-200 tracking-wide">
+              Contacter l'auteur
+            </h2>
+            <button type="button" id="l5r-contact-close" aria-label="Fermer la fenêtre de contact" class="w-9 h-9 rounded-lg bg-stone-900/90 hover:bg-stone-800 border border-amber-500/50 text-amber-200 hover:text-white flex items-center justify-center text-lg cursor-pointer transition shrink-0">
+              ✕
+            </button>
+          </div>
+
+          <form id="l5r-contact-form" class="space-y-3.5 text-xs">
+            <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+            <div class="space-y-1">
+              <label for="l5r-contact-name" class="block font-bold text-stone-200">Nom ou pseudo (facultatif)</label>
+              <input id="l5r-contact-name" name="name" type="text" maxlength="100" placeholder="Ex. Tsuruchi Akira" class="w-full rounded-lg bg-[#100d0c] border border-stone-700 focus:border-amber-500/70 px-3 py-2 text-xs text-stone-100 placeholder-stone-500 focus:outline-none" />
+            </div>
+
+            <div class="space-y-1">
+              <label for="l5r-contact-email" class="block font-bold text-stone-200">Email pour te répondre (facultatif)</label>
+              <input id="l5r-contact-email" name="email" type="email" maxlength="150" placeholder="ton.email@exemple.fr" class="w-full rounded-lg bg-[#100d0c] border border-stone-700 focus:border-amber-500/70 px-3 py-2 text-xs text-stone-100 placeholder-stone-500 focus:outline-none" />
+              <p class="text-[11px] text-stone-400">Sans email, je ne pourrai pas te répondre.</p>
+            </div>
+
+            <div class="space-y-1">
+              <label for="l5r-contact-subject" class="block font-bold text-stone-200">Sujet</label>
+              <select id="l5r-contact-subject" name="subject" class="w-full rounded-lg bg-[#100d0c] border border-stone-700 focus:border-amber-500/70 px-3 py-2 text-xs text-stone-100 focus:outline-none">
+                <option value="Question">Question</option>
+                <option value="Idée d'évolution">Idée d'évolution</option>
+                <option value="Règle L5R 4e à vérifier">Règle L5R 4e à vérifier</option>
+                <option value="Scénario / Campagne / Podcast">Scénario / Campagne / Podcast</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+
+            <div class="space-y-1">
+              <label for="l5r-contact-message" class="block font-bold text-stone-200">Message</label>
+              <textarea id="l5r-contact-message" name="message" rows="5" maxlength="3000" required placeholder="Écris ton message ici..." class="w-full rounded-lg bg-[#100d0c] border border-stone-700 focus:border-amber-500/70 px-3 py-2 text-xs text-stone-100 placeholder-stone-500 focus:outline-none resize-y"></textarea>
+              <div class="text-right text-[11px] font-mono text-stone-400">
+                <span id="l5r-contact-charcount">0</span> / 3000
+              </div>
+            </div>
+
+            <div id="l5r-contact-status" class="hidden rounded-lg p-2.5 text-xs border leading-relaxed"></div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <button type="submit" id="l5r-contact-submit" class="px-5 py-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs tracking-wide shadow cursor-pointer transition">
+                Envoyer
+              </button>
+              <span class="text-xs text-stone-400">
+                Un bug ? →
+                <a href="${GITHUB_ISSUES_CHOOSE_URL}" target="_blank" rel="noopener noreferrer" class="text-amber-300 hover:text-amber-200 underline decoration-amber-500/50 transition">
+                  Signaler sur GitHub ↗
+                </a>
+              </span>
+            </div>
+
+            <div class="rounded-lg bg-black/45 border border-stone-800 border-l-4 border-l-amber-500/80 px-3 py-2.5 text-[11px] text-stone-400 leading-snug">
+              Ton message est transmis par mail via le service FormSubmit. Rien n'est stocké sur le site.
+            </div>
+          </form>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      const closeModal = () => {
+        modal.classList.add('hidden');
+      };
+
+      modal.querySelector('#l5r-contact-close')?.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+      });
+
+      const msgEl = modal.querySelector('#l5r-contact-message');
+      const countEl = modal.querySelector('#l5r-contact-charcount');
+      if (msgEl && countEl) {
+        msgEl.addEventListener('input', () => {
+          countEl.textContent = String(msgEl.value.length);
+        });
+      }
+
+      const formEl = modal.querySelector('#l5r-contact-form');
+      const submitBtn = modal.querySelector('#l5r-contact-submit');
+      const statusEl = modal.querySelector('#l5r-contact-status');
+
+      if (formEl) {
+        formEl.addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          const honey = formEl.querySelector('input[name="_honey"]')?.value || '';
+          if (honey) return;
+
+          const name = (formEl.querySelector('#l5r-contact-name')?.value || '').trim();
+          const email = (formEl.querySelector('#l5r-contact-email')?.value || '').trim();
+          const subject = (formEl.querySelector('#l5r-contact-subject')?.value || 'Question').trim();
+          const message = (msgEl?.value || '').trim();
+          if (!message) return;
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi en cours…';
+          }
+          if (statusEl) statusEl.classList.add('hidden');
+
+          const payload = {
+            _subject: `[Les Chroniques de Rokugan] ${subject}`,
+            _template: 'table',
+            _captcha: 'false',
+            Nom: name || 'Anonyme',
+            Email: email || 'Non renseigné',
+            Sujet: subject,
+            Page: window.location.href,
+            Message: message
+          };
+          if (email) payload._replyto = email;
+
+          try {
+            const res = await fetch(CONTACT_ENDPOINT, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            if (statusEl) {
+              statusEl.className = 'rounded-lg p-2.5 text-xs border bg-emerald-950/80 border-emerald-500/50 text-emerald-200 leading-relaxed';
+              statusEl.textContent = '✓ Message envoyé ! Merci pour ton retour.';
+              statusEl.classList.remove('hidden');
+            }
+            formEl.reset();
+            if (countEl) countEl.textContent = '0';
+          } catch (_) {
+            const mailtoFallback = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`[Les Chroniques de Rokugan] ${subject}`)}&body=${encodeURIComponent(`${name ? `De : ${name}\n` : ''}${message}`)}`;
+            if (statusEl) {
+              statusEl.className = 'rounded-lg p-2.5 text-xs border bg-amber-950/80 border-amber-500/50 text-amber-200 leading-relaxed';
+              statusEl.innerHTML = `Impossible d'envoyer directement (hors-ligne ou bloqueur). <a href="${mailtoFallback}" class="underline font-bold text-amber-300">Ouvrir dans ton application mail ↗</a>`;
+              statusEl.classList.remove('hidden');
+            }
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Envoyer';
+            }
+          }
+        });
+      }
+    }
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.querySelector('#l5r-contact-message')?.focus();
+    }, 50);
+  }
+
+  window.openContactAuthorModal = openContactAuthorModal;
+
+  function injectFooterBugReportLink() {
+    const footerBar = document.getElementById('site-version-footer');
+    if (!footerBar) return;
+
+    footerBar.classList.add('flex-wrap', 'gap-y-1.5');
+
+    if (!document.getElementById('site-bug-report-link')) {
+      const sep1 = document.createElement('span');
+      sep1.textContent = '•';
+      sep1.setAttribute('aria-hidden', 'true');
+
+      const bugLink = document.createElement('a');
+      bugLink.id = 'site-bug-report-link';
+      bugLink.href = GITHUB_ISSUES_CHOOSE_URL;
+      bugLink.target = '_blank';
+      bugLink.rel = 'noopener noreferrer';
+      bugLink.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-900/90 hover:bg-amber-950/80 border border-amber-500/35 hover:border-amber-400 text-amber-300/90 hover:text-amber-200 transition no-underline font-sans font-semibold';
+      bugLink.title = 'Signaler un bug, proposer une idée ou vérifier une règle 4e sur GitHub';
+      bugLink.innerHTML = '<span aria-hidden="true">🐛</span><span>Signaler un bug</span>';
+
+      footerBar.appendChild(sep1);
+      footerBar.appendChild(bugLink);
+    }
+
+    if (!document.getElementById('site-contact-link')) {
+      const sep2 = document.createElement('span');
+      sep2.textContent = '•';
+      sep2.setAttribute('aria-hidden', 'true');
+
+      const contactBtn = document.createElement('button');
+      contactBtn.id = 'site-contact-link';
+      contactBtn.type = 'button';
+      contactBtn.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-300 hover:text-amber-200 transition cursor-pointer font-sans font-semibold';
+      contactBtn.title = "Contacter l'auteur du site par message";
+      contactBtn.innerHTML = '<span aria-hidden="true">✉️</span><span>Contact</span>';
+      contactBtn.addEventListener('click', openContactAuthorModal);
+
+      footerBar.appendChild(sep2);
+      footerBar.appendChild(contactBtn);
+    }
+  }
+
   function syncFooterVersion() {
+    injectFooterBugReportLink();
     const lbl = document.getElementById('site-version-label');
     const lnk = document.getElementById('site-version-link');
     if (!lbl && !lnk) return;
