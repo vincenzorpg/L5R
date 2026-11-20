@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recueil des Katas Martiaux — Formes de Combat Bushi | L5R 4e Édition</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/navbar.js" defer></script>
+  <script src="data/katas-data.js" defer></script>
+  <script src="js/katas.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <header id="site-header"></header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- EN-TÊTE -->
+    <div class="text-center space-y-2">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-300 text-[10px] uppercase tracking-widest font-imperial font-bold">
+        <span>⚔️</span> Voie du Sabre &amp; Formes Martiales
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold font-imperial tracking-wide gold-gradient">
+        Recueil des Katas Martiaux
+      </h1>
+      <p class="text-xs md:text-sm text-stone-400 max-w-2xl mx-auto">
+        Les 43 Katas officiels de la 4ᵉ Édition (<i>Livre de Base</i>, <i>The Great Clans</i>, <i>Books of Air, Earth, Fire &amp; Water</i>, dont la lignée <i>1 000 Ans d'Acier</i>), filtrables par Élément, Maîtrise, École ou nom FR/EN.
+      </p>
+      <div class="pt-1 flex flex-wrap justify-center gap-2.5 text-[11px]">
+        <a href="grimoire.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-amber-300 border border-amber-500/30 font-imperial font-bold transition">
+          📜 Grimoire des Sorts →
+        </a>
+        <a href="kihos.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-emerald-300 border border-emerald-500/30 font-imperial font-bold transition">
+          🥋 Recueil des Kihos →
+        </a>
+        <a href="tatouages.html" class="px-3 py-1 rounded-lg bg-stone-900/80 hover:bg-stone-800 text-teal-300 border border-teal-500/30 font-imperial font-bold transition">
+          🐉 Tatouages Togashi →
+        </a>
+      </div>
+    </div>
+
+    <!-- MÉMENTO OFFICIEL DES RÈGLES DES KATAS (L5R 4E p. 259) -->
+    <section class="card-clean rounded-xl p-5 space-y-3 border border-amber-500/35 bg-black/70 text-xs">
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b border-amber-500/20 pb-2.5">
+        <h2 class="text-sm md:text-base font-bold text-amber-300 font-imperial flex items-center gap-2">
+          <span>📜</span> Règles Officielles des Katas (Livre de Base, p. 259)
+        </h2>
+        <button type="button" onclick="document.getElementById('aide-katas-body').classList.toggle('hidden')" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-amber-500/30 font-bold font-imperial text-[11px] cursor-pointer transition">
+          Afficher / Masquer ▾
+        </button>
+      </div>
+      <div id="aide-katas-body" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-stone-300 leading-relaxed">
+        <div class="p-3 rounded-lg bg-stone-950/90 border border-stone-800 space-y-1">
+          <b class="text-amber-200 font-imperial block">🎯 Apprentissage &amp; Coût XP</b>
+          Coût en XP égal au <b>Niveau de Maîtrise</b> du Kata, si votre École est autorisée et que votre Anneau atteint le niveau requis. Les autres écoles de bushi d'un même Clan peuvent l'apprendre en considérant leur Anneau comme inférieur de <b>1 Rang</b>.
+        </div>
+        <div class="p-3 rounded-lg bg-stone-950/90 border border-stone-800 space-y-1">
+          <b class="text-amber-200 font-imperial block">⚡ Activation &amp; Limite</b>
+          Activer un Kata coûte une <b>Action Simple</b>. Il reste actif jusqu'à son expiration ou son abandon volontaire (<b>Action Gratuite</b>). Un samouraï ne peut maintenir qu'<b>1 seul Kata actif à la fois</b>.
+        </div>
+        <div class="p-3 rounded-lg bg-stone-950/90 border border-orange-500/25 space-y-1">
+          <b class="text-orange-200 font-imperial block">⚔️ 1 000 Ans d'Acier (Book of Fire)</b>
+          <i>The Empire Rests on Its Edge</i>, <i>The World is Empty</i>, <i>Victory of the River</i> et <i>Standing on the Heavens</i> exigent <b>Air ou Feu</b> (Katana/Daishō uniquement). Les bushi <b>Mirumoto</b> et <b>Kakita</b> réduisent l'Anneau requis de 1.
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRE DE FILTRES -->
+    <section class="card-clean rounded-xl p-4 border-stone-800 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" data-kata-elem="all" onclick="setKataElementFilter('all')" class="px-3 py-1.5 rounded-lg bg-amber-600 text-black font-bold text-xs cursor-pointer transition shadow">Tous</button>
+          <button type="button" data-kata-elem="Terre" onclick="setKataElementFilter('Terre')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">土 Terre</button>
+          <button type="button" data-kata-elem="Eau" onclick="setKataElementFilter('Eau')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">水 Eau</button>
+          <button type="button" data-kata-elem="Air" onclick="setKataElementFilter('Air')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">風 Air</button>
+          <button type="button" data-kata-elem="Feu" onclick="setKataElementFilter('Feu')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">火 Feu</button>
+          <button type="button" data-kata-elem="Air / Feu" onclick="setKataElementFilter('Air / Feu')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">⚔️ Air / Feu (Acier)</button>
+          <button type="button" data-kata-elem="Vide" onclick="setKataElementFilter('Vide')" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 border border-stone-700 text-xs cursor-pointer transition">空 Vide</button>
+        </div>
+        <span id="katas-count-badge" class="text-xs font-mono text-amber-300 font-bold">42 / 42 KATAS</span>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input type="search" id="katas-search-input" placeholder="🔍 Rechercher (ex. The World is Empty, Tsunami, Kakita, Mirumoto, Réduction...)" class="flex-1 bg-black/70 border border-stone-700 rounded-lg px-3 py-2 text-xs text-stone-100 placeholder-stone-500 focus:outline-none focus:border-amber-500/60" />
+        <select id="katas-mastery-filter" class="bg-black/70 border border-stone-700 rounded-lg px-3 py-2 text-xs text-amber-200">
+          <option value="all">Toutes les Maîtrises</option>
+          <option value="3">Maîtrise 3 (3 XP)</option>
+          <option value="4">Maîtrise 4 (4 XP)</option>
+          <option value="5">Maîtrise 5 (5 XP)</option>
+          <option value="6">Maîtrise 6 (6 XP)</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- GRILLE DES KATAS -->
+    <section id="katas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    <div>Campagne de la Chronique de Rokugan — L5R 4e Édition • Recueil des Katas Martiaux</div>
+    <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
+      <span id="site-version-label">v1.35.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+    </div>
+  </footer>
+
+</body>
+</html>

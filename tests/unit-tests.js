@@ -24,6 +24,7 @@
   const codexData = isNode ? require("../data/campaign-codex-data.js") : window;
   const campagneStudio = isNode ? require("../js/campagne-studio.js") : window;
   const narrator = isNode ? require("../js/narrator.js") : window;
+  const katasUi = isNode ? require("../js/katas.js") : window;
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -653,12 +654,19 @@
       );
     });
 
-    it("KATAS_DATA réunit les 40 Katas officiels 4e édition sans doublon", function () {
+    it("KATAS_DATA réunit les 43 Katas officiels 4e édition sans doublon (dont Book of Water et 1 000 Ans d'Acier)", function () {
       const katas = catalogScope.KATAS_DATA || [];
-      assertEqual(katas.length, 40, "Total Katas");
+      assertEqual(katas.length, 43, "Total Katas (43 officiels L5R 4e)");
       assertEqual(new Set(katas.map(k => k.id)).size, katas.length, "Aucun ID Kata en doublon");
-      const multiElem = katas.find(k => k.id === "kata-acier-empire-sur-fil");
-      assertTrue(!!multiElem && multiElem.element === "Air / Feu", "Kata bi-élémentaire Air / Feu");
+      const worldEmpty = katas.find(k => k.id === "kata-acier-monde-est-vide");
+      assertTrue(!!worldEmpty && worldEmpty.element === "Air / Feu", "The World is Empty présent (Air / Feu)");
+      const waterBookIds = ["kata-eau-feuilles-courant", "kata-eau-vagues-brisants", "kata-eau-puissance-tsunami"];
+      assertTrue(waterBookIds.every(id => katas.some(k => k.id === id)), "Les 3 Katas de The Book of Water sont présents");
+
+      const pubKatas = katasUi.filterKatasList(katas, { includeSecrets: false });
+      assertEqual(pubKatas.length, 42, "42 Katas visibles aux PJ (La Force de l'Araignée masquée)");
+      const searchWorldEmpty = katasUi.filterKatasList(katas, { query: "The World is Empty", includeSecrets: false });
+      assertEqual(searchWorldEmpty.length, 1, "Recherche 'The World is Empty' exacte");
     });
 
     it("TATOUAGES_DATA réunit les 24 Tatouages Togashi officiels 4e édition sans doublon", function () {

@@ -6,6 +6,23 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.35.0] — 2026-11-20
+
+### ✨ Ajouté
+- **Catalogue complet des 43 Katas officiels L5R 4e (`data/katas-data.js`)** :
+  - Ajout des 3 Katas d'Eau issus de *The Book of Water (p. 177)* : **Feuilles dans le Courant (*Leaves in the Stream*)**, **Vagues sur les Brisants (*Waves Upon the Breakers*)** et **La Puissance du Tsunami (*Power of the Tsunami*)**.
+  - Précision des écoles autorisées (*Bushi Daigotsu*, *Ninja Goju*) sur les katas du Livre de Base et *The Great Clans*.
+- **Nouvelle page « Recueil des Katas Martiaux » (`katas.html`, `js/katas.js`, `js/navbar.js`)** :
+  - Page dédiée accessible depuis la barre de navigation, `kihos.html` et la recherche globale : filtres par Élément (dont *1 000 Ans d'Acier — Air / Feu*), par Niveau de Maîtrise (`3` à `6`), recherche instantanée FR/EN (ex. *The World is Empty*), mémento des règles officielles (p. 259) et respect du verrou MJ `gmOnly`.
+- **Recherche Globale & La Forge (`js/global-search.js`, `createcharacter.html`)** :
+  - Indexation complète des Katas dans la recherche globale (`Ctrl+K`) avec onglet dédié `Katas` et redirection directe `katas.html?q=...`.
+  - Ajout du filtre explicite `Air / Feu (1 000 Ans d'Acier)` dans le sélecteur de Katas de La Forge (`createcharacter.html`).
+
+### 🧪 Tests & Cache
+- Mise à jour de `tests/unit-tests.js` (43 Katas officiels, vérification de *The World is Empty* et des 3 Katas de *The Book of Water*, tests de `filterKatasList`) et mise en cache PWA de `katas.html` & `js/katas.js` (`sw.js`).
+
+---
+
 ## [1.34.0] — 2026-11-20
 
 ### ✨ Ajouté

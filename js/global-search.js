@@ -49,6 +49,7 @@
     { cat: 'Pages', badge: '地 Carte', title: 'Carte Interactive de Rokugan', sub: '42 lieux, territoires de clans & chemin des 10 actes', url: 'carte.html' },
     { cat: 'Pages', badge: '法 Sorts', title: 'Grimoire des Sorts & Prières', sub: 'Air, Terre, Feu, Eau, Vide & Mahō', url: 'grimoire.html' },
     { cat: 'Pages', badge: '気 Kihos', title: 'Recueil des Kihos', sub: 'Arts mystiques des Moines & Atemi', url: 'kihos.html' },
+    { cat: 'Pages', badge: '型 Katas', title: 'Recueil des Katas Martiaux', sub: '43 formes de combat bushi & 1 000 Ans d\'Acier', url: 'katas.html' },
     { cat: 'Pages', badge: '墨 Tatouages', title: 'Tatouages Sacrés Togashi', sub: '24 tatouages de l\'Ordre Ise Zumi', url: 'tatouages.html' },
     { cat: 'Pages', badge: '記 Campagne', title: 'Chroniques de Campagne (10 Actes)', sub: 'Récits illustrés & narration audio', url: 'campagne.html' },
     { cat: 'Pages', badge: '幕 MJ', title: 'Écran du Maître du Jeu', sub: 'Escarmouche, Duel Iaijutsu, Paravent & Scénario Jour J', url: 'ecran-mj.html' },
@@ -117,6 +118,20 @@
         sub: `${loc.subtitle || loc.kind || ''} — ${loc.desc || ''}`.slice(0, 120),
         url: `carte.html?lieu=${encodeURIComponent(loc.id)}`,
         searchBlob: normalizeText(`${loc.name} ${loc.subtitle || ''} ${loc.kind || ''} ${loc.faction || ''} ${loc.desc || ''}`)
+      });
+    });
+
+    // Katas Martiaux
+    const katas = sources.KATAS_DATA || globalScope.KATAS_DATA || [];
+    katas.forEach((kt) => {
+      if (!includeSecrets && kt && kt.gmOnly === true) return;
+      items.push({
+        cat: 'Katas',
+        badge: `型 ${kt.element || 'Kata'} ${kt.mastery || 3}`,
+        title: kt.name,
+        sub: `${kt.schools || 'Toutes'} — ${kt.desc || ''}`.slice(0, 120),
+        url: `katas.html?q=${encodeURIComponent(kt.name)}`,
+        searchBlob: normalizeText(`${kt.name} ${kt.element || ''} ${kt.schools || ''} ${kt.source || ''} ${kt.desc || ''}`)
       });
     });
 
@@ -235,6 +250,7 @@
       `${prefix}data/clans-data.js`,
       `${prefix}data/carte-data.js`,
       `${prefix}data/tatouages-data.js`,
+      `${prefix}data/katas-data.js`,
       `${prefix}data/gm-rules-data.js`,
       `${prefix}data/sorts/sorts-universels.js`,
       `${prefix}data/sorts/sorts-air.js`,
@@ -275,7 +291,7 @@
         </div>
 
         <div id="l5r-global-search-cats" class="px-3 py-2 border-b border-stone-800/80 bg-black/30 flex flex-wrap gap-1 text-[11px]">
-          ${['all', 'Pages', 'Clans', 'Écoles', 'Sorts', 'Kihos', 'Tatouages', 'Lieux', 'Scénarios', 'Règles'].map((c) => `
+          ${['all', 'Pages', 'Clans', 'Écoles', 'Sorts', 'Kihos', 'Katas', 'Tatouages', 'Lieux', 'Scénarios', 'Règles'].map((c) => `
             <button type="button" data-gs-cat="${c}" class="px-2 py-0.5 rounded-full border cursor-pointer transition ${c === 'all' ? 'bg-amber-600 text-black border-amber-400 font-bold' : 'bg-stone-900/80 text-stone-300 border-stone-700 hover:border-amber-500/40'}">
               ${c === 'all' ? 'Tout' : c}
             </button>

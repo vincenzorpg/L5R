@@ -3,8 +3,8 @@
  * Pré-cache la Forge de Personnage, les données L5R 4e et permet l'installation PWA iOS/Android.
  */
 
-const CACHE_VERSION = 'l5r-forge-v1.34.0';
-const RUNTIME_CACHE = 'l5r-runtime-v1.34.0';
+const CACHE_VERSION = 'l5r-forge-v1.35.0';
+const RUNTIME_CACHE = 'l5r-runtime-v1.35.0';
 
 const CORE_ASSETS = [
   './',
@@ -13,6 +13,7 @@ const CORE_ASSETS = [
   './ecoles.html',
   './grimoire.html',
   './kihos.html',
+  './katas.html',
   './tatouages.html',
   './ecran-mj.html',
   './data/gm-scenarios-data.js',
@@ -36,6 +37,7 @@ const CORE_ASSETS = [
   './js/export-carnet.js',
   './js/grimoire.js',
   './js/kihos.js',
+  './js/katas.js',
   './js/tatouages.js',
   './js/gm-screen.js',
   './js/index-ui.js',

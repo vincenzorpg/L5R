@@ -1,7 +1,7 @@
 /**
- * data/katas-data.js — Catalogue officiel exact des Katas de Rokugan (L5R 4e Édition — 40 Katas)
+ * data/katas-data.js — Catalogue officiel exact des Katas de Rokugan (L5R 4e Édition — 43 Katas)
  * Sources : Livre de Base (pp. 259–260), The Book of Air (p. 175), The Book of Earth (pp. 194–195),
- *           The Book of Fire (pp. 179–180) et The Great Clans.
+ *           The Book of Fire (pp. 179–180), The Book of Water (p. 177) et The Great Clans.
  *
  * RÈGLES OFFICIELLES (Livre de Base, p. 259) :
  * - Coût d'apprentissage : Nombre de Points d'Expérience égal au Niveau de Maîtrise du Kata (si votre École figure dans la liste autorisée et que votre Anneau atteint au moins le Niveau de Maîtrise).
@@ -31,7 +31,7 @@
       element: "Terre",
       mastery: 4,
       cost: 4,
-      schools: "Bushi Hida, Bushi Ichiro, Bushi Moto",
+      schools: "Bushi Daigotsu, Bushi Hida, Bushi Ichiro, Bushi Moto",
       source: "Livre de Base (p. 260)",
       desc: "Réduit toutes vos pénalités de ND dues aux Rangs de Blessures d'un montant égal à votre Anneau de Terre."
     },
@@ -118,7 +118,7 @@
     },
 
     // =========================================================================
-    // --- KATAS D'EAU (WATER : 2 Livre de Base + 5 Great Clans) ---
+    // --- KATAS D'EAU (WATER : 2 Livre de Base + 4 Great Clans + 3 Book of Water) ---
     // =========================================================================
     {
       id: "kata-eau-frapper-eau",
@@ -176,9 +176,39 @@
       element: "Eau",
       mastery: 5,
       cost: 5,
-      schools: "Bushi Bayushi, Éclaireur Daidoji, Acteur Shosuro, Infiltrateur Shosuro",
+      schools: "Bushi Bayushi, Bushi Daigotsu, Éclaireur Daidoji, Acteur Shosuro, Infiltrateur Shosuro, Ninja Goju",
       source: "The Great Clans (p. 282)",
       desc: "Une fois par Round, vous pouvez calculer la distance d'une Action de Mouvement comme si votre Anneau d'Eau était égal à votre Rang de Compétence Discrétion (Stealth). Cela ne modifie pas la distance maximale franchissable en un Round."
+    },
+    {
+      id: "kata-eau-feuilles-courant",
+      name: "Feuilles dans le Courant (Leaves in the Stream)",
+      element: "Eau",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Bayushi, Bushi Hiruma, Bushi Mirumoto, Bushi Shiba",
+      source: "The Book of Water (p. 177)",
+      desc: "Tant que ce Kata est actif, vous pouvez réduire votre ND d'Armure d'un montant allant jusqu'à 5 × votre Anneau d'Eau (sans pouvoir descendre en dessous de 5). En contrepartie, votre distance maximale de déplacement pour le Round augmente du même montant (en pieds, soit ~1,5 m par tranche de 5)."
+    },
+    {
+      id: "kata-eau-vagues-brisants",
+      name: "Vagues sur les Brisants (Waves Upon the Breakers)",
+      element: "Eau",
+      mastery: 3,
+      cost: 3,
+      schools: "Bushi Akodo, Bushi Kakita, Bushi Shinjo",
+      source: "The Book of Water (p. 177)",
+      desc: "Tant que ce Kata est actif et que vous maniez une arme dans laquelle vous possédez au moins 3 Rangs de Compétence, vous bénéficiez d'un bonus de +1g0 à vos jets de dégâts avec cette arme."
+    },
+    {
+      id: "kata-eau-puissance-tsunami",
+      name: "La Puissance du Tsunami (Power of the Tsunami)",
+      element: "Eau",
+      mastery: 4,
+      cost: 4,
+      schools: "Bushi Daigotsu, Bushi Hida, Bushi Moto",
+      source: "The Book of Water (p. 177)",
+      desc: "Tant que ce Kata est actif, une fois par Round lors d'une attaque contre un adversaire, vous pouvez ignorer un montant de Réduction égal à votre Anneau d'Eau."
     },
 
     // =========================================================================
@@ -314,7 +344,7 @@
       element: "Feu",
       mastery: 4,
       cost: 4,
-      schools: "Berserker Matsu, Bushi Usagi",
+      schools: "Bushi Daigotsu, Berserker Matsu, Bushi Usagi",
       source: "Livre de Base (p. 260)",
       desc: "Vous pouvez ajouter votre Anneau de Feu à votre ND d'Armure tant que vous êtes en Posture d'Attaque Totale (Full Attack Stance)."
     },
@@ -436,5 +466,8 @@
 
   if (typeof window !== "undefined") {
     window.KATAS_DATA = KATAS_DATA;
+  }
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { KATAS_DATA };
   }
 })();
