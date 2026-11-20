@@ -6,6 +6,23 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.36.0] — 2026-11-20
+
+### ✨ Ajouté
+- **Couverture complète des techniques passives des 95 écoles dans La Forge & Fiche Imprimable (`js/character-generator.js`, `js/forge-ui.js`, `tests/unit-tests.js`)** :
+  - **Jets d'Attaque (`computeWeaponCombatMetrics` / `SCHOOL_ATTACK_RULES`)** : Intégration des bonus permanents pour **Bushi Yoritomo** (`+1g0` global), **Magistrat Doji** (`+1g0` Jitte / Sasumata), **Acteur Shosuro R2** (`+2g0` arme Petite), **Ordre Tatoué Togashi R2** (`+1g1` mains nues), **Moines de l'Araignée** (`+1g0` mains nues / hast), **Ingénieur Kaiu** (`+1g0` Compétences d'École), **Ombre du Lion Ikoma R2** (`+1g0` Compétences d'École), **Bushi Toritaka** (`+1g0` Perception) et **Pragmatiste Hida** (`+1g0` mains nues), en plus des écoles déjà gérées (*Bushi Hiruma*, *Archer Tsuruchi*).
+  - **Jets de Dégâts (`computeWeaponCombatMetrics` / `SCHOOL_DAMAGE_RULES`)** : Intégration pour **Berserker Matsu** (`+Rang d'Honneur` statique), **Tueurs des Forêts** (`+Constitution` en mêlée), **Magistrat Soshi** (`+1g0` mêlée), **Bushi Heichi** (`+0g1` Lance), **Bushi Moto** (`+1g0` Cimeterre / arme à 2 mains), **Épéiste Taoïste Mirumoto** (`+1g0` sabre sans armure), **Ordre Tatoué Togashi R2** (`+1g1` mains nues), **Hitomi Kikage Zumi R4** (`+1g1` mains nues), **Temple d'Osano-Wo** (`+0g1` mains nues), **Bagarreur Mante** (`+1g0` mains nues / arme Petite) et **Pragmatiste Hida** (`+1g0` mains nues).
+  - **Initiative (`computeInitiativeMetrics`)** : Ajout d'**Éclaireur Hiruma** (`+Discrétion`) et **Infanterie Montée Utaku R2** (`+1g0`).
+  - **ND d'Armure & Réduction de Dégâts (`computeArmorDefenseMetrics`, `resolveCatalogArmorData`, `updateAll`, `refreshPrintSheet`, `updateArmorWeaponSummary`)** : Intégration de **Enquêteur Kitsuki** (`+Perception`), **Hitomi Kikage Zumi** (`+Réflexes`), **Magistrat Doji** (`+Air`), **Bushi Usagi** (`+Athlétisme`), **Moines de l'Araignée** (`+2 × Rang`), **Le Tessen** (`+Éventail de Guerre`), **Bushi Hida R2** (`+Terre` en Réduction) et **Épéiste Taoïste Mirumoto** (`+(Rang + 2)` en Réduction avec sabre sans armure), ainsi que résolution dynamique de toutes les armures du catalogue (`Ashigaru`, `Tetsu-Dō`, `Bogu`, etc.).
+  - **Seuils de Blessures (`calculateWoundThresholds`)** : Prise en compte de **Tueurs des Forêts** (`+Constitution` par palier de blessure) en complément du *Guerrier de Fer Daidoji*.
+  - **Compétences sur Fiche Imprimable (`computeSkillRollBonus`)** : Affichage automatique des bonus passifs d'école (*Ingénieur Kaiu*, *Ombre du Lion Ikoma R2*, *Bushi Toritaka*, *Éclaireur Daidoji*, *Infiltrateur Shosuro*, *Vengeur Moto R2* et *Érudit Asako R5*).
+
+### 🐛 Corrigé
+- **Initiative Bushi Bayushi (`computeInitiativeMetrics`)** : Correction de l'ancienne règle héritée (1e/3e) pour appliquer la règle exacte **L5R 4e** (`+1g1 à tous les jets d'Initiative`).
+- **Isolation stricte des identifiants d'écoles (`getEffectiveSchoolRank`)** : Resserrage des motifs de correspondance afin d'éviter toute collision entre variantes familiales (ex. *Bushi Hida* vs *Pragmatiste Hida*, *Bushi Mirumoto* vs *Épéiste Taoïste Mirumoto*).
+
+---
+
 ## [1.35.2] — 2026-11-20
 
 ### 🐛 Corrigé
