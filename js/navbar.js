@@ -266,6 +266,15 @@
                   </div>
                 </a>
 
+                <!-- Recueil des Katas -->
+                <a href="${rootPrefix}katas.html" class="px-2.5 py-2 rounded-lg hover:bg-orange-950/40 text-stone-200 hover:text-orange-200 flex items-center gap-3 text-xs transition">
+                  <span class="w-7 h-7 rounded border bg-orange-950/80 text-orange-300 border-orange-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">型</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-orange-300">Recueil des Katas</span>
+                    <span class="text-[10px] text-stone-400 font-sans">43 formes martiales &amp; 1 000 Ans d'Acier</span>
+                  </div>
+                </a>
+
                 <!-- Tatouages -->
                 <a href="${rootPrefix}tatouages.html" class="px-2.5 py-2 rounded-lg hover:bg-teal-950/40 text-stone-200 hover:text-teal-200 flex items-center gap-3 text-xs transition">
                   <span class="w-7 h-7 rounded border bg-teal-950/80 text-teal-300 border-teal-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">墨</span>
@@ -409,6 +418,10 @@
               <a href="${rootPrefix}kihos.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">気</span>
                 <span>Kihos (Moines)</span>
+              </a>
+              <a href="${rootPrefix}katas.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-orange-300 flex items-center gap-2">
+                <span class="w-6 h-6 rounded border bg-orange-950/80 text-orange-300 border-orange-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">型</span>
+                <span>Katas (Bushi)</span>
               </a>
               <a href="${rootPrefix}tatouages.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-teal-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-teal-950/80 text-teal-300 border-teal-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">墨</span>
@@ -863,6 +876,7 @@
         'ecoles.html': ['Outils', 'Explorateur des Écoles'],
         'grimoire.html': ['Outils', 'Grimoire des Sorts'],
         'kihos.html': ['Outils', 'Recueil des Kihos'],
+        'katas.html': ['Outils', 'Recueil des Katas'],
         'tatouages.html': ['Outils', 'Tatouages Togashi'],
         'carte.html': ['Outils', 'Carte de Rokugan'],
         'ecran-mj.html': ['Outils', 'Écran du MJ'],
