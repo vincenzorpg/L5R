@@ -6,6 +6,17 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.35.2] — 2026-11-20
+
+### 🐛 Corrigé
+- **Bonus d'Archer Tsuruchi dans La Forge & Fiche Imprimable (`js/character-generator.js`, `js/forge-ui.js`, `createcharacter.html`, `tests/unit-tests.js`, Issue #93)** :
+  - Prise en compte du **Rang 1 *Toujours Prêt* (Archer Tsuruchi)** dans le calcul du jet pour toucher (`+1g0` avec tous les arcs : *Yumi*, *Dai-kyu*, *Han-kyu*) et dans le calcul d'**Initiative** (`+3`), y compris lorsque l'école est acquise en seconde école via *Écoles Multiples*.
+  - Prise en compte du **Rang 2 *La Flèche Connaît le Chemin*** (`+2g0` aux dégâts avec un arc) dès le Rang de Réputation 2+.
+  - Correction de l'équipement automatique lors de la sélection d'*Archer Tsuruchi* (`"Arc Yumi"` corrigé vers `"Yumi (Arc, Flèches Saule 2g2)"`) et unification du calcul de combat entre la barre sticky (`#sticky-atk` / `#sticky-dmg`), le récapitulatif d'étape (`#gear-weapon-summary`) et la fiche PDF (`#p-weapons-box`).
+  - Ajout de tests unitaires dédiés dans `tests/unit-tests.js` (Suite 1) pour `computeWeaponCombatMetrics` et `computeInitiativeMetrics`.
+
+---
+
 ## [1.35.1] — 2026-11-20
 
 ### 🐛 Corrigé

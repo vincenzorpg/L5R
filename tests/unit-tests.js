@@ -225,6 +225,62 @@
       });
     });
 
+    it("computeWeaponCombatMetrics & computeInitiativeMetrics appliquent Archer Tsuruchi R1 (+1g0 arc, +3 Init) & R2 (+2g0 dégâts)", function () {
+      const equipData = catalogScope.EQUIPEMENT_DATA;
+      const tsuruchiSchool = { id: "archer-tsuruchi", name: "Archer Tsuruchi", type: "Bushi" };
+      const traits = { sta: 2, wil: 2, str: 3, per: 3, ref: 3, awa: 2, agi: 3, int: 2, voi: 2 };
+      const skills = [{ name: "Kyujutsu (Yumi)", rank: 2, spec: false }, { name: "Kenjutsu", rank: 1, spec: false }];
+
+      // Rang 1 avec Yumi : Kyujutsu (2) + Réflexes (3) + Toujours Prêt (+1g0) = 6g3 ; Dégâts = 2g2 + Force d'Arc 3 = 5g2
+      const bowR1 = cg.computeWeaponCombatMetrics("Arc Yumi", traits, tsuruchiSchool, () => false, () => false, {
+        equipCatalog: equipData,
+        skillsList: skills,
+        insightRank: 1
+      });
+      assertEqual(bowR1.name, "Yumi (Arc, Flèches Saule 2g2)", "Résolution d'alias 'Arc Yumi'");
+      assertEqual(bowR1.attackRoll, "6g3", "Archer Tsuruchi R1 donne +1g0 au toucher à l'arc");
+      assertTrue(/Tsuruchi \(\+1g0\)/.test(bowR1.attackDetail), "Détail explicite du bonus Tsuruchi (+1g0)");
+      assertEqual(bowR1.damageRoll, "5g2", "Dégâts Yumi R1 sans bonus R2");
+
+      // Rang 2 avec Yumi : dégâts gagnent +2g0 supplémentaires (7g2)
+      const bowR2 = cg.computeWeaponCombatMetrics("Yumi (Arc, Flèches Saule 2g2)", traits, tsuruchiSchool, () => false, () => false, {
+        equipCatalog: equipData,
+        skillsList: skills,
+        insightRank: 2
+      });
+      assertEqual(bowR2.damageRoll, "7g2", "Archer Tsuruchi R2 ajoute +2g0 aux dégâts à l'arc");
+
+      // Aucun bonus au Katana ou avec arme à feu (Teppo)
+      const katana = cg.computeWeaponCombatMetrics("Katana", traits, tsuruchiSchool, () => false, () => false, {
+        equipCatalog: equipData,
+        skillsList: skills,
+        insightRank: 1
+      });
+      assertEqual(katana.attackRoll, "4g3", "Pas de bonus Tsuruchi R1 au Katana");
+
+      // Écoles Multiples : Seconde école Archer Tsuruchi confère aussi +1g0 à l'arc et +3 Init
+      const matsuPrimary = { id: "dompteur-matsu", name: "Dompteur de Lion Matsu", type: "Bushi" };
+      const multiAdvs = [{ name: "Écoles Multiples (Multiple Schools)", secondarySchoolId: "archer-tsuruchi", secondarySchoolRank: 1 }];
+      const bowMulti = cg.computeWeaponCombatMetrics("Dai-kyu (Arc de cavalerie, Flèches Saule 2g2)", traits, matsuPrimary, () => false, () => false, {
+        equipCatalog: equipData,
+        skillsList: skills,
+        insightRank: 2,
+        advantagesList: multiAdvs
+      });
+      assertEqual(bowMulti.attackRoll, "6g3", "Bonus Tsuruchi R1 appliqué via Écoles Multiples");
+
+      const initMulti = cg.computeInitiativeMetrics({
+        insightRank: 2,
+        ref: 3,
+        rAir: 2,
+        sch: matsuPrimary,
+        skillsList: skills,
+        hasAdv: () => false,
+        advantagesList: multiAdvs
+      });
+      assertEqual(initMulti.rollStr, "5g3 + 3", "Archer Tsuruchi R1 ajoute +3 à l'Initiative");
+    });
+
     it("getMasteriesSummary retourne les maîtrises débloquées aux rangs 3, 5 et 7", function () {
       assertEqual(cg.getMasteriesSummary("Kenjutsu", 2), "");
       assertEqual(cg.getMasteriesSummary("Kenjutsu", 3), "[R3: Frappe Tranchante]");

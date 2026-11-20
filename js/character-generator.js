@@ -1526,11 +1526,12 @@ function resetSheetToNewSelection(preserveAdvDisadv = true) {
   const w1Sel = document.getElementById('pc-weapon-1');
   if (w1Sel) {
     if (sch.id?.includes("hida") || sch.name?.includes("Hida")) {
-      w1Sel.value = "Tetsubo";
+      w1Sel.value = resolveCatalogWeaponData("Tetsubo")?.name || "Tetsubo";
     } else if (sch.id?.includes("tsuruchi") || sch.name?.includes("Tsuruchi")) {
-      w1Sel.value = "Arc Yumi";
+      const yumiName = resolveCatalogWeaponData("Yumi")?.name;
+      if (yumiName && w1Sel.querySelector(`option[value="${yumiName}"]`)) w1Sel.value = yumiName;
     } else if (sch.id?.includes("shiba") || sch.name?.includes("Shiba")) {
-      w1Sel.value = "Yari";
+      w1Sel.value = resolveCatalogWeaponData("Yari")?.name || "Yari";
     } else {
       w1Sel.value = "Katana";
     }
@@ -2639,146 +2640,50 @@ function updateAll() {
 
   renderSchoolTechniques(insightRank);
 
-  // 4. Jet pour Toucher
+  // 4. Jet pour Toucher & 5. Jet de Dégâts (moteur unifié avec bonus d'école Rang 1/2)
   const weapon1Name = document.getElementById('pc-weapon-1')?.value || "Katana";
-  const weaponData = getEquipment().armes?.find(w => w.name === weapon1Name) || {
+  const weaponData = resolveCatalogWeaponData(weapon1Name) || {
     name: weapon1Name,
     vd: "3g2",
     trait: "Agilité",
     skill: "Kenjutsu",
     type: "Médium"
   };
-
-  const isRanged = (weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu" || weaponData.skill === "Armes à feu");
-  const atkTraitName = weaponData.trait || (isRanged ? "Réflexes" : "Agilité");
-  const atkTraitVal = (atkTraitName === "Réflexes") ? ref
-    : (atkTraitName === "Intelligence") ? int
-    : (atkTraitName === "Perception") ? per
-    : agi;
-  const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
-
-  const skillObj = currentSkills.find(s => {
-    if (s.isChoice && !s.chosen) return false;
-    const sName = s.name.toLowerCase();
-    const wSkill = atkSkillName.toLowerCase();
-    const wName = weaponData.name.toLowerCase();
-    return sName.includes(wSkill) || wSkill.includes(sName) || sName.includes(wName);
+  const traitsObj = { sta, wil, str, per, ref, awa, agi, int, voi };
+  const primaryCombat = computeWeaponCombatMetrics(weapon1Name, traitsObj, sch, hasAdv, hasDisadv, {
+    skillsList: currentSkills,
+    insightRank,
+    advantagesList
   });
 
-  const skillRank = skillObj ? skillObj.rank : 0;
-  const hasSpec = skillObj ? skillObj.spec : false;
-
-  let atkRoll = 0;
-  let atkKeep = atkTraitVal;
-  let atkDetails = [];
-
-  if (skillRank > 0) {
-    atkRoll = skillRank + atkTraitVal;
-    atkDetails.push(`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`);
-  } else {
-    atkRoll = atkTraitVal;
-    atkDetails.push(`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`);
-  }
-
-  if ((sch?.id === "bushi-hiruma" || sch?.name?.includes("Hiruma")) && !isRanged) {
-    atkRoll += 1;
-    atkDetails.push("Hiruma (+1g0)");
-  }
-
-  if (hasSpec) {
-    atkDetails.push("Spé : relance les 1");
-  }
-
-  const atkStr = `${atkRoll}g${atkKeep}`;
-  const atkDetailStr = `${weaponData.name} : ${atkDetails.join(' + ')}`;
   const stickyAtk = document.getElementById('sticky-atk');
   const stickyAtkDetail = document.getElementById('sticky-atk-detail');
-  if (stickyAtk) stickyAtk.textContent = atkStr;
+  if (stickyAtk) stickyAtk.textContent = primaryCombat.attackRoll;
   if (stickyAtkDetail) {
-    stickyAtkDetail.textContent = atkDetailStr;
-    stickyAtkDetail.title = atkDetailStr;
+    stickyAtkDetail.textContent = primaryCombat.attackDetail;
+    stickyAtkDetail.title = primaryCombat.attackDetail;
   }
 
-  // 5. Jet de Dégâts
-  const vdParts = (weaponData.vd || "3g2").split('g');
-  const parsedRoll = parseInt(vdParts[0], 10);
-  const parsedKeep = parseInt(vdParts[1], 10);
-  let dmgBaseRoll = Number.isNaN(parsedRoll) ? 3 : parsedRoll;
-  let dmgBaseKeep = Number.isNaN(parsedKeep) ? 2 : parsedKeep;
-
-  let dmgRoll = dmgBaseRoll;
-  let dmgKeep = dmgBaseKeep;
-  let dmgBonusStatic = 0;
-  let dmgDetails = [`Arme (${weaponData.vd})`];
-
-  if (weaponData.fixedDamage) {
-    dmgDetails = [weaponData.fixedDamage];
-  } else if (weaponData.noStrength) {
-    dmgDetails.push("Sans Force");
-  } else if (weaponData.bowStrength != null) {
-    const effBowStr = Math.min(str, weaponData.bowStrength);
-    dmgRoll += effBowStr;
-    dmgDetails.push(`Force d'Arc (+${effBowStr}g0)`);
-  } else {
-    dmgRoll += str;
-    dmgDetails.push(`Force (+${str}g0)`);
-  }
-
-  if ((sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) && weaponData.type?.includes("Lourde")) {
-    dmgRoll += 1;
-    dmgDetails.push("Voie du Crabe (+1g0)");
-  }
-
-  if (hasAdv("large") && (weaponData.type?.includes("Grand") || weaponData.type?.includes("Lourd") || weaponData.type?.includes("2 mains"))) {
-    dmgRoll += 1;
-    dmgDetails.push("Grand (+1g0)");
-  }
-
-  if (hasDisadv("small") && !isRanged) {
-    dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
-    dmgDetails.push("Petit (-1g0)");
-  }
-
-  const dmgStr = weaponData.fixedDamage ? weaponData.fixedDamage : (dmgBonusStatic > 0 ? `${dmgRoll}g${dmgKeep} + ${dmgBonusStatic}` : `${dmgRoll}g${dmgKeep}`);
-  const dmgDetailStr = dmgDetails.join(' + ');
   const stickyDmg = document.getElementById('sticky-dmg');
   const stickyDmgDetail = document.getElementById('sticky-dmg-detail');
-  if (stickyDmg) stickyDmg.textContent = dmgStr;
+  if (stickyDmg) stickyDmg.textContent = primaryCombat.damageRoll;
   if (stickyDmgDetail) {
-    stickyDmgDetail.textContent = dmgDetailStr;
-    stickyDmgDetail.title = dmgDetailStr;
+    stickyDmgDetail.textContent = primaryCombat.damageDetail;
+    stickyDmgDetail.title = primaryCombat.damageDetail;
   }
 
-  // 6. Initiative (Insight + Réflexes g Réflexes)
-  let initRoll = insightRank + ref;
-  let initKeep = ref;
-  let initStatic = 0;
-  let initDetails = [`Insight ${insightRank} + Réfl. ${ref} (${insightRank + ref}g${ref})`];
-
-  if (hasAdv("lightning_reflexes")) {
-    initRoll += 1;
-    initDetails.push("Vitesse Éclair (+1g0)");
-  }
-
-  if (hasAdv("quick")) {
-    initStatic += rAir;
-    initDetails.push(`Vif (+${rAir})`);
-  }
-
-  const iaiSkill = currentSkills.find(s => s.name.toLowerCase().includes("iaijutsu"));
-  const iaiRank = iaiSkill ? iaiSkill.rank : 0;
-  if ((sch?.id === "duelliste-kakita" || sch?.name?.includes("Kakita")) && iaiRank > 0) {
-    initStatic += (iaiRank * 2);
-    initDetails.push(`Voie de la Grue (+${iaiRank * 2})`);
-  }
-
-  if ((sch?.id === "bushi-bayushi" || sch?.name?.includes("Bayushi")) && iaiRank > 0) {
-    initStatic += iaiRank;
-    initDetails.push(`Voie du Scorpion (+${iaiRank})`);
-  }
-
-  const initStr = initStatic > 0 ? `${initRoll}g${initKeep} + ${initStatic}` : `${initRoll}g${initKeep}`;
-  const initDetailStr = initDetails.join(' + ');
+  // 6. Initiative (Insight + Réflexes g Réflexes + bonus d'avantages/école)
+  const initMetrics = computeInitiativeMetrics({
+    insightRank,
+    ref,
+    rAir,
+    sch,
+    skillsList: currentSkills,
+    hasAdv,
+    advantagesList
+  });
+  const initStr = initMetrics.rollStr;
+  const initDetailStr = initMetrics.detailStr;
   const stickyInit = document.getElementById('sticky-init');
   const stickyInitDetail = document.getElementById('sticky-init-detail');
   if (stickyInit) stickyInit.textContent = initStr;
@@ -2801,6 +2706,13 @@ function updateAll() {
   }
 
   const weapon2Name = document.getElementById('pc-weapon-2')?.value || "Aucune";
+  const secondaryCombat = (weapon2Name && weapon2Name !== "Aucune")
+    ? computeWeaponCombatMetrics(weapon2Name, traitsObj, sch, hasAdv, hasDisadv, {
+        skillsList: currentSkills,
+        insightRank,
+        advantagesList
+      })
+    : null;
   let nitenBonus = 0;
   if ((sch?.id === "bushi-mirumoto" || sch?.name?.includes("Mirumoto")) && (weapon1Name.includes("Katana") || weapon2Name.includes("Wakizashi"))) {
     const kenSkill = currentSkills.find(s => s.name.toLowerCase().includes("kenjutsu"));
@@ -2852,6 +2764,12 @@ function updateAll() {
       family: fam?.name || "",
       school: sch?.name || "École de bushi Hida",
       schoolId: sch?.id || "",
+      insightRank: insightRank,
+      combatMetrics: {
+        primary: primaryCombat,
+        secondary: secondaryCombat,
+        initiative: initMetrics
+      },
       schoolClanName: schObj?.clanName || "",
       isExternalSchool: !!schObj?.isExternalClan,
       traits: {
@@ -3091,11 +3009,13 @@ function applyCharacterDataToSheet(rawInput) {
     }
     if (d.weapon1 && document.getElementById('pc-weapon-1')) {
       const w1Sel = document.getElementById('pc-weapon-1');
-      if (w1Sel.querySelector(`option[value="${d.weapon1}"]`)) w1Sel.value = d.weapon1;
+      const resolvedW1 = resolveCatalogWeaponData(d.weapon1)?.name || d.weapon1;
+      if (w1Sel.querySelector(`option[value="${resolvedW1}"]`)) w1Sel.value = resolvedW1;
     }
     if (d.weapon2 && document.getElementById('pc-weapon-2')) {
       const w2Sel = document.getElementById('pc-weapon-2');
-      if (w2Sel.querySelector(`option[value="${d.weapon2}"]`)) w2Sel.value = d.weapon2;
+      const resolvedW2 = d.weapon2 === "Aucune" ? "Aucune" : (resolveCatalogWeaponData(d.weapon2)?.name || d.weapon2);
+      if (w2Sel.querySelector(`option[value="${resolvedW2}"]`)) w2Sel.value = resolvedW2;
     }
     if (d.outfit !== undefined && document.getElementById('pc-outfit')) {
       document.getElementById('pc-outfit').value = d.outfit;
@@ -3380,49 +3300,177 @@ function resetCharacter() {
   }
 }
 
-function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisadv) {
+/**
+ * Indique si une fiche d'arme correspond à un arc (Yumi, Dai-kyu, Han-kyu).
+ */
+function isBowWeapon(weaponData) {
+  if (!weaponData) return false;
+  const cat = String(weaponData.category || "").toLowerCase();
+  const type = String(weaponData.type || "").toLowerCase();
+  const skill = String(weaponData.skill || "").toLowerCase();
+  const name = String(weaponData.name || "").toLowerCase();
+  return cat === "arcs"
+    || type.includes("arc")
+    || skill === "kyujutsu"
+    || /\b(yumi|dai-?kyu|han-?kyu|arc)\b/.test(name);
+}
+
+/**
+ * Résout une arme depuis le catalogue (par nom exact, identifiant ou alias historique tel que "Arc Yumi").
+ */
+function resolveCatalogWeaponData(weaponName, equipCatalog = null) {
+  if (!weaponName || weaponName === "Aucune") return null;
+  const eq = equipCatalog || getEquipment();
+  const armList = Array.isArray(eq?.armes) ? eq.armes : [];
+  const raw = String(weaponName).trim();
+  const normRaw = normalizeFold(raw);
+
+  let found = armList.find(w => w.name === raw || (w.id && normalizeFold(w.id) === normRaw));
+  if (!found && normRaw) {
+    found = armList.find(w => normalizeFold(w.name) === normRaw)
+      || armList.find(w => {
+        const wn = normalizeFold(w.name);
+        return wn.startsWith(normRaw) || (normRaw.includes("yumi") && w.id === "yumi") || (w.id && normRaw.includes(normalizeFold(w.id)));
+      });
+  }
+  return found || null;
+}
+
+/**
+ * Retourne le rang actif d'une école donnée, qu'elle soit école principale ou seconde école (Écoles Multiples).
+ */
+function getEffectiveSchoolRank(schoolId, nameRegex, primarySch, primaryRank = 1, advList = []) {
+  if (primarySch && (primarySch.id === schoolId || (nameRegex && nameRegex.test(primarySch.name || "")))) {
+    return Math.max(1, parseInt(primaryRank, 10) || 1);
+  }
+  const list = Array.isArray(advList) ? advList : [];
+  const multiAdv = list.find(a =>
+    isMultipleSchoolsAdv(a?.name)
+    && (a.secondarySchoolId === schoolId || (nameRegex && nameRegex.test(a.secondarySchoolName || "")))
+  );
+  if (multiAdv) {
+    return Math.max(1, parseInt(multiAdv.secondarySchoolRank, 10) || 1);
+  }
+  return 0;
+}
+
+/**
+ * Calcule le jet d'Initiative complet (dés + bonus statiques d'Avantages et d'École).
+ */
+function computeInitiativeMetrics({ insightRank = 1, ref = 2, rAir = 2, sch = null, skillsList = [], hasAdv = () => false, advantagesList: advList = [] } = {}) {
+  let initRoll = insightRank + ref;
+  const initKeep = ref;
+  let initStatic = 0;
+  const initDetails = [`Insight ${insightRank} + Réfl. ${ref} (${insightRank + ref}g${ref})`];
+
+  if (hasAdv("lightning_reflexes")) {
+    initRoll += 1;
+    initDetails.push("Vitesse Éclair (+1g0)");
+  }
+
+  if (hasAdv("quick")) {
+    initStatic += rAir;
+    initDetails.push(`Vif (+${rAir})`);
+  }
+
+  const skills = Array.isArray(skillsList) ? skillsList : [];
+  const iaiSkill = skills.find(s => (s.name || "").toLowerCase().includes("iaijutsu"));
+  const iaiRank = iaiSkill ? (iaiSkill.rank || 0) : 0;
+  if (getEffectiveSchoolRank("duelliste-kakita", /kakita/i, sch, insightRank, advList) >= 1 && iaiRank > 0) {
+    initStatic += (iaiRank * 2);
+    initDetails.push(`Voie de la Grue (+${iaiRank * 2})`);
+  }
+
+  if (getEffectiveSchoolRank("bushi-bayushi", /bayushi/i, sch, insightRank, advList) >= 1 && iaiRank > 0) {
+    initStatic += iaiRank;
+    initDetails.push(`Voie du Scorpion (+${iaiRank})`);
+  }
+
+  if (getEffectiveSchoolRank("archer-tsuruchi", /\barcher\s+tsuruchi\b/i, sch, insightRank, advList) >= 1) {
+    initStatic += 3;
+    initDetails.push("Toujours Prêt (+3)");
+  }
+
+  return {
+    initRoll,
+    initKeep,
+    initStatic,
+    rollStr: initStatic > 0 ? `${initRoll}g${initKeep} + ${initStatic}` : `${initRoll}g${initKeep}`,
+    detailStr: initDetails.join(' + ')
+  };
+}
+
+function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisadv, ctx = {}) {
   const safeName = weaponName || "Katana";
-  const weaponData = getEquipment().armes?.find(w => w.name === safeName) || {
+  const weaponData = resolveCatalogWeaponData(safeName, ctx.equipCatalog) || {
     name: safeName,
     vd: "3g2",
-    trait: "Agilité",
-    skill: "Kenjutsu",
-    type: "Médium"
+    trait: isBowWeapon({ name: safeName }) ? "Réflexes" : "Agilité",
+    skill: isBowWeapon({ name: safeName }) ? "Kyujutsu" : "Kenjutsu",
+    type: isBowWeapon({ name: safeName }) ? "Distance / Arc" : "Médium"
   };
 
-  const isRanged = !!(weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu");
-  const atkTraitName = isRanged ? "Réflexes" : (weaponData.trait || "Agilité");
-  const atkTraitVal = (atkTraitName === "Réflexes") ? traits.ref : traits.agi;
-  const atkSkillName = weaponData.skill || (isRanged ? "Kyujutsu" : "Kenjutsu");
+  const skillsList = Array.isArray(ctx.skillsList) ? ctx.skillsList : (currentSkills || []);
+  const advList = Array.isArray(ctx.advantagesList) ? ctx.advantagesList : (advantagesList || []);
+  const effectiveRank = Math.max(1, parseInt(ctx.insightRank, 10) || 1);
+  const safeHasAdv = typeof checkAdv === "function" ? checkAdv : () => false;
+  const safeHasDisadv = typeof checkDisadv === "function" ? checkDisadv : () => false;
 
-  const skillObj = currentSkills.find(s => {
+  const isBow = isBowWeapon(weaponData);
+  const isRanged = !!(weaponData.type?.includes("Distance") || weaponData.skill?.includes("Arc") || weaponData.skill === "Kyujutsu" || weaponData.skill === "Armes à feu" || isBow);
+  const atkTraitName = weaponData.trait || (isRanged ? "Réflexes" : "Agilité");
+  const atkTraitVal = (atkTraitName === "Réflexes") ? traits.ref
+    : (atkTraitName === "Intelligence") ? traits.int
+    : (atkTraitName === "Perception") ? traits.per
+    : traits.agi;
+  const atkSkillName = weaponData.skill || (isBow ? "Kyujutsu" : (isRanged ? "Tir" : "Kenjutsu"));
+
+  const skillObj = skillsList.find(s => {
     if (s.isChoice && !s.chosen) return false;
-    const sName = s.name.toLowerCase();
+    const sName = (s.name || "").toLowerCase();
     const wSkill = atkSkillName.toLowerCase();
     const wName = weaponData.name.toLowerCase();
     return sName.includes(wSkill) || wSkill.includes(sName) || sName.includes(wName);
   });
 
-  const skillRank = skillObj ? skillObj.rank : 0;
-  const hasSpec = skillObj ? skillObj.spec : false;
+  const skillRank = skillObj ? (skillObj.rank || 0) : 0;
+  const hasSpec = skillObj ? !!skillObj.spec : false;
   let atkRoll = skillRank > 0 ? (skillRank + atkTraitVal) : atkTraitVal;
   const atkKeep = atkTraitVal;
   const atkDetails = skillRank > 0
     ? [`${skillObj.name} (${skillRank})`, `${atkTraitName} (${atkTraitVal})`]
     : [`Non entraîné : ${atkTraitName} (${atkTraitVal}) sans explosion`];
 
-  if ((sch?.id === "bushi-hiruma" || sch?.name?.includes("Hiruma")) && !isRanged) {
+  const hirumaRank = getEffectiveSchoolRank("bushi-hiruma", /hiruma/i, sch, effectiveRank, advList);
+  if (hirumaRank >= 1 && !isRanged) {
     atkRoll += 1;
     atkDetails.push("Hiruma (+1g0)");
   }
+
+  const tsuruchiRank = getEffectiveSchoolRank("archer-tsuruchi", /\barcher\s+tsuruchi\b/i, sch, effectiveRank, advList);
+  if (tsuruchiRank >= 1 && isBow) {
+    atkRoll += 1;
+    atkDetails.push("Toujours Prêt : Tsuruchi (+1g0)");
+  }
+
   if (hasSpec) atkDetails.push("Spé : relance les 1");
 
   const vdParts = (weaponData.vd || "3g2").split('g');
-  let dmgRoll = parseInt(vdParts[0], 10) || 3;
-  const dmgKeep = parseInt(vdParts[1], 10) || 2;
-  const dmgDetails = [`Arme (${weaponData.vd || "3g2"})`];
+  const parsedRoll = parseInt(vdParts[0], 10);
+  const parsedKeep = parseInt(vdParts[1], 10);
+  let dmgRoll = Number.isNaN(parsedRoll) ? 3 : parsedRoll;
+  const dmgKeep = Number.isNaN(parsedKeep) ? 2 : parsedKeep;
+  let dmgDetails = [`Arme (${weaponData.vd || "3g2"})`];
 
-  if (!isRanged) {
+  if (weaponData.fixedDamage) {
+    dmgDetails = [weaponData.fixedDamage];
+  } else if (weaponData.noStrength) {
+    dmgDetails.push("Sans Force");
+  } else if (weaponData.bowStrength != null) {
+    const effBowStr = Math.min(traits.str, weaponData.bowStrength);
+    dmgRoll += effBowStr;
+    dmgDetails.push(`Force d'Arc (+${effBowStr}g0)`);
+  } else if (!isRanged) {
     dmgRoll += traits.str;
     dmgDetails.push(`Force (+${traits.str}g0)`);
   } else {
@@ -3430,15 +3478,22 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
     dmgDetails.push("Force d'Arc (+3g0)");
   }
 
-  if ((sch?.id === "bushi-hida" || sch?.name?.includes("Hida")) && weaponData.type?.includes("Lourde")) {
+  const hidaRank = getEffectiveSchoolRank("bushi-hida", /hida/i, sch, effectiveRank, advList);
+  if (hidaRank >= 1 && weaponData.type?.includes("Lourde") && !weaponData.fixedDamage) {
     dmgRoll += 1;
     dmgDetails.push("Voie du Crabe (+1g0)");
   }
-  if (checkAdv("large") && (weaponData.type?.includes("Grand") || weaponData.type?.includes("Lourd") || weaponData.type?.includes("2 mains"))) {
+
+  if (tsuruchiRank >= 2 && isBow && !weaponData.fixedDamage) {
+    dmgRoll += 2;
+    dmgDetails.push("Archer Tsuruchi R2 (+2g0)");
+  }
+
+  if (safeHasAdv("large") && (weaponData.type?.includes("Grand") || weaponData.type?.includes("Lourd") || weaponData.type?.includes("2 mains")) && !weaponData.fixedDamage) {
     dmgRoll += 1;
     dmgDetails.push("Grand (+1g0)");
   }
-  if (checkDisadv("small") && !isRanged) {
+  if (safeHasDisadv("small") && !isRanged && !weaponData.fixedDamage) {
     dmgRoll = Math.max(dmgKeep, dmgRoll - 1);
     dmgDetails.push("Petit (-1g0)");
   }
@@ -3448,9 +3503,10 @@ function computeWeaponCombatMetrics(weaponName, traits, sch, checkAdv, checkDisa
     type: weaponData.type || "Médium",
     skill: atkSkillName,
     isRanged,
+    isBow,
     attackRoll: `${atkRoll}g${atkKeep}`,
     attackDetail: `${weaponData.name} : ${atkDetails.join(' + ')}`,
-    damageRoll: `${dmgRoll}g${dmgKeep}`,
+    damageRoll: weaponData.fixedDamage ? weaponData.fixedDamage : `${dmgRoll}g${dmgKeep}`,
     damageDetail: dmgDetails.join(' + ')
   };
 }
@@ -3662,8 +3718,17 @@ function populateOfficialPrintSheet() {
   );
   const w1 = document.getElementById('pc-weapon-1')?.value || "Katana";
   const w2 = document.getElementById('pc-weapon-2')?.value || "Aucune";
-  const m1 = computeWeaponCombatMetrics(w1, traitsMap, sch, checkAdv, checkDisadv);
-  const m2 = (w2 && w2 !== "Aucune") ? computeWeaponCombatMetrics(w2, traitsMap, sch, checkAdv, checkDisadv) : null;
+  const printRank = parseInt(document.getElementById('insight-display')?.textContent.match(/Rang\s*(\d+)/i)?.[1], 10) || 1;
+  const m1 = computeWeaponCombatMetrics(w1, traitsMap, sch, checkAdv, checkDisadv, {
+    skillsList: currentSkills,
+    insightRank: printRank,
+    advantagesList
+  });
+  const m2 = (w2 && w2 !== "Aucune") ? computeWeaponCombatMetrics(w2, traitsMap, sch, checkAdv, checkDisadv, {
+    skillsList: currentSkills,
+    insightRank: printRank,
+    advantagesList
+  }) : null;
 
   const wBox = document.getElementById('p-weapons-box');
   if (wBox) {
@@ -3858,6 +3923,11 @@ if (typeof window !== "undefined") {
   window.calculateInsightAndRank = calculateInsightAndRank;
   window.calculateArmorTN = calculateArmorTN;
   window.calculateWoundThresholds = calculateWoundThresholds;
+  window.isBowWeapon = isBowWeapon;
+  window.resolveCatalogWeaponData = resolveCatalogWeaponData;
+  window.getEffectiveSchoolRank = getEffectiveSchoolRank;
+  window.computeInitiativeMetrics = computeInitiativeMetrics;
+  window.computeWeaponCombatMetrics = computeWeaponCombatMetrics;
   window.computeForgeSessionWoundState = computeForgeSessionWoundState;
   window.normalizeSessionState = normalizeSessionState;
   window.mergeDojoBackupLists = mergeDojoBackupLists;
@@ -3964,6 +4034,11 @@ if (typeof module !== "undefined" && module.exports) {
     calculateInsightAndRank,
     calculateArmorTN,
     calculateWoundThresholds,
+    isBowWeapon,
+    resolveCatalogWeaponData,
+    getEffectiveSchoolRank,
+    computeInitiativeMetrics,
+    computeWeaponCombatMetrics,
     computeForgeSessionWoundState,
     normalizeSessionState,
     mergeDojoBackupLists,

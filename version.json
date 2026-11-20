@@ -1,6 +1,6 @@
 {
-  "version": "1.35.1",
-  "tag": "v1.35.1",
+  "version": "1.35.2",
+  "tag": "v1.35.2",
   "date": "2026-11-20",
-  "notes": "Recalibrage précis des villes, du Mur Kaiu, de Kyuden Hida, de l'Outremonde et du tracé de campagne sur la Carte de Rokugan"
+  "notes": "Prise en compte du Rang 1 d'Archer Tsuruchi (+1g0 au toucher à l'arc et +3 Initiative), du Rang 2 (+2g0 dégâts à l'arc) et de la sélection automatique du Yumi dans la Forge (Issue #93)"
 }
