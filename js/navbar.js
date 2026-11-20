@@ -564,7 +564,53 @@
   }
 
   // 3. Synchronisation centralisée de la version en pied de page (#site-version-footer)
+  //    + injection des boutons « Signaler un bug » (GitHub Issues) et « Contact » (e-mail).
+  const GITHUB_ISSUES_CHOOSE_URL = 'https://github.com/vincenzorpg/L5R/issues/new/choose';
+  const CONTACT_MAILTO_URL = 'mailto:vincent.david.perso@gmail.com?subject=%5BLes%20Chroniques%20de%20Rokugan%5D%20Contact';
+
+  function injectFooterBugReportLink() {
+    const footerBar = document.getElementById('site-version-footer');
+    if (!footerBar) return;
+
+    footerBar.classList.add('flex-wrap', 'gap-y-1.5');
+
+    if (!document.getElementById('site-bug-report-link')) {
+      const sep1 = document.createElement('span');
+      sep1.textContent = '•';
+      sep1.setAttribute('aria-hidden', 'true');
+
+      const bugLink = document.createElement('a');
+      bugLink.id = 'site-bug-report-link';
+      bugLink.href = GITHUB_ISSUES_CHOOSE_URL;
+      bugLink.target = '_blank';
+      bugLink.rel = 'noopener noreferrer';
+      bugLink.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-900/90 hover:bg-amber-950/80 border border-amber-500/35 hover:border-amber-400 text-amber-300/90 hover:text-amber-200 transition no-underline font-sans font-semibold';
+      bugLink.title = 'Signaler un bug, proposer une idée ou vérifier une règle 4e sur GitHub';
+      bugLink.innerHTML = '<span aria-hidden="true">🐛</span><span>Signaler un bug</span>';
+
+      footerBar.appendChild(sep1);
+      footerBar.appendChild(bugLink);
+    }
+
+    if (!document.getElementById('site-contact-link')) {
+      const sep2 = document.createElement('span');
+      sep2.textContent = '•';
+      sep2.setAttribute('aria-hidden', 'true');
+
+      const contactLink = document.createElement('a');
+      contactLink.id = 'site-contact-link';
+      contactLink.href = CONTACT_MAILTO_URL;
+      contactLink.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-900/90 hover:bg-stone-800 border border-stone-700 hover:border-amber-400/60 text-stone-300 hover:text-amber-200 transition no-underline font-sans font-semibold';
+      contactLink.title = 'Envoyer un e-mail à Vincent (vincent.david.perso@gmail.com)';
+      contactLink.innerHTML = '<span aria-hidden="true">✉️</span><span>Contact</span>';
+
+      footerBar.appendChild(sep2);
+      footerBar.appendChild(contactLink);
+    }
+  }
+
   function syncFooterVersion() {
+    injectFooterBugReportLink();
     const lbl = document.getElementById('site-version-label');
     const lnk = document.getElementById('site-version-link');
     if (!lbl && !lnk) return;

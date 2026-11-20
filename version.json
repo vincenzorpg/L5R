@@ -1,6 +1,6 @@
 {
-  "version": "1.33.1",
-  "tag": "v1.33.1",
-  "date": "2026-11-18",
-  "notes": "Fiabilisation du générateur Podcast Edge TTS (filtrage segments non parlés, 5 retries + fallback, sauvegarde incrémentale)"
+  "version": "1.34.0",
+  "tag": "v1.34.0",
+  "date": "2026-11-20",
+  "notes": "Boutons « Signaler un bug » et « Contact » en pied de page sur tout le site + formulaires GitHub Issues catégorisés"
 }

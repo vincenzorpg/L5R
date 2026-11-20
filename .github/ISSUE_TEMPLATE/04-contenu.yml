@@ -1,0 +1,24 @@
+name: Contenu, Scénario ou Podcast
+description: Une coquille, une précision sur un récit de campagne, la carte, le codex ou un épisode audio.
+title: "[Contenu] "
+labels: ["documentation"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Contenu concerné
+      options:
+        - Récit de scénario (Actes 1 à 11+)
+        - Épisode Podcast audio (prononciation, coupure, voix...)
+        - Carte interactive de Rokugan (lieu, position, itinéraire)
+        - Codex de Campagne (PNJ, Lieux, Reliques)
+        - Fiche de Clan ou Aide de jeu
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Correction ou précision souhaitée
+      description: Indiquez le passage, le nom du lieu/PNJ ou le moment dans l'épisode audio.
+    validations:
+      required: true

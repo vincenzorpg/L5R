@@ -1,0 +1,47 @@
+name: Bug
+description: Quelque chose ne marche pas comme prévu.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce problème sur **Les Chroniques de Rokugan** !
+  - type: dropdown
+    id: module
+    attributes:
+      label: Page ou outil concerné
+      options:
+        - Accueil (index)
+        - La Forge de Samouraïs (création & mode session)
+        - Export / Import « Carnet de Rokugan »
+        - Carte interactive de Rokugan
+        - Chroniques de Campagne, Codex & Podcasts audio
+        - Écran du Maître du Jeu (MJ)
+        - Grimoire, Kihos, Katas, Tatouages ou Écoles
+        - Encyclopédie des Clans ou Aides de jeu
+        - Application mobile / Mode hors-ligne (PWA)
+        - Autre
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Que s'est-il passé ?
+      description: Décrivez le problème constaté et ce qui aurait dû se produire.
+      placeholder: Ex. Quand je clique sur...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire (optionnel)
+      placeholder: |
+        1. Aller sur ...
+        2. Cliquer sur ...
+        3. Constater ...
+  - type: input
+    id: environment
+    attributes:
+      label: Appareil & Navigateur (optionnel)
+      placeholder: "Ex. iPhone Safari, Android Chrome, PC Firefox / Chrome..."
