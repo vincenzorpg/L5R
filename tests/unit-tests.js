@@ -25,6 +25,7 @@
   const campagneStudio = isNode ? require("../js/campagne-studio.js") : window;
   const narrator = isNode ? require("../js/narrator.js") : window;
   const katasUi = isNode ? require("../js/katas.js") : window;
+  const sessionsUi = isNode ? require("../js/sessions.js") : (window.L5RSessions || window);
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -1283,6 +1284,77 @@
       const found = narrator.resolvePodcastEntry(mockManifest, 11);
       assertTrue(found && found.file === "assets/audio/scenario-11.mp3", "Résolution de l'Acte 11 exacte");
       assertEqual(narrator.resolvePodcastEntry(mockManifest, 99), null, "Acte absent retourne null");
+    });
+  });
+
+  // ===========================================================================
+  // 18. PLANIFICATEUR DE SESSIONS / DOODLE PJs (js/sessions.js)
+  // ===========================================================================
+  describe("18. Planificateur de Sessions JDR — Janvier à Mars 2026 (js/sessions.js)", function () {
+    it("generateWeekendSlots et groupSlotsByWeekend couvrent les 13 week-ends (65 créneaux) de janv. à mars 2026", function () {
+      const slots = sessionsUi.generateWeekendSlots(2026, [0, 1, 2]);
+      const groups = sessionsUi.groupSlotsByWeekend(slots);
+
+      assertEqual(slots.length, 65, "65 créneaux week-end exactement entre janvier et mars 2026");
+      assertEqual(groups.length, 13, "13 week-ends complets regroupés");
+      assertEqual(slots[0].id, "2026-01-02:soir", "Premier créneau le vendredi 2 janvier 2026 au soir");
+      assertEqual(slots[1].id, "2026-01-03:aprem", "Samedi 3 janvier après-midi");
+      assertEqual(slots[2].id, "2026-01-03:soir", "Samedi 3 janvier soir");
+      assertEqual(slots[slots.length - 1].id, "2026-03-29:soir", "Dernier créneau le dimanche 29 mars 2026 au soir");
+    });
+
+    it("computeSlotRanking, fusion des votes et partage URL/Discord fonctionnent bout en bout", function () {
+      const slots = sessionsUi.generateWeekendSlots(2026, [0, 1, 2]);
+      assertEqual(sessionsUi.cycleVoteState(""), "yes");
+      assertEqual(sessionsUi.cycleVoteState("yes"), "maybe");
+      assertEqual(sessionsUi.cycleVoteState("maybe"), "no");
+      assertEqual(sessionsUi.cycleVoteState("no"), "");
+
+      let responses = [];
+      responses = sessionsUi.upsertParticipantResponse(responses, {
+        name: "Tsuruchi Akira",
+        clan: "mante",
+        note: "Dispo dès 20h",
+        votes: { "2026-01-17:soir": "yes", "2026-02-07:soir": "maybe" }
+      });
+      responses = sessionsUi.upsertParticipantResponse(responses, {
+        name: "Okado Hiruma",
+        clan: "crabe",
+        votes: { "2026-01-17:soir": "yes", "2026-02-07:soir": "no" }
+      });
+      // Dédoublonnage insensible à la casse
+      responses = sessionsUi.upsertParticipantResponse(responses, {
+        name: "tsuruchi akira",
+        clan: "mante",
+        note: "Maj Ok",
+        votes: { "2026-01-17:soir": "yes", "2026-02-07:soir": "yes" }
+      });
+      assertEqual(responses.length, 2, "Dédoublonnage par nom de PJ sans créer de doublon");
+
+      const ranking = sessionsUi.computeSlotRanking(slots, responses);
+      assertEqual(ranking[0].slot.id, "2026-01-17:soir", "Le créneau unanime 17 janv. soir arrive en tête");
+      assertTrue(ranking[0].isPerfectMatch, "2/2 disponibles -> unanimité détectée");
+      assertEqual(ranking[0].yesCount, 2);
+
+      // Encodage / Décodage individuel + extraction Discord multi-lignes
+      const tok1 = sessionsUi.encodeVoteSharePayload(responses[0], slots);
+      const tok2 = sessionsUi.encodeVoteSharePayload(responses[1], slots);
+      const discordPaste = `Voici mes dispos:\nhttps://vincenzorpg.github.io/L5R/sessions.html?vote=${tok1}\nOkado:\nhttps://vincenzorpg.github.io/L5R/sessions.html?vote=${tok2}`;
+      const extracted = sessionsUi.extractAndDecodeShareInputs(discordPaste, slots);
+      assertEqual(extracted.invalidCount, 0);
+      assertEqual(extracted.imported.length, 2, "Extraction de 2 fiches depuis du texte Discord mixte");
+      assertEqual(extracted.imported[0].votes["2026-01-17:soir"], "yes");
+
+      // Poll complet roundtrip
+      const pollTok = sessionsUi.encodePollSharePayload(responses, slots);
+      const decodedPoll = sessionsUi.decodeSharePayload(`poll=${pollTok}`, slots);
+      assertTrue(decodedPoll && decodedPoll.kind === "poll" && decodedPoll.items.length === 2, "Roundtrip ?poll= complet fidèle");
+
+      // Résumé Discord & .ics
+      const summary = sessionsUi.formatDiscordPlayerSummary(responses[0], slots, `https://vincenzorpg.github.io/L5R/sessions.html?vote=${tok1}`);
+      assertTrue(/tsuruchi akira/i.test(summary) && summary.includes("17 janv.") && summary.includes("?vote="), "Résumé Discord complet");
+      const ics = sessionsUi.buildIcsEventContent(slots.find(s => s.id === "2026-01-17:soir"));
+      assertTrue(ics.includes("BEGIN:VCALENDAR") && ics.includes("DTSTART:20260117T200000"), "Export .ics valide");
     });
   });
 

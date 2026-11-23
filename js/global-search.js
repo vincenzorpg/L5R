@@ -53,6 +53,7 @@
     { cat: 'Pages', badge: '墨 Tatouages', title: 'Tatouages Sacrés Togashi', sub: '24 tatouages de l\'Ordre Ise Zumi', url: 'tatouages.html' },
     { cat: 'Pages', badge: '記 Campagne', title: 'Chroniques de Campagne (10 Actes)', sub: 'Récits illustrés & narration audio', url: 'campagne.html' },
     { cat: 'Pages', badge: '幕 MJ', title: 'Écran du Maître du Jeu', sub: 'Escarmouche, Duel Iaijutsu, Paravent & Scénario Jour J', url: 'ecran-mj.html' },
+    { cat: 'Pages', badge: '暦 Sessions', title: 'Doodle & Planning des Sessions (Janv–Mars 2026)', sub: 'Disponibilités week-ends des PJs, fusion Discord & .ics', url: 'sessions.html' },
     { cat: 'Pages', badge: '戦 Aide', title: 'Mémento Combat L5R 4e', sub: 'Postures, manœuvres, duel & blessures', url: 'aides/combat-memento.html' },
     { cat: 'Pages', badge: '誉 Aide', title: 'Le Code du Bushido', sub: '7 vertus, Honneur, Gloire & Table 2.3', url: 'aides/bushido-honneur.html' },
     { cat: 'Pages', badge: '禮 Aide', title: 'Étiquette & Coutumes de Cour', sub: 'Ordre céleste, cadeaux, sabres & thé', url: 'aides/etiquette-coutumes.html' },
