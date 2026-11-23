@@ -1,6 +1,6 @@
 {
-  "version": "1.36.0",
-  "tag": "v1.36.0",
-  "date": "2026-11-20",
-  "notes": "Audit et intégration complète de toutes les techniques passives des 95 écoles L5R 4e (Attaque, Dégâts, Initiative, ND d'Armure, Réduction de dégâts, Seuils de Blessures et Compétences) et correction du bonus d'Initiative Bushi Bayushi (+1g1)"
+  "version": "1.37.0",
+  "tag": "v1.37.0",
+  "date": "2026-11-23",
+  "notes": "Ajout du Planificateur de Sessions JDR (Doodle Janvier–Mars 2026) 100 % autonome avec créneaux week-ends, classement des meilleures dates, partage Discord/URL et export agenda .ics"
 }

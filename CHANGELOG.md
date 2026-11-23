@@ -6,6 +6,18 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.37.0] — 2026-11-23
+
+### ✨ Ajouté
+- **Planificateur de Sessions JDR — Doodle PJs Janvier à Mars 2026 (`sessions.html`, `js/sessions.js`, `js/navbar.js`, `js/global-search.js`, `index.html`, `sw.js`, `tests/unit-tests.js`)** :
+  - Génération complète des **13 week-ends (65 créneaux)** du 2 janvier au 29 mars 2026 (*Vendredi soir*, *Samedi après-midi/soir*, *Dimanche après-midi/soir*) via `generateWeekendSlots` et `groupSlotsByWeekend`.
+  - Interface de saisie rapide 4 états (`✅ Dispo`, `🟡 Si besoin`, `❌ Indispo`, `⬜ Non renseigné`) avec mode pinceau, filtres par mois/moment, remplissage en masse par week-end, préréglages de l'Escouade (*Hirohito Hida*, *Okado Hiruma*, *Tsuruchi Akira*, *Ryujin Mirumoto*, *Maître du Jeu*) et chargement automatique des personnages locaux du Dojo (`l5r_dojo_characters_v1`).
+  - Classement automatique des meilleurs créneaux (`computeSlotRanking` avec détection d'unanimité 🌟), export iCalendar (`.ics` via `buildIcsEventContent`) et annonce Discord prête à copier (`formatDiscordSessionCall`).
+  - Centralisation et fusion 100 % autonome sans serveur (`localStorage` + jetons URL compacts `?vote=` / `?poll=` + extraction multi-lignes Discord `extractAndDecodeShareInputs` + résumé Discord `formatDiscordPlayerSummary` + export/import `.json`).
+  - Intégration dans la navigation globale (`js/navbar.js`), la recherche `Ctrl+K` (`js/global-search.js`), l'accueil (`index.html`), le cache PWA (`sw.js`) et ajout de la **Suite 18** dans `tests/unit-tests.js`.
+
+---
+
 ## [1.36.0] — 2026-11-20
 
 ### ✨ Ajouté
