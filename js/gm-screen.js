@@ -26,11 +26,11 @@
   ];
 
   const STANCES = {
-    attaque: { label: 'Attaque', tnDelta: 0 },
-    assaut: { label: 'Assaut (-10 ND, +2g1)', tnDelta: -10 },
-    defense: { label: 'Défense (+Air+Déf)', tnDelta: 5 },
-    esquive: { label: 'Défense Totale (Déf/Réf ÷2)', tnDelta: 10 },
-    centre: { label: 'Centre (0 action ; +1g1+Vide & +10 Init tour suiv.)', tnDelta: 0 }
+    attaque: { label: 'Attaque', shortLabel: 'Attaque', tnDelta: 0 },
+    assaut: { label: 'Assaut (-10 ND, +2g1)', shortLabel: 'Assaut (-10 ND)', tnDelta: -10 },
+    defense: { label: 'Défense (+Air+Déf)', shortLabel: 'Défense (+Air+Déf)', tnDelta: 5 },
+    esquive: { label: 'Défense Totale (Déf/Réf ÷2)', shortLabel: 'Défense Totale', tnDelta: 10 },
+    centre: { label: 'Centre (0 action ; +1g1+Vide & +10 Init tour suiv.)', shortLabel: 'Centre (+1g1+Vide)', tnDelta: 0 }
   };
 
   const STATUS_FLAGS = [
@@ -1402,128 +1402,122 @@
       const woundPenalty = wState.penalty || 0;
 
       const stanceOptions = Object.entries(STANCES).map(([key, st]) =>
-        `<option value="${key}" ${c.stance === key ? 'selected' : ''}>${escapeHtml(st.label)}</option>`
+        `<option value="${key}" ${c.stance === key ? 'selected' : ''}>${escapeHtml(st.shortLabel || st.label)}</option>`
       ).join('');
 
       const statusChips = STATUS_FLAGS.map((sf) => {
         const active = Array.isArray(c.statuses) && c.statuses.includes(sf.id);
-        return `<button type="button" data-action="toggle-status" data-combat-id="${escapeHtml(c.id)}" data-status="${sf.id}" title="${escapeHtml(sf.desc)}" class="px-1.5 py-0.5 rounded text-[10px] border transition cursor-pointer ${active ? 'bg-rose-950/90 border-rose-500 text-rose-200 font-bold' : 'bg-stone-900/70 border-stone-800 text-stone-400 hover:text-stone-200'}">${escapeHtml(sf.label)}</button>`;
+        return `<button type="button" data-action="toggle-status" data-combat-id="${escapeHtml(c.id)}" data-status="${sf.id}" title="${escapeHtml(sf.desc)}" class="px-1 py-0.5 rounded text-[9.5px] leading-tight border transition cursor-pointer ${active ? 'bg-rose-950/90 border-rose-500 text-rose-200 font-bold' : 'bg-stone-900/70 border-stone-800 text-stone-400 hover:text-stone-200'}">${escapeHtml(sf.label)}</button>`;
       }).join('');
 
       return `
         <tr class="transition ${isActive ? 'bg-amber-950/30 ring-1 ring-inset ring-amber-500/50' : 'hover:bg-white/[0.02]'}">
-          <!-- 1. TOUR & INIT -->
-          <td class="px-3 py-2.5 text-center align-middle">
-            <div class="flex items-center justify-center gap-1.5">
-              <button type="button" data-action="set-active-turn" data-turn-index="${idx}" title="Cliquer pour activer le tour de ${escapeHtml(c.name)}" class="w-7 h-7 rounded-full inline-flex items-center justify-center font-imperial font-bold text-xs cursor-pointer transition ${isActive ? 'bg-amber-500 text-black shadow' : 'bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300'}">#${idx + 1}</button>
-              <input type="number" data-action="set-init" data-combat-id="${escapeHtml(c.id)}" value="${c.initiative}" class="w-13 text-center font-mono font-bold text-xs rounded bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-1 focus:outline-none" />
-              <button type="button" data-action="reroll-combatant-init" data-combat-id="${escapeHtml(c.id)}" title="Relancer l'Initiative" class="px-1.5 py-1 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] cursor-pointer">🎲</button>
+          <!-- 1. TOUR & INIT (11%) -->
+          <td class="px-2 py-2 text-center align-middle">
+            <div class="flex items-center justify-center gap-1">
+              <button type="button" data-action="set-active-turn" data-turn-index="${idx}" title="Cliquer pour activer le tour de ${escapeHtml(c.name)}" class="w-6 h-6 rounded-full inline-flex items-center justify-center font-imperial font-bold text-[11px] cursor-pointer transition shrink-0 ${isActive ? 'bg-amber-500 text-black shadow' : 'bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300'}">#${idx + 1}</button>
+              <input type="number" data-action="set-init" data-combat-id="${escapeHtml(c.id)}" value="${c.initiative}" class="w-11 text-center font-mono font-bold text-xs rounded bg-[#0d0b0b] border border-amber-500/40 text-amber-300 py-0.5 focus:outline-none" />
+              <button type="button" data-action="reroll-combatant-init" data-combat-id="${escapeHtml(c.id)}" title="Relancer l'Initiative" class="px-1 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] cursor-pointer shrink-0">🎲</button>
             </div>
           </td>
 
-          <!-- 2. COMBATTANT & NOTE -->
-          <td class="px-3 py-2.5 align-middle">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${isPC ? 'bg-sky-950/80 text-sky-300 border-sky-700/50' : 'bg-red-950/80 text-red-300 border-red-700/50'}">${isPC ? 'PJ' : 'PNJ'}</span>
-              <span class="font-imperial font-bold text-sm text-stone-100">${escapeHtml(c.name)}</span>
-              ${isActive ? '<span class="px-1.5 py-0.5 rounded bg-amber-500 text-black font-bold text-[9px] uppercase">Tour actif</span>' : ''}
+          <!-- 2. COMBATTANT & NOTE (19%) -->
+          <td class="px-2 py-2 align-middle">
+            <div class="flex items-center gap-1 flex-wrap">
+              <span class="px-1 py-0.2 rounded text-[9px] font-bold border ${isPC ? 'bg-sky-950/80 text-sky-300 border-sky-700/50' : 'bg-red-950/80 text-red-300 border-red-700/50'}">${isPC ? 'PJ' : 'PNJ'}</span>
+              <span class="font-imperial font-bold text-xs text-stone-100 leading-tight break-words">${escapeHtml(c.name)}</span>
+              ${isActive ? '<span class="px-1 py-0.2 rounded bg-amber-500 text-black font-bold text-[8px] uppercase">Actif</span>' : ''}
             </div>
             <input
               type="text"
               data-action="combatant-note"
               data-combat-id="${escapeHtml(c.id)}"
               value="${escapeHtml(c.notes || '')}"
-              placeholder="Note / Cible / Effet..."
-              class="mt-1 w-full rounded bg-black/45 border border-stone-800 focus:border-amber-500/50 px-2 py-0.5 text-[11px] text-stone-300 placeholder-stone-600 focus:outline-none"
+              placeholder="Note / Cible..."
+              class="mt-1 w-full rounded bg-black/45 border border-stone-800 focus:border-amber-500/50 px-1.5 py-0.5 text-[10px] text-stone-300 placeholder-stone-600 focus:outline-none"
             />
           </td>
 
-          <!-- 3. POSTURE & DÉFENSE -->
-          <td class="px-3 py-2.5 align-middle">
-            <div class="space-y-1.5">
-              <select data-action="set-stance" data-combat-id="${escapeHtml(c.id)}" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-xs text-amber-200 focus:outline-none">
+          <!-- 3. POSTURE & ND (15%) -->
+          <td class="px-2 py-2 align-middle">
+            <div class="space-y-1">
+              <select data-action="set-stance" data-combat-id="${escapeHtml(c.id)}" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-1.5 py-0.5 text-[11px] text-amber-200 focus:outline-none">
                 ${stanceOptions}
               </select>
-              <div class="flex items-center justify-between gap-2 text-xs">
-                <span class="px-2 py-0.5 rounded bg-black/60 border border-amber-500/35 font-mono font-bold text-amber-300" title="${escapeHtml(tnInfo.note || `ND Base ${c.armorTN}`)}">
-                  🛡️ ND ${tnInfo.effectiveTN}
-                </span>
-                <span class="px-2 py-0.5 rounded bg-black/60 border border-stone-700 font-mono text-[11px] text-stone-300" title="Réduction de dégâts">
-                  Réd. <b class="text-emerald-300">${reduction}</b> • Ter ${earth}
-                </span>
+              <div class="flex items-center justify-between gap-1 text-[10px] font-mono bg-black/50 px-1.5 py-0.5 rounded border border-stone-800" title="${escapeHtml(tnInfo.note || `ND Base ${c.armorTN}`)}">
+                <span class="font-bold text-amber-300">🛡️ ND ${tnInfo.effectiveTN}</span>
+                <span class="text-stone-300">Réd <b class="text-emerald-300">${reduction}</b> • T${earth}</span>
               </div>
             </div>
           </td>
 
-          <!-- 4. JETS D'ACTION (CÔTE À CÔTE) -->
-          <td class="px-3 py-2.5 align-middle font-mono text-xs">
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5">
-              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(c.attack || '5g2')}" data-penalty="${woundPenalty}" data-roll-label="Toucher ${escapeHtml(c.name)}" class="flex-1 px-2.5 py-1.5 rounded-lg bg-black/60 hover:bg-amber-950/70 border border-amber-500/40 text-stone-100 cursor-pointer transition text-center" title="Lancer le jet de toucher (malus blessures ${woundPenalty ? '-' + woundPenalty : '0'})">
-                ⚔️ <b class="text-amber-300">${escapeHtml(c.attack || '—')}</b> 🎲
+          <!-- 4. JETS D'ACTION (13%) -->
+          <td class="px-2 py-2 align-middle font-mono text-[11px]">
+            <div class="flex items-center gap-1">
+              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(c.attack || '5g2')}" data-penalty="${woundPenalty}" data-roll-label="Toucher ${escapeHtml(c.name)}" class="flex-1 px-1.5 py-1 rounded bg-black/60 hover:bg-amber-950/70 border border-amber-500/40 text-stone-100 cursor-pointer transition text-center whitespace-nowrap" title="Lancer Toucher (malus blessures ${woundPenalty ? '-' + woundPenalty : '0'})">
+                ⚔️<b class="text-amber-300">${escapeHtml(c.attack || '—')}</b>
               </button>
-              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(c.damage || '4g2')}" data-penalty="0" data-roll-label="Dégâts ${escapeHtml(c.name)}" class="flex-1 px-2.5 py-1.5 rounded-lg bg-black/60 hover:bg-red-950/70 border border-red-500/40 text-stone-100 cursor-pointer transition text-center" title="Lancer le jet de dégâts">
-                🩸 <b class="text-rose-300">${escapeHtml(c.damage || '—')}</b> 🎲
+              <button type="button" data-action="roll-formula" data-formula="${escapeHtml(c.damage || '4g2')}" data-penalty="0" data-roll-label="Dégâts ${escapeHtml(c.name)}" class="flex-1 px-1.5 py-1 rounded bg-black/60 hover:bg-red-950/70 border border-red-500/40 text-stone-100 cursor-pointer transition text-center whitespace-nowrap" title="Lancer Dégâts">
+                🩸<b class="text-rose-300">${escapeHtml(c.damage || '—')}</b>
               </button>
             </div>
           </td>
 
-          <!-- 5. BLESSURES & SEUIL -->
-          <td class="px-3 py-2.5 align-middle">
-            <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
-              <span class="px-2 py-0.5 rounded border font-bold text-[11px] ${woundBadgeClass(wState.color)}">${escapeHtml(formatPenaltyText(wState))}</span>
-              <div class="flex items-center gap-1 font-mono">
-                <input
-                  type="number"
-                  min="0"
-                  data-action="set-wounds-input"
-                  data-combat-id="${escapeHtml(c.id)}"
-                  value="${wState.wounds}"
-                  title="Modifier directement le total de Blessures"
-                  class="w-12 text-center font-bold rounded bg-[#0d0b0b] border border-stone-700 py-0.5 text-xs text-stone-100 focus:outline-none focus:border-amber-400"
-                />
-                <span class="text-stone-400 text-[11px]">/ ${wState.maxWounds}</span>
+          <!-- 5. BLESSURES & ENCAISSER (-RÉD AUTO) (24%) -->
+          <td class="px-2 py-2 align-middle">
+            <div class="space-y-1">
+              <div class="flex items-center justify-between gap-1 text-[10px]">
+                <span class="px-1.5 py-0.2 rounded border font-bold truncate ${woundBadgeClass(wState.color)}">${escapeHtml(formatPenaltyText(wState))}</span>
+                <div class="flex items-center gap-0.5 font-mono shrink-0">
+                  <input
+                    type="number"
+                    min="0"
+                    data-action="set-wounds-input"
+                    data-combat-id="${escapeHtml(c.id)}"
+                    value="${wState.wounds}"
+                    title="Modifier directement le total de Blessures"
+                    class="w-10 text-center font-bold rounded bg-[#0d0b0b] border border-stone-700 py-0.2 text-[11px] text-stone-100 focus:outline-none focus:border-amber-400"
+                  />
+                  <span class="text-stone-400 text-[10px]">/${wState.maxWounds}</span>
+                </div>
               </div>
-            </div>
-            <div class="w-full h-2 rounded-full bg-stone-900 overflow-hidden border border-stone-800">
-              <div class="h-full transition-all duration-200 ${woundBarColor(wState.color)}" style="width: ${wState.percent}%"></div>
+              <div class="w-full h-1.5 rounded-full bg-stone-900 overflow-hidden border border-stone-800">
+                <div class="h-full transition-all duration-200 ${woundBarColor(wState.color)}" style="width: ${wState.percent}%"></div>
+              </div>
+              <div class="flex items-center justify-between gap-1 pt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    min="1"
+                    max="200"
+                    data-hit-input="${escapeHtml(c.id)}"
+                    placeholder="Dég"
+                    title="Dégâts bruts reçus (-${reduction} Réd. auto)"
+                    class="w-11 text-center font-mono rounded bg-[#0d0b0b] border border-rose-500/40 py-0.5 text-[10px] text-rose-200 focus:outline-none"
+                  />
+                  <button type="button" data-action="apply-reduced-hit" data-combat-id="${escapeHtml(c.id)}" title="Soustraire Réduction (${reduction}) et appliquer" class="px-1.5 py-0.5 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-500/50 text-[10px] font-bold text-rose-100 cursor-pointer whitespace-nowrap">
+                    💥-${reduction}
+                  </button>
+                </div>
+                <div class="flex items-center gap-0.5">
+                  <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="-5" class="px-1 py-0.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-[9.5px] text-emerald-300 cursor-pointer">-5</button>
+                  <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="-1" class="px-1 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[9.5px] text-emerald-200 cursor-pointer">-1</button>
+                  <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="1" class="px-1 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[9.5px] text-red-200 cursor-pointer">+1</button>
+                  <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="5" class="px-1 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[9.5px] text-red-200 cursor-pointer">+5</button>
+                  <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="10" class="px-1 py-0.5 rounded bg-red-950/80 hover:bg-red-800 border border-red-600/60 text-[9.5px] font-bold text-red-200 cursor-pointer">+10</button>
+                  <button type="button" data-action="wound-reset" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" class="px-1 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[9.5px] text-stone-300 cursor-pointer" title="Remettre à 0 PV">0</button>
+                </div>
+              </div>
             </div>
           </td>
 
-          <!-- 6. ENCAISSER (-RÉD AUTO) & BOUTONS RAPIDES -->
-          <td class="px-3 py-2.5 align-middle">
-            <div class="space-y-1.5">
-              <div class="flex items-center gap-1">
-                <input
-                  type="number"
-                  min="1"
-                  max="200"
-                  data-hit-input="${escapeHtml(c.id)}"
-                  placeholder="Dégâts"
-                  title="Saisir les dégâts bruts reçus (la Réduction ${reduction} sera soustraite automatiquement)"
-                  class="w-16 text-center font-mono rounded bg-[#0d0b0b] border border-rose-500/40 py-1 text-xs text-rose-200 focus:outline-none"
-                />
-                <button type="button" data-action="apply-reduced-hit" data-combat-id="${escapeHtml(c.id)}" title="Soustraire Réduction (${reduction}) et appliquer les Blessures" class="px-2 py-1 rounded bg-rose-900/80 hover:bg-rose-800 border border-rose-500/50 text-[11px] font-bold text-rose-100 cursor-pointer transition whitespace-nowrap">
-                  💥 -Réd (${reduction})
-                </button>
-              </div>
-              <div class="flex items-center gap-1 flex-wrap">
-                <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="-5" class="px-1.5 py-0.5 rounded bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-700/50 text-[10px] text-emerald-300 cursor-pointer">-5</button>
-                <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="-1" class="px-1.5 py-0.5 rounded bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-700/40 text-[10px] text-emerald-200 cursor-pointer">-1</button>
-                <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="1" class="px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+1</button>
-                <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="5" class="px-1.5 py-0.5 rounded bg-red-950/70 hover:bg-red-900 border border-red-700/50 text-[10px] text-red-200 cursor-pointer">+5</button>
-                <button type="button" data-action="wound-delta" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" data-delta="10" class="px-1.5 py-0.5 rounded bg-red-950/80 hover:bg-red-800 border border-red-600/60 text-[10px] font-bold text-red-200 cursor-pointer">+10</button>
-                <button type="button" data-action="wound-reset" data-target-type="combat" data-target-id="${escapeHtml(c.id)}" class="px-1.5 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] text-stone-300 cursor-pointer" title="Remettre à 0 PV">0</button>
-              </div>
-            </div>
-          </td>
-
-          <!-- 7. ÉTATS & ACTIONS -->
-          <td class="px-3 py-2.5 align-middle">
-            <div class="flex items-start justify-between gap-2">
-              <div class="flex flex-wrap gap-1 max-w-[240px]">${statusChips}</div>
-              <div class="flex flex-col gap-1 shrink-0">
-                ${!isPC ? `<button type="button" data-action="duplicate-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1.5 py-0.5 rounded bg-stone-900 hover:bg-amber-950 border border-stone-700 text-[10px] text-amber-300 cursor-pointer" title="Dupliquer ce PNJ">📋</button>` : ''}
-                <button type="button" data-action="remove-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1.5 py-0.5 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[10px] text-stone-400 hover:text-red-300 cursor-pointer" title="Retirer du combat">✕</button>
+          <!-- 6. ÉTATS & ACTIONS (18%) -->
+          <td class="px-2 py-2 align-middle">
+            <div class="flex items-start justify-between gap-1">
+              <div class="flex flex-wrap gap-0.5">${statusChips}</div>
+              <div class="flex flex-col gap-0.5 shrink-0">
+                ${!isPC ? `<button type="button" data-action="duplicate-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1 py-0.5 rounded bg-stone-900 hover:bg-amber-950 border border-stone-700 text-[9.5px] text-amber-300 cursor-pointer" title="Dupliquer ce PNJ">📋</button>` : ''}
+                <button type="button" data-action="remove-combatant" data-combat-id="${escapeHtml(c.id)}" class="px-1 py-0.5 rounded bg-stone-900 hover:bg-red-950 border border-stone-700 text-[9.5px] text-stone-400 hover:text-red-300 cursor-pointer" title="Retirer du combat">✕</button>
               </div>
             </div>
           </td>

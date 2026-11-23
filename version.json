@@ -1,6 +1,6 @@
 {
-  "version": "1.38.0",
-  "tag": "v1.38.0",
+  "version": "1.38.1",
+  "tag": "v1.38.1",
   "date": "2026-11-23",
-  "notes": "Refonte ergonomique de l'Écran du MJ : mode Pleine Largeur (100% pour l'Escarmouche), bandeau de dés en direct, cockpit du combattant actif, tirage d'initiative automatique des PJs et calculateur de dégâts avec soustraction automatique de la Réduction"
+  "notes": "Correction de la largeur du tableau d'escarmouche de l'Écran du MJ : affichage de toute la ligne sur 100 % de l'écran sans aucun défilement horizontal"
 }
