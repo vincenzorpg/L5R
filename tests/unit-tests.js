@@ -1294,21 +1294,21 @@
   // ===========================================================================
   // 18. PLANIFICATEUR DE SESSIONS / DOODLE PJs (js/sessions.js)
   // ===========================================================================
-  describe("18. Planificateur de Sessions JDR — Janvier à Mars 2026 (js/sessions.js)", function () {
-    it("generateWeekendSlots et groupSlotsByWeekend couvrent les 13 week-ends (65 créneaux) de janv. à mars 2026", function () {
-      const slots = sessionsUi.generateWeekendSlots(2026, [0, 1, 2]);
+  describe("18. Planificateur de Sessions JDR — Janvier à Mars 2027 (js/sessions.js)", function () {
+    it("generateWeekendSlots et groupSlotsByWeekend couvrent les 13 week-ends (65 créneaux) de janv. à mars 2027", function () {
+      const slots = sessionsUi.generateWeekendSlots(2027, [0, 1, 2]);
       const groups = sessionsUi.groupSlotsByWeekend(slots);
 
-      assertEqual(slots.length, 65, "65 créneaux week-end exactement entre janvier et mars 2026");
+      assertEqual(slots.length, 65, "65 créneaux week-end exactement entre janvier et mars 2027");
       assertEqual(groups.length, 13, "13 week-ends complets regroupés");
-      assertEqual(slots[0].id, "2026-01-02:soir", "Premier créneau le vendredi 2 janvier 2026 au soir");
-      assertEqual(slots[1].id, "2026-01-03:aprem", "Samedi 3 janvier après-midi");
-      assertEqual(slots[2].id, "2026-01-03:soir", "Samedi 3 janvier soir");
-      assertEqual(slots[slots.length - 1].id, "2026-03-29:soir", "Dernier créneau le dimanche 29 mars 2026 au soir");
+      assertEqual(slots[0].id, "2027-01-01:soir", "Premier créneau le vendredi 1er janvier 2027 au soir");
+      assertEqual(slots[1].id, "2027-01-02:aprem", "Samedi 2 janvier 2027 après-midi");
+      assertEqual(slots[2].id, "2027-01-02:soir", "Samedi 2 janvier 2027 soir");
+      assertEqual(slots[slots.length - 1].id, "2027-03-28:soir", "Dernier créneau le dimanche 28 mars 2027 au soir");
     });
 
     it("computeSlotRanking, fusion des votes et partage URL/Discord fonctionnent bout en bout", function () {
-      const slots = sessionsUi.generateWeekendSlots(2026, [0, 1, 2]);
+      const slots = sessionsUi.generateWeekendSlots(2027, [0, 1, 2]);
       assertEqual(sessionsUi.cycleVoteState(""), "yes");
       assertEqual(sessionsUi.cycleVoteState("yes"), "maybe");
       assertEqual(sessionsUi.cycleVoteState("maybe"), "no");
@@ -1319,24 +1319,24 @@
         name: "Tsuruchi Akira",
         clan: "mante",
         note: "Dispo dès 20h",
-        votes: { "2026-01-17:soir": "yes", "2026-02-07:soir": "maybe" }
+        votes: { "2027-01-16:soir": "yes", "2027-02-06:soir": "maybe" }
       });
       responses = sessionsUi.upsertParticipantResponse(responses, {
         name: "Okado Hiruma",
         clan: "crabe",
-        votes: { "2026-01-17:soir": "yes", "2026-02-07:soir": "no" }
+        votes: { "2027-01-16:soir": "yes", "2027-02-06:soir": "no" }
       });
       // Dédoublonnage insensible à la casse
       responses = sessionsUi.upsertParticipantResponse(responses, {
         name: "tsuruchi akira",
         clan: "mante",
         note: "Maj Ok",
-        votes: { "2026-01-17:soir": "yes", "2026-02-07:soir": "yes" }
+        votes: { "2027-01-16:soir": "yes", "2027-02-06:soir": "yes" }
       });
       assertEqual(responses.length, 2, "Dédoublonnage par nom de PJ sans créer de doublon");
 
       const ranking = sessionsUi.computeSlotRanking(slots, responses);
-      assertEqual(ranking[0].slot.id, "2026-01-17:soir", "Le créneau unanime 17 janv. soir arrive en tête");
+      assertEqual(ranking[0].slot.id, "2027-01-16:soir", "Le créneau unanime 16 janv. 2027 soir arrive en tête");
       assertTrue(ranking[0].isPerfectMatch, "2/2 disponibles -> unanimité détectée");
       assertEqual(ranking[0].yesCount, 2);
 
@@ -1347,7 +1347,7 @@
       const extracted = sessionsUi.extractAndDecodeShareInputs(discordPaste, slots);
       assertEqual(extracted.invalidCount, 0);
       assertEqual(extracted.imported.length, 2, "Extraction de 2 fiches depuis du texte Discord mixte");
-      assertEqual(extracted.imported[0].votes["2026-01-17:soir"], "yes");
+      assertEqual(extracted.imported[0].votes["2027-01-16:soir"], "yes");
 
       // Poll complet roundtrip
       const pollTok = sessionsUi.encodePollSharePayload(responses, slots);
@@ -1356,9 +1356,9 @@
 
       // Résumé Discord & .ics
       const summary = sessionsUi.formatDiscordPlayerSummary(responses[0], slots, `https://vincenzorpg.github.io/L5R/sessions.html?vote=${tok1}`);
-      assertTrue(/tsuruchi akira/i.test(summary) && summary.includes("17 janv.") && summary.includes("?vote="), "Résumé Discord complet");
-      const ics = sessionsUi.buildIcsEventContent(slots.find(s => s.id === "2026-01-17:soir"));
-      assertTrue(ics.includes("BEGIN:VCALENDAR") && ics.includes("DTSTART:20260117T200000"), "Export .ics valide");
+      assertTrue(/tsuruchi akira/i.test(summary) && summary.includes("16 janv.") && summary.includes("?vote="), "Résumé Discord complet");
+      const ics = sessionsUi.buildIcsEventContent(slots.find(s => s.id === "2027-01-16:soir"));
+      assertTrue(ics.includes("BEGIN:VCALENDAR") && ics.includes("DTSTART:20270116T200000"), "Export .ics valide");
     });
   });
 

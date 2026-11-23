@@ -2,5 +2,5 @@
   "version": "1.38.1",
   "tag": "v1.38.1",
   "date": "2026-11-23",
-  "notes": "Correction de la largeur du tableau d'escarmouche de l'Écran du MJ : affichage de toute la ligne sur 100 % de l'écran sans aucun défilement horizontal"
+  "notes": "Correction de la largeur du tableau d'escarmouche de l'Écran du MJ (zéro scroll horizontal) et passage des dates du Doodle des sessions sur Janvier à Mars 2027"
 }

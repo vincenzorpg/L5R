@@ -118,7 +118,7 @@ L5R/
 ├── ecoles.html                         # Explorateur, tableau triable et comparateur des 88 écoles publiques
 ├── carte.html                          # Carte interactive de Rokugan et itinéraire des PJs
 ├── ecran-mj.html                       # Écran interactif du Maître du Jeu (PJs, Escarmouche, Paravent, Duel, Dés)
-├── sessions.html                       # Planificateur de Sessions JDR (Doodle PJs Janvier–Mars 2026 & partage Discord)
+├── sessions.html                       # Planificateur de Sessions JDR (Doodle PJs Janvier–Mars 2027 & partage Discord)
 ├── grimoire.html                       # Grimoire interactif des sorts élémentaires, prières et mahō
 ├── kihos.html                          # Recueil interactif des 64 Kihos des moines & règles Atemi
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
@@ -178,7 +178,7 @@ L5R/
 │   ├── tatouages.js                    # Moteur de filtrage et modale du Codex des Tatouages Togashi
 │   ├── gm-screen.js                    # Moteur complet de l'Écran du MJ (Escarmouche, Paravent, Duel, Dés R&K)
 │   ├── narrator.js                     # Lecteur vocal narrateur HD & sélecteur multi-versions des scénarios
-│   ├── sessions.js                     # Moteur Doodle des disponibilités PJs (Janv–Mars 2026, partage URL/Discord, .ics)
+│   ├── sessions.js                     # Moteur Doodle des disponibilités PJs (Janv–Mars 2027, partage URL/Discord, .ics)
 │   └── campagne-studio.js              # Studio glisser-déposer et générateur HTML de scénarios
 │
 ├── data/                               # Bases de données modulaires en JavaScript
