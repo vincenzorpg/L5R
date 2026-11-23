@@ -6,6 +6,18 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.38.0] — 2026-11-23
+
+### 🔄 Modifié & ✨ Ajouté
+- **Refonte ergonomique de l'Écran du MJ & du Tableau d'Escarmouche (`ecran-mj.html`, `js/gm-screen.js`, `tests/unit-tests.js`)** :
+  - **Mode Pleine Largeur par défaut (`wideLayout`, max 1800px)** : Le poste de commandement et le tableau d'escarmouche occupent désormais **100 % de la largeur (`12/12 colonnes`)**, doublant l'espace disponible des colonnes, avec bascule instantanée vers la vue *Côte-à-côte* (`#gm-toggle-wide`) et repli de la Table des Joueurs (`#gm-toggle-pcs-collapse`).
+  - **Bandeau de Dés en Direct (`#gm-inline-dice-bar`)** : Affichage immédiat du dernier jet (`Toucher`, `Dégâts`, `Initiative`) directement au-dessus du tableau d'escarmouche sans avoir à scroller jusqu'au dock.
+  - **Tiroir de Préparation Intelligent (`#gm-skirmish-setup-details`) & Initiative Auto des PJs** : Ajout d'un bouton `🎲 Tirer Init PJs` (`rollAllIncludedPcsInit`) et d'un dé individuel par PJ ; le panneau de préparation se replie automatiquement dès le lancement de l'escarmouche pour laisser toute la hauteur au combat.
+  - **Cockpit du Combattant Actif (`#gm-active-turn-spotlight`)** : Bandeau mettant en avant le combattant dont c'est le tour avec changement de posture en 1 clic (boutons-pilules), boutons larges *Toucher* / *Dégâts*, navigation `◀ Précédent` / `Tour suivant ▶` et module *« 🎯 Infliger des dégâts à… »* pré-rempli avec le dernier jet de dégâts.
+  - **Calculateur de Coup Reçu avec Réduction Automatique (`computeNetDamageAfterReduction`, `applyReducedHitToCombatant`)** : Sur chaque ligne et dans le cockpit actif, saisie directe des dégâts bruts avec soustraction automatique de la Réduction du combattant (`💥 -Réd`), champ de PV éditable en direct, duplication de PNJ en 1 clic (`📋`), saut de tour en cliquant sur `#N` et nettoyage rapide des morts (`🧹 Retirer Morts`).
+
+---
+
 ## [1.37.0] — 2026-11-23
 
 ### ✨ Ajouté

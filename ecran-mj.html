@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- DONNÉES & MOTEUR JS -->
-  <script src="js/navbar.js" defer></script>
-  <script src="data/gm-rules-data.js" defer></script>
-  <script src="data/gm-scenarios-data.js" defer></script>
-  <script src="js/gm-screen.js" defer></script>
+  <script src="js/navbar.js?v=4" defer></script>
+  <script src="data/gm-rules-data.js?v=2" defer></script>
+  <script src="data/gm-scenarios-data.js?v=2" defer></script>
+  <script src="js/gm-screen.js?v=2" defer></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
 
@@ -26,8 +26,8 @@
   <header id="site-header"></header>
 
   <!-- 2. BANNIÈRE DE COMMANDEMENT COMPACTE -->
-  <div class="border-b border-amber-500/20 bg-gradient-to-b from-[#190909] via-[#0d0909] to-[#0a0808] py-4 px-4">
-    <div class="max-w-[1440px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+  <div class="border-b border-amber-500/20 bg-gradient-to-b from-[#190909] via-[#0d0909] to-[#0a0808] py-3.5 px-3 sm:px-5">
+    <div class="max-w-[1800px] mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-3">
       <div>
         <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-950/40 border border-amber-500/30 text-[10px] tracking-widest uppercase font-imperial text-amber-300 mb-1">
           <span>幕</span> Paravent Numérique du MJ — L5R 4e Édition
@@ -38,6 +38,9 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
+        <button id="gm-toggle-wide" type="button" title="Basculer entre le mode Pleine Largeur (100% pour l'Escarmouche) et la vue Côte-à-côte" class="px-3 py-2 rounded-lg bg-amber-950/70 hover:bg-amber-900/70 border border-amber-400/50 text-amber-200 font-imperial font-bold text-xs cursor-pointer transition">
+          ↔️ Pleine Largeur : ON
+        </button>
         <button id="gm-quick-rules-btn" type="button" title="Ouvrir la recherche instantanée de règles (Touche /)" class="px-3 py-2 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 border border-amber-500/40 text-amber-200 font-imperial text-xs cursor-pointer transition flex items-center gap-1.5">
           <span>🔍 Règle express</span>
           <kbd class="hidden sm:inline px-1.5 py-0.2 rounded bg-black/60 border border-amber-500/30 text-[10px] font-mono text-amber-300">/</kbd>
@@ -63,16 +66,19 @@
   </div>
 
   <!-- 3. COCKPIT PRINCIPAL MJ -->
-  <main class="flex-1 max-w-[1440px] w-full mx-auto p-4 md:p-5 space-y-5">
+  <main class="flex-1 max-w-[1800px] w-full mx-auto p-3 sm:p-5 space-y-4">
 
-    <!-- TABLE HORIZONTALE DES PJs -->
-    <section class="card-clean rounded-xl p-4 space-y-3">
+    <!-- TABLE HORIZONTALE DES PJs (REPLIABLE POUR LIBÉRER L'ÉCRAN EN COMBAT) -->
+    <section id="gm-pcs-section" class="card-clean rounded-xl p-3.5 space-y-3">
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
-        <div class="flex flex-wrap items-center gap-3">
-          <h2 class="font-imperial font-bold text-base text-amber-300 flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <h2 class="font-imperial font-bold text-sm sm:text-base text-amber-300 flex items-center gap-2">
             <span>👥</span> Table des Joueurs (<span id="gm-pc-count">0</span> PJ)
           </h2>
           <div id="gm-party-summary" class="flex flex-wrap items-center gap-1.5 text-[11px]"></div>
+          <button id="gm-toggle-pcs-collapse" type="button" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] font-imperial text-stone-300 cursor-pointer transition">
+            ▾ Masquer les fiches
+          </button>
         </div>
         <div id="gm-drop-zone" class="px-3 py-1.5 border border-dashed border-amber-500/30 rounded-lg text-[11px] text-stone-400 transition">
           Glissez-déposez ici vos fichiers <b>.json</b> (<i>La Forge</i> / <i>Carnet de Rokugan</i>)
@@ -82,98 +88,137 @@
       <div id="gm-pcs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
     </section>
 
-    <!-- GRILLE COCKPIT : VOLET PRINCIPAL (8 COL) + DOCK OUTILS MJ (4 COL) -->
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+    <!-- GRILLE COCKPIT : VOLET PRINCIPAL (12 COL EN PLEINE LARGEUR / 9 COL EN CÔTE-À-CÔTE) + DOCK OUTILS MJ -->
+    <div id="gm-cockpit-grid" class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
 
       <!-- POSTE DE COMMANDEMENT PRINCIPAL À 7 ONGLETS -->
-      <section class="xl:col-span-8 card-clean rounded-xl p-4 md:p-5 space-y-4">
-        <div class="flex flex-wrap gap-1.5 border-b border-amber-500/20 pb-3" role="tablist">
-          <button type="button" data-gm-tab="skirmish" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            ⚔️ Escarmouche
-          </button>
-          <button type="button" data-gm-tab="scenario" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🎭 Scénario Jour J
-          </button>
-          <button type="button" data-gm-tab="rules" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            📜 Paravent Règles
-          </button>
-          <button type="button" data-gm-tab="duel" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🎋 Duel Iaijutsu
-          </button>
-          <button type="button" data-gm-tab="honor" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            ⚖️ Honneur &amp; Gloire
-          </button>
-          <button type="button" data-gm-tab="court" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🏯 Cour &amp; Loi
-          </button>
-          <button type="button" data-gm-tab="magic" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
-            🌀 Magie &amp; Outremonde
-          </button>
+      <section id="gm-main-col" class="xl:col-span-12 card-clean rounded-xl p-4 md:p-5 space-y-4">
+        <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3 border-b border-amber-500/20 pb-3">
+          <div class="flex flex-wrap gap-1.5" role="tablist">
+            <button type="button" data-gm-tab="skirmish" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              ⚔️ Escarmouche
+            </button>
+            <button type="button" data-gm-tab="scenario" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              🎭 Scénario Jour J
+            </button>
+            <button type="button" data-gm-tab="rules" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              📜 Paravent Règles
+            </button>
+            <button type="button" data-gm-tab="duel" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              🎋 Duel Iaijutsu
+            </button>
+            <button type="button" data-gm-tab="honor" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              ⚖️ Honneur &amp; Gloire
+            </button>
+            <button type="button" data-gm-tab="court" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              🏯 Cour &amp; Loi
+            </button>
+            <button type="button" data-gm-tab="magic" class="px-3.5 py-2 rounded-lg border text-xs font-imperial cursor-pointer transition">
+              🌀 Magie &amp; Outremonde
+            </button>
+          </div>
+
+          <!-- BANDEAU DE DÉS EN DIRECT (TOUJOURS VISIBLE AU-DESSUS DU TABLEAU) -->
+          <div id="gm-inline-dice-bar" class="flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-xl bg-black/65 border border-amber-500/35 text-xs">
+            <span class="text-[11px] font-imperial font-bold text-amber-300">🎲 Dernier jet :</span>
+            <div id="gm-inline-dice-output" class="flex flex-wrap items-center gap-2 text-xs text-stone-400 italic">
+              Cliquez sur un jet ⚔️ / 🩸 du tableau ou lancez ci-contre
+            </div>
+            <div class="flex items-center gap-1 ml-auto pl-2 border-l border-stone-800">
+              <button type="button" data-dice-preset="4g2" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] font-mono text-stone-200 cursor-pointer">4g2</button>
+              <button type="button" data-dice-preset="5g3" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] font-mono text-amber-200 cursor-pointer">5g3</button>
+              <button type="button" data-dice-preset="6g3" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] font-mono text-amber-200 cursor-pointer">6g3</button>
+              <button type="button" data-dice-preset="7g4" class="px-2 py-0.5 rounded bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[10px] font-mono text-amber-300 cursor-pointer">7g4</button>
+            </div>
+          </div>
         </div>
 
         <!-- ONGLET 1 : ESCARMOUCHE -->
         <div data-gm-panel="skirmish" class="space-y-4">
-          <!-- ASSISTANT DE PRÉPARATION D'ESCARMOUCHE -->
-          <div class="p-3.5 rounded-xl bg-amber-950/15 border border-amber-500/30 space-y-3">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-              <div>
-                <h3 class="font-imperial font-bold text-sm text-amber-300">⚔️ Préparer &amp; Gérer l'Escarmouche</h3>
-                <p class="text-[11px] text-stone-400">Cochez les PJs impliqués, renseignez leur initiative, choisissez le nombre de PNJs et générez (ou ajoutez des renforts en cours de combat).</p>
+          <!-- ASSISTANT DE PRÉPARATION D'ESCARMOUCHE (TIROIR REPLIABLE AUTOMATIQUEMENT DÈS QUE LE COMBAT DÉMARRE) -->
+          <details id="gm-skirmish-setup-details" open class="rounded-xl bg-amber-950/15 border border-amber-500/30 overflow-hidden">
+            <summary class="px-4 py-3 cursor-pointer select-none flex flex-wrap items-center justify-between gap-2 bg-black/30 hover:bg-black/45 transition">
+              <div class="flex items-center gap-2.5">
+                <span class="font-imperial font-bold text-sm text-amber-300">⚙️ Préparer l'Escarmouche &amp; Ajouter des Renforts PNJ</span>
+                <span id="gm-skirmish-setup-hint" class="text-[11px] text-stone-400 hidden sm:inline">(Cliquer pour replier / déplier)</span>
               </div>
-              <div class="flex flex-wrap items-center gap-2 shrink-0">
-                <button id="gm-add-to-skirmish" type="button" title="Ajouter les PNJs sélectionnés au combat actif sans le réinitialiser" class="px-3 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-amber-200 font-imperial font-bold text-xs cursor-pointer transition">
-                  + Renforts PNJ
-                </button>
-                <button id="gm-generate-skirmish" type="button" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
-                  ⚔️ Générer l'Escarmouche
-                </button>
-              </div>
-            </div>
+              <span class="px-2.5 py-0.5 rounded bg-amber-950/70 border border-amber-500/40 text-[10px] font-imperial font-bold text-amber-200">
+                PJs &amp; Modèles PNJ ▾
+              </span>
+            </summary>
 
-            <div id="gm-skirmish-pcs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2"></div>
-
-            <div class="p-3 rounded-lg bg-black/35 border border-stone-800 space-y-2 text-xs">
-              <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
-                <label class="md:col-span-4 flex items-center gap-2">
-                  <span class="text-stone-300 font-bold shrink-0">PNJs :</span>
-                  <input id="gm-skirmish-npc-count" type="number" min="0" max="20" value="3" class="w-16 rounded bg-[#0d0b0b] border border-amber-500/40 px-2 py-1 text-center font-mono font-bold text-amber-300 focus:outline-none" />
-                </label>
-                <label class="md:col-span-8 flex items-center gap-2">
-                  <span class="text-stone-300 font-bold shrink-0">Modèle :</span>
-                  <select id="gm-skirmish-npc-preset" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1 text-amber-200 focus:outline-none"></select>
-                </label>
-              </div>
-
-              <details class="text-[11px]">
-                <summary class="cursor-pointer text-stone-400 hover:text-amber-300 select-none">Personnaliser les jets &amp; stats des PNJs générés ▾</summary>
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2">
-                  <input id="gm-enemy-name" type="text" placeholder="Nom" class="col-span-2 rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-init-formula" type="text" placeholder="Init (4g2)" title="Formule d'initiative PNJ" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-amber-200 font-mono" />
-                  <input id="gm-enemy-tn" type="number" placeholder="ND" title="ND d'Armure" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-red" type="number" placeholder="Réd." title="Réduction" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-earth" type="number" min="1" max="10" placeholder="Terre" title="Terre" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
-                  <input id="gm-enemy-attack" type="text" placeholder="Toucher" title="Jet de toucher" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
-                  <input id="gm-enemy-damage" type="text" placeholder="Dégâts" title="Jet de dégâts" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
-                  <input id="gm-enemy-notes" type="text" placeholder="Notes PNJ..." class="col-span-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+            <div class="p-3.5 space-y-3 border-t border-amber-500/20">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                <p class="text-[11px] text-stone-300">
+                  <b>1.</b> Cochez les PJs présents et tirez leur Initiative (ou saisissez leur jet) • <b>2.</b> Choisissez un modèle de PNJ et leur nombre • <b>3.</b> Lancez l'escarmouche ou ajoutez des renforts à la volée.
+                </p>
+                <div class="flex flex-wrap items-center gap-2 shrink-0">
+                  <button id="gm-roll-pcs-init" type="button" title="Tirer automatiquement l'Initiative de tous les PJs cochés" class="px-3 py-2 rounded-lg bg-sky-950/80 hover:bg-sky-900 border border-sky-500/50 text-sky-200 font-imperial font-bold text-xs cursor-pointer transition">
+                    🎲 Tirer Init PJs
+                  </button>
+                  <button id="gm-add-to-skirmish" type="button" title="Ajouter les PNJs sélectionnés au combat actif sans le réinitialiser" class="px-3 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-amber-200 font-imperial font-bold text-xs cursor-pointer transition">
+                    + Renforts PNJ
+                  </button>
+                  <button id="gm-generate-skirmish" type="button" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
+                    ⚔️ Générer l'Escarmouche
+                  </button>
                 </div>
-              </details>
-            </div>
-          </div>
+              </div>
 
-          <!-- BARRE DE CONTRÔLE DU TOUR -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800 pb-3">
-            <div class="flex items-center gap-3 flex-wrap">
-              <span class="px-3 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-xs font-imperial font-bold text-red-200">
+              <div id="gm-skirmish-pcs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2"></div>
+
+              <div class="p-3 rounded-lg bg-black/35 border border-stone-800 space-y-2 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-center">
+                  <label class="md:col-span-3 flex items-center gap-2">
+                    <span class="text-stone-300 font-bold shrink-0">Nombre PNJs :</span>
+                    <input id="gm-skirmish-npc-count" type="number" min="0" max="20" value="3" class="w-16 rounded bg-[#0d0b0b] border border-amber-500/40 px-2 py-1 text-center font-mono font-bold text-amber-300 focus:outline-none" />
+                  </label>
+                  <label class="md:col-span-9 flex items-center gap-2">
+                    <span class="text-stone-300 font-bold shrink-0">Modèle PNJ :</span>
+                    <select id="gm-skirmish-npc-preset" class="w-full rounded bg-[#0d0b0b] border border-stone-700 px-2.5 py-1.5 text-amber-200 focus:outline-none"></select>
+                  </label>
+                </div>
+
+                <details class="text-[11px]">
+                  <summary class="cursor-pointer text-stone-400 hover:text-amber-300 select-none">Personnaliser les jets &amp; stats des PNJs générés ▾</summary>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2">
+                    <input id="gm-enemy-name" type="text" placeholder="Nom" class="col-span-2 rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                    <input id="gm-enemy-init-formula" type="text" placeholder="Init (4g2)" title="Formule d'initiative PNJ" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-amber-200 font-mono" />
+                    <input id="gm-enemy-tn" type="number" placeholder="ND" title="ND d'Armure" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                    <input id="gm-enemy-red" type="number" placeholder="Réd." title="Réduction" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                    <input id="gm-enemy-earth" type="number" min="1" max="10" placeholder="Terre" title="Terre" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                    <input id="gm-enemy-attack" type="text" placeholder="Toucher" title="Jet de toucher" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
+                    <input id="gm-enemy-damage" type="text" placeholder="Dégâts" title="Jet de dégâts" class="rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200 font-mono" />
+                    <input id="gm-enemy-notes" type="text" placeholder="Notes PNJ..." class="col-span-full rounded bg-[#0d0b0b] border border-stone-700 px-2 py-1 text-stone-200" />
+                  </div>
+                </details>
+              </div>
+            </div>
+          </details>
+
+          <!-- BARRE DE CONTRÔLE DU TOUR & ACTIONS RAPIDES -->
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-black/45 p-3 rounded-xl border border-amber-500/30">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="px-3.5 py-1.5 rounded-full bg-red-950/90 border border-red-500/50 text-xs sm:text-sm font-imperial font-extrabold text-red-200 shadow">
                 Round <span id="gm-combat-round">1</span>
               </span>
-              <span id="gm-combat-next-up" class="text-xs text-stone-300"></span>
+              <button id="gm-prev-turn" type="button" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 font-imperial font-bold text-xs cursor-pointer transition" title="Revenir au combattant précédent">
+                ◀ Précédent
+              </button>
+              <button id="gm-next-turn" type="button" class="px-4 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-extrabold text-xs sm:text-sm cursor-pointer transition shadow-lg">
+                Tour suivant ▶
+              </button>
+              <span id="gm-combat-next-up" class="text-xs text-stone-300 ml-1"></span>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-              <button id="gm-next-turn" type="button" class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-xs cursor-pointer transition shadow">
-                Tour suivant ▶
+              <button id="gm-open-setup-btn" type="button" class="px-3 py-1.5 rounded-lg bg-amber-950/60 hover:bg-amber-900/70 border border-amber-500/40 text-amber-200 font-imperial font-bold text-xs cursor-pointer transition">
+                + Renforts / Réglages
               </button>
               <button id="gm-sort-init" type="button" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 font-imperial text-xs cursor-pointer transition">
                 Trier Init ↓
+              </button>
+              <button id="gm-remove-dead" type="button" class="px-2.5 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-300 font-imperial text-xs cursor-pointer transition" title="Retirer tous les PNJs Morts ou Hors de combat">
+                🧹 Retirer Morts
               </button>
               <button id="gm-reset-combat" type="button" class="px-2.5 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/70 border border-red-700/40 text-red-300 font-imperial text-xs cursor-pointer transition">
                 Réinitialiser
@@ -181,26 +226,28 @@
             </div>
           </div>
 
-          <!-- TABLEAU HORIZONTAL DU COMBAT -->
+          <!-- COCKPIT DU COMBATTANT ACTIF (SPOTLIGHT EN GRAND) -->
+          <div id="gm-active-turn-spotlight" class="hidden"></div>
+
+          <!-- TABLEAU D'ESCARMOUCHE PLEINE LARGEUR -->
           <div id="gm-combat-empty" class="p-6 text-center text-xs text-stone-400 border border-dashed border-stone-800 rounded-xl">
             Aucun combat actif. Cochez les PJs impliqués, choisissez le nombre de PNJs et cliquez sur <b>« ⚔️ Générer l'Escarmouche »</b>.
           </div>
 
-          <div id="gm-combat-table-wrap" class="hidden overflow-x-auto rounded-xl border border-stone-800 bg-black/25">
+          <div id="gm-combat-table-wrap" class="hidden overflow-x-auto rounded-xl border border-amber-500/30 bg-black/35 shadow-xl">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
-                <tr class="border-b border-amber-500/20 bg-black/50 text-[10px] uppercase tracking-wider font-imperial text-amber-300">
-                  <th class="px-2 py-2.5 text-center">Ordre</th>
-                  <th class="px-2 py-2.5 text-center">Init</th>
-                  <th class="px-2 py-2.5">Combattant</th>
-                  <th class="px-2 py-2.5">Posture &amp; ND</th>
-                  <th class="px-2 py-2.5">Jets (Clic = Lancer)</th>
-                  <th class="px-2 py-2.5">Blessures &amp; Malus</th>
-                  <th class="px-2 py-2.5">Dégâts rapides</th>
-                  <th class="px-2 py-2.5">États</th>
+                <tr class="border-b border-amber-500/30 bg-[#140e0d] text-[11px] uppercase tracking-wider font-imperial text-amber-300">
+                  <th class="px-3 py-3 text-center w-28">Tour &amp; Init</th>
+                  <th class="px-3 py-3 min-w-[210px]">Combattant &amp; Note</th>
+                  <th class="px-3 py-3 min-w-[220px]">Posture &amp; Défense</th>
+                  <th class="px-3 py-3 min-w-[190px]">Jets (1 Clic = Lancer)</th>
+                  <th class="px-3 py-3 min-w-[225px]">Blessures &amp; Seuil</th>
+                  <th class="px-3 py-3 min-w-[240px]">Encaisser (-Réd. auto) / PV</th>
+                  <th class="px-3 py-3 min-w-[225px]">États &amp; Actions</th>
                 </tr>
               </thead>
-              <tbody id="gm-combat-tbody"></tbody>
+              <tbody id="gm-combat-tbody" class="divide-y divide-stone-800/80"></tbody>
             </table>
           </div>
 
@@ -490,8 +537,8 @@
         </div>
       </section>
 
-      <!-- DOCK LATÉRAL PERMANENT : BOÎTE À OUTILS LIVE DU MJ (4 COL) -->
-      <aside class="xl:col-span-4 space-y-4 xl:sticky xl:top-20">
+      <!-- DOCK OUTILS LIVE DU MJ (EN GRILLE SOUS LE PANNEAU EN MODE PLEINE LARGEUR, OU 3 COL À DROITE) -->
+      <aside id="gm-side-dock" class="xl:col-span-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-start">
 
         <!-- 1. LANCEUR ROLL & KEEP MJ -->
         <section class="card-clean rounded-xl p-4 space-y-3 border-amber-500/35">
@@ -654,7 +701,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.37.0</span>
+      <span id="site-version-label">v1.38.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

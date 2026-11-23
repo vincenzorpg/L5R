@@ -807,6 +807,10 @@
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 30, stance: "defense", statuses: ["stunned"] }, pcRef).effectiveTN, 15); // 5 + armorBonus 10
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 25, stance: "attaque", statuses: ["blinded"] }, null).effectiveTN, 9); // Réflexes 4 + 5
       assertEqual(gm.computeEffectiveCombatantTN({ armorTN: 25, stance: "attaque", statuses: ["prone", "blinded"] }, null).effectiveTN, 5);
+
+      assertDeepEqual(gm.computeNetDamageAfterReduction(22, 5), { raw: 22, reduction: 5, absorbed: 5, net: 17 });
+      assertDeepEqual(gm.computeNetDamageAfterReduction(4, 6), { raw: 4, reduction: 6, absorbed: 4, net: 0 });
+      assertDeepEqual(gm.computeNetDamageAfterReduction(18, 5, true), { raw: 18, reduction: 0, absorbed: 0, net: 18 });
     });
 
     it("computeIaijutsuFocusVerdict, computeMagicCastParams et filterGmRulesCards calculent les règles L5R 4e", function () {
