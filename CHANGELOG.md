@@ -6,6 +6,17 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.38.1] — 2026-11-23
+
+### 🐛 Corrigé
+- **Planificateur de Sessions JDR — Passage du calendrier sur Janvier à Mars 2027 (`sessions.html`, `js/sessions.js`, `js/navbar.js`, `js/global-search.js`, `tests/unit-tests.js`)** :
+  - Génération des **13 week-ends (65 créneaux)** du vendredi **1er janvier 2027** au dimanche **28 mars 2027** (*Vendredi soir*, *Samedi après-midi/soir*, *Dimanche après-midi/soir*).
+- **Tableau d'Escarmouche — Affichage complet de chaque ligne sans défilement horizontal (`ecran-mj.html`, `js/gm-screen.js`)** :
+  - Passage du tableau en `table-fixed` à 6 colonnes proportionnelles (`11% / 19% / 15% / 13% / 24% / 18%`) sans largeurs minimales bloquantes (`min-w-[2xxpx]`).
+  - Fusion de la jauge de Blessures et du calculateur d'encaissement (`💥 -Réd`) dans une seule colonne unifiée (*Blessures & Dégâts*), correction de la largeur du champ d'Initiative (`w-11`) et raccourcissement des libellés du sélecteur de Posture (`shortLabel`) afin que toute la ligne soit visible d'un seul coup d'œil sans barre de scroll horizontale.
+
+---
+
 ## [1.38.0] — 2026-11-23
 
 ### 🔄 Modifié & ✨ Ajouté

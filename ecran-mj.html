@@ -16,9 +16,9 @@
 
   <!-- DONNÉES & MOTEUR JS -->
   <script src="js/navbar.js?v=4" defer></script>
-  <script src="data/gm-rules-data.js?v=2" defer></script>
-  <script src="data/gm-scenarios-data.js?v=2" defer></script>
-  <script src="js/gm-screen.js?v=2" defer></script>
+  <script src="data/gm-rules-data.js?v=3" defer></script>
+  <script src="data/gm-scenarios-data.js?v=3" defer></script>
+  <script src="js/gm-screen.js?v=3" defer></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
 
@@ -234,17 +234,16 @@
             Aucun combat actif. Cochez les PJs impliqués, choisissez le nombre de PNJs et cliquez sur <b>« ⚔️ Générer l'Escarmouche »</b>.
           </div>
 
-          <div id="gm-combat-table-wrap" class="hidden overflow-x-auto rounded-xl border border-amber-500/30 bg-black/35 shadow-xl">
-            <table class="w-full text-left border-collapse text-xs">
+          <div id="gm-combat-table-wrap" class="hidden rounded-xl border border-amber-500/30 bg-black/35 shadow-xl overflow-hidden">
+            <table class="w-full table-fixed text-left border-collapse text-xs">
               <thead>
-                <tr class="border-b border-amber-500/30 bg-[#140e0d] text-[11px] uppercase tracking-wider font-imperial text-amber-300">
-                  <th class="px-3 py-3 text-center w-28">Tour &amp; Init</th>
-                  <th class="px-3 py-3 min-w-[210px]">Combattant &amp; Note</th>
-                  <th class="px-3 py-3 min-w-[220px]">Posture &amp; Défense</th>
-                  <th class="px-3 py-3 min-w-[190px]">Jets (1 Clic = Lancer)</th>
-                  <th class="px-3 py-3 min-w-[225px]">Blessures &amp; Seuil</th>
-                  <th class="px-3 py-3 min-w-[240px]">Encaisser (-Réd. auto) / PV</th>
-                  <th class="px-3 py-3 min-w-[225px]">États &amp; Actions</th>
+                <tr class="border-b border-amber-500/30 bg-[#140e0d] text-[10px] uppercase tracking-wider font-imperial text-amber-300">
+                  <th class="px-2 py-2.5 text-center w-[11%]">Tour &amp; Init</th>
+                  <th class="px-2 py-2.5 w-[19%]">Combattant &amp; Note</th>
+                  <th class="px-2 py-2.5 w-[15%]">Posture &amp; ND</th>
+                  <th class="px-2 py-2.5 w-[13%]">Jets (1 Clic)</th>
+                  <th class="px-2 py-2.5 w-[24%]">Blessures &amp; Dégâts (-Réd.)</th>
+                  <th class="px-2 py-2.5 w-[18%]">États &amp; Actions</th>
                 </tr>
               </thead>
               <tbody id="gm-combat-tbody" class="divide-y divide-stone-800/80"></tbody>
@@ -701,7 +700,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.38.0</span>
+      <span id="site-version-label">v1.38.1</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

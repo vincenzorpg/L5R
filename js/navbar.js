@@ -307,7 +307,7 @@
                   <span class="w-7 h-7 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">暦</span>
                   <div class="flex flex-col">
                     <span class="font-bold text-emerald-300">Dispos &amp; Sessions</span>
-                    <span class="text-[10px] text-stone-400 font-sans">Doodle PJs Janv–Mars 2026</span>
+                    <span class="text-[10px] text-stone-400 font-sans">Doodle PJs Janv–Mars 2027</span>
                   </div>
                 </a>
 

@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.38.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.38.1-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -118,7 +118,7 @@ L5R/
 ├── ecoles.html                         # Explorateur, tableau triable et comparateur des 88 écoles publiques
 ├── carte.html                          # Carte interactive de Rokugan et itinéraire des PJs
 ├── ecran-mj.html                       # Écran interactif du Maître du Jeu (PJs, Escarmouche, Paravent, Duel, Dés)
-├── sessions.html                       # Planificateur de Sessions JDR (Doodle PJs Janvier–Mars 2026 & partage Discord)
+├── sessions.html                       # Planificateur de Sessions JDR (Doodle PJs Janvier–Mars 2027 & partage Discord)
 ├── grimoire.html                       # Grimoire interactif des sorts élémentaires, prières et mahō
 ├── kihos.html                          # Recueil interactif des 64 Kihos des moines & règles Atemi
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
@@ -178,7 +178,7 @@ L5R/
 │   ├── tatouages.js                    # Moteur de filtrage et modale du Codex des Tatouages Togashi
 │   ├── gm-screen.js                    # Moteur complet de l'Écran du MJ (Escarmouche, Paravent, Duel, Dés R&K)
 │   ├── narrator.js                     # Lecteur vocal narrateur HD & sélecteur multi-versions des scénarios
-│   ├── sessions.js                     # Moteur Doodle des disponibilités PJs (Janv–Mars 2026, partage URL/Discord, .ics)
+│   ├── sessions.js                     # Moteur Doodle des disponibilités PJs (Janv–Mars 2027, partage URL/Discord, .ics)
 │   └── campagne-studio.js              # Studio glisser-déposer et générateur HTML de scénarios
 │
 ├── data/                               # Bases de données modulaires en JavaScript

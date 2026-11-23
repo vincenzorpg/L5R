@@ -1,13 +1,13 @@
 /**
  * js/sessions.js
- * Planificateur de sessions JDR ("Doodle de Rokugan") — Janvier à Mars 2026
+ * Planificateur de sessions JDR ("Doodle de Rokugan") — Janvier à Mars 2027
  * 100 % autonome (localStorage + partage par lien/code Discord + export JSON/.ics).
  * Compatible Navigateur (window.L5RSessions) et Node.js (module.exports).
  */
 (function (globalScope) {
   'use strict';
 
-  const STORAGE_KEY = 'l5r_sessions_doodle_v1';
+  const STORAGE_KEY = 'l5r_sessions_doodle_v2027';
 
   const VOTE_YES = 'yes';
   const VOTE_MAYBE = 'maybe';
@@ -78,9 +78,9 @@
 
   /**
    * Génère tous les créneaux week-end (Vendredi soir, Samedi aprèm/soir, Dimanche aprèm/soir)
-   * sur les mois donnés (par défaut Janvier à Mars 2026 : [0, 1, 2]).
+   * sur les mois donnés (par défaut Janvier à Mars 2027 : [0, 1, 2]).
    */
-  function generateWeekendSlots(year = 2026, months = [0, 1, 2]) {
+  function generateWeekendSlots(year = 2027, months = [0, 1, 2]) {
     const monthSet = new Set(Array.isArray(months) ? months : [0, 1, 2]);
     const sortedMonths = Array.from(monthSet).sort((a, b) => a - b);
     if (sortedMonths.length === 0) return [];
@@ -520,7 +520,7 @@
     });
 
     const lines = [
-      `📅 **Disponibilités JDR (Janv–Mars 2026) — ${name}**`
+      `📅 **Disponibilités JDR (Janv–Mars 2027) — ${name}**`
     ];
     if (yesLines.length > 0) {
       lines.push(`✅ **Disponible (${yesLines.reduce((acc, l) => acc + l.split(' / ').length, 0)}) :**`, ...yesLines);
@@ -554,7 +554,7 @@
    * Génère un fichier iCalendar (.ics) pour un créneau donné (heure locale France).
    */
   function buildIcsEventContent(slot, summaryTitle = 'Session L5R — Les Chroniques de Rokugan') {
-    const compactDate = String(slot?.dateStr || '2026-01-03').replace(/-/g, '');
+    const compactDate = String(slot?.dateStr || '2027-01-02').replace(/-/g, '');
     const isAfternoon = slot?.period === 'aprem';
     const startTime = isAfternoon ? '140000' : '200000';
     const endTime = isAfternoon ? '183000' : '235900';
@@ -565,7 +565,7 @@
       'PRODID:-//Les Chroniques de Rokugan//Sessions JDR//FR',
       'BEGIN:VEVENT',
       `UID:${uid}`,
-      `DTSTAMP:20260101T120000Z`,
+      `DTSTAMP:20270101T120000Z`,
       `DTSTART:${compactDate}T${startTime}`,
       `DTEND:${compactDate}T${endTime}`,
       `SUMMARY:${summaryTitle}`,
@@ -587,7 +587,7 @@
       .replace(/'/g, '&#39;');
   }
 
-  const ALL_SLOTS = generateWeekendSlots(2026, [0, 1, 2]);
+  const ALL_SLOTS = generateWeekendSlots(2027, [0, 1, 2]);
   const ALL_WEEKEND_GROUPS = groupSlotsByWeekend(ALL_SLOTS);
 
   let state = {
@@ -1276,7 +1276,7 @@
     document.getElementById('btn-export-json')?.addEventListener('click', () => {
       const payload = JSON.stringify({
         type: 'l5r-sessions-doodle-v1',
-        range: '2026-01..2026-03',
+        range: '2027-01..2027-03',
         exportedAt: new Date().toISOString(),
         responses: state.responses
       }, null, 2);
@@ -1284,7 +1284,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'dispos-jdr-janv-mars-2026.json';
+      a.download = 'dispos-jdr-janv-mars-2027.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
