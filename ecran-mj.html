@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- DONNÉES & MOTEUR JS -->
-  <script src="js/navbar.js?v=4" defer></script>
+  <script src="js/navbar.js?v=5" defer></script>
   <script src="data/gm-rules-data.js?v=3" defer></script>
   <script src="data/gm-scenarios-data.js?v=3" defer></script>
-  <script src="js/gm-screen.js?v=3" defer></script>
+  <script src="js/gm-screen.js?v=4" defer></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
 
@@ -75,6 +75,12 @@
           <h2 class="font-imperial font-bold text-sm sm:text-base text-amber-300 flex items-center gap-2">
             <span>👥</span> Table des Joueurs (<span id="gm-pc-count">0</span> PJ)
           </h2>
+          <span id="gm-cloud-sync-badge" class="hidden px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-[10px] font-mono font-bold">
+            ☁️ Live Cloud MJ
+          </span>
+          <button id="gm-cloud-backup-btn" type="button" class="hidden px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-500/45 text-amber-200 text-[10px] font-imperial font-bold cursor-pointer transition" title="Télécharger une sauvegarde complète JSON de la base Firebase">
+            💾 Backup Base (.json)
+          </button>
           <div id="gm-party-summary" class="flex flex-wrap items-center gap-1.5 text-[11px]"></div>
           <button id="gm-toggle-pcs-collapse" type="button" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] font-imperial text-stone-300 cursor-pointer transition">
             ▾ Masquer les fiches
@@ -700,7 +706,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.39.0</span>
+      <span id="site-version-label">v1.40.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

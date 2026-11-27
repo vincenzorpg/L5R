@@ -602,6 +602,163 @@
     showOnlyMyMonthMatch: false
   };
 
+  let cloudUnsub = null;
+  let cloudSyncActive = false;
+  let cloudPushTimer = null;
+  let hasHydratedOwnCloudVote = false;
+
+  function isCloudDoodleAuthorized() {
+    const fb = typeof window !== 'undefined' ? window.L5RFirebase : null;
+    if (!fb || typeof fb.getState !== 'function') return false;
+    const s = fb.getState();
+    return Boolean(s && s.user && (s.isApproved || s.isGm));
+  }
+
+  function renderCloudBanner() {
+    const banner = document.getElementById('doodle-cloud-banner');
+    const dot = document.getElementById('doodle-cloud-dot');
+    const textEl = document.getElementById('doodle-cloud-status-text');
+    const actionsEl = document.getElementById('doodle-cloud-actions');
+    if (!banner || !dot || !textEl || !actionsEl) return;
+
+    const fb = typeof window !== 'undefined' ? window.L5RFirebase : null;
+    const s = fb && typeof fb.getState === 'function' ? fb.getState() : null;
+
+    if (!s || s.offline || !s.user) {
+      banner.className = 'card-clean rounded-2xl px-4 py-3 border border-amber-500/30 bg-black/45 flex flex-wrap items-center justify-between gap-3 text-xs';
+      dot.className = 'inline-flex w-2.5 h-2.5 rounded-full bg-stone-500 shrink-0';
+      textEl.innerHTML = '<b>Mode local actif</b> — Connectez-vous pour activer le Doodle partagé en temps réel (le partage par liens Discord reste 100 % disponible).';
+      actionsEl.innerHTML = `
+        <button type="button" id="btn-doodle-open-account" class="px-3 py-1.5 rounded-lg bg-amber-950/70 hover:bg-amber-900 border border-amber-500/45 text-amber-200 font-imperial font-bold text-[11px] cursor-pointer transition">
+          👤 Connexion / Dojo Cloud
+        </button>
+      `;
+    } else if (!s.isApproved && !s.isGm) {
+      banner.className = 'card-clean rounded-2xl px-4 py-3 border border-amber-500/50 bg-amber-950/20 flex flex-wrap items-center justify-between gap-3 text-xs';
+      dot.className = 'inline-flex w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0';
+      textEl.innerHTML = s.memberStatus === 'pending'
+        ? '<b>⏳ En attente de validation du MJ</b> — Dès approbation, vos disponibilités seront synchronisées en direct avec toute l\'escouade.'
+        : '<b>Compte connecté (accès Table requis)</b> — Demandez l\'accès à la Table dans votre compte pour rejoindre le Doodle en direct.';
+      actionsEl.innerHTML = `
+        <button type="button" id="btn-doodle-open-account" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-imperial font-bold text-[11px] cursor-pointer transition">
+          🏯 Ouvrir mon compte
+        </button>
+      `;
+    } else {
+      const cloudCount = state.responses.filter(r => r.fromCloud).length;
+      const localOnlyCount = state.responses.filter(r => !r.fromCloud).length;
+      banner.className = 'card-clean rounded-2xl px-4 py-3 border border-emerald-500/55 bg-emerald-950/20 flex flex-wrap items-center justify-between gap-3 text-xs';
+      dot.className = 'inline-flex w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] shrink-0';
+      textEl.innerHTML = `<b>☁️ Synchronisation Temps Réel Active</b> — ${cloudCount} fiche(s) en direct dans Firebase.${s.isGm ? ' <span class="text-amber-300 font-bold">(Mode MJ)</span>' : ''}`;
+      actionsEl.innerHTML = (localOnlyCount > 0 || s.isGm)
+        ? `<button type="button" id="btn-doodle-push-local" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-imperial font-bold text-[11px] cursor-pointer transition" title="Envoyer vos fiches locales vers le Doodle partagé Firebase">☁️ Publier ${localOnlyCount > 0 ? localOnlyCount + ' fiche(s) locale(s)' : 'le tableau'} vers la Table</button>`
+        : `<span class="px-2.5 py-1 rounded-lg bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 font-mono text-[10px]">Temps réel OK</span>`;
+    }
+
+    document.getElementById('btn-doodle-open-account')?.addEventListener('click', () => {
+      window.L5RFirebase?.openAccountModal?.();
+    });
+    document.getElementById('btn-doodle-push-local')?.addEventListener('click', syncLocalResponsesToCloud);
+  }
+
+  function schedulePushCurrentVoteToCloud(immediate = false) {
+    if (!isCloudDoodleAuthorized() || !state.currentName.trim()) return;
+    clearTimeout(cloudPushTimer);
+    const runner = async () => {
+      try {
+        const fb = window.L5RFirebase;
+        const s = fb.getState();
+        const entry = getCurrentEditorResponseObj();
+        const existing = state.responses.find(r => normalizePlayerName(r.name) === normalizePlayerName(entry.name));
+        let targetKey = null;
+        if (s.isGm) {
+          if (existing?.cloudKey) {
+            targetKey = existing.cloudKey;
+          } else {
+            const normName = normalizePlayerName(entry.name);
+            const isOwnGm = normName === 'maitre du jeu' || normName === normalizePlayerName(s.user.displayName || '');
+            targetKey = isOwnGm ? s.user.uid : `gm_${fb.sanitizeFirebaseKey(entry.name)}`;
+          }
+        }
+        await fb.saveDoodleEntryToCloud(entry, targetKey);
+      } catch (err) {
+        console.warn('[Sessions] Synchro Cloud en attente :', err?.message);
+      }
+    };
+    if (immediate) runner();
+    else cloudPushTimer = setTimeout(runner, 450);
+  }
+
+  async function syncLocalResponsesToCloud() {
+    if (!isCloudDoodleAuthorized()) return;
+    const fb = window.L5RFirebase;
+    const s = fb.getState();
+    const toPush = s.isGm
+      ? state.responses
+      : state.responses.filter(r => normalizePlayerName(r.name) === normalizePlayerName(state.currentName));
+    if (toPush.length === 0) {
+      showToast('Aucune fiche locale à publier.', 'warn');
+      return;
+    }
+    try {
+      let pushed = 0;
+      for (const item of toPush) {
+        const key = s.isGm ? (item.cloudKey || `gm_${fb.sanitizeFirebaseKey(item.name)}`) : null;
+        await fb.saveDoodleEntryToCloud(item, key);
+        pushed++;
+      }
+      showToast(`${pushed} fiche(s) publiée(s) dans le Doodle temps réel !`);
+    } catch (err) {
+      showToast(err?.message || 'Impossible de publier vers Firebase.', 'err');
+    }
+  }
+
+  async function bindDoodleCloudSync() {
+    renderCloudBanner();
+    const fb = typeof window !== 'undefined' ? window.L5RFirebase : null;
+    if (!fb || typeof fb.subscribeDoodle2027 !== 'function') return;
+
+    if (!isCloudDoodleAuthorized()) {
+      if (typeof cloudUnsub === 'function') {
+        try { cloudUnsub(); } catch (_) {}
+        cloudUnsub = null;
+      }
+      cloudSyncActive = false;
+      return;
+    }
+    if (cloudSyncActive) return;
+    cloudSyncActive = true;
+
+    const s = fb.getState();
+    cloudUnsub = await fb.subscribeDoodle2027((cloudMap) => {
+      const localOnly = state.responses.filter(r => !r.fromCloud);
+      state.responses = typeof fb.mergeDoodleResponses === 'function'
+        ? fb.mergeDoodleResponses(localOnly, cloudMap)
+        : localOnly;
+
+      if (!hasHydratedOwnCloudVote && s.user) {
+        const own = state.responses.find(r => r.uid === s.user.uid || r.cloudKey === s.user.uid);
+        if (own) {
+          if (!state.currentName.trim()) {
+            state.currentName = own.name;
+            state.currentClan = CLAN_BADGE_META[own.clan] ? own.clan : 'crabe';
+            state.currentNote = own.note || '';
+            state.currentVotes = { ...own.votes };
+          }
+          hasHydratedOwnCloudVote = true;
+        } else if (!state.currentName.trim() && s.user.displayName) {
+          state.currentName = s.isGm ? 'Maître du Jeu' : s.user.displayName;
+          state.currentClan = s.isGm ? 'imperial' : state.currentClan;
+          hasHydratedOwnCloudVote = true;
+        }
+      }
+
+      saveStateToStorage();
+      renderAll();
+      renderCloudBanner();
+    });
+  }
+
   function showToast(msg, tone = 'ok') {
     const el = document.getElementById('sessions-toast');
     if (!el) return;
@@ -679,7 +836,9 @@
     state.responses = upsertParticipantResponse(state.responses, getCurrentEditorResponseObj());
     saveStateToStorage();
     renderAll();
-    showToast(`Disponibilités de ${state.currentName} enregistrées dans le tableau !`);
+    const synced = isCloudDoodleAuthorized();
+    if (synced) schedulePushCurrentVoteToCloud(true);
+    showToast(`Disponibilités de ${state.currentName} enregistrées${synced ? ' (synchronisées en direct ☁️)' : ' dans le tableau'} !`);
     return true;
   }
 
@@ -710,7 +869,9 @@
     const container = document.getElementById('dojo-quick-presets');
     if (!container || typeof localStorage === 'undefined') return;
     try {
-      const raw = localStorage.getItem('l5r_dojo_characters_v1');
+      const raw = localStorage.getItem('l5r_dojo_characters_v4')
+        || localStorage.getItem('l5r_saved_characters')
+        || localStorage.getItem('l5r_dojo_characters_v1');
       const list = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(list) || list.length === 0) return;
       const presetNorms = new Set(PJ_PRESETS.map(p => normalizePlayerName(p.name)));
@@ -769,6 +930,7 @@
       const existsIdx = state.responses.findIndex(r => normalizePlayerName(r.name) === norm);
       if (existsIdx >= 0) {
         state.responses = upsertParticipantResponse(state.responses, getCurrentEditorResponseObj());
+        schedulePushCurrentVoteToCloud(false);
       }
     }
     saveStateToStorage();
@@ -787,6 +949,7 @@
       const norm = normalizePlayerName(state.currentName);
       if (state.responses.some(r => normalizePlayerName(r.name) === norm)) {
         state.responses = upsertParticipantResponse(state.responses, getCurrentEditorResponseObj());
+        schedulePushCurrentVoteToCloud(false);
       }
     }
     saveStateToStorage();
@@ -804,6 +967,7 @@
       const norm = normalizePlayerName(state.currentName);
       if (state.responses.some(r => normalizePlayerName(r.name) === norm)) {
         state.responses = upsertParticipantResponse(state.responses, getCurrentEditorResponseObj());
+        schedulePushCurrentVoteToCloud(false);
       }
     }
     saveStateToStorage();
@@ -917,7 +1081,7 @@
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/50 border border-stone-700/80 text-xs">
           <span class="px-1.5 py-0.5 rounded border text-[10px] font-serif font-bold ${meta.colorClass}">${meta.kanji}</span>
           <div class="flex flex-col">
-            <button type="button" data-edit-participant="${escapeHtml(p.name)}" class="font-bold font-imperial text-amber-200 hover:underline text-left cursor-pointer" title="Charger pour modifier">${escapeHtml(p.name)}</button>
+            <button type="button" data-edit-participant="${escapeHtml(p.name)}" class="font-bold font-imperial text-amber-200 hover:underline text-left cursor-pointer" title="Charger pour modifier">${escapeHtml(p.name)}${p.fromCloud ? ' <span class="text-[10px] text-emerald-400" title="Synchronisé en temps réel">☁️</span>' : ''}</button>
             <span class="text-[10px] text-stone-400">${yesTotal} ✅ ${p.note ? `• ${escapeHtml(p.note)}` : ''}</span>
           </div>
           <button type="button" data-remove-participant="${escapeHtml(p.name)}" class="ml-1 text-stone-500 hover:text-red-400 text-xs cursor-pointer" title="Retirer du sondage">✕</button>
@@ -1112,6 +1276,13 @@
     loadDojoCharactersPresets();
     handleUrlImportIfPresent();
     renderAll();
+    bindDoodleCloudSync();
+
+    window.addEventListener('l5r-auth-changed', () => {
+      bindDoodleCloudSync();
+      loadDojoCharactersPresets();
+    });
+    window.addEventListener('l5r-cloud-dojo-updated', loadDojoCharactersPresets);
 
     // Presets & Dojo click delegation
     document.addEventListener('click', (e) => {
@@ -1139,9 +1310,17 @@
       const rmBtn = e.target.closest('[data-remove-participant]');
       if (rmBtn) {
         const targetName = rmBtn.getAttribute('data-remove-participant');
+        const existing = state.responses.find(r => normalizePlayerName(r.name) === normalizePlayerName(targetName));
         state.responses = removeParticipantResponse(state.responses, targetName);
         saveStateToStorage();
         renderAll();
+        if (existing?.cloudKey && isCloudDoodleAuthorized()) {
+          const fb = window.L5RFirebase;
+          const s = fb.getState();
+          if (s.isGm || existing.uid === s.user.uid) {
+            fb.deleteDoodleEntryFromCloud(existing.cloudKey).catch(() => {});
+          }
+        }
         showToast(`${targetName} retiré du sondage.`, 'warn');
         return;
       }
