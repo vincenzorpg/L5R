@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- DONNÉES & MOTEUR JS -->
-  <script src="js/navbar.js?v=5" defer></script>
+  <script src="js/navbar.js?v=6" defer></script>
   <script src="data/gm-rules-data.js?v=3" defer></script>
   <script src="data/gm-scenarios-data.js?v=3" defer></script>
-  <script src="js/gm-screen.js?v=4" defer></script>
+  <script src="js/gm-screen.js?v=5" defer></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-amber-700 selection:text-white">
 
@@ -571,6 +571,9 @@
           <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-300">
             <label class="flex items-center gap-1.5 cursor-pointer"><input id="gm-dice-explode" type="checkbox" checked class="accent-amber-500" /> Exploser 10</label>
             <label class="flex items-center gap-1.5 cursor-pointer"><input id="gm-dice-spec" type="checkbox" class="accent-amber-500" /> Spécialisation (1)</label>
+            <label class="flex items-center gap-1.5 cursor-pointer text-purple-300 font-bold" title="Si coché, le jet reste strictement privé derrière le paravent MJ et n'est pas envoyé sur la Table Live">
+              <input id="gm-dice-secret" type="checkbox" class="accent-purple-500" /> 🔒 Secret MJ
+            </label>
             <label class="flex items-center gap-1">
               <span>Malus :</span>
               <input id="gm-dice-penalty" type="number" min="0" max="40" value="0" class="w-12 text-center rounded bg-[#0d0b0b] border border-stone-700 py-0.5 font-mono text-rose-300" />
@@ -582,6 +585,18 @@
           </div>
 
           <div id="gm-dice-history" class="space-y-1 max-h-32 overflow-y-auto text-[10px]"></div>
+
+          <!-- FIL DE DÉS PARTAGÉ TEMPS RÉEL (PJs + MJ) -->
+          <div id="gm-live-dice-feed-wrap" class="hidden pt-2 border-t border-amber-500/20 space-y-1.5">
+            <div class="flex items-center justify-between text-[10px]">
+              <span class="font-imperial font-bold text-emerald-300">☁️ Fil de Dés Table Live</span>
+              <div class="flex items-center gap-2">
+                <a href="table-live.html" class="text-amber-300 hover:underline">Table Live ↗</a>
+                <button type="button" id="gm-clear-live-dice-btn" class="text-stone-400 hover:text-red-300 cursor-pointer">Vider</button>
+              </div>
+            </div>
+            <div id="gm-live-dice-feed" class="space-y-1 max-h-40 overflow-y-auto text-[10px]"></div>
+          </div>
         </section>
 
         <!-- 2. CALCULATEUR EXPRESS DE ND -->
@@ -706,7 +721,7 @@
   <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/80 mt-8">
     <div>Légende des Cinq Anneaux (4e Édition) — Écran du Maître du Jeu • Les Chroniques de Rokugan</div>
     <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
-      <span id="site-version-label">v1.40.0</span>
+      <span id="site-version-label">v1.41.0</span>
       <span>•</span>
       <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
     </div>

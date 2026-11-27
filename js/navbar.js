@@ -311,6 +311,15 @@
                   </div>
                 </a>
 
+                <!-- La Table Live (Compagnon Temps Réel PJs) -->
+                <a href="${rootPrefix}table-live.html" class="px-2.5 py-2 rounded-lg hover:bg-purple-950/40 text-stone-200 hover:text-purple-200 flex items-center gap-3 text-xs transition">
+                  <span class="w-7 h-7 rounded border bg-purple-950/80 text-purple-300 border-purple-500/50 flex items-center justify-center font-serif font-bold text-sm shrink-0">卓</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-purple-300">La Table Live</span>
+                    <span class="text-[10px] text-stone-400 font-sans">Escouade, initiative &amp; fil de dés</span>
+                  </div>
+                </a>
+
                 <div class="border-t border-amber-500/20 my-1"></div>
 
                 <!-- Carnet de Rokugan avec son logo officiel -->
@@ -464,6 +473,10 @@
               <a href="${rootPrefix}sessions.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-2">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">暦</span>
                 <span>Dispos Sessions</span>
+              </a>
+              <a href="${rootPrefix}table-live.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-purple-300 flex items-center gap-2">
+                <span class="w-6 h-6 rounded border bg-purple-950/80 text-purple-300 border-purple-500/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">卓</span>
+                <span>La Table Live</span>
               </a>
               <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/45 text-emerald-200 hover:bg-emerald-900/50 flex items-center gap-2 col-span-2 cursor-pointer text-left">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-bold text-xs shrink-0">📲</span>
@@ -933,6 +946,7 @@
         'carte.html': ['Outils', 'Carte de Rokugan'],
         'ecran-mj.html': ['Outils', 'Écran du MJ'],
         'sessions.html': ['Outils', 'Dispos & Sessions'],
+        'table-live.html': ['Outils', 'La Table Live'],
         'campagne.html': [null, 'Chroniques de Campagne'],
         'campagne-ajouter.html': ['Campagne', 'Déposer un Récit']
       };
