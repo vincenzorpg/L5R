@@ -42,6 +42,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -50,6 +51,7 @@ body {
   color: var(--text-main) !important;
   font-family: 'Noto Serif JP', serif;
   transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4, .font-imperial {

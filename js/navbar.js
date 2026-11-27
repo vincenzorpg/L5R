@@ -146,14 +146,18 @@
     `;
 
     header.innerHTML = `
-      <nav aria-label="Navigation principale" class="card-clean border-b border-amber-500/30 backdrop-blur-md px-3 sm:px-4 py-2.5 select-none shadow-xl">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      <nav aria-label="Navigation principale" class="card-clean border-b border-amber-500/30 backdrop-blur-md px-2.5 sm:px-4 py-2 sm:py-2.5 select-none shadow-xl">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
           
           <!-- Marque & Retour Accueil : Les Chroniques de Rokugan -->
-          <a href="${rootPrefix}index.html" class="flex items-center gap-2 group shrink-0 focus:outline-none">
-            <img src="${rootPrefix}assets/images/favicon_cinq_anneaux.png" alt="Logo des Chroniques de Rokugan" width="36" height="36" class="w-9 h-9 rounded-full object-cover border border-amber-500/60 bg-[#0f0b0a] shadow-md transition-transform group-hover:scale-105" />
-            <div class="flex flex-col">
-              <span class="font-imperial font-bold text-xs xl:text-sm tracking-wider gold-text leading-tight uppercase whitespace-nowrap">LES CHRONIQUES DE ROKUGAN</span>
+          <a href="${rootPrefix}index.html" class="flex items-center gap-2 group min-w-0 flex-1 lg:flex-initial lg:shrink-0 focus:outline-none">
+            <img src="${rootPrefix}assets/images/favicon_cinq_anneaux.png" alt="Logo des Chroniques de Rokugan" width="36" height="36" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-amber-500/60 bg-[#0f0b0a] shadow-md shrink-0 transition-transform group-hover:scale-105" />
+            <div class="flex flex-col min-w-0">
+              <span class="font-imperial font-bold text-xs xl:text-sm tracking-wider gold-text leading-tight uppercase truncate">
+                <span class="sm:hidden">ROKUGAN</span>
+                <span class="hidden sm:inline">LES CHRONIQUES DE ROKUGAN</span>
+              </span>
+              <span class="text-[9px] text-stone-400 sm:hidden leading-tight truncate">L5R 4e Édition</span>
               <span class="text-[10px] text-stone-400 hidden xl:inline">L5R 4e Édition • Campagne de la Chronique de Rokugan</span>
             </div>
           </a>
@@ -341,14 +345,14 @@
           </div>
 
           <!-- Actions Droite : Recherche Globale + Compte Cloud + Thème + Burger Mobile -->
-          <div class="flex items-center gap-1.5 shrink-0">
+          <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
             <!-- Bouton Recherche Globale (Ctrl+K) -->
             <button
               type="button"
               id="btn-global-search"
               data-action="open-global-search"
               title="Recherche globale (Ctrl + K)"
-              class="px-2 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
+              class="h-9 px-2 xl:px-2.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center justify-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               aria-label="Ouvrir la recherche globale"
             >
               <span>🔍</span>
@@ -362,18 +366,18 @@
               id="btn-firebase-account"
               data-action="open-account-modal"
               title="Compte & Dojo Cloud Firebase"
-              class="px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
+              class="h-9 px-2 sm:px-2.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center justify-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               aria-label="Ouvrir mon compte et mon Dojo Cloud"
             >
               <span class="account-btn-icon">👤</span>
-              <span class="account-btn-label hidden sm:inline text-[11px] font-bold">Connexion</span>
+              <span class="account-btn-label hidden sm:inline text-[11px] font-bold max-w-[92px] truncate">Connexion</span>
             </button>
 
             <!-- Bascule Thème Clair/Sombre (Kanjis 月 / 陽) -->
             <button
               type="button"
               data-action="toggle-theme"
-              class="px-2 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-300 flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
+              class="h-9 px-1.5 sm:px-2 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-300 flex items-center justify-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               aria-label="${isLight ? 'Activer le mode sombre' : 'Activer le mode clair'}"
             >
               <span class="theme-icon w-5 h-5 rounded bg-amber-950/60 border border-amber-500/40 flex items-center justify-center font-serif font-bold text-xs text-amber-300">${isLight ? '月' : '陽'}</span>
@@ -387,7 +391,7 @@
               aria-expanded="false"
               aria-controls="mobile-menu-panel"
               aria-label="Ouvrir le menu de navigation"
-              class="lg:hidden p-2 rounded-lg border border-amber-500/30 text-amber-300 hover:bg-amber-500/10 focus:outline-none"
+              class="lg:hidden h-9 w-9 rounded-lg border border-amber-500/30 text-amber-300 hover:bg-amber-500/10 flex items-center justify-center focus:outline-none shrink-0"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -397,22 +401,31 @@
 
         </div>
 
-        <!-- Menu Mobile (100% Kanjis & Couleurs) -->
-        <div id="mobile-menu-panel" class="hidden lg:hidden mt-3 pt-3 border-t border-amber-500/20 space-y-3 text-xs font-imperial">
+        <!-- Menu Mobile (100% Kanjis, Couleurs & Défilement sécurisé) -->
+        <div id="mobile-menu-panel" class="hidden lg:hidden mt-2.5 pt-2.5 pb-2 border-t border-amber-500/20 space-y-3 text-xs font-imperial max-h-[calc(100dvh-4.25rem)] overflow-y-auto overscroll-contain">
           
+          <!-- Accès Compte & Dojo Cloud Mobile -->
+          <button type="button" data-action="open-account-modal" class="w-full px-3 py-2 rounded-lg bg-amber-950/35 hover:bg-amber-950/55 border border-amber-500/45 text-amber-200 flex items-center justify-between gap-2 cursor-pointer transition">
+            <span class="flex items-center gap-2 min-w-0">
+              <span class="account-btn-icon shrink-0">👤</span>
+              <span class="account-btn-label font-bold truncate">Connexion</span>
+            </span>
+            <span class="text-[10px] text-stone-400 font-sans shrink-0">Compte &amp; Dojo Cloud ›</span>
+          </button>
+
           <!-- Accueil, Campagne & La Forge -->
-          <div class="grid grid-cols-3 gap-2">
-            <a href="${rootPrefix}index.html" class="p-2 rounded-lg bg-stone-900/80 border border-amber-600/40 text-stone-200 flex items-center justify-center gap-1.5">
-              <span class="text-amber-400 font-serif font-bold">本</span>
-              <span>Accueil</span>
+          <div class="grid grid-cols-3 gap-1.5">
+            <a href="${rootPrefix}index.html" class="px-1.5 py-2 rounded-lg bg-stone-900/80 border border-amber-600/40 text-stone-200 flex items-center justify-center gap-1 min-w-0 text-[11px]">
+              <span class="text-amber-400 font-serif font-bold shrink-0">本</span>
+              <span class="truncate">Accueil</span>
             </a>
-            <a href="${rootPrefix}campagne.html" class="p-2 rounded-lg bg-stone-900/80 border border-purple-600/40 text-purple-200 flex items-center justify-center gap-1.5">
-              <span class="text-purple-400 font-serif font-bold">記</span>
-              <span>Campagne</span>
+            <a href="${rootPrefix}campagne.html" class="px-1.5 py-2 rounded-lg bg-stone-900/80 border border-purple-600/40 text-purple-200 flex items-center justify-center gap-1 min-w-0 text-[11px]">
+              <span class="text-purple-400 font-serif font-bold shrink-0">記</span>
+              <span class="truncate">Campagne</span>
             </a>
-            <a href="${rootPrefix}createcharacter.html" class="p-2 rounded-lg bg-red-950/70 border border-amber-500/60 text-amber-200 font-bold flex items-center justify-center gap-1.5">
-              <span class="text-red-400 font-serif font-bold">鍛</span>
-              <span>La Forge</span>
+            <a href="${rootPrefix}createcharacter.html" class="px-1.5 py-2 rounded-lg bg-red-950/70 border border-amber-500/60 text-amber-200 font-bold flex items-center justify-center gap-1 min-w-0 text-[11px]">
+              <span class="text-red-400 font-serif font-bold shrink-0">鍛</span>
+              <span class="truncate">La Forge</span>
             </a>
           </div>
 
@@ -426,9 +439,9 @@
               ${aidesList
                 .map(
                   (a) => `
-                <a href="${rootPrefix}aides/${a.slug}" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-2">
+                <a href="${rootPrefix}aides/${a.slug}" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-2 min-w-0">
                   <span class="w-6 h-6 rounded border flex items-center justify-center font-serif font-bold text-xs shrink-0 ${a.badge}">${a.kanji}</span>
-                  <span>${a.name}</span>
+                  <span class="truncate">${a.name}</span>
                 </a>`
                 )
                 .join('')}
@@ -442,50 +455,50 @@
               <span>Outils</span>
             </div>
             <div class="grid grid-cols-2 gap-1.5">
-              <a href="${rootPrefix}grimoire.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-sky-300 flex items-center gap-2">
+              <a href="${rootPrefix}grimoire.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-sky-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-sky-950/80 text-sky-300 border-sky-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">法</span>
-                <span>Grimoire (Sorts)</span>
+                <span class="truncate">Grimoire</span>
               </a>
-              <a href="${rootPrefix}kihos.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-2">
+              <a href="${rootPrefix}kihos.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">気</span>
-                <span>Kihos (Moines)</span>
+                <span class="truncate">Kihos</span>
               </a>
-              <a href="${rootPrefix}katas.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-orange-300 flex items-center gap-2">
+              <a href="${rootPrefix}katas.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-orange-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-orange-950/80 text-orange-300 border-orange-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">型</span>
-                <span>Katas (Bushi)</span>
+                <span class="truncate">Katas</span>
               </a>
-              <a href="${rootPrefix}tatouages.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-teal-300 flex items-center gap-2">
+              <a href="${rootPrefix}tatouages.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-teal-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-teal-950/80 text-teal-300 border-teal-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">墨</span>
-                <span>Tatouages</span>
+                <span class="truncate">Tatouages</span>
               </a>
-              <a href="${rootPrefix}ecran-mj.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-2">
+              <a href="${rootPrefix}ecran-mj.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">幕</span>
-                <span>Écran du MJ</span>
+                <span class="truncate">Écran du MJ</span>
               </a>
-              <a href="${rootPrefix}carte.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-yellow-300 flex items-center gap-2">
+              <a href="${rootPrefix}carte.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-yellow-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-yellow-950/80 text-yellow-300 border-yellow-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">地</span>
-                <span>Carte de Rokugan</span>
+                <span class="truncate">Carte</span>
               </a>
-              <a href="${rootPrefix}ecoles.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-200 flex items-center gap-2">
+              <a href="${rootPrefix}ecoles.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-amber-200 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-amber-950/80 text-amber-300 border-amber-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">道</span>
-                <span>Tableau des Écoles</span>
+                <span class="truncate">Écoles</span>
               </a>
-              <a href="${rootPrefix}sessions.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-2">
+              <a href="${rootPrefix}sessions.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-emerald-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">暦</span>
-                <span>Dispos Sessions</span>
+                <span class="truncate">Sessions</span>
               </a>
-              <a href="${rootPrefix}table-live.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-purple-300 flex items-center gap-2">
+              <a href="${rootPrefix}table-live.html" class="p-2 rounded-lg bg-black/50 border border-stone-800 text-stone-200 hover:text-purple-300 flex items-center gap-1.5 min-w-0 col-span-2 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-purple-950/80 text-purple-300 border-purple-500/50 flex items-center justify-center font-serif font-bold text-xs shrink-0">卓</span>
-                <span>La Table Live</span>
+                <span class="truncate font-bold text-purple-200">La Table Live (Temps Réel)</span>
               </a>
-              <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/45 text-emerald-200 hover:bg-emerald-900/50 flex items-center gap-2 col-span-2 cursor-pointer text-left">
+              <button type="button" data-pwa-install-btn onclick="window.promptPWAInstall && window.promptPWAInstall()" class="hidden p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/45 text-emerald-200 hover:bg-emerald-900/50 flex items-center gap-2 col-span-2 cursor-pointer text-left min-w-0 text-[11px]">
                 <span class="w-6 h-6 rounded border bg-emerald-950/80 text-emerald-300 border-emerald-600/50 flex items-center justify-center font-bold text-xs shrink-0">📲</span>
-                <span class="font-bold">Installer l'App Téléphone (Hors-ligne)</span>
+                <span class="font-bold truncate">Installer l'App Téléphone</span>
               </button>
-              <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-amber-200 flex items-center gap-2.5 col-span-2">
+              <a href="https://nelsio.github.io/carnet-l5r/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-amber-200 flex items-center gap-2 col-span-2 min-w-0 text-[11px]">
                 <img src="${rootPrefix}assets/images/logo_carnet_rokugan.png" alt="Logo Carnet de Rokugan" class="w-6 h-6 rounded border border-amber-500/50 object-contain bg-black p-0.5 shrink-0" />
-                <span class="font-bold">Carnet de Rokugan</span>
-                <span class="ml-auto">${externalLinkSvg}</span>
+                <span class="font-bold truncate">Carnet de Rokugan</span>
+                <span class="ml-auto shrink-0">${externalLinkSvg}</span>
               </a>
             </div>
           </div>
@@ -500,9 +513,9 @@
               ${clansList
                 .map(
                   (c) => `
-                <a href="${rootPrefix}clans/${c.id}.html" class="p-1.5 rounded-lg bg-black/50 border border-stone-800 text-stone-300 hover:text-amber-300 flex items-center gap-2">
+                <a href="${rootPrefix}clans/${c.id}.html" class="p-1.5 rounded-lg bg-black/50 border border-stone-800 text-stone-300 hover:text-amber-300 flex items-center gap-1.5 min-w-0 text-[11px]">
                   <span class="w-5 h-5 rounded border flex items-center justify-center font-serif font-bold text-[11px] shrink-0 ${c.badge}">${c.kanji}</span>
-                  <span>${c.name.replace('Clan de la ', '').replace('Clan du ', '')}</span>
+                  <span class="truncate">${c.name.replace('Clan de la ', '').replace('Clan du ', '')}</span>
                 </a>`
                 )
                 .join('')}
@@ -513,9 +526,26 @@
       </nav>
     `;
 
+    // Événement Menu Mobile
+    const mobileBtn = document.getElementById('mobile-menu-toggle');
+    const mobilePanel = document.getElementById('mobile-menu-panel');
+    const closeMobileMenu = () => {
+      if (mobilePanel && !mobilePanel.classList.contains('hidden')) {
+        mobilePanel.classList.add('hidden');
+        mobileBtn?.setAttribute('aria-expanded', 'false');
+      }
+    };
+    if (mobileBtn && mobilePanel) {
+      mobileBtn.addEventListener('click', () => {
+        const isHidden = mobilePanel.classList.toggle('hidden');
+        mobileBtn.setAttribute('aria-expanded', String(!isHidden));
+      });
+    }
+
     // Événement Recherche Globale
     header.querySelectorAll('[data-action="open-global-search"]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        closeMobileMenu();
         if (typeof window.openL5rGlobalSearch === 'function') {
           window.openL5rGlobalSearch();
         }
@@ -525,6 +555,7 @@
     // Événement Compte & Dojo Cloud Firebase
     header.querySelectorAll('[data-action="open-account-modal"]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        closeMobileMenu();
         if (window.L5RFirebase && typeof window.L5RFirebase.openAccountModal === 'function') {
           window.L5RFirebase.openAccountModal();
         }
@@ -538,16 +569,6 @@
         applyTheme(current === 'dark' ? 'light' : 'dark');
       });
     });
-
-    // Événement Menu Mobile
-    const mobileBtn = document.getElementById('mobile-menu-toggle');
-    const mobilePanel = document.getElementById('mobile-menu-panel');
-    if (mobileBtn && mobilePanel) {
-      mobileBtn.addEventListener('click', () => {
-        const isHidden = mobilePanel.classList.toggle('hidden');
-        mobileBtn.setAttribute('aria-expanded', String(!isHidden));
-      });
-    }
 
     // Maintien fluide & tolérant des menus déroulants bureau (délai de grâce + clic)
     const dropdowns = Array.from(header.querySelectorAll('.nav-dropdown'));
