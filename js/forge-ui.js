@@ -3477,9 +3477,131 @@ function syncSessionTrackerUI() {
   if (notesEl && notesEl.value !== (state.notes || '')) notesEl.value = state.notes || '';
 }
 
+let _forgeLiveUnsub = null;
+let _forgeLiveCharId = null;
+let _forgeLivePushTimer = null;
+let _forgeApplyingRemoteLive = false;
+
+function getActiveDojoCharacterEntry() {
+  if (!window.currentCharacterId || typeof localStorage === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('l5r_dojo_characters_v4') || localStorage.getItem('l5r_saved_characters');
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? (list.find(c => c && c.id === window.currentCharacterId) || null) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function pushForgeSessionStateToCloud() {
+  if (_forgeApplyingRemoteLive) return;
+  const fb = window.L5RFirebase;
+  if (!fb || typeof fb.updateRosterLiveState !== 'function') return;
+  const authState = fb.getState?.();
+  if (!authState?.user || (!authState.isApproved && !authState.isGm)) return;
+  const dojoEntry = getActiveDojoCharacterEntry();
+  if (!dojoEntry || !dojoEntry.isCampaignActive) return;
+
+  clearTimeout(_forgeLivePushTimer);
+  _forgeLivePushTimer = setTimeout(() => {
+    const s = getSessionStateRef();
+    const rings = getCurrentForgeRings();
+    const honorEl = document.getElementById('pc-honor');
+    const gloryEl = document.getElementById('pc-glory');
+    const statusEl = document.getElementById('pc-status');
+    const patch = {
+      wounds: Math.max(0, parseInt(s.wounds, 10) || 0),
+      voidCurrent: Math.max(0, rings.vide - (parseInt(s.voidSpent, 10) || 0)),
+      voidMax: rings.vide,
+      taint: Math.max(0, Math.min(10, Number(s.taint) || 0)),
+      spellsSpent: s.spellsSpent || { air: 0, terre: 0, feu: 0, eau: 0, vide: 0 }
+    };
+    if (honorEl && honorEl.value !== '') patch.honor = parseFloat(honorEl.value) || 4.5;
+    if (gloryEl && gloryEl.value !== '') patch.glory = parseFloat(gloryEl.value) || 1.0;
+    if (statusEl && statusEl.value !== '') patch.status = parseFloat(statusEl.value) || 1.0;
+
+    fb.updateRosterLiveState(dojoEntry.id, patch, { earthRing: rings.terre }).catch(() => {});
+  }, 300);
+}
+
+async function bindForgeLiveSessionSync() {
+  const fb = window.L5RFirebase;
+  const authState = fb?.getState?.();
+  const dojoEntry = getActiveDojoCharacterEntry();
+  const canSync = Boolean(
+    fb && typeof fb.subscribeCharacterLiveState === 'function'
+    && authState?.user && (authState.isApproved || authState.isGm)
+    && dojoEntry && dojoEntry.isCampaignActive
+  );
+
+  if (!canSync) {
+    if (typeof _forgeLiveUnsub === 'function') {
+      try { _forgeLiveUnsub(); } catch (_) {}
+    }
+    _forgeLiveUnsub = null;
+    _forgeLiveCharId = null;
+    return;
+  }
+
+  if (_forgeLiveCharId === dojoEntry.id && typeof _forgeLiveUnsub === 'function') return;
+  if (typeof _forgeLiveUnsub === 'function') {
+    try { _forgeLiveUnsub(); } catch (_) {}
+  }
+
+  _forgeLiveCharId = dojoEntry.id;
+  _forgeLiveUnsub = await fb.subscribeCharacterLiveState(dojoEntry.id, (liveState) => {
+    if (!liveState || typeof liveState !== 'object') return;
+    if (window.currentCharacterId !== dojoEntry.id) return;
+
+    const currentS = getSessionStateRef();
+    const rings = getCurrentForgeRings();
+    const mergedChar = typeof fb.applyLiveStateToCharacter === 'function'
+      ? fb.applyLiveStateToCharacter({
+          id: dojoEntry.id,
+          voidRing: rings.vide,
+          sessionState: currentS
+        }, liveState)
+      : null;
+    if (!mergedChar || !mergedChar.sessionState) return;
+
+    const prevWounds = currentS.wounds || 0;
+    const prevVoidSpent = currentS.voidSpent || 0;
+    const nextS = mergedChar.sessionState;
+
+    const changed = nextS.wounds !== prevWounds
+      || nextS.voidSpent !== prevVoidSpent
+      || nextS.taint !== (currentS.taint || 0)
+      || JSON.stringify(nextS.spellsSpent) !== JSON.stringify(currentS.spellsSpent || {});
+
+    _forgeApplyingRemoteLive = true;
+    try {
+      window.charSessionState = { ...currentS, ...nextS };
+      const honorEl = document.getElementById('pc-honor');
+      const gloryEl = document.getElementById('pc-glory');
+      const statusEl = document.getElementById('pc-status');
+      if (mergedChar.honor !== undefined && honorEl && document.activeElement !== honorEl) {
+        honorEl.value = String(mergedChar.honor);
+      }
+      if (mergedChar.glory !== undefined && gloryEl && document.activeElement !== gloryEl) {
+        gloryEl.value = String(mergedChar.glory);
+      }
+      if (mergedChar.status !== undefined && statusEl && document.activeElement !== statusEl) {
+        statusEl.value = String(mergedChar.status);
+      }
+      syncSessionTrackerUI();
+      if (changed && typeof window.autoSaveCharacterDraft === 'function') {
+        window.autoSaveCharacterDraft();
+      }
+    } finally {
+      _forgeApplyingRemoteLive = false;
+    }
+  });
+}
+
 function triggerSessionAutoSave() {
   syncSessionTrackerUI();
   if (typeof window.autoSaveCharacterDraft === 'function') window.autoSaveCharacterDraft();
+  pushForgeSessionStateToCloud();
 }
 
 function adjustSessionWounds(delta) {
@@ -3596,9 +3718,16 @@ window.triggerDojoBackupImport = triggerDojoBackupImport;
 window.handleDojoBackupFile = handleDojoBackupFile;
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('l5r-forge-selection-changed', syncSessionTrackerUI);
+  window.addEventListener('l5r-forge-selection-changed', () => {
+    syncSessionTrackerUI();
+    bindForgeLiveSessionSync();
+  });
   window.addEventListener('l5r-auth-changed', () => {
     if (typeof renderDojoRoster === 'function') renderDojoRoster();
+    bindForgeLiveSessionSync();
   });
-  window.addEventListener('DOMContentLoaded', () => setTimeout(syncSessionTrackerUI, 100));
+  window.addEventListener('DOMContentLoaded', () => setTimeout(() => {
+    syncSessionTrackerUI();
+    bindForgeLiveSessionSync();
+  }, 150));
 }

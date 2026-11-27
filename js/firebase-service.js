@@ -251,6 +251,181 @@
     return map[code] || (err?.message || 'Erreur de connexion Firebase.');
   }
 
+  /**
+   * Convertit la map RTDB `/campaign/doodle2027` en liste normalisée de participations.
+   */
+  function normalizeDoodleCloudEntries(cloudMap) {
+    if (!cloudMap || typeof cloudMap !== 'object') return [];
+    const out = [];
+    Object.keys(cloudMap).forEach((key) => {
+      const item = cloudMap[key];
+      if (!item || typeof item !== 'object') return;
+      const name = String(item.name || '').trim();
+      if (!name) return;
+      const rawVotes = (item.votes && typeof item.votes === 'object') ? item.votes : {};
+      const cleanVotes = {};
+      Object.keys(rawVotes).forEach((slotId) => {
+        const v = String(rawVotes[slotId] || '');
+        if (v === 'yes' || v === 'maybe' || v === 'no') cleanVotes[slotId] = v;
+      });
+      out.push({
+        id: String(item.id || key),
+        cloudKey: key,
+        uid: String(item.uid || key),
+        name,
+        clan: String(item.clan || 'crabe'),
+        note: String(item.note || '').trim().slice(0, 200),
+        votes: cleanVotes,
+        updatedAt: item.updatedAt || new Date().toISOString(),
+        fromCloud: true
+      });
+    });
+    return out.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+  }
+
+  /**
+   * Fusionne les réponses locales du Doodle avec les entrées temps réel Firebase.
+   * Les entrées Cloud font foi pour un même joueur (nom normalisé), sans perdre les fiches uniquement locales.
+   */
+  function mergeDoodleResponses(localList, cloudMap) {
+    const fold = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+    const byNorm = new Map();
+
+    (Array.isArray(localList) ? localList : []).forEach((r) => {
+      if (!r || !String(r.name || '').trim()) return;
+      const k = fold(r.name);
+      byNorm.set(k, { ...r, fromCloud: Boolean(r.fromCloud) });
+    });
+
+    normalizeDoodleCloudEntries(cloudMap).forEach((cloudItem) => {
+      const k = fold(cloudItem.name);
+      byNorm.set(k, cloudItem);
+    });
+
+    return Array.from(byNorm.values()).sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+  }
+
+  /**
+   * Applique un patch `liveState` (issu de l'Écran MJ ou d'un autre appareil) sur une fiche Forge sans perte.
+   */
+  function applyLiveStateToCharacter(charData, liveState) {
+    const c = charData && typeof charData === 'object' ? { ...charData } : {};
+    const ls = liveState && typeof liveState === 'object' ? liveState : {};
+    const prevSession = (c.sessionState && typeof c.sessionState === 'object') ? { ...c.sessionState } : {};
+    const voidMax = Math.max(1, parseInt(ls.voidMax ?? c.voidRing ?? c.traits?.voi, 10) || 2);
+
+    const nextSession = {
+      ...prevSession,
+      wounds: ls.wounds !== undefined ? Math.max(0, parseInt(ls.wounds, 10) || 0) : (parseInt(prevSession.wounds, 10) || 0),
+      voidSpent: ls.voidCurrent !== undefined
+        ? Math.max(0, Math.min(voidMax, voidMax - (parseInt(ls.voidCurrent, 10) || 0)))
+        : (parseInt(prevSession.voidSpent, 10) || 0),
+      taint: ls.taint !== undefined
+        ? Math.max(0, Math.min(10, Math.round((Number(ls.taint) || 0) * 10) / 10))
+        : (Number(prevSession.taint) || 0),
+      spellsSpent: (ls.spellsSpent && typeof ls.spellsSpent === 'object')
+        ? {
+            air: Math.max(0, parseInt(ls.spellsSpent.air, 10) || 0),
+            terre: Math.max(0, parseInt(ls.spellsSpent.terre, 10) || 0),
+            feu: Math.max(0, parseInt(ls.spellsSpent.feu, 10) || 0),
+            eau: Math.max(0, parseInt(ls.spellsSpent.eau, 10) || 0),
+            vide: Math.max(0, parseInt(ls.spellsSpent.vide, 10) || 0)
+          }
+        : (prevSession.spellsSpent || { air: 0, terre: 0, feu: 0, eau: 0, vide: 0 })
+    };
+
+    const next = {
+      ...c,
+      sessionState: nextSession
+    };
+    if (ls.honor !== undefined) next.honor = Math.max(0, Math.min(10, Math.round((Number(ls.honor) || 0) * 10) / 10));
+    if (ls.glory !== undefined) next.glory = Math.max(0, Math.min(10, Math.round((Number(ls.glory) || 0) * 10) / 10));
+    if (ls.status !== undefined) next.status = Math.max(0, Math.min(10, Math.round((Number(ls.status) || 0) * 10) / 10));
+    if (ls.taint !== undefined) next.taint = nextSession.taint;
+    return next;
+  }
+
+  /**
+   * Construit une vue publique sans spoilers d'une escarmouche pour les PJs (ordre d'initiative + état narratif).
+   * Masque les PV exacts ennemis, les ND/stats cachés et les notes privées du MJ.
+   */
+  function buildSkirmishPublicSnapshot(combatState) {
+    const cs = combatState && typeof combatState === 'object' ? combatState : {};
+    const list = Array.isArray(cs.combatants) ? cs.combatants : [];
+    return stripUndefinedDeep({
+      round: Math.max(1, parseInt(cs.round, 10) || 1),
+      activeIndex: Math.max(0, parseInt(cs.activeIndex, 10) || 0),
+      active: list.length > 0,
+      updatedAt: new Date().toISOString(),
+      combatants: list.map((c) => ({
+        id: String(c.id || ''),
+        pcId: c.pcId ? String(c.pcId) : null,
+        type: c.type === 'pc' ? 'pc' : 'enemy',
+        name: String(c.name || 'Combattant'),
+        initiative: Number(c.initiative) || 0,
+        stance: String(c.stance || 'attaque'),
+        statuses: Array.isArray(c.statuses) ? [...c.statuses] : [],
+        woundLabel: computeNarrativeWoundLabel(c.wounds || 0, c.earth || 2)
+      }))
+    });
+  }
+
+  /**
+   * Fusionne le Roster Cloud `/campaign/roster` dans la liste des PJs de l'Écran MJ
+   * tout en préservant les réglages locaux de séance (initiative, participation escarmouche, notes privées MJ).
+   */
+  function mergeCloudRosterIntoGmPcs(existingPcs, cloudRosterMap, normalizerFn) {
+    const base = Array.isArray(existingPcs) ? existingPcs.map((p) => ({ ...p })) : [];
+    if (!cloudRosterMap || typeof cloudRosterMap !== 'object' || typeof normalizerFn !== 'function') {
+      return base;
+    }
+
+    const fold = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    const entries = Object.keys(cloudRosterMap).map((key) => ({
+      cloudRosterId: key,
+      raw: cloudRosterMap[key]
+    })).filter((e) => e.raw && typeof e.raw === 'object' && e.raw.name);
+
+    entries.forEach(({ cloudRosterId, raw }) => {
+      const ls = raw.liveState && typeof raw.liveState === 'object' ? raw.liveState : {};
+      const hydratedRaw = {
+        ...raw,
+        wounds: ls.wounds !== undefined ? ls.wounds : (raw.sessionState?.wounds ?? raw.wounds ?? 0),
+        voidPoints: ls.voidCurrent !== undefined ? ls.voidCurrent : raw.voidPoints,
+        honor: ls.honor !== undefined ? ls.honor : raw.honor,
+        glory: ls.glory !== undefined ? ls.glory : raw.glory,
+        status: ls.status !== undefined ? ls.status : raw.status,
+        taint: ls.taint !== undefined ? ls.taint : (raw.sessionState?.taint ?? raw.taint ?? 0)
+      };
+      const normalized = normalizerFn(hydratedRaw);
+      normalized.cloudRosterId = cloudRosterId;
+      normalized.ownerUid = String(raw.ownerUid || '');
+      normalized.ownerName = String(raw.ownerName || '');
+      normalized.isCloudSynced = true;
+      normalized.liveSpellsSpent = ls.spellsSpent || raw.sessionState?.spellsSpent || null;
+
+      const idx = base.findIndex((p) =>
+        (p.cloudRosterId && p.cloudRosterId === cloudRosterId)
+        || fold(p.name) === fold(normalized.name)
+      );
+
+      if (idx >= 0) {
+        const prev = base[idx];
+        base[idx] = {
+          ...normalized,
+          id: prev.id,
+          lastInit: prev.lastInit,
+          includedInSkirmish: prev.includedInSkirmish !== undefined ? prev.includedInSkirmish : true,
+          gmNotes: prev.gmNotes || normalized.gmNotes || ''
+        };
+      } else {
+        base.push(normalized);
+      }
+    });
+
+    return base;
+  }
+
   // ===========================================================================
   // 2. SERVICE CLIENT FIREBASE (NAVIGATEUR UNIQUEMENT)
   // ===========================================================================
@@ -647,6 +822,188 @@
   }
 
   // ===========================================================================
+  // 2B. SYNCHRONISATION TEMPS RÉEL JALON 2 (DOODLE 2027, ROSTER LIVE, NOTES MJ & BACKUP)
+  // ===========================================================================
+  async function subscribeDoodle2027(callback) {
+    if (typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || (!runtimeState.isApproved && !runtimeState.isGm)) {
+      return () => {};
+    }
+    const { db, dbMod } = loaded;
+    const doodleRef = dbMod.ref(db, 'campaign/doodle2027');
+    return dbMod.onValue(doodleRef, (snap) => {
+      const val = snap.exists() ? (snap.val() || {}) : {};
+      callback(val, normalizeDoodleCloudEntries(val));
+    }, (err) => {
+      console.warn('[L5RFirebase] Lecture Doodle 2027 Cloud indisponible :', err?.message);
+    });
+  }
+
+  async function saveDoodleEntryToCloud(entry, targetKey = null) {
+    if (!runtimeState.user || !sdk) return false;
+    if (!runtimeState.isApproved && !runtimeState.isGm) {
+      throw new Error('Votre compte doit être approuvé par le MJ pour synchroniser le Doodle en direct.');
+    }
+    const { db, dbMod } = sdk;
+    const uid = runtimeState.user.uid;
+    const key = runtimeState.isGm && targetKey
+      ? sanitizeFirebaseKey(targetKey)
+      : uid;
+    const payload = stripUndefinedDeep({
+      id: key,
+      uid: runtimeState.isGm && targetKey ? (entry?.uid || key) : uid,
+      name: String(entry?.name || runtimeState.user.displayName || 'Samouraï').trim(),
+      clan: String(entry?.clan || 'crabe'),
+      note: String(entry?.note || '').trim().slice(0, 200),
+      votes: entry?.votes && typeof entry.votes === 'object' ? entry.votes : {},
+      updatedAt: new Date().toISOString()
+    });
+    await dbMod.set(dbMod.ref(db, `campaign/doodle2027/${key}`), payload);
+    return payload;
+  }
+
+  async function deleteDoodleEntryFromCloud(entryKey) {
+    if (!runtimeState.user || !sdk) return false;
+    if (!runtimeState.isApproved && !runtimeState.isGm) return false;
+    const { db, dbMod } = sdk;
+    const key = runtimeState.isGm && entryKey ? sanitizeFirebaseKey(entryKey) : runtimeState.user.uid;
+    await dbMod.remove(dbMod.ref(db, `campaign/doodle2027/${key}`));
+    return true;
+  }
+
+  async function subscribeCampaignRoster(callback) {
+    if (typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || !runtimeState.isGm) return () => {};
+    const { db, dbMod } = loaded;
+    const rosterRef = dbMod.ref(db, 'campaign/roster');
+    return dbMod.onValue(rosterRef, (snap) => {
+      callback(snap.exists() ? (snap.val() || {}) : {});
+    }, (err) => {
+      console.warn('[L5RFirebase] Lecture Roster Campagne indisponible :', err?.message);
+    });
+  }
+
+  async function subscribeCharacterLiveState(charId, callback) {
+    if (!charId || typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || (!runtimeState.isApproved && !runtimeState.isGm)) return () => {};
+    const { db, dbMod } = loaded;
+    const safeId = sanitizeFirebaseKey(charId);
+    const liveRef = dbMod.ref(db, `campaign/roster/${safeId}/liveState`);
+    return dbMod.onValue(liveRef, (snap) => {
+      if (snap.exists()) callback(snap.val());
+    }, () => {});
+  }
+
+  async function updateRosterLiveState(charId, livePatch, meta = {}) {
+    if (!charId || !runtimeState.user || !sdk) return false;
+    if (!runtimeState.isApproved && !runtimeState.isGm) return false;
+    const { db, dbMod } = sdk;
+    const safeId = sanitizeFirebaseKey(charId);
+    const nowIso = new Date().toISOString();
+    const cleanPatch = stripUndefinedDeep(livePatch || {});
+
+    const tasks = [
+      dbMod.update(dbMod.ref(db, `campaign/roster/${safeId}/liveState`), cleanPatch),
+      dbMod.update(dbMod.ref(db, `campaign/roster/${safeId}`), { updatedAt: nowIso })
+    ];
+
+    const publicPatch = { updatedAt: nowIso };
+    if (cleanPatch.wounds !== undefined) {
+      publicPatch.woundStatus = computeNarrativeWoundLabel(cleanPatch.wounds, meta.earthRing || 2);
+    }
+    if (cleanPatch.honor !== undefined) {
+      publicPatch.honor = Number(cleanPatch.honor) || 4.5;
+    }
+    if (Object.keys(publicPatch).length > 1) {
+      tasks.push(dbMod.update(dbMod.ref(db, `campaign/publicParty/${safeId}`), stripUndefinedDeep(publicPatch)));
+    }
+
+    await Promise.allSettled(tasks);
+    return true;
+  }
+
+  async function syncGmSkirmishToCloud(combatState) {
+    if (!runtimeState.user || !sdk || !runtimeState.isGm) return false;
+    const { db, dbMod } = sdk;
+    const publicSnap = buildSkirmishPublicSnapshot(combatState);
+    const fullSnap = stripUndefinedDeep({
+      round: Math.max(1, parseInt(combatState?.round, 10) || 1),
+      activeIndex: Math.max(0, parseInt(combatState?.activeIndex, 10) || 0),
+      combatants: Array.isArray(combatState?.combatants) ? combatState.combatants : [],
+      updatedAt: new Date().toISOString()
+    });
+    await Promise.all([
+      dbMod.set(dbMod.ref(db, 'campaign/skirmish/publicView'), publicSnap),
+      dbMod.set(dbMod.ref(db, 'campaign/skirmish/gmFullState'), fullSnap)
+    ]);
+    return true;
+  }
+
+  async function subscribeGmPrivateData(callback) {
+    if (typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || !runtimeState.isGm) return () => {};
+    const { db, dbMod } = loaded;
+    const privRef = dbMod.ref(db, `gmPrivate/${runtimeState.user.uid}`);
+    return dbMod.onValue(privRef, (snap) => {
+      if (snap.exists()) callback(snap.val() || {});
+    }, () => {});
+  }
+
+  async function saveGmPrivateData(patch) {
+    if (!runtimeState.user || !sdk || !runtimeState.isGm) return false;
+    const { db, dbMod } = sdk;
+    const clean = stripUndefinedDeep({
+      ...(patch || {}),
+      updatedAt: new Date().toISOString()
+    });
+    await dbMod.update(dbMod.ref(db, `gmPrivate/${runtimeState.user.uid}`), clean);
+    return true;
+  }
+
+  async function exportFullFirebaseBackup() {
+    const { db, dbMod } = await ensureReadySdk();
+    if (!runtimeState.user || !runtimeState.isGm) {
+      throw new Error('Sauvegarde complète réservée au Maître du Jeu.');
+    }
+    const uid = runtimeState.user.uid;
+    const [cfgSnap, campSnap, privSnap, myUserSnap] = await Promise.all([
+      dbMod.get(dbMod.ref(db, 'config')),
+      dbMod.get(dbMod.ref(db, 'campaign')),
+      dbMod.get(dbMod.ref(db, `gmPrivate/${uid}`)),
+      dbMod.get(dbMod.ref(db, `users/${uid}`))
+    ]);
+    const backup = {
+      format: 'l5r-rokugan-firebase-backup',
+      version: 1,
+      projectId: getConfig()?.projectId || 'vincenzorpg-l5r',
+      exportedAt: new Date().toISOString(),
+      exportedBy: runtimeState.user.email || uid,
+      data: {
+        config: cfgSnap.exists() ? cfgSnap.val() : null,
+        campaign: campSnap.exists() ? campSnap.val() : null,
+        gmPrivate: privSnap.exists() ? { [uid]: privSnap.val() } : null,
+        gmDojo: myUserSnap.exists() ? myUserSnap.val() : null
+      }
+    };
+    if (typeof document !== 'undefined') {
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rokugan-firebase-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    return backup;
+  }
+
+  // ===========================================================================
   // 3. UI GLOBALE : BOUTON NAVBAR + MODALE COMPTE & APPROBATION MJ
   // ===========================================================================
   function syncNavbarAccountButtons() {
@@ -835,9 +1192,14 @@
 
     const gmPanelHtml = runtimeState.isGm ? `
       <div class="p-3.5 rounded-xl bg-amber-950/20 border border-amber-500/40 space-y-2.5">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
           <h3 class="font-imperial font-bold text-xs text-amber-300">👥 Membres de la Table (${membersList.length})</h3>
-          ${pendingCount > 0 ? `<span class="px-2 py-0.5 rounded-full bg-amber-500 text-black font-bold text-[10px]">${pendingCount} demande(s)</span>` : ''}
+          <div class="flex items-center gap-1.5">
+            ${pendingCount > 0 ? `<span class="px-2 py-0.5 rounded-full bg-amber-500 text-black font-bold text-[10px]">${pendingCount} demande(s)</span>` : ''}
+            <button type="button" id="l5r-btn-gm-backup" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/45 text-amber-200 font-imperial font-bold text-[10px] cursor-pointer transition" title="Télécharger une sauvegarde JSON complète de la campagne Firebase">
+              💾 Backup Base (.json)
+            </button>
+          </div>
         </div>
         ${membersList.length === 0
           ? `<div class="text-[11px] text-stone-400 italic">Aucun joueur n'a encore demandé à rejoindre la table.</div>`
@@ -954,6 +1316,15 @@
       });
     });
 
+    body.querySelector('#l5r-btn-gm-backup')?.addEventListener('click', async () => {
+      try {
+        await exportFullFirebaseBackup();
+        setModalMessage('Sauvegarde complète JSON de la base Firebase téléchargée !');
+      } catch (err) {
+        setModalMessage(err?.message || 'Erreur lors de la sauvegarde Firebase.', true);
+      }
+    });
+
     body.querySelector('#l5r-btn-signout')?.addEventListener('click', async () => {
       try {
         await signOut();
@@ -994,6 +1365,11 @@
     mergeLocalAndCloudCharacters,
     computeCloudSyncBadgeState,
     formatFirebaseAuthError,
+    normalizeDoodleCloudEntries,
+    mergeDoodleResponses,
+    applyLiveStateToCharacter,
+    buildSkirmishPublicSnapshot,
+    mergeCloudRosterIntoGmPcs,
     init: loadFirebaseSdk,
     getState,
     subscribe,
@@ -1007,6 +1383,16 @@
     deleteCharacterFromCloud,
     setCharacterCampaignActive,
     migrateLocalDojoToCloud,
+    subscribeDoodle2027,
+    saveDoodleEntryToCloud,
+    deleteDoodleEntryFromCloud,
+    subscribeCampaignRoster,
+    subscribeCharacterLiveState,
+    updateRosterLiveState,
+    syncGmSkirmishToCloud,
+    subscribeGmPrivateData,
+    saveGmPrivateData,
+    exportFullFirebaseBackup,
     openAccountModal,
     closeAccountModal
   };

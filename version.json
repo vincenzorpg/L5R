@@ -1,6 +1,6 @@
 {
-  "version": "1.39.0",
-  "tag": "v1.39.0",
+  "version": "1.40.0",
+  "tag": "v1.40.0",
   "date": "2026-11-27",
-  "notes": "Jalon 1 Firebase : Authentification Google & Email/Mot de passe, Rôle Maître du Jeu automatique (déverrouillage secrets & approbation des membres de la table), Dojo Cloud multi-appareils et règles de sécurité RTDB"
+  "notes": "Jalon 2 Firebase : Doodle 2027 temps réel partagé, synchronisation bidirectionnelle live Écran MJ ↔ PJs (PV, Vide, Honneur, Gloire, Statut, Souillure, Sorts), notes MJ privées Cloud, vue publique d'escarmouche sans spoilers et export Backup JSON complet MJ"
 }

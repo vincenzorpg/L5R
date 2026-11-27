@@ -599,6 +599,159 @@
     }
   };
 
+  let gmRosterUnsub = null;
+  let gmPrivateUnsub = null;
+  let gmCloudSyncBound = false;
+  let gmSkirmishPushTimer = null;
+  let gmPrivatePushTimer = null;
+  let lastSyncedCombatHash = '';
+  let gmApplyingRemotePrivate = false;
+
+  function isGmCloudReady() {
+    const fb = typeof window !== 'undefined' ? window.L5RFirebase : null;
+    if (!fb || typeof fb.getState !== 'function') return false;
+    const s = fb.getState();
+    return Boolean(s && s.user && s.isGm);
+  }
+
+  function updateGmCloudBadges() {
+    const badge = document.getElementById('gm-cloud-sync-badge');
+    const backupBtn = document.getElementById('gm-cloud-backup-btn');
+    const ready = isGmCloudReady();
+    if (badge) {
+      badge.classList.toggle('hidden', !ready);
+      if (ready) {
+        const syncedCount = state.pcs.filter((p) => p && p.isCloudSynced).length;
+        badge.textContent = `☁️ Live Cloud MJ : ${syncedCount} PJ`;
+      }
+    }
+    if (backupBtn) {
+      backupBtn.classList.toggle('hidden', !ready);
+    }
+  }
+
+  function pushPcLiveStateToCloud(pc) {
+    if (!pc || !pc.cloudRosterId || !isGmCloudReady()) return;
+    const fb = window.L5RFirebase;
+    if (!fb || typeof fb.updateRosterLiveState !== 'function') return;
+    fb.updateRosterLiveState(pc.cloudRosterId, {
+      wounds: Math.max(0, parseInt(pc.wounds, 10) || 0),
+      voidCurrent: Math.max(0, parseInt(pc.voidCurrent, 10) || 0),
+      voidMax: Math.max(1, parseInt(pc.voidMax, 10) || 2),
+      honor: clampRankTen(pc.honor),
+      glory: clampRankTen(pc.glory),
+      status: clampRankTen(pc.status),
+      taint: clampRankTen(pc.taint)
+    }, {
+      earthRing: (pc.rings && pc.rings.earth) || 2
+    }).catch(() => {});
+  }
+
+  function scheduleGmSkirmishSync() {
+    if (!isGmCloudReady()) return;
+    const fb = window.L5RFirebase;
+    if (!fb || typeof fb.syncGmSkirmishToCloud !== 'function') return;
+    const hash = JSON.stringify(state.combat || {});
+    if (hash === lastSyncedCombatHash) return;
+    lastSyncedCombatHash = hash;
+    clearTimeout(gmSkirmishPushTimer);
+    gmSkirmishPushTimer = setTimeout(() => {
+      fb.syncGmSkirmishToCloud(state.combat).catch(() => {});
+    }, 300);
+  }
+
+  function scheduleGmPrivateSync() {
+    if (gmApplyingRemotePrivate || !isGmCloudReady()) return;
+    const fb = window.L5RFirebase;
+    if (!fb || typeof fb.saveGmPrivateData !== 'function') return;
+    clearTimeout(gmPrivatePushTimer);
+    gmPrivatePushTimer = setTimeout(() => {
+      const pcNotesMap = {};
+      state.pcs.forEach((p) => {
+        if (p && p.gmNotes) {
+          const key = fb.sanitizeFirebaseKey(p.cloudRosterId || p.name || p.id);
+          pcNotesMap[key] = String(p.gmNotes);
+        }
+      });
+      fb.saveGmPrivateData({
+        gmScratchpad: String(state.gmScratchpad || ''),
+        pcNotes: pcNotesMap,
+        scenarioChecked: (state.scenario && state.scenario.checked) ? state.scenario.checked : {}
+      }).catch(() => {});
+    }, 600);
+  }
+
+  async function bindGmCloudSync() {
+    updateGmCloudBadges();
+    const fb = typeof window !== 'undefined' ? window.L5RFirebase : null;
+    if (!fb || !isGmCloudReady()) {
+      if (typeof gmRosterUnsub === 'function') { try { gmRosterUnsub(); } catch (_) {} gmRosterUnsub = null; }
+      if (typeof gmPrivateUnsub === 'function') { try { gmPrivateUnsub(); } catch (_) {} gmPrivateUnsub = null; }
+      gmCloudSyncBound = false;
+      return;
+    }
+    if (gmCloudSyncBound) return;
+    gmCloudSyncBound = true;
+
+    if (typeof fb.subscribeCampaignRoster === 'function') {
+      gmRosterUnsub = await fb.subscribeCampaignRoster((rosterMap) => {
+        if (!rosterMap || typeof fb.mergeCloudRosterIntoGmPcs !== 'function') return;
+        state.pcs = fb.mergeCloudRosterIntoGmPcs(state.pcs, rosterMap, normalizeImportedCharacter);
+        // Aligner les PV des combattants PJ déjà présents dans l'escarmouche active
+        state.combat.combatants.forEach((c) => {
+          if (c.pcId) {
+            const pc = findPc(c.pcId);
+            if (pc) {
+              c.wounds = pc.wounds || 0;
+              c.armorTN = pc.armorTN || c.armorTN;
+              c.reduction = pc.reduction || 0;
+            }
+          }
+        });
+        saveState();
+        updateGmCloudBadges();
+        renderPcs();
+        renderCombat();
+        renderHonorPanel();
+      });
+    }
+
+    if (typeof fb.subscribeGmPrivateData === 'function') {
+      gmPrivateUnsub = await fb.subscribeGmPrivateData((privData) => {
+        if (!privData || typeof privData !== 'object') return;
+        gmApplyingRemotePrivate = true;
+        try {
+          const scratchEl = document.getElementById('gm-scratchpad');
+          if (typeof privData.gmScratchpad === 'string' && document.activeElement !== scratchEl) {
+            if (privData.gmScratchpad || !state.gmScratchpad) {
+              state.gmScratchpad = privData.gmScratchpad;
+              if (scratchEl) scratchEl.value = state.gmScratchpad;
+            }
+          }
+          if (privData.scenarioChecked && typeof privData.scenarioChecked === 'object') {
+            if (!state.scenario) state.scenario = { selectedId: 'scenario-2-jouets', checked: {} };
+            state.scenario.checked = { ...(state.scenario.checked || {}), ...privData.scenarioChecked };
+            renderScenarioPanel();
+          }
+          if (privData.pcNotes && typeof privData.pcNotes === 'object') {
+            let changedNote = false;
+            state.pcs.forEach((p) => {
+              const key = fb.sanitizeFirebaseKey(p.cloudRosterId || p.name || p.id);
+              if (typeof privData.pcNotes[key] === 'string' && !p.gmNotes) {
+                p.gmNotes = privData.pcNotes[key];
+                changedNote = true;
+              }
+            });
+            if (changedNote) renderPcs();
+          }
+          saveState();
+        } finally {
+          gmApplyingRemotePrivate = false;
+        }
+      });
+    }
+  }
+
   function saveState() {
     if (typeof localStorage === 'undefined') return;
     try {
@@ -606,6 +759,7 @@
     } catch (e) {
       console.warn('Impossible de sauvegarder l\'Écran du MJ :', e);
     }
+    scheduleGmSkirmishSync();
   }
 
   function loadState() {
@@ -768,9 +922,13 @@
   }
 
   function adjustWoundsForTarget(targetType, targetId, delta) {
+    let touchedPc = null;
     if (targetType === 'pc') {
       const pc = findPc(targetId);
-      if (pc) pc.wounds = Math.max(0, (pc.wounds || 0) + delta);
+      if (pc) {
+        pc.wounds = Math.max(0, (pc.wounds || 0) + delta);
+        touchedPc = pc;
+      }
     } else {
       const c = state.combat.combatants.find((item) => item.id === targetId);
       if (!c) return;
@@ -779,6 +937,7 @@
         if (pc) {
           pc.wounds = Math.max(0, (pc.wounds || 0) + delta);
           c.wounds = pc.wounds;
+          touchedPc = pc;
         }
       } else {
         c.wounds = Math.max(0, (c.wounds || 0) + delta);
@@ -787,15 +946,20 @@
         pushCombatLog(`${c.name} : ${delta > 0 ? '+' + delta : delta} PV (total ${c.wounds})`);
       }
     }
+    if (touchedPc) pushPcLiveStateToCloud(touchedPc);
     saveState();
     renderAll();
   }
 
   function setWoundsForTarget(targetType, targetId, value) {
     const val = Math.max(0, parseInt(value, 10) || 0);
+    let touchedPc = null;
     if (targetType === 'pc') {
       const pc = findPc(targetId);
-      if (pc) pc.wounds = val;
+      if (pc) {
+        pc.wounds = val;
+        touchedPc = pc;
+      }
     } else {
       const c = state.combat.combatants.find((item) => item.id === targetId);
       if (!c) return;
@@ -805,6 +969,7 @@
         if (pc) {
           prev = pc.wounds || 0;
           pc.wounds = val;
+          touchedPc = pc;
         }
       }
       c.wounds = val;
@@ -813,6 +978,7 @@
         pushCombatLog(`${c.name} : ${delta > 0 ? '+' + delta : delta} Blessures (total ${val})`);
       }
     }
+    if (touchedPc) pushPcLiveStateToCloud(touchedPc);
     saveState();
     renderAll();
   }
@@ -2820,6 +2986,19 @@
     document.getElementById('gm-scratchpad')?.addEventListener('input', (e) => {
       state.gmScratchpad = e.target.value;
       saveState();
+      scheduleGmPrivateSync();
+    });
+    document.getElementById('gm-cloud-backup-btn')?.addEventListener('click', async () => {
+      const statusEl = document.getElementById('gm-import-status');
+      try {
+        await window.L5RFirebase?.exportFullFirebaseBackup?.();
+        if (statusEl) {
+          statusEl.textContent = 'Sauvegarde JSON complète téléchargée !';
+          setTimeout(() => { statusEl.textContent = ''; }, 4000);
+        }
+      } catch (err) {
+        alert(err?.message || 'Erreur lors de la sauvegarde complète Firebase.');
+      }
     });
     document.getElementById('gm-copy-notes')?.addEventListener('click', () => {
       const text = state.gmScratchpad || '';
@@ -2842,6 +3021,7 @@
         const pc = findPc(btn.getAttribute('data-pc-id'));
         if (pc) {
           pc.voidCurrent = Math.max(0, Math.min(pc.voidMax, parseInt(btn.getAttribute('data-void-val'), 10) || 0));
+          pushPcLiveStateToCloud(pc);
           saveState();
           renderPcs();
         }
@@ -2871,6 +3051,7 @@
         const delta = parseFloat(btn.getAttribute('data-delta')) || 0;
         if (pc && ['honor', 'glory', 'status', 'taint'].includes(field)) {
           pc[field] = clampRankTen((pc[field] || 0) + delta);
+          pushPcLiveStateToCloud(pc);
           saveState();
           renderPcs();
           renderHonorPanel();
@@ -3083,6 +3264,7 @@
           if (!state.scenario.checked[scId]) state.scenario.checked[scId] = {};
           state.scenario.checked[scId][checkId] = Boolean(el.checked);
           saveState();
+          scheduleGmPrivateSync();
           renderScenarioPanel();
         }
       } else if (action === 'scenario-select') {
@@ -3104,6 +3286,7 @@
         if (pc) {
           pc.gmNotes = el.value;
           saveState();
+          scheduleGmPrivateSync();
         }
       } else if (action === 'pc-init-input') {
         const pc = findPc(el.getAttribute('data-pc-id'));
@@ -3123,9 +3306,14 @@
     window.addEventListener('l5r-gm-role-changed', () => {
       populateSkirmishNpcPresetSelect();
       renderScenarioPanel();
+      bindGmCloudSync();
+    });
+    window.addEventListener('l5r-auth-changed', () => {
+      bindGmCloudSync();
     });
 
     renderAll();
+    bindGmCloudSync();
   }
 
   if (typeof document !== 'undefined') {

@@ -1433,6 +1433,99 @@
   });
 
   // ===========================================================================
+  // 20. JALON 2 FIREBASE — DOODLE 2027 LIVE & SYNC ÉCRAN MJ ↔ PJs
+  // ===========================================================================
+  describe("20. Jalon 2 Firebase — Doodle 2027 Temps Réel & Sync Live MJ ↔ PJs", function () {
+    it("normalizeDoodleCloudEntries et mergeDoodleResponses fusionnent le Doodle temps réel sans perte", function () {
+      assertTrue(firebaseSvc && typeof firebaseSvc.mergeDoodleResponses === "function", "mergeDoodleResponses doit exister");
+      const cloudMap = {
+        uid_akira: {
+          uid: "uid_akira",
+          name: "Tsuruchi Akira",
+          clan: "mante",
+          note: "Dispo dès 20h",
+          votes: { "2027-01-08:soir": "yes", "2027-01-09:aprem": "maybe", invalid: "bogus" },
+          updatedAt: "2026-11-27T18:00:00.000Z"
+        },
+        gm_hirohito: {
+          uid: "gm_hirohito",
+          name: "Hirohito Hida",
+          clan: "crabe",
+          votes: { "2027-01-08:soir": "yes" }
+        }
+      };
+      const normalized = firebaseSvc.normalizeDoodleCloudEntries(cloudMap);
+      assertEqual(normalized.length, 2, "2 fiches Cloud normalisées");
+      const akira = normalized.find(e => e.name === "Tsuruchi Akira");
+      assertEqual(akira.fromCloud, true);
+      assertEqual(akira.votes["2027-01-08:soir"], "yes");
+      assertEqual(akira.votes.invalid, undefined, "Les votes invalides doivent être filtrés");
+
+      const localList = [
+        { name: "Tsuruchi Akira", clan: "mante", votes: { "2027-01-08:soir": "no" } },
+        { name: "Okado Hiruma", clan: "crabe", votes: { "2027-01-08:soir": "yes" } }
+      ];
+      const merged = firebaseSvc.mergeDoodleResponses(localList, cloudMap);
+      assertEqual(merged.length, 3, "Fusion conserve la fiche locale + les 2 fiches Cloud");
+      const akiraMerged = merged.find(e => e.name === "Tsuruchi Akira");
+      assertEqual(akiraMerged.votes["2027-01-08:soir"], "yes", "La version Cloud fait foi pour Akira");
+      assertEqual(akiraMerged.fromCloud, true);
+    });
+
+    it("applyLiveStateToCharacter, buildSkirmishPublicSnapshot et mergeCloudRosterIntoGmPcs préservent l'état et masquent les spoilers", function () {
+      const updated = firebaseSvc.applyLiveStateToCharacter(
+        { id: "c_akira", name: "Tsuruchi Akira", voidRing: 3, honor: 4.5, sessionState: { wounds: 0, voidSpent: 0 } },
+        { wounds: 14, voidCurrent: 1, voidMax: 3, honor: 5.2, glory: 2.4, status: 1.5, taint: 0.5, spellsSpent: { air: 1, terre: 0, feu: 2, eau: 0, vide: 0 } }
+      );
+      assertEqual(updated.sessionState.wounds, 14);
+      assertEqual(updated.sessionState.voidSpent, 2, "3 max - 1 courant = 2 dépensés");
+      assertEqual(updated.sessionState.spellsSpent.feu, 2);
+      assertEqual(updated.honor, 5.2);
+      assertEqual(updated.taint, 0.5);
+
+      const pubSkirmish = firebaseSvc.buildSkirmishPublicSnapshot({
+        round: 2,
+        activeIndex: 1,
+        combatants: [
+          { id: "c1", pcId: "pc1", type: "pc", name: "Akira", initiative: 24, armorTN: 22, wounds: 0, earth: 3, stance: "attaque", statuses: [], notes: "Secret MJ" },
+          { id: "f1", pcId: null, type: "enemy", name: "Guerrier Tsuno", initiative: 19, armorTN: 30, wounds: 35, earth: 3, stance: "assaut", statuses: ["prone"], notes: "Invulnérable sauf Jade" }
+        ]
+      });
+      assertEqual(pubSkirmish.round, 2);
+      assertEqual(pubSkirmish.active, true);
+      assertEqual(pubSkirmish.combatants[1].woundLabel, "Gravement blessé");
+      assertEqual(pubSkirmish.combatants[1].wounds, undefined, "PV exacts ennemis masqués dans la vue publique");
+      assertEqual(pubSkirmish.combatants[1].notes, undefined, "Notes MJ masquées dans la vue publique");
+      assertEqual(pubSkirmish.combatants[1].armorTN, undefined, "ND ennemi masqué dans la vue publique");
+
+      const existingGmPcs = [
+        { id: "pc_local_1", name: "Tsuruchi Akira", lastInit: 27, includedInSkirmish: true, gmNotes: "Note secrète MJ" }
+      ];
+      const rosterMap = {
+        samurai_akira: {
+          id: "samurai_akira",
+          ownerUid: "uid_akira",
+          ownerName: "Player1",
+          name: "Tsuruchi Akira",
+          clan: "mante",
+          traits: { stamina: 3, willpower: 3, strength: 2, perception: 3, reflexes: 4, awareness: 3, agility: 3, intelligence: 2 },
+          voidRing: 3,
+          liveState: { wounds: 11, voidCurrent: 2, honor: 4.8, glory: 2.0, status: 1.5, taint: 0 }
+        }
+      };
+      const mergedPcs = firebaseSvc.mergeCloudRosterIntoGmPcs(existingGmPcs, rosterMap, gm.normalizeImportedCharacter);
+      assertEqual(mergedPcs.length, 1, "Fusion par nom sans doublon");
+      assertEqual(mergedPcs[0].id, "pc_local_1", "Conserve l'ID local pour les combats en cours");
+      assertEqual(mergedPcs[0].lastInit, 27, "Conserve l'initiative locale");
+      assertEqual(mergedPcs[0].gmNotes, "Note secrète MJ", "Conserve les notes secrètes MJ");
+      assertEqual(mergedPcs[0].wounds, 11, "Applique les blessures live du Cloud");
+      assertEqual(mergedPcs[0].voidCurrent, 2, "Applique le Vide courant live du Cloud");
+      assertEqual(mergedPcs[0].isCloudSynced, true);
+      assertEqual(mergedPcs[0].cloudRosterId, "samurai_akira");
+    });
+  });
+
+  // ===========================================================================
   // RAPPORT D'EXÉCUTION (NODE.JS & NAVIGATEUR)
   // ===========================================================================
   const totalPassed = suites.reduce((acc, s) => acc + s.passed, 0);

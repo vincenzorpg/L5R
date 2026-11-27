@@ -6,6 +6,18 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.40.0] — 2026-11-27
+
+### ✨ Ajouté
+- **Jalon 2 — Doodle 2027 Temps Réel & Sync Live Écran MJ ↔ PJs (`js/firebase-service.js`, `js/sessions.js`, `sessions.html`, `js/gm-screen.js`, `ecran-mj.html`, `js/forge-ui.js`, `sw.js`, `tests/unit-tests.js`)** :
+  - **Doodle 2027 Partagé en Direct (`sessions.html`, `js/sessions.js`)** : Bandeau de statut temps réel (`#doodle-cloud-banner`), écoute live de `/campaign/doodle2027`, fusion sans perte des votes locaux et Cloud (`normalizeDoodleCloudEntries`, `mergeDoodleResponses`), publication en 1 clic des fiches locales vers la table et chargement corrigé des préréglages du Dojo (`l5r_dojo_characters_v4`).
+  - **Synchronisation Bidirectionnelle Écran MJ ↔ Forge PJ (`ecran-mj.html`, `js/gm-screen.js`, `js/forge-ui.js`)** : Abonnement temps réel du MJ au roster `/campaign/roster` (`mergeCloudRosterIntoGmPcs`), mise à jour instantanée des jauges de séance (`wounds`, `voidCurrent`, `honor`, `glory`, `status`, `taint`, `spellsSpent`) dans les deux sens (`updateRosterLiveState`, `applyLiveStateToCharacter`) et répercussion automatique sur le tableau d'escarmouche et les cartes publiques `/campaign/publicParty`.
+  - **Notes MJ Privées Cloud & Escarmouche Publique Sans Spoilers** : Synchronisation automatique des notes de séance (`gmScratchpad`, notes par PJ, coches Scénario Jour J) dans `/gmPrivate/{uid}` et publication temps réel de l'ordre d'initiative sans spoilers (`buildSkirmishPublicSnapshot` → `/campaign/skirmish/publicView`).
+  - **Sauvegarde Complète JSON MJ (« Backup Base »)** : Nouveau bouton 1-clic dans l'Écran MJ (`#gm-cloud-backup-btn`) et la modale Compte (`#l5r-btn-gm-backup`) exportant l'intégralité des données campagne & MJ (`exportFullFirebaseBackup`).
+  - **Tests unitaires** : Ajout de la **Suite 20** dans `tests/unit-tests.js` (couvrant Doodle temps réel, `applyLiveStateToCharacter`, `buildSkirmishPublicSnapshot` et `mergeCloudRosterIntoGmPcs`).
+
+---
+
 ## [1.39.0] — 2026-11-27
 
 ### ✨ Ajouté
