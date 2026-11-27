@@ -3103,9 +3103,12 @@ function saveCharacterToDojo(forceNew = false) {
 
     if (existingIndex !== -1 && !forceNew) {
       data.id = dojoList[existingIndex].id;
+      data.isCampaignActive = Boolean(dojoList[existingIndex].isCampaignActive);
       window.currentCharacterId = data.id;
+      data.updatedAt = new Date().toISOString();
       dojoList[existingIndex] = data;
     } else {
+      data.updatedAt = new Date().toISOString();
       dojoList.unshift(data); // Ajoute en tête de liste
     }
 
@@ -3114,10 +3117,17 @@ function saveCharacterToDojo(forceNew = false) {
     localStorage.setItem('l5r_saved_characters', serialized);
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
 
+    if (window.L5RFirebase && window.L5RFirebase.getState?.().user) {
+      window.L5RFirebase.saveCharacterToCloud(data).catch((e) => {
+        console.warn("Synchro Dojo Cloud en attente :", e);
+      });
+    }
+
     if (typeof renderDojoList === 'function') renderDojoList();
     if (typeof renderDojoRoster === 'function') renderDojoRoster();
 
-    notifyForgeUser(`« ${data.name} » enregistré dans votre Dojo !`, 'success');
+    const isCloud = Boolean(window.L5RFirebase && window.L5RFirebase.getState?.().user);
+    notifyForgeUser(`« ${data.name} » enregistré dans votre Dojo${isCloud ? ' (+ Cloud ☁️)' : ''} !`, 'success');
   } catch (err) {
     console.error(err);
     notifyForgeUser("Erreur lors de l'enregistrement dans le navigateur.", 'error');
@@ -3158,14 +3168,51 @@ function deleteCharacterFromDojo(idOrIndex) {
   try {
     const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
     let dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    const target = dojoList.find((c, idx) => c.id === idOrIndex || idx === idOrIndex);
     dojoList = dojoList.filter((c, idx) => c.id !== idOrIndex && idx !== idOrIndex);
     const serialized = JSON.stringify(dojoList);
     localStorage.setItem(DOJO_STORAGE_KEY, serialized);
     localStorage.setItem('l5r_saved_characters', serialized);
+    if (target?.id && window.L5RFirebase && window.L5RFirebase.getState?.().user) {
+      window.L5RFirebase.deleteCharacterFromCloud(target.id).catch(() => {});
+    }
     renderDojoList();
   } catch (e) {
     console.error("Erreur de suppression Dojo :", e);
   }
+}
+
+async function toggleCharacterCampaignActive(charId) {
+  try {
+    const rawDojo = localStorage.getItem(DOJO_STORAGE_KEY) || localStorage.getItem('l5r_saved_characters');
+    const dojoList = rawDojo ? JSON.parse(rawDojo) : [];
+    const idx = dojoList.findIndex(c => c.id === charId);
+    if (idx < 0) return;
+    const nextActive = !dojoList[idx].isCampaignActive;
+    if (!window.L5RFirebase || !window.L5RFirebase.getState?.().user) {
+      notifyForgeUser("Connectez-vous à votre compte Firebase pour lier un personnage à la Table de Campagne.", "warn");
+      window.L5RFirebase?.openAccountModal?.();
+      return;
+    }
+    const updated = await window.L5RFirebase.setCharacterCampaignActive(dojoList[idx], nextActive);
+    dojoList[idx] = { ...dojoList[idx], ...updated, cloudSynced: true };
+    const serialized = JSON.stringify(dojoList);
+    localStorage.setItem(DOJO_STORAGE_KEY, serialized);
+    localStorage.setItem('l5r_saved_characters', serialized);
+    if (typeof renderDojoList === 'function') renderDojoList();
+    if (typeof renderDojoRoster === 'function') renderDojoRoster();
+    notifyForgeUser(
+      nextActive
+        ? `« ${dojoList[idx].name} » synchronisé avec la Table de Campagne !`
+        : `« ${dojoList[idx].name} » retiré de la Table de Campagne.`,
+      "success"
+    );
+  } catch (err) {
+    notifyForgeUser(err?.message || "Impossible de mettre à jour le statut Campagne.", "error");
+  }
+}
+if (typeof window !== "undefined") {
+  window.toggleCharacterCampaignActive = toggleCharacterCampaignActive;
 }
 
 function renderDojoList() {

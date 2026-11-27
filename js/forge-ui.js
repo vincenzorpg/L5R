@@ -1500,15 +1500,23 @@ function renderDojoRoster() {
     return;
   }
 
+  const fbState = window.L5RFirebase?.getState?.() || {};
+  const canSyncTable = Boolean(fbState.user && (fbState.isApproved || fbState.isGm));
+
   roster.innerHTML = list.map((c, idx) => {
     const safeId = c.id || idx;
+    const cloudBadge = c.cloudSynced ? '<span class="text-sky-400 text-[9px] ml-1" title="Synchronisé dans votre Dojo Cloud">☁️</span>' : '';
+    const campBtn = canSyncTable
+      ? `<button type="button" onclick="window.toggleCharacterCampaignActive && window.toggleCharacterCampaignActive('${safeId}')" title="${c.isCampaignActive ? 'Retirer de la Table de Campagne MJ' : 'Partager sur la Table de Campagne MJ'}" class="px-1.5 py-0.5 rounded text-[9px] font-bold border cursor-pointer ${c.isCampaignActive ? 'bg-emerald-950/90 border-emerald-500/70 text-emerald-300' : 'bg-stone-900 border-stone-700 text-stone-400 hover:text-amber-200'}">${c.isCampaignActive ? '⚔️ Table' : '+ Table'}</button>`
+      : '';
     return `
       <div class="p-2 rounded bg-black/60 border border-stone-800 hover:border-amber-500/40 flex items-center justify-between gap-1 transition">
         <div class="truncate">
-          <b class="text-amber-200 font-imperial block truncate">${c.name || "Samouraï"}</b>
+          <b class="text-amber-200 font-imperial block truncate">${c.name || "Samouraï"}${cloudBadge}</b>
           <span class="text-[9px] text-stone-500">${c.clan || "Clan"}</span>
         </div>
         <div class="flex items-center gap-1 shrink-0">
+          ${campBtn}
           <button type="button" onclick="loadFromDojo('${safeId}')" class="px-2 py-0.5 rounded bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] cursor-pointer">Charger</button>
           <button type="button" onclick="deleteFromDojo('${safeId}')" class="text-stone-500 hover:text-red-400 font-bold px-1 cursor-pointer">✕</button>
         </div>
@@ -3589,5 +3597,8 @@ window.handleDojoBackupFile = handleDojoBackupFile;
 
 if (typeof window !== 'undefined') {
   window.addEventListener('l5r-forge-selection-changed', syncSessionTrackerUI);
+  window.addEventListener('l5r-auth-changed', () => {
+    if (typeof renderDojoRoster === 'function') renderDojoRoster();
+  });
   window.addEventListener('DOMContentLoaded', () => setTimeout(syncSessionTrackerUI, 100));
 }

@@ -3120,6 +3120,11 @@
       }
     });
 
+    window.addEventListener('l5r-gm-role-changed', () => {
+      populateSkirmishNpcPresetSelect();
+      renderScenarioPanel();
+    });
+
     renderAll();
   }
 

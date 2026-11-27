@@ -150,34 +150,34 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
           
           <!-- Marque & Retour Accueil : Les Chroniques de Rokugan -->
-          <a href="${rootPrefix}index.html" class="flex items-center gap-2.5 group shrink-0 focus:outline-none">
+          <a href="${rootPrefix}index.html" class="flex items-center gap-2 group shrink-0 focus:outline-none">
             <img src="${rootPrefix}assets/images/favicon_cinq_anneaux.png" alt="Logo des Chroniques de Rokugan" width="36" height="36" class="w-9 h-9 rounded-full object-cover border border-amber-500/60 bg-[#0f0b0a] shadow-md transition-transform group-hover:scale-105" />
             <div class="flex flex-col">
-              <span class="font-imperial font-bold text-xs sm:text-sm tracking-wider gold-text leading-tight uppercase">LES CHRONIQUES DE ROKUGAN</span>
-              <span class="text-[10px] text-stone-400 hidden sm:inline">L5R 4e Édition • Campagne de la Chronique de Rokugan</span>
+              <span class="font-imperial font-bold text-xs xl:text-sm tracking-wider gold-text leading-tight uppercase whitespace-nowrap">LES CHRONIQUES DE ROKUGAN</span>
+              <span class="text-[10px] text-stone-400 hidden xl:inline">L5R 4e Édition • Campagne de la Chronique de Rokugan</span>
             </div>
           </a>
 
           <!-- Liens Bureau -->
-          <div class="hidden lg:flex items-center gap-2 text-xs font-imperial">
+          <div class="hidden lg:flex items-center gap-1.5 xl:gap-2 text-xs font-imperial shrink-0">
             
             <!-- 1. ACCUEIL -->
-            <a href="${rootPrefix}index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 hover:bg-amber-950/40 text-stone-200 hover:text-amber-300 border border-stone-800 hover:border-amber-500/50 transition">
-              <span class="w-5 h-5 rounded flex items-center justify-center bg-amber-950/80 border border-amber-600/50 text-amber-400 font-serif font-bold text-xs">本</span>
+            <a href="${rootPrefix}index.html" class="flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 rounded-lg bg-stone-900/70 hover:bg-amber-950/40 text-stone-200 hover:text-amber-300 border border-stone-800 hover:border-amber-500/50 transition whitespace-nowrap">
+              <span class="w-5 h-5 rounded flex items-center justify-center bg-amber-950/80 border border-amber-600/50 text-amber-400 font-serif font-bold text-xs shrink-0">本</span>
               <span>Accueil</span>
             </a>
 
             <!-- 2. CAMPAGNE (Bouton à part entière) -->
-            <a href="${rootPrefix}campagne.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 hover:bg-purple-950/40 text-stone-200 hover:text-purple-300 border border-stone-800 hover:border-purple-500/50 transition">
-              <span class="w-5 h-5 rounded flex items-center justify-center bg-purple-950/80 border border-purple-600/50 text-purple-300 font-serif font-bold text-xs">記</span>
+            <a href="${rootPrefix}campagne.html" class="flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 rounded-lg bg-stone-900/70 hover:bg-purple-950/40 text-stone-200 hover:text-purple-300 border border-stone-800 hover:border-purple-500/50 transition whitespace-nowrap">
+              <span class="w-5 h-5 rounded flex items-center justify-center bg-purple-950/80 border border-purple-600/50 text-purple-300 font-serif font-bold text-xs shrink-0">記</span>
               <span>Campagne</span>
             </a>
 
             <!-- 3. CLANS MAJEURS -->
             <div class="relative group nav-dropdown">
-              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-emerald-950/40 text-stone-200 group-hover:text-emerald-300 border border-stone-800 group-hover:border-emerald-500/50 transition focus:outline-none">
-                <span class="w-5 h-5 rounded flex items-center justify-center bg-emerald-950/80 border border-emerald-600/50 text-emerald-400 font-serif font-bold text-xs">家</span>
-                <span>Clans majeurs</span>
+              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-emerald-950/40 text-stone-200 group-hover:text-emerald-300 border border-stone-800 group-hover:border-emerald-500/50 transition focus:outline-none whitespace-nowrap">
+                <span class="w-5 h-5 rounded flex items-center justify-center bg-emerald-950/80 border border-emerald-600/50 text-emerald-400 font-serif font-bold text-xs shrink-0">家</span>
+                <span>Clans</span>
                 ${chevronDownSvg}
               </button>
               <div class="nav-dropdown-panel invisible opacity-0 pointer-events-none transition-all duration-150 absolute left-0 top-full pt-2 z-50">
@@ -197,8 +197,8 @@
 
             <!-- 4. AIDES (Mémento Combat, Code du Bushido, Étiquette & Coutumes) -->
             <div class="relative group nav-dropdown">
-              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-amber-950/40 text-stone-200 group-hover:text-amber-300 border border-stone-800 group-hover:border-amber-500/50 transition focus:outline-none">
-                <span class="w-5 h-5 rounded flex items-center justify-center bg-amber-950/80 border border-amber-600/50 text-amber-400 font-serif font-bold text-xs">書</span>
+              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-amber-950/40 text-stone-200 group-hover:text-amber-300 border border-stone-800 group-hover:border-amber-500/50 transition focus:outline-none whitespace-nowrap">
+                <span class="w-5 h-5 rounded flex items-center justify-center bg-amber-950/80 border border-amber-600/50 text-amber-400 font-serif font-bold text-xs shrink-0">書</span>
                 <span>Aides</span>
                 ${chevronDownSvg}
               </button>
@@ -222,8 +222,8 @@
 
             <!-- 5. OUTILS (La Forge, Sorts & Kiho, Tatouages, Carnet de Rokugan) -->
             <div class="relative group nav-dropdown">
-              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-sky-950/40 text-stone-200 group-hover:text-sky-300 border border-stone-800 group-hover:border-sky-500/50 transition focus:outline-none">
-                <span class="w-5 h-5 rounded flex items-center justify-center bg-sky-950/80 border border-sky-600/50 text-sky-300 font-serif font-bold text-xs">器</span>
+              <button type="button" aria-haspopup="true" aria-expanded="false" class="nav-dropdown-trigger flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 rounded-lg bg-stone-900/70 group-hover:bg-sky-950/40 text-stone-200 group-hover:text-sky-300 border border-stone-800 group-hover:border-sky-500/50 transition focus:outline-none whitespace-nowrap">
+                <span class="w-5 h-5 rounded flex items-center justify-center bg-sky-950/80 border border-sky-600/50 text-sky-300 font-serif font-bold text-xs shrink-0">器</span>
                 <span>Outils</span>
                 ${chevronDownSvg}
               </button>
@@ -331,31 +331,44 @@
 
           </div>
 
-          <!-- Actions Droite : Recherche Globale + Thème + Burger Mobile -->
-          <div class="flex items-center gap-2">
+          <!-- Actions Droite : Recherche Globale + Compte Cloud + Thème + Burger Mobile -->
+          <div class="flex items-center gap-1.5 shrink-0">
             <!-- Bouton Recherche Globale (Ctrl+K) -->
             <button
               type="button"
               id="btn-global-search"
               data-action="open-global-search"
               title="Recherche globale (Ctrl + K)"
-              class="px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center gap-1.5 transition cursor-pointer"
+              class="px-2 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               aria-label="Ouvrir la recherche globale"
             >
               <span>🔍</span>
-              <span class="hidden md:inline text-[11px]">Rechercher</span>
-              <kbd class="hidden xl:inline px-1.5 py-0.2 rounded bg-stone-900 border border-stone-700 text-[9px] font-mono text-stone-400">Ctrl K</kbd>
+              <span class="hidden xl:inline text-[11px]">Rechercher</span>
+              <kbd class="hidden 2xl:inline px-1.5 py-0.2 rounded bg-stone-900 border border-stone-700 text-[9px] font-mono text-stone-400">Ctrl K</kbd>
+            </button>
+
+            <!-- Bouton Compte & Dojo Cloud Firebase -->
+            <button
+              type="button"
+              id="btn-firebase-account"
+              data-action="open-account-modal"
+              title="Compte & Dojo Cloud Firebase"
+              class="px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-200 flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
+              aria-label="Ouvrir mon compte et mon Dojo Cloud"
+            >
+              <span class="account-btn-icon">👤</span>
+              <span class="account-btn-label hidden sm:inline text-[11px] font-bold">Connexion</span>
             </button>
 
             <!-- Bascule Thème Clair/Sombre (Kanjis 月 / 陽) -->
             <button
               type="button"
               data-action="toggle-theme"
-              class="px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-300 flex items-center gap-1.5 transition cursor-pointer"
+              class="px-2 py-1.5 rounded-lg border border-amber-500/40 bg-black/40 hover:bg-amber-500/15 text-xs font-imperial text-amber-300 flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               aria-label="${isLight ? 'Activer le mode sombre' : 'Activer le mode clair'}"
             >
               <span class="theme-icon w-5 h-5 rounded bg-amber-950/60 border border-amber-500/40 flex items-center justify-center font-serif font-bold text-xs text-amber-300">${isLight ? '月' : '陽'}</span>
-              <span class="theme-label hidden sm:inline text-[11px] font-bold">${isLight ? 'Laque' : 'Parchemin'}</span>
+              <span class="theme-label hidden xl:inline text-[11px] font-bold">${isLight ? 'Laque' : 'Parchemin'}</span>
             </button>
 
             <!-- Bouton Burger Mobile (SVG vectoriel) -->
@@ -492,6 +505,15 @@
       btn.addEventListener('click', () => {
         if (typeof window.openL5rGlobalSearch === 'function') {
           window.openL5rGlobalSearch();
+        }
+      });
+    });
+
+    // Événement Compte & Dojo Cloud Firebase
+    header.querySelectorAll('[data-action="open-account-modal"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (window.L5RFirebase && typeof window.L5RFirebase.openAccountModal === 'function') {
+          window.L5RFirebase.openAccountModal();
         }
       });
     });
@@ -850,6 +872,23 @@
     document.head.appendChild(sc);
   }
 
+  function ensureFirebaseScripts() {
+    if (window.L5RFirebase) return;
+    const loadedSrcs = Array.from(document.querySelectorAll('script[src]')).map((s) => s.getAttribute('src') || '');
+    if (!loadedSrcs.some((src) => src.includes('firebase-config.js'))) {
+      const cfg = document.createElement('script');
+      cfg.src = `${rootPrefix}js/firebase-config.js`;
+      cfg.defer = true;
+      document.head.appendChild(cfg);
+    }
+    if (!loadedSrcs.some((src) => src.includes('firebase-service.js'))) {
+      const svc = document.createElement('script');
+      svc.src = `${rootPrefix}js/firebase-service.js`;
+      svc.defer = true;
+      document.head.appendChild(svc);
+    }
+  }
+
   function renderBreadcrumb() {
     if (document.getElementById('l5r-breadcrumb')) return;
     const path = window.location.pathname.replace(/\\/g, '/');
@@ -893,6 +932,7 @@
         'tatouages.html': ['Outils', 'Tatouages Togashi'],
         'carte.html': ['Outils', 'Carte de Rokugan'],
         'ecran-mj.html': ['Outils', 'Écran du MJ'],
+        'sessions.html': ['Outils', 'Dispos & Sessions'],
         'campagne.html': [null, 'Chroniques de Campagne'],
         'campagne-ajouter.html': ['Campagne', 'Déposer un Récit']
       };
@@ -927,6 +967,7 @@
   function initGlobalUI() {
     ensurePwaScript();
     ensureGlobalSearchScript();
+    ensureFirebaseScripts();
     renderNavbar();
     renderBreadcrumb();
     syncFooterVersion();

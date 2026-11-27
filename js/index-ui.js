@@ -206,3 +206,4 @@ function renderHomeSections() {
 
 window.addEventListener("DOMContentLoaded", renderHomeSections);
 window.addEventListener("l5r-scenarios-updated", renderHomeSections);
+window.addEventListener("l5r-cloud-dojo-updated", renderHomeSections);

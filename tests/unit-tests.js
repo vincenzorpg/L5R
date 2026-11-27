@@ -26,6 +26,8 @@
   const narrator = isNode ? require("../js/narrator.js") : window;
   const katasUi = isNode ? require("../js/katas.js") : window;
   const sessionsUi = isNode ? require("../js/sessions.js") : (window.L5RSessions || window);
+  const firebaseCfg = isNode ? require("../js/firebase-config.js") : window;
+  const firebaseSvc = isNode ? require("../js/firebase-service.js") : (window.L5RFirebase || window);
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -1359,6 +1361,74 @@
       assertTrue(/tsuruchi akira/i.test(summary) && summary.includes("16 janv.") && summary.includes("?vote="), "Résumé Discord complet");
       const ics = sessionsUi.buildIcsEventContent(slots.find(s => s.id === "2027-01-16:soir"));
       assertTrue(ics.includes("BEGIN:VCALENDAR") && ics.includes("DTSTART:20270116T200000"), "Export .ics valide");
+    });
+  });
+
+  // ===========================================================================
+  // 19. SOCLE FIREBASE AUTH, RÔLE MJ & DOJO CLOUD (js/firebase-service.js)
+  // ===========================================================================
+  describe("19. Socle Firebase Auth, Rôle MJ & Dojo Cloud (js/firebase-service.js)", function () {
+    it("Configuration Firebase, détection du rôle MJ et nettoyage des clés/valeurs RTDB sont conformes", function () {
+      const cfg = firebaseCfg.L5R_FIREBASE_CONFIG;
+      assertTrue(cfg && cfg.projectId === "vincenzorpg-l5r", "projectId vincenzorpg-l5r présent");
+      assertTrue(String(cfg.databaseURL || "").includes("europe-west1.firebasedatabase.app"), "URL RTDB europe-west1 présente");
+      assertEqual(firebaseCfg.L5R_GM_EMAIL, "vincent.david.perso@gmail.com", "Email MJ configuré");
+
+      assertEqual(firebaseSvc.isGmUser({ uid: "u1", email: "vincent.david.perso@gmail.com", emailVerified: true }, firebaseCfg.L5R_GM_EMAIL), true, "Email MJ vérifié reconnu");
+      assertEqual(firebaseSvc.isGmUser({ uid: "u1", email: "vincent.david.perso@gmail.com", emailVerified: false }, firebaseCfg.L5R_GM_EMAIL), false, "Email MJ non vérifié refusé");
+      assertEqual(firebaseSvc.isGmUser({ uid: "gm_123", email: "autre@test.fr", emailVerified: true }, firebaseCfg.L5R_GM_EMAIL, "gm_123"), true, "gmUid reconnu");
+      assertEqual(firebaseSvc.isGmUser({ uid: "pj_1", email: "joueur@test.fr", emailVerified: true }, firebaseCfg.L5R_GM_EMAIL, "gm_123"), false, "Joueur standard non MJ");
+
+      assertEqual(firebaseSvc.sanitizeFirebaseKey("samurai.1#2$3[4]/5"), "samurai_1_2_3_4_5", "Clé RTDB assainie");
+      assertDeepEqual(firebaseSvc.stripUndefinedDeep({ a: 1, b: undefined, c: { d: undefined, e: "ok" } }), { a: 1, c: { e: "ok" } });
+    });
+
+    it("Dojo Cloud fusionne sans perte, génère des cartes publiques sans spoilers et prépare le roster MJ", function () {
+      const charFull = {
+        id: "samurai_akira",
+        name: "Tsuruchi Akira",
+        clan: "mante",
+        family: "Tsuruchi",
+        school: "Archer Tsuruchi",
+        insightRank: 3,
+        honor: 4.5,
+        traits: { stamina: 3, willpower: 3 },
+        voidRing: 3,
+        disadvantages: "Sombre Secret, Ennemi Juré",
+        taint: 1.5,
+        notes: "Notes secrètes du PJ",
+        sessionState: { wounds: 12, voidSpent: 1, taint: 1.5 },
+        updatedAt: "2026-11-27T17:00:00.000Z"
+      };
+
+      const pub = firebaseSvc.buildPublicPartySummary(charFull, "uid_akira");
+      assertEqual(pub.name, "Tsuruchi Akira");
+      assertEqual(pub.ownerUid, "uid_akira");
+      assertEqual(pub.woundStatus, "Éraflé");
+      assertEqual(pub.disadvantages, undefined, "Aucun Désavantage divulgué dans publicParty");
+      assertEqual(pub.taint, undefined, "Aucune Souillure divulguée dans publicParty");
+      assertEqual(pub.notes, undefined, "Aucune Note privée divulguée dans publicParty");
+
+      const roster = firebaseSvc.buildCampaignRosterEntry(charFull, "uid_akira", "Vincent");
+      assertEqual(roster.isCampaignActive, true);
+      assertEqual(roster.liveState.wounds, 12);
+      assertEqual(roster.liveState.voidCurrent, 2);
+      assertEqual(roster.liveState.taint, 1.5);
+
+      const merged = firebaseSvc.mergeLocalAndCloudCharacters(
+        [
+          { id: "c1", name: "Akira Ancien", updatedAt: "2026-11-20T10:00:00.000Z" },
+          { id: "c2", name: "Okado Local", updatedAt: "2026-11-25T10:00:00.000Z" }
+        ],
+        {
+          c1: { id: "c1", name: "Akira Cloud Récent", updatedAt: "2026-11-27T12:00:00.000Z" },
+          c3: { id: "c3", name: "Ryujin Cloud", updatedAt: "2026-11-26T10:00:00.000Z" }
+        }
+      );
+      assertEqual(merged.length, 3, "Fusion conserve les 3 personnages sans perte");
+      assertEqual(merged[0].name, "Akira Cloud Récent", "La version la plus récente gagne et est triée en tête");
+      assertEqual(firebaseSvc.computeCloudSyncBadgeState({ user: { displayName: "Vincent" }, isGm: true }).tone, "gm");
+      assertEqual(firebaseSvc.computeCloudSyncBadgeState({ user: null }).tone, "guest");
     });
   });
 
