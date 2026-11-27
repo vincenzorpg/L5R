@@ -6,6 +6,16 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.41.1] — 2026-11-27
+
+### 🐛 Corrigé
+- **Optimisation mobile & tablette de la barre de navigation et du menu burger (`js/navbar.js`, `css/main.css`, `sw.js`)** :
+  - **En-tête mobile sans débordement dès 360 px** : Titre compact (`ROKUGAN` + sous-titre `L5R 4e Édition`) sous 640 px, boutons d'action harmonisés en `h-9` (`🔍`, `👤`, `陽/月`, `☰`) avec espacement adaptatif et troncature sécurisée du nom de compte (`max-w-[92px] truncate`).
+  - **Menu burger mobile scrollable (`#mobile-menu-panel`)** : Ajout d'une hauteur maximale contrainte (`max-h-[calc(100dvh-4.25rem)] overflow-y-auto overscroll-contain`), d'un bandeau dédié *Compte & Dojo Cloud* en tête du tiroir, de `min-w-0` + `truncate` sur toutes les tuiles et de la fermeture automatique du menu lors de l'ouverture de la recherche ou du compte.
+  - **Protection anti-débordement horizontal (`css/main.css`)** : Application de `overflow-x: clip` sur `html` et `body` (compatible `position: sticky`) validée sur 360 px, 375 px et 768 px sur toutes les pages clés.
+
+---
+
 ## [1.41.0] — 2026-11-27
 
 ### ✨ Ajouté

@@ -1,6 +1,6 @@
 {
-  "version": "1.41.0",
-  "tag": "v1.41.0",
+  "version": "1.41.1",
+  "tag": "v1.41.1",
   "date": "2026-11-27",
-  "notes": "Jalon 3 Firebase : Nouvelle page compagnon La Table Live (escouade sans spoilers, ordre d'initiative en direct & fil de dés partagé Roll & Keep) et publication temps réel des jets entre Table Live, La Forge et Écran du MJ (avec bascule Jet Secret MJ)"
+  "notes": "Correctif mobile & tablette : barre de navigation compacte sans débordement dès 360px, menu burger scrollable avec accès rapide Compte & Dojo Cloud et troncature sécurisée sur toutes les pages"
 }
