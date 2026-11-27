@@ -1,7 +1,7 @@
 # 🏯 Les Chroniques de Rokugan — L5R 4ᵉ Édition
 > *« Dans mon sabre, le vent. Dans mon cœur, le courage. Dans mes yeux, la mort. »*
 
-[![Version](https://img.shields.io/badge/Version-v1.38.1-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
+[![Version](https://img.shields.io/badge/Version-v1.39.0-d4af37?style=flat-square)](https://github.com/vincenzorpg/L5R/releases)
 [![GitHub Pages](https://img.shields.io/badge/Déploiement-GitHub%20Pages-success?style=flat-square&logo=github)](https://vincenzorpg.github.io/L5R/)
 [![Système](https://img.shields.io/badge/JDR-L5R%204e%20Édition-b45309?style=flat-square)](https://vincenzorpg.github.io/L5R/)
 [![Compatibilité](https://img.shields.io/badge/Export%20JSON-Carnet%20de%20Rokugan%20v2-emerald?style=flat-square)](https://nelsio.github.io/carnet-l5r/)
@@ -124,7 +124,8 @@ L5R/
 ├── tatouages.html                      # Codex interactif des tatouages sacrés Togashi (Ise Zumi)
 ├── campagne.html                       # Hub des 10 scénarios de la Campagne de la Chronique de Rokugan
 ├── campagne-ajouter.html               # Studio d'import et générateur de pages de scénarios HTML
-├── version.json                        # Source unique de vérité pour la version du site (v1.21.0)
+├── version.json                        # Source unique de vérité pour la version du site (v1.39.0)
+├── database.rules.json                 # Règles de sécurité Firebase Realtime Database (Dojo Cloud, Rôle MJ & Campagne)
 ├── manifest.webmanifest                # Manifeste PWA installable sur Android & iPhone (mode autonome)
 ├── sw.js                               # Service Worker hors-ligne pré-cachant Forge, Dojo & données L5R 4e
 ├── CHANGELOG.md                        # Historique structuré des versions et nouveautés
@@ -165,6 +166,8 @@ L5R/
 │
 ├── js/                                 # Moteurs applicatifs en Vanilla JavaScript (ES6+)
 │   ├── pwa.js                          # Gestionnaire PWA (Service Worker, install Android/iOS, mode hors-ligne)
+│   ├── firebase-config.js              # Configuration client Web Firebase RTDB (vincenzorpg-l5r)
+│   ├── firebase-service.js             # Auth Google/Email, Rôle MJ, Membres de la Table & synchro Dojo Cloud
 │   ├── navbar.js                       # Barre de navigation responsive, sélecteur de thème, version & CSS
 │   ├── index-ui.js                     # Rendu déclaratif des Clans, de la frise des scénarios & du Dojo d'accueil
 │   ├── clans-ui.js                     # Filtres par lignée & accordéons ergonomiques des pages de clans

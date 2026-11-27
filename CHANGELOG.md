@@ -6,6 +6,18 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.39.0] — 2026-11-27
+
+### ✨ Ajouté
+- **Jalon 1 — Socle Firebase Auth, Rôle MJ & Dojo Cloud (`js/firebase-config.js`, `js/firebase-service.js`, `database.rules.json`, `js/navbar.js`, `js/character-generator.js`, `js/forge-ui.js`, `js/index-ui.js`, `sw.js`, `tests/unit-tests.js`)** :
+  - **Comptes & Authentification (Google + E-mail/Mot de passe)** : Bouton global *Connexion / Compte* dans la barre de navigation et fenêtre modale dédiée permettant de créer un compte ou se connecter sans casser le mode invité hors-ligne (`localStorage`).
+  - **Rôle Maître du Jeu & Approbation de la Table** : Reconnaissance automatique du compte MJ vérifié, déverrouillage automatique des secrets MJ (Mahō, Écoles secrètes, Scénario Jour J) et panneau intégré *Membres de la Table* permettant d'approuver ou révoquer en 1 clic les joueurs demandant accès aux espaces partagés de campagne.
+  - **Dojo Cloud Multi-Appareils** : Synchronisation automatique des personnages de La Forge dans Firebase Realtime Database (`/users/{uid}/characters`), migration en 1 clic du Dojo local existant, mise à jour live de l'accueil (`index.html`) et bascule *`+ Table / ⚔️ Table`* publiant la fiche vers le roster MJ (`/campaign/roster`) et une carte résumé sans spoilers (`/campaign/publicParty`).
+  - **Règles de sécurité RTDB (`database.rules.json`)** : Règles prêtes à déployer couvrant le Dojo privé, l'approbation anti-auto-élévation des membres, le roster MJ, le Doodle 2027, l'Escarmouche et le fil de dés.
+  - **Tests unitaires** : Ajout de la **Suite 19** dans `tests/unit-tests.js`.
+
+---
+
 ## [1.38.1] — 2026-11-23
 
 ### 🐛 Corrigé
