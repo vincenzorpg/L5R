@@ -601,6 +601,7 @@
 
   let gmRosterUnsub = null;
   let gmPrivateUnsub = null;
+  let gmDiceFeedUnsub = null;
   let gmCloudSyncBound = false;
   let gmSkirmishPushTimer = null;
   let gmPrivatePushTimer = null;
@@ -681,17 +682,54 @@
     }, 600);
   }
 
+  function renderGmLiveDiceFeed(feedList) {
+    const wrap = document.getElementById('gm-live-dice-feed-wrap');
+    const listEl = document.getElementById('gm-live-dice-feed');
+    if (!wrap || !listEl) return;
+    if (!isGmCloudReady()) {
+      wrap.classList.add('hidden');
+      return;
+    }
+    wrap.classList.remove('hidden');
+    const items = Array.isArray(feedList) ? feedList.slice(0, 10) : [];
+    if (items.length === 0) {
+      listEl.innerHTML = '<div class="text-stone-500 italic text-center py-1">Aucun jet partagé pour l\'instant.</div>';
+      return;
+    }
+    listEl.innerHTML = items.map((item) => {
+      const who = item.characterName || item.authorName || 'Samouraï';
+      const crown = item.isGm ? '👑 ' : '';
+      return `
+        <div class="flex items-center justify-between gap-2 px-2 py-1 rounded bg-emerald-950/20 border border-emerald-800/40">
+          <div class="min-w-0 truncate text-stone-200">
+            <b class="text-amber-300">${crown}${escapeHtml(who)}</b> — ${escapeHtml(item.label || item.formula)}
+            <span class="font-mono text-stone-400">(${escapeHtml(item.formula)})</span>
+          </div>
+          <span class="font-mono font-bold text-emerald-300 shrink-0">${escapeHtml(item.total)}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
   async function bindGmCloudSync() {
     updateGmCloudBadges();
     const fb = typeof window !== 'undefined' ? window.L5RFirebase : null;
     if (!fb || !isGmCloudReady()) {
       if (typeof gmRosterUnsub === 'function') { try { gmRosterUnsub(); } catch (_) {} gmRosterUnsub = null; }
       if (typeof gmPrivateUnsub === 'function') { try { gmPrivateUnsub(); } catch (_) {} gmPrivateUnsub = null; }
+      if (typeof gmDiceFeedUnsub === 'function') { try { gmDiceFeedUnsub(); } catch (_) {} gmDiceFeedUnsub = null; }
+      document.getElementById('gm-live-dice-feed-wrap')?.classList.add('hidden');
       gmCloudSyncBound = false;
       return;
     }
     if (gmCloudSyncBound) return;
     gmCloudSyncBound = true;
+
+    if (typeof fb.subscribeDiceFeed === 'function') {
+      gmDiceFeedUnsub = await fb.subscribeDiceFeed((feedList) => {
+        renderGmLiveDiceFeed(feedList);
+      }, 15);
+    }
 
     if (typeof fb.subscribeCampaignRoster === 'function') {
       gmRosterUnsub = await fb.subscribeCampaignRoster((rosterMap) => {
@@ -844,6 +882,21 @@
     }
     saveState();
     renderDicePanel(entry);
+
+    // Publication sur le Fil de Dés partagé si le MJ est connecté et n'a pas coché "Secret MJ"
+    const isSecretRoll = Boolean(document.getElementById('gm-dice-secret')?.checked);
+    if (!isSecretRoll && isGmCloudReady() && typeof window.L5RFirebase?.publishDiceRollToFeed === 'function') {
+      window.L5RFirebase.publishDiceRollToFeed({
+        label: entry.label,
+        formula: entry.formula,
+        total: entry.total,
+        keptRolls: entry.keptRolls,
+        droppedRolls: entry.droppedRolls,
+        penalty: entry.penalty,
+        isGm: true,
+        source: 'gm-screen'
+      }).catch(() => {});
+    }
     return entry;
   }
 
@@ -2988,6 +3041,15 @@
       saveState();
       scheduleGmPrivateSync();
     });
+    document.getElementById('gm-clear-live-dice-btn')?.addEventListener('click', async () => {
+      if (!confirm('Vider le fil de dés partagé de la Table Live ?')) return;
+      try {
+        await window.L5RFirebase?.clearDiceFeed?.();
+      } catch (err) {
+        alert(err?.message || 'Impossible de vider le fil de dés.');
+      }
+    });
+
     document.getElementById('gm-cloud-backup-btn')?.addEventListener('click', async () => {
       const statusEl = document.getElementById('gm-import-status');
       try {

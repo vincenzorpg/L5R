@@ -28,6 +28,7 @@
   const sessionsUi = isNode ? require("../js/sessions.js") : (window.L5RSessions || window);
   const firebaseCfg = isNode ? require("../js/firebase-config.js") : window;
   const firebaseSvc = isNode ? require("../js/firebase-service.js") : (window.L5RFirebase || window);
+  const tableLive = isNode ? require("../js/table-live.js") : (window.L5RTableLive || window);
 
   const catalogScope = isNode ? (() => {
     const fs = require("fs");
@@ -1522,6 +1523,65 @@
       assertEqual(mergedPcs[0].voidCurrent, 2, "Applique le Vide courant live du Cloud");
       assertEqual(mergedPcs[0].isCloudSynced, true);
       assertEqual(mergedPcs[0].cloudRosterId, "samurai_akira");
+    });
+  });
+
+  // ===========================================================================
+  // 21. JALON 3 FIREBASE — LA TABLE LIVE & FIL DE DÉS PARTAGÉ (js/table-live.js)
+  // ===========================================================================
+  describe("21. Jalon 3 Firebase — La Table Live & Fil de Dés Partagé (js/table-live.js)", function () {
+    it("buildDiceFeedEntry, formatDiceFeedList et formatPublicPartyList formatent et trient le flux live", function () {
+      assertTrue(typeof firebaseSvc.buildDiceFeedEntry === "function", "buildDiceFeedEntry existe");
+      const entry = firebaseSvc.buildDiceFeedEntry(
+        {
+          label: "Attaque Katana",
+          formula: "6g3",
+          total: 29,
+          keptRolls: ["14*", "8", "7"],
+          droppedRolls: ["5", "3", "2"],
+          characterName: "Tsuruchi Akira",
+          source: "forge"
+        },
+        { uid: "uid_akira", displayName: "Player1", isGm: false }
+      );
+      assertEqual(entry.uid, "uid_akira");
+      assertEqual(entry.authorName, "Player1");
+      assertEqual(entry.characterName, "Tsuruchi Akira");
+      assertEqual(entry.isGm, false);
+      assertEqual(entry.total, 29);
+      assertEqual(entry.keptRolls[0], "14*");
+
+      const list = firebaseSvc.formatDiceFeedList({
+        r_old: { authorName: "A", formula: "4g2", total: 12, createdAt: "2026-11-27T18:00:00.000Z" },
+        r_new: { authorName: "B", formula: "7g3", total: 31, createdAt: "2026-11-27T18:05:00.000Z" }
+      }, 10);
+      assertEqual(list.length, 2);
+      assertEqual(list[0].id, "r_new", "Le jet le plus récent est trié en premier");
+
+      const party = firebaseSvc.formatPublicPartyList({
+        c2: { name: "Ryujin Mirumoto", clan: "dragon", rank: 2, honor: 5.0, woundStatus: "Indemne" },
+        c1: { name: "Hirohito Hida", clan: "crabe", rank: 2, honor: 4.2, woundStatus: "Éraflé" }
+      });
+      assertEqual(party.length, 2);
+      assertEqual(party[0].name, "Hirohito Hida", "Tri alphabétique français de l'escouade");
+    });
+
+    it("parseAndRollLiveFormula applique la Règle des 10 dés, les explosions et les classes de blessures narratives", function () {
+      assertTrue(tableLive && typeof tableLive.parseAndRollLiveFormula === "function", "parseAndRollLiveFormula existe");
+      // 12g3 -> 10g4 (Règle des 10 dés : 2 excédentaires convertis en +1 dé gardé)
+      const seq = [0.7, 0.5, 0.4, 0.3, 0.2, 0.1, 0.1, 0.1, 0.1, 0.1];
+      let idx = 0;
+      const res = tableLive.parseAndRollLiveFormula("12g3+2", {
+        explode: false,
+        rng: () => seq[idx++ % seq.length]
+      });
+      assertEqual(res.formula, "10g4+2", "12g3+2 converti en 10g4+2");
+      assertEqual(res.keptRolls.length, 4, "4 dés gardés");
+      assertEqual(res.droppedRolls.length, 6, "6 dés écartés");
+      assertEqual(res.total, 8 + 6 + 5 + 4 + 2, "Total exact 25");
+
+      assertTrue(tableLive.getWoundToneClasses("Indemne").includes("emerald"), "Indemne -> emerald");
+      assertTrue(tableLive.getWoundToneClasses("Hors de combat").includes("red"), "Hors de combat -> red");
     });
   });
 

@@ -1427,6 +1427,24 @@ function rollL5RDicePool(rollX, keepY, bonus, label, explode = true, spec = fals
   _diceHistory.unshift({ label: label || `${rollX}g${keepY}`, total: totalScore, aug: _diceAugCount });
   if (_diceHistory.length > 5) _diceHistory.pop();
   renderDiceHistory();
+
+  // Publication temps réel sur le Fil de Dés de la Table Live si connecté & approuvé (ou MJ)
+  const fb = window.L5RFirebase;
+  const authState = fb?.getState?.();
+  if (fb && typeof fb.publishDiceRollToFeed === 'function' && authState?.user && (authState.isApproved || authState.isGm)) {
+    const pcName = String(document.getElementById('pc-name')?.value || '').trim();
+    const formulaTag = `${rollX}g${keepY}${totalBonus ? (totalBonus > 0 ? `+${totalBonus}` : totalBonus) : ''}`;
+    fb.publishDiceRollToFeed({
+      characterName: pcName,
+      label: label || `Jet ${formulaTag}`,
+      formula: formulaTag,
+      total: totalScore,
+      keptRolls: kept.map(d => `${d.value}${d.exploded ? '*' : ''}`),
+      droppedRolls: dropped.map(d => `${d.value}${d.exploded ? '*' : ''}`),
+      aug: _diceAugCount,
+      source: 'forge'
+    }).catch(() => {});
+  }
 }
 
 function rollFromSticky(metricId, label) {

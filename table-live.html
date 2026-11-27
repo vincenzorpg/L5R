@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Table Live — Escouade, Escarmouche &amp; Fil de Dés | Les Chroniques de Rokugan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/main.css?v=14">
+
+  <script src="js/navbar.js?v=6" defer></script>
+  <script src="js/table-live.js?v=1" defer></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- MENU GLOBAL -->
+  <header id="site-header"></header>
+
+  <main class="max-w-7xl w-full mx-auto p-3 sm:p-6 space-y-5 flex-1">
+
+    <!-- EN-TÊTE TABLE LIVE -->
+    <section class="card-clean rounded-2xl p-4 sm:p-6 border-amber-500/35 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div class="space-y-1.5">
+        <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-purple-950/70 border border-purple-500/45 text-[10px] uppercase tracking-widest text-purple-200 font-bold">
+          <span>🎲</span> Compagnon Temps Réel des Joueurs — L5R 4e Édition
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black font-imperial gold-gradient tracking-wide">
+          LA TABLE LIVE
+        </h1>
+        <p class="text-xs text-stone-300 max-w-2xl leading-relaxed">
+          Suivez en direct l'<b>ordre d'initiative des escarmouches</b>, l'état narratif de vos <b>compagnons de route</b> (sans aucun spoiler MJ) et partagez tous vos <b>jets Roll &amp; Keep</b> en temps réel avec la table.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 shrink-0">
+        <a href="createcharacter.html" class="px-3.5 py-2 rounded-xl bg-red-950/70 hover:bg-red-900 border border-red-500/50 text-red-200 font-imperial font-bold text-xs transition">
+          ⚔️ La Forge (Ma Fiche)
+        </a>
+        <a href="sessions.html" class="px-3.5 py-2 rounded-xl bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-500/45 text-emerald-200 font-imperial font-bold text-xs transition">
+          暦 Doodle 2027
+        </a>
+      </div>
+    </section>
+
+    <!-- BANDEAU CONNEXION / STATUT TEMPS RÉEL -->
+    <section id="table-live-status-banner" class="card-clean rounded-2xl px-4 py-3 border border-amber-500/35 bg-black/45 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span id="tl-status-dot" class="inline-flex w-2.5 h-2.5 rounded-full bg-stone-500 shrink-0"></span>
+        <div id="tl-status-text" class="text-stone-300 leading-snug">
+          <b>Mode local / aperçu</b> — Connectez-vous pour rejoindre la Table Live.
+        </div>
+      </div>
+      <div id="tl-status-actions" class="flex items-center gap-2 shrink-0"></div>
+    </section>
+
+    <!-- GRILLE PRINCIPALE : GAUCHE (ESCARMOUCHE + ESCOUADE) / DROITE (FIL DE DÉS LIVE) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+      <!-- COLONNE GAUCHE (7 COL) -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- ESCARMOUCHE EN DIRECT (SANS SPOILERS) -->
+        <section class="card-clean rounded-2xl p-4 sm:p-5 border-amber-500/30 space-y-3.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-500/20 pb-2.5">
+            <div>
+              <h2 class="text-sm sm:text-base font-bold font-imperial text-amber-200 flex items-center gap-2">
+                <span>⚔️</span> Escarmouche en Direct
+              </h2>
+              <p class="text-[11px] text-stone-400">Ordre d'initiative, postures, états et blessures narratives synchronisés depuis l'Écran du MJ.</p>
+            </div>
+            <span id="tl-skirmish-round-badge" class="px-2.5 py-1 rounded-full bg-stone-900 border border-amber-500/40 text-amber-300 text-[11px] font-mono font-bold">
+              Hors combat
+            </span>
+          </div>
+          <div id="table-live-skirmish"></div>
+        </section>
+
+        <!-- ESCOUADE DE LA CHRONIQUE (SANS SPOILERS) -->
+        <section class="card-clean rounded-2xl p-4 sm:p-5 border-amber-500/30 space-y-3.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-500/20 pb-2.5">
+            <div>
+              <h2 class="text-sm sm:text-base font-bold font-imperial text-amber-200 flex items-center gap-2">
+                <span>🏯</span> Escouade de la Chronique
+              </h2>
+              <p class="text-[11px] text-stone-400">Cartes publiques des samouraïs actifs (Clan, École, Rang, Honneur et état physique — sans secrets).</p>
+            </div>
+            <span id="tl-party-count" class="px-2.5 py-1 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-300 text-[11px] font-mono font-bold">
+              0 PJ
+            </span>
+          </div>
+          <div id="table-live-party"></div>
+        </section>
+
+      </div>
+
+      <!-- COLONNE DROITE (5 COL) : LANCEUR & FIL DE DÉS PARTAGÉ -->
+      <aside id="table-live-dice-panel" class="lg:col-span-5 card-clean rounded-2xl p-4 sm:p-5 border-amber-500/40 space-y-4">
+        <div class="flex items-center justify-between gap-2 border-b border-amber-500/20 pb-2.5">
+          <div>
+            <h2 class="text-sm sm:text-base font-bold font-imperial text-amber-300 flex items-center gap-2">
+              <span>🎲</span> Fil de Dés Roll &amp; Keep
+            </h2>
+            <p class="text-[11px] text-stone-400">Partagé en direct avec La Forge et l'Écran du MJ.</p>
+          </div>
+          <button type="button" id="tl-clear-feed-btn" class="hidden px-2.5 py-1 rounded-lg bg-red-950/60 hover:bg-red-900 border border-red-600/50 text-red-200 text-[10px] font-imperial font-bold cursor-pointer transition" title="Vider l'historique partagé (MJ uniquement)">
+            🧹 Vider
+          </button>
+        </div>
+
+        <!-- Raccourcis Roll & Keep -->
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" data-tl-preset="3g2" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] font-mono text-stone-200 cursor-pointer">3g2</button>
+          <button type="button" data-tl-preset="4g2" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-[11px] font-mono text-stone-200 cursor-pointer">4g2</button>
+          <button type="button" data-tl-preset="5g3" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-[11px] font-mono text-amber-200 cursor-pointer">5g3</button>
+          <button type="button" data-tl-preset="6g3" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-[11px] font-mono text-amber-200 cursor-pointer">6g3</button>
+          <button type="button" data-tl-preset="7g3" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-[11px] font-mono text-amber-300 cursor-pointer">7g3</button>
+          <button type="button" data-tl-preset="8g4" class="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 border border-amber-500/40 text-[11px] font-mono text-amber-300 cursor-pointer">8g4</button>
+        </div>
+
+        <!-- Formulaire de lancer -->
+        <div class="space-y-2.5 text-xs">
+          <div class="grid grid-cols-12 gap-2">
+            <input id="tl-dice-label" type="text" maxlength="80" placeholder="Action (ex: Kenjutsu, Enquête, Initiative...)" class="col-span-7 rounded-lg bg-[#0d0b0b] border border-stone-700 px-2.5 py-2 text-stone-200 focus:outline-none focus:border-amber-400" />
+            <input id="tl-dice-formula" type="text" value="5g3" placeholder="6g3+2" class="col-span-5 rounded-lg bg-[#0d0b0b] border border-amber-500/50 px-2.5 py-2 font-mono font-bold text-amber-200 text-center focus:outline-none focus:border-amber-400" />
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-300">
+            <label class="flex items-center gap-1.5 cursor-pointer"><input id="tl-dice-explode" type="checkbox" checked class="accent-amber-500" /> Exploser 10</label>
+            <label class="flex items-center gap-1.5 cursor-pointer"><input id="tl-dice-spec" type="checkbox" class="accent-amber-500" /> Spé. (relance 1)</label>
+            <label class="flex items-center gap-1">
+              <span>Malus :</span>
+              <input id="tl-dice-penalty" type="number" min="0" max="40" value="0" class="w-12 text-center rounded bg-[#0d0b0b] border border-stone-700 py-0.5 font-mono text-rose-300" />
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 pt-0.5">
+            <label id="tl-gm-secret-wrap" class="hidden flex items-center gap-1.5 text-[11px] text-purple-300 font-bold cursor-pointer">
+              <input id="tl-gm-secret-roll" type="checkbox" class="accent-purple-500" /> 🔒 Jet secret (MJ seul)
+            </label>
+            <button type="button" id="tl-dice-roll-btn" class="ml-auto px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-black font-imperial font-extrabold text-xs cursor-pointer transition shadow-lg">
+              🎲 Lancer les Dés
+            </button>
+          </div>
+        </div>
+
+        <!-- Flux des derniers jets -->
+        <div id="tl-dice-feed-list" class="space-y-2 max-h-[540px] overflow-y-auto pr-1"></div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-stone-600 border-t border-stone-900 bg-black/60 mt-10">
+    <div>Campagne de la Chronique de Rokugan — La Table Live (Compagnon Temps Réel L5R 4e)</div>
+    <div id="site-version-footer" class="mt-2 text-[10px] text-stone-500 font-mono flex items-center justify-center gap-2 no-print">
+      <span id="site-version-label">v1.41.0</span>
+      <span>•</span>
+      <a id="site-version-link" href="https://github.com/vincenzorpg/L5R/releases" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition underline decoration-stone-700 hover:decoration-amber-400">Releases GitHub ↗</a>
+    </div>
+  </footer>
+
+</body>
+</html>

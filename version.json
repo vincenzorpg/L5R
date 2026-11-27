@@ -1,6 +1,6 @@
 {
-  "version": "1.40.0",
-  "tag": "v1.40.0",
+  "version": "1.41.0",
+  "tag": "v1.41.0",
   "date": "2026-11-27",
-  "notes": "Jalon 2 Firebase : Doodle 2027 temps réel partagé, synchronisation bidirectionnelle live Écran MJ ↔ PJs (PV, Vide, Honneur, Gloire, Statut, Souillure, Sorts), notes MJ privées Cloud, vue publique d'escarmouche sans spoilers et export Backup JSON complet MJ"
+  "notes": "Jalon 3 Firebase : Nouvelle page compagnon La Table Live (escouade sans spoilers, ordre d'initiative en direct & fil de dés partagé Roll & Keep) et publication temps réel des jets entre Table Live, La Forge et Écran du MJ (avec bascule Jet Secret MJ)"
 }

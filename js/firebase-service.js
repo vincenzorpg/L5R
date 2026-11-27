@@ -426,6 +426,79 @@
     return base;
   }
 
+  /**
+   * Normalise un jet Roll & Keep pour le fil partagé `/campaign/diceFeed`.
+   */
+  function buildDiceFeedEntry(rollInput, userContext = {}) {
+    const r = rollInput && typeof rollInput === 'object' ? rollInput : {};
+    const u = userContext && typeof userContext === 'object' ? userContext : {};
+    const kept = Array.isArray(r.keptRolls)
+      ? r.keptRolls.map(String)
+      : (Array.isArray(r.kept) ? r.kept.map(d => (d && typeof d === 'object' ? `${d.value}${d.exploded ? '*' : ''}` : String(d))) : []);
+    const dropped = Array.isArray(r.droppedRolls)
+      ? r.droppedRolls.map(String)
+      : (Array.isArray(r.dropped) ? r.dropped.map(d => (d && typeof d === 'object' ? `${d.value}${d.exploded ? '*' : ''}` : String(d))) : []);
+
+    const authorName = String(r.authorName || u.displayName || (u.isGm ? 'Maître du Jeu' : 'Samouraï')).trim().slice(0, 48);
+    return stripUndefinedDeep({
+      uid: String(r.uid || u.uid || ''),
+      authorName,
+      characterName: String(r.characterName || '').trim().slice(0, 60) || undefined,
+      isGm: Boolean(r.isGm !== undefined ? r.isGm : u.isGm),
+      label: String(r.label || `Jet ${r.formula || ''}`).trim().slice(0, 90),
+      formula: String(r.formula || '').trim().slice(0, 24),
+      total: Number(r.total) || 0,
+      keptRolls: kept,
+      droppedRolls: dropped,
+      penalty: Math.max(0, parseInt(r.penalty, 10) || 0),
+      aug: Math.max(0, parseInt(r.aug, 10) || 0),
+      source: String(r.source || 'table-live'),
+      createdAt: r.createdAt || new Date().toISOString()
+    });
+  }
+
+  /**
+   * Convertit la map RTDB `/campaign/diceFeed` en liste triée du plus récent au plus ancien.
+   */
+  function formatDiceFeedList(feedMap, limit = 30) {
+    if (!feedMap || typeof feedMap !== 'object') return [];
+    const maxItems = Math.max(1, parseInt(limit, 10) || 30);
+    return Object.keys(feedMap)
+      .map((id) => {
+        const item = feedMap[id];
+        if (!item || typeof item !== 'object') return null;
+        return {
+          id,
+          ...item,
+          keptRolls: Array.isArray(item.keptRolls) ? item.keptRolls : [],
+          droppedRolls: Array.isArray(item.droppedRolls) ? item.droppedRolls : []
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => {
+        const ta = Date.parse(a.createdAt || '') || 0;
+        const tb = Date.parse(b.createdAt || '') || 0;
+        if (tb !== ta) return tb - ta;
+        return String(b.id).localeCompare(String(a.id));
+      })
+      .slice(0, maxItems);
+  }
+
+  /**
+   * Convertit `/campaign/publicParty` en liste triée de cartes compagnons sans spoilers.
+   */
+  function formatPublicPartyList(partyMap) {
+    if (!partyMap || typeof partyMap !== 'object') return [];
+    return Object.keys(partyMap)
+      .map((id) => {
+        const item = partyMap[id];
+        if (!item || typeof item !== 'object' || !item.name) return null;
+        return { id, ...item };
+      })
+      .filter(Boolean)
+      .sort((a, b) => String(a.name).localeCompare(String(b.name), 'fr'));
+  }
+
   // ===========================================================================
   // 2. SERVICE CLIENT FIREBASE (NAVIGATEUR UNIQUEMENT)
   // ===========================================================================
@@ -1004,6 +1077,79 @@
   }
 
   // ===========================================================================
+  // 2C. SYNCHRONISATION TEMPS RÉEL JALON 3 (TABLE LIVE & FIL DE DÉS PARTAGÉ)
+  // ===========================================================================
+  async function subscribePublicParty(callback) {
+    if (typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || (!runtimeState.isApproved && !runtimeState.isGm)) {
+      return () => {};
+    }
+    const { db, dbMod } = loaded;
+    const partyRef = dbMod.ref(db, 'campaign/publicParty');
+    return dbMod.onValue(partyRef, (snap) => {
+      const raw = snap.exists() ? (snap.val() || {}) : {};
+      callback(formatPublicPartyList(raw), raw);
+    }, (err) => {
+      console.warn('[L5RFirebase] Lecture publicParty indisponible :', err?.message);
+    });
+  }
+
+  async function subscribePublicSkirmish(callback) {
+    if (typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || (!runtimeState.isApproved && !runtimeState.isGm)) {
+      return () => {};
+    }
+    const { db, dbMod } = loaded;
+    const skRef = dbMod.ref(db, 'campaign/skirmish/publicView');
+    return dbMod.onValue(skRef, (snap) => {
+      callback(snap.exists() ? snap.val() : null);
+    }, (err) => {
+      console.warn('[L5RFirebase] Lecture skirmish publicView indisponible :', err?.message);
+    });
+  }
+
+  async function subscribeDiceFeed(callback, limit = 30) {
+    if (typeof callback !== 'function') return () => {};
+    const loaded = await loadFirebaseSdk();
+    if (!loaded || !runtimeState.user || (!runtimeState.isApproved && !runtimeState.isGm)) {
+      return () => {};
+    }
+    const { db, dbMod } = loaded;
+    const feedRef = dbMod.query(dbMod.ref(db, 'campaign/diceFeed'), dbMod.limitToLast(Math.max(1, parseInt(limit, 10) || 30)));
+    return dbMod.onValue(feedRef, (snap) => {
+      const raw = snap.exists() ? (snap.val() || {}) : {};
+      callback(formatDiceFeedList(raw, limit), raw);
+    }, (err) => {
+      console.warn('[L5RFirebase] Lecture diceFeed indisponible :', err?.message);
+    });
+  }
+
+  async function publishDiceRollToFeed(rollInput) {
+    if (!runtimeState.user || !sdk) return null;
+    if (!runtimeState.isApproved && !runtimeState.isGm) return null;
+    const { db, dbMod } = sdk;
+    const rollId = `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const entry = buildDiceFeedEntry(rollInput, {
+      uid: runtimeState.user.uid,
+      displayName: runtimeState.user.displayName || runtimeState.user.email?.split('@')[0] || 'Samouraï',
+      isGm: runtimeState.isGm
+    });
+    await dbMod.set(dbMod.ref(db, `campaign/diceFeed/${rollId}`), entry);
+    return { id: rollId, ...entry };
+  }
+
+  async function clearDiceFeed() {
+    if (!runtimeState.user || !sdk || !runtimeState.isGm) {
+      throw new Error('Action réservée au Maître du Jeu.');
+    }
+    const { db, dbMod } = sdk;
+    await dbMod.remove(dbMod.ref(db, 'campaign/diceFeed'));
+    return true;
+  }
+
+  // ===========================================================================
   // 3. UI GLOBALE : BOUTON NAVBAR + MODALE COMPTE & APPROBATION MJ
   // ===========================================================================
   function syncNavbarAccountButtons() {
@@ -1370,6 +1516,9 @@
     applyLiveStateToCharacter,
     buildSkirmishPublicSnapshot,
     mergeCloudRosterIntoGmPcs,
+    buildDiceFeedEntry,
+    formatDiceFeedList,
+    formatPublicPartyList,
     init: loadFirebaseSdk,
     getState,
     subscribe,
@@ -1393,6 +1542,11 @@
     subscribeGmPrivateData,
     saveGmPrivateData,
     exportFullFirebaseBackup,
+    subscribePublicParty,
+    subscribePublicSkirmish,
+    subscribeDiceFeed,
+    publishDiceRollToFeed,
+    clearDiceFeed,
     openAccountModal,
     closeAccountModal
   };

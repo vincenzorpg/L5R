@@ -6,6 +6,17 @@ Le format est inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ---
 
+## [1.41.0] — 2026-11-27
+
+### ✨ Ajouté
+- **Jalon 3 — La Table Live & Fil de Dés Roll & Keep Partagé (`table-live.html`, `js/table-live.js`, `js/firebase-service.js`, `ecran-mj.html`, `js/gm-screen.js`, `js/forge-ui.js`, `js/navbar.js`, `js/global-search.js`, `sw.js`, `tests/unit-tests.js`)** :
+  - **Page Compagnon Joueurs `table-live.html` & `js/table-live.js`** : Vue d'escarmouche en direct sans spoilers (`/campaign/skirmish/publicView` : round, tour actif, postures, états et blessures narratives), cartes publiques de l'escouade (`/campaign/publicParty`), lanceur Roll & Keep (règle des 10 dés, explosions sur 10, spécialisation) et flux chronologique partagé (`/campaign/diceFeed`).
+  - **Fil de Dés Partagé Transversal & Jet Secret MJ** : Les jets lancés depuis le plateau de La Forge (`js/forge-ui.js`), l'Écran du MJ (`js/gm-screen.js`) ou `table-live.html` s'affichent instantanément pour toute la table approuvée ; ajout de la case **`🔒 Secret MJ`** (`#gm-dice-secret` / `#tl-gm-secret-roll`) et d'un mini-fil en direct dans l'Écran du MJ (`#gm-live-dice-feed`) avec bouton de nettoyage réservé au MJ (`clearDiceFeed`).
+  - **Navigation, Recherche & Hors-Ligne** : Ajout de *La Table Live* dans le menu *Outils* (desktop + mobile), le fil d'Ariane (`js/navbar.js`), la recherche globale `Ctrl+K` (`js/global-search.js`) et le Service Worker (`sw.js`).
+  - **Tests unitaires** : Ajout de la **Suite 21** dans `tests/unit-tests.js` (2 tests vérifiant `buildDiceFeedEntry`, `formatDiceFeedList`, `formatPublicPartyList`, `parseAndRollLiveFormula` et `getWoundToneClasses`).
+
+---
+
 ## [1.40.0] — 2026-11-27
 
 ### ✨ Ajouté
